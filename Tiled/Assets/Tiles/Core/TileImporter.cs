@@ -10,6 +10,8 @@ namespace Tiles
 
         public static void LoadTileTypes()
         {
+            Assets.TileTypes.Clear();
+
             var path = Path.Combine(BaseDir, "assets/tile/");
             foreach (var file in Directory.GetFiles(path, "*.yaml",SearchOption.AllDirectories))
             {

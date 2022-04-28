@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -16,6 +17,9 @@ namespace Tiles.Unity
         {
             TileImporter.LoadTileTypes();
             SpriteImporter.LoadSprites();
+
+            //build atlas for sprites
+            Assets.SpriteAtlas0 = AtlasBuilder.BuildAtlas(Assets.Sprites.Values.ToList(), true, true);
         }
     }
 

@@ -6,6 +6,7 @@ namespace Tiles
     {
         public static readonly List<TileType> TileTypes = new List<TileType>();
         public static readonly Dictionary<string, Sprite> Sprites = new Dictionary<string, Sprite>();
+        public static int[,] SpriteAtlas0;
 
         public static int RegisterTileType(TileType tile)
         {
@@ -16,7 +17,8 @@ namespace Tiles
 
         public static void RegisterSprite(Sprite sprite)
         {
-            Sprites.Add(sprite.Name, sprite);
+            if(!Sprites.TryAdd(sprite.Name, sprite))
+                throw new System.Exception($"Sprite with name {sprite.Name} already exists");
         }
     }
 }

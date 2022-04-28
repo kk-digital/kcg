@@ -1,5 +1,4 @@
 ﻿using BigGustave;
-using System.Collections.Generic;
 using System.IO;
 using Tiles.Utils;
 using UnityEngine;
@@ -15,7 +14,8 @@ namespace Tiles
 
         public static void LoadSprites()
         {
-            //List<>
+            Assets.Sprites.Clear();
+
             var path = Path.Combine(BaseDir, "assets/sprite/");
             foreach (var file in Directory.GetFiles(path, "*.yaml",SearchOption.AllDirectories))
             {
@@ -24,6 +24,9 @@ namespace Tiles
                 var imgPath = Path.ChangeExtension(file, ".png");
                 var png = Png.Open(imgPath);
 
+                var cw = CellWidth(node);
+                var ch = CellHeight(node);
+
                 //create sprites
                 if(node["sprites"] != null)
                 { 
@@ -31,16 +34,19 @@ namespace Tiles
                     {
                         var sprite = new Sprite();
                         sprite.Name = spriteNode.Name;
-                        Assets.RegisterSprite(sprite);   
+                        sprite.Left = spriteNode.GetInt("left", 0) * cw;
+                        sprite.Top = spriteNode.GetInt("top", 0) * ch;
+                        sprite.Width = spriteNode.GetInt("width", 1) * cw;
+                        sprite.Height = spriteNode.GetInt("height", 1) * ch;
+                        sprite.Texture = PngToRGBA(png, sprite.Left, sprite.Top, sprite.Width, sprite.Height);
+
+                        Assets.RegisterSprite(sprite);  
                     }
                     continue;
                 }
 
                 if (node["autoname"]?.ValueAsString == "index")
                 {
-                    var cw = CellWidth(node);
-                    var ch = CellHeight(node);
-
                     var x = 0;
                     var y = 0;
 
@@ -49,7 +55,10 @@ namespace Tiles
                         var sprite = new Sprite();
                         sprite.Top = y;
                         sprite.Left = x;
-                        sprite.Name = $"{node.Name}:{i}";
+                        sprite.Width = cw;
+                        sprite.Height = ch;
+                        sprite.Name = $"{node["name"].ValueAsString}:{i}";
+                        sprite.Texture = PngToRGBA(png, sprite.Left, sprite.Top, cw, ch);
                         Assets.RegisterSprite(sprite);
 
                         x += cw;
@@ -62,10 +71,13 @@ namespace Tiles
             }
         }
 
-        int[,] PngToRGBA(Png png)
+        static int[,] PngToRGBA(Png png, int left, int top, int w, int h)
         {
-            var res = new int[png.Width, png.Height];
-            png.GetPixel
+            var res = new int[w, h];
+            for (int x = 0; x < w; x++)
+            for (int y = 0; y < h; y++)
+                res[x, y] = png.GetPixel(x + left, y + top).ToRGBA();
+            return res;
         }
 
         static int CellWidth(YamlNode node)
