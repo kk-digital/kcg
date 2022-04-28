@@ -1,0 +1,73 @@
+---
+
+vines-1:
+    blob: full
+    sprites:
+        - tiles/vines-1-a
+        - tiles/vines-1-b
+        - tiles/vines-1-c
+    durability: 2
+    layer: mid
+
+vines-2:
+    blob: full
+    sprites:
+        - tiles/vines-2-a
+        - tiles/vines-2-b
+    durability: 2
+    layer: mid
+
+stone:
+    sprite: tiles/stone
+    layer: top
+
+bedrock:
+    sprite: tiles/bedrock
+    layer: top
+
+regolith:
+    blob: full
+    sprites: 
+        - tiles/regolith
+        - tiles/regolith-alt
+    layer : top
+
+platform:
+    blob: platform
+    collision: platform
+    sprites: 
+        - tiles/platform
+    layer: top
+
+smoothplatform:
+    blob: platform
+    collision: platform
+    sprites:
+        - tiles/smoothplatform
+    layer: top
+
+# stairs:
+#     blob: manhattan
+#     sprites:
+#         - tiles/platform
+#     layer: top
+
+regolith-wall:
+    blob: full
+    sprites: 
+        - tiles/regolith-wall
+    layer: bg
+
+pipe:
+    blob: manhattan
+    sprites: 
+        - tiles/ventilation-pipes
+    layer: pipe
+
+water:
+    sprite: tiles/water
+    category: liquid
+    layer: top
+
+---
+
