@@ -7,13 +7,18 @@ namespace Tiles
 {
     static class AtlasBuilder
     {
-        public static int[,] Build(IList<Sprite> sprites, bool replaceSpritesInAssets = true, bool clearTextureInSprite = true)
+        public static int[,] Build(IList<Sprite> sprites, bool clearTextureInSprite = true)
         {
             //pack sprites into one rect
-            var rects = new PackingRectangle[sprites.Count];
+            var rectsList = new List<PackingRectangle>(sprites.Count);
             for (int  i = 0 ; i <  sprites.Count; i++)
-                rects[i] = new PackingRectangle(0, 0, (uint)sprites[i].Width, (uint)sprites[i].Height, i);
-            
+            if (sprites[i].Texture != null)
+            { 
+                rectsList.Add(new PackingRectangle(0, 0, (uint)sprites[i].Width, (uint)sprites[i].Height, i));
+            }
+
+            var rects = rectsList.ToArray();
+
             RectanglePacker.Pack(rects, out var bounds);
             //round texture size to POT
             var w2 = (int)Math.Pow(2, Math.Ceiling(Math.Log(bounds.Width, 2)));
@@ -29,6 +34,7 @@ namespace Tiles
                 CopyRect(sprite.Texture, targetRect);
                 sprite.Left = (int)targetRect.X;
                 sprite.Top = (int)targetRect.Y;
+                sprites[targetRect.Id] = sprite;
             }
 
             //clear texture in sprite
@@ -39,11 +45,6 @@ namespace Tiles
                 s.Texture = null;
                 sprites[i] = s;
             }
-
-            //replace sprite in Assets
-            if (replaceSpritesInAssets)
-            foreach (var sprite in sprites)
-                Assets.Sprites[sprite.Name] = sprite;
 
             return atlas;
 
