@@ -19,7 +19,7 @@ namespace Tiles.Unity
             SpriteImporter.LoadSprites();
 
             //build atlas for sprites
-            Assets.SpriteAtlas0 = AtlasBuilder.BuildAtlas(Assets.Sprites.Values.ToList(), true, true);
+            Assets.SpriteAtlas0 = AtlasBuilder.Build(Assets.Sprites.Values.ToList(), true, true);
         }
     }
 
