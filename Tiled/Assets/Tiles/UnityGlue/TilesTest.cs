@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 using System.IO;
 
 #if UNITY_EDITOR
@@ -10,11 +8,25 @@ using UnityEditor;
 
 namespace Tiles.Unity
 {
-    public class TilesTest : MonoBehaviour
+    class TilesTest : MonoBehaviour
     {
         public static string BaseDir => Application.streamingAssetsPath;
         public string TileMap = "Moonbunker/Moon Bunker.tmx";
         public Material Material;
+        public MeshBuilder mb;
+        Mesh mesh;
+
+        public Mode RenderMode = Mode.Mesh;
+
+        public enum Mode
+        {
+            Mesh, GL
+        }
+
+        public void Start()
+        {
+            Build();
+        }
 
         public void Build()
         {
@@ -25,21 +37,66 @@ namespace Tiles.Unity
             var tex = TextureBuilder.Build(Assets.AtlasTexture);
             Material.SetTexture("_MainTex", tex);
 
-            var mb = new MeshBuilder();
-            for (int i = 0 ; i < Assets.Map.Layers.Length; i++)
-                mb.Build(i, -i / 100f);
-
-            var mesh = new Mesh();
-            if (mb.verticies.Count > 65000)
-                mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
-            mesh.SetVertices(mb.verticies);
-            mesh.SetUVs(0, mb.uvs);
-            mesh.SetTriangles(mb.triangles, 0);
+            mb = new MeshBuilder();
+            mb.BuildQauds();
+                
+            mesh = new Mesh();
+            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
             var mf = GetComponent<MeshFilter>();
             mf.sharedMesh = mesh;
             var mr = GetComponent<MeshRenderer>();
             mr.sharedMaterial = Material;
+
+            LateUpdate();
+        }
+
+        private void LateUpdate()
+        {
+            if (mb == null)
+                return;
+
+            if (RenderMode != Mode.Mesh)
+            { 
+                mesh.Clear();
+                return;
+            }
+
+            var visibleRect = CalcVisibleRect();
+
+            //var sw = System.Diagnostics.Stopwatch.StartNew();
+            mb.BuildMesh(visibleRect);
+            mesh.Clear(true);
+            mesh.SetVertices(mb.verticies);
+            mesh.SetUVs(0, mb.uvs);
+            mesh.SetTriangles(mb.triangles, 0);
+            //Debug.Log(sw.Elapsed);
+        }
+
+        private void OnRenderObject()
+        {
+            if (mb == null)
+                return;
+
+            if (RenderMode != Mode.GL)
+                return;
+
+            var visibleRect = CalcVisibleRect();
+
+            //var sw = System.Diagnostics.Stopwatch.StartNew();
+            GLRenderer.Render(visibleRect, mb.quads, Material);
+            //Debug.Log(sw.Elapsed);
+        }
+
+        private static Rect CalcVisibleRect()
+        {
+            var cam = Camera.main;
+            var pos = cam.transform.position;
+            float height = 2f * cam.orthographicSize;
+            float width = height * cam.aspect;
+            var visibleRect = new Rect(pos.x - width / 2, pos.y - height / 2, width, height);
+            //Debug.Log(visibleRect);
+            return visibleRect;
         }
     }
 
