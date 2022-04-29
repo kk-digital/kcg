@@ -8,12 +8,13 @@ using UnityEditor;
 
 namespace Tiles.Unity
 {
-    class TilesTest : MonoBehaviour
+    class TilesRenderer : MonoBehaviour
     {
-        public static string BaseDir => Application.streamingAssetsPath;
         public string TileMap = "Moonbunker/Moon Bunker.tmx";
-        public Material Material;
-        public MeshBuilder mb;
+        [SerializeField] Material Material;
+
+        public static string BaseDir => Application.streamingAssetsPath;
+        MeshBuilder mb;
         Mesh mesh;
 
         public Mode RenderMode = Mode.Mesh;
@@ -25,10 +26,10 @@ namespace Tiles.Unity
 
         public void Start()
         {
-            Build();
+            LoadMap();
         }
 
-        public void Build()
+        public void LoadMap()
         {
             //load map
             TmxImporter.LoadMap(Path.Combine(BaseDir,TileMap));
@@ -64,13 +65,11 @@ namespace Tiles.Unity
 
             var visibleRect = CalcVisibleRect();
 
-            //var sw = System.Diagnostics.Stopwatch.StartNew();
             mb.BuildMesh(visibleRect);
             mesh.Clear(true);
             mesh.SetVertices(mb.verticies);
             mesh.SetUVs(0, mb.uvs);
             mesh.SetTriangles(mb.triangles, 0);
-            //Debug.Log(sw.Elapsed);
         }
 
         private void OnRenderObject()
@@ -83,36 +82,33 @@ namespace Tiles.Unity
 
             var visibleRect = CalcVisibleRect();
 
-            //var sw = System.Diagnostics.Stopwatch.StartNew();
             GLRenderer.Render(visibleRect, mb.quads, Material);
-            //Debug.Log(sw.Elapsed);
         }
 
         private static Rect CalcVisibleRect()
         {
             var cam = Camera.main;
             var pos = cam.transform.position;
-            float height = 2f * cam.orthographicSize;
-            float width = height * cam.aspect;
+            var height = 2f * cam.orthographicSize;
+            var width = height * cam.aspect;
             var visibleRect = new Rect(pos.x - width / 2, pos.y - height / 2, width, height);
-            //Debug.Log(visibleRect);
             return visibleRect;
         }
     }
 
 #if UNITY_EDITOR
-    [CustomEditor(typeof(TilesTest))]
+    [CustomEditor(typeof(TilesRenderer))]
     public class TerrainGeneratorEditor : Editor
     {
         public override void OnInspectorGUI()
         {
-            var myTarget = (TilesTest)target;
+            var myTarget = (TilesRenderer)target;
 
             // Show default inspector property editor
             DrawDefaultInspector();
 
-            if (GUILayout.Button("Build"))
-                myTarget.Build();
+            if (GUILayout.Button("Load Map"))
+                myTarget.LoadMap();
         }
     }
 #endif

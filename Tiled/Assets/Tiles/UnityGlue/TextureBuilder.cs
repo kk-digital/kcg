@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
 
-#if UNITY_EDITOR
-#endif
-
 namespace Tiles.Unity
 {
     static class TextureBuilder
