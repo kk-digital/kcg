@@ -39,7 +39,7 @@ namespace Tiles.Unity
             Material.SetTexture("_MainTex", tex);
 
             mb = new MeshBuilder();
-            mb.BuildQauds();
+            mb.BuildQuads();
                 
             mesh = new Mesh();
             mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;

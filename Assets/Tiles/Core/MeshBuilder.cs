@@ -25,14 +25,14 @@ namespace Tiles
             quads.Clear();
         }
 
-        public void BuildQauds()
+        public void BuildQuads()
         {
             var map = Assets.Map;
             for (int i =- 0 ; i <  map.Layers.Length; i++)
-                BuildQauds(i, 0);
+                BuildQuads(i, 0);
         }
 
-        public void BuildQauds(int iLayer, float depth)
+        public void BuildQuads(int iLayer, float depth)
         {
             var map = Assets.Map;
             var layer = map.Layers[iLayer];
