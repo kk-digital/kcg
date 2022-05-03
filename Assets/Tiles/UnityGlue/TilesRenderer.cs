@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System.IO;
+using System.Collections.Generic;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -16,13 +17,8 @@ namespace Tiles.Unity
         public static string BaseDir => Application.streamingAssetsPath;
         MeshBuilder mb;
         Mesh mesh;
-
-        public Mode RenderMode = Mode.Mesh;
-
-        public enum Mode
-        {
-            Mesh, GL
-        }
+        PlanetMapInfo mapInfo;
+        List<MeshBuilder> meshBuildersByLayers = new List<MeshBuilder>();
 
         public void Start()
         {
@@ -32,57 +28,59 @@ namespace Tiles.Unity
         public void LoadMap()
         {
             //load map
-            TmxImporter.LoadMap(Path.Combine(BaseDir,TileMap));
+            mapInfo = TmxImporter.LoadMap(Path.Combine(BaseDir, TileMap));
 
             //create material for atlas
-            var tex = TextureBuilder.Build(Assets.AtlasTexture);
+            var tex = TextureBuilder.Build(mapInfo.AtlasTexture);
             Material.SetTexture("_MainTex", tex);
 
-            mb = new MeshBuilder();
-            mb.BuildQuads();
-                
-            mesh = new Mesh();
-            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+            //build sprite quads for each layer
+            meshBuildersByLayers.Clear();
+            var planetLayers = new [] { PlanetTileLayer.Back, PlanetTileLayer.Middle, PlanetTileLayer.Furniture, PlanetTileLayer.Front };
 
-            var mf = GetComponent<MeshFilter>();
-            mf.sharedMesh = mesh;
-            var mr = GetComponent<MeshRenderer>();
-            mr.sharedMaterial = Material;
+            //remove all children MeshRenderer
+            foreach(var mr in GetComponentsInChildren<MeshRenderer>())
+            if (Application.isPlaying)
+                Destroy(mr.gameObject);
+            else
+                DestroyImmediate(mr.gameObject);
+            
+            var sortingOrder = 0;
+            foreach (var layer in planetLayers)
+            {
+                var mesh = CreateMesh(transform, layer.ToString(), sortingOrder++);
+                var quads = new QuadsBuilder().BuildQuads(mapInfo, layer, 0f);
+                mb = new MeshBuilder(quads, mesh);
+                meshBuildersByLayers.Add(mb);
+            }
 
             LateUpdate();
         }
 
-        private void LateUpdate()
+        private Mesh CreateMesh(Transform parent, string name, int sortingOrder)
         {
-            if (mb == null)
-                return;
+            var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
+            go.transform.SetParent(parent);
 
-            if (RenderMode != Mode.Mesh)
-            { 
-                mesh.Clear();
-                return;
-            }
+            var mesh = new Mesh();
+            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
-            var visibleRect = CalcVisibleRect();
+            var mf = go.GetComponent<MeshFilter>();
+            mf.sharedMesh = mesh;
+            var mr = go.GetComponent<MeshRenderer>();
+            mr.sharedMaterial = Material;
+            mr.sortingOrder = sortingOrder;
 
-            mb.BuildMesh(visibleRect);
-            mesh.Clear(true);
-            mesh.SetVertices(mb.verticies);
-            mesh.SetUVs(0, mb.uvs);
-            mesh.SetTriangles(mb.triangles, 0);
+            return mesh;
         }
 
-        private void OnRenderObject()
+        private void LateUpdate()
         {
-            if (mb == null)
-                return;
-
-            if (RenderMode != Mode.GL)
-                return;
-
             var visibleRect = CalcVisibleRect();
 
-            GLRenderer.Render(visibleRect, mb.quads, Material);
+            //rebuild all layers for visible rect
+            foreach (var mb in meshBuildersByLayers)
+                mb.BuildMesh(visibleRect);
         }
 
         private static Rect CalcVisibleRect()

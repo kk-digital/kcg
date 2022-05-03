@@ -9,7 +9,7 @@ namespace Tiles.Unity
             var w = rgba.GetLength(0);
             var h = rgba.GetLength(1);
 
-            var res = new Texture2D(w, h);
+            var res = new Texture2D(w, h, TextureFormat.RGBA32, false);
             res.filterMode = FilterMode.Point;
 
             var pixels = new Color32[w * h];
