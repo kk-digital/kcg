@@ -98,7 +98,7 @@ public class GridBuildingSystem2D : MonoBehaviour {
                 //DeselectObjectType();
             } else {
                 // Cannot build here
-                UtilsClass.CreateWorldTextPopup("Cannot Build Here!", mousePosition);
+                CreateWorldTextPopup("Cannot Build Here!", mousePosition);
             }
         }
 
@@ -146,7 +146,7 @@ public class GridBuildingSystem2D : MonoBehaviour {
     }
 
     public Vector3 GetMouseWorldSnappedPosition() {
-        Vector3 mousePosition = UtilsClass.GetMouseWorldPosition();
+        Vector3 mousePosition = GetMouseWorldPosition();
         grid.GetXY(mousePosition, out int x, out int y);
 
         if (placedObjectTypeSO != null) {
