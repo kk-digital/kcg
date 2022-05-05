@@ -23,45 +23,56 @@ namespace Tiles
             { 
                 var tile = info.Map.Tiles[iCol, iRow];
 
-                var spriteId = 0;
-                switch(layer)
+                foreach(var spriteId in GetSpriteIds(tile))
                 {
-                    case PlanetTileLayer.Front: spriteId = tile.FrontSpriteId; break;
-                    case PlanetTileLayer.Middle: spriteId = tile.MidSpriteId; break;
-                    case PlanetTileLayer.Furniture: spriteId = tile.FurnitureSpriteId; break;
-                    case PlanetTileLayer.Back: spriteId = tile.BackSpriteId; break;
+                    if (spriteId == 0)
+                        continue;//empty sprite
+
+                    var sprite = info.SpritesById[spriteId];
+                    if (sprite.Height == 0)
+                        continue;//sprite is not found :(
+
+                    //calc position
+                    var k = 1/(float)PixelsPerUnit;
+                    var w = sprite.Width * k;//quad width
+                    var h = sprite.Height * k;//quad height
+                    var x = iCol * TileWidth * k;
+                    var y = iRow * TileHeight * k;
+
+                    //calc UVs
+                    var u0 = (float)sprite.Left / texW;
+                    var u1 = u0 + (float)sprite.Width / texW;
+                    var v1 = 1 - (float)sprite.Top / texH;
+                    var v0 = v1 - (float)sprite.Height / texH;
+
+                    //create quad
+                    var p0 = new Vector3(x, y, depth);
+                    var p1 = new Vector3(x + w, y + h, depth);
+                    var uv0 = new Vector2(u0, v0);
+                    var uv1 = new Vector2(u1, v1);
+                    var quad = new Quad(p0, p1, uv0, uv1);
+                    quads.Add(quad);
                 }
-
-                if (spriteId == 0)
-                    continue;//empty sprite
-
-                var sprite = info.SpritesById[spriteId];
-                if (sprite.Height == 0)
-                    continue;//sprite is not found :(
-
-                //calc position
-                var k = 1/(float)PixelsPerUnit;
-                var w = sprite.Width * k;//quad width
-                var h = sprite.Height * k;//quad height
-                var x = iCol * TileWidth * k;
-                var y = iRow * TileHeight * k;
-
-                //calc UVs
-                var u0 = (float)sprite.Left / texW;
-                var u1 = u0 + (float)sprite.Width / texW;
-                var v1 = 1 - (float)sprite.Top / texH;
-                var v0 = v1 - (float)sprite.Height / texH;
-
-                //create quad
-                var p0 = new Vector3(x, y, depth);
-                var p1 = new Vector3(x + w, y + h, depth);
-                var uv0 = new Vector2(u0, v0);
-                var uv1 = new Vector2(u1, v1);
-                var quad = new Quad(p0, p1, uv0, uv1);
-                quads.Add(quad);
             }
 
             return quads.ToArray();
+
+            IEnumerable<int> GetSpriteIds(PlanetTile tile)
+            {
+                PlanetTileProperties tileProperty;
+
+                switch (layer)
+                {
+                    case PlanetTileLayer.Back: tileProperty = info.TileProperties[tile.BackTileId]; break;
+                    case PlanetTileLayer.Middle: tileProperty = info.TileProperties[tile.MidTileId]; break;
+                    case PlanetTileLayer.Front: tileProperty = info.TileProperties[tile.FrontTileId]; break;
+                    case PlanetTileLayer.Furniture: tileProperty = info.TileProperties[tile.FurnitureTileId]; break;
+                    default: yield break;
+                }
+
+                if (tileProperty.SpriteId != 0) yield return tileProperty.SpriteId;
+                if (tileProperty.SecondarySpriteId != 0) yield return tileProperty.SecondarySpriteId;
+            }
         }
     }
 

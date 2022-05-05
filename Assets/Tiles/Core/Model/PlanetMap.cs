@@ -10,7 +10,7 @@
         {
             Xsize = xsize;
             Ysize = ysize;
-            Tiles= new PlanetTile[Xsize, Ysize];
+            Tiles = new PlanetTile[Xsize, Ysize];
         }
     }
 }

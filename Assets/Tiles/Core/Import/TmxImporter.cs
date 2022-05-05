@@ -77,7 +77,9 @@ namespace Tiles
             var mapWidth = mapBounds.maxX - mapBounds.minX + 1;
             var mapHeight = mapBounds.maxY - mapBounds.minY + 1;
             var planetMap = res.Map = new PlanetMap(mapWidth, mapHeight);
-            var tiles = planetMap.Tiles;
+
+            //temp array to collect info about tiles
+            var tileInfos = new PlanetTileInfo[planetMap.Xsize, planetMap.Ysize];
 
             //load layers
             foreach (var layer in map.Layers)
@@ -87,10 +89,11 @@ namespace Tiles
                 if (planetLayer == PlanetTileLayer.Unknown)
                     continue; //do not import layers with unknown PlanetTileLayer
 
-                //convert chunks of layer
+                //enumerate layer chunks
                 if (layer.chunks != null)
                 foreach (var chunk in layer.chunks)
                 { 
+                    //enumerate spriteId of layer
                     for (int i = 0; i < chunk.data.Length; i++)
                     {
                         var spriteId = chunk.data[i];
@@ -107,18 +110,107 @@ namespace Tiles
                         var x = (chunk.x + iCol) - mapBounds.minX;
                         var y = mapBounds.maxY - (chunk.y + iRow);
 
+                        //save spriteId into temp array
                         switch (planetLayer)
                         {
-                            case PlanetTileLayer.Back: tiles[x, y].BackSpriteId = spriteId; break;
-                            case PlanetTileLayer.Front: tiles[x, y].FrontSpriteId = spriteId; break;
-                            case PlanetTileLayer.Middle: tiles[x, y].MidSpriteId = spriteId; break;
-                            case PlanetTileLayer.Furniture: tiles[x, y].FurnitureSpriteId = spriteId; break;
+                            case PlanetTileLayer.Back: 
+                                if (tileInfos[x, y].BackSpriteId == 0) 
+                                    tileInfos[x, y].BackSpriteId = spriteId; else tileInfos[x, y].SecondaryBackSpriteId = spriteId;
+                                break;
+                            case PlanetTileLayer.Front:
+                                 if (tileInfos[x, y].FrontSpriteId == 0) 
+                                    tileInfos[x, y].FrontSpriteId = spriteId; else tileInfos[x, y].SecondaryFrontSpriteId = spriteId;
+                                break;
+                            case PlanetTileLayer.Middle:
+                                 if (tileInfos[x, y].MidSpriteId == 0) 
+                                    tileInfos[x, y].MidSpriteId = spriteId; else tileInfos[x, y].SecondaryMidSpriteId = spriteId;
+                                break;
+                            case PlanetTileLayer.Furniture:
+                                 if (tileInfos[x, y].FurnitureSpriteId == 0) 
+                                    tileInfos[x, y].FurnitureSpriteId = spriteId; else tileInfos[x, y].SecondaryFurnitureSpriteId = spriteId;
+                                break;
                         }
                     }
                 }
             }
 
+            //now look in tile info array and generate TileProperty for each unique combinations of primary and secondary spriteId
+            var spriteIdsToTilePropertyId = new Dictionary<(int, int), int>();
+            var tileProperties = new List<PlanetTileProperties>();
+
+            Generate(PlanetTileLayer.Back);
+            Generate(PlanetTileLayer.Middle);
+            Generate(PlanetTileLayer.Front);
+            Generate(PlanetTileLayer.Furniture);
+
+            res.TileProperties = tileProperties.ToArray();
+
             return res;
+
+            void Generate(PlanetTileLayer layer)
+            {
+                spriteIdsToTilePropertyId.Clear();
+
+                for (int x = 0; x < planetMap.Xsize; x++)
+                for (int y = 0; y < planetMap.Ysize; y++)
+                {
+                    var tileInfo = tileInfos[x, y];
+                    var key = (0, 0);
+                    switch (layer)
+                    {
+                        case PlanetTileLayer.Back: key = (tileInfo.BackSpriteId, tileInfo.SecondaryBackSpriteId); break;
+                        case PlanetTileLayer.Middle: key = (tileInfo.MidSpriteId, tileInfo.SecondaryMidSpriteId); break;
+                        case PlanetTileLayer.Front: key = (tileInfo.FrontSpriteId, tileInfo.SecondaryFrontSpriteId); break;
+                        case PlanetTileLayer.Furniture: key = (tileInfo.FurnitureSpriteId, tileInfo.SecondaryFurnitureSpriteId); break;
+                    }
+
+                    //get tileProperty index or create new tileProperty
+                    if (!spriteIdsToTilePropertyId.TryGetValue(key, out var tilePropertyId))
+                    {
+                        tilePropertyId = tileProperties.Count;
+                        var tileProperty = new PlanetTileProperties(){Layer = layer, SpriteId = key.Item1, SecondarySpriteId = key.Item2};
+                        tileProperties.Add(tileProperty);
+                    }
+
+                    //assign tile property index to tile in planetMap.Tiles
+                    switch (layer)
+                    {
+                        case PlanetTileLayer.Back: planetMap.Tiles[x, y].BackTileId = tilePropertyId; break;
+                        case PlanetTileLayer.Middle: planetMap.Tiles[x, y].MidTileId = tilePropertyId; break;
+                        case PlanetTileLayer.Front: planetMap.Tiles[x, y].FrontTileId = tilePropertyId; break;
+                        case PlanetTileLayer.Furniture: planetMap.Tiles[x, y].FurnitureTileId = tilePropertyId; break;
+                    }
+                }
+            }
+        }
+
+        /// <summary> Temp struct to collect info about tile </summary>
+        private struct PlanetTileInfo
+        {
+            //Back tile
+            public int BackSpriteId;
+            public int SecondaryBackSpriteId;
+            public int BackTileId;
+
+            //Mid tile
+            public int MidSpriteId;
+            public int SecondaryMidSpriteId;
+            public int MidTileId;
+
+            //Front tile
+            public int FrontSpriteId;
+            public int SecondaryFrontSpriteId;
+            public int FrontTileId;
+        
+            //Furniture
+            public int FurnitureSpriteId;
+            public int SecondaryFurnitureSpriteId;
+            public int FurnitureTileId;
+            public sbyte FurnitureOffsetX;
+            public sbyte FurnitureOffsetY;
+
+            //Health
+            public byte Durability;
         }
 
         private static PlanetTileLayer GetPlanetTileLayer(TiledLayer layer)

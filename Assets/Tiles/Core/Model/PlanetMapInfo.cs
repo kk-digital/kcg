@@ -6,5 +6,6 @@
         public PlanetMap Map;
         public Sprite[] SpritesById;
         public int[,] AtlasTexture;
+        public PlanetTileProperties[] TileProperties;
     }
 }
