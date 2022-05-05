@@ -7,12 +7,12 @@ namespace Tiles
 {
     static class AtlasBuilder
     {
-        public static int[,] Build(IList<Sprite> sprites, bool clearTextureInSprite = true)
+        public static int[,] Build(IList<Sprite> sprites, PlanetTileLayer layer, bool clearTextureInSprite = true)
         {
             //pack sprites into one rect
             var rectsList = new List<PackingRectangle>(sprites.Count);
             for (int  i = 0 ; i <  sprites.Count; i++)
-            if (sprites[i].Texture != null)
+            if (sprites[i].Texture != null && sprites[i].Layer == layer)
             { 
                 rectsList.Add(new PackingRectangle(0, 0, (uint)sprites[i].Width, (uint)sprites[i].Height, i));
             }
@@ -34,16 +34,9 @@ namespace Tiles
                 CopyRect(sprite.Texture, targetRect);
                 sprite.Left = (int)targetRect.X;
                 sprite.Top = (int)targetRect.Y;
+                if (clearTextureInSprite)
+                    sprite.Texture = null;
                 sprites[targetRect.Id] = sprite;
-            }
-
-            //clear texture in sprite
-            if (clearTextureInSprite)
-            for (int  i = 0; i < sprites.Count; i++)
-            {
-                var s = sprites[i];
-                s.Texture = null;
-                sprites[i] = s;
             }
 
             return atlas;

@@ -69,9 +69,6 @@ namespace Tiles
             var res = new PlanetMapInfo();
             res.SpritesById = spritesById;
 
-            //build atlas
-            res.AtlasTexture = AtlasBuilder.Build(spritesById);
-
             //calc bounds
             var mapBounds = CalcBounds(map);
             var mapWidth = mapBounds.maxX - mapBounds.minX + 1;
@@ -145,6 +142,12 @@ namespace Tiles
 
             res.TileProperties = tileProperties.ToArray();
 
+            //build atlases
+            res.SetAtlas(PlanetTileLayer.Back, AtlasBuilder.Build(spritesById, PlanetTileLayer.Back));
+            res.SetAtlas(PlanetTileLayer.Middle, AtlasBuilder.Build(spritesById, PlanetTileLayer.Middle));
+            res.SetAtlas(PlanetTileLayer.Front, AtlasBuilder.Build(spritesById, PlanetTileLayer.Front));
+            res.SetAtlas(PlanetTileLayer.Furniture, AtlasBuilder.Build(spritesById, PlanetTileLayer.Furniture));
+
             return res;
 
             void Generate(PlanetTileLayer layer)
@@ -171,6 +174,10 @@ namespace Tiles
                         var tileProperty = new PlanetTileProperties(){Layer = layer, SpriteId = key.Item1, SecondarySpriteId = key.Item2};
                         tileProperties.Add(tileProperty);
                     }
+
+                    //assign layer to sprite
+                    if (key.Item1 != 0) spritesById[key.Item1].Layer = layer;
+                    if (key.Item2 != 0) spritesById[key.Item2].Layer = layer;
 
                     //assign tile property index to tile in planetMap.Tiles
                     switch (layer)

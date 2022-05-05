@@ -30,10 +30,6 @@ namespace Tiles.Unity
             //load map
             mapInfo = TmxImporter.LoadMap(Path.Combine(BaseDir, TileMap));
 
-            //create material for atlas
-            var tex = TextureBuilder.Build(mapInfo.AtlasTexture);
-            Material.SetTexture("_MainTex", tex);
-
             //build sprite quads for each layer
             meshBuildersByLayers.Clear();
             var planetLayers = new [] { PlanetTileLayer.Back, PlanetTileLayer.Middle, PlanetTileLayer.Furniture, PlanetTileLayer.Front };
@@ -48,7 +44,14 @@ namespace Tiles.Unity
             var sortingOrder = 0;
             foreach (var layer in planetLayers)
             {
-                var mesh = CreateMesh(transform, layer.ToString(), sortingOrder++);
+                //create material for atlas
+                var atlas = mapInfo.GetAtlas(layer);
+                if (atlas.Length == 0)
+                    continue;
+                var tex = TextureBuilder.Build(atlas);
+                var mat = Instantiate(Material);
+                mat.SetTexture("_MainTex", tex);
+                var mesh = CreateMesh(transform, layer.ToString(), sortingOrder++, mat);
                 var quads = new QuadsBuilder().BuildQuads(mapInfo, layer, 0f);
                 mb = new MeshBuilder(quads, mesh);
                 meshBuildersByLayers.Add(mb);
@@ -57,7 +60,7 @@ namespace Tiles.Unity
             LateUpdate();
         }
 
-        private Mesh CreateMesh(Transform parent, string name, int sortingOrder)
+        private Mesh CreateMesh(Transform parent, string name, int sortingOrder, Material material)
         {
             var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
             go.transform.SetParent(parent);
@@ -68,7 +71,7 @@ namespace Tiles.Unity
             var mf = go.GetComponent<MeshFilter>();
             mf.sharedMesh = mesh;
             var mr = go.GetComponent<MeshRenderer>();
-            mr.sharedMaterial = Material;
+            mr.sharedMaterial = material;
             mr.sortingOrder = sortingOrder;
 
             return mesh;

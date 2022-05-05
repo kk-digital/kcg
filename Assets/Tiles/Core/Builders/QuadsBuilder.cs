@@ -14,8 +14,12 @@ namespace Tiles
 
         public Quad[] BuildQuads(PlanetMapInfo info, PlanetTileLayer layer, float depth)
         {
-            var texW = info.AtlasTexture.GetLength(0);
-            var texH = info.AtlasTexture.GetLength(1);
+            var atlas = info.GetAtlas(layer);
+            if (atlas == null)
+                return new Quad[0];
+
+            var texW = atlas.GetLength(0);
+            var texH = atlas.GetLength(1);
             var quads = new List<Quad>();
 
             for (int iCol = 0; iCol < info.Map.Xsize; iCol++)

@@ -8,5 +8,6 @@
         public int Width;
         public int Height;
         public int[,] Texture;
+        public PlanetTileLayer Layer;
     }
 }
