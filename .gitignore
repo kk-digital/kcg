@@ -8,6 +8,7 @@ Assets/AssetStoreTools*
 AppPC/
 AppMac.app/
 Env/
+Logs/
 
 # Visual Studio cache directory
 .vs/
