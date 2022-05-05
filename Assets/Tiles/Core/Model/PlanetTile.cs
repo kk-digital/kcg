@@ -1,7 +1,7 @@
 ﻿namespace Tiles
 {
     /// <summary> Contains info about tile, include all layers </summary>
-    struct PlanetTile
+    public struct PlanetTile
     {
         //Back tile property id
         public int BackTileId;

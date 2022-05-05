@@ -1,10 +1,12 @@
-﻿namespace Tiles
+﻿using Entitas;
+
+namespace Tiles
 {
-    struct PlanetMap 
+    public struct PlanetMap : IComponent
     {
-        public readonly int Xsize;
-        public readonly int Ysize;
-        public readonly PlanetTile[,] Tiles;
+        public int Xsize;
+        public int Ysize;
+        public PlanetTile[,] Tiles;
 
         public PlanetMap(int xsize, int ysize) : this()
         {
