@@ -55,6 +55,13 @@ Monokai-night
 Monokai-dark
 - https://marketplace.visualstudio.com/items?itemName=AlfredoCarrazco.monokaivs2019
 
+Monokai-pro
+- https://monokai.pro/vscode
+
+--- Fonts
+
+consolas
+
 ---
 
 Todo:
@@ -64,4 +71,15 @@ Unity Extensions
 - extention to show files for .md files in Assets folder (done)
 - extention to change font in unity editor
 
+--- Changing Unity Font
+
+TODO: Research how to set per application system font
+
+https://answers.unity.com/questions/56067/what-fonts-does-the-unity-interface-use.html
+
+you can check by doing:
+- Assets > Create > GUI Skin
+
+The Unity Editor just uses the same system font as all other applications.
+- If you're on Windows, this is Segoe UI
 

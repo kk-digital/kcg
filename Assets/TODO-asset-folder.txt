@@ -1,0 +1,13 @@
+1> Move Level1.unity into Assets/Scenes
+
+2> Move Entitas into Assets/Library
+
+3> Move DesperateDevs into Assets/Library
+
+4> Change settings for Jenny/Entias, so Assets/Generated goes into /Library/EntiasGenerated 
+
+5> Move Assets/Tiles into Assets/src/tile-map-planet
+- then move tile-properties to Assets/setc/tile-property-manager
+- move draw functions for tile-map to Assets/src/tile-map-draw
+
+6> move Assets/FileExtentions.cs to Assets/Extensions
