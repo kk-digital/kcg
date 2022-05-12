@@ -10,6 +10,9 @@ AppMac.app/
 Env/
 Logs/
 
+#exclude unity user settings
+/UserSettings/
+
 # Exclude sublime text work space files
 # Files are user specific
 kcg.sublime-workspace
