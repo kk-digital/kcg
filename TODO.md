@@ -5,6 +5,7 @@ Organizing the code:
 ## Problems
 
 - unity does not seem to keep .csproj file updated when code is moved
+-- todo: verify and check if its fixed, seems to be fixed
 
 ## Top Level Todo
 
