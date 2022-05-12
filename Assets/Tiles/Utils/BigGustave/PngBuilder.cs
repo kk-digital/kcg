@@ -495,7 +495,7 @@
                     noneFilterSum += scanData[i];
                 }
 
-                var leftFilterSum = 0;
+                //var leftFilterSum = 0;
                 for (int i = 0; i < scanData.Length; i++)
                 {
 
