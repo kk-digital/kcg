@@ -10,6 +10,10 @@ This folder is for external libraries
 
 - Used for opening and decoding .pngs
 
+### Entitas 
+ 
+Entity-Component-Systems (ECS) framework
+
 ### RectpackShar
 
 - Used for packing sprites onto sprite sheet if all sprites are not square or the same size
