@@ -12,6 +12,8 @@ Allows .md files to be seen in Unity Project Panel
 
 ### DesperateDevs
 
+Note: DesperateDevs should be called "Entitas-Jenny" or "Entitas-Unity". The name is very bad.
+
 - Entitas
 - "Jenny"
 - Unity tool that builds generated code files for Entitas

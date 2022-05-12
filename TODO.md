@@ -31,3 +31,16 @@ Need to specify binary assemblies to rename the .cxproj file
 
 - in long term (not urgent), see if we can run from entitas source code, instead of .dlls
 - should be in its own binary assembly file
+
+## Rename BigGustave
+
+Update:
+- repo here: https://github.com/kk-digital/LibPng
+
+Fork repo
+- rename PngLib for Png Library Csharp
+- or just LibPng
+- do changes, update readme here
+
+-- fix readme
+- then use to replace BigGustave in Library folder
