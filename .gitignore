@@ -11,6 +11,7 @@ Env/
 Logs/
 
 #exclude unity user settings
+UserSettings/
 /UserSettings/
 
 # Exclude sublime text work space files
