@@ -10,6 +10,11 @@ AppMac.app/
 Env/
 Logs/
 
+# Exclude sublime text work space files
+# Files are user specific
+kcg.sublime-workspace
+*.sublime-workspace
+
 # Visual Studio cache directory
 .vs/
 .vscode/
@@ -46,5 +51,6 @@ sysinfo.txt
 # Misc
 *.DS_Store
 
+#Do we need zips/rars?
 *.zip
 *.rar
