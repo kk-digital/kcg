@@ -2,7 +2,8 @@
 
 namespace Tiles
 {
-    public struct PlanetMap : IComponent
+    //public struct PlanetMap : IComponent
+    public struct PlanetMap
     {
         public int Xsize;
         public int Ysize;
