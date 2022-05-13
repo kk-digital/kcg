@@ -156,7 +156,7 @@ namespace TmxMapFileLoader
             Generate(PlanetTileLayer.TileLayerFront);
             Generate(PlanetTileLayer.TileLayerFurniture);
 
-            res.TileProperties = tileProperties.ToArray();
+            TilePropertiesManager.Instance.TileProperties = tileProperties.ToArray(); //changed from res.TileProperties to use singleton
 
             //build atlases
             res.SetAtlas(PlanetTileLayer.TileLayerBack, AtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerBack));

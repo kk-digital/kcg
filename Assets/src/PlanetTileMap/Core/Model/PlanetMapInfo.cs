@@ -1,6 +1,7 @@
 ﻿using Enums;
 using System;
 
+
 namespace PlanetTileMap
 {
     /// <summary> All info to render PlanetMap </summary>
@@ -9,7 +10,8 @@ namespace PlanetTileMap
         public PlanetMap Map;
         public Sprite[] SpritesById;
         public int[][,] AtlasTextures;
-        public PlanetTileProperties[] TileProperties;
+        //public PlanetTileProperties[] TileProperties = TilePropertiesManager.Instance.TileProperties;
+        //line 13 is moved to TilePropertiesManager
 
         public PlanetMapInfo()
         {

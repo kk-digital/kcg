@@ -68,13 +68,13 @@ namespace PlanetTileMap
 
                 switch (layer)
                 {
-                    case PlanetTileLayer.TileLayerBack: tileProperty = info.TileProperties[tile.BackTileId]; break;
-                    case PlanetTileLayer.TileLayerMiddle: tileProperty = info.TileProperties[tile.MidTileId]; break;
-                    case PlanetTileLayer.TileLayerFront: tileProperty = info.TileProperties[tile.FrontTileId]; break;
-                    case PlanetTileLayer.TileLayerFurniture: tileProperty = info.TileProperties[tile.FurnitureTileId]; break;
+                    case PlanetTileLayer.TileLayerBack: tileProperty = TilePropertiesManager.Instance.TileProperties[tile.BackTileId]; break;
+                    case PlanetTileLayer.TileLayerMiddle: tileProperty = TilePropertiesManager.Instance.TileProperties[tile.MidTileId]; break;
+                    case PlanetTileLayer.TileLayerFront: tileProperty = TilePropertiesManager.Instance.TileProperties[tile.FrontTileId]; break;
+                    case PlanetTileLayer.TileLayerFurniture: tileProperty = TilePropertiesManager.Instance.TileProperties[tile.FurnitureTileId]; break;
                     default: yield break;
                 }
-
+                //line 71-74 changed from info.TileProperties to TilePropertiesManager.Instance.TileProperties
                 if (tileProperty.SpriteId != 0) yield return tileProperty.SpriteId;
                 if (tileProperty.SecondarySpriteId != 0) yield return tileProperty.SecondarySpriteId;
             }
