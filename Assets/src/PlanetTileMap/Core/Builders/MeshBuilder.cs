@@ -7,7 +7,7 @@ using Rect = UnityEngine.Rect;
 using Mesh = UnityEngine.Mesh;
 using System;
 
-namespace Tiles
+namespace PlanetTileMap
 {
     class MeshBuilder
     {

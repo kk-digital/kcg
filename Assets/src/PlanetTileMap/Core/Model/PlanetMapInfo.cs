@@ -1,7 +1,7 @@
 ﻿using Enums;
 using System;
 
-namespace Tiles
+namespace PlanetTileMap
 {
     /// <summary> All info to render PlanetMap </summary>
     class PlanetMapInfo

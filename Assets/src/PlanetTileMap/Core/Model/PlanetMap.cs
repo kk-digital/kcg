@@ -1,6 +1,6 @@
 ﻿using Entitas;
 
-namespace Tiles
+namespace PlanetTileMap
 {
     //public struct PlanetMap : IComponent
     public struct PlanetMap

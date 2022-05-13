@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Tiles.Unity
+namespace PlanetTileMap.Unity
 {
     static class GLRenderer
     {

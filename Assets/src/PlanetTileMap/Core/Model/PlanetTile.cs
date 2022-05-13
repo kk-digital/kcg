@@ -1,4 +1,4 @@
-﻿namespace Tiles
+﻿namespace PlanetTileMap
 {
     /// <summary> Contains info about tile, include all layers </summary>
     public struct PlanetTile

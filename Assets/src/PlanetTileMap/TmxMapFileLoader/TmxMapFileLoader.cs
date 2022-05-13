@@ -5,12 +5,26 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TiledCS;
-using BoundsInt = UnityEngine.BoundsInt;
 
-namespace Tiles
+//Todo: Remove unity dependency
+using BoundsInt = UnityEngine.BoundsInt;
+using PlanetTileMap;
+
+//Note:
+//TMX files are created by map editor "Tiled"
+//Tiled can be downloaded at mapeditor.org
+//Tiled saves maps in TMX format
+
+namespace TmxMapFileLoader
 {
     static class TmxImporter
     {
+        //Todo: Break into stages
+        //First stage, iterates over map and gets all sprite sheets used (loads them)
+        //with ImageAssetManager
+        //Second stage, iterates over map and gets all sprites/tiles used
+        //register the tiles
+        //Third stage copies the map data into the internal format
         public static PlanetMapInfo LoadMap(string filePath)
         {
             var map = new TiledMap(filePath);
@@ -65,6 +79,7 @@ namespace Tiles
             return ConvertToInternalStructures(map, idToSprite);
         }
 
+        //Tile Properties should be set in an earlier stage
         private static PlanetMapInfo ConvertToInternalStructures(TiledMap map, Sprite[] spritesById)
         {
             var res = new PlanetMapInfo();
@@ -131,7 +146,7 @@ namespace Tiles
                     }
                 }
             }
-
+            //TODO: The Tile Properties should be set earlier, before this stage
             //now look in tile info array and generate TileProperty for each unique combinations of primary and secondary spriteId
             var spriteIdsToTilePropertyId = new Dictionary<(int, int), int>();
             var tileProperties = new List<PlanetTileProperties>();

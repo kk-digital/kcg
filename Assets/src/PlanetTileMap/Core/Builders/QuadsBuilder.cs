@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
-namespace Tiles
+namespace PlanetTileMap
 {
     /// <summary> Builds array of sprite quads (2 triangles) for specified layer </summary>
     class QuadsBuilder

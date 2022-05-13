@@ -1,6 +1,6 @@
 ﻿using Enums;
 
-namespace Tiles
+namespace PlanetTileMap
 {
     class PlanetTileProperties
     {
