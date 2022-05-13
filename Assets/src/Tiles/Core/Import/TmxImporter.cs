@@ -1,4 +1,5 @@
 ﻿using BigGustave;
+using Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -83,7 +84,7 @@ namespace Tiles
             { 
                 //get PlanetTileLayer
                 var planetLayer = GetPlanetTileLayer(layer);
-                if (planetLayer == PlanetTileLayer.Unknown)
+                if (planetLayer == PlanetTileLayer.TileLayerError)
                     continue; //do not import layers with unknown PlanetTileLayer
 
                 //enumerate layer chunks
@@ -110,19 +111,19 @@ namespace Tiles
                         //save spriteId into temp array
                         switch (planetLayer)
                         {
-                            case PlanetTileLayer.Back: 
+                            case PlanetTileLayer.TileLayerBack: 
                                 if (tileInfos[x, y].BackSpriteId == 0) 
                                     tileInfos[x, y].BackSpriteId = spriteId; else tileInfos[x, y].SecondaryBackSpriteId = spriteId;
                                 break;
-                            case PlanetTileLayer.Front:
+                            case PlanetTileLayer.TileLayerFront:
                                  if (tileInfos[x, y].FrontSpriteId == 0) 
                                     tileInfos[x, y].FrontSpriteId = spriteId; else tileInfos[x, y].SecondaryFrontSpriteId = spriteId;
                                 break;
-                            case PlanetTileLayer.Middle:
+                            case PlanetTileLayer.TileLayerMiddle:
                                  if (tileInfos[x, y].MidSpriteId == 0) 
                                     tileInfos[x, y].MidSpriteId = spriteId; else tileInfos[x, y].SecondaryMidSpriteId = spriteId;
                                 break;
-                            case PlanetTileLayer.Furniture:
+                            case PlanetTileLayer.TileLayerFurniture:
                                  if (tileInfos[x, y].FurnitureSpriteId == 0) 
                                     tileInfos[x, y].FurnitureSpriteId = spriteId; else tileInfos[x, y].SecondaryFurnitureSpriteId = spriteId;
                                 break;
@@ -135,18 +136,18 @@ namespace Tiles
             var spriteIdsToTilePropertyId = new Dictionary<(int, int), int>();
             var tileProperties = new List<PlanetTileProperties>();
 
-            Generate(PlanetTileLayer.Back);
-            Generate(PlanetTileLayer.Middle);
-            Generate(PlanetTileLayer.Front);
-            Generate(PlanetTileLayer.Furniture);
+            Generate(PlanetTileLayer.TileLayerBack);
+            Generate(PlanetTileLayer.TileLayerMiddle);
+            Generate(PlanetTileLayer.TileLayerFront);
+            Generate(PlanetTileLayer.TileLayerFurniture);
 
             res.TileProperties = tileProperties.ToArray();
 
             //build atlases
-            res.SetAtlas(PlanetTileLayer.Back, AtlasBuilder.Build(spritesById, PlanetTileLayer.Back));
-            res.SetAtlas(PlanetTileLayer.Middle, AtlasBuilder.Build(spritesById, PlanetTileLayer.Middle));
-            res.SetAtlas(PlanetTileLayer.Front, AtlasBuilder.Build(spritesById, PlanetTileLayer.Front));
-            res.SetAtlas(PlanetTileLayer.Furniture, AtlasBuilder.Build(spritesById, PlanetTileLayer.Furniture));
+            res.SetAtlas(PlanetTileLayer.TileLayerBack, AtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerBack));
+            res.SetAtlas(PlanetTileLayer.TileLayerMiddle, AtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerMiddle));
+            res.SetAtlas(PlanetTileLayer.TileLayerFront, AtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerFront));
+            res.SetAtlas(PlanetTileLayer.TileLayerFurniture, AtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerFurniture));
 
             return res;
 
@@ -161,10 +162,10 @@ namespace Tiles
                     var key = (0, 0);
                     switch (layer)
                     {
-                        case PlanetTileLayer.Back: key = (tileInfo.BackSpriteId, tileInfo.SecondaryBackSpriteId); break;
-                        case PlanetTileLayer.Middle: key = (tileInfo.MidSpriteId, tileInfo.SecondaryMidSpriteId); break;
-                        case PlanetTileLayer.Front: key = (tileInfo.FrontSpriteId, tileInfo.SecondaryFrontSpriteId); break;
-                        case PlanetTileLayer.Furniture: key = (tileInfo.FurnitureSpriteId, tileInfo.SecondaryFurnitureSpriteId); break;
+                        case PlanetTileLayer.TileLayerBack: key = (tileInfo.BackSpriteId, tileInfo.SecondaryBackSpriteId); break;
+                        case PlanetTileLayer.TileLayerMiddle: key = (tileInfo.MidSpriteId, tileInfo.SecondaryMidSpriteId); break;
+                        case PlanetTileLayer.TileLayerFront: key = (tileInfo.FrontSpriteId, tileInfo.SecondaryFrontSpriteId); break;
+                        case PlanetTileLayer.TileLayerFurniture: key = (tileInfo.FurnitureSpriteId, tileInfo.SecondaryFurnitureSpriteId); break;
                     }
 
                     //get tileProperty index or create new tileProperty
@@ -182,10 +183,10 @@ namespace Tiles
                     //assign tile property index to tile in planetMap.Tiles
                     switch (layer)
                     {
-                        case PlanetTileLayer.Back: planetMap.Tiles[x, y].BackTileId = tilePropertyId; break;
-                        case PlanetTileLayer.Middle: planetMap.Tiles[x, y].MidTileId = tilePropertyId; break;
-                        case PlanetTileLayer.Front: planetMap.Tiles[x, y].FrontTileId = tilePropertyId; break;
-                        case PlanetTileLayer.Furniture: planetMap.Tiles[x, y].FurnitureTileId = tilePropertyId; break;
+                        case PlanetTileLayer.TileLayerBack: planetMap.Tiles[x, y].BackTileId = tilePropertyId; break;
+                        case PlanetTileLayer.TileLayerMiddle: planetMap.Tiles[x, y].MidTileId = tilePropertyId; break;
+                        case PlanetTileLayer.TileLayerFront: planetMap.Tiles[x, y].FrontTileId = tilePropertyId; break;
+                        case PlanetTileLayer.TileLayerFurniture: planetMap.Tiles[x, y].FurnitureTileId = tilePropertyId; break;
                     }
                 }
             }
@@ -222,19 +223,19 @@ namespace Tiles
 
         private static PlanetTileLayer GetPlanetTileLayer(TiledLayer layer)
         {
-            if (layer.properties == null) return PlanetTileLayer.Unknown;
+            if (layer.properties == null) return PlanetTileLayer.TileLayerError;
 
             var layerProperty = layer.properties.FirstOrDefault(p => p.name == "Layer");
 
             switch (layerProperty?.value)
             {
-                case "Front" : return PlanetTileLayer.Front;
-                case "Back" : return PlanetTileLayer.Back;
-                case "Middle" : return PlanetTileLayer.Middle;
-                case "Furniture" : return PlanetTileLayer.Furniture;
+                case "Front" : return PlanetTileLayer.TileLayerFront;
+                case "Back" : return PlanetTileLayer.TileLayerBack;
+                case "Middle" : return PlanetTileLayer.TileLayerMiddle;
+                case "Furniture" : return PlanetTileLayer.TileLayerFurniture;
             }
 
-            return PlanetTileLayer.Unknown;
+            return PlanetTileLayer.TileLayerError;
         }
 
         private static (int minX, int minY, int maxX, int maxY) CalcBounds(TiledMap map)

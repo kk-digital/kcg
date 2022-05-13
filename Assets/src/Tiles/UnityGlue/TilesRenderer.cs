@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
+using Enums;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -32,7 +33,7 @@ namespace Tiles.Unity
 
             //build sprite quads for each layer
             meshBuildersByLayers.Clear();
-            var planetLayers = new [] { PlanetTileLayer.Back, PlanetTileLayer.Middle, PlanetTileLayer.Furniture, PlanetTileLayer.Front };
+            var planetLayers = new [] { PlanetTileLayer.TileLayerBack, PlanetTileLayer.TileLayerMiddle, PlanetTileLayer.TileLayerFurniture, PlanetTileLayer.TileLayerFront };
 
             //remove all children MeshRenderer
             foreach(var mr in GetComponentsInChildren<MeshRenderer>())

@@ -1,4 +1,5 @@
-﻿using RectpackSharp;
+﻿using Enums;
+using RectpackSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;

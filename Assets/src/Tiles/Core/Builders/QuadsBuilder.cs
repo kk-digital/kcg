@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Enums;
+using System.Collections.Generic;
 
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
@@ -67,10 +68,10 @@ namespace Tiles
 
                 switch (layer)
                 {
-                    case PlanetTileLayer.Back: tileProperty = info.TileProperties[tile.BackTileId]; break;
-                    case PlanetTileLayer.Middle: tileProperty = info.TileProperties[tile.MidTileId]; break;
-                    case PlanetTileLayer.Front: tileProperty = info.TileProperties[tile.FrontTileId]; break;
-                    case PlanetTileLayer.Furniture: tileProperty = info.TileProperties[tile.FurnitureTileId]; break;
+                    case PlanetTileLayer.TileLayerBack: tileProperty = info.TileProperties[tile.BackTileId]; break;
+                    case PlanetTileLayer.TileLayerMiddle: tileProperty = info.TileProperties[tile.MidTileId]; break;
+                    case PlanetTileLayer.TileLayerFront: tileProperty = info.TileProperties[tile.FrontTileId]; break;
+                    case PlanetTileLayer.TileLayerFurniture: tileProperty = info.TileProperties[tile.FurnitureTileId]; break;
                     default: yield break;
                 }
 

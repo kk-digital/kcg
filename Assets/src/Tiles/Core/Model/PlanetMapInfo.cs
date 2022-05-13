@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Enums;
+using System;
 
 namespace Tiles
 {

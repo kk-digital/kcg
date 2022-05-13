@@ -1,4 +1,6 @@
-﻿namespace Tiles
+﻿using Enums;
+
+namespace Tiles
 {
     class PlanetTileProperties
     {
