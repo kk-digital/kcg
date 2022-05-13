@@ -28,3 +28,6 @@
 - use unity initially
 - eventually, inputs should be fed in with a singleton input state component (not required at begining)
 - intially just use Unity Input library
+
+### Acessors
+- NO GETTERS/SETTERS on every field, unless there is a reason
