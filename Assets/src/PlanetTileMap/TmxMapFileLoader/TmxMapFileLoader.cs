@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TiledCS;
-
+using TileProperties;
 //Todo: Remove unity dependency
 using BoundsInt = UnityEngine.BoundsInt;
 using PlanetTileMap;
