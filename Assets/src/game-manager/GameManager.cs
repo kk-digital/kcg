@@ -1,16 +1,26 @@
+using Entitas;
+using src.ecs.Game;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private Systems ecsSystems;
+    
     void Start()
     {
-        
+        ecsSystems = new GameFeatures(Contexts.sharedInstance);
+        ecsSystems.Initialize();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        ecsSystems.Execute();
+        ecsSystems.Cleanup();
+    }
+
+    void OnDestroy()
+    {
+        ecsSystems.TearDown();
+        Contexts.sharedInstance = null;
     }
 }
