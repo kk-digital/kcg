@@ -31,3 +31,5 @@
 
 ### Acessors
 - NO GETTERS/SETTERS on every field, unless there is a reason
+- code should not be 60% getter/setter methods
+- but getter/setter can be used if we need to introspect what is writing to field 
