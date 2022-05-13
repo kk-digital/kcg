@@ -2,6 +2,11 @@ TODO.md
 
 Organizing the code:
 
+## Rename top-level assembly/project
+
+From Assembly-CSharp to kcg
+- for the name of Visual Studios 2022 project
+
 ## Problems
 
 - unity does not seem to keep .csproj file updated when code is moved
