@@ -1,8 +1,3 @@
-2> Move Entitas into Assets/Library
-
-3> Move DesperateDevs into Assets/Library
-
-4> Change settings for Jenny/Entias, so Assets/Generated goes into /Library/EntiasGenerated 
 
 ---
 
@@ -10,12 +5,20 @@
 - then move tile-properties to Assets/setc/tile-property-manager
 - move draw functions for tile-map to Assets/src/tile-map-draw
 
-6> move Assets/FileExtentions.cs to Assets/Extensions
-
-7> Put this library in Assets/Library
-- https://github.com/uranium62/xxHash
-
 8> Setup assembly definition, to rename Assembly-CSharp.csproj
 to something sensible
 - https://answers.unity.com/questions/1200398/change-assembly-name.html
 - research how to set assembly definitions
+
+---
+
+### Entitas Tasks
+
+1. Setup Entity-Component-Systems (ECS) framework
+
+2> Move Entitas assets into Assets/Entias
+- Assets/Entias/DesperateDevelopers
+- Assets/Entias/Entias
+- Assets/Entias/Generated
+
+

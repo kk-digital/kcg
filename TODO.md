@@ -28,11 +28,6 @@ Need to specify binary assemblies to rename the .cxproj file
 - all files in Assets/Libraries are seldom changed, therefore should be a binary assembly
 -- single binary assembly or one binary assembly for each, then assemble into its own assembly?
 
-## Entitas Cleanup
-
-- in long term (not urgent), see if we can run from entitas source code, instead of .dlls
-- should be in its own binary assembly file
-
 ## Rename BigGustave
 
 Update:
