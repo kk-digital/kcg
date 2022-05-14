@@ -2,6 +2,8 @@
 
 namespace PlanetTileMap.Unity
 {
+   //TODO: Delete
+   //Why is PlanetTileMap dealing with textures? 
     static class TextureBuilder
     {
         public static Texture2D Build(int[,] rgba)

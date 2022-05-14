@@ -187,7 +187,7 @@ namespace TmxMapFileLoader
                     if (!spriteIdsToTilePropertyId.TryGetValue(key, out var tilePropertyId))
                     {
                         tilePropertyId = tileProperties.Count;
-                        var tileProperty = new PlanetTileProperties(){Layer = layer, SpriteId = key.Item1, SecondarySpriteId = key.Item2};
+                        var tileProperty = new PlanetTileProperties(){Layer = layer, SpriteId = key.Item1, SpriteId2 = key.Item2};
                         tileProperties.Add(tileProperty);
                     }
 

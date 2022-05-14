@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
+using TileProperties;
 
 // https://docs.unity3d.com/ScriptReference/MonoBehaviour.html
 
@@ -107,6 +108,8 @@ public class GameManager : MonoBehaviour
     public void InitStage1()
     {
         //TODO: Intialize all managers here
+        TilePropertiesManager.InitStage1();
+ 
     }
 
     //Load settings from files and other init, that requires systems to be intialized

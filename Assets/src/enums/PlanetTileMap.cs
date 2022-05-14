@@ -18,12 +18,6 @@ namespace Enums
         TileLayerFurniture = 4
     }
 
-    enum PlanetTileCategory : byte
-    {
-        //TODO
-        TileCategoryError = 0 //TileCategory.Error
-    }
-
     enum PlanetTileCollisionType : byte
     {
         TileCollisionTypeError = 0,

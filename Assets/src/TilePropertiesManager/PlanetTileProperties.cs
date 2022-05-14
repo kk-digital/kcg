@@ -2,14 +2,21 @@
 
 namespace TileProperties
 {
-    class PlanetTileProperties
+    struct PlanetTileProperties
     {
-        public string Name;
-        public int SpriteId;
-        public int SecondarySpriteId;
-        public PlanetTileCategory TileCategory;
+        public string Name; //later use string pool
+
+        public int TileId; //could be TileId or TileId
+        public TileDrawProperties TileDrawType; //enum, hint for how tile should be drawn
+
+        public int SpriteId; //spriteId
+        public int SpriteId2; //used for composited tiles, like ore
+
         public PlanetTileLayer Layer;
         public PlanetTileCollisionType TileCollisionType;
-        public byte MaxHealth;
+
+        //note: ore is composited, others are just normal
+
+        public byte Durability; //max health of tile
     }
 }

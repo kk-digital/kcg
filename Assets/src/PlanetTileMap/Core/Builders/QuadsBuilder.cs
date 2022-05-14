@@ -83,7 +83,7 @@ namespace PlanetTileMap
                 }
                 //line 71-74 changed from info.TileProperties to TilePropertiesManager.Instance.TileProperties
                 if (tileProperty.SpriteId != 0) yield return tileProperty.SpriteId;
-                if (tileProperty.SecondarySpriteId != 0) yield return tileProperty.SecondarySpriteId;
+                if (tileProperty.SpriteId2 != 0) yield return tileProperty.SpriteId2;
             }
         }
     }
