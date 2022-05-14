@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraMove : MonoBehaviour
 {
-    [SerializeField] float speed= 0.1f;
+    public float CameraSpeed= 0.3f;
 
     void Update()
     {
@@ -16,7 +16,7 @@ public class CameraMove : MonoBehaviour
         if (Input.GetKey(KeyCode.W)) y = 1;
         if (Input.GetKey(KeyCode.S)) y = -1;
 
-        transform.position += Vector3.right * x * Time.deltaTime * speed;
-        transform.position += Vector3.up * y * Time.deltaTime * speed;
+        transform.position += Vector3.right * x * Time.deltaTime * CameraSpeed;
+        transform.position += Vector3.up * y * Time.deltaTime * CameraSpeed;
     }
 }
