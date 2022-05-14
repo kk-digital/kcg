@@ -1,5 +1,4 @@
-﻿using TiledCS;
-
+﻿
 //Note:
 //May want to put enums inside a struct as static consts?
 //so it is accessed like PlanetTileMapLayer.Middle
@@ -12,10 +11,11 @@ namespace Enums
     enum PlanetTileLayer : byte
     {
         TileLayerError = 0, //TileLayer.Error
-        TileLayerBack,
-        TileLayerMiddle,
-        TileLayerFront, 
-        TileLayerFurniture
+
+        TileLayerBack = 1,
+        TileLayerMiddle = 2 ,
+        TileLayerFront = 3 , 
+        TileLayerFurniture = 4
     }
 
     enum PlanetTileCategory : byte
@@ -26,7 +26,10 @@ namespace Enums
 
     enum PlanetTileCollisionType : byte
     {
-        TileCollisionTypeError = 0
+        TileCollisionTypeError = 0,
         //TODO
+        TileCollisionTypeSolid, //just a normal solid tile
+        TileCollisionTypeAir, //no collision, no blocking
+        //TileCollisionTypeLiquid,
     }
 }

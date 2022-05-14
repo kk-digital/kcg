@@ -5,15 +5,17 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-//TODO: Delete
+//TODO: Delete, is doing sprite stuff
 
 namespace PlanetTileMap
 {
+    //TODO: NO COMMENTS!?!?!?
     static class AtlasBuilder
     {
         public static int[,] Build(IList<Sprite> sprites, PlanetTileLayer layer, bool clearTextureInSprite = true)
         {
-            //pack sprites into one rect
+            //pack sprites into one rect\
+            //WTF: Why do we have rectangle? Every tile is 32x32 pixels; their squares
             var rectsList = new List<PackingRectangle>(sprites.Count);
             for (int  i = 0 ; i <  sprites.Count; i++)
             if (sprites[i].Texture != null && sprites[i].Layer == layer)
@@ -25,8 +27,8 @@ namespace PlanetTileMap
 
             RectanglePacker.Pack(rects, out var bounds);
             //round texture size to POT
-            var w2 = (int)Math.Pow(2, Math.Ceiling(Math.Log(bounds.Width, 2)));
-            var h2 = (int)Math.Pow(2, Math.Ceiling(Math.Log(bounds.Height, 2)));
+            var w2 = (int)Math.Pow(2, Math.Ceiling(Math.Log(bounds.Width, 2))); //w2 = 32 always
+            var h2 = (int)Math.Pow(2, Math.Ceiling(Math.Log(bounds.Height, 2))); //h2 = 32 always
 
             //create atlas
             var atlas = new int[w2, h2];
@@ -45,6 +47,8 @@ namespace PlanetTileMap
 
             return atlas;
 
+            //TODO: Delete this, should be done by TileSpriteManager
+            //TODO: tiles are allways 32x32 pixels and are fixed size, not rects
             void CopyRect(int[,] texture, PackingRectangle targetRect)
             {
                 for (int x = 0; x < targetRect.Width; x++)

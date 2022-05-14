@@ -5,6 +5,7 @@ using System;
 namespace PlanetTileMap
 {
     /// <summary> All info to render PlanetMap </summary>
+    //TODO: delete PlanetTileMap, because its not doing anything
     class PlanetMapInfo
     {
         public PlanetTileMap Map;

@@ -7,15 +7,16 @@ using Vector3 = UnityEngine.Vector3;
 namespace PlanetTileMap
 {
     /// <summary> Builds array of sprite quads (2 triangles) for specified layer </summary>
+    //TODO: WTF is difference between mesh builder and quad builder?
     class QuadsBuilder
     {
-        public int PixelsPerUnit = 100;
-        public int TileWidth = 16;
-        public int TileHeight = 16;
+        public int PixelsPerUnit = 100; //NO. 32 pixels = 1.0f
+        public int TileWidth = 16;  // Tiles are 32x32 pixels
+        public int TileHeight = 16; // Tiles are 32x32 pixel
 
         public Quad[] BuildQuads(PlanetMapInfo info, PlanetTileLayer layer, float depth)
         {
-            var atlas = info.GetAtlas(layer);
+            var atlas = info.GetAtlas(layer); //WTF is atlas
             if (atlas == null)
                 return new Quad[0];
 
@@ -27,7 +28,9 @@ namespace PlanetTileMap
             for (int iRow = 0; iRow < info.Map.Ysize; iRow++)
             { 
                 var tile = info.Map.Tiles[iCol, iRow];
-
+                
+                //TODO: Why is there a for loop here?
+                //TODO: Tiles mostly have 1 sprite, some tiles have 2
                 foreach(var spriteId in GetSpriteIds(tile))
                 {
                     if (spriteId == 0)
@@ -62,6 +65,10 @@ namespace PlanetTileMap
 
             return quads.ToArray();
 
+            //TODO: Do we even need this?
+            //TODO: Move function to TilePropertiesManager or TileSpriteManager
+            //TODO: DONT RETURN IEnumerable<int>
+            //TODO: return pointer to TileProperty
             IEnumerable<int> GetSpriteIds(PlanetTile tile)
             {
                 PlanetTileProperties tileProperty;

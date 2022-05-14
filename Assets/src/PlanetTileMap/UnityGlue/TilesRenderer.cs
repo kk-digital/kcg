@@ -12,6 +12,9 @@ using UnityEditor;
 
 namespace PlanetTileMap.Unity
 {
+    //TODO: Move to script folder
+    //Note: MonoBehaviors/Scripts should go into Asset/Scripts folder
+    //Note: TileMap should be mostly controlled by GameManager
     class TilesRenderer : MonoBehaviour
     {
         public string TileMap = "Moonbunker/Moon Bunker.tmx";

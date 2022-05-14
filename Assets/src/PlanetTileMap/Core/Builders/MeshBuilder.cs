@@ -9,6 +9,8 @@ using System;
 
 namespace PlanetTileMap
 {
+    //Mesh is just a list of "Quads", which are squares
+    //Each square is made out of 2 triangles
     class MeshBuilder
     {
         List<int> triangles = new List<int>();
@@ -33,18 +35,21 @@ namespace PlanetTileMap
 
         public void BuildMesh(Rect visibleRect)
         {
-            triangles.Clear();
-            uvs.Clear();
-            verticies.Clear();
+            triangles.Clear(); //TODO: Comment, WTF is this doing?
+            uvs.Clear();  //Clear texture cooranates?
+            verticies.Clear(); //Clear position coorindatess
 
-            var fromX = visibleRect.xMin;
-            var toX = visibleRect.xMax;
-            var fromY = visibleRect.yMin;
-            var toY = visibleRect.yMax;
+            //Note: 32 pixels = 1.0f units
+            var fromX = visibleRect.xMin; //0 pixels = 0.0f
+            var toX = visibleRect.xMax; //32 pixels = 1.0f
+            var fromY = visibleRect.yMin; //0 pixels = 0.0f
+            var toY = visibleRect.yMax; //32 pixels = 1.0f
 
             for (int i = 0 ; i < quads.Length; i++)
             {
                 var quad = quads[i];
+
+                //WTF is he doing?
                 if (quad.P1.x < fromX) continue;
                 if (quad.P0.x > toX) continue;
                 if (quad.P1.y < fromY) continue;
