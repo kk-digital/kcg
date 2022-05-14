@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO: Dont import unity
+
 public struct SpriteStruct
 {
     public int id;
@@ -21,6 +23,7 @@ public class SpriteSheetManager
         SpriteStruct loadedSprite = new SpriteStruct();
         Sprite sprite = SpriteLoader.instance.LoadNewSprite(BaseDir + filePath, 32f);
         loadedSprite.id = spriteList.Count;
+        //TODO: All tile sprites are 32x32 or scaled to 32x32, dont use rects
         loadedSprite.size = sprite.textureRect.size;
         loadedSprite.sprite = sprite;
 

@@ -44,6 +44,9 @@ public class SpriteLoader : MonoBehaviour
         //Sprite NewSprite = new Sprite();
         Texture2D SpriteTexture = LoadTexture(FilePath);
        
+        //ImageFiles are loaded from files
+        //Sprite sheets are made by copying assets from texture files to the sheets
+        //TODO: use ImageAssetManager, etc
         NewSprite = Sprite.Create(SpriteTexture, new Rect(0, 0, SpriteTexture.width, SpriteTexture.height), new Vector2(0, 0), PixelsPerUnit);
 
         return NewSprite;
