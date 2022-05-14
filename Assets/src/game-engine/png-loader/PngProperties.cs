@@ -6,10 +6,11 @@ namespace PNGLoader
 {
    public struct ImageData
    {
+        //TODO: Add in image format enum, or ImageFormatType, RGBA, HDR16
         public int ImageID;
         public int xSize;
         public int ySize;
-        public byte[] Pixels;
+        public byte[] Pixels; //PixelArray? Put note that its RGBA, 4 byes per pixel
         public ImageData(int ImageID, int xSize, int ySize, byte[] Pixels)
         {
             this.ImageID = ImageID;

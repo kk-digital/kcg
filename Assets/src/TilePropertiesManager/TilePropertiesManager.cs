@@ -9,9 +9,17 @@ namespace TileProperties
         public PlanetTileProperties[] TileProperties;
 
         //SingleTon
-        private static TilePropertiesManager instance;
-        public static TilePropertiesManager Instance;
-        
+        private static TilePropertiesManager _instance;
+       // public static TilePropertiesManager Instance;
+        public static TilePropertiesManager Instance 
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new TilePropertiesManager();
+                return _instance;
+            }
+        }
             //Todo: Move Init to Init Function
 
             /*
@@ -21,12 +29,12 @@ namespace TileProperties
             }
             return Instance; 
             */
-        
+
 
         public static void InitStage1()
         {
             //This is where init goes
-            Instance = new TilePropertiesManager();
+            //Instance = new TilePropertiesManager();
         }
 
         public static void InitStage2()

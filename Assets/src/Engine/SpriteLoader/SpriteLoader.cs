@@ -2,6 +2,14 @@ using UnityEngine;
 using System.Collections;
 using System.IO;
 
+//TODO: Dont import unity
+
+//TODO: Should not be mono-behavior
+//TODO: Monobehavior for testing can be in Assets/script
+
+
+//TODO: Rename SpriteLoader -> TileSpriteLoader
+//All tiles will be 32x32 pixels, but use a const
 public class SpriteLoader : MonoBehaviour
 {
     // This script loads a PNG or JPEG image from disk and returns it as a Sprite
@@ -9,6 +17,8 @@ public class SpriteLoader : MonoBehaviour
 
     private Sprite NewSprite;
 
+
+    /// TODO, dont do private/getters like this, too much code, no one will ever assign this by accident
     private static SpriteLoader _instance;
 
     public static SpriteLoader instance
@@ -18,12 +28,14 @@ public class SpriteLoader : MonoBehaviour
             //If _instance hasn't been set yet, we grab it from the scene!
             //This will only happen the first time this reference is used.
 
+            //Dont use GameObject/unity
             if (_instance == null)
                 _instance = GameObject.FindObjectOfType<SpriteLoader>();
             return _instance;
         }
     }
 
+    //TODO: 32 pixels is 1.0f, fix
     public Sprite LoadNewSprite(string FilePath, float PixelsPerUnit = 100.0f)
     {
 
@@ -31,6 +43,7 @@ public class SpriteLoader : MonoBehaviour
 
         //Sprite NewSprite = new Sprite();
         Texture2D SpriteTexture = LoadTexture(FilePath);
+       
         NewSprite = Sprite.Create(SpriteTexture, new Rect(0, 0, SpriteTexture.width, SpriteTexture.height), new Vector2(0, 0), PixelsPerUnit);
 
         return NewSprite;
