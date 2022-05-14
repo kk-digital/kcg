@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+
+//TODO: Delete
+
 namespace PlanetTileMap
 {
     static class AtlasBuilder

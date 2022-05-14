@@ -7,7 +7,10 @@ namespace PlanetTileMap
     /// <summary> All info to render PlanetMap </summary>
     class PlanetMapInfo
     {
-        public PlanetMap Map;
+        public PlanetTileMap Map;
+
+        //Todo: Remove these. they have to do with SpriteStorage
+        //TODO: Move these to TileSpriteManager
         public Sprite[] SpritesById;
         public int[][,] AtlasTextures;
         //public PlanetTileProperties[] TileProperties = TilePropertiesManager.Instance.TileProperties;

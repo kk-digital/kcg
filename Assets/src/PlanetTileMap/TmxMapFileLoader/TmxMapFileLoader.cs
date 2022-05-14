@@ -89,7 +89,7 @@ namespace TmxMapFileLoader
             var mapBounds = CalcBounds(map);
             var mapWidth = mapBounds.maxX - mapBounds.minX + 1;
             var mapHeight = mapBounds.maxY - mapBounds.minY + 1;
-            var planetMap = res.Map = new PlanetMap(mapWidth, mapHeight);
+            var planetMap = res.Map = new PlanetTileMap.PlanetTileMap(mapWidth, mapHeight);
 
             //temp array to collect info about tiles
             var tileInfos = new PlanetTileInfo[planetMap.Xsize, planetMap.Ysize];

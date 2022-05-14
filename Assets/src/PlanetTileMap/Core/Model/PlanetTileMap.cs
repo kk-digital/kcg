@@ -3,13 +3,13 @@
 namespace PlanetTileMap
 {
     //public struct PlanetMap : IComponent
-    public struct PlanetMap
+    public struct PlanetTileMap
     {
         public int Xsize;
         public int Ysize;
         public PlanetTile[,] Tiles;
 
-        public PlanetMap(int xsize, int ysize) : this()
+        public PlanetTileMap(int xsize, int ysize) : this()
         {
             Xsize = xsize;
             Ysize = ysize;
