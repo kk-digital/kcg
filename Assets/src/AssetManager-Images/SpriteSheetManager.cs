@@ -12,12 +12,12 @@ public struct SpriteStruct
 }
 public class SpriteSheetManager
 {
+    
     public List<SpriteStruct> spriteList = new List<SpriteStruct>();
     public static string BaseDir => Application.streamingAssetsPath;
 
     public int GetImageID(string filePath)
     {
-       
         SpriteStruct loadedSprite = new SpriteStruct();
         Sprite sprite = SpriteLoader.instance.LoadNewSprite(BaseDir + filePath, 32f);
         loadedSprite.id = spriteList.Count;
