@@ -1,3 +1,5 @@
+using Entitas;
+using src.ecs.Game;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
@@ -7,6 +9,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    private Systems ecsSystems;
+
     private static GameManager _instance;
     public static GameManager Instance
     {
@@ -54,8 +58,11 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        
+
+        ecsSystems.Execute();
+        ecsSystems.Cleanup();
     }
+
     /* https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html
      * Frame-rate independent MonoBehaviour.FixedUpdate message for physics calculations.
      * MonoBehaviour.FixedUpdate has the frequency of the physics system; it is called every fixed frame-rate frame.
@@ -115,6 +122,8 @@ public class GameManager : MonoBehaviour
     public void Init()
     {
 
+        ecsSystems = new GameFeatures(Contexts.sharedInstance);
+        ecsSystems.Initialize();
     }
 
     public void InitStage1()
@@ -130,5 +139,7 @@ public class GameManager : MonoBehaviour
     public void TearDown()
     {
 
+        ecsSystems.TearDown();
+        Contexts.sharedInstance = null;
     }
 }
