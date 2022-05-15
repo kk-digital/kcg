@@ -10,7 +10,7 @@ using TileProperties;
 
 public class GameManager : MonoBehaviour
 {
-<<<<<<< HEAD
+
     public string filePath = "/SimpleSpriteSheet/Table1.png";
     private Systems ecsSystems;
 
