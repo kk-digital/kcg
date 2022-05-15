@@ -1,3 +1,5 @@
+using Entitas;
+using src.ecs.Game;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
@@ -8,9 +10,12 @@ using TileProperties;
 
 public class GameManager : MonoBehaviour
 {
+<<<<<<< HEAD
     public string filePath = "/SimpleSpriteSheet/Table1.png";
+    private Systems ecsSystems;
 
     //Todo, just make public, dont do getter/setter
+
     private static GameManager _instance;
     public static GameManager Instance
     {
@@ -49,8 +54,15 @@ public class GameManager : MonoBehaviour
     {
         //TODO: put per frame calls here
         //Example: Drawing calls
+        ecsSystems.Execute();
+        ecsSystems.Cleanup();
     }
 
+    /* https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html
+     * Frame-rate independent MonoBehaviour.FixedUpdate message for physics calculations.
+     * MonoBehaviour.FixedUpdate has the frequency of the physics system; it is called every fixed frame-rate frame.
+     * Use FixedUpdate when using Rigidbody. Set a force to a Rigidbody and it applies each fixed frame.
+     */
 
     //Documentation: https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html
     //Frame-rate independent MonoBehaviour.FixedUpdate message for physics calculations.
@@ -109,7 +121,9 @@ public class GameManager : MonoBehaviour
     {
         //TODO: Intialize all managers here
         TilePropertiesManager.InitStage1();
- 
+        //Setup ECS system
+        ecsSystems = new GameFeatures(Contexts.sharedInstance);
+        ecsSystems.Initialize();
     }
 
     //Load settings from files and other init, that requires systems to be intialized
@@ -122,5 +136,7 @@ public class GameManager : MonoBehaviour
     public void TearDown()
     {
         //TODO: Call code to tear down object
+        ecsSystems.TearDown();
+        Contexts.sharedInstance = null;
     }
 }
