@@ -8,7 +8,7 @@ using BigGustave;
 //using Entitas;
 using System;
 using System.Linq;
-
+using System.IO;
 
 //Todo: Rename, SpriteImageLoader, SpriteImageManager?
 namespace PNGLoader
@@ -20,6 +20,7 @@ namespace PNGLoader
     {
         //They are not .pngs, they are loaded as pngs, but decoded to image data
         public static ImageData[] PNGFiles;
+        public static int NumberOfPNG;
 
         //TODO: Rename, GetImageId
         //TODO: Input should be path+filename, example assets/tiles/tilesheet_01.png
@@ -34,9 +35,9 @@ namespace PNGLoader
         }   
         
         //TODO: InitStage1, InitStage2, etc
-        public static void InitializePNGTest()
+        public static void InitStage1()
         {
-            PNGFiles = new ImageData[5]; //Always use a power of 2
+            // PNGFiles = new ImageData[0]; //Always use a power of 2
             LoadPNGDatas(); 
         }
         //trying to show the png datas
@@ -44,31 +45,74 @@ namespace PNGLoader
         {    
             foreach(ImageData i in PngLoaderManager.PNGFiles)
             {
-                Debug.Log($"{i.ImageID} image id {i.xSize} = x size, {i.ySize} = y size ");
+                ///Debug.Log($"{i.ImageID} image id {i.xSize} = x size, {i.ySize} = y size ");
             }   
         }
         //A test to load PNGDatas
+
+        public static void EnterSubDirectories(DirectoryInfo currentDirectory)
+        {
+            string[] subDirectories = Directory.GetDirectories(currentDirectory.FullName, "*", SearchOption.TopDirectoryOnly);
+            int numberOfSubDirectories = subDirectories.Length;
+
+            if(numberOfSubDirectories > 0)
+            {
+                foreach(string directoryName in subDirectories)
+                {
+                    DirectoryInfo newCurrentDirectory = new DirectoryInfo(directoryName);
+                    FilesIteration(newCurrentDirectory);
+                    EnterSubDirectories(newCurrentDirectory);
+                }
+                
+            }
+        
+        }
+        public static void FilesIteration(DirectoryInfo newCurrentDirectory)
+        {
+            FileInfo[] files = newCurrentDirectory.GetFiles("*.png");
+            foreach(FileInfo fileInfo in files)
+            {
+                Debug.Log($"{fileInfo.Name} and {newCurrentDirectory.FullName}");
+                NumberOfPNG++;
+                Array.Resize<ImageData>(ref PNGFiles,NumberOfPNG);
+            }
+        }
         public static void LoadPNGDatas()
         {
             int id = 0;
-            //0 is reserved and error
-            //-1 return spritesheet int-1 on error
-            for(int x = 1; x < PngLoaderManager.PNGFiles.Length; x++)
-            {
-                PngLoaderManager.PNGFiles[x] = AssignPNGDatas(@$"{Application.dataPath}/StreamingAssets\assets\temporarypngfiles/{id}.png",id);
-                id++;
-            }
+            
+            DirectoryInfo mainDirectory = new DirectoryInfo(@$"{Application.dataPath}\StreamingAssets");
+            string[] directories = Directory.GetDirectories(mainDirectory.FullName, "*", SearchOption.TopDirectoryOnly);
+            FilesIteration(mainDirectory);
+            EnterSubDirectories(mainDirectory);
+
+            PNGFiles[0] = AssignPNGDatas(@$"{Application.dataPath}\StreamingAssets\assets\luis\terrains\moon_rock_2.png",id);
+            id++;
+            Debug.Log($"{NumberOfPNG} number of PNGS");
         }
         //Testing on assigning PNG Datas
         public static Func<string,int, ImageData> AssignPNGDatas = (filename,id) 
         =>  {
             Png png = Png.Open(filename);
             var imageID = id;
-            var xSize = png.Width;
-            var ySize = png.Height;
-            Pixel getPixels = png.GetPixel(0,7); 
-            byte[] pixels = new byte[4] {getPixels.R,getPixels.G,getPixels.B,getPixels.A};
-            return new ImageData(imageID,xSize,ySize,pixels);  
+            var xSize = png.Header.Width;
+            var ySize = png.Header.Height;
+            int numberOfArrays = xSize * ySize;
+            PixelsRGBAData[] pixelRGBAData = new PixelsRGBAData[numberOfArrays];
+            int reference = 0;
+            for(int y = 0; y < ySize; y++)
+            {
+                for(int x = 0; x < xSize; x++)
+                {
+                    Pixel getPixels = png.GetPixel(x,y); 
+                    byte[] pixelsRGBA = new byte[4] {getPixels.R,getPixels.G,getPixels.B,getPixels.A};
+                    pixelRGBAData[reference] = new PixelsRGBAData(pixelsRGBA);
+                    //Debug.Log($"{pixelRGBAData[reference].PixelsRGBA[0]} red value");  
+                    reference++;
+                }
+            }
+
+            return new ImageData(imageID,xSize,ySize,pixelRGBAData);  
             };
     }
 }
