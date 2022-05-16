@@ -9,7 +9,7 @@ namespace PNGLoader
     {
         private void Start() 
         {
-            PngLoaderManager.InitializePNGTest();
+            PngLoaderManager.InitStage1();
             PngLoaderManager.DebugImageDatas();
         }
         
