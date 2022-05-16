@@ -5,7 +5,7 @@ using UnityEngine;
 //MonoBehaviors should be in Asset/Script folder?
 namespace PNGLoader
 {
-    public class PNGTest : MonoBehaviour
+    public class ImageTest : MonoBehaviour
     {
         private void Start() 
         {
