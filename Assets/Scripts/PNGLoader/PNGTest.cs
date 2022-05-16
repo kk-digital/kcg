@@ -9,8 +9,12 @@ namespace PNGLoader
     {
         private void Start() 
         {
-            PngLoaderManager.InitStage1();
-            PngLoaderManager.DebugImageDatas();
+            
+            TileSpriteImageLoaderManager.GetImageID("cat.png");// not found id, will add to dictionary afterwards if file exists.
+            //it will get its rgba each pixel of the image "PixelsArray"
+            TileSpriteImageLoaderManager.GetImageID("basic-enemy.png");// not found id, will add to dictionary afterwards if file exists.
+            
+            TileSpriteImageLoaderManager.GetImageID("cat.png");// found id, returns an id
         }
         
     }
