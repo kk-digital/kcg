@@ -8,11 +8,11 @@ using System;
 using BigGustave;
 public abstract class LoaderData 
 {
-    public  int count;
-    public Dictionary<string, int> DictionaryID = new Dictionary<string, int>();
-    public ImageData[] FilesImage;
-    public SpriteSheet[] FilesSpriteSheet;
-    public virtual int GetID (string filename) 
+    protected int count;
+    protected Dictionary<string, int> DictionaryID = new Dictionary<string, int>();
+    protected ImageData[] FilesImage;
+    protected SpriteSheetData[] FilesSpriteSheet;
+    protected virtual int GetID<Data> (string filename, Data data) 
     {
         int id = 0;
         if(DictionaryID.ContainsKey(filename))
@@ -28,29 +28,29 @@ public abstract class LoaderData
                             .FirstOrDefault();
             if(fileInfo.Exists)
             {
-                LoadImageFile(filename,fileInfo);
+                LoadImageFile(filename,fileInfo, data);
             }    
         }
         return id;   
     }
-    public virtual void LoadImageFile(string filename, FileInfo fileInfo)
+    protected virtual void LoadImageFile<Data>(string filename, FileInfo fileInfo, Data data)
     {
         count++;
         Debug.Log($"file found, adding {fileInfo.FullName} into dictionary");
         DictionaryID.Add(filename, count);
-        if(FilesImage != null)
+        if(data is ImageData)
         {
             Array.Resize(ref FilesImage, count);
             FilesImage[count-1] = AssignPNGDatas(fileInfo.FullName,count);
         }
-        if(FilesSpriteSheet != null)
+        if(data is SpriteSheetData)
         {
             Array.Resize(ref FilesSpriteSheet, count);
             FilesSpriteSheet[count-1] = AssignSpriteSheetDatas(fileInfo.FullName,count);
         }
     }
     public virtual ImageData AssignPNGDatas (string filename, int id) => new ImageData();
-    public virtual SpriteSheet AssignSpriteSheetDatas (string filename, int id) => new SpriteSheet();
+    public virtual SpriteSheetData AssignSpriteSheetDatas (string filename, int id) => new SpriteSheetData();
        
 
 }

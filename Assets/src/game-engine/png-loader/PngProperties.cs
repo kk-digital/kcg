@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.IO;
 using System;
 namespace ImageLoader 
@@ -33,7 +32,7 @@ namespace ImageLoader
             this.PixelsArray = new PixelsRGBAData[numberOfArrays];
             for(int i = 0; i < numberOfArrays; i++)
             {
-                PixelsArray[i].PixelsRGBA = PixelsArray[i].PixelsRGBA;   
+                this.PixelsArray[i].PixelsRGBA = PixelsArray[i].PixelsRGBA;   
             }
         } 
    }

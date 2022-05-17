@@ -2,7 +2,6 @@
 //using System.Collections.Generic;
 
 //TODO: Dont import Unity
-using UnityEngine;
 
 using BigGustave;
 //using Entitas;
@@ -10,19 +9,21 @@ using System;
 using System.Linq;
 using System.IO;
 using System.Collections.Generic;
+using UnityEngine;
 namespace ImageLoader
 {
     public class TileSpriteImageLoaderManager : LoaderData
     {
         public static TileSpriteImageLoaderManager Instance;
         public ImageData[] PNGFile {get => FilesImage; set => FilesImage = value;}
+        public ImageData imageData;        
         public int ImageCount {get => count; set => count = value;}
         public Dictionary<string, int> DictionaryPNGID {get => DictionaryID; set => DictionaryID = value;}
-        public delegate int DGetImageID(string filename);
-        public DGetImageID GetImageID;
+        public delegate int DGetImageID<ImageData>(string filename, ImageData data);
+        public DGetImageID<ImageData> GetImageID;
         public TileSpriteImageLoaderManager()
         {
-            GetImageID = new DGetImageID(base.GetID);
+            GetImageID = new DGetImageID<ImageData>(base.GetID<ImageData>);
             Instance = this;
         }
         public override ImageData AssignPNGDatas(string filename, int id)

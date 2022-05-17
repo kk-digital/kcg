@@ -9,17 +9,17 @@ namespace ImageLoader
     public class SpriteSheetImageLoader : LoaderData
     {
         public static SpriteSheetImageLoader Instance;
-        public SpriteSheet[] SpriteSheet {get => FilesSpriteSheet; set => FilesSpriteSheet = value;}
+        public SpriteSheetData[] SpriteSheet {get => FilesSpriteSheet; set => FilesSpriteSheet = value;}
         public int SpriteSheetCount {get => count; set => count = value;}
         public Dictionary<string, int> DictionarySpriteSheetID {get => DictionaryID; set => DictionaryID = value;}
-        public delegate int DGetSpriteSheetID(string filename);
-        public DGetSpriteSheetID GetSpriteSheetID;
+        public delegate int DGetSpriteSheetID<SpriteSheetData>(string filename,SpriteSheetData data);
+        public DGetSpriteSheetID<SpriteSheetData> GetSpriteSheetID;
         public SpriteSheetImageLoader()
         {
-            GetSpriteSheetID = new DGetSpriteSheetID(base.GetID);
+            GetSpriteSheetID = new DGetSpriteSheetID<SpriteSheetData>(base.GetID<SpriteSheetData>);
             Instance = this;
         }
-        public override SpriteSheet AssignSpriteSheetDatas(string filename, int id)
+        public override SpriteSheetData AssignSpriteSheetDatas(string filename, int id)
         {
             Png png = Png.Open(filename);
             FileInfo fileInfo = new FileInfo(filename);
@@ -43,13 +43,12 @@ namespace ImageLoader
                     Pixel getPixels = png.GetPixel(x,y); 
                     byte[] pixelsRGBA = new byte[4] {getPixels.R,getPixels.G,getPixels.B,getPixels.A};
                     pixelRGBAData[reference] = new PixelsRGBAData(pixelsRGBA);
-                    //Debug.Log($"{pixelRGBAData[reference].PixelsRGBA[0]} red value, {pixelRGBAData[reference].PixelsRGBA[1]} green value,  {pixelRGBAData[reference].PixelsRGBA[2]} blue value");  
                     reference++;
                 }
             }
-            return new SpriteSheet(imageID,spriteSheetType,loaded,accesCounter,xSize,
-                                  ySize,pixelFormat,pixelRGBAData,filename,hash,
-                                  fileCreationTime.ToString(),fileSize);
+            return new SpriteSheetData(imageID,spriteSheetType,loaded,accesCounter,xSize,
+                                       ySize,pixelFormat,pixelRGBAData,filename,hash,
+                                       fileCreationTime.ToString(),fileSize);
         }
 
     }
