@@ -6,6 +6,11 @@ public class CameraMove : MonoBehaviour
 {
     public float CameraSpeed= 0.3f;
 
+    void Awake()
+    {
+        SceneManager.Instance.Register(this.GetType().Name);
+    }
+
     void Update()
     {
         var x = 0f;

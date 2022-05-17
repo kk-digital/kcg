@@ -3,20 +3,27 @@ using System.Collections.Generic;
 
 public class SceneManager : MonoBehaviour
 {
-    public static SceneManager Instance { get; private set; }
     private List<string> objects = new List<string>();
 
-    private void Awake() 
-    { 
-        if (Instance != null && Instance != this) 
-        { 
-            Destroy(this); 
-        } 
-        else 
-        { 
-            Instance = this; 
-        } 
+    private static SceneManager _instance;
+    public static SceneManager Instance
+    {
+        get
+        {
+            if(_instance == null)
+            {
+                _instance = GameObject.FindObjectOfType<SceneManager>();
+            }
+
+            return _instance;
+        }
     }
+
+    public void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
 
     //add object to the list
     public void Register(string typeName)
