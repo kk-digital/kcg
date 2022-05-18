@@ -22,7 +22,7 @@ namespace ImageLoader
         public int xSize;
         public int ySize;
         public PixelsRGBAData[] PixelsArray;
-
+        
         public ImageData(int ImageID, int xSize, int ySize, PixelsRGBAData[] PixelsArray )
         {
             this.ImageID = ImageID;
