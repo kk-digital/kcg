@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.IO;
 using System;
-namespace PNGLoader 
+namespace ImageLoader 
 {
    public struct PixelsRGBAData
    {
@@ -16,8 +15,7 @@ namespace PNGLoader
         }   
    }
 
-   [Serializable]
-   public struct ImageData
+   public struct ImageData 
    {
         //TODO: Add in image format enum, or ImageFormatType, RGBA, HDR16 System.IO.Directory.GetFiles()
         public int ImageID;
@@ -34,7 +32,7 @@ namespace PNGLoader
             this.PixelsArray = new PixelsRGBAData[numberOfArrays];
             for(int i = 0; i < numberOfArrays; i++)
             {
-                PixelsArray[i].PixelsRGBA = PixelsArray[i].PixelsRGBA;   
+                this.PixelsArray[i].PixelsRGBA = PixelsArray[i].PixelsRGBA;   
             }
         } 
    }
