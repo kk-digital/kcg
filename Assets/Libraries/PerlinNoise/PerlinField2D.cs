@@ -10,7 +10,7 @@ namespace PerlinNoise {
             53, 59, 61, 67, 71
         };
         
-        static private float dot(int gi, float x, float y, float z) {
+        static public float dot(int gi, float x, float y, float z) {
             int[,] g3 = {
                 {1, 1, 0}, {-1,  1, 0}, {1, -1,  0}, {-1, -1,  0},
                 {1, 0, 1}, {-1,  0, 1}, {1,  0, -1}, {-1,  0, -1},
@@ -22,9 +22,9 @@ namespace PerlinNoise {
                  + g3[gi, 2] * z;
         }
 
-        static private int fast_floor(float value) { return (int)(value >= 0 ? (int)value : (int)value - 1); }
-        static private float mix(float a, float b, float t) { return a + t * (b - a); }
-        static private float fade(float t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+        static public int fast_floor(float value) { return (int)(value >= 0 ? (int)value : (int)value - 1); }
+        static public float mix(float a, float b, float t) { return a + t * (b - a); }
+        static public float fade(float t) { return t * t * t * (t * (t * 6 - 15) + 10); }
 
         public  byte[] ga;
         public float[] grad;
