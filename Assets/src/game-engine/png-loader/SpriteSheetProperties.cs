@@ -13,16 +13,17 @@ namespace ImageLoader
         public int XSize;
         public int YSize;
         public int PixelFormat; //enum in src/enums, RGBA default
-        public PixelsRGBAData[] PixelData; //4 bytes per pixel RGBA
             //File Properties
         public string FileName; // Filename and path string
         public Int64 Hash; // 64 bit xxHash of image file
         public string FileCreationTime; // time of file modification
         public long FileSize;
+        public byte[] _PixelsArray;
         public SpriteSheetData(int SpriteSheetId, int SpriteSheetType, 
                                int Loaded, int AccessCounter, int XSize, 
-                               int Ysize, int PixelFormat, PixelsRGBAData[] PixelData,
-                               string FileName, Int64 Hash, string FileCreationTime, long FileSize)
+                               int Ysize, int PixelFormat,
+                               string FileName, Int64 Hash, string FileCreationTime,
+                               long FileSize, byte[] _PixelsARray)
         {
         this.SpriteSheetId = SpriteSheetId;
         this.SpriteSheetType = SpriteSheetType;
@@ -31,11 +32,11 @@ namespace ImageLoader
         this.XSize = XSize;
         this.YSize = Ysize;
         this.PixelFormat = PixelFormat;
-        this.PixelData = PixelData;
         this.FileName = FileName;
         this.Hash = Hash;
         this.FileCreationTime = FileCreationTime;
         this.FileSize = FileSize;
+        this._PixelsArray = _PixelsARray;
         }
     }    
 }

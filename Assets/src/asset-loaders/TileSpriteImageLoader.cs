@@ -33,20 +33,20 @@ namespace ImageLoader
             var xSize = png.Header.Width;
             var ySize = png.Header.Height;
             int numberOfArrays = xSize * ySize;
-            PixelsRGBAData[] pixelRGBAData = new PixelsRGBAData[numberOfArrays];
-            int reference = 0;
+            byte[] pixelsArray = new byte[4 * xSize * ySize];
             for(int y = 0; y < ySize; y++)
             {
                 for(int x = 0; x < xSize; x++)
                 {
                     Pixel getPixels = png.GetPixel(x,y); 
-                    byte[] pixelsRGBA = new byte[4] {getPixels.R,getPixels.G,getPixels.B,getPixels.A};
-                    pixelRGBAData[reference] = new PixelsRGBAData(pixelsRGBA);
-                    //Debug.Log($"{pixelRGBAData[reference].PixelsRGBA[0]} red value, {pixelRGBAData[reference].PixelsRGBA[1]} green value,  {pixelRGBAData[reference].PixelsRGBA[2]} blue value");  
-                    reference++;
+                    int index = y*xSize + x;
+                    pixelsArray[4 * index + 0] = getPixels.R;
+                    pixelsArray[4 * index + 1] = getPixels.G;
+                    pixelsArray[4 * index + 2] = getPixels.B;
+                    pixelsArray[4 * index + 3] = getPixels.A;
                 }
             }
-            return new ImageData(imageID,xSize,ySize,pixelRGBAData);
+            return new ImageData(imageID,xSize,ySize,pixelsArray);
         }
     }
 }
