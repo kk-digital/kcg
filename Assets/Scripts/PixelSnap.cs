@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Enums;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(SpriteRenderer))]
@@ -8,6 +9,11 @@ public class PixelSnap : MonoBehaviour
     private Sprite sprite;
     private Vector3 actualPosition;
     private bool shouldRestorePosition;
+
+    void Awake()
+    {
+        SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+    }
 
     // Use this for initialization
     void Start()

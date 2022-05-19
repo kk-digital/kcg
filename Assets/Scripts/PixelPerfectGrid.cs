@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Enums;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(PixelSnap))]
@@ -11,6 +12,11 @@ public class PixelPerfectGrid : MonoBehaviour
     public float CursorMoveSpeed = 0.1f;
     public float XOffset = 0.0f;
     public float YOffset = 0.0f;
+
+    void Awake()
+    {
+        SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+    }
 
     void Start()
     {
