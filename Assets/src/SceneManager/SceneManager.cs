@@ -28,7 +28,7 @@ class SceneManager : MonoBehaviour
         {
             if(_instance == null)
             {
-                _instance = GameObject.FindObjectOfType<SceneManager>();
+                _instance =  new SceneManager();
             }
 
             return _instance;
