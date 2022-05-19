@@ -57,6 +57,7 @@ namespace PerlinNoise {
 
         public void set_param(float persistence, bool change_seed = true) {
             if(runs == 0) {
+                if(change_seed) Mt19937.seed_twister((ulong)(new Random()).Next());
                 for(int i = 0; i < octaves; i++)
                     octave_array[i].generate_gradient_array();
             }

@@ -92,5 +92,17 @@ namespace PerlinNoise {
 
             return nxyz * 0.707106781f;   //-1 to 1
         }
+
+        float noise(float x, float y, float z) {
+            return _base(x, y, z);
+        }
+
+        float one_over_f(float x, float y, float z) {
+            float tmp = 0;
+            tmp += _base(x, y, z);
+            tmp += 0.50f * _base(2 * x, 2 * y, 2 * z);
+            tmp += 0.25f * _base(4 * x, 4 * y, 2 * z);
+            return tmp;
+        }
     }
 }

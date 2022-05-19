@@ -109,5 +109,58 @@ namespace PerlinNoise {
 
             return nxy * MathF.Sqrt(2.0f); // -1 to 1
         }
+
+        public float noise(float x, float y) {
+            return _base(x, y);
+        }
+
+        public float one_over_f(float x, float y) {
+            float tmp = 0;
+            tmp += _base(x, y);
+            tmp += 0.50f   * _base( 2 * x,  2 * y);
+            tmp += 0.25f   * _base( 4 * x,  4 * y);
+            tmp += 0.125f  * _base( 8 * x,  8 * y);
+            tmp += 0.0625f * _base(16 * x, 16 * y);
+            return tmp;
+        }
+
+        public float one_over_f(float x, float y, float persistence) {
+            float tmp = 0;
+            float m = 1.0f;
+
+            tmp += _base(x, y);
+            m *= persistence;
+
+            tmp += m * _base(2 * x, 2 * y);
+            m *= persistence;
+
+            tmp += m * _base(4 * x, 4 * y);
+            m *= persistence;
+
+            tmp += m * _base(8 * x, 8 * y);
+
+            m *= persistence;
+            tmp += m * _base(16 * x, 16 * y);
+            return tmp;
+        }
+
+        //order 0 is base
+        float order(float x, float y, float persistence, int order) {
+            float tmp = 0;
+            float m = 1.0f;
+            int b = 1;
+
+            for (int i = 0; i <= order; i++) {
+                tmp += _base(b * x, b * y);
+                m *= persistence;
+                b *= 2;
+            }
+            return tmp;
+        }
+
+        float abs(float x, float y) {
+            float tmp = _base(x, y);
+            return MathF.Sqrt(tmp * tmp);
+        }
     }
 }
