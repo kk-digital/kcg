@@ -18,7 +18,7 @@ namespace ImageLoader
         {
             ImageLoaderManager = new TileSpriteImageLoaderManager();
             SpriteSheetLoaderManager = new SpriteSheetImageLoader();
-            SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+            //SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
         }
         private void Start() 
         {
@@ -41,7 +41,7 @@ namespace ImageLoader
             byte B;  
             byte A;     
 
-                                              Debug.Log($"{x} x size; {y} y size");
+                                              Debug.Log($"{xSize} x size; {ySize} y size");
             int count = 0;
             //we're setting up each pixel's rgba according to the png pixels rgba   
             for(int Y = 0; Y < 16; Y++)
@@ -55,8 +55,6 @@ namespace ImageLoader
                     B = pixelArray[4 * index + 2]; //GETTING THE BLUE COLOR BYTE  
                     A = pixelArray[4 * index + 3]; //GETTING THE ALPHA COLOR BYTE  
                     texture.SetPixel(X,Y, new Color32(R,G,B,A));
-                    var color = TileSpriteImageLoaderManager.Instance.PNGFile[0].GetColorFromPixelArray(count);
-                    texture.SetPixel(X,Y, color);
                     count++;
                 }
             }
@@ -78,7 +76,6 @@ namespace ImageLoader
             byte G;  
             byte B;  
             byte A;     
-            int count = 0;
             //we're setting up each pixel's rgba according to the png pixels rgba   
             for(int Y = 0; Y < 55; Y++)
             {
@@ -91,9 +88,6 @@ namespace ImageLoader
                     B = pixelArray[4 * index + 2]; //GETTING THE BLUE COLOR BYTE  
                     A = pixelArray[4 * index + 3]; //GETTING THE ALPHA COLOR BYTE  
                     texture.SetPixel(X,Y, new Color32(R,G,B,A));
-                    var color = SpriteSheetImageLoader.Instance.SpriteSheet[0].GetColorFromPixelArray(count);
-                    texture.SetPixel(X,Y, color);
-                    count++;
                 }
             }
             texture.Apply(true);     
