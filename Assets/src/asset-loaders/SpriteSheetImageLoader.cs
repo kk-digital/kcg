@@ -10,13 +10,13 @@ namespace ImageLoader
     {
         public static SpriteSheetImageLoader Instance;
         public SpriteSheetData[] SpriteSheet {get => FilesSpriteSheet; set => FilesSpriteSheet = value;}
-        public int SpriteSheetCount {get => count; set => count = value;}
+        public int SpriteSheetCount {get => Count; set => Count = value;}
         public Dictionary<string, int> DictionarySpriteSheetID {get => DictionaryID; set => DictionaryID = value;}
         public delegate int DGetSpriteSheetID<SpriteSheetData>(string filename,SpriteSheetData data);
         public DGetSpriteSheetID<SpriteSheetData> GetSpriteSheetID;
         public SpriteSheetImageLoader()
         {
-            GetSpriteSheetID = new DGetSpriteSheetID<SpriteSheetData>(base.GetID<SpriteSheetData>);
+            GetSpriteSheetID = base.GetID;
             Instance = this;
         }
         public override SpriteSheetData AssignSpriteSheetDatas(string filename, int id)
@@ -34,7 +34,8 @@ namespace ImageLoader
             var fileCreationTime = fileInfo.CreationTime;
             var fileSize = fileInfo.Length;
             var numberOfArrays = xSize * ySize;
-            PixelsRGBAData[] pixelRGBAData = new PixelsRGBAData[numberOfArrays];
+            var pixelRGBAData = new Pixel[numberOfArrays];
+            
             int reference = 0;
             
             //test of taking 8 sprites from spritesheet in 1st column
@@ -42,9 +43,7 @@ namespace ImageLoader
             {
                 for(int x = 0; x < 73; x++)
                 {
-                    Pixel getPixels = png.GetPixel(x,y); 
-                    byte[] pixelsRGBA = new byte[4] {getPixels.R,getPixels.G,getPixels.B,getPixels.A};
-                    pixelRGBAData[reference] = new PixelsRGBAData(pixelsRGBA);
+                    pixelRGBAData[reference] = png.GetPixel(x, y);
                     reference++;
                 }
             }

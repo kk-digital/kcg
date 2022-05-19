@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using BigGustave;
 
 namespace ImageLoader 
 {
@@ -13,7 +14,7 @@ namespace ImageLoader
         public int XSize;
         public int YSize;
         public int PixelFormat; //enum in src/enums, RGBA default
-        public PixelsRGBAData[] PixelData; //4 bytes per pixel RGBA
+        public Pixel[] PixelData; //4 bytes per pixel RGBA
             //File Properties
         public string FileName; // Filename and path string
         public Int64 Hash; // 64 bit xxHash of image file
@@ -21,7 +22,7 @@ namespace ImageLoader
         public long FileSize;
         public SpriteSheetData(int SpriteSheetId, int SpriteSheetType, 
                                int Loaded, int AccessCounter, int XSize, 
-                               int Ysize, int PixelFormat, PixelsRGBAData[] PixelData,
+                               int Ysize, int PixelFormat, Pixel[] PixelData,
                                string FileName, Int64 Hash, string FileCreationTime, long FileSize)
         {
         this.SpriteSheetId = SpriteSheetId;

@@ -45,10 +45,10 @@ namespace ImageLoader
             {
                 for(int X = 0; X < 16; X++)
                 {
-                    R = TileSpriteImageLoaderManager.Instance.PNGFile[0].PixelsArray[count].PixelsRGBA[0]; //GETTING THE RED COLOR BYTE
-                    G = TileSpriteImageLoaderManager.Instance.PNGFile[0].PixelsArray[count].PixelsRGBA[1]; //GETTING THE GREEN COLOR BYTE 
-                    B = TileSpriteImageLoaderManager.Instance.PNGFile[0].PixelsArray[count].PixelsRGBA[2]; //GETTING THE BLUE COLOR BYTE  
-                    A = TileSpriteImageLoaderManager.Instance.PNGFile[0].PixelsArray[count].PixelsRGBA[3]; //GETTING THE ALPHA COLOR BYTE  
+                    R = TileSpriteImageLoaderManager.Instance.PNGFile[0].PixelsArray[count].R;
+                    G = TileSpriteImageLoaderManager.Instance.PNGFile[0].PixelsArray[count].G;
+                    B = TileSpriteImageLoaderManager.Instance.PNGFile[0].PixelsArray[count].B;
+                    A = TileSpriteImageLoaderManager.Instance.PNGFile[0].PixelsArray[count].A;
                     texture.SetPixel(X,Y, new Color32(R,G,B,A));
                     count++;
                 }
