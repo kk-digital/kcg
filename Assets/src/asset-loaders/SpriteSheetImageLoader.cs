@@ -10,13 +10,13 @@ namespace ImageLoader
     {
         public static SpriteSheetImageLoader Instance;
         public SpriteSheetData[] SpriteSheet {get => FilesSpriteSheet; set => FilesSpriteSheet = value;}
-        public int SpriteSheetCount {get => count; set => count = value;}
+        public int SpriteSheetCount {get => Count; set => Count = value;}
         public Dictionary<string, int> DictionarySpriteSheetID {get => DictionaryID; set => DictionaryID = value;}
         public delegate int DGetSpriteSheetID<SpriteSheetData>(string filename,SpriteSheetData data);
         public DGetSpriteSheetID<SpriteSheetData> GetSpriteSheetID;
         public SpriteSheetImageLoader()
         {
-            GetSpriteSheetID = new DGetSpriteSheetID<SpriteSheetData>(base.GetID<SpriteSheetData>);
+            GetSpriteSheetID = base.GetID;
             Instance = this;
         }
         public override SpriteSheetData AssignSpriteSheetDatas(string filename, int id)
@@ -35,6 +35,10 @@ namespace ImageLoader
             var fileSize = fileInfo.Length;
             var numberOfArrays = xSize * ySize;
             byte[] pixelsArray = new byte[4 * xSize * ySize];
+            var pixelRGBAData = new Pixel[numberOfArrays];
+            
+            int reference = 0;
+            
             //test of taking 8 sprites from spritesheet in 1st column
             for(int y = 0; y < 32; y++)
             {
@@ -46,6 +50,8 @@ namespace ImageLoader
                     pixelsArray[4 * index + 1] = getPixels.G;
                     pixelsArray[4 * index + 2] = getPixels.B;
                     pixelsArray[4 * index + 3] = getPixels.A;
+                    pixelRGBAData[reference] = png.GetPixel(x, y);
+                    reference++;
                 }
             }
             TileSpriteImageLoaderManager.Instance.ImageCount +=1;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using Enums;
 
 //MonoBehaviors should be in Asset/Script folder?
 namespace ImageLoader
@@ -17,6 +18,7 @@ namespace ImageLoader
         {
             ImageLoaderManager = new TileSpriteImageLoaderManager();
             SpriteSheetLoaderManager = new SpriteSheetImageLoader();
+            SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
         }
         private void Start() 
         {
@@ -32,11 +34,16 @@ namespace ImageLoader
             Texture2D texture = new Texture2D(xSize,
                                               ySize,
                                               TextureFormat.RGBA32,false );
+
                                               Debug.Log($"{xSize} x size; {ySize} y size");
             byte R;
             byte G;  
             byte B;  
             byte A;     
+
+                                              Debug.Log($"{x} x size; {y} y size");
+            int count = 0;
+            //we're setting up each pixel's rgba according to the png pixels rgba   
             for(int Y = 0; Y < 16; Y++)
             {
                 for(int X = 0; X < 16; X++)
@@ -48,12 +55,16 @@ namespace ImageLoader
                     B = pixelArray[4 * index + 2]; //GETTING THE BLUE COLOR BYTE  
                     A = pixelArray[4 * index + 3]; //GETTING THE ALPHA COLOR BYTE  
                     texture.SetPixel(X,Y, new Color32(R,G,B,A));
+                    var color = TileSpriteImageLoaderManager.Instance.PNGFile[0].GetColorFromPixelArray(count);
+                    texture.SetPixel(X,Y, color);
+                    count++;
                 }
             }
             texture.Apply(true);
             Debug.Log($"{texture.GetPixels()} pixels count");
             GameObject.Find("/Canvas/Image").GetComponent<RawImage>().texture = texture;
         }
+        
         public void GetSpriteFromSpriteSheet()
         {
             SpriteSheetImageLoader.Instance.GetSpriteSheetID("spiderDrill_spritesheet.png",spriteSheetData);
@@ -67,6 +78,7 @@ namespace ImageLoader
             byte G;  
             byte B;  
             byte A;     
+            int count = 0;
             //we're setting up each pixel's rgba according to the png pixels rgba   
             for(int Y = 0; Y < 55; Y++)
             {
@@ -79,6 +91,9 @@ namespace ImageLoader
                     B = pixelArray[4 * index + 2]; //GETTING THE BLUE COLOR BYTE  
                     A = pixelArray[4 * index + 3]; //GETTING THE ALPHA COLOR BYTE  
                     texture.SetPixel(X,Y, new Color32(R,G,B,A));
+                    var color = SpriteSheetImageLoader.Instance.SpriteSheet[0].GetColorFromPixelArray(count);
+                    texture.SetPixel(X,Y, color);
+                    count++;
                 }
             }
             texture.Apply(true);     
