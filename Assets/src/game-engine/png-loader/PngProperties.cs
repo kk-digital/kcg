@@ -1,4 +1,5 @@
 using BigGustave;
+using UnityEngine;
 
 namespace ImageLoader 
 {
@@ -22,7 +23,13 @@ namespace ImageLoader
             {
                 PixelsArray[i] = pixelsArray[i];   
             }
-        } 
+        }
+
+        public Color32 GetColorFromPixelArray(int index)
+        {
+            var pixel = PixelsArray[index];
+            return new Color32(pixel.R, pixel.G, pixel.B, pixel.A);
+        }
    }
 }
 

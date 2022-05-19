@@ -45,11 +45,8 @@ namespace ImageLoader
             {
                 for(int X = 0; X < 16; X++)
                 {
-                    R = TileSpriteImageLoaderManager.Instance.PNGFile[0].PixelsArray[count].R;
-                    G = TileSpriteImageLoaderManager.Instance.PNGFile[0].PixelsArray[count].G;
-                    B = TileSpriteImageLoaderManager.Instance.PNGFile[0].PixelsArray[count].B;
-                    A = TileSpriteImageLoaderManager.Instance.PNGFile[0].PixelsArray[count].A;
-                    texture.SetPixel(X,Y, new Color32(R,G,B,A));
+                    var color = TileSpriteImageLoaderManager.Instance.PNGFile[0].GetColorFromPixelArray(count);
+                    texture.SetPixel(X,Y, color);
                     count++;
                 }
             }
