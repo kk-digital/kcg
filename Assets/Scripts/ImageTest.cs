@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using Enums;
 
 //MonoBehaviors should be in Asset/Script folder?
 namespace ImageLoader
@@ -17,6 +18,7 @@ namespace ImageLoader
         {
             ImageLoaderManager = new TileSpriteImageLoaderManager();
             SpriteSheetLoaderManager = new SpriteSheetImageLoader();
+            SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
         }
         private void Start() 
         {
