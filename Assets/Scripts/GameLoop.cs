@@ -1,4 +1,5 @@
 using UnityEngine;
+using Enums;
 
 public class GameLoop : MonoBehaviour
 {
@@ -7,7 +8,7 @@ public class GameLoop : MonoBehaviour
     // Method for setting everything up, for like init GameManager for example
     private void Init()
     {
-        SceneManager.Instance.Register(GetType().Name);
+        SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
         Application.targetFrameRate = FPS; // Cap at 60 FPS
     }
     
