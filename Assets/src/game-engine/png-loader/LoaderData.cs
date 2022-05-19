@@ -40,13 +40,24 @@ public abstract class LoaderData
         DictionaryID.Add(filename, count);
         if(data is ImageData)
         {
-            Array.Resize(ref FilesImage, count);
+            ImageArray(data);
             FilesImage[count-1] = AssignPNGDatas(fileInfo.FullName,count);
         }
         if(data is SpriteSheetData)
         {
-            Array.Resize(ref FilesSpriteSheet, count);
+            ImageArray(data);
             FilesSpriteSheet[count-1] = AssignSpriteSheetDatas(fileInfo.FullName,count);
+        }
+    }
+    public void ImageArray<Data>(Data data)
+    {
+        if(data is ImageData)
+        {
+            Array.Resize(ref FilesImage, count);
+        }
+        if(data is SpriteSheetData)
+        {
+            Array.Resize(ref FilesSpriteSheet, count);
         }
     }
     public virtual ImageData AssignPNGDatas (string filename, int id) => new ImageData();

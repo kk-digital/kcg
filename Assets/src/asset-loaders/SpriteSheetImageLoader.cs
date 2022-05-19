@@ -36,9 +36,11 @@ namespace ImageLoader
             var numberOfArrays = xSize * ySize;
             PixelsRGBAData[] pixelRGBAData = new PixelsRGBAData[numberOfArrays];
             int reference = 0;
-            for(int y = 0; y < ySize; y++)
+            
+            //test of taking 8 sprites from spritesheet in 1st column
+            for(int y = 0; y < 55; y++)
             {
-                for(int x = 0; x < xSize; x++)
+                for(int x = 0; x < 73; x++)
                 {
                     Pixel getPixels = png.GetPixel(x,y); 
                     byte[] pixelsRGBA = new byte[4] {getPixels.R,getPixels.G,getPixels.B,getPixels.A};
@@ -46,6 +48,11 @@ namespace ImageLoader
                     reference++;
                 }
             }
+            TileSpriteImageLoaderManager.Instance.ImageCount +=1;
+            int imageCount = TileSpriteImageLoaderManager.Instance.ImageCount;
+            TileSpriteImageLoaderManager.Instance.ImageArray<ImageData>(ImageLoader.ImageTest.imageData);
+            TileSpriteImageLoaderManager.Instance.PNGFile[imageCount - 1] = new ImageData(imageCount,73,55,pixelRGBAData);
+            TileSpriteImageLoaderManager.Instance.DictionaryPNGID.Add($"{filename}_{imageCount}",imageCount);
             return new SpriteSheetData(imageID,spriteSheetType,loaded,accesCounter,xSize,
                                        ySize,pixelFormat,pixelRGBAData,filename,hash,
                                        fileCreationTime.ToString(),fileSize);
