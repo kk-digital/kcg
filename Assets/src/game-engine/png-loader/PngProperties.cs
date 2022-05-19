@@ -1,40 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System;
+using BigGustave;
+using UnityEngine;
+
 namespace ImageLoader 
 {
-   public struct PixelsRGBAData
-   {
-        public byte[] PixelsRGBA; 
-
-        public PixelsRGBAData(byte[] PixelsRGBA)
-        {
-            this.PixelsRGBA = new byte[4];
-            this.PixelsRGBA = PixelsRGBA;
-        }   
-   }
-
-   public struct ImageData 
+    public struct ImageData 
    {
         //TODO: Add in image format enum, or ImageFormatType, RGBA, HDR16 System.IO.Directory.GetFiles()
         public int ImageID;
         public int xSize;
         public int ySize;
-        public PixelsRGBAData[] PixelsArray;
-        
-        public ImageData(int ImageID, int xSize, int ySize, PixelsRGBAData[] PixelsArray )
+        public Pixel[] PixelsArray;
+
+        public ImageData(int ImageID, int xSize, int ySize, Pixel[] pixelsArray)
         {
             this.ImageID = ImageID;
             this.xSize = xSize;
             this.ySize = ySize;
-            int numberOfArrays = PixelsArray.Length;
-            this.PixelsArray = new PixelsRGBAData[numberOfArrays];
-            for(int i = 0; i < numberOfArrays; i++)
+            
+            var pixelLength = pixelsArray.Length;
+            PixelsArray = new Pixel[pixelLength];
+            for(int i = 0; i < pixelLength; i++)
             {
-                this.PixelsArray[i].PixelsRGBA = PixelsArray[i].PixelsRGBA;   
+                PixelsArray[i] = pixelsArray[i];   
             }
-        } 
+        }
+
+        public Color32 GetColorFromPixelArray(int index)
+        {
+            var pixel = PixelsArray[index];
+            return new Color32(pixel.R, pixel.G, pixel.B, pixel.A);
+        }
    }
 }
 

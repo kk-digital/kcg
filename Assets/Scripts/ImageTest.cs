@@ -36,20 +36,13 @@ namespace ImageLoader
                                               TextureFormat.RGBA32,false );
                                               Debug.Log($"{x} x size; {y} y size");
             int count = 0;
-            byte R;
-            byte G;  
-            byte B;  
-            byte A;     
             //we're setting up each pixel's rgba according to the png pixels rgba   
             for(int Y = 0; Y < 16; Y++)
             {
                 for(int X = 0; X < 16; X++)
                 {
-                    R = TileSpriteImageLoaderManager.Instance.PNGFile[0].PixelsArray[count].PixelsRGBA[0]; //GETTING THE RED COLOR BYTE
-                    G = TileSpriteImageLoaderManager.Instance.PNGFile[0].PixelsArray[count].PixelsRGBA[1]; //GETTING THE GREEN COLOR BYTE 
-                    B = TileSpriteImageLoaderManager.Instance.PNGFile[0].PixelsArray[count].PixelsRGBA[2]; //GETTING THE BLUE COLOR BYTE  
-                    A = TileSpriteImageLoaderManager.Instance.PNGFile[0].PixelsArray[count].PixelsRGBA[3]; //GETTING THE ALPHA COLOR BYTE  
-                    texture.SetPixel(X,Y, new Color32(R,G,B,A));
+                    var color = TileSpriteImageLoaderManager.Instance.PNGFile[0].GetColorFromPixelArray(count);
+                    texture.SetPixel(X,Y, color);
                     count++;
                 }
             }
@@ -57,6 +50,7 @@ namespace ImageLoader
             Debug.Log($"{texture.GetPixels()} pixels count");
             GameObject.Find("/Canvas/Image").GetComponent<RawImage>().texture = texture;
         }
+        
         public void GetSpriteFromSpriteSheet()
         {
             SpriteSheetImageLoader.Instance.GetSpriteSheetID("spiderDrill_spritesheet.png",spriteSheetData);
@@ -66,20 +60,13 @@ namespace ImageLoader
                                               TextureFormat.RGBA32,false );
                                               Debug.Log($"{73} x size; {55} y size");
             int count = 0;
-            byte R;
-            byte G;  
-            byte B;  
-            byte A;     
             //we're setting up each pixel's rgba according to the png pixels rgba   
             for(int Y = 0; Y < 55; Y++)
             {
                 for(int X = 0; X < 73; X++)
                 {
-                    R = SpriteSheetImageLoader.Instance.SpriteSheet[0].PixelData[count].PixelsRGBA[0]; //GETTING THE RED COLOR BYTE
-                    G = SpriteSheetImageLoader.Instance.SpriteSheet[0].PixelData[count].PixelsRGBA[1]; //GETTING THE GREEN COLOR BYTE 
-                    B = SpriteSheetImageLoader.Instance.SpriteSheet[0].PixelData[count].PixelsRGBA[2]; //GETTING THE BLUE COLOR BYTE  
-                    A = SpriteSheetImageLoader.Instance.SpriteSheet[0].PixelData[count].PixelsRGBA[3]; //GETTING THE ALPHA COLOR BYTE  
-                    texture.SetPixel(X,Y, new Color32(R,G,B,A));
+                    var color = SpriteSheetImageLoader.Instance.SpriteSheet[0].GetColorFromPixelArray(count);
+                    texture.SetPixel(X,Y, color);
                     count++;
                 }
             }
