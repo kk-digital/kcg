@@ -36,10 +36,6 @@ namespace ImageLoader
                                               TextureFormat.RGBA32,false );
                                               Debug.Log($"{x} x size; {y} y size");
             int count = 0;
-            byte R;
-            byte G;  
-            byte B;  
-            byte A;     
             //we're setting up each pixel's rgba according to the png pixels rgba   
             for(int Y = 0; Y < 16; Y++)
             {
