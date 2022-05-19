@@ -41,6 +41,8 @@ namespace ImageLoader
         public int count {get; set;}
         public Dictionary<string, int> DictionaryID {get; set;}
 
+
+        // TODO(mahdi): reusing released memory and fileIds
         public int load(string filePath)
         {
             int id = -1;
@@ -86,8 +88,10 @@ namespace ImageLoader
 
 
             return null;        
-
         }
+
+        //TODO(mahdi): releasing fileData memory function
+        
 
     }
 
