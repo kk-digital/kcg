@@ -29,7 +29,7 @@ namespace PerlinNoise {
             octaves = _octaves;
 
             if(change_seed)
-                Mt19937.seed_twister(new_seed != 0 ? new_seed : (ulong)rng.Next() << 32 | (ulong)rng.Next()));
+                Mt19937.seed_twister(new_seed != 0 ? new_seed : (ulong)rng.Next() << 32 | (ulong)rng.Next());
             
 
             octave_array = new PerlinField2D[octaves];
@@ -54,7 +54,7 @@ namespace PerlinNoise {
 
             if(runs == 0) {
                 update = true;
-                Mt19937.seed_twister(new_seed != 0 ? new_seed : (ulong)rng.Next() << 32 | (ulong)rng.Next()));
+                Mt19937.seed_twister(new_seed != 0 ? new_seed : (ulong)rng.Next() << 32 | (ulong)rng.Next());
 
                 for (int i = 0; i < octaves; i++)
                     octave_array[i].generate_gradient_array();
