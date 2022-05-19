@@ -1,9 +1,25 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Enums;
 
-public class SceneManager : MonoBehaviour
+
+
+// helper class to store  mono objects
+public class SceneManagerObject
 {
-    private List<string> objects = new List<string>();
+    public object obj { get; set; }
+    public SceneObjectType type { get; set; }
+
+    public SceneManagerObject(object o, SceneObjectType typ)
+    {
+        obj = o;
+        type = typ;
+    }
+}
+
+class SceneManager : MonoBehaviour
+{
+    private List<SceneManagerObject> objects = new List<SceneManagerObject>();
 
     private static SceneManager _instance;
     public static SceneManager Instance
@@ -26,14 +42,20 @@ public class SceneManager : MonoBehaviour
 
 
     //add object to the list
-    public void Register(string typeName)
+    public int Register(object obj, SceneObjectType type)
     {
-        objects.Add(typeName);
+        SceneManagerObject newObject = new SceneManagerObject(obj, type);
+        objects.Add(newObject);
+
+        return objects.Count - 1;
     }
 
     //remove object from the list
-    public void Unregister(string typeName)
+    public void Unregister(int id)
     {
-        objects.Remove(typeName);
+        if (objects.Count < id)
+        {
+            objects.RemoveAt(id);
+        }
     }
 }
