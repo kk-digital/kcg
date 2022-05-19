@@ -55,9 +55,12 @@ namespace PerlinNoise {
             populate_cache(persistence);
         }
 
-        public void set_param(float persistence, bool change_seed = true) {
+        public void set_param(float persistence, bool change_seed = true, ulong new_seed = 0) {
             if(runs == 0) {
-                if(change_seed) Mt19937.seed_twister((ulong)(new Random()).Next());
+                if(change_seed) {
+                    Random rng = new Random();
+                    Mt19937.seed_twister(new_seed != 0 ? new_seed : ((ulong)rng.Next() << 32 | (ulong)rng.Next()));
+                }
                 for(int i = 0; i < octaves; i++)
                     octave_array[i].generate_gradient_array();
             }

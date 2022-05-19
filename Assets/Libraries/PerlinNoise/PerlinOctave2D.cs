@@ -14,8 +14,10 @@ namespace PerlinNoise {
         private int map_dim_y;
 
         private int runs;
+        private Random rng;
 
-        private void _init(int _octaves, int _map_dim_x, int _map_dim_y, bool change_seed = true) {
+        private void _init(int _octaves, int _map_dim_x, int _map_dim_y, bool change_seed = true, ulong new_seed = 0) {
+            rng = new Random();
             runs = 0;
             cache = null;
             cache_persistence = 0.0f;
@@ -27,7 +29,8 @@ namespace PerlinNoise {
             octaves = _octaves;
 
             if(change_seed)
-                Mt19937.seed_twister((ulong)(new Random()).Next());
+                Mt19937.seed_twister(new_seed != 0 ? new_seed : (ulong)rng.Next() << 32 | (ulong)rng.Next()));
+            
 
             octave_array = new PerlinField2D[octaves];
 
@@ -38,7 +41,7 @@ namespace PerlinNoise {
         }
 
         public PerlinOctave2D(int octaves, int dim_x, int dim_y) { _init(octaves, dim_x, dim_y); }
-        public PerlinOctave2D(int octaves, int dim_x, int dim_y, bool change_seed) { _init(octaves, dim_x, dim_y, change_seed); }
+        public PerlinOctave2D(int octaves, int dim_x, int dim_y, bool change_seed, ulong new_seed) { _init(octaves, dim_x, dim_y, change_seed, new_seed); }
 
         public void set_persistence(float persistence) {
             if(cache_persistence == persistence) return;
@@ -46,14 +49,14 @@ namespace PerlinNoise {
             populate_cache(persistence);
         }
 
-        public void set_param(float persistence, bool change_seed = true) {
+        public void set_param(float persistence, bool change_seed = true, ulong new_seed = 0) {
             bool update = false;
 
             if(runs == 0) {
                 update = true;
-                if(change_seed) Mt19937.seed_twister(cache_seed = (ulong)(new Random()).Next());
-               
-                for(int i = 0; i < octaves; i++)
+                Mt19937.seed_twister(new_seed != 0 ? new_seed : (ulong)rng.Next() << 32 | (ulong)rng.Next()));
+
+                for (int i = 0; i < octaves; i++)
                     octave_array[i].generate_gradient_array();
             }
 
