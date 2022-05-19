@@ -65,13 +65,13 @@ namespace PerlinNoise {
             int gi111 = get_gradient(X + 1, Y + 1, Z + 1);
 
             // Calculate noise contributions from each of the eight corners
-            float n000 = PerlinField2D.dot(gi000, x, y, z);
-            float n100 = PerlinField2D.dot(gi100, x - 1, y, z);
-            float n010 = PerlinField2D.dot(gi010, x, y - 1, z);
+            float n000 = PerlinField2D.dot(gi000, x,     y,     z);
+            float n100 = PerlinField2D.dot(gi100, x - 1, y,     z);
+            float n010 = PerlinField2D.dot(gi010, x,     y - 1, z);
             float n110 = PerlinField2D.dot(gi110, x - 1, y - 1, z);
-            float n001 = PerlinField2D.dot(gi001, x, y, z - 1);
-            float n101 = PerlinField2D.dot(gi101, x - 1, y, z - 1);
-            float n011 = PerlinField2D.dot(gi011, x, y - 1, z - 1);
+            float n001 = PerlinField2D.dot(gi001, x,     y,     z - 1);
+            float n101 = PerlinField2D.dot(gi101, x - 1, y,     z - 1);
+            float n011 = PerlinField2D.dot(gi011, x,     y - 1, z - 1);
             float n111 = PerlinField2D.dot(gi111, x - 1, y - 1, z - 1);
             // Compute the fade curve value for each of x, y, z
 

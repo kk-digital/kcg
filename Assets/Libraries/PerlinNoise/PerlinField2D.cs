@@ -22,9 +22,17 @@ namespace PerlinNoise {
                  + g3[gi, 2] * z;
         }
 
-        static public int fast_floor(float value) { return (int)(value >= 0 ? (int)value : (int)value - 1); }
-        static public float mix(float a, float b, float t) { return a + t * (b - a); }
-        static public float fade(float t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+        static public int fast_floor(float value) {
+            return (int)(value >= 0 ? (int)value : (int)value - 1);
+        }
+
+        static public float mix(float a, float b, float t) {
+            return a + t * (b - a);
+        }
+
+        static public float fade(float t) {
+            return t * t * t * (t * (t * 6 - 15) + 10);
+        }
 
         public  byte[] ga;
         public float[] grad;
@@ -93,9 +101,9 @@ namespace PerlinNoise {
 
             // Calculate noise contributions from each of the eight corners
 
-            float n00 = dot_grad(gi00, x, y);
+            float n00 = dot_grad(gi00, x,     y);
             float n10 = dot_grad(gi10, x - 1, y);
-            float n01 = dot_grad(gi01, x, y - 1);
+            float n01 = dot_grad(gi01, x,     y - 1);
             float n11 = dot_grad(gi11, x - 1, y - 1);
 
             // Compute the fade curve value for each of x, y, z
@@ -103,8 +111,8 @@ namespace PerlinNoise {
             float u = fade(x);
             float v = fade(y);
 
-            float nx00 = mix(n00, n10, u);
-            float nx10 = mix(n01, n11, u);
+            float nx00 = mix(n00,  n10,  u);
+            float nx10 = mix(n01,  n11,  u);
             float nxy  = mix(nx00, nx10, v);
 
             return nxy * MathF.Sqrt(2.0f); // -1 to 1
