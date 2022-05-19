@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Assets.src.Utility.FileLoader
 {
@@ -11,13 +8,29 @@ namespace Assets.src.Utility.FileLoader
         /// <summary>
         /// A map of FileId to Filename
         /// </summary>
-        public Dictionary<int, string> Mappings;
+        Dictionary<int, string> Mappings;
 
-        public FileData[] FileProperties;
+        FileData[] FileProperties;
 
-        /// <summary>
-        /// Unload file
-        /// </summary>
+        IntegerIdGenerator integerIdGenerator;
+
+        void InitCheck()
+        {
+            if (Mappings == null) Mappings = new Dictionary<int, string>();
+            if (FileProperties == null) FileProperties = new FileData[] { };
+            if (integerIdGenerator == null) integerIdGenerator = new IntegerIdGenerator();
+        }
+
+        public void Load(FileData fileData)
+        {
+            InitCheck();
+
+            fileData.FileId = integerIdGenerator.NewId();
+
+            FileProperties = FileProperties.Append(fileData).ToArray();
+            Mappings.Add(fileData.FileId, fileData.Filename);
+        }
+
         public void Unload(int fileId)
         {
             if (Mappings.ContainsKey(fileId)) Mappings.Remove(fileId);
@@ -27,6 +40,9 @@ namespace Assets.src.Utility.FileLoader
 
         public int GetFileId(string filename) => Mappings.FirstOrDefault(x => x.Value == filename).Key;
 
-        public FileData GetFileData(int fileId) => FileProperties.FirstOrDefault(x => x.FileId == fileId);
+        public FileData GetFileData(int fileId)
+        {
+            return FileProperties.FirstOrDefault(x => x.FileId == fileId);
+        }
     }
 }
