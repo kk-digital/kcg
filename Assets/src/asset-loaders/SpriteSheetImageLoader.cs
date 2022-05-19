@@ -34,15 +34,22 @@ namespace ImageLoader
             var fileCreationTime = fileInfo.CreationTime;
             var fileSize = fileInfo.Length;
             var numberOfArrays = xSize * ySize;
+            byte[] pixelsArray = new byte[4 * xSize * ySize];
             var pixelRGBAData = new Pixel[numberOfArrays];
             
             int reference = 0;
             
             //test of taking 8 sprites from spritesheet in 1st column
-            for(int y = 0; y < 55; y++)
+            for(int y = 0; y < 32; y++)
             {
-                for(int x = 0; x < 73; x++)
+                for(int x = 0; x < 32; x++)
                 {
+                    Pixel getPixels = png.GetPixel(x,y); 
+                    int index = y*xSize + x;
+                    pixelsArray[4 * index + 0] = getPixels.R;
+                    pixelsArray[4 * index + 1] = getPixels.G;
+                    pixelsArray[4 * index + 2] = getPixels.B;
+                    pixelsArray[4 * index + 3] = getPixels.A;
                     pixelRGBAData[reference] = png.GetPixel(x, y);
                     reference++;
                 }
@@ -50,11 +57,12 @@ namespace ImageLoader
             TileSpriteImageLoaderManager.Instance.ImageCount +=1;
             int imageCount = TileSpriteImageLoaderManager.Instance.ImageCount;
             TileSpriteImageLoaderManager.Instance.ImageArray<ImageData>(ImageLoader.ImageTest.imageData);
-            TileSpriteImageLoaderManager.Instance.PNGFile[imageCount - 1] = new ImageData(imageCount,73,55,pixelRGBAData);
+            //TileSpriteImageLoaderManager.Instance.PNGFile[imageCount - 1] = new ImageData(imageCount,73,55,pixelRGBAData, new byte[]{});
             TileSpriteImageLoaderManager.Instance.DictionaryPNGID.Add($"{filename}_{imageCount}",imageCount);
+
             return new SpriteSheetData(imageID,spriteSheetType,loaded,accesCounter,xSize,
-                                       ySize,pixelFormat,pixelRGBAData,filename,hash,
-                                       fileCreationTime.ToString(),fileSize);
+                                       ySize,pixelFormat,filename,hash,
+                                       fileCreationTime.ToString(),fileSize,pixelsArray);
         }
 
     }

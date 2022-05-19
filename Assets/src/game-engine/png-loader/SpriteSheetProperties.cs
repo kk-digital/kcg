@@ -15,6 +15,7 @@ namespace ImageLoader
         public int XSize;
         public int YSize;
         public int PixelFormat; //enum in src/enums, RGBA default
+            //File Properties
 
         public Pixel[] PixelData; //4 bytes per pixel RGBA
 
@@ -23,6 +24,25 @@ namespace ImageLoader
         public Int64 Hash; // 64 bit xxHash of image file
         public string FileCreationTime; // time of file modification
         public long FileSize;
+        public byte[] _PixelsArray;
+        public SpriteSheetData(int SpriteSheetId, int SpriteSheetType, 
+                               int Loaded, int AccessCounter, int XSize, 
+                               int Ysize, int PixelFormat,
+                               string FileName, Int64 Hash, string FileCreationTime,
+                               long FileSize, byte[] _PixelsARray)
+        {
+        this.SpriteSheetId = SpriteSheetId;
+        this.SpriteSheetType = SpriteSheetType;
+        this.Loaded = Loaded;
+        this.AccessCounter = AccessCounter;
+        this.XSize = XSize;
+        this.YSize = Ysize;
+        this.PixelFormat = PixelFormat;
+        this.FileName = FileName;
+        this.Hash = Hash;
+        this.FileCreationTime = FileCreationTime;
+        this.FileSize = FileSize;
+        this._PixelsArray = _PixelsARray;
 
         public SpriteSheetData(int SpriteSheetId, int SpriteSheetType,
             int Loaded, int AccessCounter, int XSize,

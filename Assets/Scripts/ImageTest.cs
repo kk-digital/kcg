@@ -22,18 +22,25 @@ namespace ImageLoader
         }
         private void Start() 
         {
-            //SpritePixelGeneration();
-            GetSpriteFromSpriteSheet();
+            SpritePixelGeneration();
+            //GetSpriteFromSpriteSheet();
         }   
 
         public void SpritePixelGeneration()
         {
             TileSpriteImageLoaderManager.Instance.GetImageID("rock1.png", imageData);
-            int x = TileSpriteImageLoaderManager.Instance.PNGFile[0].xSize;
-            int y = TileSpriteImageLoaderManager.Instance.PNGFile[0].ySize;
-            Texture2D texture = new Texture2D(x,
-                                              y,
+            int xSize = TileSpriteImageLoaderManager.Instance.PNGFile[0].xSize;
+            int ySize = TileSpriteImageLoaderManager.Instance.PNGFile[0].ySize;
+            Texture2D texture = new Texture2D(xSize,
+                                              ySize,
                                               TextureFormat.RGBA32,false );
+
+                                              Debug.Log($"{xSize} x size; {ySize} y size");
+            byte R;
+            byte G;  
+            byte B;  
+            byte A;     
+
                                               Debug.Log($"{x} x size; {y} y size");
             int count = 0;
             //we're setting up each pixel's rgba according to the png pixels rgba   
@@ -41,6 +48,13 @@ namespace ImageLoader
             {
                 for(int X = 0; X < 16; X++)
                 {
+                    byte[] pixelArray = TileSpriteImageLoaderManager.Instance.PNGFile[0]._PixelsArray;
+                    int index = Y*xSize + X;
+                    R = pixelArray[4 * index + 0]; //GETTING THE RED COLOR BYTE
+                    G = pixelArray[4 * index + 1]; //GETTING THE GREEN COLOR BYTE 
+                    B = pixelArray[4 * index + 2]; //GETTING THE BLUE COLOR BYTE  
+                    A = pixelArray[4 * index + 3]; //GETTING THE ALPHA COLOR BYTE  
+                    texture.SetPixel(X,Y, new Color32(R,G,B,A));
                     var color = TileSpriteImageLoaderManager.Instance.PNGFile[0].GetColorFromPixelArray(count);
                     texture.SetPixel(X,Y, color);
                     count++;
@@ -54,17 +68,29 @@ namespace ImageLoader
         public void GetSpriteFromSpriteSheet()
         {
             SpriteSheetImageLoader.Instance.GetSpriteSheetID("spiderDrill_spritesheet.png",spriteSheetData);
-
             Texture2D texture = new Texture2D(73,
                                               55,
                                               TextureFormat.RGBA32,false );
                                               Debug.Log($"{73} x size; {55} y size");
+            int xSize = SpriteSheetImageLoader.Instance.SpriteSheet[0].XSize;
+            int ySize = SpriteSheetImageLoader.Instance.SpriteSheet[0].YSize;                                 
+            byte R;
+            byte G;  
+            byte B;  
+            byte A;     
             int count = 0;
             //we're setting up each pixel's rgba according to the png pixels rgba   
             for(int Y = 0; Y < 55; Y++)
             {
                 for(int X = 0; X < 73; X++)
                 {
+                    byte[] pixelArray = TileSpriteImageLoaderManager.Instance.PNGFile[0]._PixelsArray;
+                    int index = Y*xSize + X;
+                    R = pixelArray[4 * index + 0]; //GETTING THE RED COLOR BYTE
+                    G = pixelArray[4 * index + 1]; //GETTING THE GREEN COLOR BYTE 
+                    B = pixelArray[4 * index + 2]; //GETTING THE BLUE COLOR BYTE  
+                    A = pixelArray[4 * index + 3]; //GETTING THE ALPHA COLOR BYTE  
+                    texture.SetPixel(X,Y, new Color32(R,G,B,A));
                     var color = SpriteSheetImageLoader.Instance.SpriteSheet[0].GetColorFromPixelArray(count);
                     texture.SetPixel(X,Y, color);
                     count++;
