@@ -151,7 +151,7 @@ namespace TmxMapFileLoader
             var spriteIdsToTilePropertyId = new Dictionary<(int, int), int>();
            
             //TODO: Fix
-            //var tileProperties = new List<TileProperties.TileProperties>();
+            var tileProperties = new List<TileProperties.TileProperties>();
 
             Generate(PlanetTileLayer.TileLayerBack);
             Generate(PlanetTileLayer.TileLayerMiddle);
