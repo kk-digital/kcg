@@ -1,4 +1,4 @@
-﻿using BigGustave;
+using BigGustave;
 using Enums;
 using System;
 using System.Collections.Generic;
@@ -155,7 +155,7 @@ namespace TmxMapFileLoader
             Generate(PlanetTileLayer.TileLayerMiddle);
             Generate(PlanetTileLayer.TileLayerFront);
             Generate(PlanetTileLayer.TileLayerFurniture);
-
+            
             TilePropertiesManager.Instance.TileProperties = tileProperties.ToArray(); //changed from res.TileProperties to use singleton
 
             //build atlases
@@ -288,7 +288,7 @@ namespace TmxMapFileLoader
                 var y = ts.Margin + iRow * ts.TileHeight + Math.Max(0, iRow - 1) * ts.Spacing;
                 var sprite = new Sprite { Width = ts.TileWidth, Height = ts.TileHeight, Left = x, Top = y };
                 sprite.Texture = PngToRGBA(png, x, y, sprite.Width, sprite.Height);
-
+                
                 gidToSprite[gid] = sprite;
             }
         }
