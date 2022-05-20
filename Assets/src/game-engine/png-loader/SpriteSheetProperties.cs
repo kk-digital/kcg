@@ -19,60 +19,39 @@ namespace ImageLoader
         public long Hash; // 64 bit xxHash of image file
         public string FileCreationTime; // time of file modification
         public long FileSize;
-        public byte[] PixelsArray;
+        public Png Data;
 
         #endregion
 
         public SpriteSheetData(string fileName, int spriteSheetId, int spriteSheetType, int loaded, int accessCounter,
             int pixelFormat, long hash) : this()
         {
-            var png = Png.Open(fileName);
+            Data = Png.Open(fileName);
             var fileInfo = new FileInfo(fileName);
 
             SpriteSheetId = spriteSheetId;
             SpriteSheetType = spriteSheetType;
             Loaded = loaded;
             AccessCounter = accessCounter;
-            Size.x = png.Header.Width;
-            Size.y = png.Header.Height;
+            Size.x = Data.Header.Width;
+            Size.y = Data.Header.Height;
             PixelFormat = pixelFormat;
             FileName = fileName;
             Hash = hash;
             FileCreationTime = fileInfo.CreationTime.ToString();
             FileSize = fileInfo.Length;
-            CreatePixelsArray(png);
         }
 
         /// <summary>
-        /// Creating byte array from PNG
-        /// </summary>
-        public void CreatePixelsArray(Png png)
-        {
-            PixelsArray = new byte[4 * Size.x * Size.y];
-            
-            for (int y = 0; y < Size.y; y++)
-            {
-                for (int x = 0; x < Size.x; x++)
-                {
-                    var getPixels = png.GetPixel(x, y);
-                    var index = y * Size.x + x;
-                    PixelsArray[4 * index + 0] = getPixels.R;
-                    PixelsArray[4 * index + 1] = getPixels.G;
-                    PixelsArray[4 * index + 2] = getPixels.B;
-                    PixelsArray[4 * index + 3] = getPixels.A;
-                }
-            }
-        }
-        
-        /// <summary>
         /// Getting RGBA color bytes from index
         /// </summary>
-        public Color32 GetColor(int index)
+        public Color32 GetPixelColor(int x, int y)
         {
-            var r = PixelsArray[4 * index + 0];
-            var g = PixelsArray[4 * index + 1];
-            var b = PixelsArray[4 * index + 2]; 
-            var a = PixelsArray[4 * index + 3];
+            var pixel = Data.GetPixel(x, y);
+            var r = pixel.R;
+            var g = pixel.G;
+            var b = pixel.B;
+            var a = pixel.A;
 
             return new Color32(r, g, b, a);
         }

@@ -43,8 +43,7 @@ namespace ImageLoader
             {
                 for (int x = 0; x < 16; x++)
                 {
-                    int index = y * xSize + x;
-                    var color = TileSpriteImageLoaderManager.Instance.PNGFile[0].GetColor(index);
+                    var color = TileSpriteImageLoaderManager.Instance.PNGFile[0].GetPixelColor(x, y);
                     texture.SetPixel(x, y, color);
                 }
             }
@@ -77,8 +76,7 @@ namespace ImageLoader
             {
                 for (int x = 0; x < xSize; x++)
                 {
-                    int index = y * xSize + x;
-                    var color = SpriteSheetImageLoader.Instance.SpriteSheet[0].GetColor(index);
+                    var color = SpriteSheetImageLoader.Instance.SpriteSheet[0].GetPixelColor(x, y);
                     texture.SetPixel(x, y, color);
                 }
             }
