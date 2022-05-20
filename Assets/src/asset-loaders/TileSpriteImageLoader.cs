@@ -21,7 +21,8 @@ namespace ImageLoader
 
         public override ImageData AssignPNGDatas(string filename, int id)
         {
-            return new ImageData(filename, id);
+            var pngData = Png.Open(filename);
+            return new ImageData(pngData, id);
         }
     }
 }

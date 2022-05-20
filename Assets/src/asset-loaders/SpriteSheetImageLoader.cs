@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BigGustave;
 
 namespace ImageLoader
 {
@@ -47,7 +48,8 @@ namespace ImageLoader
             TileSpriteImageLoaderManager.Instance.ImageArray(ImageTest.imageData);
             TileSpriteImageLoaderManager.Instance.DictionaryPNGID.Add($"{filename}_{imageCount}", imageCount);
 
-            return new SpriteSheetData(filename, id, spriteSheetType, loaded, accessCounter, pixelFormat, hash);
+            var data = Png.Open(filename);
+            return new SpriteSheetData(data, filename, id, spriteSheetType, loaded, accessCounter, pixelFormat, hash);
         }
     }
 }

@@ -23,12 +23,12 @@ namespace ImageLoader
 
         #endregion
 
-        public SpriteSheetData(string fileName, int spriteSheetId, int spriteSheetType, int loaded, int accessCounter,
+        public SpriteSheetData(Png pngData, string fileName, int spriteSheetId, int spriteSheetType, int loaded, int accessCounter,
             int pixelFormat, long hash) : this()
         {
-            Data = Png.Open(fileName);
             var fileInfo = new FileInfo(fileName);
 
+            Data = pngData;
             SpriteSheetId = spriteSheetId;
             SpriteSheetType = spriteSheetType;
             Loaded = loaded;

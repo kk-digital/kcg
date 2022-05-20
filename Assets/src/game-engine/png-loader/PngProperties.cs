@@ -10,10 +10,9 @@ namespace ImageLoader
         public Vector2Int Size;
         public Png Data;
         
-        public ImageData(string filename, int imageID) : this()
+        public ImageData(Png data, int imageID) : this()
         {
-            Data = Png.Open(filename);
-
+            Data = data;
             ImageID = imageID;
             Size.x = Data.Header.Width;
             Size.y = Data.Header.Height;
