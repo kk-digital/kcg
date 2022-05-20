@@ -149,14 +149,17 @@ namespace TmxMapFileLoader
             //TODO: The Tile Properties should be set earlier, before this stage
             //now look in tile info array and generate TileProperty for each unique combinations of primary and secondary spriteId
             var spriteIdsToTilePropertyId = new Dictionary<(int, int), int>();
-            var tileProperties = new List<PlanetTileProperties>();
+           
+            //TODO: Fix
+            //var tileProperties = new List<TileProperties.TileProperties>();
 
             Generate(PlanetTileLayer.TileLayerBack);
             Generate(PlanetTileLayer.TileLayerMiddle);
             Generate(PlanetTileLayer.TileLayerFront);
             Generate(PlanetTileLayer.TileLayerFurniture);
 
-            TilePropertiesManager.Instance.TileProperties = tileProperties.ToArray(); //changed from res.TileProperties to use singleton
+            //TODO: Fix
+            //TilePropertiesManager.Instance.TileProperties = tileProperties.ToArray(); //changed from res.TileProperties to use singleton
 
             //build atlases
             res.SetAtlas(PlanetTileLayer.TileLayerBack, AtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerBack));
@@ -186,8 +189,9 @@ namespace TmxMapFileLoader
                     //get tileProperty index or create new tileProperty
                     if (!spriteIdsToTilePropertyId.TryGetValue(key, out var tilePropertyId))
                     {
+                        //move to global
                         tilePropertyId = tileProperties.Count;
-                        var tileProperty = new PlanetTileProperties(){Layer = layer, SpriteId = key.Item1, SpriteId2 = key.Item2};
+                        var tileProperty = new TileProperties.TileProperties(){ Layer = layer, SpriteId = key.Item1, SpriteId2 = key.Item2};
                         tileProperties.Add(tileProperty);
                     }
 

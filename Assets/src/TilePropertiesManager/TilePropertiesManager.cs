@@ -6,11 +6,12 @@ namespace TileProperties
 {
     public class TilePropertiesManager
     {
-        public PlanetTileProperties[] TileProperties;
+        public TileProperties[] TileProperties;
         public static TilePropertiesManager Instance;
         public TilePropertiesManager ()
         {
-            Instance = this;
+            //Instance = this;
+            Instance = new TilePropertiesManager();
         }
         
         public static void InitStage1()
