@@ -19,6 +19,7 @@ namespace ImageLoader
             GetSpriteSheetID = base.GetID;
             Instance = this;
         }
+
         public override SpriteSheetData AssignSpriteSheetDatas(string filename, int id)
         {
             Png png = Png.Open(filename);
@@ -34,27 +35,28 @@ namespace ImageLoader
             var fileCreationTime = fileInfo.CreationTime;
             var fileSize = fileInfo.Length;
             var numberOfArrays = xSize * ySize;
-            byte[] pixelsArray = new byte[4 * xSize * ySize];
+            var pixelsArray = new List<byte>(4 * xSize * ySize);
             //test of taking 8 sprites from spritesheet in 1st row
-            for(int y = 0; y < ySize; y++)
+            for (int y = 0; y < ySize; y++)
             {
-                for(int x = 0; x < xSize; x++)
+                for (int x = 0; x < xSize; x++)
                 {
-                    Pixel getPixels = png.GetPixel(x,y); 
-                    int index = y*xSize + x;
+                    Pixel getPixels = png.GetPixel(x, y);
+                    int index = y * xSize + x;
                     pixelsArray[4 * index + 0] = getPixels.R;
                     pixelsArray[4 * index + 1] = getPixels.G;
                     pixelsArray[4 * index + 2] = getPixels.B;
                     pixelsArray[4 * index + 3] = getPixels.A;
                 }
             }
-            TileSpriteImageLoaderManager.Instance.ImageCount +=1;
+
+            TileSpriteImageLoaderManager.Instance.ImageCount += 1;
             int imageCount = TileSpriteImageLoaderManager.Instance.ImageCount;
-            TileSpriteImageLoaderManager.Instance.ImageArray<ImageData>(ImageLoader.ImageTest.imageData);
-            TileSpriteImageLoaderManager.Instance.DictionaryPNGID.Add($"{filename}_{imageCount}",imageCount);
-            return new SpriteSheetData(imageID,spriteSheetType,loaded,accesCounter,xSize,
-                                       ySize,pixelFormat,filename,hash,
-                                       fileCreationTime.ToString(),fileSize,pixelsArray);
+            TileSpriteImageLoaderManager.Instance.ImageArray(ImageTest.imageData);
+            TileSpriteImageLoaderManager.Instance.DictionaryPNGID.Add($"{filename}_{imageCount}", imageCount);
+            return new SpriteSheetData(imageID, spriteSheetType, loaded, accesCounter, xSize,
+                ySize, pixelFormat, filename, hash,
+                fileCreationTime.ToString(), fileSize, pixelsArray);
         }
 
     }
