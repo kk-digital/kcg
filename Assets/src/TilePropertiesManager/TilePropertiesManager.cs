@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 /*
  A MANAGE CLASS TO MANAGE SPRITE TILE PROPERTIES
 */
+
 namespace TileProperties
 {
     class TilePropertiesManager
@@ -12,14 +9,16 @@ namespace TileProperties
         // Tile properties
         public PlanetTileProperties[] TileProperties;
 
-        public static TilePropertiesManager _instance;
+        //SingleTon
+        public static TilePropertiesManager instance;
+
         public static TilePropertiesManager Instance
         {
             get
             {
-                if (_instance == null)
-                    _instance = new TilePropertiesManager();
-                return _instance;
+                if (instance == null)
+                    instance = new TilePropertiesManager();
+                return instance;
             }
         }
 

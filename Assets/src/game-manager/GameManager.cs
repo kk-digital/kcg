@@ -129,8 +129,7 @@ public class GameManager : MonoBehaviour
     //Load settings from files and other init, that requires systems to be intialized
     public void InitStage2()
     {
-        //TODO: Start loading the files
-        // file loading operations here
+        TilePropertiesManager.InitCoreRelatives();
     }
 
     public void TearDown()
