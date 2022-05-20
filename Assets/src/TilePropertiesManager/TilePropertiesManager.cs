@@ -11,8 +11,8 @@ namespace TileProperties
         public static TilePropertiesManager Instance;
         public TilePropertiesManager ()
         {
-            //Instance = this;
-            Instance = new TilePropertiesManager();
+            Instance = this;
+            
         }
         
         public static void InitStage1()
