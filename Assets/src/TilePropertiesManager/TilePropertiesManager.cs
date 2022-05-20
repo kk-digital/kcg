@@ -4,33 +4,15 @@ using UnityEngine;
 
 namespace TileProperties
 {
-    class TilePropertiesManager
+    public class TilePropertiesManager
     {
         public PlanetTileProperties[] TileProperties;
-
-        //SingleTon
-        private static TilePropertiesManager _instance;
-       // public static TilePropertiesManager Instance;
-        public static TilePropertiesManager Instance 
+        public static TilePropertiesManager Instance;
+        public TilePropertiesManager ()
         {
-            get
-            {
-                if (_instance == null)
-                    _instance = new TilePropertiesManager();
-                return _instance;
-            }
+            Instance = this;
         }
-            //Todo: Move Init to Init Function
-
-            /*
-            if (instance == null)
-            {
-                Instance = new TilePropertiesManager();
-            }
-            return Instance; 
-            */
-
-
+        
         public static void InitStage1()
         {
             //This is where init goes

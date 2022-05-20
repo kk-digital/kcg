@@ -36,9 +36,9 @@ namespace ImageLoader
             var numberOfArrays = xSize * ySize;
             byte[] pixelsArray = new byte[4 * xSize * ySize];
             //test of taking 8 sprites from spritesheet in 1st row
-            for(int y = 0; y < 32; y++)
+            for(int y = 0; y < ySize; y++)
             {
-                for(int x = 0; x < 32; x++)
+                for(int x = 0; x < xSize; x++)
                 {
                     Pixel getPixels = png.GetPixel(x,y); 
                     int index = y*xSize + x;

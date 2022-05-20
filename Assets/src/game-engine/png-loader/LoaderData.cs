@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System;
 using BigGustave;
-
+using TileProperties;
 public abstract class LoaderData 
 {
     protected int Count;
@@ -48,6 +48,7 @@ public abstract class LoaderData
                 break;
             case SpriteSheetData:
                 Array.Resize(ref FilesSpriteSheet, Count);
+                Array.Resize(ref TilePropertiesManager.Instance.TileProperties, Count);
                 FilesSpriteSheet[Count-1] = AssignSpriteSheetDatas(fileInfo.FullName, Count);
                 break;
         }

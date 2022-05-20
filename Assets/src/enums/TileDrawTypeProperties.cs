@@ -4,7 +4,7 @@
 namespace Enums
 {
 
-    enum TileDrawProperties : int
+    public enum TileDrawProperties : int
     {
         TileDrawPropertyError = 0, //TileLayer.Error
         TileDrawPropertyNormal = 1 , //use a single sprite, normal tile
