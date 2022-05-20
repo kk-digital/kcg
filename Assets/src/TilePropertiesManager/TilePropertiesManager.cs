@@ -7,6 +7,7 @@ namespace TileProperties
     public class TilePropertiesManager
     {
         public TileProperties[] TileProperties;
+
         public static TilePropertiesManager Instance;
         public TilePropertiesManager ()
         {
