@@ -116,28 +116,27 @@ namespace ImageLoader
             return id;
         }
 
+        //Unloads file data from memory, nils the byte array
+        //However, we keep file metadata/struct forever
         public void Unload(int id)
         {
-          if (id < fileDataArray.Count)
-          {
-                if (!fileData.loaded)
-                {
-                    if (fileData.data)
-                    {
-                        // if the data is set to null the garbage collector
-                        // will delete it for us (c#)
-                        fileData.data = null;
-                        fileData.loaded = false;
+            //FileData* fileDataPtr = this.fileDataArray[id];
+            
+            //if FileId is invalid, just crash, means bug
+            if (this.fileDataArray[id].loaded != true)
+            {
+                //ADD PANIC
+            }
 
-                        // remove the fileData name from the dictionary
-                        DictionaryID.Remove(fileData.filename);
-                    }
-                }
-                else
-                {
-                    // it was already unloaded
-                }
-          }
+            // if the data is set to null the garbage collector
+            // will delete it for us (c#)
+            this.fileDataArray[id].data = null;
+            this.fileDataArray[id].loaded = false;
+
+            // remove the fileData name from the dictionary
+            //Dont remove, we keep forever
+            //DictionaryID.Remove(fileData.filename);
+
         }
 
         public bool Unload(string name)
@@ -148,7 +147,7 @@ namespace ImageLoader
             bool exists = DictionaryID.TryGetValue(name, out value);
             if (exists)
             {
-                 unload(value);
+                this.Unload(value);
                  found = true;
             } 
 
@@ -185,7 +184,7 @@ namespace ImageLoader
             bool exists = DictionaryID.TryGetValue(name, out value);
             if (exists)
             {
-                return get(value);
+                return this.Get(value);
             }
 
 
