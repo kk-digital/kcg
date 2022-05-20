@@ -39,8 +39,6 @@ namespace ImageLoader
         this.FileCreationTime = FileCreationTime;
         this.FileSize = FileSize;
         this._PixelsArray = _PixelsArray;
-
-       
     }
 }
 }
