@@ -2,16 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ A MANAGE CLASS TO MANAGE SPRITE TILE PROPERTIES
+*/
 namespace TileProperties
 {
     class TilePropertiesManager
     {
+        // Tile properties
         public PlanetTileProperties[] TileProperties;
 
-        //SingleTon
-        private static TilePropertiesManager _instance;
-       // public static TilePropertiesManager Instance;
-        public static TilePropertiesManager Instance 
+        public static TilePropertiesManager _instance;
+        public static TilePropertiesManager Instance
         {
             get
             {
@@ -20,27 +22,23 @@ namespace TileProperties
                 return _instance;
             }
         }
-            //Todo: Move Init to Init Function
 
-            /*
-            if (instance == null)
-            {
-                Instance = new TilePropertiesManager();
-            }
-            return Instance; 
-            */
-
-
-        public static void InitStage1()
+        // First of all, we initial core elements to avoid crashes. Because, if we initialize relatives before core, and because realtives uses core 
+        public static void InitCore()
         {
-            //This is where init goes
-            //Instance = new TilePropertiesManager();
+            
         }
 
-        public static void InitStage2()
+        // Once we initialize all core elemets, then we can initialize other parts that is use core elements when working
+        public static void InitCoreRelatives()
         {
+            
+        }
 
+        // Reciving information from Tile property with index
+        public PlanetTileProperties GetTileProperty(int index) 
+        { 
+            return TileProperties[index];
         }
     }
 }
-    //TODO: add a function to get pointer to TileProperty struct from index

@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviour
     public void InitStage1()
     {
         //TODO: Intialize all managers here
-        TilePropertiesManager.InitStage1();
+        TilePropertiesManager.InitCore();
         //Setup ECS system
         ecsSystems = new GameFeatures(Contexts.sharedInstance);
         ecsSystems.Initialize();
