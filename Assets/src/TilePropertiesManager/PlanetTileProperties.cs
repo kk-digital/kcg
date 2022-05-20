@@ -2,7 +2,7 @@
 
 namespace TileProperties
 {
-    struct PlanetTileProperties
+    public struct PlanetTileProperties
     {
         public string Name; //later use string pool
         public string Description;
