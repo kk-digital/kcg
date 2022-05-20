@@ -32,8 +32,8 @@ namespace ImageLoader
         public void SpritePixelGeneration()
         {
             TileSpriteImageLoaderManager.Instance.GetImageID("rock1.png", imageData);
-            int xSize = TileSpriteImageLoaderManager.Instance.PNGFile[0].XSize;
-            int ySize = TileSpriteImageLoaderManager.Instance.PNGFile[0].YSize;
+            int xSize = TileSpriteImageLoaderManager.Instance.PNGFile[0].Size.x;
+            int ySize = TileSpriteImageLoaderManager.Instance.PNGFile[0].Size.y;
             var texture = new Texture2D(xSize, ySize, TextureFormat.RGBA32, false);
 
             Debug.Log($"{xSize} x size; {ySize} y size");
