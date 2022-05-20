@@ -23,11 +23,10 @@ namespace PlanetTileMap.Unity
         Mesh mesh;
         PlanetMapInfo mapInfo;
         List<MeshBuilder> meshBuildersByLayers = new List<MeshBuilder>();
-        public TilePropertiesManager TilePropertiesManager;
+        
 
-        public void Awake()
+        public void Start()
         {
-            TilePropertiesManager = new TilePropertiesManager();
             LoadMap();
         }
 
