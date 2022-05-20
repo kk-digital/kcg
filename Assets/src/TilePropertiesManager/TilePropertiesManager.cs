@@ -12,6 +12,7 @@ namespace TileProperties
         {
             Instance = this;
         }
+        
         public static void InitStage1()
         {
             //This is where init goes

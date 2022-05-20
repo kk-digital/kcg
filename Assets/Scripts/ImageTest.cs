@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using Enums;
-
+using TileProperties;
+using System;
 //MonoBehaviors should be in Asset/Script folder?
 namespace ImageLoader
 {
@@ -12,18 +13,20 @@ namespace ImageLoader
     {
         public LoaderData ImageLoaderManager;
         public static LoaderData SpriteSheetLoaderManager;
+        public static TilePropertiesManager TilesPropertiesManager;
         public static ImageData imageData;
         public SpriteSheetData spriteSheetData;
         private void Awake() 
         {
             ImageLoaderManager = new TileSpriteImageLoaderManager();
             SpriteSheetLoaderManager = new SpriteSheetImageLoader();
+            TilesPropertiesManager = new TilePropertiesManager();
             //SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
         }
         private void Start() 
         {
-            SpritePixelGeneration();
-            //GetSpriteFromSpriteSheet();
+            //SpritePixelGeneration();
+            GetSpriteFromSpriteSheet();
         }   
 
         public void SpritePixelGeneration()
@@ -65,23 +68,29 @@ namespace ImageLoader
         
         public void GetSpriteFromSpriteSheet()
         {
-            SpriteSheetImageLoader.Instance.GetSpriteSheetID("spiderDrill_spritesheet.png",spriteSheetData);
-            Texture2D texture = new Texture2D(73,
-                                              55,
-                                              TextureFormat.RGBA32,false );
-                                              Debug.Log($"{73} x size; {55} y size");
+            string spriteName = "table3.png";
+            SpriteSheetImageLoader.Instance.GetSpriteSheetID(spriteName,spriteSheetData);
+            int tileID = TilePropertiesManager.Instance.TileProperties.Length - 1;
+            TilePropertiesManager.Instance.TileProperties[tileID] = new PlanetTileProperties(spriteName, "A table where things can be placed", tileID
+                                                                                             ,TileDrawProperties.TileDrawPropertyNormal,tileID,0
+                                                                                             ,PlanetTileLayer.TileLayerFront,PlanetTileCollisionType.TileCollisionTypeSolid
+                                                                                             ,0);
             int xSize = SpriteSheetImageLoader.Instance.SpriteSheet[0].XSize;
-            int ySize = SpriteSheetImageLoader.Instance.SpriteSheet[0].YSize;                                 
+            int ySize = SpriteSheetImageLoader.Instance.SpriteSheet[0].YSize;     
+            Texture2D texture = new Texture2D(xSize,
+                                              ySize,
+                                              TextureFormat.RGBA32,false );
+                                              Debug.Log($"{xSize} x size; {ySize} y size");                            
             byte R;
             byte G;  
             byte B;  
             byte A;     
             //we're setting up each pixel's rgba according to the png pixels rgba   
-            for(int Y = 0; Y < 55; Y++)
+            for(int Y = 0; Y < ySize; Y++)
             {
-                for(int X = 0; X < 73; X++)
+                for(int X = 0; X < xSize; X++)
                 {
-                    byte[] pixelArray = TileSpriteImageLoaderManager.Instance.PNGFile[0]._PixelsArray;
+                    byte[] pixelArray = SpriteSheetImageLoader.Instance.SpriteSheet[0]._PixelsArray;
                     int index = Y*xSize + X;
                     R = pixelArray[4 * index + 0]; //GETTING THE RED COLOR BYTE
                     G = pixelArray[4 * index + 1]; //GETTING THE GREEN COLOR BYTE 
@@ -91,6 +100,8 @@ namespace ImageLoader
                 }
             }
             texture.Apply(true);     
+
+
             GameObject.Find("/Canvas/Image").GetComponent<RawImage>().texture = texture;   
         }
     }
