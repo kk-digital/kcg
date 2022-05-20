@@ -7,7 +7,7 @@ namespace TileProperties
     class TilePropertiesManager
     {
         public PlanetTileProperties[] TileProperties;
-
+        
         //SingleTon
         private static TilePropertiesManager _instance;
        // public static TilePropertiesManager Instance;
