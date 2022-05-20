@@ -32,8 +32,8 @@ namespace ImageLoader
         public void SpritePixelGeneration()
         {
             TileSpriteImageLoaderManager.Instance.GetImageID("rock1.png", imageData);
-            int xSize = TileSpriteImageLoaderManager.Instance.PNGFile[0].xSize;
-            int ySize = TileSpriteImageLoaderManager.Instance.PNGFile[0].ySize;
+            int xSize = TileSpriteImageLoaderManager.Instance.PNGFile[0].XSize;
+            int ySize = TileSpriteImageLoaderManager.Instance.PNGFile[0].YSize;
             Texture2D texture = new Texture2D(xSize,
                                               ySize,
                                               TextureFormat.RGBA32,false );
@@ -51,7 +51,7 @@ namespace ImageLoader
             {
                 for(int X = 0; X < 16; X++)
                 {
-                    byte[] pixelArray = TileSpriteImageLoaderManager.Instance.PNGFile[0]._PixelsArray;
+                    byte[] pixelArray = TileSpriteImageLoaderManager.Instance.PNGFile[0].PixelsArray;
                     int index = Y*xSize + X;
                     R = pixelArray[4 * index + 0]; //GETTING THE RED COLOR BYTE
                     G = pixelArray[4 * index + 1]; //GETTING THE GREEN COLOR BYTE 
@@ -90,8 +90,8 @@ namespace ImageLoader
             {
                 for(int X = 0; X < xSize; X++)
                 {
-                    byte[] pixelArray = SpriteSheetImageLoader.Instance.SpriteSheet[0]._PixelsArray;
-                    int index = Y*xSize + X;
+                    var pixelArray = SpriteSheetImageLoader.Instance.SpriteSheet[0].PixelsArray;
+                    int index = Y * xSize + X;
                     R = pixelArray[4 * index + 0]; //GETTING THE RED COLOR BYTE
                     G = pixelArray[4 * index + 1]; //GETTING THE GREEN COLOR BYTE 
                     B = pixelArray[4 * index + 2]; //GETTING THE BLUE COLOR BYTE  

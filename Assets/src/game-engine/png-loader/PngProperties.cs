@@ -7,16 +7,16 @@ namespace ImageLoader
    {
         //TODO: Add in image format enum, or ImageFormatType, RGBA, HDR16 System.IO.Directory.GetFiles()
         public int ImageID;
-        public int xSize;
-        public int ySize;
-        public byte[] _PixelsArray;
-        public ImageData(int ImageID, int xSize, int ySize, byte[] _PixelsArray)
+        public int XSize;
+        public int YSize;
+        public byte[] PixelsArray;
+        public ImageData(int imageID, int xSize, int ySize, byte[] pixelsArray)
         {
-            this.ImageID = ImageID;
-            this.xSize = xSize;
-            this.ySize = ySize;
-            this._PixelsArray = _PixelsArray;
-        } 
+            ImageID = imageID;
+            XSize = xSize;
+            YSize = ySize;
+            PixelsArray = pixelsArray;
+        }
     }
 }
 
