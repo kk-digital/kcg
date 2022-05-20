@@ -120,9 +120,11 @@ namespace ImageLoader
         {
           if (id < fileDataArray.Count)
           {
+              FileData fileData = fileDataArray[id];
+
                 if (!fileData.loaded)
                 {
-                    if (fileData.data)
+                    if (fileData.data != null)
                     {
                         // if the data is set to null the garbage collector
                         // will delete it for us (c#)
@@ -130,7 +132,7 @@ namespace ImageLoader
                         fileData.loaded = false;
 
                         // remove the fileData name from the dictionary
-                        DictionaryID.Remove(fileData.filename);
+                        DictionaryID.Remove(fileData.fileName);
                     }
                 }
                 else
@@ -148,7 +150,7 @@ namespace ImageLoader
             bool exists = DictionaryID.TryGetValue(name, out value);
             if (exists)
             {
-                 unload(value);
+                 Unload(value);
                  found = true;
             } 
 
@@ -185,7 +187,7 @@ namespace ImageLoader
             bool exists = DictionaryID.TryGetValue(name, out value);
             if (exists)
             {
-                return get(value);
+                return Get(value);
             }
 
 
