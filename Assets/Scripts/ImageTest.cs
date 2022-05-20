@@ -43,7 +43,7 @@ namespace ImageLoader
             {
                 for (int x = 0; x < 16; x++)
                 {
-                    var color = TileSpriteImageLoaderManager.Instance.PNGFile[0].GetPixelColor(x, y);
+                    var color = TileSpriteImageLoaderManager.Instance.PNGFile[0].GetColor(x, y);
                     texture.SetPixel(x, y, color);
                 }
             }
@@ -76,7 +76,7 @@ namespace ImageLoader
             {
                 for (int x = 0; x < xSize; x++)
                 {
-                    var color = SpriteSheetImageLoader.Instance.SpriteSheet[0].GetPixelColor(x, y);
+                    var color = SpriteSheetImageLoader.Instance.SpriteSheet[0].GetColor(x, y);
                     texture.SetPixel(x, y, color);
                 }
             }
