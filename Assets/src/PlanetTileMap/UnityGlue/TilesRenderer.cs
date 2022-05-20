@@ -3,7 +3,7 @@ using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
 using Enums;
-
+using TileProperties;
 using TmxMapFileLoader;
 
 #if UNITY_EDITOR
@@ -25,9 +25,11 @@ namespace PlanetTileMap.Unity
         Mesh mesh;
         PlanetMapInfo mapInfo;
         List<MeshBuilder> meshBuildersByLayers = new List<MeshBuilder>();
+        public TilePropertiesManager TilePropertiesManager;
 
-        public void Start()
+        public void Awake()
         {
+            TilePropertiesManager = new TilePropertiesManager();
             LoadMap();
         }
 
