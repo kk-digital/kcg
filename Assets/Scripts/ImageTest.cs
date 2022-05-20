@@ -27,82 +27,62 @@ namespace ImageLoader
         {
             //SpritePixelGeneration();
             GetSpriteFromSpriteSheet();
-        }   
+        }
 
         public void SpritePixelGeneration()
         {
             TileSpriteImageLoaderManager.Instance.GetImageID("rock1.png", imageData);
-            int xSize = TileSpriteImageLoaderManager.Instance.PNGFile[0].xSize;
-            int ySize = TileSpriteImageLoaderManager.Instance.PNGFile[0].ySize;
-            Texture2D texture = new Texture2D(xSize,
-                                              ySize,
-                                              TextureFormat.RGBA32,false );
+            int xSize = TileSpriteImageLoaderManager.Instance.PNGFile[0].Size.x;
+            int ySize = TileSpriteImageLoaderManager.Instance.PNGFile[0].Size.y;
+            var texture = new Texture2D(xSize, ySize, TextureFormat.RGBA32, false);
 
-                                              Debug.Log($"{xSize} x size; {ySize} y size");
-            byte R;
-            byte G;  
-            byte B;  
-            byte A;     
-
-                                              Debug.Log($"{xSize} x size; {ySize} y size");
-            int count = 0;
+            Debug.Log($"{xSize} x size; {ySize} y size");
+            Debug.Log($"{xSize} x size; {ySize} y size");
             //we're setting up each pixel's rgba according to the png pixels rgba   
-            for(int Y = 0; Y < 16; Y++)
+            for (int y = 0; y < 16; y++)
             {
-                for(int X = 0; X < 16; X++)
+                for (int x = 0; x < 16; x++)
                 {
-                    byte[] pixelArray = TileSpriteImageLoaderManager.Instance.PNGFile[0]._PixelsArray;
-                    int index = Y*xSize + X;
-                    R = pixelArray[4 * index + 0]; //GETTING THE RED COLOR BYTE
-                    G = pixelArray[4 * index + 1]; //GETTING THE GREEN COLOR BYTE 
-                    B = pixelArray[4 * index + 2]; //GETTING THE BLUE COLOR BYTE  
-                    A = pixelArray[4 * index + 3]; //GETTING THE ALPHA COLOR BYTE  
-                    texture.SetPixel(X,Y, new Color32(R,G,B,A));
-                    count++;
+                    var color = TileSpriteImageLoaderManager.Instance.PNGFile[0].GetColor(x, y);
+                    texture.SetPixel(x, y, color);
                 }
             }
+
             texture.Apply(true);
             Debug.Log($"{texture.GetPixels()} pixels count");
             GameObject.Find("/Canvas/Image").GetComponent<RawImage>().texture = texture;
         }
-        
+
         public void GetSpriteFromSpriteSheet()
         {
             string spriteName = "table3.png";
-            SpriteSheetImageLoader.Instance.GetSpriteSheetID(spriteName,spriteSheetData);
+            string description = "A table where things can be placed";
             int tileID = TilePropertiesManager.Instance.TileProperties.Length - 1;
-            TilePropertiesManager.Instance.TileProperties[tileID] = new PlanetTileProperties(spriteName, "A table where things can be placed", tileID
-                                                                                             ,TileDrawProperties.TileDrawPropertyNormal,tileID,0
-                                                                                             ,PlanetTileLayer.TileLayerFront,PlanetTileCollisionType.TileCollisionTypeSolid
-                                                                                             ,0);
-            int xSize = SpriteSheetImageLoader.Instance.SpriteSheet[0].XSize;
-            int ySize = SpriteSheetImageLoader.Instance.SpriteSheet[0].YSize;     
-            Texture2D texture = new Texture2D(xSize,
-                                              ySize,
-                                              TextureFormat.RGBA32,false );
-                                              Debug.Log($"{xSize} x size; {ySize} y size");                            
-            byte R;
-            byte G;  
-            byte B;  
-            byte A;     
-            //we're setting up each pixel's rgba according to the png pixels rgba   
-            for(int Y = 0; Y < ySize; Y++)
+
+            SpriteSheetImageLoader.Instance.GetSpriteSheetID(spriteName, spriteSheetData);
+
+            TilePropertiesManager.Instance.TileProperties[tileID] = new PlanetTileProperties(spriteName, description,
+                tileID, TileDrawProperties.TileDrawPropertyNormal, tileID, 0, PlanetTileLayer.TileLayerFront,
+                PlanetTileCollisionType.TileCollisionTypeSolid, 0);
+
+            int xSize = SpriteSheetImageLoader.Instance.SpriteSheet[0].Size.x;
+            int ySize = SpriteSheetImageLoader.Instance.SpriteSheet[0].Size.y;
+            var texture = new Texture2D(xSize, ySize, TextureFormat.RGBA32, false);
+
+            Debug.Log($"{xSize} x size; {ySize} y size");
+
+            //we're setting up each pixel's RGBA according to the png pixels rgba   
+            for (int y = 0; y < ySize; y++)
             {
-                for(int X = 0; X < xSize; X++)
+                for (int x = 0; x < xSize; x++)
                 {
-                    byte[] pixelArray = SpriteSheetImageLoader.Instance.SpriteSheet[0]._PixelsArray;
-                    int index = Y*xSize + X;
-                    R = pixelArray[4 * index + 0]; //GETTING THE RED COLOR BYTE
-                    G = pixelArray[4 * index + 1]; //GETTING THE GREEN COLOR BYTE 
-                    B = pixelArray[4 * index + 2]; //GETTING THE BLUE COLOR BYTE  
-                    A = pixelArray[4 * index + 3]; //GETTING THE ALPHA COLOR BYTE  
-                    texture.SetPixel(X,Y, new Color32(R,G,B,A));
+                    var color = SpriteSheetImageLoader.Instance.SpriteSheet[0].GetColor(x, y);
+                    texture.SetPixel(x, y, color);
                 }
             }
-            texture.Apply(true);     
 
-
-            GameObject.Find("/Canvas/Image").GetComponent<RawImage>().texture = texture;   
+            texture.Apply(true);
+            GameObject.Find("/Canvas/Image").GetComponent<RawImage>().texture = texture;
         }
     }
 }

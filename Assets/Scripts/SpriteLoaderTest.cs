@@ -10,7 +10,7 @@ using System.IO;
 
 //TODO: Rename SpriteLoader -> TileSpriteLoader
 //All tiles will be 32x32 pixels, but use a const
-public class SpriteLoader : MonoBehaviour
+public class SpriteLoaderTest : MonoBehaviour
 {
     // This script loads a PNG or JPEG image from disk and returns it as a Sprite
     
@@ -19,9 +19,9 @@ public class SpriteLoader : MonoBehaviour
 
 
     /// TODO, dont do private/getters like this, too much code, no one will ever assign this by accident
-    private static SpriteLoader _instance;
+    private static SpriteLoaderTest _instance;
 
-    public static SpriteLoader instance
+    public static SpriteLoaderTest instance
     {
         get
         {
@@ -30,7 +30,7 @@ public class SpriteLoader : MonoBehaviour
 
             //Dont use GameObject/unity
             if (_instance == null)
-                _instance = GameObject.FindObjectOfType<SpriteLoader>();
+                _instance = GameObject.FindObjectOfType<SpriteLoaderTest>();
             return _instance;
         }
     }

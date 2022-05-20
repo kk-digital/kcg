@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,7 +20,7 @@ public class SpriteSheetManager
     public int GetImageID(string filePath)
     {
         SpriteStruct loadedSprite = new SpriteStruct();
-        Sprite sprite = SpriteLoader.instance.LoadNewSprite(BaseDir + filePath, 32f);
+        Sprite sprite = TileSpriteLoader.Instance.LoadNewSprite(BaseDir + filePath, 32f);
         loadedSprite.id = spriteList.Count;
         //TODO: All tile sprites are 32x32 or scaled to 32x32, dont use rects
         loadedSprite.size = sprite.textureRect.size;

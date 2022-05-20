@@ -10,7 +10,7 @@ using TileProperties;
 public abstract class LoaderData 
 {
     protected int Count;
-    protected Dictionary<string, int> DictionaryID = new Dictionary<string, int>();
+    protected Dictionary<string, int> DictionaryID = new();
     protected ImageData[] FilesImage;
     protected SpriteSheetData[] FilesSpriteSheet;
     protected virtual int GetID<TData> (string filename, TData data) 

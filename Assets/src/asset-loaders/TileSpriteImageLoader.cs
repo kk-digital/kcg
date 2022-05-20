@@ -1,15 +1,7 @@
-//using System.Collections;
-//using System.Collections.Generic;
-
 //TODO: Dont import Unity
-
 using BigGustave;
-//using Entitas;
-using System;
-using System.Linq;
-using System.IO;
 using System.Collections.Generic;
-using UnityEngine;
+
 namespace ImageLoader
 {
     public class TileSpriteImageLoaderManager : LoaderData
@@ -26,25 +18,11 @@ namespace ImageLoader
             GetImageID = base.GetID;
             Instance = this;
         }
+
         public override ImageData AssignPNGDatas(string filename, int id)
         {
-            var png = Png.Open(filename);
-            var xSize = png.Header.Width;
-            var ySize = png.Header.Height;
-            byte[] pixelsArray = new byte[4 * xSize * ySize];
-            for(int y = 0; y < ySize; y++)
-            {
-                for(int x = 0; x < xSize; x++)
-                {
-                    Pixel getPixels = png.GetPixel(x,y); 
-                    int index = y*xSize + x;
-                    pixelsArray[4 * index + 0] = getPixels.R;
-                    pixelsArray[4 * index + 1] = getPixels.G;
-                    pixelsArray[4 * index + 2] = getPixels.B;
-                    pixelsArray[4 * index + 3] = getPixels.A;
-                }
-            }
-            return new ImageData(id,xSize,ySize,pixelsArray);            
+            var pngData = Png.Open(filename);
+            return new ImageData(pngData, id);
         }
     }
 }
