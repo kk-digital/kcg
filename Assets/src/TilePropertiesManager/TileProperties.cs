@@ -2,7 +2,7 @@
 
 namespace TileProperties
 {
-    public struct PlanetTileProperties
+    public struct TileProperties
     {
         public string Name; //later use string pool
         public string Description;
@@ -34,7 +34,7 @@ namespace TileProperties
         {
             this.TileCollisionType = collisionType;
         }
-        public PlanetTileProperties(string Name, string Description, int TileId,
+        public TileProperties(string Name, string Description, int TileId,
                                     TileDrawProperties TileDrawType, int SpriteId,
                                     int SpriteId2, PlanetTileLayer Layer, 
                                     PlanetTileCollisionType TileCollisionType,

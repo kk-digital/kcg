@@ -61,7 +61,7 @@ namespace ImageLoader
 
             SpriteSheetImageLoader.Instance.GetSpriteSheetID(spriteName, spriteSheetData);
 
-            TilePropertiesManager.Instance.TileProperties[tileID] = new PlanetTileProperties(spriteName, description,
+            TilePropertiesManager.Instance.TileProperties[tileID] = new TileProperties.TileProperties(spriteName, description,
                 tileID, TileDrawProperties.TileDrawPropertyNormal, tileID, 0, PlanetTileLayer.TileLayerFront,
                 PlanetTileCollisionType.TileCollisionTypeSolid, 0);
 

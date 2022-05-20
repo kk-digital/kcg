@@ -19,21 +19,9 @@ public class SceneManagerObject
 
 class SceneManager : MonoBehaviour
 {
-    private List<SceneManagerObject> objects = new List<SceneManagerObject>();
+    public List<SceneManagerObject> SceneObjects;
 
-    private static SceneManager _instance;
-    public static SceneManager Instance
-    {
-        get
-        {
-            if(_instance == null)
-            {
-                _instance =  new SceneManager();
-            }
-
-            return _instance;
-        }
-    }
+    public static SceneManager Instance;
 
     public void Awake()
     {
@@ -45,17 +33,17 @@ class SceneManager : MonoBehaviour
     public int Register(MonoBehaviour obj, SceneObjectType type)
     {
         SceneManagerObject newObject = new SceneManagerObject(obj, type);
-        objects.Add(newObject);
+        SceneObjects.Add(newObject);
 
-        return objects.Count - 1;
+        return SceneObjects.Count - 1;
     }
 
     //remove object from the list
     public void Unregister(int id)
     {
-        if (objects.Count < id)
+        if (SceneObjects.Count < id)
         {
-            objects.RemoveAt(id);
+            SceneObjects.RemoveAt(id);
         }
     }
 }

@@ -9,7 +9,11 @@ public class CameraMove : MonoBehaviour
 
     void Awake()
     {
-        SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+        //Check if Scene has SceneManager setup
+        if(SceneManager.Instance != null)
+        {
+            SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+        }
     }
 
     void Update()

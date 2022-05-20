@@ -8,7 +8,12 @@ public class GameLoop : MonoBehaviour
     // Method for setting everything up, for like init GameManager for example
     private void Init()
     {
-        SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+        //check if SceneManager even exists
+        if (SceneManager.Instance != null)
+        {
+            SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+        }
+        
         Application.targetFrameRate = FPS; // Cap at 60 FPS
     }
     

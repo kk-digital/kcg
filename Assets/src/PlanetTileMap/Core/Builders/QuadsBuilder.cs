@@ -71,7 +71,7 @@ namespace PlanetTileMap
             //TODO: return pointer to TileProperty
             IEnumerable<int> GetSpriteIds(PlanetTile tile)
             {
-                PlanetTileProperties tileProperty;
+                TileProperties.TileProperties tileProperty;
 
                 switch (layer)
                 {
