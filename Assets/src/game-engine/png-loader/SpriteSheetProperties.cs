@@ -10,8 +10,7 @@ namespace ImageLoader
         public int SpriteSheetType; //enum in src/enums
         public int Loaded;
         public int AccessCounter; //0 at creation, increment every blit or usage operation
-        public int XSize;
-        public int YSize;
+        public Vector2Int Size;
         public int PixelFormat; //enum in src/enums, RGBA default
 
         #region FileProperties
@@ -34,8 +33,8 @@ namespace ImageLoader
             SpriteSheetType = spriteSheetType;
             Loaded = loaded;
             AccessCounter = accessCounter;
-            XSize = png.Header.Width;
-            YSize = png.Header.Height;
+            Size.x = png.Header.Width;
+            Size.y = png.Header.Height;
             PixelFormat = pixelFormat;
             FileName = fileName;
             Hash = hash;
@@ -44,16 +43,19 @@ namespace ImageLoader
             CreatePixelsArray(png);
         }
 
-        private void CreatePixelsArray(Png png)
+        /// <summary>
+        /// Creating byte array from PNG
+        /// </summary>
+        public void CreatePixelsArray(Png png)
         {
-            PixelsArray = new byte[4 * XSize * YSize];
+            PixelsArray = new byte[4 * Size.x * Size.y];
             
-            for (int y = 0; y < YSize; y++)
+            for (int y = 0; y < Size.y; y++)
             {
-                for (int x = 0; x < XSize; x++)
+                for (int x = 0; x < Size.x; x++)
                 {
                     var getPixels = png.GetPixel(x, y);
-                    var index = y * XSize + x;
+                    var index = y * Size.x + x;
                     PixelsArray[4 * index + 0] = getPixels.R;
                     PixelsArray[4 * index + 1] = getPixels.G;
                     PixelsArray[4 * index + 2] = getPixels.B;
@@ -63,7 +65,7 @@ namespace ImageLoader
         }
         
         /// <summary>
-        /// Getting RGBA color bytes
+        /// Getting RGBA color bytes from index
         /// </summary>
         public Color32 GetColor(int index)
         {
