@@ -193,6 +193,12 @@ namespace TmxMapFileLoader
                         tilePropertyId = tileProperties.Count;
                         var tileProperty = new TileProperties.TileProperties(){ Layer = layer, SpriteId = key.Item1, SpriteId2 = key.Item2};
                         tileProperties.Add(tileProperty);
+                        if(TilePropertiesManager.Instance.TileProperties == null) TilePropertiesManager.Instance.TileProperties = new TileProperties.TileProperties[1];
+                        int tilePropertiesLength = TilePropertiesManager.Instance.TileProperties.Length;
+                        Array.Resize(ref TilePropertiesManager.Instance.TileProperties, 
+                                         tilePropertiesLength != 1 ? tilePropertiesLength + 1 :
+                                         tilePropertiesLength);
+                        TilePropertiesManager.Instance.TileProperties[tilePropertiesLength - 1] = tileProperty;
                     }
 
                     //assign layer to sprite
