@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System;
+using System.IO;
 using BigGustave;
 using UnityEngine;
 
@@ -8,42 +6,73 @@ namespace ImageLoader
 {
     public struct SpriteSheetData
     {
-        public int SpriteSheetId { get; private set; }
-        public int SpriteSheetType { get; private set; } //enum in src/enums
-        public int Loaded { get; private set; }
-        public int AccessCounter { get; private set; } //0 at creation, increment every blit or usage operation
-        public int XSize { get; private set; }
-        public int YSize { get; private set; }
-        public int PixelFormat { get; private set; } //enum in src/enums, RGBA default
+        public int SpriteSheetId;
+        public int SpriteSheetType; //enum in src/enums
+        public int Loaded;
+        public int AccessCounter; //0 at creation, increment every blit or usage operation
+        public int XSize;
+        public int YSize;
+        public int PixelFormat; //enum in src/enums, RGBA default
 
         #region FileProperties
 
-        public string FileName { get; private set; } // Filename and path string
-        public Int64 Hash { get; private set; } // 64 bit xxHash of image file
-        public string FileCreationTime { get; private set; } // time of file modification
-        public long FileSize { get; private set; }
-        public List<byte> PixelsArray { get; private set; }
+        public string FileName; // Filename and path string
+        public long Hash; // 64 bit xxHash of image file
+        public string FileCreationTime; // time of file modification
+        public long FileSize;
+        public byte[] PixelsArray;
 
         #endregion
 
-        public SpriteSheetData(int spriteSheetId, int spriteSheetType,
-            int loaded, int accessCounter, int xSize,
-            int ySize, int pixelFormat,
-            string fileName, long hash, string fileCreationTime,
-            long fileSize, List<byte> pixelsArray)
+        public SpriteSheetData(string fileName, int spriteSheetId, int spriteSheetType, int loaded, int accessCounter,
+            int pixelFormat, long hash) : this()
         {
+            var png = Png.Open(fileName);
+            var fileInfo = new FileInfo(fileName);
+
             SpriteSheetId = spriteSheetId;
             SpriteSheetType = spriteSheetType;
             Loaded = loaded;
             AccessCounter = accessCounter;
-            XSize = xSize;
-            YSize = ySize;
+            XSize = png.Header.Width;
+            YSize = png.Header.Height;
             PixelFormat = pixelFormat;
             FileName = fileName;
             Hash = hash;
-            FileCreationTime = fileCreationTime;
-            FileSize = fileSize;
-            PixelsArray = pixelsArray;
+            FileCreationTime = fileInfo.CreationTime.ToString();
+            FileSize = fileInfo.Length;
+            CreatePixelsArray(png);
+        }
+
+        private void CreatePixelsArray(Png png)
+        {
+            PixelsArray = new byte[4 * XSize * YSize];
+            
+            for (int y = 0; y < YSize; y++)
+            {
+                for (int x = 0; x < XSize; x++)
+                {
+                    var getPixels = png.GetPixel(x, y);
+                    var index = y * XSize + x;
+                    PixelsArray[4 * index + 0] = getPixels.R;
+                    PixelsArray[4 * index + 1] = getPixels.G;
+                    PixelsArray[4 * index + 2] = getPixels.B;
+                    PixelsArray[4 * index + 3] = getPixels.A;
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Getting RGBA color bytes
+        /// </summary>
+        public Color32 GetColor(int index)
+        {
+            var r = PixelsArray[4 * index + 0];
+            var g = PixelsArray[4 * index + 1];
+            var b = PixelsArray[4 * index + 2]; 
+            var a = PixelsArray[4 * index + 3];
+
+            return new Color32(r, g, b, a);
         }
     }
 }
