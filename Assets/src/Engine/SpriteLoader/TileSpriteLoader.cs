@@ -14,7 +14,15 @@ public class TileSpriteLoader
     
     // This script loads a PNG or JPEG image from disk and returns it as a Sprite
     private Sprite newSprite;
-
+    
+    public static void InitStage1()
+    {
+        Instance = new TileSpriteLoader();
+    }
+    public static void InitStage2()
+    {
+        
+    }
     //TODO: 32 pixels is 1.0f, fix
     /// <summary>
     /// Load a PNG or JPG image from disk to a Texture2D, assign this texture to a new sprite

@@ -34,7 +34,14 @@ namespace ImageLoader
             GetSpriteSheetID = base.GetID;
             Instance = this;
         }
-
+        public static void InitStage1()
+        {
+            Instance = new SpriteSheetImageLoader();
+        }
+        public static void InitStage2()
+        {
+            
+        }
         public override SpriteSheetData AssignSpriteSheetDatas(string filename, int id)
         {
             const int accessCounter = 0;

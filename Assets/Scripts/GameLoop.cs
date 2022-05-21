@@ -8,8 +8,7 @@ public class GameLoop : MonoBehaviour
     // Method for setting everything up, for like init GameManager for example
     private void Init()
     {
-        TilePropertiesManager = new TilePropertiesManager();
-        if(TilePropertiesManager.Instance.TileProperties == null) TilePropertiesManager.Instance.TileProperties = new TileProperties.TileProperties[1];
+
         //check if SceneManager even exists
         if (SceneManager.Instance != null)
         {

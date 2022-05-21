@@ -35,7 +35,10 @@ namespace TileProperties
         
         public static void InitStage1()
         {
-            
+            //This is where init goes
+            //Instance = new TilePropertiesManager();
+        Instance = new TilePropertiesManager();
+        if(TilePropertiesManager.Instance.TileProperties == null) TilePropertiesManager.Instance.TileProperties = new TileProperties[1];
         }
 
         // Once we initialize all core elemets, then we can initialize other parts that is use core elements when working
