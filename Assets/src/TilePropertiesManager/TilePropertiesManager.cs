@@ -9,16 +9,16 @@ namespace TileProperties
         // Tile properties
         public PlanetTileProperties[] TileProperties;
 
-        //SingleTon
-        public static TilePropertiesManager instance;
+        //Singleton
+        public static TilePropertiesManager Instance;
 
-        public static TilePropertiesManager Instance
+        public static TilePropertiesManager instance
         {
             get
             {
-                if (instance == null)
-                    instance = new TilePropertiesManager();
-                return instance;
+                if (Instance == null)
+                    Instance = new TilePropertiesManager();
+                return Instance;
             }
         }
 
