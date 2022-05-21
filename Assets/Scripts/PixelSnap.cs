@@ -12,7 +12,10 @@ public class PixelSnap : MonoBehaviour
 
     void Awake()
     {
-        SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+        if (SceneManager.Instance != null)
+        {
+            SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+        }
     }
 
     // Use this for initialization
