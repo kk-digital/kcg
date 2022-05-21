@@ -1,9 +1,9 @@
-using System.Collections;
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
 using Enums;
-
+using SpriteAtlas;
+using TileProperties;
 using TmxMapFileLoader;
 
 #if UNITY_EDITOR
@@ -12,8 +12,6 @@ using UnityEditor;
 
 namespace PlanetTileMap.Unity
 {
-    //TODO: Move to script folder
-    //Note: MonoBehaviors/Scripts should go into Asset/Scripts folder
     //Note: TileMap should be mostly controlled by GameManager
     class TilesRenderer : MonoBehaviour
     {
@@ -25,6 +23,7 @@ namespace PlanetTileMap.Unity
         Mesh mesh;
         PlanetMapInfo mapInfo;
         List<MeshBuilder> meshBuildersByLayers = new List<MeshBuilder>();
+        
 
         public void Start()
         {
@@ -42,10 +41,10 @@ namespace PlanetTileMap.Unity
 
             //remove all children MeshRenderer
             foreach(var mr in GetComponentsInChildren<MeshRenderer>())
-            if (Application.isPlaying)
-                Destroy(mr.gameObject);
-            else
-                DestroyImmediate(mr.gameObject);
+                if (Application.isPlaying)
+                    Destroy(mr.gameObject);
+                else
+                    DestroyImmediate(mr.gameObject);
             
             var sortingOrder = 0;
             foreach (var layer in planetLayers)

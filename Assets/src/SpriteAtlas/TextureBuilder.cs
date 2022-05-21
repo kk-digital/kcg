@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 
-namespace PlanetTileMap.Unity
+namespace SpriteAtlas
 {
-   //TODO: Delete
-   //Why is PlanetTileMap dealing with textures? 
     static class TextureBuilder
     {
         public static Texture2D Build(int[,] rgba)
@@ -11,8 +9,10 @@ namespace PlanetTileMap.Unity
             var w = rgba.GetLength(0);
             var h = rgba.GetLength(1);
 
-            var res = new Texture2D(w, h, TextureFormat.RGBA32, false);
-            res.filterMode = FilterMode.Point;
+            var res = new Texture2D(w, h, TextureFormat.RGBA32, false)
+            {
+                filterMode = FilterMode.Point
+            };
 
             var pixels = new Color32[w * h];
             for (int x = 0 ; x < w; x++)

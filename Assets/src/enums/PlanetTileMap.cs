@@ -8,7 +8,7 @@ namespace Enums
 {
 
 
-    enum PlanetTileLayer : byte
+    public enum PlanetTileLayer : byte
     {
         TileLayerError = 0, //TileLayer.Error
 
@@ -18,7 +18,7 @@ namespace Enums
         TileLayerFurniture = 4
     }
 
-    enum PlanetTileCollisionType : byte
+    public enum PlanetTileCollisionType : byte
     {
         TileCollisionTypeError = 0,
         //TODO

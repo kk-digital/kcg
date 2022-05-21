@@ -4,7 +4,7 @@
 
 namespace TileProperties
 {
-    class TilePropertiesManager
+    public class TilePropertiesManager
     {
         // Tile properties
         public PlanetTileProperties[] TileProperties;
@@ -24,6 +24,16 @@ namespace TileProperties
 
         // First of all, we initial core elements to avoid crashes. Because, if we initialize relatives before core, and because realtives uses core 
         public static void InitCore()
+        
+        public TileProperties[] TileProperties;
+
+        public static TilePropertiesManager Instance;
+        public TilePropertiesManager ()
+        {
+            Instance = this;
+        }
+        
+        public static void InitStage1()
         {
             
         }

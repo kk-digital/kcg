@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Enums;
 
 //NEED SPRITE RENDERER COMPONENT TO WORK
 [ExecuteInEditMode]
@@ -14,6 +15,11 @@ public class PixelSnap : MonoBehaviour
 
     // Option to restore position
     private bool shouldRestorePosition;
+
+    void Awake()
+    {
+        SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+    }
 
     // Use this for initialization
     void Start()

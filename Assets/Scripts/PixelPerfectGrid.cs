@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Enums;
 
 /*
 GRID CONTROL SCRIPT TO TEST PIXEL PERFECT CAMERA AND PIXEL SNAP
@@ -22,7 +23,7 @@ public class PixelPerfectGrid : MonoBehaviour
 
     // Grid's Y Offset
     public float YOffset = 0.0f;
-
+    
     // Sprite Renderer
     SpriteRenderer spriteRenderer;
 
@@ -34,6 +35,11 @@ public class PixelPerfectGrid : MonoBehaviour
     public float targetAlpha = 1.0f;
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
+    void Awake()
+    {
+        SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+    }
+    
     void Start()
     {
         // When we off the cursor following, grid go backs to his offset

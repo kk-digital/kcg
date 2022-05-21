@@ -1,4 +1,4 @@
-﻿using BigGustave;
+using BigGustave;
 using Enums;
 using System;
 using System.Collections.Generic;
@@ -149,7 +149,9 @@ namespace TmxMapFileLoader
             //TODO: The Tile Properties should be set earlier, before this stage
             //now look in tile info array and generate TileProperty for each unique combinations of primary and secondary spriteId
             var spriteIdsToTilePropertyId = new Dictionary<(int, int), int>();
-            var tileProperties = new List<PlanetTileProperties>();
+           
+            //TODO: Fix
+            var tileProperties = new List<TileProperties.TileProperties>();
 
             Generate(PlanetTileLayer.TileLayerBack);
             Generate(PlanetTileLayer.TileLayerMiddle);
@@ -186,9 +188,15 @@ namespace TmxMapFileLoader
                     //get tileProperty index or create new tileProperty
                     if (!spriteIdsToTilePropertyId.TryGetValue(key, out var tilePropertyId))
                     {
+                        //move to global
                         tilePropertyId = tileProperties.Count;
-                        var tileProperty = new PlanetTileProperties(){Layer = layer, SpriteId = key.Item1, SpriteId2 = key.Item2};
+                        var tileProperty = new TileProperties.TileProperties(){ Layer = layer, SpriteId = key.Item1, SpriteId2 = key.Item2};
                         tileProperties.Add(tileProperty);
+                        int tilePropertiesLength = TilePropertiesManager.Instance.TileProperties.Length;
+                        Array.Resize(ref TilePropertiesManager.Instance.TileProperties, 
+                                         tilePropertiesLength != 1 ? tilePropertiesLength + 1 :
+                                         tilePropertiesLength);
+                        TilePropertiesManager.Instance.TileProperties[tilePropertiesLength - 1] = tileProperty;
                     }
 
                     //assign layer to sprite
@@ -205,35 +213,6 @@ namespace TmxMapFileLoader
                     }
                 }
             }
-        }
-
-        /// <summary> Temp struct to collect info about tile </summary>
-        private struct PlanetTileInfo
-        {
-            //Back tile
-            public int BackSpriteId;
-            public int SecondaryBackSpriteId;
-            public int BackTileId;
-
-            //Mid tile
-            public int MidSpriteId;
-            public int SecondaryMidSpriteId;
-            public int MidTileId;
-
-            //Front tile
-            public int FrontSpriteId;
-            public int SecondaryFrontSpriteId;
-            public int FrontTileId;
-        
-            //Furniture
-            public int FurnitureSpriteId;
-            public int SecondaryFurnitureSpriteId;
-            public int FurnitureTileId;
-            public sbyte FurnitureOffsetX;
-            public sbyte FurnitureOffsetY;
-
-            //Health
-            public byte Durability;
         }
 
         private static PlanetTileLayer GetPlanetTileLayer(TiledLayer layer)
@@ -288,7 +267,7 @@ namespace TmxMapFileLoader
                 var y = ts.Margin + iRow * ts.TileHeight + Math.Max(0, iRow - 1) * ts.Spacing;
                 var sprite = new Sprite { Width = ts.TileWidth, Height = ts.TileHeight, Left = x, Top = y };
                 sprite.Texture = PngToRGBA(png, x, y, sprite.Width, sprite.Height);
-
+                
                 gidToSprite[gid] = sprite;
             }
         }
