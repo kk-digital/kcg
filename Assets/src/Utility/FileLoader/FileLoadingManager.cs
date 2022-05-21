@@ -116,27 +116,30 @@ namespace ImageLoader
             return id;
         }
 
-        //Unloads file data from memory, nils the byte array
-        //However, we keep file metadata/struct forever
         public void Unload(int id)
         {
-            //FileData* fileDataPtr = this.fileDataArray[id];
-            
-            //if FileId is invalid, just crash, means bug
-            if (this.fileDataArray[id].loaded != true)
-            {
-                //ADD PANIC
-            }
+          if (id < fileDataArray.Count)
+          {
+              FileData fileData = fileDataArray[id];
 
-            // if the data is set to null the garbage collector
-            // will delete it for us (c#)
-            this.fileDataArray[id].data = null;
-            this.fileDataArray[id].loaded = false;
+                if (!fileData.loaded)
+                {
+                    if (fileData.data != null)
+                    {
+                        // if the data is set to null the garbage collector
+                        // will delete it for us (c#)
+                        fileData.data = null;
+                        fileData.loaded = false;
 
-            // remove the fileData name from the dictionary
-            //Dont remove, we keep forever
-            //DictionaryID.Remove(fileData.filename);
-
+                        // remove the fileData name from the dictionary
+                        DictionaryID.Remove(fileData.fileName);
+                    }
+                }
+                else
+                {
+                    // it was already unloaded
+                }
+          }
         }
 
         public bool Unload(string name)
@@ -147,7 +150,7 @@ namespace ImageLoader
             bool exists = DictionaryID.TryGetValue(name, out value);
             if (exists)
             {
-                this.Unload(value);
+                 Unload(value);
                  found = true;
             } 
 
@@ -184,7 +187,7 @@ namespace ImageLoader
             bool exists = DictionaryID.TryGetValue(name, out value);
             if (exists)
             {
-                return this.Get(value);
+                return Get(value);
             }
 
 
