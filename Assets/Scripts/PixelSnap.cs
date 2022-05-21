@@ -2,12 +2,18 @@ using UnityEngine;
 using System.Collections;
 using Enums;
 
+//NEED SPRITE RENDERER COMPONENT TO WORK
 [ExecuteInEditMode]
 [RequireComponent(typeof(SpriteRenderer))]
 public class PixelSnap : MonoBehaviour
 {
+    // Sprite target
     private Sprite sprite;
+
+    // Acutal poisiton world space
     private Vector3 actualPosition;
+
+    // Option to restore position
     private bool shouldRestorePosition;
 
     void Awake()
@@ -21,6 +27,7 @@ public class PixelSnap : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        // Assigning renderer
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
         if (renderer != null)
         {
@@ -32,10 +39,9 @@ public class PixelSnap : MonoBehaviour
         }
     }
 
-
+    // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnWillRenderObject.html
     void OnWillRenderObject()
     {
-        //Debug.Log("on will" + Camera.current);
         Camera cam = Camera.current;
         if (!cam)
             return;

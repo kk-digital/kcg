@@ -143,12 +143,6 @@ public class PixelPerfectCameraTestTool : MonoBehaviour
         cam.orthographicSize = cameraSize;
     }
 
-    //   // Use this for initialization
-    //   void Start () {
-    //       //testMethod();
-    //       adjustCameraFOV();
-    //}
-
     // Doc : https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnEnable.html
     void OnEnable()
     {

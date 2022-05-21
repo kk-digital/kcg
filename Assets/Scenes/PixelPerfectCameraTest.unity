@@ -391,6 +391,7 @@ MonoBehaviour:
   XOffset: 0
   YOffset: 0
   followCursor: 0
+  targetAlpha: 1
 --- !u!114 &2033251205
 MonoBehaviour:
   m_ObjectHideFlags: 0

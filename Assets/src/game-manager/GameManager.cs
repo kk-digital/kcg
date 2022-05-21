@@ -6,7 +6,7 @@ using UnityEngine;
 using ImageLoader;
 using TileProperties;
 
-// https://docs.unity3d.com/ScriptReference/MonoBehaviour.html
+// Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.html
 
 public class GameManager : MonoBehaviour
 {
@@ -14,26 +14,12 @@ public class GameManager : MonoBehaviour
     public string filePath = "/SimpleSpriteSheet/Table1.png";
     private Systems ecsSystems;
 
-    //Todo, just make public, dont do getter/setter
-
-    private static GameManager _instance;
-    public static GameManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-                Debug.LogError("Null GameManager");
-            return _instance;
-        }
-    }
-
     //Documentation: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Awake.html
     //Awake is called when the script instance is being loaded.
     //The Awake function is called on all objects in the Scene before any object's Start function is called. 
     //Unity calls Awake only once during the lifetime of the script instance.
     private void Awake()
     {
-        _instance = this;
         InitStage1();
     }
 
@@ -72,9 +58,9 @@ public class GameManager : MonoBehaviour
          //TODO: Put physics update calls here
     }
 
- //Documentation: https://docs.unity3d.com/ScriptReference/MonoBehaviour.LateUpdate.html 
- //LateUpdate is called every frame
- //LateUpdate is called after all Update functions have been called. This is useful to order script execution.
+    //Documentation: https://docs.unity3d.com/ScriptReference/MonoBehaviour.LateUpdate.html 
+    //LateUpdate is called every frame
+    //LateUpdate is called after all Update functions have been called. This is useful to order script execution.
     private void LateUpdate()
     {
         //Note: Not Used right now
@@ -89,27 +75,27 @@ public class GameManager : MonoBehaviour
         //Note: Not used right now
     }
 
-//Documentation: https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnDisable.html
-//This function is called when the behaviour becomes disabled.
-//This is also called when the object is destroyed and can be used for any cleanup code.
+    //Documentation: https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnDisable.html
+    //This function is called when the behaviour becomes disabled.
+    //This is also called when the object is destroyed and can be used for any cleanup code.
     private void OnDisable()
     {
         //Note: Dont use
     }
 
-    //https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnEnable.html
+    // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnEnable.html
     private void OnEnable()
     {
         //Note: Dont use
     }
-    // https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnDestroy.html
 
+    // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnDestroy.html
     private void OnDestroy()
     {
         
     }
   
-   //https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnApplicationQuit.html
+    // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnApplicationQuit.html
     public void OnApplicationQuit()
     {
         TearDown();
@@ -120,6 +106,7 @@ public class GameManager : MonoBehaviour
     public void InitStage1()
     {
         //TODO: Intialize all managers here
+        TilePropertiesManager.InitCore();
         TilePropertiesManager.InitStage1();
         TileSpriteLoader.InitStage1();
         SpriteSheetImageLoader.InitStage1();
@@ -132,6 +119,7 @@ public class GameManager : MonoBehaviour
     //Load settings from files and other init, that requires systems to be intialized
     public void InitStage2()
     {
+        TilePropertiesManager.InitCoreRelatives();
         //TODO: Start loading the files
         // file loading operations here
         TilePropertiesManager.InitStage2();

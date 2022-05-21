@@ -75,10 +75,10 @@ namespace PlanetTileMap
 
                 switch (layer)
                 {
-                    case PlanetTileLayer.TileLayerBack: tileProperty = TilePropertiesManager.Instance.TileProperties[tile.BackTileId]; break;
-                    case PlanetTileLayer.TileLayerMiddle: tileProperty = TilePropertiesManager.Instance.TileProperties[tile.MidTileId]; break;
-                    case PlanetTileLayer.TileLayerFront: tileProperty = TilePropertiesManager.Instance.TileProperties[tile.FrontTileId]; break;
-                    case PlanetTileLayer.TileLayerFurniture: tileProperty = TilePropertiesManager.Instance.TileProperties[tile.FurnitureTileId]; break;
+                    case PlanetTileLayer.TileLayerBack: tileProperty = TilePropertiesManager.instance.TileProperties[tile.BackTileId]; break;
+                    case PlanetTileLayer.TileLayerMiddle: tileProperty = TilePropertiesManager.instance.TileProperties[tile.MidTileId]; break;
+                    case PlanetTileLayer.TileLayerFront: tileProperty = TilePropertiesManager.instance.TileProperties[tile.FrontTileId]; break;
+                    case PlanetTileLayer.TileLayerFurniture: tileProperty = TilePropertiesManager.instance.TileProperties[tile.FurnitureTileId]; break;
                     default: yield break;
                 }
                 //line 71-74 changed from info.TileProperties to TilePropertiesManager.Instance.TileProperties
