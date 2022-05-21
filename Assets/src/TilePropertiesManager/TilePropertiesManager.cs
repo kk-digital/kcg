@@ -18,6 +18,8 @@ namespace TileProperties
         {
             //This is where init goes
             //Instance = new TilePropertiesManager();
+        Instance = new TilePropertiesManager();
+        if(TilePropertiesManager.Instance.TileProperties == null) TilePropertiesManager.Instance.TileProperties = new TileProperties[1];
         }
 
         public static void InitStage2()
