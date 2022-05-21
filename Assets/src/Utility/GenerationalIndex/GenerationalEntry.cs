@@ -2,8 +2,8 @@
 {
     public struct GenerationalEntry<T>
     {
-        public T Value { get; set; }
-        public bool IsFree { get; set; }
-        public int Generation { get; set; }
+        public T Value;
+        public bool IsFree;
+        public int Generation;
     }
 }

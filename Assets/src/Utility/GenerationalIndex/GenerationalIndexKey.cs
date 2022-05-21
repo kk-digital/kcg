@@ -2,7 +2,7 @@
 {
     public struct GenerationalIndexKey
     {
-        public int Index { get; set; }
-        public int Generation { get; set; }
+        public int Index;
+        public int Generation;
     }
 }
