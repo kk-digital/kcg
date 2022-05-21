@@ -16,13 +16,6 @@ namespace ImageLoader
         public static TilePropertiesManager TilesPropertiesManager;
         public static ImageData imageData;
         public SpriteSheetData spriteSheetData;
-        private void Awake() 
-        {
-            ImageLoaderManager = new TileSpriteImageLoaderManager();
-            SpriteSheetLoaderManager = new SpriteSheetImageLoader();
-            TilesPropertiesManager = new TilePropertiesManager();
-            //SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
-        }
         private void Start() 
         {
             //SpritePixelGeneration();

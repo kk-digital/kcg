@@ -18,7 +18,14 @@ namespace ImageLoader
             GetImageID = base.GetID;
             Instance = this;
         }
-
+        public static void InitStage1()
+        {
+            Instance = new TileSpriteImageLoaderManager();
+        }
+        public static void InitStage2()
+        {
+            
+        }
         public override ImageData AssignPNGDatas(string filename, int id)
         {
             var pngData = Png.Open(filename);

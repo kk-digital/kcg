@@ -3,7 +3,7 @@ using src.ecs.Game;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-
+using ImageLoader;
 using TileProperties;
 
 // https://docs.unity3d.com/ScriptReference/MonoBehaviour.html
@@ -122,6 +122,8 @@ public class GameManager : MonoBehaviour
         //TODO: Intialize all managers here
         TilePropertiesManager.InitStage1();
         TileSpriteLoader.InitStage1();
+        SpriteSheetImageLoader.InitStage1();
+        TileSpriteImageLoaderManager.InitStage1();
         //Setup ECS system
         ecsSystems = new GameFeatures(Contexts.sharedInstance);
         ecsSystems.Initialize();
@@ -132,6 +134,10 @@ public class GameManager : MonoBehaviour
     {
         //TODO: Start loading the files
         // file loading operations here
+        TilePropertiesManager.InitStage2();
+        TileSpriteLoader.InitStage2();
+        SpriteSheetImageLoader.InitStage2();
+        TileSpriteImageLoaderManager.InitStage2();
     }
 
     public void TearDown()
