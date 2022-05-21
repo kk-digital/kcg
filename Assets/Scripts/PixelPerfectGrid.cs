@@ -15,7 +15,10 @@ public class PixelPerfectGrid : MonoBehaviour
 
     void Awake()
     {
-        SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+        if (SceneManager.Instance != null)
+        {
+            SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+        }
     }
 
     void Start()

@@ -178,7 +178,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 2.5800002
+  orthographic size: 1.2975
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -231,7 +231,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d9877f66addf7b4698c8b42386b98ac, type: 3}
+  m_Script: {fileID: 11500000, guid: ed771354369887441a8200653af6b229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxCameraHalfWidthEnabled: 0
@@ -240,7 +240,7 @@ MonoBehaviour:
   maxCameraHalfHeight: 2
   targetDimension: 1
   targetCameraHalfWidth: 2
-  targetCameraHalfHeight: 2
+  targetCameraHalfHeight: 1.5
   pixelPerfect: 1
   assetsPixelsPerUnit: 100
 --- !u!1 &546800182
@@ -349,12 +349,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 5
-  m_Sprite: {fileID: 21300000, guid: 59afc49c4f6696941b0f39ed5335cf62, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4f95b7a580bc6aa4e9d06a45e2d46d9a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 10.24, y: 10.24}
+  m_Size: {x: 0.64, y: 0.64}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -368,7 +368,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2033251201}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.5, y: 5, z: 0.31147766}
+  m_LocalPosition: {x: 0, y: 0, z: 0.31147766}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -384,12 +384,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2033251201}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bebc109f5e7251740b4ee94f8f13853c, type: 3}
+  m_Script: {fileID: 11500000, guid: 7f6f322723fd94844a9f55cceb423098, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   CursorMoveSpeed: 0.1
-  XOffset: 3.5
-  YOffset: 5
+  XOffset: 0
+  YOffset: 0
   followCursor: 0
 --- !u!114 &2033251205
 MonoBehaviour:
@@ -400,6 +400,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2033251201}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aec06d64b1cef84cbe7442f5164d364, type: 3}
+  m_Script: {fileID: 11500000, guid: 3087f1d544d54444ca61b412cb8018c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
