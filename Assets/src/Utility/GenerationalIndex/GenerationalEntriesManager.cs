@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Assets.src.Utility.GenerationalIndex
 {
-    public sealed class GenerationalEntriesManager<T>
+    public class GenerationalEntriesManager<T>
     {
         private static GenerationalEntriesManager<T> _instance = null;
 
