@@ -1,7 +1,7 @@
 ﻿namespace TileProperties
 {
     /// <summary> Temp struct to collect info about tile </summary>
-    public struct PlanetTileInfo
+   /* public struct PlanetTileInfo
     {
         //Back tile
         public int BackSpriteId;
@@ -27,5 +27,5 @@
 
         //Health
         public byte Durability;
-    }
+    }*/
 }

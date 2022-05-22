@@ -7,7 +7,6 @@ using System.Linq;
 using TiledCS;
 using TileProperties;
 //Todo: Remove unity dependency
-using BoundsInt = UnityEngine.BoundsInt;
 using PlanetTileMap;
 using SpriteAtlas;
 
@@ -109,7 +108,7 @@ namespace TmxMapFileLoader
             //temp array to collect info about tiles
 
             //TODO: Replace wth PlanetMap
-            var tileInfos = new PlanetTileInfo[PlanetMap.Map.Xsize, PlanetMap.Map.Ysize];
+            var tileInfos = new TileProperties.TileProperties[PlanetMap.Map.Xsize, PlanetMap.Map.Ysize];
 
             //load layers
             foreach (var layer in map.Layers)
@@ -140,25 +139,15 @@ namespace TmxMapFileLoader
                         var x = (chunk.x + iCol) - mapBounds.minX;
                         var y = mapBounds.maxY - (chunk.y + iRow);
 
-                        //save spriteId into temp array
-                        switch (planetLayer)
+                        //save spriteId into temp array      
+                        tileInfos[x, y].Layer = planetLayer;  
+                        if (tileInfos[x, y].SpriteId == 0)
                         {
-                            case PlanetTileLayer.TileLayerBack: 
-                                if (tileInfos[x, y].BackSpriteId == 0) 
-                                    tileInfos[x, y].BackSpriteId = spriteId; else tileInfos[x, y].SecondaryBackSpriteId = spriteId;
-                                break;
-                            case PlanetTileLayer.TileLayerFront:
-                                 if (tileInfos[x, y].FrontSpriteId == 0) 
-                                    tileInfos[x, y].FrontSpriteId = spriteId; else tileInfos[x, y].SecondaryFrontSpriteId = spriteId;
-                                break;
-                            case PlanetTileLayer.TileLayerMiddle:
-                                 if (tileInfos[x, y].MidSpriteId == 0) 
-                                    tileInfos[x, y].MidSpriteId = spriteId; else tileInfos[x, y].SecondaryMidSpriteId = spriteId;
-                                break;
-                            case PlanetTileLayer.TileLayerFurniture:
-                                 if (tileInfos[x, y].FurnitureSpriteId == 0) 
-                                    tileInfos[x, y].FurnitureSpriteId = spriteId; else tileInfos[x, y].SecondaryFurnitureSpriteId = spriteId;
-                                break;
+                            tileInfos[x, y].SpriteId = spriteId;
+                        }
+                        else
+                        {
+                            tileInfos[x, y].SpriteId2 = spriteId;
                         }
                     }
                 }
@@ -195,12 +184,9 @@ namespace TmxMapFileLoader
                 {
                     var tileInfo = tileInfos[x, y];
                     var key = (0, 0);
-                    switch (layer)
+                    if (tileInfo.Layer == layer)
                     {
-                        case PlanetTileLayer.TileLayerBack: key = (tileInfo.BackSpriteId, tileInfo.SecondaryBackSpriteId); break;
-                        case PlanetTileLayer.TileLayerMiddle: key = (tileInfo.MidSpriteId, tileInfo.SecondaryMidSpriteId); break;
-                        case PlanetTileLayer.TileLayerFront: key = (tileInfo.FrontSpriteId, tileInfo.SecondaryFrontSpriteId); break;
-                        case PlanetTileLayer.TileLayerFurniture: key = (tileInfo.FurnitureSpriteId, tileInfo.SecondaryFurnitureSpriteId); break;
+                        key = (tileInfo.SpriteId, tileInfo.SpriteId2);
                     }
 
                     //get tileProperty index or create new tileProperty
