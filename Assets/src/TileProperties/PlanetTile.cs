@@ -1,4 +1,4 @@
-﻿namespace PlanetTileMap
+﻿namespace TileProperties
 {
     /// <summary> Contains info about tile, include all layers </summary>
     public struct PlanetTile
@@ -11,7 +11,7 @@
 
         //Front tile property id
         public int FrontTileId;
-        
+
         //Furniture tile property id
         public int FurnitureTileId;
 

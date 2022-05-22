@@ -1,5 +1,7 @@
 ﻿//using Entitas;
 
+using TileProperties;
+
 namespace PlanetTileMap
 {
     //public struct PlanetMap : IComponent
