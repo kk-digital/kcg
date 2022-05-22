@@ -161,10 +161,10 @@ namespace TmxMapFileLoader
             TilePropertiesManager.Instance.TileProperties = tileProperties.ToArray(); //changed from res.TileProperties to use singleton
 
             //build atlases
-            res.SetAtlas(PlanetTileLayer.TileLayerBack, AtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerBack));
-            res.SetAtlas(PlanetTileLayer.TileLayerMiddle, AtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerMiddle));
-            res.SetAtlas(PlanetTileLayer.TileLayerFront, AtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerFront));
-            res.SetAtlas(PlanetTileLayer.TileLayerFurniture, AtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerFurniture));
+            res.SetAtlas(PlanetTileLayer.TileLayerBack, SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerBack));
+            res.SetAtlas(PlanetTileLayer.TileLayerMiddle, SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerMiddle));
+            res.SetAtlas(PlanetTileLayer.TileLayerFront, SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerFront));
+            res.SetAtlas(PlanetTileLayer.TileLayerFurniture, SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerFurniture));
 
             return res;
 

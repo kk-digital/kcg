@@ -12,7 +12,7 @@ namespace PlanetTileMap
     //TODO: NO COMMENTS!?!?!?
     //TODO: Delete
     //TODO: Replace with /src/SpriteAtlas
-    static class AtlasBuilder
+    static class SpriteAtlasBuilder
     {
         public static int[,] Build(IList<Sprite> sprites, PlanetTileLayer layer, bool clearTextureInSprite = true)
         {
