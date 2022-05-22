@@ -3,9 +3,11 @@
 //TODO: Move all sprite structs to TileSpriteManager, out of PlanetTileMap
 
 //TODO: Delete TileSprite information from PlanetTileMap, move to TileSpriteManager
-namespace PlanetTileMap
+namespace SpriteAtlas
 {
-    struct Sprite
+    //TODO:Destroy, use SpriteAtlas datastructuer to replace
+    //Each sprite is just (SpriteAtlasId, Index)
+    struct Deprecate_Sprite
     {
         public string Name;
         public int Left;//position in atlas

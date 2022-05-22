@@ -1,4 +1,5 @@
 ﻿using Enums;
+using SpriteAtlas;
 using System;
 
 
@@ -12,7 +13,7 @@ namespace PlanetTileMap
 
         //Todo: Remove these. they have to do with SpriteStorage
         //TODO: Move these to TileSpriteManager
-        public Sprite[] SpritesById;
+        public Deprecate_Sprite[] SpritesById;
         public int[][,] AtlasTextures;
         //public PlanetTileProperties[] TileProperties = TilePropertiesManager.Instance.TileProperties;
         //line 13 is moved to TilePropertiesManager

@@ -46,7 +46,7 @@ namespace TmxMapFileLoader
             }
 
             //create sprite array
-            var idToSprite = new Sprite[maxGid + 1];
+            var idToSprite = new Deprecate_Sprite[maxGid + 1];
 
             //create sprites
             for (int iTileSet = 0; iTileSet < map.Tilesets.Length; iTileSet++)
@@ -81,7 +81,7 @@ namespace TmxMapFileLoader
         }
 
         //Tile Properties should be set in an earlier stage
-        private static PlanetMapInfo ConvertToInternalStructures(TiledMap map, Sprite[] spritesById)
+        private static PlanetMapInfo ConvertToInternalStructures(TiledMap map, Deprecate_Sprite[] spritesById)
         {
             var res = new PlanetMapInfo();
             res.SpritesById = spritesById;
@@ -288,7 +288,7 @@ namespace TmxMapFileLoader
         }
 
         //DELETE AMD USE OUR LOADER
-        private static void LoadSprite(string dir, int startGid, Sprite[] gidToSprite, TiledMapTileset link, TiledTileset ts)
+        private static void LoadSprite(string dir, int startGid, Deprecate_Sprite[] gidToSprite, TiledMapTileset link, TiledTileset ts)
         {
             var tsxDir = Path.GetDirectoryName(Path.Combine(dir, link.source));
             var imgPath = Path.Combine(tsxDir, ts.Image.source);
@@ -301,7 +301,7 @@ namespace TmxMapFileLoader
                 var iRow = i / ts.Columns;
                 var x = ts.Margin + iColumn * ts.TileWidth + Math.Max(0, iColumn - 1) * ts.Spacing;
                 var y = ts.Margin + iRow * ts.TileHeight + Math.Max(0, iRow - 1) * ts.Spacing;
-                var sprite = new Sprite { Width = ts.TileWidth, Height = ts.TileHeight, Left = x, Top = y };
+                var sprite = new Deprecate_Sprite { Width = ts.TileWidth, Height = ts.TileHeight, Left = x, Top = y };
                 sprite.Texture = PngToRGBA(png, x, y, sprite.Width, sprite.Height);
                 
                 gidToSprite[gid] = sprite;

@@ -1,5 +1,4 @@
 ﻿using Enums;
-using PlanetTileMap;
 using RectpackSharp;
 using System;
 using System.Collections.Generic;
@@ -15,7 +14,7 @@ namespace SpriteAtlas
     //TODO: Replace with /src/SpriteAtlas
     static class SpriteAtlasBuilder
     {
-        public static int[,] Build(IList<Sprite> sprites, PlanetTileLayer layer, bool clearTextureInSprite = true)
+        public static int[,] Build(IList<Deprecate_Sprite> sprites, PlanetTileLayer layer, bool clearTextureInSprite = true)
         {
             //pack sprites into one rect\
             //WTF: Why do we have rectangle? Every tile is 32x32 pixels; their squares
