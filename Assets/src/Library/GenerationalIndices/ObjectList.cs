@@ -1,9 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Assets.src.Library.GenerationalIndices
 {
-    public class ObjectList<T>
+    public class ObjectList<T> where T: struct
     {
         private List<GenerationalEntry<T>> _entries = new List<GenerationalEntry<T>>();
 
@@ -28,12 +29,12 @@ namespace Assets.src.Library.GenerationalIndices
             }
         }
 
-        public T Get(GenerationalIndexKey indexKey)
+        public T? Get(GenerationalIndexKey indexKey)
         {
-            if (indexKey.Index < 0 || indexKey.Index >= _entries.Count) return default;
+            if (indexKey.Index < 0 || indexKey.Index >= _entries.Count) return null;
 
             var entry = _entries.ElementAtOrDefault(indexKey.Index);
-            if (entry.Generation != indexKey.Generation) return default;
+            if (entry.Generation != indexKey.Generation) return null;
 
             return entry.Value;
         }
