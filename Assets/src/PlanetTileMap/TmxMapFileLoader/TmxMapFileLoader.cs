@@ -81,6 +81,8 @@ namespace TmxMapFileLoader
         }
 
         //Tile Properties should be set in an earlier stage
+
+        //TODO: Make it return a PlanetTileMap, not a PlanetMapInfo
         private static PlanetMapInfo ConvertToInternalStructures(TiledMap map, Deprecate_Sprite[] spritesById)
         {
             var res = new PlanetMapInfo();
@@ -90,7 +92,10 @@ namespace TmxMapFileLoader
             var mapBounds = CalcBounds(map);
             var mapWidth = mapBounds.maxX - mapBounds.minX + 1;
             var mapHeight = mapBounds.maxY - mapBounds.minY + 1;
+            
+            //TODO: What is res.Map? Removes
             var planetMap = res.Map = new PlanetTileMap.PlanetTileMap(mapWidth, mapHeight);
+            //var planetMap = new PlanetTileMap.PlanetTileMap(mapWidth, mapHeight);
 
             //temp array to collect info about tiles
             var tileInfos = new PlanetTileInfo[planetMap.Xsize, planetMap.Ysize];

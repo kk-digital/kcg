@@ -5,18 +5,15 @@ using System;
 
 namespace PlanetTileMap
 {
-    /// <summary> All info to render PlanetMap </summary>
-    //TODO: delete PlanetTileMap, because its not doing anything
     class PlanetMapInfo
     {
         public PlanetTileMap Map;
 
         //Todo: Remove these. they have to do with SpriteStorage
-        //TODO: Move these to TileSpriteManager
+        //TODO: Use datastructure in SrpiteAtlas
         public Deprecate_Sprite[] SpritesById;
+        //TODO: Use datastructure in SrpiteAtlas
         public int[][,] AtlasTextures;
-        //public PlanetTileProperties[] TileProperties = TilePropertiesManager.Instance.TileProperties;
-        //line 13 is moved to TilePropertiesManager
 
         public PlanetMapInfo()
         {
