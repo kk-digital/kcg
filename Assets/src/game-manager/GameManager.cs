@@ -107,7 +107,6 @@ public class GameManager : MonoBehaviour
     {
         //TODO: Intialize all managers here
         TilePropertiesManager.InitCore();
-        TilePropertiesManager.InitStage1();
         TileSpriteLoader.InitStage1();
         SpriteSheetImageLoader.InitStage1();
         TileSpriteImageLoaderManager.InitStage1();
@@ -119,10 +118,9 @@ public class GameManager : MonoBehaviour
     //Load settings from files and other init, that requires systems to be intialized
     public void InitStage2()
     {
-        TilePropertiesManager.InitCoreRelatives();
         //TODO: Start loading the files
         // file loading operations here
-        TilePropertiesManager.InitStage2();
+        TilePropertiesManager.InitCoreRelatives();
         TileSpriteLoader.InitStage2();
         SpriteSheetImageLoader.InitStage2();
         TileSpriteImageLoaderManager.InitStage2();
