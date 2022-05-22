@@ -34,6 +34,7 @@ namespace TileProperties
         {
             this.TileCollisionType = collisionType;
         }
+        
         public TileProperties(string Name, string Description, int TileId,
                                     TileDrawProperties TileDrawType, int SpriteId,
                                     int SpriteId2, PlanetTileLayer Layer, 

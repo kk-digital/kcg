@@ -106,7 +106,7 @@ public class GameManager : MonoBehaviour
     public void InitStage1()
     {
         //TODO: Intialize all managers here
-        TilePropertiesManager.InitCore();
+        TilePropertiesManager.InitStage1();
         TileSpriteLoader.InitStage1();
         SpriteSheetImageLoader.InitStage1();
         TileSpriteImageLoaderManager.InitStage1();
@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviour
     {
         //TODO: Start loading the files
         // file loading operations here
-        TilePropertiesManager.InitCoreRelatives();
+        TilePropertiesManager.InitStage2();
         TileSpriteLoader.InitStage2();
         SpriteSheetImageLoader.InitStage2();
         TileSpriteImageLoaderManager.InitStage2();
