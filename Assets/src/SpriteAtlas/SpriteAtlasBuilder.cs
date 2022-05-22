@@ -1,13 +1,14 @@
 ﻿using Enums;
+using PlanetTileMap;
 using RectpackSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 
-//TODO: Delete, is doing sprite stuff
+//TODO: Delete
 
-namespace PlanetTileMap
+namespace SpriteAtlas
 {
     //TODO: NO COMMENTS!?!?!?
     //TODO: Delete
@@ -19,11 +20,11 @@ namespace PlanetTileMap
             //pack sprites into one rect\
             //WTF: Why do we have rectangle? Every tile is 32x32 pixels; their squares
             var rectsList = new List<PackingRectangle>(sprites.Count);
-            for (int  i = 0 ; i <  sprites.Count; i++)
-            if (sprites[i].Texture != null && sprites[i].Layer == layer)
-            { 
-                rectsList.Add(new PackingRectangle(0, 0, (uint)sprites[i].Width, (uint)sprites[i].Height, i));
-            }
+            for (int i = 0; i < sprites.Count; i++)
+                if (sprites[i].Texture != null && sprites[i].Layer == layer)
+                {
+                    rectsList.Add(new PackingRectangle(0, 0, (uint)sprites[i].Width, (uint)sprites[i].Height, i));
+                }
 
             var rects = rectsList.ToArray();
 
@@ -35,7 +36,7 @@ namespace PlanetTileMap
             //create atlas
             var atlas = new int[w2, h2];
             //copy textures to atlas
-            for (int  i = 0 ; i < rects.Length; i++)
+            for (int i = 0; i < rects.Length; i++)
             {
                 var targetRect = rects[i];
                 var sprite = sprites[targetRect.Id];
@@ -54,8 +55,8 @@ namespace PlanetTileMap
             void CopyRect(int[,] texture, PackingRectangle targetRect)
             {
                 for (int x = 0; x < targetRect.Width; x++)
-                for (int y = 0; y < targetRect.Height; y++)
-                    atlas[targetRect.X + x,  targetRect.Y + y] = texture[x, y];
+                    for (int y = 0; y < targetRect.Height; y++)
+                        atlas[targetRect.X + x, targetRect.Y + y] = texture[x, y];
             }
         }
     }

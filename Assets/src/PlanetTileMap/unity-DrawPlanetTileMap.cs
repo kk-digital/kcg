@@ -4,12 +4,12 @@ using UnityEngine;
 namespace PlanetTileMap.Unity
 {
     //TODO: Improve naming PlanetTileMapRender ?
-    static class GLRenderer
+    static class GLDrawPlanetTileMap
     {
         //TODO: USE GOOD NAMES
         //TODO: Does anything even call this!?
         //TODO: This class has no variables? Should this be a method?
-        public static void Render(Rect rect, List<Quad> quads, Material mat)
+        public static void DrawPlanetTileMap(Rect rect, List<Quad> quads, Material mat)
         {
             GL.PushMatrix();
             mat.SetPass(0);

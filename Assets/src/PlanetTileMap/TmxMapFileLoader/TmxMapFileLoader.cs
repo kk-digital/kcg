@@ -9,6 +9,7 @@ using TileProperties;
 //Todo: Remove unity dependency
 using BoundsInt = UnityEngine.BoundsInt;
 using PlanetTileMap;
+using SpriteAtlas;
 
 //Note:
 //TMX files are created by map editor "Tiled"
