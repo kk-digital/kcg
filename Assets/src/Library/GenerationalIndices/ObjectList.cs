@@ -5,22 +5,6 @@ namespace Assets.src.Library.GenerationalIndices
 {
     public class ObjectList<T>
     {
-        private static ObjectList<T> _instance = null;
-
-        ObjectList() { }
-
-        public static ObjectList<T> Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new ObjectList<T>();
-                }
-                return _instance;
-            }
-        }
-
         private List<GenerationalEntry<T>> _entries = new List<GenerationalEntry<T>>();
 
         public GenerationalIndexKey Add(T val)
