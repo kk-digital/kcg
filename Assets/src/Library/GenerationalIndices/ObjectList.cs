@@ -28,14 +28,14 @@ namespace Assets.src.Library.GenerationalIndices
             }
         }
 
-        public GenerationalEntry<T> Get(GenerationalIndexKey indexKey)
+        public T Get(GenerationalIndexKey indexKey)
         {
             if (indexKey.Index < 0 || indexKey.Index >= _entries.Count) return default;
 
             var entry = _entries.ElementAtOrDefault(indexKey.Index);
             if (entry.Generation != indexKey.Generation) return default;
 
-            return entry;
+            return entry.Value;
         }
 
         public void Remove(GenerationalIndexKey indexKey)
