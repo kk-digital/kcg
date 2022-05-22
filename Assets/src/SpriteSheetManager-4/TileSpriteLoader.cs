@@ -13,7 +13,7 @@ public class TileSpriteLoader
     }
     
     // This script loads a PNG or JPEG image from disk and returns it as a Sprite
-    private Sprite newSprite;
+    private Sprite newTexture;
     
     public static void InitStage1()
     {
@@ -23,29 +23,24 @@ public class TileSpriteLoader
     {
         
     }
-    //TODO: 32 pixels is 1.0f, fix
-    /// <summary>
-    /// Load a PNG or JPG image from disk to a Texture2D, assign this texture to a new sprite
-    /// </summary>
-    /// <returns>Reference to a new created sprite</returns>
+
+    //TODO: COMPLETELY WRONG
     public Sprite LoadNewSprite(string filePath, float pixelsPerUnit = 32.0f)
     {
-        //Sprite NewSprite = new Sprite();
-        var spriteTexture = LoadTexture(filePath);
-       
-        //ImageFiles are loaded from files
-        //Sprite sheets are made by copying assets from texture files to the sheets
-        //TODO: use ImageAssetManager, etc
-        newSprite = Sprite.Create(spriteTexture, new Rect(0, 0, spriteTexture.width, spriteTexture.height), new Vector2(0, 0), pixelsPerUnit);
-
-        return newSprite;
+        //TODO: COMPLETELY WRONG
+        //LOADING IMAGE IS ONE STEP
+        //COPYING SPRITES FROM IMAGE TO ATLAS IS ANOTHER STEP (blitting)
+        //MAKING TEXTURE FROM ATLAS IS A THIRD STEP
+        var spriteTexture = LoadImageAndCreateTexture(filePath);
+        newTexture = Sprite.Create(spriteTexture, new Rect(0, 0, spriteTexture.width, spriteTexture.height), new Vector2(0, 0), pixelsPerUnit);
+        return newTexture;
     }
 
     /// <summary>
     /// Load a PNG or JPG file from disk to a Texture2D
     /// </summary>
     /// <returns>Null if load fails</returns>
-    public Texture2D LoadTexture(string filePath)
+    public Texture2D LoadImageAndCreateTexture(string filePath)
     {
         if (File.Exists(filePath))
         {

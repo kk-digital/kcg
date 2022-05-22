@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace ImageLoader
 {
+    //TODO: Do not inherit LoaderData
     public class TileSpriteImageLoaderManager : LoaderData
     {
         public static TileSpriteImageLoaderManager Instance;
