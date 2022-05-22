@@ -83,22 +83,33 @@ namespace TmxMapFileLoader
         //Tile Properties should be set in an earlier stage
 
         //TODO: Make it return a PlanetTileMap, not a PlanetMapInfo
-        private static PlanetMapInfo ConvertToInternalStructures(TiledMap map, Deprecate_Sprite[] spritesById)
+
+
+        //TODO: Move sprite/image loading operations from ConvertToInternalStructures
+        public static void LoadMapSpritesFromMapFile(TiledMap map, Deprecate_Sprite[] spritesById)
         {
-            var res = new PlanetMapInfo();
-            res.SpritesById = spritesById;
+            //
+            return;
+        }
+
+        public static PlanetMapInfo ConvertToInternalStructures(TiledMap map, Deprecate_Sprite[] spritesById)
+        {
+            var PlanetMap = new PlanetMapInfo();
+            PlanetMap.SpritesById = spritesById;
 
             //calc bounds
             var mapBounds = CalcBounds(map);
             var mapWidth = mapBounds.maxX - mapBounds.minX + 1;
             var mapHeight = mapBounds.maxY - mapBounds.minY + 1;
             
-            //TODO: What is res.Map? Removes
-            var planetMap = res.Map = new PlanetTileMap.PlanetTileMap(mapWidth, mapHeight);
+            //A grid of tiles
+            PlanetMap.Map = new PlanetTileMap.PlanetTileMap(mapWidth, mapHeight);
             //var planetMap = new PlanetTileMap.PlanetTileMap(mapWidth, mapHeight);
 
             //temp array to collect info about tiles
-            var tileInfos = new PlanetTileInfo[planetMap.Xsize, planetMap.Ysize];
+
+            //TODO: Replace wth PlanetMap
+            var tileInfos = new PlanetTileInfo[PlanetMap.Map.Xsize, PlanetMap.Map.Ysize];
 
             //load layers
             foreach (var layer in map.Layers)
@@ -167,19 +178,20 @@ namespace TmxMapFileLoader
             TilePropertiesManager.Instance.TileProperties = tileProperties.ToArray(); //changed from res.TileProperties to use singleton
 
             //build atlases
-            res.SetAtlas(PlanetTileLayer.TileLayerBack, SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerBack));
-            res.SetAtlas(PlanetTileLayer.TileLayerMiddle, SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerMiddle));
-            res.SetAtlas(PlanetTileLayer.TileLayerFront, SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerFront));
-            res.SetAtlas(PlanetTileLayer.TileLayerFurniture, SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerFurniture));
+            PlanetMap.SetAtlas(PlanetTileLayer.TileLayerBack, SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerBack));
+            PlanetMap.SetAtlas(PlanetTileLayer.TileLayerMiddle, SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerMiddle));
+            PlanetMap.SetAtlas(PlanetTileLayer.TileLayerFront, SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerFront));
+            PlanetMap.SetAtlas(PlanetTileLayer.TileLayerFurniture, SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerFurniture));
 
-            return res;
+            return PlanetMap;
 
+            //TODO: What does this function actually do?
             void Generate(PlanetTileLayer layer)
             {
                 spriteIdsToTilePropertyId.Clear();
 
-                for (int x = 0; x < planetMap.Xsize; x++)
-                for (int y = 0; y < planetMap.Ysize; y++)
+                for (int x = 0; x < PlanetMap.Map.Xsize; x++)
+                for (int y = 0; y < PlanetMap.Map.Ysize; y++)
                 {
                     var tileInfo = tileInfos[x, y];
                     var key = (0, 0);
@@ -212,10 +224,10 @@ namespace TmxMapFileLoader
                     //assign tile property index to tile in planetMap.Tiles
                     switch (layer)
                     {
-                        case PlanetTileLayer.TileLayerBack: planetMap.Tiles[x, y].BackTileId = tilePropertyId; break;
-                        case PlanetTileLayer.TileLayerMiddle: planetMap.Tiles[x, y].MidTileId = tilePropertyId; break;
-                        case PlanetTileLayer.TileLayerFront: planetMap.Tiles[x, y].FrontTileId = tilePropertyId; break;
-                        case PlanetTileLayer.TileLayerFurniture: planetMap.Tiles[x, y].FurnitureTileId = tilePropertyId; break;
+                        case PlanetTileLayer.TileLayerBack: PlanetMap.Map.Tiles[x, y].BackTileId = tilePropertyId; break;
+                        case PlanetTileLayer.TileLayerMiddle: PlanetMap.Map.Tiles[x, y].MidTileId = tilePropertyId; break;
+                        case PlanetTileLayer.TileLayerFront: PlanetMap.Map.Tiles[x, y].FrontTileId = tilePropertyId; break;
+                        case PlanetTileLayer.TileLayerFurniture: PlanetMap.Map.Tiles[x, y].FurnitureTileId = tilePropertyId; break;
                     }
                 }
             }
