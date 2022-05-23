@@ -8,7 +8,6 @@ using TiledCS;
 using TileProperties;
 //Todo: Remove unity dependency
 using PlanetTileMap;
-using SpriteAtlas;
 
 //Note:
 //TMX files are created by map editor "Tiled"
@@ -45,7 +44,7 @@ namespace TmxMapFileLoader
             }
 
             //create sprite array
-            var idToSprite = new Deprecate_Sprite[maxGid + 1];
+            var idToSprite = new SpriteAtlas.SpriteAtlas[maxGid + 1];
 
             //create sprites
             for (int iTileSet = 0; iTileSet < map.Tilesets.Length; iTileSet++)
@@ -85,13 +84,13 @@ namespace TmxMapFileLoader
 
 
         //TODO: Move sprite/image loading operations from ConvertToInternalStructures
-        public static void LoadMapSpritesFromMapFile(TiledMap map, Deprecate_Sprite[] spritesById)
+        public static void LoadMapSpritesFromMapFile(TiledMap map, SpriteAtlas.SpriteAtlas[] spritesById)
         {
             //
             return;
         }
 
-        public static PlanetMapInfo ConvertToInternalStructures(TiledMap map, Deprecate_Sprite[] spritesById)
+        public static PlanetMapInfo ConvertToInternalStructures(TiledMap map, SpriteAtlas.SpriteAtlas[] spritesById)
         {
             var PlanetMap = new PlanetMapInfo();
             PlanetMap.SpritesById = spritesById;
@@ -167,10 +166,10 @@ namespace TmxMapFileLoader
             TilePropertiesManager.Instance.TileProperties = tileProperties.ToArray(); //changed from res.TileProperties to use singleton
 
             //build atlases
-            PlanetMap.SetAtlas(PlanetTileLayer.TileLayerBack, SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerBack));
-            PlanetMap.SetAtlas(PlanetTileLayer.TileLayerMiddle, SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerMiddle));
-            PlanetMap.SetAtlas(PlanetTileLayer.TileLayerFront, SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerFront));
-            PlanetMap.SetAtlas(PlanetTileLayer.TileLayerFurniture, SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerFurniture));
+            PlanetMap.SetAtlas(PlanetTileLayer.TileLayerBack, SpriteAtlas.SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerBack));
+            PlanetMap.SetAtlas(PlanetTileLayer.TileLayerMiddle, SpriteAtlas.SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerMiddle));
+            PlanetMap.SetAtlas(PlanetTileLayer.TileLayerFront, SpriteAtlas.SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerFront));
+            PlanetMap.SetAtlas(PlanetTileLayer.TileLayerFurniture, SpriteAtlas.SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerFurniture));
 
             return PlanetMap;
 
@@ -291,7 +290,7 @@ namespace TmxMapFileLoader
         }
 
         //DELETE AMD USE OUR LOADER
-        private static void LoadSprite(string dir, int startGid, Deprecate_Sprite[] gidToSprite, TiledMapTileset link, TiledTileset ts)
+        private static void LoadSprite(string dir, int startGid, SpriteAtlas.SpriteAtlas[] gidToSprite, TiledMapTileset link, TiledTileset ts)
         {
             var tsxDir = Path.GetDirectoryName(Path.Combine(dir, link.source));
             var imgPath = Path.Combine(tsxDir, ts.Image.source);
@@ -304,8 +303,8 @@ namespace TmxMapFileLoader
                 var iRow = i / ts.Columns;
                 var x = ts.Margin + iColumn * ts.TileWidth + Math.Max(0, iColumn - 1) * ts.Spacing;
                 var y = ts.Margin + iRow * ts.TileHeight + Math.Max(0, iRow - 1) * ts.Spacing;
-                var sprite = new Deprecate_Sprite { Width = ts.TileWidth, Height = ts.TileHeight, Left = x, Top = y };
-                sprite.Texture = PngToRGBA(png, x, y, sprite.Width, sprite.Height);
+                var sprite = new SpriteAtlas.SpriteAtlas { Width = ts.TileWidth, Height = ts.TileHeight, Left = x, Top = y };
+                sprite.PixelArray = PngToRGBA(png, x, y, sprite.Width, sprite.Height);
                 
                 gidToSprite[gid] = sprite;
             }
