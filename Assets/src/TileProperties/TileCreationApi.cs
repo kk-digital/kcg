@@ -2,6 +2,25 @@
 //MOST IMPORTANT TILE
 
 /*
+
+CreateTile(TileId)
+SetTileName("Regolith") //map from string to TileId
+SetTileLayer(TileMapLayerBackground)
+SetTileTexture(TileSpriteId, 2,10) //2nd row, 10th column of TileSpriteId
+SetTilePropertyISExplosive(true)
+SetTileDurability(60)
+EndTile()
+
+Atlas is a pixel array
+Atlas starts empty
+Sprites are copied to Atlas and we get a AtlasSpriteId
+
+SetTileTexture(TileSpriteId, 2,10) //2nd row, 10th column of TileSpriteId
+- What does this do?
+-- It blits (copy) the Sprite from TileSpriteLoader (TileSpriteSheetId)
+-- to the TileSpriteAtlas
+-- AND get the AtlasSpriteId (index into the Atlas texture sheet)
+
 SetTileId(5)
 // TileType, TileLayer, Name
 DefineTile(BlockTypeSolid, LayerForegound, "regolith");

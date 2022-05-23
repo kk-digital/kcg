@@ -1,4 +1,5 @@
 using BigGustave; //SHOULD NOT IMPORT
+
 using Enums;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,6 @@ using TiledCS;
 
 
 using TileProperties;
-//Todo: Remove unity dependency
 using PlanetTileMap;
 
 //Note:
@@ -26,6 +26,8 @@ namespace TmxMapFileLoader
         //Second stage, iterates over map and gets all sprites/tiles used
         //register the tiles
         //Third stage copies the map data into the internal format
+        
+
         public static PlanetMapInfo LoadMap(string filePath)
         {
             var map = new TiledMap(filePath);
