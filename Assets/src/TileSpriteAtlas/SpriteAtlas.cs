@@ -13,6 +13,7 @@ namespace SpriteAtlas
     //TODO: Put SpriteAtlases in Enums
     //ex. SpriteAtlasTileMap
 
+    //TODO: Function to Upload Texture to OpenGl/Get Texture Id
     class SpriteAtlasManager
     {
         //TODO: Add array
@@ -68,8 +69,29 @@ namespace SpriteAtlas
         public int Width;
         public int Height;
 
-        public int[,] PixelArray;
+        public int[,] PixelArray; //Use 4 bytes per pixel
 
         public PlanetTileLayer Layer;
     }
 }
+
+
+/*
+         public void CreatePixelsArray(Png png)
+        {
+            PixelsArray = new byte[4 * Size.x * Size.y];
+            
+            for (int y = 0; y < Size.y; y++)
+            {
+                for (int x = 0; x < Size.x; x++)
+                {
+                    var getPixels = png.GetPixel(x, y);
+                    int index = y * Size.x + x;
+                    PixelsArray[4 * index + 0] = getPixels.R;
+                    PixelsArray[4 * index + 1] = getPixels.G;
+                    PixelsArray[4 * index + 2] = getPixels.B;
+                    PixelsArray[4 * index + 3] = getPixels.A;
+                }
+            }
+        }
+*/
