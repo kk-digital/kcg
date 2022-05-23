@@ -26,8 +26,6 @@ class SceneManager : MonoBehaviour
     {
         get
         {
-            if (_instance == null)
-                _instance = new SceneManager();
             return _instance;
         }
     }
@@ -35,6 +33,7 @@ class SceneManager : MonoBehaviour
     public void Awake()
     {
         DontDestroyOnLoad(gameObject);
+          _instance = gameObject.AddComponent(typeof(SceneManager)) as SceneManager;
     }
 
 
