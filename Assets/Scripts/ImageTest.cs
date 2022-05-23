@@ -51,19 +51,19 @@ namespace ImageLoader
             string spriteName = "table3.png";
             string description = "A table where things can be placed";
             int tileID = TilePropertiesManager.Instance.TileProperties.Length - 1;
-
+            bool tilePropertyIsExplosive = true;
             SpriteSheetImageLoader.Instance.GetSpriteSheetID(spriteName, spriteSheetData);
 
             TilePropertiesManager.Instance.TileProperties[tileID] = new TileProperties.TileProperties(spriteName, description,
                 tileID, TileDrawProperties.TileDrawPropertyNormal, tileID, 0, PlanetTileLayer.TileLayerFront,
-                PlanetTileCollisionType.TileCollisionTypeSolid, 0);
-
+                PlanetTileCollisionType.TileCollisionTypeSolid, 0,tilePropertyIsExplosive);
+            
             int xSize = SpriteSheetImageLoader.Instance.SpriteSheet[0].Size.x;
             int ySize = SpriteSheetImageLoader.Instance.SpriteSheet[0].Size.y;
             var texture = new Texture2D(xSize, ySize, TextureFormat.RGBA32, false);
 
             Debug.Log($"{xSize} x size; {ySize} y size");
-
+            
             //we're setting up each pixel's RGBA according to the png pixels rgba   
             for (int y = 0; y < ySize; y++)
             {

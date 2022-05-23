@@ -12,9 +12,10 @@ namespace TileProperties
 
         public int SpriteId; //spriteId
         public int SpriteId2; //used for composited tiles, like ore
-
+        
         public PlanetTileLayer Layer;
         public PlanetTileCollisionType TileCollisionType;
+        public bool TilePropertyIsExplosive;
 
         //note: ore is composited, others are just normal
 
@@ -22,23 +23,26 @@ namespace TileProperties
         
         //In case after the first newly created tileproperty with already properties being set,
         //you might want to change it anytime by accessing the id of a tile
-        public void SetDescription(string description)
+        public void SetTileID(int TileId) => this.TileId = TileId;
+        public void SetTileTexture(int row, int column)
         {
-            this.Description = description;
+            //WIP
         }
-        public void SetDurability(byte durability)
-        {
-            this.Durability = durability;
-        }
-        public void SetCollisionType(PlanetTileCollisionType collisionType)
+        public void SetPropertyIsExplosive(bool TilePropertyIsExplosive) => this.TilePropertyIsExplosive = TilePropertyIsExplosive;
+        public void DefineTile(PlanetTileCollisionType collisionType, PlanetTileLayer planetTileLayer, string name)
         {
             this.TileCollisionType = collisionType;
+            this.Layer = planetTileLayer;
+            this.Name = name;
         }
+        public void SetDescription(string Description) => this.Description = Description;
+        public void SetDurability(byte Durability) => this.Durability = Durability;
+        public void SetCollisionType(PlanetTileCollisionType TileCollisionType) => this.TileCollisionType = TileCollisionType;
         public TileProperties(string Name, string Description, int TileId,
                                     TileDrawProperties TileDrawType, int SpriteId,
                                     int SpriteId2, PlanetTileLayer Layer, 
                                     PlanetTileCollisionType TileCollisionType,
-                                    byte Durability)
+                                    byte Durability, bool TilePropertyIsExplosive)
         {
             this.Name = Name;
             this.Description = Description;
@@ -49,6 +53,7 @@ namespace TileProperties
             this.Layer = Layer;
             this.TileCollisionType = TileCollisionType;
             this.Durability = Durability;
+            this.TilePropertyIsExplosive = TilePropertyIsExplosive;
         }
     }
 }
