@@ -1,10 +1,12 @@
-using BigGustave;
+using BigGustave; //SHOULD NOT IMPORT
 using Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TiledCS;
+
+
 using TileProperties;
 //Todo: Remove unity dependency
 using PlanetTileMap;
@@ -16,7 +18,7 @@ using PlanetTileMap;
 
 namespace TmxMapFileLoader
 {
-    class TmxImporter
+    static class TmxImporter
     {
         //Todo: Break into stages
         //First stage, iterates over map and gets all sprite sheets used (loads them)
@@ -24,29 +26,10 @@ namespace TmxMapFileLoader
         //Second stage, iterates over map and gets all sprites/tiles used
         //register the tiles
         //Third stage copies the map data into the internal format
-
-        TiledMap map;
-
-        public PlanetTileMap.PlanetTileMap PlanetTileMap;
-        public SpriteAtlas.SpriteAtlas[] SpritesById;
-        public int[][,] AtlasTextures;
-
-        public string FilePath;
-
-        public TmxImporter(string filePath)
+        public static PlanetMapInfo LoadMap(string filePath)
         {
-            FilePath = filePath;
-        }
-
-        public void LoadStage1()
-        {
-             map = new TiledMap(FilePath);
-             AtlasTextures = new int[Enum.GetValues(typeof(PlanetTileLayer)).Length][,];
-        }
-
-        public void LoadStage2()
-        {
-            var dir = Path.GetDirectoryName(FilePath);
+            var map = new TiledMap(filePath);
+            var dir = Path.GetDirectoryName(filePath);
             var tileSets = new List<TiledTileset>();
 
             //load tile layers
@@ -63,7 +46,7 @@ namespace TmxMapFileLoader
             }
 
             //create sprite array
-            SpritesById = new SpriteAtlas.SpriteAtlas[maxGid + 1];
+            var idToSprite = new SpriteAtlas.SpriteAtlas[maxGid + 1];
 
             //create sprites
             for (int iTileSet = 0; iTileSet < map.Tilesets.Length; iTileSet++)
@@ -86,32 +69,47 @@ namespace TmxMapFileLoader
                     tile.TileHeight = t.image.height;
                     tile.TileWidth = t.image.width;
 
-                    LoadSprite(dir, link.firstgid + t.id, SpritesById, link, tile);
+                    LoadSprite(dir, link.firstgid + t.id, idToSprite, link, tile);
                 }
 
                 if (ts.Image != null)
-                    LoadSprite(dir, link.firstgid, SpritesById, link, ts);
+                    LoadSprite(dir, link.firstgid, idToSprite, link, ts);
             }
 
+            //convert to internal structures
+            return ConvertToInternalStructures(map, idToSprite);
         }
 
-        // convert to internal format
-        public void LoadStage3()
+        //Tile Properties should be set in an earlier stage
+
+        //TODO: Make it return a PlanetTileMap, not a PlanetMapInfo
+
+
+        //TODO: Move sprite/image loading operations from ConvertToInternalStructures
+        public static void LoadMapSpritesFromMapFile(TiledMap map, SpriteAtlas.SpriteAtlas[] spritesById)
         {
+            //
+            return;
+        }
+
+        public static PlanetMapInfo ConvertToInternalStructures(TiledMap map, SpriteAtlas.SpriteAtlas[] spritesById)
+        {
+            var PlanetMap = new PlanetMapInfo();
+            PlanetMap.SpritesById = spritesById;
+
             //calc bounds
             var mapBounds = CalcBounds(map);
             var mapWidth = mapBounds.maxX - mapBounds.minX + 1;
             var mapHeight = mapBounds.maxY - mapBounds.minY + 1;
             
             //A grid of tiles
-            PlanetTileMap = new PlanetTileMap.PlanetTileMap(mapWidth, mapHeight);
+            PlanetMap.Map = new PlanetTileMap.PlanetTileMap(mapWidth, mapHeight);
             //var planetMap = new PlanetTileMap.PlanetTileMap(mapWidth, mapHeight);
 
             //temp array to collect info about tiles
 
             //TODO: Replace wth PlanetMap
-            var tileInfos = 
-                new TileProperties.TileProperties[PlanetTileMap.Xsize, PlanetTileMap.Ysize];
+            var tileInfos = new TileProperties.TileProperties[PlanetMap.Map.Xsize, PlanetMap.Map.Ysize];
 
             //load layers
             foreach (var layer in map.Layers)
@@ -132,7 +130,7 @@ namespace TmxMapFileLoader
                         if (spriteId == 0)
                             continue;//empty sprite
 
-                        var sprite = SpritesById[spriteId];
+                        var sprite = spritesById[spriteId];
                         if (sprite.Height == 0)
                             continue;//sprite is not found :(
 
@@ -170,20 +168,20 @@ namespace TmxMapFileLoader
             TilePropertiesManager.Instance.TileProperties = tileProperties.ToArray(); //changed from res.TileProperties to use singleton
 
             //build atlases
-            SetAtlas(PlanetTileLayer.TileLayerBack, SpriteAtlas.SpriteAtlasBuilder.Build(SpritesById, PlanetTileLayer.TileLayerBack));
-            SetAtlas(PlanetTileLayer.TileLayerMiddle, SpriteAtlas.SpriteAtlasBuilder.Build(SpritesById, PlanetTileLayer.TileLayerMiddle));
-            SetAtlas(PlanetTileLayer.TileLayerFront, SpriteAtlas.SpriteAtlasBuilder.Build(SpritesById, PlanetTileLayer.TileLayerFront));
-            SetAtlas(PlanetTileLayer.TileLayerFurniture, SpriteAtlas.SpriteAtlasBuilder.Build(SpritesById, PlanetTileLayer.TileLayerFurniture));
+            PlanetMap.SetAtlas(PlanetTileLayer.TileLayerBack, SpriteAtlas.SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerBack));
+            PlanetMap.SetAtlas(PlanetTileLayer.TileLayerMiddle, SpriteAtlas.SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerMiddle));
+            PlanetMap.SetAtlas(PlanetTileLayer.TileLayerFront, SpriteAtlas.SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerFront));
+            PlanetMap.SetAtlas(PlanetTileLayer.TileLayerFurniture, SpriteAtlas.SpriteAtlasBuilder.Build(spritesById, PlanetTileLayer.TileLayerFurniture));
 
-            return;
+            return PlanetMap;
 
             //TODO: What does this function actually do?
             void Generate(PlanetTileLayer layer)
             {
                 spriteIdsToTilePropertyId.Clear();
 
-                for (int x = 0; x < PlanetTileMap.Xsize; x++)
-                for (int y = 0; y < PlanetTileMap.Ysize; y++)
+                for (int x = 0; x < PlanetMap.Map.Xsize; x++)
+                for (int y = 0; y < PlanetMap.Map.Ysize; y++)
                 {
                     var tileInfo = tileInfos[x, y];
                     var key = (0, 0);
@@ -207,32 +205,19 @@ namespace TmxMapFileLoader
                     }
 
                     //assign layer to sprite
-                    if (key.Item1 != 0) SpritesById[key.Item1].Layer = layer;
-                    if (key.Item2 != 0) SpritesById[key.Item2].Layer = layer;
+                    if (key.Item1 != 0) spritesById[key.Item1].Layer = layer;
+                    if (key.Item2 != 0) spritesById[key.Item2].Layer = layer;
 
                     //assign tile property index to tile in planetMap.Tiles
                     switch (layer)
                     {
-                        case PlanetTileLayer.TileLayerBack: PlanetTileMap.Tiles[x, y].BackTileId = tilePropertyId; break;
-                        case PlanetTileLayer.TileLayerMiddle: PlanetTileMap.Tiles[x, y].MidTileId = tilePropertyId; break;
-                        case PlanetTileLayer.TileLayerFront: PlanetTileMap.Tiles[x, y].FrontTileId = tilePropertyId; break;
-                        case PlanetTileLayer.TileLayerFurniture: PlanetTileMap.Tiles[x, y].FurnitureTileId = tilePropertyId; break;
+                        case PlanetTileLayer.TileLayerBack: PlanetMap.Map.Tiles[x, y].BackTileId = tilePropertyId; break;
+                        case PlanetTileLayer.TileLayerMiddle: PlanetMap.Map.Tiles[x, y].MidTileId = tilePropertyId; break;
+                        case PlanetTileLayer.TileLayerFront: PlanetMap.Map.Tiles[x, y].FrontTileId = tilePropertyId; break;
+                        case PlanetTileLayer.TileLayerFurniture: PlanetMap.Map.Tiles[x, y].FurnitureTileId = tilePropertyId; break;
                     }
                 }
             }
-        }
-
-
-        //Tile Properties should be set in an earlier stage
-
-        //TODO: Make it return a PlanetTileMap, not a PlanetMapInfo
-
-
-        //TODO: Move sprite/image loading operations from ConvertToInternalStructures
-        public static void LoadMapSpritesFromMapFile(TiledMap map, SpriteAtlas.SpriteAtlas[] spritesById)
-        {
-            //
-            return;
         }
 
 /*
@@ -334,16 +319,6 @@ namespace TmxMapFileLoader
             for (int y = 0; y < h; y++)
                 res[x, y] = png.GetPixel(x + left, y + top).ToRGBA();
             return res;
-        }
-
-        public int[,] GetAtlas(PlanetTileLayer layer)
-        {
-            return AtlasTextures[(int)layer];
-        }
-
-        public void SetAtlas(PlanetTileLayer layer, int[,] atlasTexture)
-        {
-            AtlasTextures[(int)layer] = atlasTexture;
         }
     }
 }
