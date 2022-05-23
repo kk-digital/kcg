@@ -14,7 +14,7 @@ namespace TileProperties
             Instance = this;
         }
         // First of all, we initial core elements to avoid crashes. Because, if we initialize relatives before core, and because realtives uses core 
-        public static void InitCore()
+        public static void InitStage1()
         {
             //This is where init goes
             //Instance = new TilePropertiesManager();
@@ -22,7 +22,7 @@ namespace TileProperties
         if(TilePropertiesManager.Instance.TileProperties == null) TilePropertiesManager.Instance.TileProperties = new TileProperties[1];
         }
         // Once we initialize all core elemets, then we can initialize other parts that is use core elements when working
-        public static void InitCoreRelatives()
+        public static void InitStage2()
         {
 
         }
