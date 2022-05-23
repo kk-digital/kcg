@@ -14,9 +14,9 @@ namespace PlanetTileMap
         public int TileWidth = 16;  // Tiles are 32x32 pixels
         public int TileHeight = 16; // Tiles are 32x32 pixel
 
-        public Quad[] BuildQuads(PlanetMapInfo info, PlanetTileLayer layer, float depth)
+        public Quad[] BuildQuads(TmxMapFileLoader.TmxImporter Loader, PlanetTileLayer layer, float depth)
         {
-            var atlas = info.GetAtlas(layer); //WTF is atlas
+            var atlas = Loader.GetAtlas(layer); //WTF is atlas
             if (atlas == null)
                 return new Quad[0];
 
@@ -24,10 +24,10 @@ namespace PlanetTileMap
             var texH = atlas.GetLength(1);
             var quads = new List<Quad>();
 
-            for (int iCol = 0; iCol < info.Map.Xsize; iCol++)
-            for (int iRow = 0; iRow < info.Map.Ysize; iRow++)
+            for (int iCol = 0; iCol < Loader.PlanetTileMap.Xsize; iCol++)
+            for (int iRow = 0; iRow < Loader.PlanetTileMap.Ysize; iRow++)
             { 
-                var tile = info.Map.Tiles[iCol, iRow];
+                var tile = Loader.PlanetTileMap.Tiles[iCol, iRow];
                 
                 //TODO: Why is there a for loop here?
                 //TODO: Tiles mostly have 1 sprite, some tiles have 2
@@ -36,7 +36,7 @@ namespace PlanetTileMap
                     if (spriteId == 0)
                         continue;//empty sprite
 
-                    var sprite = info.SpritesById[spriteId];
+                    var sprite = Loader.SpritesById[spriteId];
                     if (sprite.Height == 0)
                         continue;//sprite is not found :(
 
