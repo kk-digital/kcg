@@ -17,5 +17,20 @@ namespace PlanetTileMap
             Ysize = ysize;
             Tiles = new PlanetTile[Xsize, Ysize];
         }
-    }
+    
+
+        //Take in PlanetTileMap, and map a horizonal line
+    public void GenerateFlatPlanet()
+        {
+            //default size = X...
+
+            //make a single line horizonally across planet
+            //from left to right
+
+            //int TileId = GetTileId("default-tile")
+           //for x = 0 to x = Planet.Size.X
+           //Planet.SetTile(TileId, x, 10)
+
+
+        }
 }
