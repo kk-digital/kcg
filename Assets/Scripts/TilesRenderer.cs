@@ -24,7 +24,7 @@ namespace PlanetTileMap.Unity
 
         // TmxImporter holds the temporary data for loading
         // and is used to make a 3 stage loading process
-        TmxMapFileLoader.TmxImporter FileLoader;
+        //TmxMapFileLoader.TmxImporter FileLoader;
 
         List<MeshBuilder> meshBuildersByLayers = new List<MeshBuilder>();
         
@@ -41,15 +41,16 @@ namespace PlanetTileMap.Unity
         //File loading should not occur at this stage
         public void InitStage1()
         {
-            FileLoader = new TmxImporter(Path.Combine(BaseDir, TileMap));
-            FileLoader.LoadStage1();
+            // todo: commented out the tmx stuff for now
+            /*FileLoader = new TmxImporter(Path.Combine(BaseDir, TileMap));
+            FileLoader.LoadStage1();*/
         }
 
         //Load settings from files and other init, that requires systems to be intialized
         public void InitStage2()
         {
-            FileLoader.LoadStage2();
-            FileLoader.LoadStage3();
+            /*FileLoader.LoadStage2();
+            FileLoader.LoadStage3();*/
 
 
             meshBuildersByLayers.Clear();
@@ -66,7 +67,7 @@ namespace PlanetTileMap.Unity
             foreach (var layer in planetLayers)
             {
                 //create material for atlas
-                var atlas = FileLoader.GetAtlas(layer);
+                /*var atlas = FileLoader.GetAtlas(layer);
 
                 if (atlas.Length == 0)
                     continue;
@@ -76,7 +77,7 @@ namespace PlanetTileMap.Unity
                 var mesh = CreateMesh(transform, layer.ToString(), sortingOrder++, mat);
                 var quads = new QuadsBuilder().BuildQuads(FileLoader, layer, 0f);
                 mb = new MeshBuilder(quads, mesh);
-                meshBuildersByLayers.Add(mb);
+                meshBuildersByLayers.Add(mb);*/
             }
 
             LateUpdate();

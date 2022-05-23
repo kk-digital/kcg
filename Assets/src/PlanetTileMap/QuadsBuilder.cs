@@ -14,7 +14,8 @@ namespace PlanetTileMap
         public int TileWidth = 16;  // Tiles are 32x32 pixels
         public int TileHeight = 16; // Tiles are 32x32 pixel
 
-        public Quad[] BuildQuads(TmxMapFileLoader.TmxImporter Loader, PlanetTileLayer layer, float depth)
+        // todo: commented out tmx stuff for now
+        /*public Quad[] BuildQuads(TmxMapFileLoader.TmxImporter Loader, PlanetTileLayer layer, float depth)
         {
             var atlas = Loader.GetAtlas(layer); //WTF is atlas
             if (atlas == null)
@@ -85,7 +86,7 @@ namespace PlanetTileMap
                 if (tileProperty.SpriteId != 0) yield return tileProperty.SpriteId;
                 if (tileProperty.SpriteId2 != 0) yield return tileProperty.SpriteId2;
             }
-        }
+        }*/
     }
 
     /// <summary>Represents sprite quad in mesh</summary>
