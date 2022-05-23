@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Physics
 {
-    public struct Body
+    public struct RectangleBoundingBoxCollision
     {
         // epsilon parameter for values that are "close enough"
         public const float Eps = 0.05f;
@@ -312,7 +312,7 @@ namespace Physics
             return collidingLines.ToArray();
         }
     
-        public bool Intersects(Body other)
+        public bool Intersects(RectangleBoundingBoxCollision other)
         {
             var disp = Pos - other.Pos;
             var intersects =
