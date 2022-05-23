@@ -21,21 +21,37 @@ namespace PlanetTileMap.Unity
         public static string BaseDir => Application.streamingAssetsPath;
         MeshBuilder mb;
         Mesh mesh;
-        PlanetMapInfo mapInfo;
+
+        // TmxImporter holds the temporary data for loading
+        // and is used to make a 3 stage loading process
+        TmxMapFileLoader.TmxImporter FileLoader;
+
         List<MeshBuilder> meshBuildersByLayers = new List<MeshBuilder>();
         
 
         public void Start()
         {
-            LoadMap();
+            // TODO(Mahdi): does not make sense to put them here
+            // move them out ! 
+            InitStage1();
+            InitStage2();
         }
 
-        public void LoadMap()
+        //All memory allocations/setups go here
+        //File loading should not occur at this stage
+        public void InitStage1()
         {
-            //load map
-            mapInfo = TmxImporter.LoadMap(Path.Combine(BaseDir, TileMap));
+            FileLoader = new TmxImporter(Path.Combine(BaseDir, TileMap));
+            FileLoader.LoadStage1();
+        }
 
-            //build sprite quads for each layer
+        //Load settings from files and other init, that requires systems to be intialized
+        public void InitStage2()
+        {
+            FileLoader.LoadStage2();
+            FileLoader.LoadStage3();
+
+
             meshBuildersByLayers.Clear();
             var planetLayers = new [] { PlanetTileLayer.TileLayerBack, PlanetTileLayer.TileLayerMiddle, PlanetTileLayer.TileLayerFurniture, PlanetTileLayer.TileLayerFront };
 
@@ -50,20 +66,28 @@ namespace PlanetTileMap.Unity
             foreach (var layer in planetLayers)
             {
                 //create material for atlas
-                var atlas = mapInfo.GetAtlas(layer);
+                var atlas = FileLoader.GetAtlas(layer);
+
                 if (atlas.Length == 0)
                     continue;
                 var tex = TextureBuilder.Build(atlas);
                 var mat = Instantiate(Material);
                 mat.SetTexture("_MainTex", tex);
                 var mesh = CreateMesh(transform, layer.ToString(), sortingOrder++, mat);
-                var quads = new QuadsBuilder().BuildQuads(mapInfo, layer, 0f);
+                var quads = new QuadsBuilder().BuildQuads(FileLoader, layer, 0f);
                 mb = new MeshBuilder(quads, mesh);
                 meshBuildersByLayers.Add(mb);
             }
 
             LateUpdate();
+        }        
+
+        public void LoadMap()
+        {
+            InitStage1();
+            InitStage2();
         }
+
 
         private Mesh CreateMesh(Transform parent, string name, int sortingOrder, Material material)
         {
@@ -114,7 +138,10 @@ namespace PlanetTileMap.Unity
             DrawDefaultInspector();
 
             if (GUILayout.Button("Load Map"))
+            {
                 myTarget.LoadMap();
+            }
+
         }
     }
 #endif
