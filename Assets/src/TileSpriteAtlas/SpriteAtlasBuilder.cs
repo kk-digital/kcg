@@ -14,13 +14,13 @@ namespace SpriteAtlas
     //TODO: Replace with /src/SpriteAtlas
     static class SpriteAtlasBuilder
     {
-        public static int[,] Build(IList<Deprecate_Sprite> sprites, PlanetTileLayer layer, bool clearTextureInSprite = true)
+        public static int[,] Build(IList<SpriteAtlas> sprites, PlanetTileLayer layer, bool clearTextureInSprite = true)
         {
             //pack sprites into one rect\
             //WTF: Why do we have rectangle? Every tile is 32x32 pixels; their squares
             var rectsList = new List<PackingRectangle>(sprites.Count);
             for (int i = 0; i < sprites.Count; i++)
-                if (sprites[i].Texture != null && sprites[i].Layer == layer)
+                if (sprites[i].PixelArray != null && sprites[i].Layer == layer)
                 {
                     rectsList.Add(new PackingRectangle(0, 0, (uint)sprites[i].Width, (uint)sprites[i].Height, i));
                 }
@@ -39,11 +39,11 @@ namespace SpriteAtlas
             {
                 var targetRect = rects[i];
                 var sprite = sprites[targetRect.Id];
-                CopyRect(sprite.Texture, targetRect);
+                CopyRect(sprite.PixelArray, targetRect);
                 sprite.Left = (int)targetRect.X;
                 sprite.Top = (int)targetRect.Y;
                 if (clearTextureInSprite)
-                    sprite.Texture = null;
+                    sprite.PixelArray = null;
                 sprites[targetRect.Id] = sprite;
             }
 

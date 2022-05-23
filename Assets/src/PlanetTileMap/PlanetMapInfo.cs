@@ -11,7 +11,7 @@ namespace PlanetTileMap
 
         //Todo: Remove these. they have to do with SpriteStorage
         //TODO: Use datastructure in SrpiteAtlas
-        public Deprecate_Sprite[] SpritesById;
+        public SpriteAtlas.SpriteAtlas[] SpritesById;
         //TODO: Use datastructure in SrpiteAtlas
         public int[][,] AtlasTextures;
 
