@@ -3,6 +3,9 @@
     /// <summary> Contains info about tile, include all layers </summary>
     public struct PlanetTile
     {
+        // Check if this tile actually exist on Array
+        public bool Initialized;
+        
         //Back tile property id
         public int BackTileId;
 
