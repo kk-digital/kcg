@@ -1,4 +1,7 @@
 using Enums;
+using System.Collections;
+using System.Collections.Generic;
+
 //MOST IMPORTANT TILE
 
 /*
@@ -49,8 +52,11 @@ namespace TileProperties
         private int CurrentTileIndex;
         private TileProperties[] PropertiesArray;
 
+        private  Dictionary<string, int> NameToID;
+
         public TileCreationApi()
         {
+            NameToID = new Dictionary<string, int>();
             PropertiesArray = new TileProperties[1024];
             CurrentTileIndex = -1;
         }
@@ -60,6 +66,18 @@ namespace TileProperties
             if (TileId >= 0 && TileId < PropertiesArray.Length)
             {
                 return PropertiesArray[TileId];
+            }
+
+            return new TileProperties();
+        }
+
+        public TileProperties GetTileProperties(string name)
+        {
+            int value;
+            bool exists = NameToID.TryGetValue(name, out value);
+            if (exists)
+            {
+                return GetTileProperties(value);
             }
 
             return new TileProperties();
@@ -90,6 +108,13 @@ namespace TileProperties
         {
             if (CurrentTileIndex != -1)
             {
+                int value;
+                bool exists = NameToID.TryGetValue(name, out value);
+                if (!exists)
+                {
+                     NameToID.Add(name, CurrentTileIndex);
+                }
+
                 PropertiesArray[CurrentTileIndex].Name = name;
             }
         }
