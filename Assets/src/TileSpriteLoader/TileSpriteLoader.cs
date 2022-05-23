@@ -1,122 +1,91 @@
+using BigGustave;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using UnityEngine;
 
-
-//ONLY FILE TO IMPORT GUSTAVE
-
-
-
-
-//1.
-//A Image / SpriteSheet = Grid of Tiles = PNG FILE
-//load to []byte PixelData
-
-public class TileSpriteLoader
+namespace TileSpriteLoader
 {
-    //MAP: Filename/String -> SpriteSheetId
-    //Array: []SpriteSheets
-
-    //API: int id = GetTileSpriteSheetId("Filename.png")
-    //API: *TileSpriteSheet GetTileSpriteSheet(Id)
-
-    //TODO:InitStage1
-    //TODO:InitStage2
-
-
-/*
-    private int Count;
-    private Dictionary<string, int> DictionaryID = new();
-    private SpriteSheetData[] FilesSpriteSheet;
-
-    public static SpriteSheetImageLoader Instance;
-
-    public void ImageArray<Data>(Data data)
+    public class TileSpriteLoader
     {
-        Array.Resize(ref FilesSpriteSheet, Count);
-    }
+        public static TileSpriteLoader Instance;
+        public SpriteSheet[] SpriteSheets;
+        public int ImageCount;
+        public Dictionary<string, int> SpriteSheetID;
 
-    public SpriteSheetData[] SpriteSheet
-    {
-        get => FilesSpriteSheet;
-        set => FilesSpriteSheet = value;
-    }
-
-    public int SpriteSheetCount
-    {
-        get => Count;
-        set => Count = value;
-    }
-
-    public Dictionary<string, int> DictionarySpriteSheetID
-    {
-        get => DictionaryID;
-        set => DictionaryID = value;
-    }
-
-    public SpriteSheetImageLoader()
-    {
-        Instance = this;
-    }
-
-    public static void InitStage1()
-    {
-        Instance = new SpriteSheetImageLoader();
-    }
-
-    public static void InitStage2()
-    {
-
-    }
-
-    public SpriteSheetData AssignSpriteSheetDatas(string filename, int id)
-    {
-        const int accessCounter = 0;
-        const int loaded = 0;
-        const int spriteSheetType = 0;
-        const int pixelFormat = 0;
-        const int hash = 0;
-
-        var imageCount = ++TileSpriteImageLoaderManager.Instance.ImageCount;
-
-        TileSpriteImageLoaderManager.Instance.ImageArray(ImageTest.imageData);
-        TileSpriteImageLoaderManager.Instance.DictionaryPNGID.Add($"{filename}_{imageCount}", imageCount);
-
-        var data = Png.Open(filename);
-        return new SpriteSheetData(data, filename, id, spriteSheetType, loaded, accessCounter, pixelFormat, hash);
-    }
-
-    public int GetSpriteSheetID<TData>(string filename, TData data)
-    {
-        int id = 0;
-        if (DictionaryID.ContainsKey(filename))
+        public TileSpriteLoader()
         {
-            id = DictionaryID[filename];
-            Debug.Log("id found in the dictionary");
+            Instance = this;
         }
-        else
+
+        public static void InitStage1()
         {
-            Debug.Log("id not found in the dictionary");
-            FileInfo fileInfo = new DirectoryInfo(Directory.GetCurrentDirectory())
-                            .EnumerateFiles(filename, SearchOption.AllDirectories)
-                            .FirstOrDefault();
-            if (fileInfo is { Exists: true })
+            Instance = new TileSpriteLoader();
+        }
+
+        public static void InitStage2()
+        {
+        
+        }
+
+        public int GetSpriteSheetID(string filename, int tileWidth = 32) // tileWidth needed when first creating sprite sheet
+        {
+            if (SpriteSheetID.ContainsKey(filename))
             {
-                LoadImageFile(filename, fileInfo, data);
+                Debug.Log("id found in the dictionary");
+                return SpriteSheetID[filename];
+            }
+            else
+            {
+                Debug.Log("id not found in the dictionary");
+                FileInfo fileInfo = new DirectoryInfo(Directory.GetCurrentDirectory())
+                                .EnumerateFiles(filename, SearchOption.AllDirectories)
+                                .FirstOrDefault();
+                if (fileInfo is { Exists: true })
+                {
+                    LoadImageFile(filename, fileInfo, tileWidth);
+                    return SpriteSheetID[filename];
+                }
+            }
+            return -1;
+        }
+
+        private void LoadImageFile(string filename, FileInfo fileInfo, int tileWidth)
+        {
+            ImageCount++;
+            Debug.Log($"file found, adding {fileInfo.FullName} into dictionary");
+            SpriteSheetID.Add(filename, ImageCount - 1);
+
+            Array.Resize(ref SpriteSheets, ImageCount - 1);
+
+            var data = Png.Open(filename);
+            SpriteSheets[ImageCount - 1] = new SpriteSheet();
+            SpriteSheets[ImageCount - 1].id = ImageCount - 1;
+            SpriteSheets[ImageCount - 1].SpriteSize = tileWidth;
+            SpriteSheets[ImageCount - 1].Width = data.Header.Width;
+            SpriteSheets[ImageCount - 1].Height = data.Header.Height;
+
+            SpriteSheets[ImageCount - 1].Data = new byte[4 * data.Header.Width * data.Header.Height];
+
+            for (int y = 0; y < data.Header.Height; y++)
+            {
+                for (int x = 0; x < data.Header.Width; x++)
+                {
+                    var pixel = data.GetPixel(x, y);
+                    int index = y * data.Header.Width + x;
+                    SpriteSheets[ImageCount - 1].Data[4 * index + 0] = pixel.R;
+                    SpriteSheets[ImageCount - 1].Data[4 * index + 1] = pixel.G;
+                    SpriteSheets[ImageCount - 1].Data[4 * index + 2] = pixel.B;
+                    SpriteSheets[ImageCount - 1].Data[4 * index + 3] = pixel.A;
+                }
             }
         }
-        return id;
+
+        public ref SpriteSheet GetSpriteSheet(int id)
+        {
+            return ref SpriteSheets[id];
+        }
     }
-
-    private void LoadImageFile<TData>(string filename, FileInfo fileInfo, TData data)
-    {
-        Count++;
-        Debug.Log($"file found, adding {fileInfo.FullName} into dictionary");
-        DictionaryID.Add(filename, Count);
-
-        Array.Resize(ref FilesSpriteSheet, Count);
-        Array.Resize(ref TilePropertiesManager.Instance.TileProperties, Count);
-        FilesSpriteSheet[Count - 1] = AssignSpriteSheetDatas(fileInfo.FullName, Count);
-    }
-
-*/
 }

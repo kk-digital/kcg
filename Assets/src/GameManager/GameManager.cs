@@ -5,6 +5,7 @@ using System.Collections;
 using UnityEngine;
 using ImageLoader;
 using TileProperties;
+using TileSpriteLoader;
 
 // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.html
 
@@ -29,9 +30,9 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //TODO: Either put all intialiation in Awake, or put all in Start()
-        SpriteSheetManager spriteSheetManager = new SpriteSheetManager();
-        spriteSheetManager.GetImageID(filePath); // finds png, add it to struct list and returns index
-        spriteSheetManager.GetImage(0); // returns the sprite struct of the given index
+        TileSpriteLoader.TileSpriteLoader tileSpriteLoader = new TileSpriteLoader.TileSpriteLoader();
+        tileSpriteLoader.GetSpriteSheetID(filePath); // finds png, add it to struct list and returns index
+        tileSpriteLoader.GetSpriteSheet(0); // returns the sprite struct of the given index
     }
 
     //Documentation: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
@@ -107,9 +108,7 @@ public class GameManager : MonoBehaviour
     {
         //TODO: Intialize all managers here
         TilePropertiesManager.InitCore();
-        TileSpriteLoader.InitStage1();
-        SpriteSheetImageLoader.InitStage1();
-        TileSpriteImageLoaderManager.InitStage1();
+        TileSpriteLoader.TileSpriteLoader.InitStage1();
         //Setup ECS system
         ecsSystems = new GameFeatures(Contexts.sharedInstance);
         ecsSystems.Initialize();
@@ -121,9 +120,7 @@ public class GameManager : MonoBehaviour
         //TODO: Start loading the files
         // file loading operations here
         TilePropertiesManager.InitCoreRelatives();
-        TileSpriteLoader.InitStage2();
-        SpriteSheetImageLoader.InitStage2();
-        TileSpriteImageLoaderManager.InitStage2();
+        TileSpriteLoader.TileSpriteLoader.InitStage2();
     }
 
     public void TearDown()

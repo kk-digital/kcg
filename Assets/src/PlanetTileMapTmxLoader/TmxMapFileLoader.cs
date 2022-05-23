@@ -28,7 +28,7 @@ namespace TmxMapFileLoader
         //Third stage copies the map data into the internal format
         
 
-        public static PlanetMapInfo LoadMap(string filePath)
+        /*public static PlanetMapInfo LoadMap(string filePath)
         {
             var map = new TiledMap(filePath);
             var dir = Path.GetDirectoryName(filePath);
@@ -256,7 +256,7 @@ namespace TmxMapFileLoader
         }
 */
 
-        private static PlanetTileLayer GetPlanetTileLayer(TiledLayer layer)
+        /*private static PlanetTileLayer GetPlanetTileLayer(TiledLayer layer)
         {
             if (layer.properties == null) return PlanetTileLayer.TileLayerError;
 
@@ -321,6 +321,6 @@ namespace TmxMapFileLoader
             for (int y = 0; y < h; y++)
                 res[x, y] = png.GetPixel(x + left, y + top).ToRGBA();
             return res;
-        }
+        }*/
     }
 }

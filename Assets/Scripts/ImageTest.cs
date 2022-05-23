@@ -11,12 +11,13 @@ namespace ImageLoader
 {
     public class ImageTest : MonoBehaviour
     {
-        public TileSpriteImageLoaderManager ImageLoaderManager;
-        public static SpriteSheetImageLoader SpriteSheetLoaderManager;
-        public static TilePropertiesManager TilesPropertiesManager;
-        public static ImageData imageData;
-        public SpriteSheetData spriteSheetData;
-        private void Start() 
+        // todo: is this image test still needed?
+        //public TileSpriteImageLoaderManager ImageLoaderManager;
+        //public static SpriteSheetImageLoader SpriteSheetLoaderManager;
+        //public static TilePropertiesManager TilesPropertiesManager;
+        //public static ImageData imageData;
+        //public SpriteSheetData spriteSheetData;
+        /*private void Start() 
         {
             //SpritePixelGeneration();
             GetSpriteFromSpriteSheet();
@@ -76,7 +77,7 @@ namespace ImageLoader
 
             texture.Apply(true);
             GameObject.Find("/Canvas/Image").GetComponent<RawImage>().texture = texture;
-        }
+        }*/
     }
 }
 
