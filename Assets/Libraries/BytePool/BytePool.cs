@@ -3,61 +3,16 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 
-
-unsafe struct UnmanagedArray
+public struct ByteData
 {
+    public byte[] Base;
 
-	public Int64 Capacity;
-	public Int64 ElementSize;
+    public Int64 Start;
     public Int64 Length;
- 
-	public void* Memory;
-	public UnmanagedArray(Int64 capacity, Int64 elementSize)
-	{
-		Memory = (void*)Marshal.AllocHGlobal((IntPtr)(capacity * elementSize));
-		Capacity = capacity;
-		ElementSize = elementSize;
-        Length = 0;
-	}
-
-    public void Expand(Int64 newCapacity)
-    {
-        if (newCapacity > Capacity)
-        {
-            Capacity = newCapacity;
-            Memory = (void*)Marshal.ReAllocHGlobal((IntPtr)Memory, (IntPtr)(Capacity * ElementSize));
-        }
-    }
-
-    public Int64 RemainingCapacity()
-    {
-        return Capacity - Length;
-    }
-
-	public void* this[Int64 index]
-	{
-		get
-		{
-			return ((byte*)Memory) + ElementSize * index;
-		}
-	}
-	public void Destroy()
-	{
-		Marshal.FreeHGlobal((IntPtr)Memory);
-		Memory = null;
-		Capacity = 0;
-        Length = 0;
-	}
 }
-
 
 public class BytePool
 {
-    struct IndexObject
-    {
-        public Int64 ID;
-    }
-
     struct ByteObject
     {
         public Int64 Offset;
@@ -65,15 +20,27 @@ public class BytePool
 
         public bool IsFree;
 
+        public ByteObject(Int64 offset, Int64 size, bool isFree)
+        {
+            Offset = offset;
+            Size = size;
+            IsFree = isFree;
+        }
     }
 
 
 
-    IntPtr DataArray;
+    byte[] DataArray;
     Int64 DataArrayCapacity;
 
-    UnmanagedArray IndexArray;
-    UnmanagedArray FreeIndices;
+    // list of allocated bytes
+    // can be accessed by index
+    List <ByteObject> IndexArray = new List<ByteObject>();
+
+    // double linked list of free blocks
+    // for fast insertion deletion
+    // we wont be deallocating much
+    LinkedList <int> FreeIndices = new LinkedList<int>();
 
     Int64 TotalAllocations;
     Int64 TotalDeallocations;
@@ -83,30 +50,21 @@ public class BytePool
     Int64 NumberOfExpandCalls;
     
     
-    unsafe BytePool(Int64 BaseCapacity = 1024 * 1024, Int64 IndexArrayInitialCapacity = 1024)
+    BytePool(Int64 BaseCapacity = 1024 * 1024)
     {
-        IndexArray = new UnmanagedArray(IndexArrayInitialCapacity, sizeof(ByteObject));
-        FreeIndices = new UnmanagedArray(IndexArrayInitialCapacity, sizeof(IndexObject));
 
         Int64 BaseSize = BaseCapacity;
-        DataArray = (IntPtr)Marshal.AllocHGlobal((IntPtr)BaseSize);
+        DataArray = new byte[BaseSize];
         DataArrayCapacity = BaseSize;
 
-        Int64 blockID = AddIndex(0, BaseSize, true);
-        AddFreeIndex(blockID);
 
+        IndexArray.Add(new ByteObject(0, BaseSize, true));
+        int blockID = IndexArray.Count - 1;
+
+        // we start with one giant free block
+        // by adding its index to the free list
+        FreeIndices.AddFirst(blockID);
     }
-
-    ~BytePool()
-    {
-       IndexArray.Destroy();
-       FreeIndices.Destroy(); 
-
-       Marshal.FreeHGlobal(DataArray);
-       DataArrayCapacity = 0;
-    }
-
-
 
     Int64 ExpandCapacityFunction(Int64 PreviousCapacity)
     {
@@ -123,61 +81,6 @@ public class BytePool
 
     }
 
-    unsafe Int64 AddIndex(Int64 offset, Int64 size, bool IsFree)
-    {
-        // check to see if we have space for 1 more index
-        // if not we expand the memory
-        if (IndexArray.RemainingCapacity() <= 0)
-        {
-            Int64 newCapacity = ExpandCapacityFunction(IndexArray.Capacity);
-            IndexArray.Expand(newCapacity);
-        }
-
-
-        Int64 index = IndexArray.Length;
-        *((ByteObject *)IndexArray[IndexArray.Length]) = 
-                    new ByteObject{ Offset = offset, Size = size, IsFree = IsFree};
-        IndexArray.Length++;
-
-        return index;
-    }
-
-    unsafe void RemoveIndex(Int64 ID)
-    {
-        for(Int64 index = ID; index < IndexArray.Length - 1; index++)
-        {
-            ByteObject* obj1 = (ByteObject *)IndexArray[index];
-            ByteObject* obj2 = (ByteObject *)IndexArray[index + 1];
-
-            *obj1 = *obj2;
-        }
-    }
-
-    unsafe void AddFreeIndex(Int64 blockId)
-    {
-        // check to see if we have space for 1 more index
-        // if not we expand the memory
-        if (FreeIndices.RemainingCapacity() <= 0)
-        {
-            Int64 newCapacity = ExpandCapacityFunction(FreeIndices.Capacity);
-            FreeIndices.Expand(newCapacity);
-        }
-
-        *((IndexObject *)FreeIndices[FreeIndices.Length]) = new IndexObject{ ID = blockId};
-        FreeIndices.Length++;
-    }
-
-    unsafe void RemoveFreeIndex(Int64 ID)
-    {
-        for(Int64 index = ID; index < FreeIndices.Length - 1; index++)
-        {
-            IndexObject* obj1 = (IndexObject *)FreeIndices[index];
-            IndexObject* obj2 = (IndexObject *)FreeIndices[index + 1];
-
-            *obj1 = *obj2;
-        }
-    }
-
 
     void Expand(Int64 newCapacity)
     {
@@ -188,26 +91,42 @@ public class BytePool
             NumberOfExpandCalls++;
 
             DataArrayCapacity = newCapacity;
-            DataArray = Marshal.ReAllocHGlobal((IntPtr)DataArray, (IntPtr)(DataArrayCapacity));
 
-             Int64 blockID = AddIndex(oldCapacity, difference, true);
-             AddFreeIndex(blockID);
+            // create a new byte[] and copy the old one
+            // would love to use a memcpy here
+            byte[] newDataArray = new byte[DataArrayCapacity];
+            for(Int64 index = 0; index < oldCapacity; index++)
+            {
+                newDataArray[index] = DataArray[index];
+            }
+            DataArray = newDataArray;
+
+            // the new block will be added in the free list
+            IndexArray.Add(new ByteObject(oldCapacity, difference, true));
+            int blockID = IndexArray.Count - 1;
+            FreeIndices.AddLast(blockID);
         }
     }
     
     // used to get the memory from an index
     // the index is provided in the Allocate method
-    unsafe IntPtr Get(Int64 index)
+    ByteData Get(int index)
     {
-        IntPtr ptr = (IntPtr)0;
+        ByteData byteData = new ByteData();
+        byteData.Base = null;
+        byteData.Start = 0;
+        byteData.Length = 0;
 
-        if (index >= 0 && index < IndexArray.Length)
+        if (index >= 0 && index < IndexArray.Count)
         {
-            ByteObject *byteObject = (ByteObject *)IndexArray[index];
-            ptr = (IntPtr)((char *)DataArray + ((*byteObject).Offset));
+            ByteObject byteObject = IndexArray[index];
+
+            byteData.Base = DataArray;
+            byteData.Start = byteObject.Offset;
+            byteData.Length = byteObject.Size;
         }
 
-        return ptr;
+        return byteData;
     }
 
 
@@ -215,28 +134,25 @@ public class BytePool
     // returns an identifier to the memory block
     // the memory can be accesed using the Get function
     // so that we can keep track of its usage every frame
-    unsafe Int64 Allocate(int size)
+    int Allocate(Int64 size)
     {
         TotalAllocations++;
         TotalUsedSpace += size;
 
-        Int64 foundIndex = -1;
-        IndexObject *found = null;
+        LinkedListNode <int> found = null;
 
         // we allocate memory by going through the list of 
         // empty chunks and find one that fits our size.
         // if we cant find one we just expand the size.
-        for(Int64 freeIndex = 0; freeIndex < FreeIndices.Length; freeIndex++)
+        for(LinkedListNode <int> iterator = FreeIndices.First; 
+                iterator != null; iterator = iterator.Next)
         {
-            IndexObject *index = (IndexObject *)FreeIndices[freeIndex];
-
             // this is a free chunk of memory
-            ByteObject *byteObject = (ByteObject *)IndexArray[(*index).ID];
+            ByteObject byteObject = IndexArray[iterator.Value];
 
-            if ((*byteObject).Size >= size)
+            if (byteObject.Size >= size)
             {
-                foundIndex = freeIndex;
-                found = index;
+                found = iterator;
                 break;
             }
         }
@@ -258,61 +174,64 @@ public class BytePool
             }
 
             Expand(newCapacity);    
-        }
-
-
-        for(Int64 freeIndex = 0; freeIndex < FreeIndices.Length; freeIndex++)
-        {
-            IndexObject *index = (IndexObject *)FreeIndices[freeIndex];
-
-            // this is a free chunk of memory
-            ByteObject *byteObject = (ByteObject *)IndexArray[(*index).ID];
-
-            if ((*byteObject).Size >= size)
+            for(LinkedListNode <int> iterator = FreeIndices.Last; 
+                iterator != null; iterator = iterator.Previous)
             {
-                foundIndex = freeIndex;
-                found = index;
-                break;
+                // this is a free chunk of memory
+                ByteObject byteObject = IndexArray[iterator.Value];
+
+                if (byteObject.Size >= size)
+                {
+                    found = iterator;
+                    break;
+                }
             }
         }
 
 
-
-
-        Int64 byteObjectID = (*found).ID;
-        ByteObject *byteObjet = (ByteObject *)IndexArray[byteObjectID];
-        if ((*byteObjet).Size == size)
+        int byteObjectID = found.Value;
+        int newIndex = 0;
+        ByteObject byteObjet = IndexArray[byteObjectID];
+        if (byteObjet.Size == size)
         {
-            RemoveFreeIndex(foundIndex);
+            FreeIndices.Remove(found);
+            byteObjet.IsFree = false;
+
+            newIndex = byteObjectID;
         }
         else
         {
-            byteObjectID = AddIndex((*byteObjet).Offset, size, false);
-            (*byteObjet).Offset += size;
-            (*byteObjet).Size -= size;
+            IndexArray.Add(new ByteObject(byteObjet.Offset, size, false));
+            byteObjet.Offset += size;
+            byteObjet.Size -= size;
+
+            newIndex = IndexArray.Count - 1;
         }
 
+        IndexArray[byteObjectID] = byteObjet;
 
 
-        return byteObjectID;
+        return newIndex;
 	}
     
 
     // release the memory so that it can be used
     // by other allocation calls
-    unsafe void Deallocate(Int64 index)
+    void Deallocate(int index)
     {
-        if (index >= 0 && index < IndexArray.Length)
+        if (index >= 0 && index < IndexArray.Count)
         {
-            ByteObject *byteObject = (ByteObject *)IndexArray[index];
+            ByteObject byteObject = IndexArray[index];
 
             TotalDeallocations++;
                     
-            Int64 size = (*byteObject).Size;
+            Int64 size = byteObject.Size;
             TotalUsedSpace -= size;
 
-            (*byteObject).IsFree = true;
-            RemoveFreeIndex(index);
+            byteObject.IsFree = true;
+
+            IndexArray[index] = byteObject;
+            FreeIndices.AddFirst(index);
         }
     }
     
