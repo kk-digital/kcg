@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: GLTestMaterial
-  m_Shader: {fileID: 4800000, guid: 5d9d5164f12d0f3438ae7166bf6b8a42, type: 3}
+  m_Shader: {fileID: 4800000, guid: bdb9a8a9483c73a48a28252ec3af6601, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
