@@ -11,8 +11,8 @@ namespace ImageLoader
 {
     public class ImageTest : MonoBehaviour
     {
-        public LoaderData ImageLoaderManager;
-        public static LoaderData SpriteSheetLoaderManager;
+        public TileSpriteImageLoaderManager ImageLoaderManager;
+        public static SpriteSheetImageLoader SpriteSheetLoaderManager;
         public static TilePropertiesManager TilesPropertiesManager;
         public static ImageData imageData;
         public SpriteSheetData spriteSheetData;
