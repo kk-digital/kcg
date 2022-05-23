@@ -214,7 +214,9 @@ namespace Physics
     
         public float[] GetInterpolatedBBoxLines()
         {
-            float alpha = timer.GetTimeBetweenTicks() / constants.MS_PER_TICK;
+            // 60f is FPS
+            // Time.fixedTime - TimeBetweenTicks
+            float alpha = Time.fixedTime / (1.0f / 60f);
 
             //var vec = PrevPos.Mult(1 - alpha).Add(body.Pos.Mult(alpha)).Sub(cxmath.Vec2{body.Size.X / 2, body.Size.Y / 2});
             var vec = PrevPos * (1f - alpha) + (Pos * alpha) - new Vector2(Size.x / 2, Size.y / 2);
