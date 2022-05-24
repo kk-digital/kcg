@@ -1,6 +1,7 @@
 ﻿//using Entitas;
 using System;
 using TileProperties;
+using Enums;
 
 namespace PlanetTileMap
 {
