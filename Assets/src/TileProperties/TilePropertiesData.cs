@@ -6,17 +6,16 @@ namespace TileProperties
     {
         public string Name; //later use string pool
         public string Description;
-
-        public int TileId; //could be TileId or TileId
+        public int TileId;
+        
         public TileDrawProperties TileDrawType; //enum, hint for how tile should be drawn
-
-        public bool IsExplosive;
-
         public int SpriteId; //spriteId
         public int SpriteId2; //used for composited tiles, like ore
 
         public PlanetTileLayer Layer;
         public PlanetTileCollisionType TileCollisionType;
+        public bool IsExplosive;
+        public bool IsSolid;
 
         //note: ore is composited, others are just normal
 
@@ -26,32 +25,41 @@ namespace TileProperties
         //you might want to change it anytime by accessing the id of a tile
         public void SetDescription(string description)
         {
-            this.Description = description;
+            Description = description;
         }
         public void SetDurability(byte durability)
         {
-            this.Durability = durability;
+            Durability = durability;
         }
         public void SetCollisionType(PlanetTileCollisionType collisionType)
         {
-            this.TileCollisionType = collisionType;
+            TileCollisionType = collisionType;
         }
-        public TilePropertiesData(string Name, string Description, int TileId,
-                                    TileDrawProperties TileDrawType, int SpriteId,
-                                    int SpriteId2, PlanetTileLayer Layer, 
-                                    PlanetTileCollisionType TileCollisionType,
-                                    byte Durability, bool isExplosive = false)
+
+        private TilePropertiesData(string name, string description, int tileId) : this()
         {
-            this.Name = Name;
-            this.Description = Description;
-            this.TileId = TileId;
-            this.TileDrawType = TileDrawType;
-            this.SpriteId = SpriteId;
-            this.SpriteId2 = SpriteId;
-            this.Layer = Layer;
-            this.TileCollisionType = TileCollisionType;
-            this.Durability = Durability;
-            this.IsExplosive = isExplosive;
+            Name = name;
+            Description = description;
+            TileId = tileId;
+        }
+
+        private TilePropertiesData(string name, string description, int tileId,
+            TileDrawProperties tileDrawType, int spriteId, int spriteId2) : this(name, description, tileId)
+        {
+            TileDrawType = tileDrawType;
+            SpriteId = spriteId;
+            SpriteId2 = spriteId2;
+        }
+
+        public TilePropertiesData(string name, string description, int tileId,
+            TileDrawProperties tileDrawType, int spriteId, int spriteId2,
+            PlanetTileLayer layer, PlanetTileCollisionType tileCollisionType, byte durability, bool isExplosive = false)
+            : this(name, description, tileId, tileDrawType, spriteId, spriteId2)
+        {
+            TileCollisionType = tileCollisionType;
+            Durability = durability;
+            IsExplosive = isExplosive;
+            IsSolid = tileCollisionType == PlanetTileCollisionType.TileCollisionTypeSolid;
         }
     }
 }
