@@ -8,6 +8,9 @@ namespace PlanetTileMap
     //public struct PlanetMap : IComponent
     public struct PlanetTileMap
     {
+        // public static const PlanetTile AirTile = new PlanetTile(); - PlanetTile cannot be const in c#?
+        public static readonly PlanetTile AirTile = new PlanetTile();
+
         public int Xsize;
         public int Ysize;
 
@@ -55,8 +58,8 @@ namespace PlanetTileMap
             // I feel like resizing by 1 each time is not very efficient... Change it later?
             Array.Resize(ref ChunkList, NextChunk + 1);
 
-            chunk.Position = (x >> 4) * YChunkSize + (y >> 4);
-            ChunkIndexList[chunk.Position] = NextChunk + 3;
+            chunk.ChunkIndexListID = (x >> 4) * YChunkSize + (y >> 4);
+            ChunkIndexList[chunk.ChunkIndexListID] = NextChunk + 3;
             ChunkList[NextChunk] = chunk;
             NextChunk++;
             return NextChunk + 2;
@@ -113,7 +116,10 @@ namespace PlanetTileMap
 
         public PlanetTile GetTile(int x, int y)
         {
-            return GetChunk(x, y).Tiles[x & 0x0F, y & 0x0f];
+            int ChunkIndex = GetChunkIndex(x, y);
+            if (ChunkIndex == 1) return AirTile;
+
+            return ChunkList[ChunkIndex - 3].Tiles[x & 0x0F, y & 0x0f];
         }
 
         public void SetTile(int x, int y, PlanetTile tile)
@@ -134,8 +140,8 @@ namespace PlanetTileMap
             ChunkList[index2] = tmpchunk;
 
             // Then update chunk index list - This is what storing the Position inside the chunk is most useful for
-            ChunkIndexList[ChunkList[index1].Position] = index1 + 3;
-            ChunkIndexList[ChunkList[index2].Position] = index2 + 3;
+            ChunkIndexList[ChunkList[index1].ChunkIndexListID] = index1 + 3;
+            ChunkIndexList[ChunkList[index2].ChunkIndexListID] = index2 + 3;
         }
 
         private int partition(int start, int end)
