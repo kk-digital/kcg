@@ -21,6 +21,8 @@ namespace PlanetTileMap
         private static PlanetTileMapChunk ErrorChunk = new PlanetTileMapChunk(); // todo: fill this with error tiles
         private static PlanetTileMapChunk EmptyChunk = new PlanetTileMapChunk();
 
+        public PlanetWrapBehavior WrapBehavior;
+
         public PlanetTileMap(int xsize, int ysize) : this()
         {
             Xsize = xsize;
@@ -28,6 +30,8 @@ namespace PlanetTileMap
 
             XChunkSize = Xsize >> 4;
             YChunkSize = Ysize >> 4;
+
+            WrapBehavior = PlanetWrapBehavior.NoWrapAround; // Set to WrapAround manually if needed
 
             NextChunk = 0;
 
@@ -40,6 +44,8 @@ namespace PlanetTileMap
 
         private int GetChunkIndex(int x, int y)
         {
+            if (x >= Xsize && WrapBehavior == PlanetWrapBehavior.WrapAround) x %= Xsize;
+
             return ChunkIndexList[(x >> 4) * YChunkSize + (y >> 4)];
         }
 
@@ -72,7 +78,8 @@ namespace PlanetTileMap
         public ref PlanetTileMapChunk GetChunkRef(int x, int y)
         {
             int ChunkIndex = GetChunkIndex(x, y);
-            if (ChunkIndex == 0) return ref ErrorChunk;
+
+            if (ChunkIndex == 0) throw new IndexOutOfRangeException();
             if (ChunkIndex < 3)
                 // We are getting a reference here, most likely to edit the chunk / add a tile, so we can't just return an empty chunk
                 // Instead, we will just create a new chunk
@@ -94,10 +101,10 @@ namespace PlanetTileMap
                 for (int j = 0; j < 16; j++)
                     ChunkList[ChunkIndex - 3].Tiles[i, j] = tiles[i, j];
         }
-
         public ref PlanetTile GetTileRef(int x, int y)
         {
             ref PlanetTileMapChunk chunk = ref GetChunkRef(x, y);
+
             chunk.Seq++; // We are getting a reference to the tile, so we are probably modifying the tile, hence increment seq
 
             return ref chunk.Tiles[x & 0x0F, y & 0x0F];
