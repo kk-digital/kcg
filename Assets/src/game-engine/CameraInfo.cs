@@ -199,6 +199,16 @@ public class CameraInfo : MonoBehaviour
         return 0.0f;
     }
 
+    // Get Field of View (FOV)
+    public float GetFieldOfView()
+    {
+        if (cam != null)
+            return cam.fieldOfView;
+        else
+            Debug.LogError("Camera object is empty.");
+        return 0.0f;
+    }
+
 }
 
 /*
@@ -222,27 +232,48 @@ public class CameraInfoEditor : Editor
         string Width = string.Format("{0:0.00}", myCamera.GetResolution().x);
         string Height = string.Format("{0:0.00}", myCamera.GetResolution().y);
 
+        // ---- Camera Informations ---- 
+
         style.fontSize = 15;
         EditorGUILayout.LabelField("Camera Information", style);
         EditorGUILayout.Space();
         style.fontSize = 12;
 
+        // If it's ortho, get size info. If not, get fov info.
         if (myCamera.IsOrtho())
             EditorGUILayout.LabelField("Ortho Size", string.Format("{0}", Size), style);
+        else
+            EditorGUILayout.LabelField("FOV", myCamera.GetFieldOfView().ToString(), style);
 
+        // Camera Resolution (pixelW, pixelH)
         EditorGUILayout.LabelField("Resolution", string.Format("{0} x {1}", Width, Height), style);
+        
+        // Aspect Ratio
         EditorGUILayout.LabelField("Aspect Ratio", string.Format("{0}", myCamera.AspectRatio), style);
+
+        // Camera World Position
         EditorGUILayout.LabelField("Position", string.Format("X: {0}, Y: {1}, Z: {2}", myCamera.GetCameraPosition().x, myCamera.GetCameraPosition().y, myCamera.GetCameraPosition().z), style);
+
+        // Camera World Rotation
         EditorGUILayout.LabelField("Rotation", string.Format("X: {0}, Y: {1}, Z: {2}", myCamera.GetCameraRotation().x, myCamera.GetCameraRotation().y, myCamera.GetCameraRotation().z), style);
+
+        // ---- Camera Informations End ---- 
+
+
+        // ---- Screen Informations ---- 
 
         style.fontSize = 15;
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Screen Information", style);
         style.fontSize = 12;
 
+        // Screen Size
         EditorGUILayout.LabelField("Size", string.Format("Width: {0}, Height {1}", Screen.width, Screen.height), style);
+        
+        // Screen Resoluiton
         EditorGUILayout.LabelField("Resolution", string.Format("{0} x {1}", Screen.width, Screen.height), style);
 
+        // Screen Ratio Calculating
         string ratio = "";
         if (Screen.width / Screen.height >= 1.7f)
             ratio = string.Format("16:9");
@@ -253,17 +284,32 @@ public class CameraInfoEditor : Editor
         else
             ratio = string.Format("4:3");
 
+        // Screen Aspect Ratio
         EditorGUILayout.LabelField("Aspect Ratio ", ratio, style);
+
+        // ---- Screen Informations End ---- 
+
+
+        // ---- System Informations ---- 
 
         style.fontSize = 15;
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("System Information", style);
         style.fontSize = 12;
 
+        // Local Device Name
         EditorGUILayout.LabelField("Device Name",  SystemInfo.deviceName, style);
+        
+        // GPU Device Name
         EditorGUILayout.LabelField("GPU", SystemInfo.graphicsDeviceName.ToString(), style);
+        
+        // GPU Memory Size
         EditorGUILayout.LabelField("GPU Memory Size", SystemInfo.graphicsMemorySize.ToString(), style);
+        
+        // GPU Driver Version
         EditorGUILayout.LabelField("Driver Version", SystemInfo.graphicsDeviceVersion.ToString(), style);
+        
+        // Currnet Graphics API
         EditorGUILayout.LabelField("Currnet Graphics API", SystemInfo.graphicsDeviceType.ToString(), style);
 
         serializedObject.ApplyModifiedProperties();
