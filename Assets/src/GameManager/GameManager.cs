@@ -31,8 +31,8 @@ public class GameManager : MonoBehaviour
     {
         //TODO: Either put all intialiation in Awake, or put all in Start()
         TileSpriteLoader.TileSpriteLoader tileSpriteLoader = new TileSpriteLoader.TileSpriteLoader();
-        tileSpriteLoader.GetSpriteSheetID(filePath); // finds png, add it to struct list and returns index
-        tileSpriteLoader.GetSpriteSheet(0); // returns the sprite struct of the given index
+      //  tileSpriteLoader.GetSpriteSheetID(filePath); // finds png, add it to struct list and returns index
+      //  tileSpriteLoader.GetSpriteSheet(0); // returns the sprite struct of the given index
     }
 
     //Documentation: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html

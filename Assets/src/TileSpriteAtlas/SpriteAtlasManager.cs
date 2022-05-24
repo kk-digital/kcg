@@ -35,7 +35,7 @@ namespace SpriteAtlas
                 for (int x = 0; x < 32; x++)
                 {
                     int atlasindex = 4 * (y * 32 + x);
-                    int sheetindex = 4 * (x + Column * sheet.SpriteSize + y * sheet.SpriteSize + Row * sheet.SpriteSize * sheet.Width);
+                    int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));
 
                     atlas.Data[atlasindex + 0] = sheet.Data[sheetindex + 0];
                     atlas.Data[atlasindex + 1] = sheet.Data[sheetindex + 1];
@@ -47,6 +47,7 @@ namespace SpriteAtlas
 
             atlas.id = Count++;
             Array.Resize(ref Sprites, Count);
+            Sprites[atlas.id] = atlas;
 
             return Count - 1;
         }
