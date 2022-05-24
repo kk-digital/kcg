@@ -10,6 +10,8 @@ namespace TileProperties
         public int TileId; //could be TileId or TileId
         public TileDrawProperties TileDrawType; //enum, hint for how tile should be drawn
 
+        public bool IsExplosive;
+
         public int SpriteId; //spriteId
         public int SpriteId2; //used for composited tiles, like ore
 
@@ -38,7 +40,7 @@ namespace TileProperties
                                     TileDrawProperties TileDrawType, int SpriteId,
                                     int SpriteId2, PlanetTileLayer Layer, 
                                     PlanetTileCollisionType TileCollisionType,
-                                    byte Durability)
+                                    byte Durability, bool isExplosive = false)
         {
             this.Name = Name;
             this.Description = Description;
@@ -49,6 +51,7 @@ namespace TileProperties
             this.Layer = Layer;
             this.TileCollisionType = TileCollisionType;
             this.Durability = Durability;
+            this.IsExplosive = isExplosive;
         }
     }
 }

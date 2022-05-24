@@ -18,6 +18,16 @@ namespace Enums
         TileLayerFurniture = 4
     }
 
+    public enum TileLayer : byte
+    {
+        TileLayerError = 0, //TileLayer.Error
+
+        TileLayerBack = 1,
+        TileLayerMiddle = 2 ,
+        TileLayerFront = 3 , 
+        TileLayerFurniture = 4
+    }
+    
     public enum PlanetTileCollisionType : byte
     {
         TileCollisionTypeError = 0,

@@ -6,7 +6,7 @@ using System;
 
 namespace SpriteAtlas
 {
-    class SpriteAtlasManager
+    public class SpriteAtlasManager
     {
         public SpriteAtlas[] Sprites = new SpriteAtlas[0];
         public int Count = 0;
