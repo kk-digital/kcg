@@ -68,7 +68,7 @@ namespace Physics
             };
         }
     
-        public bool IsCollidingLeft(PlanetTileMap.PlanetTileMap collider, Vector2 newPos)
+        public bool IsCollidingLeft(Vector2 newPos)
         {
             var bounds = Bounds(newPos);
             // don't bother checking if not moving left
@@ -78,13 +78,13 @@ namespace Physics
             var top = (int) Mathf.Round(Pos.y + Size.y / 2 - Eps);
             for (int y = bottom; y <= top; y++) 
             {
-                //if (collider.GetTile(bounds.LeftTile, y).Initialized) return true;
+                if (GameState.TileCreationApi.GetTile(bounds.LeftTile, y).IsSolid) return true;
             }
 
             return false;
         }
     
-        public bool IsCollidingRight(PlanetTileMap.PlanetTileMap collider, Vector2 newPos)
+        public bool IsCollidingRight(Vector2 newPos)
         {
             var bounds = Bounds(newPos);
             // don't bother checking if not moving left
@@ -94,13 +94,13 @@ namespace Physics
             var top = (int) Mathf.Round(Pos.y + Size.y / 2 - Eps);
             for (int y = bottom; y <= top; y++) 
             {
-                //if (collider.GetTile(bounds.RightTile, y).Initialized) return true;
+                if (GameState.TileCreationApi.GetTile(bounds.RightTile, y).IsSolid) return true;
             }
 
             return false;
         }
     
-        public bool IsCollidingTop(PlanetTileMap.PlanetTileMap collider, Vector2 newPos)
+        public bool IsCollidingTop(Vector2 newPos)
         {
             var bounds = Bounds(newPos);
             // don't bother checking if not moving left
@@ -110,13 +110,13 @@ namespace Physics
             var right = (int) Mathf.Round(Pos.x + Size.x / 2 - Eps);
             for (int x = left; x <= right; x++) 
             {
-               // if (collider.GetTile(x, bounds.TopTile).Initialized) return true;
+               if (GameState.TileCreationApi.GetTile(x, bounds.TopTile).IsSolid) return true;
             }
 
             return false;
         }
     
-        public bool IsCollidingBottom(PlanetTileMap.PlanetTileMap collider, Vector2 newPos)
+        public bool IsCollidingBottom(Vector2 newPos)
         {
             var bounds = Bounds(newPos);
             // don't bother checking if not moving left
@@ -126,7 +126,7 @@ namespace Physics
             var right = (int) Mathf.Round(Pos.x + Size.x / 2 - Eps);
             for (int x = left; x <= right; x++) 
             {
-                //if (collider.GetTile(x, bounds.BottomTile).Initialized) return true;
+                if (GameState.TileCreationApi.GetTile(x, bounds.BottomTile).IsSolid) return true;
             }
 
             return false;
@@ -148,7 +148,7 @@ namespace Physics
             return partialDisplacements.ToArray();
         }
 
-        public Vector2 CheckForCollisions(Vector2 totalDisplacement, PlanetTileMap.PlanetTileMap collider)
+        public Vector2 CheckForCollisions(Vector2 totalDisplacement)
         {
             var partialDisplacements = DiscretizeDisplacement(totalDisplacement);
             Vector2 newPos = default;
@@ -156,25 +156,25 @@ namespace Physics
             {
                 newPos = Pos + partialDisplacement;
 
-                if (IsCollidingLeft(collider, newPos))
+                if (IsCollidingLeft(newPos))
                 {
                     Collisions.Left = true;
                     Vel.x = 0;
                     newPos.x = Bounds(newPos).Left + 0.5f + Size.x / 2f;
                 }
-                if (IsCollidingRight(collider, newPos))
+                if (IsCollidingRight(newPos))
                 {
                     Collisions.Right = true;
                     Vel.x = 0;
                     newPos.x = Bounds(newPos).Right - 0.5f - Size.x / 2f;
                 }
-                if (IsCollidingTop(collider, newPos))
+                if (IsCollidingTop(newPos))
                 {
                     Collisions.Above = true;
                     Vel.y = 0;
                     newPos.y = Bounds(newPos).Top - 0.5f - Size.y / 2f;
                 }
-                if (IsCollidingBottom(collider, newPos))
+                if (IsCollidingBottom(newPos))
                 {
                     Collisions.Below = true;
                     Vel.y = 0;
