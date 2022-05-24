@@ -191,7 +191,16 @@ namespace TileProperties
         public void EndTile()
         {
             CurrentTileIndex = -1;
-        }       
+        }
+
+        public TilePropertiesData GetTile(int x, int y)
+        {
+            // 0, 0 = 0
+            // 32, 0 = 1
+            // 64, 0 = 2
+            // return PropertiesArray[(x / 32) + (y / 32) * width];
+            return PropertiesArray[CurrentTileIndex];
+        }
     }
 
 }
