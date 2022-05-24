@@ -1,5 +1,6 @@
 ﻿//using Entitas;
 using System;
+using System.Runtime.CompilerServices;
 using TileProperties;
 using Enums;
 
@@ -46,9 +47,11 @@ namespace PlanetTileMap
                 ChunkIndexList[i] = 2;
         }
 
+        // Is this really the only way to inline a function in c#?
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private int GetChunkIndex(int x, int y)
         {
-            if (x >= Xsize && WrapBehavior == PlanetWrapBehavior.WrapAround) x %= Xsize;
+            if (WrapBehavior == PlanetWrapBehavior.WrapAround) x %= Xsize;
 
             return ChunkIndexList[(x >> 4) * YChunkSize + (y >> 4)];
         }
@@ -58,7 +61,9 @@ namespace PlanetTileMap
             // I feel like resizing by 1 each time is not very efficient... Change it later?
             Array.Resize(ref ChunkList, NextChunk + 1);
 
+            if (WrapBehavior == PlanetWrapBehavior.WrapAround) x %= Xsize;
             chunk.ChunkIndexListID = (x >> 4) * YChunkSize + (y >> 4);
+
             ChunkIndexList[chunk.ChunkIndexListID] = NextChunk + 3;
             ChunkList[NextChunk] = chunk;
             NextChunk++;
