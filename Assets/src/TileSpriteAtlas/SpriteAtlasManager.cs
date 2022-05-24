@@ -32,7 +32,7 @@ namespace SpriteAtlas
         public int GetGlTextureId(int id)
         {
             SpriteAtlas atlas = GetSpriteAtlas(id);
-            return atlas.glTextureID;
+            return atlas.GLTextureID;
         }
 
         public byte[] GetSpriteBytes(int id)
@@ -65,7 +65,7 @@ namespace SpriteAtlas
         // Returns sprite sheet id
         public int Blit(int SpriteSheetID, int Row, int Column)
         {
-            SpriteSheet sheet = TileSpriteLoader.TileSpriteLoader.Instance.SpriteSheets[SpriteSheetID];
+            SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[SpriteSheetID];
             ref SpriteAtlas atlas = ref SpritesArray[0];
             ref int count = ref Count[0];
 
@@ -96,7 +96,7 @@ namespace SpriteAtlas
 
          public int Blit16(int SpriteSheetID, int Row, int Column)
         {
-            SpriteSheet sheet = TileSpriteLoader.TileSpriteLoader.Instance.SpriteSheets[SpriteSheetID];
+            SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[SpriteSheetID];
             ref SpriteAtlas atlas = ref SpritesArray[0];
             ref int count = ref Count[0];
 
@@ -135,7 +135,7 @@ namespace SpriteAtlas
 
         public int Blit8(int SpriteSheetID, int Row, int Column)
         {
-            SpriteSheet sheet = TileSpriteLoader.TileSpriteLoader.Instance.SpriteSheets[SpriteSheetID];
+            SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[SpriteSheetID];
             ref SpriteAtlas atlas = ref SpritesArray[0];
             ref int count = ref Count[0];
 
