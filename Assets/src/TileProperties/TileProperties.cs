@@ -13,6 +13,8 @@ namespace TileProperties
         public int SpriteId; //spriteId
         public int SpriteId2; //used for composited tiles, like ore
 
+        public bool  IsExplosive;
+
         public PlanetTileLayer Layer;
         public PlanetTileCollisionType TileCollisionType;
 
@@ -38,7 +40,7 @@ namespace TileProperties
                                     TileDrawProperties TileDrawType, int SpriteId,
                                     int SpriteId2, PlanetTileLayer Layer, 
                                     PlanetTileCollisionType TileCollisionType,
-                                    byte Durability)
+                                    byte Durability, bool isExplosive)
         {
             this.Name = Name;
             this.Description = Description;
@@ -49,6 +51,7 @@ namespace TileProperties
             this.Layer = Layer;
             this.TileCollisionType = TileCollisionType;
             this.Durability = Durability;
+            this.IsExplosive = isExplosive;
         }
     }
 }

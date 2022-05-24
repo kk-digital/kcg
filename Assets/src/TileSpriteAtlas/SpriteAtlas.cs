@@ -1,6 +1,6 @@
-namespace SpriteAtlas
+﻿namespace SpriteAtlas
 {
-    struct SpriteAtlas
+    public struct SpriteAtlas
     {
         public int id;
         public int glTextureID;
