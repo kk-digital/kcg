@@ -10,6 +10,9 @@ namespace PlanetTileMap
         public int Xsize;
         public int Ysize;
 
+        public int XChunkSize; // Size in chunks
+        public int YChunkSize;
+
         public PlanetTileMapChunk[] ChunkList;
         public int[] ChunkIndexList; // 0 = error, 1 = empty, 2 = unexplored (TODO)
 
@@ -23,9 +26,13 @@ namespace PlanetTileMap
             Xsize = xsize;
             Ysize = ysize;
 
+            XChunkSize = Xsize >> 4;
+            YChunkSize = Ysize >> 4;
+
             NextChunk = 0;
 
-            ChunkIndexList = new int[Xsize / 16 * Ysize / 16];
+            ChunkIndexList = new int[XChunkSize * YChunkSize];
+            ChunkList = new PlanetTileMapChunk[0];
 
             for (int i = 0; i < ChunkIndexList.Length; i++)
                 ChunkIndexList[i] = 2;
@@ -33,9 +40,7 @@ namespace PlanetTileMap
 
         private int GetChunkIndex(int x, int y)
         {
-            // This feels wrong (x * Xsize + y) / 16
-            // Shouldn't it be  (x * Ysize + y) / 16?
-            return ChunkIndexList[(x * Ysize + y) >> 4];
+            return ChunkIndexList[(x >> 4) * YChunkSize + (y >> 4)];
         }
 
         private int AddChunk(PlanetTileMapChunk chunk, int x, int y)
@@ -43,11 +48,11 @@ namespace PlanetTileMap
             // I feel like resizing by 1 each time is not very efficient... Change it later?
             Array.Resize(ref ChunkList, NextChunk + 1);
 
-            chunk.Position = (x * Ysize + y) >> 4;
+            chunk.Position = (x >> 4) * YChunkSize + (y >> 4);
             ChunkIndexList[chunk.Position] = NextChunk + 3;
-            ChunkList[NextChunk - 3] = chunk;
+            ChunkList[NextChunk] = chunk;
             NextChunk++;
-            return NextChunk - 4;
+            return NextChunk + 2;
         }
 
         public PlanetTileMapChunk GetChunk(int x, int y)
