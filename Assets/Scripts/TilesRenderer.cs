@@ -86,12 +86,14 @@ namespace PlanetTileMap.Unity
 
         void TestDrawTiles()
         {
+            int id = TileSpriteLoader.TileSpriteLoader.Instance.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png");
+            GameState.SpriteAtlasManager.Blit16(id, 0, 0);
+            byte[] spriteBytes = GameState.SpriteAtlasManager.GetSpriteBytes(0);
+
             for (int i = 0; i < 100; i++)
             {
-                int id = TileSpriteLoader.TileSpriteLoader.Instance.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png");
-                GameState.SpriteAtlasManager.Blit(id, 0, 0);
-                SpriteAtlas.SpriteAtlas atlast = GameState.SpriteAtlasManager.GetSpriteAtlas(0);
-                var tex = CreateTextureFromRGBA(atlast.Data, 32, 32);
+
+                var tex = CreateTextureFromRGBA(spriteBytes, 32, 32);
                 var mat = Instantiate(Material);
                 mat.SetTexture("_MainTex", tex);
                 var mesh = CreateMesh(transform, "abc", 0, mat);
