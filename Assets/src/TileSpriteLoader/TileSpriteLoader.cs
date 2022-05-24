@@ -10,19 +10,31 @@ namespace TileSpriteLoader
 {
     public class TileSpriteLoader
     {
-        public static TileSpriteLoader Instance;
-        public SpriteSheet[] SpriteSheets;
+        public static TileSpriteLoader _Instance;
+        public SpriteSheet[] SpriteSheets = new SpriteSheet[1024];
         public int ImageCount;
-        public Dictionary<string, int> SpriteSheetID;
+        public Dictionary<string, int> SpriteSheetID = new Dictionary<string, int>();
+
+        public static TileSpriteLoader Instance
+        {
+            get 
+            {
+                if (_Instance == null)
+                {
+                    _Instance = new TileSpriteLoader();
+                }
+                return _Instance;
+            }
+        }
 
         public TileSpriteLoader()
         {
-            Instance = this;
+
         }
 
         public static void InitStage1()
         {
-            Instance = new TileSpriteLoader();
+
         }
 
         public static void InitStage2()
@@ -34,31 +46,22 @@ namespace TileSpriteLoader
         {
             if (SpriteSheetID.ContainsKey(filename))
             {
-                Debug.Log("id found in the dictionary");
                 return SpriteSheetID[filename];
             }
             else
             {
-                Debug.Log("id not found in the dictionary");
-                FileInfo fileInfo = new DirectoryInfo(Directory.GetCurrentDirectory())
-                                .EnumerateFiles(filename, SearchOption.AllDirectories)
-                                .FirstOrDefault();
-                if (fileInfo is { Exists: true })
-                {
-                    LoadImageFile(filename, fileInfo, tileWidth);
-                    return SpriteSheetID[filename];
-                }
+                LoadImageFile(filename, tileWidth);
+                return SpriteSheetID[filename];
             }
             return -1;
         }
 
-        private void LoadImageFile(string filename, FileInfo fileInfo, int tileWidth)
+        private void LoadImageFile(string filename, int tileWidth)
         {
             ImageCount++;
-            Debug.Log($"file found, adding {fileInfo.FullName} into dictionary");
             SpriteSheetID.Add(filename, ImageCount - 1);
 
-            Array.Resize(ref SpriteSheets, ImageCount - 1);
+            Array.Resize(ref SpriteSheets, ImageCount);
 
             var data = Png.Open(filename);
             SpriteSheets[ImageCount - 1] = new SpriteSheet();

@@ -80,8 +80,68 @@ namespace PlanetTileMap.Unity
                 meshBuildersByLayers.Add(mb);*/
             }
 
+            TestDrawTiles();
             LateUpdate();
         }        
+
+        void TestDrawTiles()
+        {
+            int id = TileSpriteLoader.TileSpriteLoader.Instance.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png");
+            GameState.SpriteAtlasManager.Blit16(id, 0, 0);
+            byte[] spriteBytes = GameState.SpriteAtlasManager.GetSpriteBytes(0);
+
+            for (int i = 0; i < 100; i++)
+            {
+
+                var tex = CreateTextureFromRGBA(spriteBytes, 32, 32);
+                var mat = Instantiate(Material);
+                mat.SetTexture("_MainTex", tex);
+                var mesh = CreateMesh(transform, "abc", 0, mat);
+
+                List<int> triangles = new List<int>();
+                List<Vector2> uvs = new List<Vector2>();
+                List<Vector3> verticies = new List<Vector3>();
+
+
+                var p0 = new Vector3(i, 0, 0);
+                var p1 = new Vector3(i + 1, 1, 0);
+                var p2 = p0; p2.y = p1.y;
+                var p3 = p1; p3.y = p0.y;
+
+                verticies.Add(p0);
+                verticies.Add(p1);
+                verticies.Add(p2);
+                verticies.Add(p3);
+
+                triangles.Add(0);
+                triangles.Add(2);
+                triangles.Add(1);
+                triangles.Add(0);
+                triangles.Add(1);
+                triangles.Add(3);
+
+                var u0 = 0;
+                var u1 = 1;
+                var v1 = -1;
+                var v0 = 0;
+
+                var uv0 = new Vector2(u0, v0);
+                var uv1 = new Vector2(u1, v1);
+                var uv2 = uv0; uv2.y = uv1.y;
+                var uv3 = uv1; uv3.y = uv0.y;
+
+
+                uvs.Add(uv0);
+                uvs.Add(uv1);
+                uvs.Add(uv2);
+                uvs.Add(uv3);
+        
+
+                mesh.SetVertices(verticies);
+                mesh.SetUVs(0, uvs);
+                mesh.SetTriangles(triangles, 0);
+            }
+        }
 
         public void LoadMap()
         {
@@ -124,6 +184,32 @@ namespace PlanetTileMap.Unity
             var width = height * cam.aspect;
             var visibleRect = new Rect(pos.x - width / 2, pos.y - height / 2, width, height);
             return visibleRect;
+        }
+
+        private Texture2D CreateTextureFromRGBA(byte[] rgba, int w, int h)
+        {
+
+            var res = new Texture2D(w, h, TextureFormat.RGBA32, false)
+            {
+                filterMode = FilterMode.Point
+            };
+
+            var pixels = new Color32[w * h];
+            for (int x = 0 ; x < w; x++)
+            for (int y = 0 ; y < h; y++)
+            { 
+                int index = (x + y * w) * 4;
+                var r = rgba[index];
+                var g = rgba[index];
+                var b = rgba[index];
+                var a = rgba[index];
+
+                pixels[x + y * w] = new Color32((byte)r, (byte)g, (byte)b, (byte)a);
+            }
+            res.SetPixels32(pixels);
+            res.Apply();
+
+            return res;
         }
     }
 

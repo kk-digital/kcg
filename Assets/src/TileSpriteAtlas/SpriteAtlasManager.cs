@@ -8,12 +8,22 @@ namespace SpriteAtlas
 {
     public class SpriteAtlasManager
     {
-        public SpriteAtlas[] Sprites = new SpriteAtlas[0];
-        public int Count = 0;
+        public SpriteAtlas[] SpritesArray = new SpriteAtlas[1];
+        public int[] Count = new int[1];
 
+        public SpriteAtlasManager()
+        {
+            SpriteAtlas atlas = new SpriteAtlas();
+            atlas.Width = 2;
+            atlas.Height = 1;
+            atlas.Data = new byte[4 * 32 * 32 * atlas.Width * atlas.Height]; // 4 * 32 * 32 = 4096
+
+            SpritesArray[0] = atlas;
+        }
+        
         public ref SpriteAtlas GetSpriteAtlas(int id)
         {
-            return ref Sprites[id];
+            return ref SpritesArray[id];
         }
 
         public int GetGlTextureId(int id)
@@ -22,20 +32,50 @@ namespace SpriteAtlas
             return atlas.glTextureID;
         }
 
+        public byte[] GetSpriteBytes(int id)
+        {
+            byte[] data = new byte[32 * 32 * 4];
+            ref SpriteAtlas atlas = ref SpritesArray[0];
+
+            int xOffset = id % atlas.Width;
+            int yOffset = id / atlas.Height;
+
+            for(int y = 0; y < 32; y++)
+            {
+                for(int x = 0; x < 32; x++)
+                {
+                    int index = 4 * (x + y * 32);
+                    int atlasindex = 4 * ((yOffset + y) * (atlas.Width * 32) +
+                                         (xOffset + x));
+                    
+
+                    data[index + 0] = atlas.Data[atlasindex + 0];
+                    data[index + 1] = atlas.Data[atlasindex + 1];
+                    data[index + 2] = atlas.Data[atlasindex + 2];
+                    data[index + 3] = atlas.Data[atlasindex + 3];
+                }
+            }
+            
+            return data;
+        }
+
         // Returns sprite sheet id
         public int Blit(int SpriteSheetID, int Row, int Column)
         {
             SpriteSheet sheet = TileSpriteLoader.TileSpriteLoader.Instance.SpriteSheets[SpriteSheetID];
-            SpriteAtlas atlas = new SpriteAtlas();
-
-            atlas.Data = new byte[4096]; // 4 * 32 * 32 = 4096
-            int ScaleFactor = 32 / sheet.SpriteSize;
+            ref SpriteAtlas atlas = ref SpritesArray[0];
+            ref int count = ref Count[0];
 
             for (int y = 0; y < 32; y++)
                 for (int x = 0; x < 32; x++)
                 {
-                    int atlasindex = 4 * (y * 32 + x);
-                    int sheetindex = 4 * (x + Column * sheet.SpriteSize + y * sheet.SpriteSize + Row * sheet.SpriteSize * sheet.Width);
+                    int xOffset = count % atlas.Width;
+                    int yOffset = count / atlas.Height;
+                    /*int atlasindex = 4 * ((yOffset + y) * atlas.Width + (x + xOffset));
+                    int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));*/
+
+                    int atlasindex = 4 * ((yOffset + y) * (atlas.Width * 32) + (xOffset + x));
+                    int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));
 
                     atlas.Data[atlasindex + 0] = sheet.Data[sheetindex + 0];
                     atlas.Data[atlasindex + 1] = sheet.Data[sheetindex + 1];
@@ -45,10 +85,88 @@ namespace SpriteAtlas
 
             // todo: upload texture to open gl
 
-            atlas.id = Count++;
-            Array.Resize(ref Sprites, Count);
+            count++;
 
-            return Count - 1;
+            return count - 1;
+        }
+
+
+         public int Blit16(int SpriteSheetID, int Row, int Column)
+        {
+            SpriteSheet sheet = TileSpriteLoader.TileSpriteLoader.Instance.SpriteSheets[SpriteSheetID];
+            ref SpriteAtlas atlas = ref SpritesArray[0];
+            ref int count = ref Count[0];
+
+            for (int y = 0; y < 16; y++)
+                for (int x = 0; x < 16; x++)
+                {
+                    int xOffset = count % atlas.Width;
+                    int yOffset = count / atlas.Height;
+                    /*int atlasindex = 4 * ((yOffset + y) * atlas.Width + (x + xOffset));
+                    int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));*/
+
+                    //int atlasindex = 4 * 4 * ((yOffset + y) * (atlas.Width * 32) + (xOffset + x));
+                    int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));
+
+                    for(int j = 0; j < 2; j++)
+                    {
+                        for(int i = 0; i < 2; i++)
+                        {
+                            int atlasindex = 4 * ((yOffset + (y * 2) + j) * (atlas.Width * 32) + (xOffset + (x * 2) + i));
+                    
+                            atlas.Data[atlasindex + 0] = sheet.Data[sheetindex + 0];
+                            atlas.Data[atlasindex + 1] = sheet.Data[sheetindex + 1];
+                            atlas.Data[atlasindex + 2] = sheet.Data[sheetindex + 2];
+                            atlas.Data[atlasindex + 3] = sheet.Data[sheetindex + 3];
+                        }
+                    }
+
+                }
+
+            // todo: upload texture to open gl
+
+            count++;
+
+            return count - 1;
+        }
+
+        public int Blit8(int SpriteSheetID, int Row, int Column)
+        {
+            SpriteSheet sheet = TileSpriteLoader.TileSpriteLoader.Instance.SpriteSheets[SpriteSheetID];
+            ref SpriteAtlas atlas = ref SpritesArray[0];
+            ref int count = ref Count[0];
+
+            for (int y = 0; y < 8; y++)
+                for (int x = 0; x < 8; x++)
+                {
+                    int xOffset = count % atlas.Width;
+                    int yOffset = count / atlas.Height;
+                    /*int atlasindex = 4 * ((yOffset + y) * atlas.Width + (x + xOffset));
+                    int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));*/
+
+                    //int atlasindex = 4 * 4 * ((yOffset + y) * (atlas.Width * 32) + (xOffset + x));
+                    int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));
+
+                    for(int j = 0; j < 4; j++)
+                    {
+                        for(int i = 0; i < 4; i++)
+                        {
+                            int atlasindex = 4 * ((yOffset + (y * 4) + j) * (atlas.Width * 32) + (xOffset + (x * 4) + i));
+                    
+                            atlas.Data[atlasindex + 0] = sheet.Data[sheetindex + 0];
+                            atlas.Data[atlasindex + 1] = sheet.Data[sheetindex + 1];
+                            atlas.Data[atlasindex + 2] = sheet.Data[sheetindex + 2];
+                            atlas.Data[atlasindex + 3] = sheet.Data[sheetindex + 3];
+                        }
+                    }
+
+                }
+
+            // todo: upload texture to open gl
+
+            count++;
+
+            return count - 1;
         }
     }
 }
