@@ -1,42 +1,16 @@
-
-
-
-
-
-
 public class GameState
 {
     private static SpriteAtlas.SpriteAtlasManager _spriteAtlasManager;
     private static TileProperties.TileCreationApi _tileCreationApi;
-
-
-    public static TileProperties.TileCreationApi TileCreationApi
-    {
-        get
-        {
-            if (_tileCreationApi == null)
-            {
-                _tileCreationApi = new TileProperties.TileCreationApi();
-                CreateDefaultTiles();
-            }
-
-            return _tileCreationApi;
-        }
-    }
-
-   public static SpriteAtlas.SpriteAtlasManager SpriteAtlasManager
-   {
-       get 
-       {
-           if (_spriteAtlasManager == null)
-           {
-               _spriteAtlasManager = new SpriteAtlas.SpriteAtlasManager();
-           }
-
-           return _spriteAtlasManager;
-       }
-   }
-
+    private static TileProperties.TilePropertiesManager _tilePropertiesManager;
+    private static TileSpriteLoader.TileSpriteLoader _tileSpriteLoader;
+    private static ImageLoader.FileLoadingManager _fileLoadingManager;
+    
+    public static TileProperties.TilePropertiesManager TilePropertiesManager => _tilePropertiesManager ??= new TileProperties.TilePropertiesManager();
+    public static TileProperties.TileCreationApi TileCreationApi => _tileCreationApi ??= new TileProperties.TileCreationApi();
+    public static SpriteAtlas.SpriteAtlasManager SpriteAtlasManager => _spriteAtlasManager ??= new SpriteAtlas.SpriteAtlasManager();
+    public static TileSpriteLoader.TileSpriteLoader TileSpriteLoader => _tileSpriteLoader ??= new TileSpriteLoader.TileSpriteLoader();
+    public static ImageLoader.FileLoadingManager FileLoadingManager => _fileLoadingManager ??= new ImageLoader.FileLoadingManager();
 
    //NOTE(Mahdi): this is used to create some test tiles
    // to make sure the system is working

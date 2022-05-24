@@ -4,42 +4,31 @@ using UnityEngine;
 using System;
 using BigGustave;
 using System.IO;
+
 namespace ImageLoader
 {
     public class FileData
     {
-        public int fileId {get; set;}
-        public string fileName{get; set;} 
-        public int reloadCount{get; set;}
-        public int deleteCount{get; set;}
-        public int refCount{get; set;}
-        public int lastUsed{get; set;}
-        public DateTime creationDate{get; set;}
-        public bool loaded{get; set;}
+        public int fileId { get; set; }
+        public string fileName { get; set; }
+        public int reloadCount { get; set; }
+        public int deleteCount { get; set; }
+        public int refCount { get; set; }
+        public int lastUsed { get; set; }
+        public DateTime creationDate { get; set; }
+        public bool loaded { get; set; }
 
-        public byte[] data{get; set;}
+        public byte[] data { get; set; }
 
     }
 
     public class FileLoadingManager
     {
-        public static FileLoadingManager _instance;
-
-     public FileLoadingManager GetSingelton()
-    {
-        if (_instance == null)
-        {
-            _instance = new FileLoadingManager();
-        }
-
-
-        return _instance;
-    }
 
         private List<FileData> fileDataArray = new List<FileData>();
 
-        public int count {get; set;}
-        public Dictionary<string, int> DictionaryID {get; set;}
+        public int count { get; set; }
+        public Dictionary<string, int> DictionaryID { get; set; }
 
         //TODO(mahdi): add logic to unload data automatically
         // when they are unused
@@ -61,7 +50,7 @@ namespace ImageLoader
         {
             int result = -1;
 
-            for(int index = 0; index < fileDataArray.Count; index++)
+            for (int index = 0; index < fileDataArray.Count; index++)
             {
                 FileData thisFileData = fileDataArray[index];
 
@@ -78,9 +67,9 @@ namespace ImageLoader
         public int Load(string filePath)
         {
             int id = -1;
-            byte[] byteArray = File.ReadAllBytes( filePath );
+            byte[] byteArray = File.ReadAllBytes(filePath);
 
-            
+
             if (byteArray != null && byteArray.Length > 0)
             {
 
@@ -90,7 +79,7 @@ namespace ImageLoader
                 fileData.fileName = filePath;
                 fileData.creationDate = fileInfo.CreationTime;
                 fileData.loaded = true;
-                
+
                 // look for an empty spot on the array
                 id = GetSmallestFreeID();
 
@@ -104,7 +93,7 @@ namespace ImageLoader
                 {
                     fileDataArray[id] = fileData;
                 }
-                
+
                 // add the filepath/id in the dictionary
                 DictionaryID.Add(filePath, id);
 
@@ -118,9 +107,9 @@ namespace ImageLoader
 
         public void Unload(int id)
         {
-          if (id < fileDataArray.Count)
-          {
-              FileData fileData = fileDataArray[id];
+            if (id < fileDataArray.Count)
+            {
+                FileData fileData = fileDataArray[id];
 
                 if (!fileData.loaded)
                 {
@@ -139,7 +128,7 @@ namespace ImageLoader
                 {
                     // it was already unloaded
                 }
-          }
+            }
         }
 
         public bool Unload(string name)
@@ -150,9 +139,9 @@ namespace ImageLoader
             bool exists = DictionaryID.TryGetValue(name, out value);
             if (exists)
             {
-                 Unload(value);
-                 found = true;
-            } 
+                Unload(value);
+                found = true;
+            }
 
             return found;
         }
@@ -191,10 +180,7 @@ namespace ImageLoader
             }
 
 
-            return null;        
+            return null;
         }
-        
-
     }
-
 }
