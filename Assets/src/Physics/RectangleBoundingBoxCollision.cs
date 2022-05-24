@@ -78,7 +78,7 @@ namespace Physics
             var top = (int) Mathf.Round(Pos.y + Size.y / 2 - Eps);
             for (int y = bottom; y <= top; y++) 
             {
-                if (collider.GetTile(bounds.LeftTile, y).Initialized) return true;
+                //if (collider.GetTile(bounds.LeftTile, y).Initialized) return true;
             }
 
             return false;
@@ -94,7 +94,7 @@ namespace Physics
             var top = (int) Mathf.Round(Pos.y + Size.y / 2 - Eps);
             for (int y = bottom; y <= top; y++) 
             {
-                if (collider.GetTile(bounds.RightTile, y).Initialized) return true;
+                //if (collider.GetTile(bounds.RightTile, y).Initialized) return true;
             }
 
             return false;
@@ -110,7 +110,7 @@ namespace Physics
             var right = (int) Mathf.Round(Pos.x + Size.x / 2 - Eps);
             for (int x = left; x <= right; x++) 
             {
-                if (collider.GetTile(x, bounds.TopTile).Initialized) return true;
+               // if (collider.GetTile(x, bounds.TopTile).Initialized) return true;
             }
 
             return false;
@@ -126,7 +126,7 @@ namespace Physics
             var right = (int) Mathf.Round(Pos.x + Size.x / 2 - Eps);
             for (int x = left; x <= right; x++) 
             {
-                if (collider.GetTile(x, bounds.BottomTile).Initialized) return true;
+                //if (collider.GetTile(x, bounds.BottomTile).Initialized) return true;
             }
 
             return false;

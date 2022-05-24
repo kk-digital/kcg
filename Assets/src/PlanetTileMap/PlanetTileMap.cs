@@ -19,6 +19,11 @@ namespace PlanetTileMap
         }
     
 
+    public TilePropertiesData GetTile(int x, int y)
+        {
+            return new TilePropertiesData();
+
+        }
         //Take in PlanetTileMap, and map a horizonal line
     public void GenerateFlatPlanet()
         {

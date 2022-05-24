@@ -6,7 +6,7 @@ namespace TileProperties
 {
     public class TilePropertiesManager
     {
-        public TileProperties[] TileProperties;
+        public TilePropertiesData[] TileProperties;
 
         //TODO: Move singleton state to src/GameLoop/GameState.cs struct
         public static TilePropertiesManager Instance;
@@ -21,14 +21,14 @@ namespace TileProperties
             //This is where init goes
             //Instance = new TilePropertiesManager();
         Instance = new TilePropertiesManager();
-        if(TilePropertiesManager.Instance.TileProperties == null) TilePropertiesManager.Instance.TileProperties = new TileProperties[1];
+        if(TilePropertiesManager.Instance.TileProperties == null) TilePropertiesManager.Instance.TileProperties = new TilePropertiesData[1];
         }
         // Once we initialize all core elemets, then we can initialize other parts that is use core elements when working
         public static void InitCoreRelatives() //WRONG
         {
 
         }
-        public TileProperties GetTileProperty(int index) 
+        public TilePropertiesData GetTileProperty(int index) 
         { 
             return TileProperties[index];
         }

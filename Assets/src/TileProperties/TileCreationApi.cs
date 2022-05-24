@@ -50,28 +50,28 @@ namespace TileProperties
         // Start is called before the first frame update
 
         private int CurrentTileIndex;
-        private TileProperties[] PropertiesArray;
+        private TilePropertiesData[] PropertiesArray;
 
         private  Dictionary<string, int> NameToID;
 
         public TileCreationApi()
         {
             NameToID = new Dictionary<string, int>();
-            PropertiesArray = new TileProperties[1024];
+            PropertiesArray = new TilePropertiesData[1024];
             CurrentTileIndex = -1;
         }
 
-        public TileProperties GetTileProperties(int TileId)
+        public TilePropertiesData GetTileProperties(int TileId)
         {
             if (TileId >= 0 && TileId < PropertiesArray.Length)
             {
                 return PropertiesArray[TileId];
             }
 
-            return new TileProperties();
+            return new TilePropertiesData();
         }
 
-        public TileProperties GetTileProperties(string name)
+        public TilePropertiesData GetTileProperties(string name)
         {
             int value;
             bool exists = NameToID.TryGetValue(name, out value);
@@ -80,7 +80,7 @@ namespace TileProperties
                 return GetTileProperties(value);
             }
 
-            return new TileProperties();
+            return new TilePropertiesData();
         }
 
         public void CreateTile(int TileId)
@@ -88,7 +88,7 @@ namespace TileProperties
             int oldSize = PropertiesArray.Length;
             while (TileId >= PropertiesArray.Length)
             {
-                TileProperties[] newArray = new TileProperties[PropertiesArray.Length * 2];
+                TilePropertiesData[] newArray = new TilePropertiesData[PropertiesArray.Length * 2];
                 for(int i = 0; i < oldSize; i++)
                 {
                     newArray[i] = PropertiesArray[i];
