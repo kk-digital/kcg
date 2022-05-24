@@ -114,6 +114,66 @@ namespace PlanetTileMap
             chunk.Seq++; // Updating tile, increment seq
             chunk.Tiles[x & 0x0F, y & 0x0F] = tile;
         }
+
+        // Sort chunks by most used using quick sort
+
+        private void swap(int index1, int index2)
+        {
+            PlanetTileMapChunk tmpchunk = ChunkList[index1];
+
+            // Swap chunks
+            ChunkList[index1] = ChunkList[index2];
+            ChunkList[index2] = tmpchunk;
+
+            // Then update chunk index list - This is what storing the Position inside the chunk is most useful for
+            ChunkIndexList[ChunkList[index1].Position] = index1 + 3;
+            ChunkIndexList[ChunkList[index2].Position] = index2 + 3;
+        }
+
+        private int partition(int start, int end)
+        {
+            int p = ChunkList[start].Usage;
+
+            int count = 0;
+            for (int k = start + 1; k <= end; k++)
+                if (ChunkList[k].Usage <= p)
+                    count++;
+
+            int pi = start + count;
+            swap(pi, start);
+
+            int i = start, j = end;
+
+            while (i < pi && j > pi)
+            {
+                while (ChunkList[i].Usage <= p) i++;
+                while (ChunkList[j].Usage > p) j--;
+
+                if (i < pi && j > pi)
+                    swap(i++, j--);
+            }
+
+            return pi;
+        }
+
+        private void quickSort(int start, int end)
+        {
+            if (start >= end) return;
+
+            int p = partition(start, end);
+            quickSort(start, p - 1);
+            quickSort(p + 1, end);
+        }
+
+        public void SortChunks()
+        {
+            // Sort chunks from most used to least used
+            // Sorting function sorts from lowest number to highest, so we use the negative of the chunk usage as a simple way of sorting
+            // from most used to least used without having to reverse the array afterwards
+            if (ChunkList == null || ChunkList.Length == 0) return;
+
+            quickSort(0, NextChunk - 1);
+        }
     
 
         //Take in PlanetTileMap, and map a horizonal line
