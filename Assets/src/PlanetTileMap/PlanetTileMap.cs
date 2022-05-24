@@ -140,11 +140,12 @@ namespace PlanetTileMap
 
         private int partition(int start, int end)
         {
-            int p = ChunkList[start].Usage;
+            // Use negative of the usage to have the list sorted from most used to least used without having to reverse afterwards
+            int p = -ChunkList[start].Usage;
 
             int count = 0;
             for (int k = start + 1; k <= end; k++)
-                if (ChunkList[k].Usage <= p)
+                if (-ChunkList[k].Usage <= p)
                     count++;
 
             int pi = start + count;
@@ -154,8 +155,8 @@ namespace PlanetTileMap
 
             while (i < pi && j > pi)
             {
-                while (ChunkList[i].Usage <= p) i++;
-                while (ChunkList[j].Usage > p) j--;
+                while (-ChunkList[i].Usage <= p) i++;
+                while (-ChunkList[j].Usage > p) j--;
 
                 if (i < pi && j > pi)
                     swap(i++, j--);
@@ -176,8 +177,6 @@ namespace PlanetTileMap
         public void SortChunks()
         {
             // Sort chunks from most used to least used
-            // Sorting function sorts from lowest number to highest, so we use the negative of the chunk usage as a simple way of sorting
-            // from most used to least used without having to reverse the array afterwards
             if (ChunkList == null || ChunkList.Length == 0) return;
 
             quickSort(0, NextChunk - 1);
