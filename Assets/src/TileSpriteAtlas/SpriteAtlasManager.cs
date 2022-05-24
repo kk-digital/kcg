@@ -8,14 +8,17 @@ namespace SpriteAtlas
 {
     public class SpriteAtlasManager
     {
-        public SpriteAtlas[] SpritesArray = new SpriteAtlas[1];
-        public int[] Count = new int[1];
+        private SpriteAtlas[] SpritesArray;
+        private int[] Count;
 
         public SpriteAtlasManager()
         {
+            SpritesArray = new SpriteAtlas[1];
+            Count = new int[1];
+
             SpriteAtlas atlas = new SpriteAtlas();
-            atlas.Width = 2;
-            atlas.Height = 1;
+            atlas.Width = 128;
+            atlas.Height = 128;
             atlas.Data = new byte[4 * 32 * 32 * atlas.Width * atlas.Height]; // 4 * 32 * 32 = 4096
 
             SpritesArray[0] = atlas;
@@ -37,8 +40,8 @@ namespace SpriteAtlas
             byte[] data = new byte[32 * 32 * 4];
             ref SpriteAtlas atlas = ref SpritesArray[0];
 
-            int xOffset = id % atlas.Width;
-            int yOffset = id / atlas.Height;
+            int xOffset = (id % atlas.Width) * 32;
+            int yOffset = (id / atlas.Height) * 32;
 
             for(int y = 0; y < 32; y++)
             {
@@ -69,8 +72,8 @@ namespace SpriteAtlas
             for (int y = 0; y < 32; y++)
                 for (int x = 0; x < 32; x++)
                 {
-                    int xOffset = count % atlas.Width;
-                    int yOffset = count / atlas.Height;
+                    int xOffset = (count % atlas.Width) * 32;
+                    int yOffset = (count / atlas.Height) * 32;
                     /*int atlasindex = 4 * ((yOffset + y) * atlas.Width + (x + xOffset));
                     int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));*/
 
@@ -100,20 +103,20 @@ namespace SpriteAtlas
             for (int y = 0; y < 16; y++)
                 for (int x = 0; x < 16; x++)
                 {
-                    int xOffset = count % atlas.Width;
-                    int yOffset = count / atlas.Height;
+                    int xOffset = (count % atlas.Width) * 32;
+                    int yOffset = (count / atlas.Height) * 32;
                     /*int atlasindex = 4 * ((yOffset + y) * atlas.Width + (x + xOffset));
                     int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));*/
 
                     //int atlasindex = 4 * 4 * ((yOffset + y) * (atlas.Width * 32) + (xOffset + x));
-                    int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));
+                    int sheetindex = 4 * ((x + Row * 16) + ( (y + Column * 16) * sheet.Width));
 
                     for(int j = 0; j < 2; j++)
                     {
                         for(int i = 0; i < 2; i++)
                         {
                             int atlasindex = 4 * ((yOffset + (y * 2) + j) * (atlas.Width * 32) + (xOffset + (x * 2) + i));
-                    
+
                             atlas.Data[atlasindex + 0] = sheet.Data[sheetindex + 0];
                             atlas.Data[atlasindex + 1] = sheet.Data[sheetindex + 1];
                             atlas.Data[atlasindex + 2] = sheet.Data[sheetindex + 2];
@@ -139,13 +142,13 @@ namespace SpriteAtlas
             for (int y = 0; y < 8; y++)
                 for (int x = 0; x < 8; x++)
                 {
-                    int xOffset = count % atlas.Width;
-                    int yOffset = count / atlas.Height;
+                    int xOffset = (count % atlas.Width) * 32;
+                    int yOffset = (count / atlas.Height) * 32;
                     /*int atlasindex = 4 * ((yOffset + y) * atlas.Width + (x + xOffset));
                     int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));*/
 
                     //int atlasindex = 4 * 4 * ((yOffset + y) * (atlas.Width * 32) + (xOffset + x));
-                    int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));
+                    int sheetindex = 4 * ((x + Row * 8) + ( (y + Column * 8) * sheet.Width));
 
                     for(int j = 0; j < 4; j++)
                     {
