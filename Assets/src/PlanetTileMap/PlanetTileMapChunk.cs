@@ -6,7 +6,9 @@ namespace PlanetTileMap
     {
         public PlanetTile[,] Tiles;
 
-        public int Position; // Makes sorting function much easier and faster
+        // Makes sorting function much easier and faster
+        // This is the index of this chunk in the ChunkIndexList
+        public int ChunkIndexListID; 
 
         public int Usage; // Used for sorting chunks by usage
         public int Seq;
