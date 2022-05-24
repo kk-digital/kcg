@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: GLSkyboxTestMaterial
-  m_Shader: {fileID: 4800000, guid: 7cecff7d5ece83a4ca5c4b151fde565c, type: 3}
+  m_Shader: {fileID: 4800000, guid: 11a871441d4f3b943931f436d0b3a448, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
