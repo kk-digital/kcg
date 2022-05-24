@@ -5,7 +5,7 @@ using Enums;
 
 public class CameraMove : MonoBehaviour
 {
-    public float CameraSpeed= 0.3f;
+    public float CameraSpeed= 6.0f;
 
     void Awake()
     {

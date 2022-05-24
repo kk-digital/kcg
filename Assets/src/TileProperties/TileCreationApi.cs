@@ -137,6 +137,16 @@ namespace TileProperties
             }
         }
 
+        public void SetTileTexture16(int spriteSheetId, int row, int column)
+        {
+            if (CurrentTileIndex != -1)
+            {
+                int atlasSpriteId = 
+                    GameState.SpriteAtlasManager.Blit16(spriteSheetId, row, column);
+                PropertiesArray[CurrentTileIndex].SpriteId = atlasSpriteId;
+            }
+        }
+
         public void SetTilePropertyIsExplosive(bool isExplosive)
         {
             if (CurrentTileIndex != -1)
