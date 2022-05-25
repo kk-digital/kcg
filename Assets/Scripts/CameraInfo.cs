@@ -385,6 +385,7 @@ public class CameraInfo : MonoBehaviour
 
 /*
     // Editor class to write notes or values on to the script inspector
+    // See: https://docs.unity3d.com/ScriptReference/SystemInfo.html
 */
 #if UNITY_EDITOR
 [CustomEditor(typeof(CameraInfo))]
@@ -477,19 +478,25 @@ public class CameraInfoEditor : Editor
         EditorGUILayout.LabelField("Device Name",  SystemInfo.deviceName, style);
         
         // Current Operating System
-        EditorGUILayout.LabelField("Current Operating System", SystemInfo.operatingSystem.ToString(), style);
+        EditorGUILayout.LabelField("Operating System", SystemInfo.operatingSystem.ToString(), style);
 
         // GPU Device Name
         EditorGUILayout.LabelField("GPU", SystemInfo.graphicsDeviceName.ToString(), style);
         
         // GPU Memory Size
-        EditorGUILayout.LabelField("GPU Memory Size", SystemInfo.graphicsMemorySize.ToString(), style);
+        EditorGUILayout.LabelField("GPU Memory Size", SystemInfo.graphicsMemorySize.ToString() + " MB", style);
         
         // GPU Driver Version
         EditorGUILayout.LabelField("Driver Version", SystemInfo.graphicsDeviceVersion.ToString(), style);
         
         // Current Graphics API
-        EditorGUILayout.LabelField("Current Graphics API", SystemInfo.graphicsDeviceType.ToString(), style);
+        EditorGUILayout.LabelField("Graphics API", SystemInfo.graphicsDeviceType.ToString(), style);
+
+        // Processor Type Name
+        EditorGUILayout.LabelField("CPU", SystemInfo.processorType.ToString(), style);
+
+        // System Memory
+        EditorGUILayout.LabelField("System Memory", SystemInfo.systemMemorySize.ToString() + " MB",  style);
 
         // Apply Changes
         serializedObject.ApplyModifiedProperties();
