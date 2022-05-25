@@ -28,13 +28,15 @@ public class CameraInfo : MonoBehaviour
         public float fieldOfView;
         public float orthographicSize;
         public float aspect;
+        // Default: 1
+        public float zoomRate;
     }
 
     // Struct Creation
     CameraProperties camProp;
 
     // Input Informations
-    public string AspectRatio = string.Format("16:9");
+    private float tempZoom;
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Awake.html
     private void Awake()
@@ -66,6 +68,8 @@ public class CameraInfo : MonoBehaviour
             camProp.fieldOfView = cam.fieldOfView;
             camProp.orthographicSize = cam.orthographicSize;
             camProp.aspect = cam.aspect;
+            camProp.zoomRate = 1.0f;
+            tempZoom = cam.orthographicSize;
         }
     }
 
@@ -84,6 +88,7 @@ public class CameraInfo : MonoBehaviour
         camProp.fieldOfView = cam.fieldOfView;
         camProp.orthographicSize = cam.orthographicSize;
         camProp.aspect = cam.aspect;
+        camProp.zoomRate = 1.0f;
     }
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnDrawGizmos.html
@@ -101,19 +106,7 @@ public class CameraInfo : MonoBehaviour
         camProp.fieldOfView = cam.fieldOfView;
         camProp.orthographicSize = cam.orthographicSize;
         camProp.aspect = cam.aspect;
-    }
-
-    private void FixedUpdate()
-    {
-        // Aspect Ratio Calculation
-        if (camProp.aspect >= 1.7f)
-            AspectRatio = string.Format("16:9");
-        else if (cam.aspect > 1.6f)
-            AspectRatio = string.Format("5:3");
-        else if (cam.aspect >= 1.5f)
-            AspectRatio = string.Format("16:10");
-        else
-            AspectRatio = string.Format("4:3");
+        camProp.zoomRate = 1.0f;
     }
 
     // Set Camera's world position
@@ -214,6 +207,46 @@ public class CameraInfo : MonoBehaviour
         UpdateCamera();
     }
 
+    // Zoom the camera (Works in both projections) 
+    public void SetZoom(float zoomRate)
+    {
+        if(cam != null)
+        {
+            camProp.zoomRate = zoomRate;
+            if(!camProp.isOrtho)
+            {
+                camProp.fieldOfView = (camProp.fieldOfView / zoomRate);
+            }
+            else
+            {
+                tempZoom = cam.orthographicSize;
+                cam.orthographicSize -= zoomRate * camProp.zoomRate;
+            }
+        }
+        else
+        {
+            Debug.LogError("Camera object is empty.");
+        }
+        UpdateCamera();
+    }
+
+    // Reset Camera Zoom 
+    public void ResetZoom()
+    {
+        if(cam)
+        {
+            camProp.zoomRate = 1;
+            if (!camProp.isOrtho)
+            {
+                camProp.fieldOfView = 90;
+            }
+            else
+            {
+                cam.orthographicSize = tempZoom;
+            }
+        }
+    }
+
     // Get Current Camera Object
     public Camera GetCurrentCamera()
     {
@@ -295,6 +328,16 @@ public class CameraInfo : MonoBehaviour
         return 0.0f;
     }
 
+    // Get Zoom Rate
+    public float GetZoomRate()
+    {
+        if (cam != null)
+            return camProp.zoomRate;
+        else
+            Debug.LogError("Camera object is empty.");
+        return 0.0f;
+    }
+
     // Get Culling Mask
     public int GetCullingMask()
     {
@@ -303,6 +346,23 @@ public class CameraInfo : MonoBehaviour
         else
             Debug.LogError("Camera object is empty.");
         return -1;
+    }
+
+    // Calculate and Get Aspect Ratio
+    public string GetAspectRatio()
+    {
+        string AspectRatio = string.Format("16:9");
+        // Aspect Ratio Calculation
+        if (camProp.aspect >= 1.7f)
+            AspectRatio = string.Format("16:9");
+        else if (cam.aspect > 1.6f)
+            AspectRatio = string.Format("5:3");
+        else if (cam.aspect >= 1.5f)
+            AspectRatio = string.Format("16:10");
+        else
+            AspectRatio = string.Format("4:3");
+
+        return AspectRatio;
     }
 
     // Update Camera Properties
@@ -325,6 +385,7 @@ public class CameraInfo : MonoBehaviour
 
 /*
     // Editor class to write notes or values on to the script inspector
+    // See: https://docs.unity3d.com/ScriptReference/SystemInfo.html
 */
 #if UNITY_EDITOR
 [CustomEditor(typeof(CameraInfo))]
@@ -362,7 +423,10 @@ public class CameraInfoEditor : Editor
         EditorGUILayout.LabelField("Resolution", string.Format("{0} x {1}", Width, Height), style);
         
         // Aspect Ratio
-        EditorGUILayout.LabelField("Aspect Ratio", string.Format("{0}", myCamera.AspectRatio), style);
+        EditorGUILayout.LabelField("Aspect Ratio", string.Format("{0}", myCamera.GetAspectRatio()), style);
+
+        // Zoom Rate
+        EditorGUILayout.LabelField("Zoom Rate", string.Format("{0}", myCamera.GetZoomRate()), style);
 
         // Camera World Position
         EditorGUILayout.LabelField("Position", string.Format("X: {0}, Y: {1}, Z: {2}", myCamera.GetCameraPosition().x, myCamera.GetCameraPosition().y, myCamera.GetCameraPosition().z), style);
@@ -413,17 +477,26 @@ public class CameraInfoEditor : Editor
         // Local Device Name
         EditorGUILayout.LabelField("Device Name",  SystemInfo.deviceName, style);
         
+        // Current Operating System
+        EditorGUILayout.LabelField("Operating System", SystemInfo.operatingSystem.ToString(), style);
+
         // GPU Device Name
         EditorGUILayout.LabelField("GPU", SystemInfo.graphicsDeviceName.ToString(), style);
         
         // GPU Memory Size
-        EditorGUILayout.LabelField("GPU Memory Size", SystemInfo.graphicsMemorySize.ToString(), style);
+        EditorGUILayout.LabelField("GPU Memory Size", SystemInfo.graphicsMemorySize.ToString() + " MB", style);
         
         // GPU Driver Version
         EditorGUILayout.LabelField("Driver Version", SystemInfo.graphicsDeviceVersion.ToString(), style);
         
-        // Currnet Graphics API
-        EditorGUILayout.LabelField("Currnet Graphics API", SystemInfo.graphicsDeviceType.ToString(), style);
+        // Current Graphics API
+        EditorGUILayout.LabelField("Graphics API", SystemInfo.graphicsDeviceType.ToString(), style);
+
+        // Processor Type Name
+        EditorGUILayout.LabelField("CPU", SystemInfo.processorType.ToString(), style);
+
+        // System Memory
+        EditorGUILayout.LabelField("System Memory", SystemInfo.systemMemorySize.ToString() + " MB",  style);
 
         // Apply Changes
         serializedObject.ApplyModifiedProperties();
