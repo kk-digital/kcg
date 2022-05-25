@@ -36,7 +36,6 @@ public class CameraInfo : MonoBehaviour
     CameraProperties camProp;
 
     // Input Informations
-    public string AspectRatio = string.Format("16:9");
     private float tempZoom;
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Awake.html
@@ -108,19 +107,6 @@ public class CameraInfo : MonoBehaviour
         camProp.orthographicSize = cam.orthographicSize;
         camProp.aspect = cam.aspect;
         camProp.zoomRate = 1.0f;
-    }
-
-    private void FixedUpdate()
-    {
-        // Aspect Ratio Calculation
-        if (camProp.aspect >= 1.7f)
-            AspectRatio = string.Format("16:9");
-        else if (cam.aspect > 1.6f)
-            AspectRatio = string.Format("5:3");
-        else if (cam.aspect >= 1.5f)
-            AspectRatio = string.Format("16:10");
-        else
-            AspectRatio = string.Format("4:3");
     }
 
     // Set Camera's world position
@@ -362,6 +348,23 @@ public class CameraInfo : MonoBehaviour
         return -1;
     }
 
+    // Calculate and Get Aspect Ratio
+    public string GetAspectRatio()
+    {
+        string AspectRatio = string.Format("16:9");
+        // Aspect Ratio Calculation
+        if (camProp.aspect >= 1.7f)
+            AspectRatio = string.Format("16:9");
+        else if (cam.aspect > 1.6f)
+            AspectRatio = string.Format("5:3");
+        else if (cam.aspect >= 1.5f)
+            AspectRatio = string.Format("16:10");
+        else
+            AspectRatio = string.Format("4:3");
+
+        return AspectRatio;
+    }
+
     // Update Camera Properties
     public void UpdateCamera()
     {
@@ -419,7 +422,7 @@ public class CameraInfoEditor : Editor
         EditorGUILayout.LabelField("Resolution", string.Format("{0} x {1}", Width, Height), style);
         
         // Aspect Ratio
-        EditorGUILayout.LabelField("Aspect Ratio", string.Format("{0}", myCamera.AspectRatio), style);
+        EditorGUILayout.LabelField("Aspect Ratio", string.Format("{0}", myCamera.GetAspectRatio()), style);
 
         // Zoom Rate
         EditorGUILayout.LabelField("Zoom Rate", string.Format("{0}", myCamera.GetZoomRate()), style);
