@@ -35,6 +35,9 @@ namespace SpriteAtlas
             return atlas.GLTextureID;
         }
 
+
+        // will copy the tile from the SpriteAtlas with a given id
+        // to the data byte array
         public void GetSpriteBytes(int id, byte[] data)
         {
             ref SpriteAtlas atlas = ref SpritesArray[0];
@@ -60,6 +63,11 @@ namespace SpriteAtlas
         }
 
         // Returns sprite sheet id
+        // Copies the 32x32 pixels from the SpriteSheet that
+        // are located in the Column, Row
+        // to the big SpriteAtlas we have and returns an id
+        // the id will then be used to get the pixels back
+        // from the SpriteAtlas 
         public int Blit(int SpriteSheetID, int Column, int Row)
         {
             SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[SpriteSheetID];
@@ -91,6 +99,12 @@ namespace SpriteAtlas
         }
 
 
+        // Returns sprite sheet id
+        // Copies the 16x16 pixels from the SpriteSheet that
+        // are located in the Column, Row
+        // to the big SpriteAtlas as a 32x32 sprite, and returns an id
+        // the id will then be used to get the pixels back
+        // from the SpriteAtlas 
          public int Blit16(int SpriteSheetID, int Column, int Row)
         {
             SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[SpriteSheetID];
@@ -130,6 +144,12 @@ namespace SpriteAtlas
             return count - 1;
         }
 
+        // Returns sprite sheet id
+        // Copies the 8x8 pixels from the SpriteSheet that
+        // are located in the Column, Row
+        // to the big SpriteAtlas as a 32x32 sprite and returns an id
+        // the id will then be used to get the pixels back
+        // from the SpriteAtlas 
         public int Blit8(int SpriteSheetID, int Column, int Row)
         {
             SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[SpriteSheetID];

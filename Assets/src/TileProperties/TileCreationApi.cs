@@ -118,14 +118,6 @@ namespace TileProperties
                 PropertiesArray[CurrentTileIndex].Name = name;
             }
         }
-        
-        public void SetTileLayer(PlanetTileLayer layer)
-        {
-            if (CurrentTileIndex != -1)
-            {
-                PropertiesArray[CurrentTileIndex].Layer = layer;
-            }
-        }
 
         public void SetTileTexture(int spriteSheetId, int row, int column)
         {
