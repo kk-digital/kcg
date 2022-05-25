@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -14,11 +15,14 @@ namespace Physics
         public const float SafeSpeed = 20f;
         public const float MaxPartialDisplacement = 0.5f;
     
-        public struct BodyBounds {
+        public struct RectangleBounds {
             public float Left, Right, Top, Bottom;
             public int LeftTile, RightTile, TopTile, BottomTile;
         }
     
+        /// <summary>
+        /// y is on bottom, x is on left
+        /// </summary>
         public Vector2 Pos;
         public Vector2 PrevPos;
         public Vector2 Vel;
@@ -36,45 +40,40 @@ namespace Physics
         public bool IgnoresGravity;
 
         public bool IsOnGround => Collisions.Below;
+
+        public RectangleBoundingBoxCollision(Vector2 pos, Vector2 size) : this()
+        {
+            Pos = pos;
+            Size = size;
+        }
     
         public bool ContainsBox(Vector2 targetPos, Vector2 targetSize)
         {
-            var disp = targetPos - Pos;
-            disp.Abs();
-            // add 0.5 to account for offset to center of point
-            var contains = 
-                                disp.x < Size.x / 2 + targetSize.x &&
-                                disp.y < Size.y / 2 + targetSize.y;
-            return contains;
+            // TODO: Implement based on mesh verticies
+            return false;
         }
         
         public bool Intersects(RectangleBoundingBoxCollision other)
         {
-            var disp = Pos - other.Pos;
-            disp.Abs();
-            
-            var intersects = 
-                                disp.x < Size.x / 2 && 
-                                disp.y < Size.y / 2;
-        
-            return intersects;
+            // TODO: Implement based on mesh verticies
+            return false;
         }
 
-        public BodyBounds Bounds(Vector2 newPos)
+        public RectangleBounds Bounds(Vector2 newPos)
         {
-            var left = Mathf.Round(newPos.x - Size.x / 2);
+            var left = Mathf.Round(newPos.x - Size.x);
             var leftTile = (int) left;
 
-            var right = Mathf.Round(newPos.x + Size.x / 2);
+            var right = Mathf.Round(newPos.x + Size.x);
             var rightTile = (int) right;
 
-            var top = Mathf.Round(newPos.y + Size.y / 2);
+            var top = Mathf.Round(newPos.y + Size.y);
             var topTile = (int) top;
 
-            var bottom = Mathf.Round(newPos.y - Size.y / 2);
+            var bottom = Mathf.Round(newPos.y - Size.y);
             var bottomTile = (int) bottom;
 
-            return new BodyBounds
+            return new RectangleBounds
             {
                 Left = left, Right = right, Top = top, Bottom = bottom,
                 LeftTile = leftTile, RightTile = rightTile,
@@ -82,65 +81,89 @@ namespace Physics
             };
         }
     
-        public bool IsCollidingLeft(Vector2 newPos)
+        public bool IsCollidingLeft(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
         {
             var bounds = Bounds(newPos);
-            // don't bother checking if not moving left
-            if (Vel.x >= 0f) return false;
-
-            var bottom = (int) Mathf.Round(Pos.y - Size.y / 2 + Eps);
-            var top = (int) Mathf.Round(Pos.y + Size.y / 2 - Eps);
-            for (int y = bottom; y <= top; y++) 
+            // TODO: don't bother checking if not moving right
+            //if (Vel.x >= 0f) return false;
+            
+            for (int y = bounds.BottomTile; y <= bounds.TopTile; y++) 
             {
-                if (GameState.TileCreationApi.GetTile(bounds.LeftTile, y).IsSolid) return true;
+                var tile = map.getTile(bounds.LeftTile, y);
+                int tilePropertiesIndex = tile.TileIdPerLayer[0];
+
+                if (tilePropertiesIndex >= 0)
+                {
+                    var tileProperties = GameState.TileCreationApi.GetTileProperties(tilePropertiesIndex);
+                    return true;
+                    //TODO: Use IsSolid and etc then return true if isSolid
+                }
             }
 
             return false;
         }
     
-        public bool IsCollidingRight(Vector2 newPos)
+        public bool IsCollidingRight(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
         {
             var bounds = Bounds(newPos);
-            // don't bother checking if not moving left
-            if (Vel.x <= 0f) return false;
-
-            var bottom = (int) Mathf.Round(Pos.y - Size.y / 2 + Eps);
-            var top = (int) Mathf.Round(Pos.y + Size.y / 2 - Eps);
-            for (int y = bottom; y <= top; y++) 
+            // TODO: don't bother checking if not moving Left
+            //if (Vel.x <= 0f) return false;
+            
+            for (int y = bounds.BottomTile; y <= bounds.TopTile; y++) 
             {
-                if (GameState.TileCreationApi.GetTile(bounds.RightTile, y).IsSolid) return true;
+                var tile = map.getTile(bounds.RightTile, y);
+                int tilePropertiesIndex = tile.TileIdPerLayer[0];
+
+                if (tilePropertiesIndex >= 0)
+                {
+                    var tileProperties = GameState.TileCreationApi.GetTileProperties(tilePropertiesIndex);
+                    return true;
+                    //TODO: Use IsSolid and etc then return true if isSolid
+                }
             }
 
             return false;
         }
     
-        public bool IsCollidingTop(Vector2 newPos)
+        public bool IsCollidingTop(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
         {
             var bounds = Bounds(newPos);
-            // don't bother checking if not moving left
-            if (Vel.y <= 0f) return false;
-
-            var left = (int) Mathf.Round(Pos.x - Size.x / 2 + Eps);
-            var right = (int) Mathf.Round(Pos.x + Size.x / 2 - Eps);
-            for (int x = left; x <= right; x++) 
+            // TODO: don't bother checking if not moving Down
+            //if (Vel.y <= 0f) return false;
+            
+            for (int x = bounds.LeftTile; x <= bounds.RightTile; x++) 
             {
-               if (GameState.TileCreationApi.GetTile(x, bounds.TopTile).IsSolid) return true;
+                var tile = map.getTile(x, bounds.TopTile);
+                int tilePropertiesIndex = tile.TileIdPerLayer[0];
+
+                if (tilePropertiesIndex >= 0)
+                {
+                    var tileProperties = GameState.TileCreationApi.GetTileProperties(tilePropertiesIndex);
+                    return true;
+                    //TODO: Use IsSolid and etc then return true if isSolid
+                }
             }
 
             return false;
         }
     
-        public bool IsCollidingBottom(Vector2 newPos)
+        public bool IsCollidingBottom(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
         {
             var bounds = Bounds(newPos);
-            // don't bother checking if not moving left
-            if (Vel.y >= 0f) return false;
-
-            var left = (int) Mathf.Round(Pos.x - Size.x / 2 + Eps);
-            var right = (int) Mathf.Round(Pos.x + Size.x / 2 - Eps);
-            for (int x = left; x <= right; x++) 
+            // TODO: don't bother checking if not moving Up
+            //if (Vel.y >= 0f) return false;
+            
+            for (int x = bounds.LeftTile; x <= bounds.RightTile; x++)
             {
-                if (GameState.TileCreationApi.GetTile(x, bounds.BottomTile).IsSolid) return true;
+                var tile = map.getTile(x, bounds.BottomTile);
+                int tilePropertiesIndex = tile.TileIdPerLayer[0];
+
+                if (tilePropertiesIndex >= 0)
+                {
+                    var tileProperties = GameState.TileCreationApi.GetTileProperties(tilePropertiesIndex);
+                    return true;
+                    //TODO: Use IsSolid and etc then return true if isSolid
+                }
             }
 
             return false;
@@ -148,6 +171,8 @@ namespace Physics
     
         public Vector2[] DiscretizeDisplacement(Vector2 totalDisplacement)
         {
+            // TODO: Reimplement
+            
             var n = totalDisplacement.magnitude;
             var normalized = totalDisplacement.normalized * MaxPartialDisplacement;
 
@@ -162,33 +187,35 @@ namespace Physics
             return partialDisplacements.ToArray();
         }
 
-        public Vector2 CheckForCollisions(Vector2 totalDisplacement)
+        public Vector2 CheckForCollisions(ref PlanetTileMap.PlanetTileMap map, Vector2 totalDisplacement)
         {
+            // TODO: Reimplement
+            
             var partialDisplacements = DiscretizeDisplacement(totalDisplacement);
             Vector2 newPos = default;
             foreach (var partialDisplacement in partialDisplacements)
             {
                 newPos = Pos + partialDisplacement;
 
-                if (IsCollidingLeft(newPos))
+                if (IsCollidingLeft(ref map, newPos))
                 {
                     Collisions.Left = true;
                     Vel.x = 0;
                     newPos.x = Bounds(newPos).Left + 0.5f + Size.x / 2f;
                 }
-                if (IsCollidingRight(newPos))
+                if (IsCollidingRight(ref map, newPos))
                 {
                     Collisions.Right = true;
                     Vel.x = 0;
                     newPos.x = Bounds(newPos).Right - 0.5f - Size.x / 2f;
                 }
-                if (IsCollidingTop(newPos))
+                if (IsCollidingTop(ref map, newPos))
                 {
                     Collisions.Above = true;
                     Vel.y = 0;
                     newPos.y = Bounds(newPos).Top - 0.5f - Size.y / 2f;
                 }
-                if (IsCollidingBottom(newPos))
+                if (IsCollidingBottom(ref map, newPos))
                 {
                     Collisions.Below = true;
                     Vel.y = 0;
@@ -203,8 +230,10 @@ namespace Physics
     
         public float[] GetBBoxLines()
         {
-            var x = Pos.x - Size.x / 2f;
-            var y = Pos.y - Size.y / 2f;
+            // TODO: Reimplement
+            
+            var x = Pos.x - Size.x;
+            var y = Pos.y - Size.y;
         
             return new[]
             {
@@ -228,12 +257,14 @@ namespace Physics
     
         public float[] GetInterpolatedBBoxLines()
         {
+            // TODO: Reimplement
+            
             // 60f is FPS
             // Time.fixedTime - TimeBetweenTicks
             float alpha = Time.fixedTime / (1.0f / 60f);
 
             //var vec = PrevPos.Mult(1 - alpha).Add(body.Pos.Mult(alpha)).Sub(cxmath.Vec2{body.Size.X / 2, body.Size.Y / 2});
-            var vec = PrevPos * (1f - alpha) + (Pos * alpha) - new Vector2(Size.x / 2, Size.y / 2);
+            var vec = PrevPos * (1f - alpha) + (Pos * alpha) - new Vector2(Size.x, Size.y);
             var x = vec.x;
             var y = vec.y;
 
@@ -259,71 +290,51 @@ namespace Physics
     
         public float[] GetCollidingLines()
         {
-            var collidingLines = new List<float>(16);
+            // TODO: Reimplement
+            
+            var collidingLines = new float[16];
             var bboxLines = GetBBoxLines();
-            if (Collisions.Below) 
+            if (Collisions.Below)
             {
-                collidingLines.Add(bboxLines[0]);
-                collidingLines.Add(bboxLines[1]);
-                collidingLines.Add(bboxLines[2]);
-                collidingLines.Add(bboxLines[3]);
+                Array.Copy(bboxLines, 0, collidingLines, 0, 4);
             }
             if (Collisions.Right) 
             {
-                collidingLines.Add(bboxLines[4]);
-                collidingLines.Add(bboxLines[5]);
-                collidingLines.Add(bboxLines[6]);
-                collidingLines.Add(bboxLines[7]);
+                Array.Copy(bboxLines, 4, collidingLines, 4, 4);
             }
             if (Collisions.Above) {
-                collidingLines.Add(bboxLines[8]);
-                collidingLines.Add(bboxLines[9]);
-                collidingLines.Add(bboxLines[10]);
-                collidingLines.Add(bboxLines[11]);
+                Array.Copy(bboxLines, 8, collidingLines, 8, 4);
             }
             if (Collisions.Left) {
-                collidingLines.Add(bboxLines[12]);
-                collidingLines.Add(bboxLines[13]);
-                collidingLines.Add(bboxLines[14]);
-                collidingLines.Add(bboxLines[15]);
+                Array.Copy(bboxLines, 12, collidingLines, 12, 4);
             }
 
-            return collidingLines.ToArray();
+            return collidingLines;
         }
     
         public float[] GetInterpolatedCollidingLines() 
         {
-            var collidingLines = new List<float>(16);
+            // TODO: Reimplement
+            
+            var collidingLines = new float[16];
             var bboxLines = GetInterpolatedBBoxLines();
         
-            if (Collisions.Below) 
+            if (Collisions.Below)
             {
-                collidingLines.Add(bboxLines[0]);
-                collidingLines.Add(bboxLines[1]);
-                collidingLines.Add(bboxLines[2]);
-                collidingLines.Add(bboxLines[3]);
+                Array.Copy(bboxLines, 0, collidingLines, 0, 4);
             }
             if (Collisions.Right) 
             {
-                collidingLines.Add(bboxLines[4]);
-                collidingLines.Add(bboxLines[5]);
-                collidingLines.Add(bboxLines[6]);
-                collidingLines.Add(bboxLines[7]);
+                Array.Copy(bboxLines, 4, collidingLines, 4, 4);
             }
             if (Collisions.Above) {
-                collidingLines.Add(bboxLines[8]);
-                collidingLines.Add(bboxLines[9]);
-                collidingLines.Add(bboxLines[10]);
-                collidingLines.Add(bboxLines[11]);
+                Array.Copy(bboxLines, 8, collidingLines, 8, 4);
             }
             if (Collisions.Left) {
-                collidingLines.Add(bboxLines[12]);
-                collidingLines.Add(bboxLines[13]);
-                collidingLines.Add(bboxLines[14]);
-                collidingLines.Add(bboxLines[15]);
+                Array.Copy(bboxLines, 12, collidingLines, 12, 4);
             }
 
-            return collidingLines.ToArray();
+            return collidingLines;
         }
     }
 }

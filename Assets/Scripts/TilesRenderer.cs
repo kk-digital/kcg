@@ -1,11 +1,8 @@
+using System;
 using UnityEngine;
-using System.IO;
 using System.Collections.Generic;
-using Enums;
-using SpriteAtlas;
+using Physics;
 using TileProperties;
-using TmxMapFileLoader;
-using PlanetTileMap;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -34,7 +31,8 @@ namespace PlanetTileMap.Unity
         List<Vector3> verticies = new List<Vector3>();
 
         PlanetTileMap TileMap;
-
+        RectangleBoundingBoxCollision Player;
+        const float TileSize = 0.2f;
 
         static bool InitTiles = false;
         
@@ -44,6 +42,7 @@ namespace PlanetTileMap.Unity
             if (!InitTiles)
             {
                 CreateDefaultTiles();
+                CreateTestPlayer();
                 InitTiles = true;
             }
             // TODO(Mahdi): does not make sense to put them here
@@ -73,6 +72,7 @@ namespace PlanetTileMap.Unity
         
 
             DrawMapTest();
+            PlayerCollidersTest();
             //TestDrawTiles();
             LateUpdate();
         }      
@@ -222,12 +222,23 @@ namespace PlanetTileMap.Unity
             mesh.SetTriangles(triangles, 0);
         }
 
+
+        void CreateTestPlayer()
+        {
+            var pos = new Vector2(6, 2);
+
+            // 1f - considered to be 32 pixel
+            Player = new RectangleBoundingBoxCollision(pos, new Vector2(1f, 1f));
+        }
+        void PlayerCollidersTest()
+        {
+            Debug.Log($"Player Bottom Collided: {Player.IsCollidingBottom(ref TileMap, Player.Pos)}");
+        }
+
         void DrawMapTest()
         {
-            float BeginX = -3.0f;
-            float BeginY = 4.0f;
-
-            float TileSize = 0.2f;
+            const float beginX = -3.0f;
+            const float beginY = 4.0f;
 
             byte[] bytes = new byte[32 * 32* 4];
 
@@ -247,8 +258,10 @@ namespace PlanetTileMap.Unity
 
                             GameState.SpriteAtlasManager.GetSpriteBytes(tileProperties.SpriteId, bytes);
 
-                            DrawTile(BeginX + (i * TileSize), BeginY + (j * TileSize),
-                            TileSize, TileSize, bytes);
+                            var x = beginX + (i * TileSize);
+                            var y = beginY + (j * TileSize);
+
+                            DrawTile(x, y, TileSize, TileSize, bytes);
                         }
 
                     }
@@ -361,8 +374,10 @@ namespace PlanetTileMap.Unity
             var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
             go.transform.SetParent(parent);
 
-            var mesh = new Mesh();
-            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+            var mesh = new Mesh
+            {
+                indexFormat = UnityEngine.Rendering.IndexFormat.UInt32
+            };
 
             var mf = go.GetComponent<MeshFilter>();
             mf.sharedMesh = mesh;
@@ -417,6 +432,57 @@ namespace PlanetTileMap.Unity
 
             return res;
         }
+        
+#if UNITY_EDITOR
+        public void OnDrawGizmos()
+        {
+            if (!Application.isPlaying) return;
+            
+            const float beginX = -3.0f;
+            const float beginY = 4.0f;
+            
+            float WorldPositionX(float pos) => beginX + (pos * TileSize);
+            float WorldPositionY(float pos) => beginY + (pos * TileSize);
+
+            var playerBound = Player.Bounds(Player.Pos);
+            
+            void DrawBottomCollision()
+            {
+                var y = WorldPositionY(Player.Pos.y);
+                var LeftTilePos = new Vector3(WorldPositionX(playerBound.LeftTile), y, 0);
+                var RightTilePos = new Vector3(WorldPositionX(playerBound.RightTile) + TileSize, y, 0);
+                Gizmos.color = Player.IsCollidingBottom(ref TileMap, Player.Pos) ? Color.red : Color.green;
+                
+                Gizmos.DrawLine(LeftTilePos, RightTilePos);
+            }
+
+            void DrawPlayerBottomCorners(int length)
+            {
+                // Centralized on player
+                var y = WorldPositionY(Player.Pos.y);
+
+                var localPosStartX = (int) Player.Pos.x - (length / 2);
+                if (localPosStartX < 0) localPosStartX = 0;
+                
+                for (; localPosStartX < (int)Player.Pos.x + (length / 2) + length % 2; localPosStartX++)
+                {
+                    var tile = TileMap.getTile(localPosStartX, playerBound.BottomTile);
+
+                    if (tile.TileIdPerLayer[0] >= 0)
+                    {
+                        var startPos = new Vector3(WorldPositionX(localPosStartX), y, 0);
+                        var endPos = new Vector3(WorldPositionX(localPosStartX) + TileSize, y, 0);;
+                        
+                        Gizmos.color = Color.green;
+                        Gizmos.DrawLine(startPos, endPos);
+                    }
+                }
+            }
+            
+            DrawPlayerBottomCorners(9);
+            DrawBottomCollision();
+        }
+#endif
     }
 
 #if UNITY_EDITOR

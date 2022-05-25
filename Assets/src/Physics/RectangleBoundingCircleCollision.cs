@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Physics
@@ -252,71 +250,47 @@ namespace Physics
     
         public float[] GetCollidingLines()
         {
-            var collidingLines = new List<float>(16);
+            var collidingLines = new float[16];
             var bboxLines = GetBBoxLines();
-            if (Collisions.Below) 
+            if (Collisions.Below)
             {
-                collidingLines.Add(bboxLines[0]);
-                collidingLines.Add(bboxLines[1]);
-                collidingLines.Add(bboxLines[2]);
-                collidingLines.Add(bboxLines[3]);
+                Array.Copy(bboxLines, 0, collidingLines, 0, 4);
             }
             if (Collisions.Right) 
             {
-                collidingLines.Add(bboxLines[4]);
-                collidingLines.Add(bboxLines[5]);
-                collidingLines.Add(bboxLines[6]);
-                collidingLines.Add(bboxLines[7]);
+                Array.Copy(bboxLines, 4, collidingLines, 4, 4);
             }
             if (Collisions.Above) {
-                collidingLines.Add(bboxLines[8]);
-                collidingLines.Add(bboxLines[9]);
-                collidingLines.Add(bboxLines[10]);
-                collidingLines.Add(bboxLines[11]);
+                Array.Copy(bboxLines, 8, collidingLines, 8, 4);
             }
             if (Collisions.Left) {
-                collidingLines.Add(bboxLines[12]);
-                collidingLines.Add(bboxLines[13]);
-                collidingLines.Add(bboxLines[14]);
-                collidingLines.Add(bboxLines[15]);
+                Array.Copy(bboxLines, 12, collidingLines, 12, 4);
             }
 
-            return collidingLines.ToArray();
+            return collidingLines;
         }
     
         public float[] GetInterpolatedCollidingLines() 
         {
-            var collidingLines = new List<float>(16);
+            var collidingLines = new float[16];
             var bboxLines = GetInterpolatedBBoxLines();
         
-            if (Collisions.Below) 
+            if (Collisions.Below)
             {
-                collidingLines.Add(bboxLines[0]);
-                collidingLines.Add(bboxLines[1]);
-                collidingLines.Add(bboxLines[2]);
-                collidingLines.Add(bboxLines[3]);
+                Array.Copy(bboxLines, 0, collidingLines, 0, 4);
             }
             if (Collisions.Right) 
             {
-                collidingLines.Add(bboxLines[4]);
-                collidingLines.Add(bboxLines[5]);
-                collidingLines.Add(bboxLines[6]);
-                collidingLines.Add(bboxLines[7]);
+                Array.Copy(bboxLines, 4, collidingLines, 4, 4);
             }
             if (Collisions.Above) {
-                collidingLines.Add(bboxLines[8]);
-                collidingLines.Add(bboxLines[9]);
-                collidingLines.Add(bboxLines[10]);
-                collidingLines.Add(bboxLines[11]);
+                Array.Copy(bboxLines, 8, collidingLines, 8, 4);
             }
             if (Collisions.Left) {
-                collidingLines.Add(bboxLines[12]);
-                collidingLines.Add(bboxLines[13]);
-                collidingLines.Add(bboxLines[14]);
-                collidingLines.Add(bboxLines[15]);
+                Array.Copy(bboxLines, 12, collidingLines, 12, 4);
             }
 
-            return collidingLines.ToArray();
+            return collidingLines;
         }
     }
 }

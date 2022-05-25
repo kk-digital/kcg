@@ -1,9 +1,6 @@
 using BigGustave;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using UnityEngine;
 
 namespace TileSpriteLoader
 {
@@ -29,12 +26,9 @@ namespace TileSpriteLoader
             {
                 return SpriteSheetID[filename];
             }
-            else
-            {
-                LoadImageFile(filename, tileWidth);
-                return SpriteSheetID[filename];
-            }
-            return -1;
+
+            LoadImageFile(filename, tileWidth);
+            return SpriteSheetID[filename];
         }
 
         private void LoadImageFile(string filename, int tileWidth)
