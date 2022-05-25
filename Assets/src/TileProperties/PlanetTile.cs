@@ -6,22 +6,26 @@
         // Check if this tile actually exist on Array
         public bool Initialized;
         
-        //Back tile property id
-        public int BackTileId;
+        // Contains the TileProperties Ids for every layer
+        public int[] TileIdPerLayer;
 
-        //Mid tile property id
-        public int MidTileId;
-
-        //Front tile property id
-        public int FrontTileId;
-
-        //Furniture tile property id
-        public int FurnitureTileId;
-
-        public sbyte FurnitureOffsetX;
-        public sbyte FurnitureOffsetY;
+        public sbyte[] LayerOffsetX;
+        public sbyte[] LayerOffsetY;
 
         //Health
         public byte Durability;
+
+        public static PlanetTile EmptyTile()
+        {
+            PlanetTile tile = new PlanetTile();
+            tile.Initialized = false;
+         
+            tile.TileIdPerLayer = new int[4];
+            tile.LayerOffsetX = new sbyte[4];
+            tile.LayerOffsetY = new sbyte[4];
+
+            return tile;
+        }
     }
+
 }

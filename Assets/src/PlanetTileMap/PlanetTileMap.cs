@@ -41,7 +41,7 @@ namespace PlanetTileMap
             NextChunk = 0;
 
             ChunkIndexList = new int[XChunkSize * YChunkSize];
-            ChunkList = new PlanetTileMapChunk[0];
+            ChunkList = new PlanetTileMapChunk[XChunkSize * YChunkSize];
 
             for (int i = 0; i < ChunkIndexList.Length; i++)
                 ChunkIndexList[i] = 2;
@@ -132,6 +132,12 @@ namespace PlanetTileMap
             ref PlanetTileMapChunk chunk = ref GetChunkRef(x, y);
             chunk.Seq++; // Updating tile, increment seq
             chunk.Tiles[x & 0x0F, y & 0x0F] = tile;
+        }
+
+        public ref PlanetTile getTile(int x, int y)
+        {
+            ref PlanetTileMapChunk chunk = ref GetChunkRef(x, y);
+            return ref chunk.Tiles[x & 0x0F, y & 0x0F];
         }
 
         // Sort chunks by most used using quick sort

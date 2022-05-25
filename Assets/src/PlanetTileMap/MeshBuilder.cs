@@ -9,6 +9,8 @@ using System;
 
 namespace PlanetTileMap
 {
+    //NOTE(Mahdi): i dont think we need this anymore
+    /*
     //Mesh is just a list of "Quads", which are squares
     //Each square is made out of 2 triangles
     class MeshBuilder
@@ -92,5 +94,5 @@ namespace PlanetTileMap
             mesh.SetUVs(0, uvs);
             mesh.SetTriangles(triangles, 0);
         }
-    }
+    }*/
 }

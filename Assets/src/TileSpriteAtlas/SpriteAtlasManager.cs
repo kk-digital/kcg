@@ -35,9 +35,8 @@ namespace SpriteAtlas
             return atlas.GLTextureID;
         }
 
-        public byte[] GetSpriteBytes(int id)
+        public void GetSpriteBytes(int id, byte[] data)
         {
-            byte[] data = new byte[32 * 32 * 4];
             ref SpriteAtlas atlas = ref SpritesArray[0];
 
             int xOffset = (id % atlas.Width) * 32;
@@ -58,12 +57,10 @@ namespace SpriteAtlas
                     data[index + 3] = atlas.Data[atlasindex + 3];
                 }
             }
-            
-            return data;
         }
 
         // Returns sprite sheet id
-        public int Blit(int SpriteSheetID, int Row, int Column)
+        public int Blit(int SpriteSheetID, int Column, int Row)
         {
             SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[SpriteSheetID];
             ref SpriteAtlas atlas = ref SpritesArray[0];
@@ -78,7 +75,7 @@ namespace SpriteAtlas
                     int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));*/
 
                     int atlasindex = 4 * ((yOffset + y) * (atlas.Width * 32) + (xOffset + x));
-                    int sheetindex = 4 * ((x + Row * 32) + ( (y + Column * 32) * sheet.Width));
+                    int sheetindex = 4 * ((x + Column * 32) + ( (y + Row * 32) * sheet.Width));
 
                     atlas.Data[atlasindex + 0] = sheet.Data[sheetindex + 0];
                     atlas.Data[atlasindex + 1] = sheet.Data[sheetindex + 1];
@@ -94,7 +91,7 @@ namespace SpriteAtlas
         }
 
 
-         public int Blit16(int SpriteSheetID, int Row, int Column)
+         public int Blit16(int SpriteSheetID, int Column, int Row)
         {
             SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[SpriteSheetID];
             ref SpriteAtlas atlas = ref SpritesArray[0];
@@ -109,7 +106,7 @@ namespace SpriteAtlas
                     int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));*/
 
                     //int atlasindex = 4 * 4 * ((yOffset + y) * (atlas.Width * 32) + (xOffset + x));
-                    int sheetindex = 4 * ((x + Row * 16) + ( (y + Column * 16) * sheet.Width));
+                    int sheetindex = 4 * ((x + Column * 16) + ( (y + Row * 16) * sheet.Width));
 
                     for(int j = 0; j < 2; j++)
                     {
@@ -133,7 +130,7 @@ namespace SpriteAtlas
             return count - 1;
         }
 
-        public int Blit8(int SpriteSheetID, int Row, int Column)
+        public int Blit8(int SpriteSheetID, int Column, int Row)
         {
             SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[SpriteSheetID];
             ref SpriteAtlas atlas = ref SpritesArray[0];
@@ -148,7 +145,7 @@ namespace SpriteAtlas
                     int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));*/
 
                     //int atlasindex = 4 * 4 * ((yOffset + y) * (atlas.Width * 32) + (xOffset + x));
-                    int sheetindex = 4 * ((x + Row * 8) + ( (y + Column * 8) * sheet.Width));
+                    int sheetindex = 4 * ((x + Column * 8) + ( (y + Row * 8) * sheet.Width));
 
                     for(int j = 0; j < 4; j++)
                     {
