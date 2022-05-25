@@ -5,6 +5,7 @@ using Enums;
 using SpriteAtlas;
 using TileProperties;
 using TmxMapFileLoader;
+using PlanetTileMap;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -15,22 +16,24 @@ namespace PlanetTileMap.Unity
     //Note: TileMap should be mostly controlled by GameManager
     class TilesRenderer : MonoBehaviour
     {
-        public string TileMap = "Moonbunker/Moon Bunker.tmx";
+        //public string TileMap = "Moonbunker/Moon Bunker.tmx";
         [SerializeField] Material Material;
 
         public static string BaseDir => Application.streamingAssetsPath;
-        MeshBuilder mb;
-        Mesh mesh;
+       // MeshBuilder mb;
+      //  Mesh mesh;
 
         // TmxImporter holds the temporary data for loading
         // and is used to make a 3 stage loading process
         //TmxMapFileLoader.TmxImporter FileLoader;
 
-        List<MeshBuilder> meshBuildersByLayers = new List<MeshBuilder>();
+        //List<MeshBuilder> meshBuildersByLayers = new List<MeshBuilder>();
 
         List<int> triangles = new List<int>();
         List<Vector2> uvs = new List<Vector2>();
         List<Vector3> verticies = new List<Vector3>();
+
+        PlanetTileMap TileMap;
 
 
         static bool InitTiles = false;
@@ -69,13 +72,14 @@ namespace PlanetTileMap.Unity
                     DestroyImmediate(mr.gameObject);
         
 
-            TestDrawTiles();
+            DrawMapTest();
+            //TestDrawTiles();
             LateUpdate();
         }      
 
         //NOTE(Mahdi): this is used to create some test tiles
         // to make sure the system is working
-        public static void CreateDefaultTiles()
+        public void CreateDefaultTiles()
         {
             int MetalSlabsTileSheet = 
                         GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png");
@@ -131,6 +135,39 @@ namespace PlanetTileMap.Unity
             GameState.TileCreationApi.SetTileTexture16(TilesMoon, 7, 1);
             GameState.TileCreationApi.EndTile()*/;
 
+            int mapWidth = 128;
+            int mapHeight = 128;
+
+            TileMap = new PlanetTileMap(mapWidth, mapHeight);
+
+            for(int j = 0; j < mapHeight; j++)
+            {
+                for(int i = 0; i < mapWidth; i++)
+                {
+                    PlanetTile tile = PlanetTile.EmptyTile();
+                    tile.TileIdPerLayer[0] = 0;
+                    if (i % 10 == 0)
+                    {
+                        tile.TileIdPerLayer[0] = 7;
+                    }
+                    if (j % 2 == 0)
+                    {
+                        tile.TileIdPerLayer[0] = 2;
+                    }
+                    if (j % 3 == 0)
+                    {
+                        tile.TileIdPerLayer[0] = 1;
+                    }
+
+                    if ((j > 1 && j < 6) || j > 10)
+                    {
+                       tile.TileIdPerLayer[0] = -1; 
+                    }
+
+                    
+                    TileMap.SetTile(i, j, tile);
+                }
+            }
 
         }
 
@@ -184,6 +221,41 @@ namespace PlanetTileMap.Unity
             mesh.SetUVs(0, uvs);
             mesh.SetTriangles(triangles, 0);
         }
+
+        void DrawMapTest()
+        {
+            float BeginX = -3.0f;
+            float BeginY = 4.0f;
+
+            float TileSize = 0.2f;
+
+            byte[] bytes = new byte[32 * 32* 4];
+
+            for(int layerIndex = 0; layerIndex < 1; layerIndex++)
+            {
+                for(int j = 0; j < TileMap.Ysize; j++)
+                {
+                    for(int i = 0; i < TileMap.Xsize; i++)
+                    {
+                        ref PlanetTile tile = ref TileMap.getTile(i, j);
+                        int tilePropertiesIndex = tile.TileIdPerLayer[layerIndex];
+
+                        if (tilePropertiesIndex >= 0)
+                        {
+                            TilePropertiesData tileProperties =
+                                GameState.TileCreationApi.GetTileProperties(tilePropertiesIndex);
+
+                            GameState.SpriteAtlasManager.GetSpriteBytes(tileProperties.SpriteId, bytes);
+
+                            DrawTile(BeginX + (i * TileSize), BeginY + (j * TileSize),
+                            TileSize, TileSize, bytes);
+                        }
+
+                    }
+                }
+            }
+        }
+
         void TestDrawTiles()
         {
             float BeginX = -3.0f;
@@ -217,19 +289,28 @@ namespace PlanetTileMap.Unity
             TilePropertiesData tileMoon1 =
              GameState.TileCreationApi.GetTileProperties(7);
 
-            //TODO(Mahdi): make these use the same statis array
-            // the size should be 32 * 32 * 4 = 4096
-            byte[] slab1Bytes = GameState.SpriteAtlasManager.GetSpriteBytes(slab1.SpriteId);
-            byte[] slab2Bytes = GameState.SpriteAtlasManager.GetSpriteBytes(slab2.SpriteId);
-            byte[] slab3Bytes = GameState.SpriteAtlasManager.GetSpriteBytes(slab3.SpriteId);
-            byte[] slab4Bytes = GameState.SpriteAtlasManager.GetSpriteBytes(slab4.SpriteId);
-            byte[] tile5Bytes = GameState.SpriteAtlasManager.GetSpriteBytes(tile5.SpriteId);
-            byte[] tile6Bytes = GameState.SpriteAtlasManager.GetSpriteBytes(tile6.SpriteId);
-            byte[] tile7Bytes = GameState.SpriteAtlasManager.GetSpriteBytes(tile7.SpriteId);
-            byte[] tileMoonBytes = GameState.SpriteAtlasManager.GetSpriteBytes(tileMoon1.SpriteId);
-            
+            byte[] slab1Bytes = new byte[32 * 32 * 4];
+            byte[] slab2Bytes = new byte[32 * 32 * 4];
+            byte[] slab3Bytes = new byte[32 * 32 * 4];
+            byte[] slab4Bytes = new byte[32 * 32 * 4];
+            byte[] tile5Bytes = new byte[32 * 32 * 4];
+            byte[] tile6Bytes = new byte[32 * 32 * 4];
+            byte[] tile7Bytes = new byte[32 * 32 * 4];
+            byte[] tileMoonBytes = new byte[32 * 32 * 4];
 
+            GameState.SpriteAtlasManager.GetSpriteBytes(slab1.SpriteId, slab1Bytes);
+            GameState.SpriteAtlasManager.GetSpriteBytes(slab2.SpriteId, slab2Bytes);
+            GameState.SpriteAtlasManager.GetSpriteBytes(slab3.SpriteId, slab3Bytes);
+            GameState.SpriteAtlasManager.GetSpriteBytes(slab4.SpriteId, slab4Bytes);
+            GameState.SpriteAtlasManager.GetSpriteBytes(tile5.SpriteId, tile5Bytes);
+            GameState.SpriteAtlasManager.GetSpriteBytes(tile6.SpriteId, tile6Bytes);
+            GameState.SpriteAtlasManager.GetSpriteBytes(tile7.SpriteId, tile7Bytes);
+            GameState.SpriteAtlasManager.GetSpriteBytes(tileMoon1.SpriteId, tileMoonBytes);
+            
             float TileSize = 0.2f;
+
+
+    
 
             DrawTile(BeginX + ((0 - 15) * TileSize), BeginY, TileSize, TileSize, slab2Bytes);
             for (int i = 1; i < 50; i++)
@@ -294,11 +375,11 @@ namespace PlanetTileMap.Unity
 
         private void LateUpdate()
         {
-            var visibleRect = CalcVisibleRect();
+         /*   var visibleRect = CalcVisibleRect();
 
             //rebuild all layers for visible rect
             foreach (var mb in meshBuildersByLayers)
-                mb.BuildMesh(visibleRect);
+                mb.BuildMesh(visibleRect);*/
         }
 
         private static Rect CalcVisibleRect()
