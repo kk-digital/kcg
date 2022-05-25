@@ -28,6 +28,8 @@ public class CameraInfo : MonoBehaviour
         public float fieldOfView;
         public float orthographicSize;
         public float aspect;
+        // Default: 1
+        public float zoomRate;
     }
 
     // Struct Creation
@@ -35,6 +37,7 @@ public class CameraInfo : MonoBehaviour
 
     // Input Informations
     public string AspectRatio = string.Format("16:9");
+    private float tempZoom;
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Awake.html
     private void Awake()
@@ -66,6 +69,8 @@ public class CameraInfo : MonoBehaviour
             camProp.fieldOfView = cam.fieldOfView;
             camProp.orthographicSize = cam.orthographicSize;
             camProp.aspect = cam.aspect;
+            camProp.zoomRate = 1.0f;
+            tempZoom = cam.orthographicSize;
         }
     }
 
@@ -84,6 +89,7 @@ public class CameraInfo : MonoBehaviour
         camProp.fieldOfView = cam.fieldOfView;
         camProp.orthographicSize = cam.orthographicSize;
         camProp.aspect = cam.aspect;
+        camProp.zoomRate = 1.0f;
     }
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnDrawGizmos.html
@@ -101,6 +107,7 @@ public class CameraInfo : MonoBehaviour
         camProp.fieldOfView = cam.fieldOfView;
         camProp.orthographicSize = cam.orthographicSize;
         camProp.aspect = cam.aspect;
+        camProp.zoomRate = 1.0f;
     }
 
     private void FixedUpdate()
@@ -214,6 +221,46 @@ public class CameraInfo : MonoBehaviour
         UpdateCamera();
     }
 
+    // Zoom the camera (Works in both projections) 
+    public void SetZoom(float zoomRate)
+    {
+        if(cam != null)
+        {
+            camProp.zoomRate = zoomRate;
+            if(!camProp.isOrtho)
+            {
+                camProp.fieldOfView = (camProp.fieldOfView / zoomRate);
+            }
+            else
+            {
+                tempZoom = cam.orthographicSize;
+                cam.orthographicSize -= zoomRate * camProp.zoomRate;
+            }
+        }
+        else
+        {
+            Debug.LogError("Camera object is empty.");
+        }
+        UpdateCamera();
+    }
+
+    // Reset Camera Zoom 
+    public void ResetZoom()
+    {
+        if(cam)
+        {
+            camProp.zoomRate = 1;
+            if (!camProp.isOrtho)
+            {
+                camProp.fieldOfView = 90;
+            }
+            else
+            {
+                cam.orthographicSize = tempZoom;
+            }
+        }
+    }
+
     // Get Current Camera Object
     public Camera GetCurrentCamera()
     {
@@ -295,6 +342,16 @@ public class CameraInfo : MonoBehaviour
         return 0.0f;
     }
 
+    // Get Zoom Rate
+    public float GetZoomRate()
+    {
+        if (cam != null)
+            return camProp.zoomRate;
+        else
+            Debug.LogError("Camera object is empty.");
+        return 0.0f;
+    }
+
     // Get Culling Mask
     public int GetCullingMask()
     {
@@ -364,6 +421,9 @@ public class CameraInfoEditor : Editor
         // Aspect Ratio
         EditorGUILayout.LabelField("Aspect Ratio", string.Format("{0}", myCamera.AspectRatio), style);
 
+        // Zoom Rate
+        EditorGUILayout.LabelField("Zoom Rate", string.Format("{0}", myCamera.GetZoomRate()), style);
+
         // Camera World Position
         EditorGUILayout.LabelField("Position", string.Format("X: {0}, Y: {1}, Z: {2}", myCamera.GetCameraPosition().x, myCamera.GetCameraPosition().y, myCamera.GetCameraPosition().z), style);
 
@@ -413,6 +473,9 @@ public class CameraInfoEditor : Editor
         // Local Device Name
         EditorGUILayout.LabelField("Device Name",  SystemInfo.deviceName, style);
         
+        // Current Operating System
+        EditorGUILayout.LabelField("Current Operating System", SystemInfo.operatingSystem.ToString(), style);
+
         // GPU Device Name
         EditorGUILayout.LabelField("GPU", SystemInfo.graphicsDeviceName.ToString(), style);
         
@@ -422,8 +485,8 @@ public class CameraInfoEditor : Editor
         // GPU Driver Version
         EditorGUILayout.LabelField("Driver Version", SystemInfo.graphicsDeviceVersion.ToString(), style);
         
-        // Currnet Graphics API
-        EditorGUILayout.LabelField("Currnet Graphics API", SystemInfo.graphicsDeviceType.ToString(), style);
+        // Current Graphics API
+        EditorGUILayout.LabelField("Current Graphics API", SystemInfo.graphicsDeviceType.ToString(), style);
 
         // Apply Changes
         serializedObject.ApplyModifiedProperties();
