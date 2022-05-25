@@ -325,9 +325,9 @@ namespace PlanetTileMap.Unity
             { 
                 int index = (x + y * w) * 4;
                 var r = rgba[index];
-                var g = rgba[index];
-                var b = rgba[index];
-                var a = rgba[index];
+                var g = rgba[index + 1];
+                var b = rgba[index + 2];
+                var a = rgba[index + 3];
 
                 pixels[x + y * w] = new Color32((byte)r, (byte)g, (byte)b, (byte)a);
             }
