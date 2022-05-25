@@ -27,10 +27,22 @@ namespace PlanetTileMap.Unity
         //TmxMapFileLoader.TmxImporter FileLoader;
 
         List<MeshBuilder> meshBuildersByLayers = new List<MeshBuilder>();
+
+        List<int> triangles = new List<int>();
+        List<Vector2> uvs = new List<Vector2>();
+        List<Vector3> verticies = new List<Vector3>();
+
+
+        static bool InitTiles = false;
         
 
         public void Start()
         {
+            if (!InitTiles)
+            {
+                CreateDefaultTiles();
+                InitTiles = true;
+            }
             // TODO(Mahdi): does not make sense to put them here
             // move them out ! 
             InitStage1();
@@ -49,56 +61,93 @@ namespace PlanetTileMap.Unity
         //Load settings from files and other init, that requires systems to be intialized
         public void InitStage2()
         {
-            /*FileLoader.LoadStage2();
-            FileLoader.LoadStage3();*/
-
-
-            meshBuildersByLayers.Clear();
-            var planetLayers = new [] { PlanetTileLayer.TileLayerBack, PlanetTileLayer.TileLayerMiddle, PlanetTileLayer.TileLayerFurniture, PlanetTileLayer.TileLayerFront };
-
             //remove all children MeshRenderer
             foreach(var mr in GetComponentsInChildren<MeshRenderer>())
                 if (Application.isPlaying)
                     Destroy(mr.gameObject);
                 else
                     DestroyImmediate(mr.gameObject);
-            
-            var sortingOrder = 0;
-            foreach (var layer in planetLayers)
-            {
-                //create material for atlas
-                /*var atlas = FileLoader.GetAtlas(layer);
-
-                if (atlas.Length == 0)
-                    continue;
-                var tex = TextureBuilder.Build(atlas);
-                var mat = Instantiate(Material);
-                mat.SetTexture("_MainTex", tex);
-                var mesh = CreateMesh(transform, layer.ToString(), sortingOrder++, mat);
-                var quads = new QuadsBuilder().BuildQuads(FileLoader, layer, 0f);
-                mb = new MeshBuilder(quads, mesh);
-                meshBuildersByLayers.Add(mb);*/
-            }
+        
 
             TestDrawTiles();
             LateUpdate();
-        }        
+        }      
+
+        //NOTE(Mahdi): this is used to create some test tiles
+        // to make sure the system is working
+        public static void CreateDefaultTiles()
+        {
+            int MetalSlabsTileSheet = 
+                        GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png");
+            int StoneBulkheads = 
+                        GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tile_wallbase\\Tiles_stone_bulkheads.png");
+            int TilesMoon = 
+                        GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png");
 
 
-        void DrawTile(float x, float y, byte[] spriteBytes)
+            // creating the tiles
+            GameState.TileCreationApi.CreateTile(0);
+            GameState.TileCreationApi.SetTileName("slab1");
+            GameState.TileCreationApi.SetTileTexture16(MetalSlabsTileSheet, 0, 0);
+            GameState.TileCreationApi.EndTile();
+
+            GameState.TileCreationApi.CreateTile(1);
+            GameState.TileCreationApi.SetTileName("slab2");
+            GameState.TileCreationApi.SetTileTexture16(MetalSlabsTileSheet, 1, 0);
+            GameState.TileCreationApi.EndTile();
+
+            GameState.TileCreationApi.CreateTile(2);
+            GameState.TileCreationApi.SetTileName("slab3");
+            GameState.TileCreationApi.SetTileTexture16(MetalSlabsTileSheet, 4, 0);
+            GameState.TileCreationApi.EndTile();
+
+            GameState.TileCreationApi.CreateTile(3);
+            GameState.TileCreationApi.SetTileName("slab4");
+            GameState.TileCreationApi.SetTileTexture16(MetalSlabsTileSheet, 5, 0);
+            GameState.TileCreationApi.EndTile();
+
+            GameState.TileCreationApi.CreateTile(4);
+            GameState.TileCreationApi.SetTileName("tile5");
+            GameState.TileCreationApi.SetTileTexture16(StoneBulkheads, 5, 1);
+            GameState.TileCreationApi.EndTile();
+
+            GameState.TileCreationApi.CreateTile(5);
+            GameState.TileCreationApi.SetTileName("tile6");
+            GameState.TileCreationApi.SetTileTexture16(StoneBulkheads, 4, 1);
+            GameState.TileCreationApi.EndTile();
+
+            GameState.TileCreationApi.CreateTile(6);
+            GameState.TileCreationApi.SetTileName("tile7");
+            GameState.TileCreationApi.SetTileTexture16(StoneBulkheads, 7, 1);
+            GameState.TileCreationApi.EndTile();
+
+            GameState.TileCreationApi.CreateTile(7);
+            GameState.TileCreationApi.SetTileName("tile_moon_1");
+            GameState.TileCreationApi.SetTileTexture(TilesMoon, 0, 0);
+            GameState.TileCreationApi.EndTile();
+
+          /*  GameState.TileCreationApi.CreateTile(8);
+            GameState.TileCreationApi.SetTileName("tile_moon_2");
+            GameState.TileCreationApi.SetTileTexture16(TilesMoon, 7, 1);
+            GameState.TileCreationApi.EndTile()*/;
+
+
+        }
+
+        void DrawTile(float x, float y, float w, float h, byte[] spriteBytes)
         {
             var tex = CreateTextureFromRGBA(spriteBytes, 32, 32);
             var mat = Instantiate(Material);
             mat.SetTexture("_MainTex", tex);
             var mesh = CreateMesh(transform, "abc", 0, mat);
 
-            List<int> triangles = new List<int>();
-            List<Vector2> uvs = new List<Vector2>();
-            List<Vector3> verticies = new List<Vector3>();
+            triangles.Clear();
+            uvs.Clear();
+            verticies.Clear();
 
 
             var p0 = new Vector3(x, y, 0);
-            var p1 = new Vector3(x + 1, y + 1, 0);
+            var p1 = new Vector3((x + w), (y + h), 0);
             var p2 = p0; p2.y = p1.y;
             var p3 = p1; p3.y = p0.y;
 
@@ -137,7 +186,7 @@ namespace PlanetTileMap.Unity
         }
         void TestDrawTiles()
         {
-            float BeginX = -6.0f;
+            float BeginX = -3.0f;
             float BeginY = 4.0f;
            // int id = TileSpriteLoader.TileSpriteLoader.Instance.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png");
            // GameState.SpriteAtlasManager.Blit16(id, 0, 0);
@@ -165,6 +214,9 @@ namespace PlanetTileMap.Unity
             TilePropertiesData tile7 =
                 GameState.TileCreationApi.GetTileProperties(6);
 
+            TilePropertiesData tileMoon1 =
+             GameState.TileCreationApi.GetTileProperties(7);
+
             //TODO(Mahdi): make these use the same statis array
             // the size should be 32 * 32 * 4 = 4096
             byte[] slab1Bytes = GameState.SpriteAtlasManager.GetSpriteBytes(slab1.SpriteId);
@@ -174,24 +226,46 @@ namespace PlanetTileMap.Unity
             byte[] tile5Bytes = GameState.SpriteAtlasManager.GetSpriteBytes(tile5.SpriteId);
             byte[] tile6Bytes = GameState.SpriteAtlasManager.GetSpriteBytes(tile6.SpriteId);
             byte[] tile7Bytes = GameState.SpriteAtlasManager.GetSpriteBytes(tile7.SpriteId);
+            byte[] tileMoonBytes = GameState.SpriteAtlasManager.GetSpriteBytes(tileMoon1.SpriteId);
             
 
-            DrawTile(BeginX, BeginY, slab2Bytes);
-            for (int i = 1; i < 10; i++)
+            float TileSize = 0.2f;
+
+            DrawTile(BeginX + ((0 - 15) * TileSize), BeginY, TileSize, TileSize, slab2Bytes);
+            for (int i = 1; i < 50; i++)
             {
-                DrawTile(BeginX + i, BeginY, slab3Bytes);
+                DrawTile(BeginX + ((i - 15) * TileSize), BeginY, TileSize, TileSize, slab3Bytes);
             }
-            DrawTile(BeginX + 10, BeginY, slab4Bytes);
+            DrawTile(BeginX + ((50 - 15) * TileSize), BeginY, TileSize, TileSize, slab4Bytes);
 
 
 
             
-            DrawTile(BeginX, BeginY + 1, tile6Bytes);
-            for (int i = 1; i < 15; i++)
+            DrawTile(BeginX, BeginY + TileSize, TileSize, TileSize, tile6Bytes);
+            for (int i = 1; i < 30; i++)
             {
-                DrawTile(BeginX + i, BeginY + 1, tile5Bytes);
+                DrawTile(BeginX + i * TileSize, BeginY + TileSize, TileSize, TileSize, tile5Bytes);
             }
-            DrawTile(BeginX + 15, BeginY + 1, tile7Bytes);
+            DrawTile(BeginX + 30 * TileSize, BeginY + TileSize, TileSize, TileSize, tile7Bytes);
+
+
+
+            for(int i = 0; i < 100; i++)
+            {
+                for (int j = 0; j < 50; j++)
+                {
+                    DrawTile((i - 50) * TileSize, (-j + 19) * TileSize, TileSize, TileSize, tileMoonBytes);
+                }
+            }
+
+
+            for(int i = 0; i < 100; i++)
+            {
+                for (int j = 0; j < 50; j++)
+                {
+                    DrawTile((i - 50) * TileSize, (j + 29) * TileSize, TileSize, TileSize, tileMoonBytes);
+                }
+            }
         }
 
         public void LoadMap()
@@ -251,9 +325,9 @@ namespace PlanetTileMap.Unity
             { 
                 int index = (x + y * w) * 4;
                 var r = rgba[index];
-                var g = rgba[index];
-                var b = rgba[index];
-                var a = rgba[index];
+                var g = rgba[index + 1];
+                var b = rgba[index + 2];
+                var a = rgba[index + 3];
 
                 pixels[x + y * w] = new Color32((byte)r, (byte)g, (byte)b, (byte)a);
             }

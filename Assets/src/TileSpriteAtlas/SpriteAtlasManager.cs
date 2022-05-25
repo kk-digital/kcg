@@ -78,7 +78,7 @@ namespace SpriteAtlas
                     int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));*/
 
                     int atlasindex = 4 * ((yOffset + y) * (atlas.Width * 32) + (xOffset + x));
-                    int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));
+                    int sheetindex = 4 * ((x + Row * 32) + ( (y + Column * 32) * sheet.Width));
 
                     atlas.Data[atlasindex + 0] = sheet.Data[sheetindex + 0];
                     atlas.Data[atlasindex + 1] = sheet.Data[sheetindex + 1];
