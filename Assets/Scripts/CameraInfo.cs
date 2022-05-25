@@ -302,7 +302,7 @@ public class CameraInfo : MonoBehaviour
             return camProp.cullingMask;
         else
             Debug.LogError("Camera object is empty.");
-        return 0;
+        return -1;
     }
 
     // Update Camera Properties
