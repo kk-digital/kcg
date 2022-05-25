@@ -2,8 +2,8 @@
 {
     public struct SpriteAtlas
     {
-        public int id;
-        public int glTextureID;
+        public int AtlasID;
+        public int GLTextureID;
 
         public int Width;
         public int Height;

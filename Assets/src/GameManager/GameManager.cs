@@ -107,8 +107,8 @@ public class GameManager : MonoBehaviour
     public void InitStage1()
     {
         //TODO: Intialize all managers here
-        TilePropertiesManager.InitCore();
-        TileSpriteLoader.TileSpriteLoader.InitStage1();
+        GameState.TilePropertiesManager.InitStage1();
+        GameState.TileSpriteLoader.InitStage1();
         //Setup ECS system
         ecsSystems = new GameFeatures(Contexts.sharedInstance);
         ecsSystems.Initialize();
@@ -119,8 +119,8 @@ public class GameManager : MonoBehaviour
     {
         //TODO: Start loading the files
         // file loading operations here
-        TilePropertiesManager.InitCoreRelatives();
-        TileSpriteLoader.TileSpriteLoader.InitStage2();
+        GameState.TilePropertiesManager.InitStage2();
+        GameState.TileSpriteLoader.InitStage2();
     }
 
     public void TearDown()

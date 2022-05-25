@@ -1,6 +1,5 @@
 using BigGustave;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,34 +9,16 @@ namespace TileSpriteLoader
 {
     public class TileSpriteLoader
     {
-        public static TileSpriteLoader _Instance;
-        public SpriteSheet[] SpriteSheets = new SpriteSheet[1024];
+        public SpriteSheet[] SpriteSheets;
         public int ImageCount;
         public Dictionary<string, int> SpriteSheetID = new Dictionary<string, int>();
 
-        public static TileSpriteLoader Instance
+        public void InitStage1()
         {
-            get 
-            {
-                if (_Instance == null)
-                {
-                    _Instance = new TileSpriteLoader();
-                }
-                return _Instance;
-            }
+            
         }
 
-        public TileSpriteLoader()
-        {
-
-        }
-
-        public static void InitStage1()
-        {
-
-        }
-
-        public static void InitStage2()
+        public void InitStage2()
         {
         
         }
