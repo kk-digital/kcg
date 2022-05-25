@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using Enums;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -11,28 +12,101 @@ using UnityEditor;
 public class CameraInfo : MonoBehaviour
 {
     // Target Camera
-    Camera cam;
-    
+    public Camera cam;
+
+    //Camera Struct
+    public struct CameraProperties
+    {
+        public int cullingMask;
+        public bool isOrtho;
+        public float nearZ;
+        public float farZ;
+        public float depth;
+        public Matrix4x4 projMatrix;
+        public Vector3 Position;
+        public Vector3 Rotation;
+        public float fieldOfView;
+        public float orthographicSize;
+        public float aspect;
+    }
+
+    // Struct Creation
+    CameraProperties camProp;
+
     // Input Informations
-    public float OrthoSize;
     public string AspectRatio = string.Format("16:9");
+
+    // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Awake.html
+    private void Awake()
+    {
+        //Check if Scene has SceneManager setup
+        if (SceneManager.Instance != null)
+        {
+            SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+        }
+    }
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
     private void Start()
     {
-        if(cam == null)
+        if (cam == null)
         {
             // Assign camera object
             cam = GetComponent<Camera>();
+
+            // Assigning struct values to camera values. Reciving all the info of the camera to our struct. So, we can save later on.
+            camProp.depth = cam.depth;
+            camProp.isOrtho = cam.orthographic;
+            camProp.cullingMask = cam.cullingMask;
+            camProp.farZ = cam.farClipPlane;
+            camProp.nearZ = cam.nearClipPlane;
+            camProp.projMatrix = cam.projectionMatrix;
+            camProp.Position = cam.transform.position;
+            camProp.Rotation = cam.transform.eulerAngles;
+            camProp.fieldOfView = cam.fieldOfView;
+            camProp.orthographicSize = cam.orthographicSize;
+            camProp.aspect = cam.aspect;
         }
+    }
+
+    // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnGUI.html
+    private void OnGUI()
+    {
+        // Assigning struct values to camera values. Reciving all the info of the camera to our struct. So, we can save later on.
+        camProp.depth = cam.depth;
+        camProp.isOrtho = cam.orthographic;
+        camProp.cullingMask = cam.cullingMask;
+        camProp.farZ = cam.farClipPlane;
+        camProp.nearZ = cam.nearClipPlane;
+        camProp.projMatrix = cam.projectionMatrix;
+        camProp.Position = cam.transform.position;
+        camProp.Rotation = cam.transform.eulerAngles;
+        camProp.fieldOfView = cam.fieldOfView;
+        camProp.orthographicSize = cam.orthographicSize;
+        camProp.aspect = cam.aspect;
+    }
+
+    // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnDrawGizmos.html
+    private void OnDrawGizmos()
+    {
+        // Assigning struct values to camera values. Reciving all the info of the camera to our struct. So, we can save later on.
+        camProp.depth = cam.depth;
+        camProp.isOrtho = cam.orthographic;
+        camProp.cullingMask = cam.cullingMask;
+        camProp.farZ = cam.farClipPlane;
+        camProp.nearZ = cam.nearClipPlane;
+        camProp.projMatrix = cam.projectionMatrix;
+        camProp.Position = cam.transform.position;
+        camProp.Rotation = cam.transform.eulerAngles;
+        camProp.fieldOfView = cam.fieldOfView;
+        camProp.orthographicSize = cam.orthographicSize;
+        camProp.aspect = cam.aspect;
     }
 
     private void FixedUpdate()
     {
-        // Assigning Info Input values
-        OrthoSize = cam.orthographicSize;
-
-        if (cam.aspect >= 1.7f)
+        // Aspect Ratio Calculation
+        if (camProp.aspect >= 1.7f)
             AspectRatio = string.Format("16:9");
         else if (cam.aspect > 1.6f)
             AspectRatio = string.Format("5:3");
@@ -46,15 +120,20 @@ public class CameraInfo : MonoBehaviour
     public void SetPosition(Vector3 newPosition)
     {
         if (cam != null)
-            cam.transform.position = newPosition;
+            camProp.Position = newPosition;
         else
             Debug.LogError("Camera object is empty.");
+        UpdateCamera();
     }
 
     // Set Camera Depth (Default: 1)
     public void SetDepth(int newDepth)
     {
-        cam.depth = newDepth;
+        if(cam != null)
+            camProp.depth = newDepth;
+        else
+            Debug.LogError("Camera object is empty.");
+        UpdateCamera();
     }
 
     // Set Near and Far Clip Values
@@ -62,49 +141,54 @@ public class CameraInfo : MonoBehaviour
     {
         if (cam != null)
         {
-            cam.nearClipPlane = NearZ;
-            cam.farClipPlane = farZ;
+            camProp.nearZ = NearZ;
+            camProp.farZ = farZ;
         }
         else
         {
             Debug.LogError("Camera object is empty.");
         }
+        UpdateCamera();
     }
 
     // Set culling mask
     public void SetCullingMask(int newMask)
     {
         if (cam != null)
-            cam.cullingMask = newMask;
+            camProp.cullingMask = newMask;
         else
             Debug.LogError("Camera object is empty.");
+        UpdateCamera();
     }
 
     // Set Projection matrix
     public void SetProjectionMatrix(Matrix4x4 newProjMatrix)
     {
         if (cam != null)
-            cam.projectionMatrix = newProjMatrix;
+            camProp.projMatrix = newProjMatrix;
         else
             Debug.LogError("Camera object is empty.");
+        UpdateCamera();
     }
 
     // Set Camera projection to orthographic
     public void SetCameraToOrtho()
     {
         if (cam != null)
-            cam.orthographic = true;
+            camProp.isOrtho = true;
         else
             Debug.LogError("Camera object is empty.");
+        UpdateCamera();
     } 
 
     // Set Camera projection to perspective
     public void SetCameraToPerspective()
     {
         if (cam != null)
-            cam.orthographic = false;
+            camProp.isOrtho = false;
         else
             Debug.LogError("Camera object is empty.");
+        UpdateCamera();
     }
 
     // Set FOV Axis (Only works in perspective mode)
@@ -112,11 +196,12 @@ public class CameraInfo : MonoBehaviour
     {
         if (cam != null)
         {
-            if(!cam.orthographic)
-            cam.fieldOfView = newFOV;
+            if(!camProp.isOrtho)
+                camProp.fieldOfView = newFOV;
         }
         else
             Debug.LogError("Camera object is empty.");
+        UpdateCamera();
     }
  
     // Set new Camera object
@@ -126,6 +211,7 @@ public class CameraInfo : MonoBehaviour
             cam = newCamera;
         else
             Debug.LogError("Camera object is empty.");
+        UpdateCamera();
     }
 
     // Get Current Camera Object
@@ -142,7 +228,7 @@ public class CameraInfo : MonoBehaviour
     public Vector3 GetCameraPosition()
     {
         if (cam != null)
-            return cam.transform.position;
+            return camProp.Position;
         else
             Debug.LogError("Camera object is empty.");
         return Vector3.zero;
@@ -152,7 +238,7 @@ public class CameraInfo : MonoBehaviour
     public Vector3 GetCameraRotation()
     {
         if (cam != null)
-            return cam.transform.eulerAngles;
+            return camProp.Rotation;
         else
             Debug.LogError("Camera object is empty.");
         return Vector3.zero;
@@ -162,7 +248,7 @@ public class CameraInfo : MonoBehaviour
     public bool IsOrtho()
     {
         if (cam != null)
-            return cam.orthographic;
+            return camProp.isOrtho;
         else
             Debug.LogError("Camera object is empty.");
         return false;
@@ -172,7 +258,7 @@ public class CameraInfo : MonoBehaviour
     public float GetOrthoSize()
     {
         if (cam != null)
-            return cam.orthographicSize;
+            return camProp.orthographicSize;
         else
             Debug.LogError("Camera object is empty.");
         return 0.0f;
@@ -193,7 +279,7 @@ public class CameraInfo : MonoBehaviour
     public float GetAspect()
     {
         if (cam != null)
-            return cam.aspect;
+            return camProp.aspect;
         else
             Debug.LogError("Camera object is empty.");
         return 0.0f;
@@ -203,22 +289,49 @@ public class CameraInfo : MonoBehaviour
     public float GetFieldOfView()
     {
         if (cam != null)
-            return cam.fieldOfView;
+            return camProp.fieldOfView;
         else
             Debug.LogError("Camera object is empty.");
         return 0.0f;
     }
 
+    // Get Culling Mask
+    public int GetCullingMask()
+    {
+        if (cam != null)
+            return camProp.cullingMask;
+        else
+            Debug.LogError("Camera object is empty.");
+        return 0;
+    }
+
+    // Update Camera Properties
+    public void UpdateCamera()
+    {
+        // Assign camera values to strcut values
+        cam.aspect = GetAspect();
+        cam.fieldOfView = GetFieldOfView();
+        cam.orthographicSize = GetOrthoSize();
+        cam.orthographic = IsOrtho();
+        cam.cullingMask = GetCullingMask();
+        cam.projectionMatrix = camProp.projMatrix;
+        cam.depth = camProp.depth;
+        cam.farClipPlane = camProp.farZ;
+        cam.nearClipPlane = camProp.nearZ;
+        cam.transform.position = camProp.Position;
+        cam.transform.eulerAngles = camProp.Rotation;
+    }
 }
 
 /*
-    //Editor class to write notes or values on to the script inspector
+    // Editor class to write notes or values on to the script inspector
 */
 #if UNITY_EDITOR
 [CustomEditor(typeof(CameraInfo))]
 [CanEditMultipleObjects]
 public class CameraInfoEditor : Editor
 {
+    // Doc: https://docs.unity3d.com/ScriptReference/Editor.OnInspectorGUI.html
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
@@ -228,7 +341,7 @@ public class CameraInfoEditor : Editor
         GUIStyle style = new GUIStyle(GUI.skin.label);
         style.richText = true;
 
-        string Size = string.Format("{0:0.00}", myCamera.OrthoSize);
+        string Size = string.Format("{0:0.00}", myCamera.GetOrthoSize());
         string Width = string.Format("{0:0.00}", myCamera.GetResolution().x);
         string Height = string.Format("{0:0.00}", myCamera.GetResolution().y);
 
@@ -312,6 +425,7 @@ public class CameraInfoEditor : Editor
         // Currnet Graphics API
         EditorGUILayout.LabelField("Currnet Graphics API", SystemInfo.graphicsDeviceType.ToString(), style);
 
+        // Apply Changes
         serializedObject.ApplyModifiedProperties();
     }
 }
