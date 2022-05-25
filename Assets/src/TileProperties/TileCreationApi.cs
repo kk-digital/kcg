@@ -1,5 +1,5 @@
+using System;
 using Enums;
-using System.Collections;
 using System.Collections.Generic;
 
 //MOST IMPORTANT TILE
@@ -85,16 +85,9 @@ namespace TileProperties
 
         public void CreateTile(int TileId)
         {
-            int oldSize = PropertiesArray.Length;
             while (TileId >= PropertiesArray.Length)
             {
-                TilePropertiesData[] newArray = new TilePropertiesData[PropertiesArray.Length * 2];
-                for(int i = 0; i < oldSize; i++)
-                {
-                    newArray[i] = PropertiesArray[i];
-                }
-
-                PropertiesArray = newArray;
+                Array.Resize(ref PropertiesArray, PropertiesArray.Length * 2);
             }
 
             CurrentTileIndex = TileId;
@@ -106,17 +99,14 @@ namespace TileProperties
 
         public void SetTileName(string name)
         {
-            if (CurrentTileIndex != -1)
+            if (CurrentTileIndex == -1) return;
+            
+            if (!NameToID.ContainsKey(name))
             {
-                int value;
-                bool exists = NameToID.TryGetValue(name, out value);
-                if (!exists)
-                {
-                     NameToID.Add(name, CurrentTileIndex);
-                }
-
-                PropertiesArray[CurrentTileIndex].Name = name;
+                NameToID.Add(name, CurrentTileIndex);
             }
+
+            PropertiesArray[CurrentTileIndex].Name = name;
         }
         
         public void SetTileLayer(PlanetTileLayer layer)
@@ -139,12 +129,10 @@ namespace TileProperties
 
         public void SetTileTexture16(int spriteSheetId, int row, int column)
         {
-            if (CurrentTileIndex != -1)
-            {
-                int atlasSpriteId = 
-                    GameState.SpriteAtlasManager.Blit16(spriteSheetId, row, column);
-                PropertiesArray[CurrentTileIndex].SpriteId = atlasSpriteId;
-            }
+            if (CurrentTileIndex == -1) return;
+            
+            int atlasSpriteId = GameState.SpriteAtlasManager.Blit16(spriteSheetId, row, column);
+            PropertiesArray[CurrentTileIndex].SpriteId = atlasSpriteId;
         }
 
         public void SetTilePropertyIsExplosive(bool isExplosive)

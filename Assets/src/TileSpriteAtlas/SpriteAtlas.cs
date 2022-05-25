@@ -9,5 +9,10 @@
         public int Height;
 
         public byte[] Data;
+
+        public void CreateData()
+        {
+            
+        }
     }
 }

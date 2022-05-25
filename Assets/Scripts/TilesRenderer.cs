@@ -1,11 +1,7 @@
 using UnityEngine;
-using System.IO;
 using System.Collections.Generic;
-using Enums;
-using SpriteAtlas;
+using Physics;
 using TileProperties;
-using TmxMapFileLoader;
-using PlanetTileMap;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -34,6 +30,7 @@ namespace PlanetTileMap.Unity
         List<Vector3> verticies = new List<Vector3>();
 
         PlanetTileMap TileMap;
+        RectangleBoundingBoxCollision Player;
 
 
         static bool InitTiles = false;
@@ -44,6 +41,7 @@ namespace PlanetTileMap.Unity
             if (!InitTiles)
             {
                 CreateDefaultTiles();
+                CreateTestPlayer();
                 InitTiles = true;
             }
             // TODO(Mahdi): does not make sense to put them here
@@ -73,6 +71,7 @@ namespace PlanetTileMap.Unity
         
 
             DrawMapTest();
+            PlayerCollidersTest();
             //TestDrawTiles();
             LateUpdate();
         }      
@@ -222,6 +221,19 @@ namespace PlanetTileMap.Unity
             mesh.SetTriangles(triangles, 0);
         }
 
+
+        void CreateTestPlayer()
+        {
+            var pos = new Vector2(2, 2);
+
+            // 1f - considered to be 32 pixel
+            Player = new RectangleBoundingBoxCollision(pos, new Vector2(1f, 1f));
+        }
+        void PlayerCollidersTest()
+        {
+            Debug.Log($"Player Bottom Collided: {Player.IsCollidingBottom(ref TileMap, Player.Pos)}");
+        }
+
         void DrawMapTest()
         {
             float BeginX = -3.0f;
@@ -247,8 +259,10 @@ namespace PlanetTileMap.Unity
 
                             GameState.SpriteAtlasManager.GetSpriteBytes(tileProperties.SpriteId, bytes);
 
-                            DrawTile(BeginX + (i * TileSize), BeginY + (j * TileSize),
-                            TileSize, TileSize, bytes);
+                            var x = BeginX + (i * TileSize);
+                            var y = BeginY + (j * TileSize);
+
+                            DrawTile(x, y, TileSize, TileSize, bytes);
                         }
 
                     }
