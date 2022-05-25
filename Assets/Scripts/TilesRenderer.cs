@@ -11,20 +11,19 @@ using UnityEditor;
 namespace PlanetTileMap.Unity
 {
     //Note: TileMap should be mostly controlled by GameManager
+
+
+    //Note(Mahdi): we are just testing and making sure everything is working
+    // before we move things out of here
+    // there will be things like rendering, collision, TileMap
+    // that are not supposed to be here.
+
     class TilesRenderer : MonoBehaviour
     {
         //public string TileMap = "Moonbunker/Moon Bunker.tmx";
         [SerializeField] Material Material;
 
         public static string BaseDir => Application.streamingAssetsPath;
-       // MeshBuilder mb;
-      //  Mesh mesh;
-
-        // TmxImporter holds the temporary data for loading
-        // and is used to make a 3 stage loading process
-        //TmxMapFileLoader.TmxImporter FileLoader;
-
-        //List<MeshBuilder> meshBuildersByLayers = new List<MeshBuilder>();
 
         List<int> triangles = new List<int>();
         List<Vector2> uvs = new List<Vector2>();
@@ -76,6 +75,14 @@ namespace PlanetTileMap.Unity
             //TestDrawTiles();
             LateUpdate();
         }      
+
+        public void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Debug.Log(Input.mousePosition);
+            }
+        }
 
         //NOTE(Mahdi): this is used to create some test tiles
         // to make sure the system is working
@@ -130,11 +137,8 @@ namespace PlanetTileMap.Unity
             GameState.TileCreationApi.SetTileTexture(TilesMoon, 0, 0);
             GameState.TileCreationApi.EndTile();
 
-          /*  GameState.TileCreationApi.CreateTile(8);
-            GameState.TileCreationApi.SetTileName("tile_moon_2");
-            GameState.TileCreationApi.SetTileTexture16(TilesMoon, 7, 1);
-            GameState.TileCreationApi.EndTile()*/;
 
+            // Generating the map
             int mapWidth = 128;
             int mapHeight = 128;
 
@@ -171,6 +175,9 @@ namespace PlanetTileMap.Unity
 
         }
 
+
+        // draws 1 tile into the screen
+        // Note(Mahdi): this code is for testing purpose
         void DrawTile(float x, float y, float w, float h, byte[] spriteBytes)
         {
             var tex = CreateTextureFromRGBA(spriteBytes, 32, 32);
@@ -269,6 +276,9 @@ namespace PlanetTileMap.Unity
             }
         }
 
+
+        //Note(Mahdi): will be deleted in the future
+        // just leave it be for now
         void TestDrawTiles()
         {
             float BeginX = -3.0f;

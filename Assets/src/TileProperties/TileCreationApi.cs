@@ -108,14 +108,6 @@ namespace TileProperties
 
             PropertiesArray[CurrentTileIndex].Name = name;
         }
-        
-        public void SetTileLayer(PlanetTileLayer layer)
-        {
-            if (CurrentTileIndex != -1)
-            {
-                PropertiesArray[CurrentTileIndex].Layer = layer;
-            }
-        }
 
         public void SetTileTexture(int spriteSheetId, int row, int column)
         {
@@ -151,7 +143,7 @@ namespace TileProperties
             }
         }
 
-        public void SetTileCollisionTile(PlanetTileCollisionType type)
+        public void SetTileCollisionType(PlanetTileCollisionType type)
         {
             if (CurrentTileIndex != -1)
             {
@@ -173,6 +165,32 @@ namespace TileProperties
             if (CurrentTileIndex != -1)
             {
                 PropertiesArray[CurrentTileIndex].Durability = durability;
+            }
+        }
+
+        public void AddTileVariant(int spriteSheetId, int row, int column)
+        {
+            if (CurrentTileIndex != -1)
+            {
+                if (PropertiesArray[CurrentTileIndex].VariantCount < PropertiesArray[CurrentTileIndex].Variants.Length)
+                {
+                    int atlasSpriteId = 
+                        GameState.SpriteAtlasManager.Blit(spriteSheetId, row, column);
+                    PropertiesArray[CurrentTileIndex].Variants[PropertiesArray[CurrentTileIndex].VariantCount++] = atlasSpriteId;
+                }
+            }
+        }
+
+        public void AddTileVariant16(int spriteSheetId, int row, int column)
+        {
+            if (CurrentTileIndex != -1)
+            {
+                if (PropertiesArray[CurrentTileIndex].VariantCount < PropertiesArray[CurrentTileIndex].Variants.Length)
+                {
+                    int atlasSpriteId = 
+                        GameState.SpriteAtlasManager.Blit16(spriteSheetId, row, column);
+                    PropertiesArray[CurrentTileIndex].Variants[PropertiesArray[CurrentTileIndex].VariantCount++] = atlasSpriteId;
+                }
             }
         }
 
