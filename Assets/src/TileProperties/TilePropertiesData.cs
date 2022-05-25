@@ -13,6 +13,7 @@ namespace TileProperties
         public int SpriteId2; //used for composited tiles, like ore
 
         public int[] Variants;
+        public int VariantCount;
 
         public PlanetTileCollisionType TileCollisionType;
         public bool IsExplosive;
@@ -36,10 +37,13 @@ namespace TileProperties
             TileCollisionType = collisionType;
         }
 
-        public bool IsSolid() 
+        public bool IsSolid 
         {
-            return tileCollisionType == PlanetTileCollisionType.TileCollisionTypeSolid;
-        };
+            get
+            {
+                return TileCollisionType == PlanetTileCollisionType.TileCollisionTypeSolid;
+            }
+        }
 
         private TilePropertiesData(string name, string description, int tileId) : this()
         {
@@ -48,6 +52,7 @@ namespace TileProperties
             TileId = tileId;
 
             Variants = new int[16];
+            VariantCount = 0;
         }
 
         private TilePropertiesData(string name, string description, int tileId,
@@ -58,6 +63,7 @@ namespace TileProperties
             SpriteId2 = spriteId2;
 
             Variants = new int[16];
+            VariantCount = 0;
         }
 
         public TilePropertiesData(string name, string description, int tileId,
@@ -71,6 +77,7 @@ namespace TileProperties
             IsExplosive = isExplosive;
 
             Variants = new int[16];
+            VariantCount = 0;
         }
     }
 }
