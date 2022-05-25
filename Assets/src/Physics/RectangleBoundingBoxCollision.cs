@@ -20,6 +20,9 @@ namespace Physics
             public int LeftTile, RightTile, TopTile, BottomTile;
         }
     
+        /// <summary>
+        /// y is on bottom, x is on left
+        /// </summary>
         public Vector2 Pos;
         public Vector2 PrevPos;
         public Vector2 Vel;
@@ -46,25 +49,14 @@ namespace Physics
     
         public bool ContainsBox(Vector2 targetPos, Vector2 targetSize)
         {
-            var disp = targetPos - Pos;
-            disp.Abs();
-            // add 0.5 to account for offset to center of point
-            var contains = 
-                                disp.x < Size.x / 2 + targetSize.x &&
-                                disp.y < Size.y / 2 + targetSize.y;
-            return contains;
+            // TODO: Implement based on mesh verticies
+            return false;
         }
         
         public bool Intersects(RectangleBoundingBoxCollision other)
         {
-            var disp = Pos - other.Pos;
-            disp.Abs();
-            
-            var intersects = 
-                                disp.x < Size.x / 2 && 
-                                disp.y < Size.y / 2;
-        
-            return intersects;
+            // TODO: Implement based on mesh verticies
+            return false;
         }
 
         public RectangleBounds Bounds(Vector2 newPos)
@@ -179,6 +171,8 @@ namespace Physics
     
         public Vector2[] DiscretizeDisplacement(Vector2 totalDisplacement)
         {
+            // TODO: Reimplement
+            
             var n = totalDisplacement.magnitude;
             var normalized = totalDisplacement.normalized * MaxPartialDisplacement;
 
@@ -195,6 +189,8 @@ namespace Physics
 
         public Vector2 CheckForCollisions(ref PlanetTileMap.PlanetTileMap map, Vector2 totalDisplacement)
         {
+            // TODO: Reimplement
+            
             var partialDisplacements = DiscretizeDisplacement(totalDisplacement);
             Vector2 newPos = default;
             foreach (var partialDisplacement in partialDisplacements)
@@ -234,8 +230,10 @@ namespace Physics
     
         public float[] GetBBoxLines()
         {
-            var x = Pos.x - Size.x / 2f;
-            var y = Pos.y - Size.y / 2f;
+            // TODO: Reimplement
+            
+            var x = Pos.x - Size.x;
+            var y = Pos.y - Size.y;
         
             return new[]
             {
@@ -259,12 +257,14 @@ namespace Physics
     
         public float[] GetInterpolatedBBoxLines()
         {
+            // TODO: Reimplement
+            
             // 60f is FPS
             // Time.fixedTime - TimeBetweenTicks
             float alpha = Time.fixedTime / (1.0f / 60f);
 
             //var vec = PrevPos.Mult(1 - alpha).Add(body.Pos.Mult(alpha)).Sub(cxmath.Vec2{body.Size.X / 2, body.Size.Y / 2});
-            var vec = PrevPos * (1f - alpha) + (Pos * alpha) - new Vector2(Size.x / 2, Size.y / 2);
+            var vec = PrevPos * (1f - alpha) + (Pos * alpha) - new Vector2(Size.x, Size.y);
             var x = vec.x;
             var y = vec.y;
 
@@ -290,6 +290,8 @@ namespace Physics
     
         public float[] GetCollidingLines()
         {
+            // TODO: Reimplement
+            
             var collidingLines = new float[16];
             var bboxLines = GetBBoxLines();
             if (Collisions.Below)
@@ -312,6 +314,8 @@ namespace Physics
     
         public float[] GetInterpolatedCollidingLines() 
         {
+            // TODO: Reimplement
+            
             var collidingLines = new float[16];
             var bboxLines = GetInterpolatedBBoxLines();
         
