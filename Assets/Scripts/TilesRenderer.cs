@@ -443,10 +443,10 @@ namespace PlanetTileMap.Unity
             
             void DrawBottomCollision()
             {
-                var y = WorldPositionY(PlayerPosition.y);
+                var y = WorldPositionY(Player.Pos.y);
                 var LeftTilePos = new Vector3(WorldPositionX(playerBound.LeftTile), y, 0);
                 var RightTilePos = new Vector3(WorldPositionX(playerBound.RightTile) + TileSize, y, 0);
-                Gizmos.color = Player.IsCollidingBottom(ref TileMap) ? Color.red : Color.green;
+                Gizmos.color = Player.IsCollidingBottom(ref TileMap, Player.Pos) ? Color.red : Color.green;
                 
                 Gizmos.DrawLine(LeftTilePos, RightTilePos);
             }
