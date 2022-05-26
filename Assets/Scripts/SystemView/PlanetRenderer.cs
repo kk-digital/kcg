@@ -24,12 +24,15 @@ public class PlanetRenderer : MonoBehaviour
         float rotsin = (float)Math.Sin(planet.Rotation);
         float rotcos = (float)Math.Cos(planet.Rotation);
 
+        // eccentricity
+        float c = (float)Math.Sqrt(planet.SemiMajorAxis * planet.SemiMajorAxis - planet.SemiMinorAxis * planet.SemiMinorAxis);
+
         float x = 1.0f;
         float y = 0.0f;
 
         for (int i = 0; i < segments; i++)
         {
-            float vx = x * planet.SemiMajorAxis + planet.CenterX;
+            float vx = x * planet.SemiMajorAxis + planet.CenterX - c;
             float vy = y * planet.SemiMinorAxis + planet.CenterY;
 
             vertices[i] = new Vector3(
@@ -70,7 +73,7 @@ public class PlanetRenderer : MonoBehaviour
         linerenderer.material = mat;
 
         linerenderer.startWidth = 0.1f;
-        linerenderer.endWidth = 0.1f;
+        linerenderer.endWidth   = 0.1f;
 
         linerenderer.useWorldSpace = true;
 

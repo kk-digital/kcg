@@ -12,23 +12,23 @@ public class SystemViewTest : MonoBehaviour
     {
         System.Random rnd = new System.Random();
 
-        testPlanets = new Planet[4];
-        testRenderers = new PlanetRenderer[4];
+        testPlanets = new Planet[6];
+        testRenderers = new PlanetRenderer[6];
 
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < 6; i++)
         {
             testPlanets[i] = new Planet();
 
             testPlanets[i].CenterX = 0;
             testPlanets[i].CenterY = 0;
 
-            testPlanets[i].SemiMinorAxis = rnd.Next(4, 16);
-            testPlanets[i].SemiMajorAxis = testPlanets[i].SemiMinorAxis + rnd.Next(0, 8);
+            testPlanets[i].SemiMinorAxis = 2.0f + i + 2.0f * (float)rnd.NextDouble();
+            testPlanets[i].SemiMajorAxis = testPlanets[i].SemiMinorAxis + 4.0f * (float)rnd.NextDouble();
 
             testPlanets[i].Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
             var child = new GameObject();
-            child.name = "Planet Renderer " + i;
+            child.name = "Planet Renderer " + (i + 1);
 
             testRenderers[i] = child.AddComponent<PlanetRenderer>();
             testRenderers[i].planet = testPlanets[i];
