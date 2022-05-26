@@ -439,7 +439,17 @@ namespace PlanetTileMap.Unity
             float WorldPositionX(float pos) => (pos * TileSize);
             float WorldPositionY(float pos) =>(pos * TileSize);
 
-            var playerBound = Player.Bounds(PlayerPosition);
+            var playerBound = Player.Bounds(Player.Pos);
+
+            void DrawPlayerBorders()
+            {
+                var playerWorldPosX = WorldPositionX(Player.Pos.x + 0.5f);
+                var playerWorldPosY = WorldPositionY(Player.Pos.y + 0.5f);
+                
+                Gizmos.color = Color.red;
+                
+                Gizmos.DrawCube(new Vector3(playerWorldPosX, playerWorldPosY, 0), new Vector3(TileSize, TileSize, 0f));
+            }
             
             void DrawBottomCollision()
             {
@@ -476,6 +486,7 @@ namespace PlanetTileMap.Unity
             
             DrawPlayerBottomCorners(9);*/
             DrawBottomCollision();
+            DrawPlayerBorders();
         }
 #endif
     }
