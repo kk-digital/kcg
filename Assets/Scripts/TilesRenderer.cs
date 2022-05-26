@@ -104,8 +104,8 @@ namespace PlanetTileMap.Unity
                 PlayerPosition.x -= speed * Time.deltaTime;
             }
 
-            DrawMapTest();
             PlayerCollidersTest();
+            DrawMapTest();
         }
 
         void DrawMapTest()
@@ -202,8 +202,8 @@ namespace PlanetTileMap.Unity
 
 
             // Generating the map
-            int mapWidth = 32;
-            int mapHeight = 16;
+            int mapWidth = 128;
+            int mapHeight = 128;
 
             TileMap = new PlanetTileMap(mapWidth, mapHeight);
 
