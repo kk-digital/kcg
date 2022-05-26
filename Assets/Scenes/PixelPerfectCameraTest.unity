@@ -235,10 +235,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed771354369887441a8200653af6b229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxCameraHalfWidthEnabled: 0
-  maxCameraHalfHeightEnabled: 0
-  maxCameraHalfWidth: 25
-  maxCameraHalfHeight: 25
+  maxCameraHalfWidthEnabled: 1
+  maxCameraHalfHeightEnabled: 1
+  maxCameraHalfWidth: 500
+  maxCameraHalfHeight: 500
   targetDimension: 1
   targetCameraHalfWidth: 2
   targetCameraHalfHeight: 2
@@ -420,7 +420,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e322dc68291adc488ca1b1b9971e20b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputDevice: 0
 --- !u!4 &1506647944
 Transform:
   m_ObjectHideFlags: 0
