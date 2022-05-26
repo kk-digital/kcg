@@ -25,21 +25,20 @@ namespace PlanetTileMap.Unity
 
         public static string BaseDir => Application.streamingAssetsPath;
 
-        List<int> triangles = new List<int>();
-        List<Vector2> uvs = new List<Vector2>();
-        List<Vector3> verticies = new List<Vector3>();
+        List<int> triangles = new();
+        List<Vector2> uvs = new();
+        List<Vector3> verticies = new();
 
         PlanetTileMap TileMap;
         RectangleBoundingBoxCollision Player;
-        Vector2 PlayerPosition;
 
         int PlayerSpriteID;
         int PlayerSprite2ID;
         const float TileSize = 1.0f;
 
-        Vector2 MapOffset = new Vector2(-3.0f, 4.0f);
+        readonly Vector2 MapOffset = new(-3.0f, 4.0f);
 
-        static bool InitTiles = false;
+        static bool InitTiles;
         
 
         public void Start()
@@ -89,24 +88,32 @@ namespace PlanetTileMap.Unity
 
             if (Input.GetKey(KeyCode.UpArrow))
             {
-                PlayerPosition.y += speed * Time.deltaTime;
+                Player.Pos.y += speed * Time.deltaTime;
             }
             else if (Input.GetKey(KeyCode.DownArrow))
             {
-                PlayerPosition.y -= speed * Time.deltaTime;
+                Player.Pos.y -= speed * Time.deltaTime;
             }
 
             if (Input.GetKey(KeyCode.RightArrow))
             {
-                PlayerPosition.x += speed * Time.deltaTime;
+                Player.Pos.x += speed * Time.deltaTime;
             }
             else if (Input.GetKey(KeyCode.LeftArrow))
             {
-                PlayerPosition.x -= speed * Time.deltaTime;
+                Player.Pos.x -= speed * Time.deltaTime;
             }
 
+            DrawPlayerTest();
             PlayerCollidersTest();
             DrawMapTest();
+        }
+
+        void DrawPlayerTest()
+        {
+            var spriteBytes = new byte[32 * 32 * 4];
+            GameState.SpriteAtlasManager.GetSpriteBytes(PlayerSpriteID, spriteBytes);
+            DrawSprite(Player.Pos.x, Player.Pos.y, Player.Size.x, Player.Size.y, spriteBytes, 32, 32);
         }
 
         void DrawMapTest()
@@ -132,8 +139,8 @@ namespace PlanetTileMap.Unity
 
                             GameState.TileSpriteAtlasManager.GetSpriteBytes(tileProperties.SpriteId, bytes);
 
-                            var x = MapOffset.x + (i * TileSize);
-                            var y = MapOffset.y + (j * TileSize);
+                            var x = (i * TileSize);
+                            var y = (j * TileSize);
 
                             if (x + TileSize >= visibleRect.X && x <= visibleRect.X + visibleRect.W &&
                             y + TileSize >= visibleRect.Y && y <= visibleRect.Y + visibleRect.H)
@@ -146,8 +153,7 @@ namespace PlanetTileMap.Unity
                 }
             }
         }
-
-
+        
         //NOTE(Mahdi): this is used to create some test tiles
         // to make sure the system is working
         public void CreateDefaultTiles()
@@ -239,11 +245,9 @@ namespace PlanetTileMap.Unity
 
         }
 
-
-      
         void CreateTestPlayer()
         {
-            int PlayerTileSheet = 
+            int playerTileSheet = 
                         GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png");
 
             int PlayerTileSheet2 = 
@@ -254,16 +258,16 @@ namespace PlanetTileMap.Unity
             PlayerSpriteID =  GameState.TileSpriteAtlasManager.Blit(PlayerTileSheet, 0, 0);
             PlayerSprite2ID =  GameState.SpriteAtlasManager.Blit(PlayerTileSheet2, 0, 0, 32, 48);;
 
-            PlayerPosition = new Vector2(6, 6);
+            Player.Pos = new Vector2(2, 2);
 
             // 1f - considered to be 32 pixel
-            Player = new RectangleBoundingBoxCollision(PlayerPosition - MapOffset, new Vector2(1f, 1f));
+            Player = new RectangleBoundingBoxCollision(Player.Pos, new Vector2(1f, 1f));
         }
 
         void PlayerCollidersTest()
         {
-            Player = new RectangleBoundingBoxCollision(PlayerPosition - MapOffset, new Vector2(1f, 1f));
-            bool isCollidingBottom = Player.IsCollidingBottom(ref TileMap);
+            Player = new RectangleBoundingBoxCollision(Player.Pos, new Vector2(1f, 1f));
+            bool isCollidingBottom = Player.IsCollidingBottom(ref TileMap, Player.Pos);
 
             Debug.Log($"Player Bottom Collided: {isCollidingBottom}");
 
@@ -282,8 +286,7 @@ namespace PlanetTileMap.Unity
             DrawSprite(PlayerPosition.x, PlayerPosition.y, 1.0f, 1.0f, spriteBytes, 32, 32);
 
         }
-
-
+        
         public void LoadMap()
         {
             InitStage1();
@@ -349,8 +352,7 @@ namespace PlanetTileMap.Unity
         {
             DrawSprite(x, y, w, h, spriteBytes, 32, 32);
         }
-
-
+        
         private Mesh CreateMesh(Transform parent, string name, int sortingOrder, Material material)
         {
             var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
@@ -434,42 +436,33 @@ namespace PlanetTileMap.Unity
         public void OnDrawGizmos()
         {
             if (!Application.isPlaying) return;
-        
             
-            float WorldPositionX(float pos) => (pos * TileSize);
-            float WorldPositionY(float pos) =>(pos * TileSize);
+            float WorldPositionX(float pos) => pos * TileSize;
+            float WorldPositionY(float pos) => pos * TileSize;
 
             var playerBound = Player.Bounds(Player.Pos);
-
-            void DrawPlayerBorders()
-            {
-                var playerWorldPosX = WorldPositionX(Player.Pos.x + 0.5f);
-                var playerWorldPosY = WorldPositionY(Player.Pos.y + 0.5f);
-                
-                Gizmos.color = Color.red;
-                
-                Gizmos.DrawCube(new Vector3(playerWorldPosX, playerWorldPosY, 0), new Vector3(TileSize, TileSize, 0f));
-            }
             
             void DrawBottomCollision()
             {
-                var y = WorldPositionY(Player.Pos.y);
-                var LeftTilePos = new Vector3(WorldPositionX(playerBound.LeftTile), y, 0);
-                var RightTilePos = new Vector3(WorldPositionX(playerBound.RightTile) + TileSize, y, 0);
-                Gizmos.color = Player.IsCollidingBottom(ref TileMap, Player.Pos) ? Color.red : Color.green;
+                if (!Player.IsCollidingBottom(ref TileMap, Player.Pos)) return;
                 
-                Gizmos.DrawLine(LeftTilePos, RightTilePos);
+                var y = WorldPositionY((int)Player.Pos.y);
+                var leftTilePos = new Vector3(WorldPositionX(playerBound.LeftTile), y, 0);
+                var rightTilePos = new Vector3(WorldPositionX(playerBound.RightTile) + TileSize, y, 0);
+                Gizmos.color = Color.red;
+                
+                Gizmos.DrawLine(leftTilePos, rightTilePos);
             }
 
-          /*  void DrawPlayerBottomCorners(int length)
+            void DrawPlayerBottomCorners(int length)
             {
                 // Centralized on player
-                var y = WorldPositionY(PlayerPosition.y);
+                var y = WorldPositionY((int)Player.Pos.y);
 
-                var localPosStartX = (int) PlayerPosition.x - (length / 2);
+                var localPosStartX = (int) Player.Pos.x - (length / 2);
                 if (localPosStartX < 0) localPosStartX = 0;
                 
-                for (; localPosStartX < (int)PlayerPosition.x + (length / 2) + length % 2; localPosStartX++)
+                for (; localPosStartX < (int)Player.Pos.x + (length / 2) + length % 2; localPosStartX++)
                 {
                     var tile = TileMap.getTile(localPosStartX, playerBound.BottomTile);
 
@@ -484,9 +477,8 @@ namespace PlanetTileMap.Unity
                 }
             }
             
-            DrawPlayerBottomCorners(9);*/
+            DrawPlayerBottomCorners(9);
             DrawBottomCollision();
-            DrawPlayerBorders();
         }
 #endif
     }
