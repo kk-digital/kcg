@@ -251,13 +251,13 @@ namespace PlanetTileMap.Unity
             PlayerPosition = new Vector2(6, 6);
 
             // 1f - considered to be 32 pixel
-            Player = new RectangleBoundingBoxCollision(PlayerPosition, new Vector2(1f, 1f));
+            Player = new RectangleBoundingBoxCollision(PlayerPosition - MapOffset, new Vector2(1f, 1f));
         }
 
         void PlayerCollidersTest()
         {
-            Player = new RectangleBoundingBoxCollision(PlayerPosition, new Vector2(1f, 1f));
-            bool isCollidingBottom = Player.IsCollidingBottom(ref TileMap, Player.Pos - MapOffset);
+            Player = new RectangleBoundingBoxCollision(PlayerPosition - MapOffset, new Vector2(1f, 1f));
+            bool isCollidingBottom = Player.IsCollidingBottom(ref TileMap);
 
             Debug.Log($"Player Bottom Collided: {isCollidingBottom}");
 
@@ -433,27 +433,27 @@ namespace PlanetTileMap.Unity
             float WorldPositionX(float pos) => (pos * TileSize);
             float WorldPositionY(float pos) =>(pos * TileSize);
 
-            var playerBound = Player.Bounds(Player.Pos);
+            var playerBound = Player.Bounds(PlayerPosition);
             
             void DrawBottomCollision()
             {
-                var y = WorldPositionY(Player.Pos.y);
+                var y = WorldPositionY(PlayerPosition.y);
                 var LeftTilePos = new Vector3(WorldPositionX(playerBound.LeftTile), y, 0);
                 var RightTilePos = new Vector3(WorldPositionX(playerBound.RightTile) + TileSize, y, 0);
-                Gizmos.color = Player.IsCollidingBottom(ref TileMap, Player.Pos - MapOffset) ? Color.red : Color.green;
+                Gizmos.color = Player.IsCollidingBottom(ref TileMap) ? Color.red : Color.green;
                 
                 Gizmos.DrawLine(LeftTilePos, RightTilePos);
             }
 
-            void DrawPlayerBottomCorners(int length)
+          /*  void DrawPlayerBottomCorners(int length)
             {
                 // Centralized on player
-                var y = WorldPositionY(Player.Pos.y);
+                var y = WorldPositionY(PlayerPosition.y);
 
-                var localPosStartX = (int) Player.Pos.x - (length / 2);
+                var localPosStartX = (int) PlayerPosition.x - (length / 2);
                 if (localPosStartX < 0) localPosStartX = 0;
                 
-                for (; localPosStartX < (int)Player.Pos.x + (length / 2) + length % 2; localPosStartX++)
+                for (; localPosStartX < (int)PlayerPosition.x + (length / 2) + length % 2; localPosStartX++)
                 {
                     var tile = TileMap.getTile(localPosStartX, playerBound.BottomTile);
 
@@ -468,7 +468,7 @@ namespace PlanetTileMap.Unity
                 }
             }
             
-            DrawPlayerBottomCorners(9);
+            DrawPlayerBottomCorners(9);*/
             DrawBottomCollision();
         }
 #endif
