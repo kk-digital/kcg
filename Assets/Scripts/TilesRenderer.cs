@@ -29,6 +29,7 @@ namespace PlanetTileMap.Unity
         List<Vector2> uvs = new();
         List<Vector3> verticies = new();
 
+        Player Player;
         PlanetTileMap TileMap;
         RectangleBoundingBoxCollision Player;
 
@@ -85,34 +86,35 @@ namespace PlanetTileMap.Unity
                     DestroyImmediate(mr.gameObject);
 
             float speed = 1.0f;
+            var newPos = Player.Pos;
 
             if (Input.GetKey(KeyCode.UpArrow))
             {
-                Player.Pos.y += speed * Time.deltaTime;
+                newPos.y += speed * Time.deltaTime;
             }
             else if (Input.GetKey(KeyCode.DownArrow))
             {
-                Player.Pos.y -= speed * Time.deltaTime;
+                newPos.y -= speed * Time.deltaTime;
             }
 
             if (Input.GetKey(KeyCode.RightArrow))
             {
-                Player.Pos.x += speed * Time.deltaTime;
+                newPos.x += speed * Time.deltaTime;
             }
             else if (Input.GetKey(KeyCode.LeftArrow))
             {
-                Player.Pos.x -= speed * Time.deltaTime;
+                newPos.x -= speed * Time.deltaTime;
             }
 
+            MovePlayerTest(newPos);
             DrawPlayerTest();
-            PlayerCollidersTest();
             DrawMapTest();
         }
 
         void DrawPlayerTest()
         {
             var spriteBytes = new byte[32 * 32 * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(PlayerSpriteID, spriteBytes);
+            GameState.SpriteAtlasManager.GetSpriteBytes(Player.PlayerSpriteID, spriteBytes);
             DrawSprite(Player.Pos.x, Player.Pos.y, Player.Size.x, Player.Size.y, spriteBytes, 32, 32);
         }
 
@@ -264,10 +266,9 @@ namespace PlanetTileMap.Unity
             Player = new RectangleBoundingBoxCollision(Player.Pos, new Vector2(1f, 1f));
         }
 
-        void PlayerCollidersTest()
+        bool MovePlayerTest(Vector2 pos)
         {
-            Player = new RectangleBoundingBoxCollision(Player.Pos, new Vector2(1f, 1f));
-            bool isCollidingBottom = Player.IsCollidingBottom(ref TileMap, Player.Pos);
+            bool isColliding = Player.MovePlayer(ref TileMap, pos);
 
             Debug.Log($"Player Bottom Collided: {isCollidingBottom}");
 
@@ -440,24 +441,24 @@ namespace PlanetTileMap.Unity
             float WorldPositionX(float pos) => pos * TileSize;
             float WorldPositionY(float pos) => pos * TileSize;
 
-            var playerBound = Player.Bounds(Player.Pos);
+            var playerBound = RectangleBoundingBoxCollision.Bounds(Player.Pos, Player.Size);
             
-            void DrawBottomCollision()
+            /*void DrawBottomCollision()
             {
-                if (!Player.IsCollidingBottom(ref TileMap, Player.Pos)) return;
+                if (!Player.IsCollidingBottom(ref TileMap)) return;
                 
-                var y = WorldPositionY((int)Player.Pos.y);
+                var y = WorldPositionY(playerBound.BottomTile + 1f);
                 var leftTilePos = new Vector3(WorldPositionX(playerBound.LeftTile), y, 0);
                 var rightTilePos = new Vector3(WorldPositionX(playerBound.RightTile) + TileSize, y, 0);
                 Gizmos.color = Color.red;
                 
                 Gizmos.DrawLine(leftTilePos, rightTilePos);
-            }
+            }*/
 
             void DrawPlayerBottomCorners(int length)
             {
                 // Centralized on player
-                var y = WorldPositionY((int)Player.Pos.y);
+                var y = WorldPositionY(playerBound.BottomTile + 1f);
 
                 var localPosStartX = (int) Player.Pos.x - (length / 2);
                 if (localPosStartX < 0) localPosStartX = 0;
@@ -478,7 +479,7 @@ namespace PlanetTileMap.Unity
             }
             
             DrawPlayerBottomCorners(9);
-            DrawBottomCollision();
+            //DrawBottomCollision();
         }
 #endif
     }
