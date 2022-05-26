@@ -156,7 +156,6 @@ namespace Physics
             int mapIndexX = (int)(Pos.x / tileSize); 
             int mapIndexY = (int)(Pos.y / tileSize); 
 
-            Debug.Log(mapIndexX + " " + mapIndexY);
             if (mapIndexX >= 0 && mapIndexX < map.Xsize &&
                  mapIndexY >= 0 && mapIndexY < map.Ysize)
             {

@@ -1,18 +1,18 @@
 ﻿using TileSpriteLoader;
 
-namespace SpriteAtlas
+namespace TileSpriteAtlas
 {
-    public class SpriteAtlasManager
+    public class TileSpriteAtlasManager
     {
-        private SpriteAtlas[] SpritesArray;
+        private TileSpriteAtlas[] SpritesArray;
         private int[] Count;
 
-        public SpriteAtlasManager()
+        public TileSpriteAtlasManager()
         {
-            SpritesArray = new SpriteAtlas[1];
+            SpritesArray = new TileSpriteAtlas[1];
             Count = new int[1];
 
-            SpriteAtlas atlas = new SpriteAtlas();
+            TileSpriteAtlas atlas = new TileSpriteAtlas();
             atlas.Width = 128;
             atlas.Height = 128;
             atlas.Data = new byte[4 * 32 * 32 * atlas.Width * atlas.Height]; // 4 * 32 * 32 = 4096
@@ -20,20 +20,20 @@ namespace SpriteAtlas
             SpritesArray[0] = atlas;
         }
         
-        public ref SpriteAtlas GetSpriteAtlas(int id)
+        public ref TileSpriteAtlas GetSpriteAtlas(int id)
         {
             return ref SpritesArray[id];
         }
 
         public int GetGlTextureId(int id)
         {
-            SpriteAtlas atlas = GetSpriteAtlas(id);
+            TileSpriteAtlas atlas = GetSpriteAtlas(id);
             return atlas.GLTextureID;
         }
 
         public void GetSpriteBytes(int id, byte[] data)
         {
-            ref SpriteAtlas atlas = ref SpritesArray[0];
+            ref TileSpriteAtlas atlas = ref SpritesArray[0];
 
             int xOffset = (id % atlas.Width) * 32;
             int yOffset = (id / atlas.Height) * 32;
@@ -59,7 +59,7 @@ namespace SpriteAtlas
         public int Blit(int spriteSheetID, int row, int column)
         {
             SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[spriteSheetID];
-            ref SpriteAtlas atlas = ref SpritesArray[0];
+            ref TileSpriteAtlas atlas = ref SpritesArray[0];
             ref int count = ref Count[0];
             
             int xOffset = (count % atlas.Width) * 32;
@@ -93,7 +93,7 @@ namespace SpriteAtlas
          public int Blit16(int spriteSheetID, int row, int column)
         {
             SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[spriteSheetID];
-            ref SpriteAtlas atlas = ref SpritesArray[0];
+            ref TileSpriteAtlas atlas = ref SpritesArray[0];
             ref int count = ref Count[0];
             
             int xOffset = (count % atlas.Width) * 32;
@@ -136,7 +136,7 @@ namespace SpriteAtlas
         public int Blit8(int spriteSheetID, int row, int column)
         {
             SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[spriteSheetID];
-            ref SpriteAtlas atlas = ref SpritesArray[0];
+            ref TileSpriteAtlas atlas = ref SpritesArray[0];
             ref int count = ref Count[0];
             
             int xOffset = (count % atlas.Width) * 32;
