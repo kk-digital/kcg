@@ -147,6 +147,32 @@ namespace Physics
             return false;
         }
     
+        public bool IsCollidingBottom(ref PlanetTileMap.PlanetTileMap map)
+        {
+            bool result = false;
+
+            float tileSize = 1.0f;
+
+            int mapIndexX = (int)(Pos.x / tileSize); 
+            int mapIndexY = (int)(Pos.y / tileSize); 
+
+            Debug.Log(mapIndexX + " " + mapIndexY);
+            if (mapIndexX >= 0 && mapIndexX < map.Xsize &&
+                 mapIndexY >= 0 && mapIndexY < map.Ysize)
+            {
+                TileProperties.PlanetTile tile = map.getTile(mapIndexX, mapIndexY);
+                int tilePropertiesIndex = tile.TileIdPerLayer[0];
+
+                if (tilePropertiesIndex >= 0)
+                {
+                    result = true;
+                }
+            }
+
+            return result;
+            
+        }
+
         public bool IsCollidingBottom(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
         {
             var bounds = Bounds(newPos);
