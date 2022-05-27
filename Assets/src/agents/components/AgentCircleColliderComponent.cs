@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Components;
 using UnityEngine;
 
-namespace Physics
+namespace Components
 {
-    public struct RectangleBoundingCircleCollision
+    public struct AgentCircleColliderComponent
     {
         // epsilon parameter for values that are "close enough"
         public const float Eps = 0.05f;
@@ -37,19 +38,19 @@ namespace Physics
 
         public bool IsOnGround => Collisions.Below;
     
-        public bool ContainsCircle(Vector2 targetPos, float targetRadius)
+        /*public bool ContainsCircle(Vector2 targetPos, float targetRadius)
         {
             var disp = Mathf.Sqrt(Mathf.Pow(targetPos.x - Pos.x, 2f) + Mathf.Pow(targetPos.y - Pos.y, 2f));
             
             return Radius > disp + targetRadius;
-        }
+        }*/
         
-        public bool Intersects(RectangleBoundingBoxCollision other)
+        /*public bool Intersects(AgentBoxColliderComponent other)
         {
             var disp = Mathf.Sqrt(Mathf.Pow(other.Pos.x - Pos.x, 2f) + Mathf.Pow(other.Pos.y - Pos.y, 2f));
             
             return Radius > disp;
-        }
+        }*/
 
         public BodyBounds Bounds(Vector2 newPos)
         {
