@@ -36,6 +36,10 @@ namespace SystemView
             return SemiMajorAxis + GetEccentricDistance();
         }
 
+        // Note: orbits are kind of simplified and don't actually take into account
+        //       factors like gravity, this leads to the movements not being quite
+        //       perfectly accurate, but considering there might be hundreds of thousands
+        //       of objects, this is far more efficient.
         public float[] GetPositionAt(float Pos)
         {
             // sine and cosine of position

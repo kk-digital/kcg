@@ -9,53 +9,30 @@ namespace SystemView
     {
         public SystemPlanet planet;
 
-        public LineRenderer linerenderer;
         public Sprite circle;
         public SpriteRenderer sr;
+        public OrbitRenderer or;
 
         public Material mat;
 
-        public Color orbitColor = Color.white;
+        public Color orbitColor  = new Color(0.5f, 0.7f, 1.0f, 1.0f);
         public Color planetColor = Color.white;
 
-        private void UpdateRenderer(int segments)
+        // Start is called before the first frame update
+        void Start()
         {
-            Vector3[] ellipsevertices = new Vector3[segments];
+            or = gameObject.AddComponent<OrbitRenderer>();
+            sr = gameObject.AddComponent<SpriteRenderer>();
 
-            float angle = 2.0f * 3.1415926f / (float)segments;
+            or.descriptor = planet.Descriptor;
 
-            // sine and cosine of the relative angle between each segment
-            float sin = (float)Math.Sin(angle);
-            float cos = (float)Math.Cos(angle);
+            // Temporary circular sprite
+            circle = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
+        }
 
-            // sine and cosine of the rotation
-            float rotsin = (float)Math.Sin(planet.Descriptor.Rotation);
-            float rotcos = (float)Math.Cos(planet.Descriptor.Rotation);
-
-            // eccentricity
-            float c = planet.Descriptor.GetEccentricDistance();
-
-            float x = 1.0f;
-            float y = 0.0f;
-
-            for (int i = 0; i < segments; i++)
-            {
-                float vx = x * planet.Descriptor.SemiMajorAxis - c;
-                float vy = y * planet.Descriptor.SemiMinorAxis;
-
-                ellipsevertices[i] = new Vector3(
-                    rotcos * vx - rotsin * vy + planet.Descriptor.CenterX,
-                    rotsin * vx + rotcos * vy + planet.Descriptor.CenterY,
-                    0.0f
-                );
-
-                (x, y) = (cos * x - sin * y, sin * x + cos * y);
-            }
-
-            linerenderer.startColor = linerenderer.endColor = orbitColor;
-            linerenderer.SetPositions(ellipsevertices);
-            linerenderer.positionCount = segments;
-
+        // LateUpdate is called once per frame
+        void LateUpdate()
+        {
             float[] pos = planet.Descriptor.GetPosition();
 
             sr.sprite = circle;
@@ -64,45 +41,9 @@ namespace SystemView
             sr.transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);
 
             sr.color = planetColor;
-        }
+            or.color = orbitColor;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-            linerenderer = gameObject.AddComponent<LineRenderer>();
-            sr = gameObject.AddComponent<SpriteRenderer>();
-
-            // Load unity test shader
-            // this could alternatively also be our GLTestShader
-
-            Shader shader = Shader.Find("Hidden/Internal-Colored");
-            mat = new Material(shader);
-            mat.hideFlags = HideFlags.HideAndDontSave;
-
-            mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-            mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-
-            // Turn off backface culling, depth writes, depth test.
-            mat.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
-            mat.SetInt("_ZWrite", 0);
-            mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
-
-            linerenderer.material = mat;
-
-            linerenderer.startWidth = 0.1f;
-            linerenderer.endWidth = 0.1f;
-
-            linerenderer.useWorldSpace = true;
-
-            linerenderer.loop = true;
-
-            circle = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            UpdateRenderer(128);
+            or.UpdateRenderer(128);
         }
     }
 }

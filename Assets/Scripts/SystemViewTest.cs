@@ -34,8 +34,6 @@ namespace SystemView
 
                 testRenderers[i] = child.AddComponent<SystemPlanetRenderer>();
                 testRenderers[i].planet = testPlanet;
-                testRenderers[i].orbitColor = new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1.0f);
-                testRenderers[i].planetColor = new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1.0f);
 
                 State.Planets.Add(testPlanet);
             }
