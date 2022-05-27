@@ -5,43 +5,47 @@ namespace SystemView
 {
     public class SystemViewTest : MonoBehaviour
     {
-        private SystemPlanet[] testPlanets;
-        private SystemPlanetRenderer[] testRenderers;
+        public SystemState State;
 
-        void Start()
+        private void Start()
         {
+            GameLoop gl = GetComponent<GameLoop>();
+
+            State = gl.CurrentSystemState;
+
             System.Random rnd = new System.Random();
 
-            testPlanets = new SystemPlanet[6];
-            testRenderers = new SystemPlanetRenderer[6];
+            SystemPlanetRenderer[] testRenderers = new SystemPlanetRenderer[6];
 
             for (int i = 0; i < 6; i++)
             {
-                testPlanets[i] = new SystemPlanet();
+                SystemPlanet testPlanet = new SystemPlanet();
 
-                testPlanets[i].Descriptor.CenterX = 0;
-                testPlanets[i].Descriptor.CenterY = 0;
+                testPlanet.Descriptor.CenterX = 0;
+                testPlanet.Descriptor.CenterY = 0;
 
-                testPlanets[i].Descriptor.SemiMinorAxis = 2.0f + i + 2.0f * (float)rnd.NextDouble();
-                testPlanets[i].Descriptor.SemiMajorAxis = testPlanets[i].Descriptor.SemiMinorAxis + 4.0f * (float)rnd.NextDouble();
+                testPlanet.Descriptor.SemiMinorAxis = 2.0f + i + 2.0f * (float)rnd.NextDouble();
+                testPlanet.Descriptor.SemiMajorAxis = testPlanet.Descriptor.SemiMinorAxis + 4.0f * (float)rnd.NextDouble();
 
-                testPlanets[i].Descriptor.Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                testPlanet.Descriptor.Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
                 var child = new GameObject();
                 child.name = "Planet Renderer " + (i + 1);
 
                 testRenderers[i] = child.AddComponent<SystemPlanetRenderer>();
-                testRenderers[i].planet = testPlanets[i];
+                testRenderers[i].planet = testPlanet;
                 testRenderers[i].orbitColor = new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1.0f);
                 testRenderers[i].planetColor = new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1.0f);
+
+                State.Planets.Add(testPlanet);
             }
         }
 
         void Update()
         {
-            for (int i = 0; i < 6; i++)
+            foreach(SystemPlanet p in State.Planets)
             {
-                testPlanets[i].Descriptor.RotationalPosition += 0.05f / (testPlanets[i].Descriptor.GetDistanceFromCenter());
+                p.Descriptor.RotationalPosition += 0.05f / (p.Descriptor.GetDistanceFromCenter());
             }
         }
     }
