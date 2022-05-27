@@ -77,13 +77,14 @@ namespace PlanetTileMap.Unity
 
         public void Update()
         {
-                       //remove all children MeshRenderer
+            //remove all children MeshRenderer
             foreach(var mr in GetComponentsInChildren<MeshRenderer>())
                 if (Application.isPlaying)
                     Destroy(mr.gameObject);
                 else
                     DestroyImmediate(mr.gameObject);
 
+            //TODO: Move DrawMapTest to DrawMap()
             DrawMapTest();
         }
 
