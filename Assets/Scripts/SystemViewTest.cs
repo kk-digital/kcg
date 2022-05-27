@@ -3,41 +3,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SystemViewTest : MonoBehaviour
+namespace SystemView
 {
-    private Planet[] testPlanets;
-    private PlanetRenderer[] testRenderers;
-
-    void Start()
+    public class SystemViewTest : MonoBehaviour
     {
-        System.Random rnd = new System.Random();
+        private SystemPlanet[] testPlanets;
+        private SystemPlanetRenderer[] testRenderers;
 
-        testPlanets = new Planet[6];
-        testRenderers = new PlanetRenderer[6];
-
-        for(int i = 0; i < 6; i++)
+        void Start()
         {
-            testPlanets[i] = new Planet();
+            System.Random rnd = new System.Random();
 
-            testPlanets[i].CenterX = 0;
-            testPlanets[i].CenterY = 0;
+            testPlanets = new SystemPlanet[6];
+            testRenderers = new SystemPlanetRenderer[6];
 
-            testPlanets[i].SemiMinorAxis = 2.0f + i + 2.0f * (float)rnd.NextDouble();
-            testPlanets[i].SemiMajorAxis = testPlanets[i].SemiMinorAxis + 4.0f * (float)rnd.NextDouble();
+            for (int i = 0; i < 6; i++)
+            {
+                testPlanets[i] = new SystemPlanet();
 
-            testPlanets[i].Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                testPlanets[i].CenterX = 0;
+                testPlanets[i].CenterY = 0;
 
-            var child = new GameObject();
-            child.name = "Planet Renderer " + (i + 1);
+                testPlanets[i].SemiMinorAxis = 2.0f + i + 2.0f * (float)rnd.NextDouble();
+                testPlanets[i].SemiMajorAxis = testPlanets[i].SemiMinorAxis + 4.0f * (float)rnd.NextDouble();
 
-            testRenderers[i] = child.AddComponent<PlanetRenderer>();
-            testRenderers[i].planet = testPlanets[i];
-            testRenderers[i].color = new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1.0f);
-        }        
-    }
+                testPlanets[i].Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
-    void Update()
-    {
+                var child = new GameObject();
+                child.name = "Planet Renderer " + (i + 1);
 
+                testRenderers[i] = child.AddComponent<SystemPlanetRenderer>();
+                testRenderers[i].planet = testPlanets[i];
+                testRenderers[i].color = new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1.0f);
+            }
+        }
+
+        void Update()
+        {
+
+        }
     }
 }
