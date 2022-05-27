@@ -1,9 +1,8 @@
-using Components;
 using UnityEngine;
 
-namespace Components
+namespace Agents.Components
 {
-    public struct AgentBoxColliderComponent
+    public struct BoxCollider
     {
         // epsilon parameter for values that are "close enough"
         public const float Eps = 0.05f;
@@ -24,7 +23,7 @@ namespace Components
         public bool IsIgnoringPlatforms;
         public bool IsOnGround => CollisionInfo.Below;
 
-        public AgentBoxColliderComponent(Vector2 size) : this()
+        public BoxCollider(Vector2 size) : this()
         {
             Size = size;
         }
@@ -57,7 +56,7 @@ namespace Components
             };
         }
     
-        public bool IsCollidingLeft(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
+        public bool IsCollidingLeft(ref Planet map, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving right
@@ -79,7 +78,7 @@ namespace Components
             return false;
         }
     
-        public bool IsCollidingRight(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
+        public bool IsCollidingRight(ref Planet map, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving Left
@@ -101,7 +100,7 @@ namespace Components
             return false;
         }
     
-        public bool IsCollidingTop(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
+        public bool IsCollidingTop(ref Planet map, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving Down
@@ -123,7 +122,7 @@ namespace Components
             return false;
         }
 
-        public bool IsCollidingBottom(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
+        public bool IsCollidingBottom(ref Planet map, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving Up
@@ -163,7 +162,7 @@ namespace Components
             return partialDisplacements.ToArray();
         }*/
 
-        public Vector2 ResolveCollisions(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
+        public Vector2 ResolveCollisions(ref Planet map, Vector2 newPos)
         {
             //var partialDisplacements = DiscretizeDisplacement(totalDisplacement);
             /*Vector2 newPos = default;
