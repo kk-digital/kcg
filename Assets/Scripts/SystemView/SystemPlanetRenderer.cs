@@ -29,23 +29,23 @@ namespace SystemView
             float cos = (float)Math.Cos(angle);
 
             // sine and cosine of the rotation
-            float rotsin = (float)Math.Sin(planet.Rotation);
-            float rotcos = (float)Math.Cos(planet.Rotation);
+            float rotsin = (float)Math.Sin(planet.Descriptor.Rotation);
+            float rotcos = (float)Math.Cos(planet.Descriptor.Rotation);
 
             // eccentricity
-            float c = planet.GetEccentricDistance();
+            float c = planet.Descriptor.GetEccentricDistance();
 
             float x = 1.0f;
             float y = 0.0f;
 
             for (int i = 0; i < segments; i++)
             {
-                float vx = x * planet.SemiMajorAxis - c;
-                float vy = y * planet.SemiMinorAxis;
+                float vx = x * planet.Descriptor.SemiMajorAxis - c;
+                float vy = y * planet.Descriptor.SemiMinorAxis;
 
                 ellipsevertices[i] = new Vector3(
-                    rotcos * vx - rotsin * vy + planet.CenterX,
-                    rotsin * vx + rotcos * vy + planet.CenterY,
+                    rotcos * vx - rotsin * vy + planet.Descriptor.CenterX,
+                    rotsin * vx + rotcos * vy + planet.Descriptor.CenterY,
                     0.0f
                 );
 
@@ -56,7 +56,7 @@ namespace SystemView
             linerenderer.SetPositions(ellipsevertices);
             linerenderer.positionCount = segments;
 
-            float[] pos = planet.GetPosition();
+            float[] pos = planet.Descriptor.GetPosition();
 
             sr.sprite = circle;
 

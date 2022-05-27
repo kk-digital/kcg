@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace SystemView
@@ -21,13 +19,13 @@ namespace SystemView
             {
                 testPlanets[i] = new SystemPlanet();
 
-                testPlanets[i].CenterX = 0;
-                testPlanets[i].CenterY = 0;
+                testPlanets[i].Descriptor.CenterX = 0;
+                testPlanets[i].Descriptor.CenterY = 0;
 
-                testPlanets[i].SemiMinorAxis = 2.0f + i + 2.0f * (float)rnd.NextDouble();
-                testPlanets[i].SemiMajorAxis = testPlanets[i].SemiMinorAxis + 4.0f * (float)rnd.NextDouble();
+                testPlanets[i].Descriptor.SemiMinorAxis = 2.0f + i + 2.0f * (float)rnd.NextDouble();
+                testPlanets[i].Descriptor.SemiMajorAxis = testPlanets[i].Descriptor.SemiMinorAxis + 4.0f * (float)rnd.NextDouble();
 
-                testPlanets[i].Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                testPlanets[i].Descriptor.Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
                 var child = new GameObject();
                 child.name = "Planet Renderer " + (i + 1);
@@ -43,7 +41,7 @@ namespace SystemView
         {
             for (int i = 0; i < 6; i++)
             {
-                testRenderers[i].planet.RotationalPosition += 0.05f / (testRenderers[i].planet.GetDistanceFromCenter());
+                testPlanets[i].Descriptor.RotationalPosition += 0.05f / (testPlanets[i].Descriptor.GetDistanceFromCenter());
             }
         }
     }
