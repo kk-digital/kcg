@@ -84,33 +84,11 @@ namespace PlanetTileMap.Unity
                 else
                     DestroyImmediate(mr.gameObject);
 
-            float speed = 1.0f;
-            Vector2 newPos = default;
-
-            if (Input.GetKey(KeyCode.UpArrow))
-            {
-                newPos.y += speed * Time.deltaTime;
-            }
-            else if (Input.GetKey(KeyCode.DownArrow))
-            {
-                newPos.y -= speed * Time.deltaTime;
-            }
-
-            if (Input.GetKey(KeyCode.RightArrow))
-            {
-                newPos.x += speed * Time.deltaTime;
-            }
-            else if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                newPos.x -= speed * Time.deltaTime;
-            }
-            
             DrawMapTest();
         }
 
         void DrawMapTest()
         {
-
             var visibleRect = CalcVisibleRect();
 
             byte[] bytes = new byte[32 * 32* 4];
