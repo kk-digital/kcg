@@ -25,20 +25,32 @@ public class InputManager : MonoBehaviour
             SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
         }
     }
-    private void KeyEvents()
-    {
-        // All key events goes here
 
-        if(activeKey.keyName == KeyCode.KeypadPlus.ToString())
+    // On Key Pressed
+    private void OnKeyPressed()
+    {
+        
+        // Increase Zoom with +
+        if (activeKey.keyName == KeyCode.KeypadPlus.ToString())
         {
             CameraInfo camInfo = Camera.main.GetComponent<CameraInfo>();
             camInfo.IncreaseZoom();
         }
 
-        if(activeKey.keyName == KeyCode.KeypadMinus.ToString())
+        // Decrease zoom with -
+        if (activeKey.keyName == KeyCode.KeypadMinus.ToString())
         {
             CameraInfo camInfo = Camera.main.GetComponent<CameraInfo>();
             camInfo.DecreaseZoom();
+        }
+    }
+
+    // On Key Released
+    private void OnKeyReleased()
+    {
+        if(activeKey.keyName == KeyCode.KeypadPlus.ToString())
+        {
+            Debug.Log(activeKey.keyName + " Released");
         }
     }
 
@@ -49,7 +61,6 @@ public class InputManager : MonoBehaviour
         DetectKey();
     }
 
-
     // Returns if referenced key pressed or not
     public bool IsKeyPressed(KeyCode key)
     {
@@ -59,7 +70,6 @@ public class InputManager : MonoBehaviour
         }
         return false;
     }
-
 
     // Detect which key player pressing
     private void DetectKey()
@@ -77,14 +87,14 @@ public class InputManager : MonoBehaviour
                 activeKey.keyCode = vKey;
                 activeKey.keyName = vKey.ToString();
                 activeKey.keyEvent = eKeyEvent.Press;
-                KeyEvents();
+                OnKeyPressed();
             }
-            else
+            else if (Input.GetKeyUp(vKey))
             {
                 activeKey.keyEvent = eKeyEvent.Release;
+                OnKeyReleased();
                 activeKey.keyName = "";
                 activeKey.keyCode = KeyCode.None;
-                KeyEvents();
             }
         }
     }
