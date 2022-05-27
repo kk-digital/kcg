@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
 {
 
     public string filePath = "/SimpleSpriteSheet/Table1.png";
-    private Systems ecsSystems;
+    private Entitas.Systems ecsSystems;
 
     //Documentation: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Awake.html
     //Awake is called when the script instance is being loaded.
