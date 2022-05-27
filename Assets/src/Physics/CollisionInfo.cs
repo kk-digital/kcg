@@ -1,4 +1,4 @@
-namespace Physics
+namespace Components
 {
     public struct CollisionInfo
     {

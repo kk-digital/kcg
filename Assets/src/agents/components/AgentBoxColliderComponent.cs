@@ -1,11 +1,9 @@
-using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using Components;
 using UnityEngine;
 
-namespace Physics
+namespace Components
 {
-    public struct RectangleBoundingBoxCollision
+    public struct AgentBoxColliderComponent
     {
         // epsilon parameter for values that are "close enough"
         public const float Eps = 0.05f;
@@ -19,21 +17,16 @@ namespace Physics
             public float Left, Right, Top, Bottom;
             public int LeftTile, RightTile, TopTile, BottomTile;
         }
-
-        public Vector2 Pos;
+        
         public Vector2 Size;
-
-        public float Speed;
-        public Vector2 Vel;
-
 
         public CollisionInfo CollisionInfo;
         public bool IsIgnoringPlatforms;
+        public bool IsOnGround => CollisionInfo.Below;
 
-        public RectangleBoundingBoxCollision(Vector2 size, Vector2 pos) : this()
+        public AgentBoxColliderComponent(Vector2 size) : this()
         {
             Size = size;
-            Pos = pos;
         }
     
         /*public bool Intersects(Vector2 targetPos, Vector2 targetSize)
@@ -170,45 +163,43 @@ namespace Physics
             return partialDisplacements.ToArray();
         }*/
 
-        public bool ResolveCollisions(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
+        public Vector2 ResolveCollisions(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
         {
-            // TODO: Add partial Displacements
-
             //var partialDisplacements = DiscretizeDisplacement(totalDisplacement);
-            /*foreach (var partialDisplacement in partialDisplacements)
-            {*/
-
-            if (IsCollidingLeft(ref map, newPos))
+            /*Vector2 newPos = default;
+            foreach (var partialDisplacement in partialDisplacements)
             {
-                CollisionInfo.Left = true;
-                Vel.x = 0;
-                newPos.x = Bounds(newPos, Size).Left + 0.5f + Size.x / 2f;
-            }
+                newPos = Pos + partialDisplacement;
 
-            if (IsCollidingRight(ref map, newPos))
-            {
-                CollisionInfo.Right = true;
-                Vel.x = 0;
-                newPos.x = Bounds(newPos, Size).Right - 0.5f - Size.x / 2f;
-            }
+                if (IsCollidingLeft(newPos))
+                {
+                    CollisionInfo.Left = true;
+                    Vel.x = 0;
+                    newPos.x = Bounds(newPos).Left + 0.5f + Radius;
+                }
+                if (IsCollidingRight(newPos))
+                {
+                    CollisionInfo.Right = true;
+                    Vel.x = 0;
+                    newPos.x = Bounds(newPos).Right - 0.5f - Radius;
+                }
+                if (IsCollidingTop(newPos))
+                {
+                    CollisionInfo.Above = true;
+                    Vel.y = 0;
+                    newPos.y = Bounds(newPos).Top;
+                }
+                if (IsCollidingBottom(newPos))
+                {
+                    CollisionInfo.Below = true;
+                    Vel.y = 0;
+                    newPos.y = Bounds(newPos).Bottom + 0.5f + Radius;
+                }
+            
+                if (CollisionInfo.Collided()) return newPos;
+            }*/
 
-            if (IsCollidingTop(ref map, newPos))
-            {
-                CollisionInfo.Above = true;
-                Vel.y = 0;
-                newPos.y = Bounds(newPos, Size).Top - 0.5f - Size.y / 2f;
-            }
-
-            if (IsCollidingBottom(ref map, newPos))
-            {
-                CollisionInfo.Below = true;
-                Vel.y = 0;
-                newPos.y = Bounds(newPos, Size).Bottom + 0.5f + Size.y / 2f;
-            }
-
-            Pos = newPos;
-
-            return CollisionInfo.Collided();
+            return newPos;
         }
 
         /*public float[] GetBBoxLines()
