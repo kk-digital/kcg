@@ -3,12 +3,13 @@ using System;
 using System.Runtime.CompilerServices;
 using TileProperties;
 using Enums;
+using PlanetTileMap;
 using UnityEngine;
 
-namespace PlanetTileMap
+namespace Agents.Components
 {
     //public struct PlanetMap : IComponent
-    public struct PlanetTileMap
+    public struct Planet
     {
         public struct ChunkBehaviour
         {
@@ -31,7 +32,7 @@ namespace PlanetTileMap
         
         public PlanetWrapBehavior WrapBehavior;
 
-        public PlanetTileMap(Vector2Int size) : this()
+        public Planet(Vector2Int size) : this()
         {
             Size.x = size.x;
             Size.y = size.y;

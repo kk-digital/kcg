@@ -2,9 +2,9 @@
 
 using UnityEngine;
 
-namespace Components
+namespace Agents.Components
 {
-    public struct Agent2dPositionComponent
+    public struct Position2D
     {
         public Vector2 Position;
         public Vector2 PreviousPosition;

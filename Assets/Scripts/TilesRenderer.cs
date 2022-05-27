@@ -1,8 +1,6 @@
-using System;
 using UnityEngine;
 using System.Collections.Generic;
-using Components;
-using Entities;
+using Agents.Entities;
 using TileProperties;
 
 #if UNITY_EDITOR
@@ -30,8 +28,8 @@ namespace PlanetTileMap.Unity
         List<Vector2> uvs = new();
         List<Vector3> verticies = new();
 
-        AgentEntity Player;
-        PlanetTileMap TileMap;
+        Entity Player;
+        World World;
 
         int PlayerSpriteID;
         int PlayerSprite2ID;
@@ -46,7 +44,8 @@ namespace PlanetTileMap.Unity
         {
             if (!InitTiles)
             {
-                CreateDefaultTiles();
+                World = new World(new Vector2Int(128, 128));
+                World.CreateDefaultTiles();
                 InitTiles = true;
             }
             // TODO(Mahdi): does not make sense to put them here
@@ -95,11 +94,11 @@ namespace PlanetTileMap.Unity
 
             for(int layerIndex = 0; layerIndex < 1; layerIndex++)
             {
-                for(int j = 0; j < TileMap.Size.y; j++)
+                for(int j = 0; j < World.Planet.Size.y; j++)
                 {
-                    for(int i = 0; i < TileMap.Size.x; i++)
+                    for(int i = 0; i < World.Planet.Size.x; i++)
                     {
-                        ref PlanetTile tile = ref TileMap.getTile(i, j);
+                        ref PlanetTile tile = ref World.Planet.getTile(i, j);
                         int tilePropertiesIndex = tile.TileIdPerLayer[layerIndex];
 
                         if (tilePropertiesIndex >= 0)
@@ -126,93 +125,6 @@ namespace PlanetTileMap.Unity
         
         //NOTE(Mahdi): this is used to create some test tiles
         // to make sure the system is working
-        public void CreateDefaultTiles()
-        {
-            int MetalSlabsTileSheet = 
-                        GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png");
-            int StoneBulkheads = 
-                        GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tile_wallbase\\Tiles_stone_bulkheads.png");
-            int TilesMoon = 
-                        GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png");
-
-
-            // creating the tiles
-            GameState.TileCreationApi.CreateTile(0);
-            GameState.TileCreationApi.SetTileName("slab1");
-            GameState.TileCreationApi.SetTileTexture16(MetalSlabsTileSheet, 0, 0);
-            GameState.TileCreationApi.EndTile();
-
-            GameState.TileCreationApi.CreateTile(1);
-            GameState.TileCreationApi.SetTileName("slab2");
-            GameState.TileCreationApi.SetTileTexture16(MetalSlabsTileSheet, 1, 0);
-            GameState.TileCreationApi.EndTile();
-
-            GameState.TileCreationApi.CreateTile(2);
-            GameState.TileCreationApi.SetTileName("slab3");
-            GameState.TileCreationApi.SetTileTexture16(MetalSlabsTileSheet, 4, 0);
-            GameState.TileCreationApi.EndTile();
-
-            GameState.TileCreationApi.CreateTile(3);
-            GameState.TileCreationApi.SetTileName("slab4");
-            GameState.TileCreationApi.SetTileTexture16(MetalSlabsTileSheet, 5, 0);
-            GameState.TileCreationApi.EndTile();
-
-            GameState.TileCreationApi.CreateTile(4);
-            GameState.TileCreationApi.SetTileName("tile5");
-            GameState.TileCreationApi.SetTileTexture16(StoneBulkheads, 5, 1);
-            GameState.TileCreationApi.EndTile();
-
-            GameState.TileCreationApi.CreateTile(5);
-            GameState.TileCreationApi.SetTileName("tile6");
-            GameState.TileCreationApi.SetTileTexture16(StoneBulkheads, 4, 1);
-            GameState.TileCreationApi.EndTile();
-
-            GameState.TileCreationApi.CreateTile(6);
-            GameState.TileCreationApi.SetTileName("tile7");
-            GameState.TileCreationApi.SetTileTexture16(StoneBulkheads, 7, 1);
-            GameState.TileCreationApi.EndTile();
-
-            GameState.TileCreationApi.CreateTile(7);
-            GameState.TileCreationApi.SetTileName("tile_moon_1");
-            GameState.TileCreationApi.SetTileTexture(TilesMoon, 0, 0);
-            GameState.TileCreationApi.EndTile();
-
-
-            // Generating the map
-            Vector2Int mapSize = new Vector2Int(128, 128);
-
-            TileMap = new PlanetTileMap(mapSize);
-
-            for(int j = 0; j < mapSize.y; j++)
-            {
-                for(int i = 0; i < mapSize.x; i++)
-                {
-                    PlanetTile tile = PlanetTile.EmptyTile();
-                    tile.TileIdPerLayer[0] = 0;
-                    if (i % 10 == 0)
-                    {
-                        tile.TileIdPerLayer[0] = 7;
-                    }
-                    if (j % 2 == 0)
-                    {
-                        tile.TileIdPerLayer[0] = 2;
-                    }
-                    if (j % 3 == 0)
-                    {
-                        tile.TileIdPerLayer[0] = 1;
-                    }
-
-                    if ((j > 1 && j < 6) || j > 10)
-                    {
-                       tile.TileIdPerLayer[0] = -1; 
-                    }
-
-                    
-                    TileMap.SetTile(i, j, tile);
-                }
-            }
-
-        }
 
         public void LoadMap()
         {
@@ -229,7 +141,7 @@ namespace PlanetTileMap.Unity
             var tex = CreateTextureFromRGBA(spriteBytes, spriteW, spriteH);
             var mat = Instantiate(Material);
             mat.SetTexture("_MainTex", tex);
-            var mesh = CreateMesh(transform, "abc", 0, mat);
+            var mesh = World.CreateMesh(transform, "abc", 0, mat);
 
             triangles.Clear();
             uvs.Clear();
@@ -279,25 +191,6 @@ namespace PlanetTileMap.Unity
         {
             DrawSprite(x, y, w, h, spriteBytes, 32, 32);
         }
-        
-        private Mesh CreateMesh(Transform parent, string name, int sortingOrder, Material material)
-        {
-            var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
-            go.transform.SetParent(parent);
-
-            var mesh = new Mesh
-            {
-                indexFormat = UnityEngine.Rendering.IndexFormat.UInt32
-            };
-
-            var mf = go.GetComponent<MeshFilter>();
-            mf.sharedMesh = mesh;
-            var mr = go.GetComponent<MeshRenderer>();
-            mr.sharedMaterial = material;
-            mr.sortingOrder = sortingOrder;
-
-            return mesh;
-        }
 
         private void LateUpdate()
         {
@@ -305,7 +198,8 @@ namespace PlanetTileMap.Unity
 
             //rebuild all layers for visible rect
             foreach (var mb in meshBuildersByLayers)
-                mb.BuildMesh(visibleRect);*/
+                mb.BuildMesh(visibleRect);
+        */
         }
 
         public struct R

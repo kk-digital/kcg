@@ -1,4 +1,4 @@
-namespace Components
+namespace Agents.Components
 {
     public struct CollisionInfo
     {
