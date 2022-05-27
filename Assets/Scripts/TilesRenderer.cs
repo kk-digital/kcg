@@ -34,6 +34,7 @@ namespace PlanetTileMap.Unity
         Vector2 PlayerPosition;
 
         int PlayerSpriteID;
+        int PlayerSprite2ID;
         const float TileSize = 1.0f;
 
         Vector2 MapOffset = new Vector2(-3.0f, 4.0f);
@@ -129,7 +130,7 @@ namespace PlanetTileMap.Unity
                             TilePropertiesData tileProperties =
                                 GameState.TileCreationApi.GetTileProperties(tilePropertiesIndex);
 
-                            GameState.SpriteAtlasManager.GetSpriteBytes(tileProperties.SpriteId, bytes);
+                            GameState.TileSpriteAtlasManager.GetSpriteBytes(tileProperties.SpriteId, bytes);
 
                             var x = MapOffset.x + (i * TileSize);
                             var y = MapOffset.y + (j * TileSize);
@@ -245,8 +246,13 @@ namespace PlanetTileMap.Unity
             int PlayerTileSheet = 
                         GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png");
 
+            int PlayerTileSheet2 = 
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png",
+                         32, 48);
 
-            PlayerSpriteID =  GameState.SpriteAtlasManager.Blit(PlayerTileSheet, 0, 0);;
+
+            PlayerSpriteID =  GameState.TileSpriteAtlasManager.Blit(PlayerTileSheet, 0, 0);
+            PlayerSprite2ID =  GameState.SpriteAtlasManager.Blit(PlayerTileSheet2, 0, 0, 32, 48);;
 
             PlayerPosition = new Vector2(6, 6);
 
@@ -266,11 +272,11 @@ namespace PlanetTileMap.Unity
 
             if (isCollidingBottom)
             {
-                GameState.SpriteAtlasManager.GetSpriteBytes(PlayerSpriteID, spriteBytes);
+                GameState.TileSpriteAtlasManager.GetSpriteBytes(PlayerSpriteID, spriteBytes);
             }
             else
             {
-                 GameState.SpriteAtlasManager.GetSpriteBytes(PlayerSpriteID, spriteBytes);
+                 GameState.TileSpriteAtlasManager.GetSpriteBytes(PlayerSpriteID, spriteBytes);
             }
 
             DrawSprite(PlayerPosition.x, PlayerPosition.y, 1.0f, 1.0f, spriteBytes, 32, 32);

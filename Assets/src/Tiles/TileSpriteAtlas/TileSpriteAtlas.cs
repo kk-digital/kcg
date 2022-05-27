@@ -1,6 +1,6 @@
-﻿namespace SpriteAtlas
+﻿namespace TileSpriteAtlas
 {
-    public struct SpriteAtlas
+    public struct TileSpriteAtlas
     {
         public int AtlasID;
         public int GLTextureID;
