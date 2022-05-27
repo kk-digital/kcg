@@ -71,14 +71,19 @@ namespace SystemView
             return GetPositionAt(RotationalPosition);
         }
 
-        public float GetDistanceFromCenter()
+        public float GetDistanceFromCenterAt(float Pos)
         {
-            float[] pos = GetPosition();
+            float[] pos = GetPositionAt(Pos);
 
             float dx = pos[0] - CenterX;
             float dy = pos[1] - CenterY;
 
             return (float)Math.Sqrt(dx * dx + dy * dy);
+        }
+
+        public float GetDistanceFromCenter()
+        {
+            return GetDistanceFromCenterAt(RotationalPosition);
         }
     }
 }

@@ -15,6 +15,8 @@ namespace SystemView
 
         public Color color = new Color(0.5f, 0.7f, 1.0f, 1.0f);
 
+        public float LineWidth = 0.1f;
+
         public void UpdateRenderer(int segments)
         {
             Vector3[] vertices = new Vector3[segments];
@@ -49,6 +51,8 @@ namespace SystemView
                 (x, y) = (cos * x - sin * y, sin * x + cos * y);
             }
 
+
+            linerenderer.startWidth = linerenderer.endWidth = LineWidth;
             linerenderer.startColor = linerenderer.endColor = color;
             linerenderer.SetPositions(vertices);
             linerenderer.positionCount = segments;
@@ -75,9 +79,6 @@ namespace SystemView
             mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
 
             linerenderer.material = mat;
-
-            linerenderer.startWidth = 0.1f;
-            linerenderer.endWidth = 0.1f;
 
             linerenderer.useWorldSpace = true;
 
