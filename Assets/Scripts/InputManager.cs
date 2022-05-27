@@ -29,19 +29,22 @@ public class InputManager : MonoBehaviour
     // On Key Pressed
     private void OnKeyPressed()
     {
-        
         // Increase Zoom with +
         if (activeKey.keyName == KeyCode.KeypadPlus.ToString())
         {
-            CameraInfo camInfo = Camera.main.GetComponent<CameraInfo>();
-            camInfo.IncreaseZoom();
+            PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
+            if(pixelCam.targetCameraHalfWidth < 15.0f)
+                pixelCam.targetCameraHalfWidth += 1.0f;
+            pixelCam.adjustCameraFOV();
         }
 
         // Decrease zoom with -
         if (activeKey.keyName == KeyCode.KeypadMinus.ToString())
         {
-            CameraInfo camInfo = Camera.main.GetComponent<CameraInfo>();
-            camInfo.DecreaseZoom();
+            PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
+            if(pixelCam.targetCameraHalfWidth > 0.1f)
+                pixelCam.targetCameraHalfWidth -= 1.0f;
+            pixelCam.adjustCameraFOV();
         }
     }
 
