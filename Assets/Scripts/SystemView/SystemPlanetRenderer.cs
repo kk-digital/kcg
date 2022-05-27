@@ -9,7 +9,6 @@ namespace SystemView
     {
         public SystemPlanet planet;
 
-        public Sprite circle;
         public SpriteRenderer sr;
         public OrbitRenderer or;
 
@@ -27,15 +26,13 @@ namespace SystemView
             or.descriptor = planet.Descriptor;
 
             // Temporary circular sprite
-            circle = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
+            sr.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
         }
 
         // LateUpdate is called once per frame
         void LateUpdate()
         {
             float[] pos = planet.Descriptor.GetPosition();
-
-            sr.sprite = circle;
 
             sr.transform.position = new Vector3(pos[0], pos[1], -0.1f);
             sr.transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);

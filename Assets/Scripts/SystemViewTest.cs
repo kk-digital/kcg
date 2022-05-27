@@ -17,12 +17,22 @@ namespace SystemView
 
             SystemPlanetRenderer[] testRenderers = new SystemPlanetRenderer[6];
 
+            State.Star = new SystemStar();
+            State.Star.PosX = (float)rnd.NextDouble() * 8.0f - 4.0f;
+            State.Star.PosY = (float)rnd.NextDouble() * 8.0f - 4.0f;
+
+            var StarObject = new GameObject();
+            StarObject.name = "Star Renderer";
+
+            SystemStarRenderer starRenderer = StarObject.AddComponent<SystemStarRenderer>();
+            starRenderer.Star = State.Star;
+
             for (int i = 0; i < 6; i++)
             {
                 SystemPlanet testPlanet = new SystemPlanet();
 
-                testPlanet.Descriptor.CenterX = 0;
-                testPlanet.Descriptor.CenterY = 0;
+                testPlanet.Descriptor.CenterX = State.Star.PosX;
+                testPlanet.Descriptor.CenterY = State.Star.PosY;
 
                 testPlanet.Descriptor.SemiMinorAxis = 2.0f + i + 2.0f * (float)rnd.NextDouble();
                 testPlanet.Descriptor.SemiMajorAxis = testPlanet.Descriptor.SemiMinorAxis + 4.0f * (float)rnd.NextDouble();
