@@ -8,13 +8,19 @@ namespace SystemView
     public class SystemPlanetRenderer : MonoBehaviour
     {
         public SystemPlanet planet;
+
         public LineRenderer linerenderer;
+        public Sprite circle;
+        public SpriteRenderer sr;
+
         public Material mat;
-        public Color color = Color.white;
+
+        public Color orbitColor = Color.white;
+        public Color planetColor = Color.white;
 
         private void UpdateRenderer(int segments)
         {
-            Vector3[] vertices = new Vector3[segments];
+            Vector3[] ellipsevertices = new Vector3[segments];
 
             float angle = 2.0f * 3.1415926f / (float)segments;
 
@@ -27,34 +33,44 @@ namespace SystemView
             float rotcos = (float)Math.Cos(planet.Rotation);
 
             // eccentricity
-            float c = (float)Math.Sqrt(planet.SemiMajorAxis * planet.SemiMajorAxis - planet.SemiMinorAxis * planet.SemiMinorAxis);
+            float c = planet.GetEccentricDistance();
 
             float x = 1.0f;
             float y = 0.0f;
 
             for (int i = 0; i < segments; i++)
             {
-                float vx = x * planet.SemiMajorAxis + planet.CenterX - c;
-                float vy = y * planet.SemiMinorAxis + planet.CenterY;
+                float vx = x * planet.SemiMajorAxis - c;
+                float vy = y * planet.SemiMinorAxis;
 
-                vertices[i] = new Vector3(
-                    rotcos * vx - rotsin * vy,
-                    rotsin * vx + rotcos * vy,
-                    0
+                ellipsevertices[i] = new Vector3(
+                    rotcos * vx - rotsin * vy + planet.CenterX,
+                    rotsin * vx + rotcos * vy + planet.CenterY,
+                    0.0f
                 );
 
                 (x, y) = (cos * x - sin * y, sin * x + cos * y);
             }
 
-            linerenderer.startColor = linerenderer.endColor = color;
-            linerenderer.SetPositions(vertices);
+            linerenderer.startColor = linerenderer.endColor = orbitColor;
+            linerenderer.SetPositions(ellipsevertices);
             linerenderer.positionCount = segments;
+
+            float[] pos = planet.GetPosition();
+
+            sr.sprite = circle;
+
+            sr.transform.position = new Vector3(pos[0], pos[1], -0.1f);
+            sr.transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);
+
+            sr.color = planetColor;
         }
 
         // Start is called before the first frame update
         void Start()
         {
             linerenderer = gameObject.AddComponent<LineRenderer>();
+            sr = gameObject.AddComponent<SpriteRenderer>();
 
             // Load unity test shader
             // this could alternatively also be our GLTestShader
@@ -79,6 +95,8 @@ namespace SystemView
             linerenderer.useWorldSpace = true;
 
             linerenderer.loop = true;
+
+            circle = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
         }
 
         // Update is called once per frame

@@ -34,13 +34,17 @@ namespace SystemView
 
                 testRenderers[i] = child.AddComponent<SystemPlanetRenderer>();
                 testRenderers[i].planet = testPlanets[i];
-                testRenderers[i].color = new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1.0f);
+                testRenderers[i].orbitColor = new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1.0f);
+                testRenderers[i].planetColor = new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1.0f);
             }
         }
 
         void Update()
         {
-
+            for (int i = 0; i < 6; i++)
+            {
+                testRenderers[i].planet.RotationalPosition += 0.05f / (testRenderers[i].planet.GetDistanceFromCenter());
+            }
         }
     }
 }
