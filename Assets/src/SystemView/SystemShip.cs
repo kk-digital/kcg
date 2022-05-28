@@ -1,27 +1,25 @@
 using System;
-using UnityEngine;  
 
 namespace SystemView
 {
     public class SystemShip
     {
         public OrbitingObjectDescriptor Descriptor;
+        public OrbitingObjectDescriptor Start, Destination;
+        public bool PathPlanned = false;
+        public bool Reached = false;
 
         public SystemShip()
         {
             Descriptor = new OrbitingObjectDescriptor();
         }
 
+        private const int segments = 64;
+
         // this math is a mess
+        // todo: clean it up
         public bool PlanPath(OrbitingObjectDescriptor Start, OrbitingObjectDescriptor Destination)
         {
-            // todo: this function should check whether an encounter is even possible right now
-            //       for now this always tries to create an encounter. Sometimes it won't work as the objects
-            //       are not lined up in a way where an encounter is possible (which results in the ship missing
-            //       the destination).
-
-            // todo: this is also kinda janky at times. fix that
-
             Descriptor.CenterX = Start.CenterX;
             Descriptor.CenterY = Start.CenterY;
 
@@ -50,8 +48,35 @@ namespace SystemView
 
             Descriptor.RotationalPosition = Descriptor.GetRotationalPositionAt(StartPos[0], StartPos[1]);
 
-            return true;
-            // return false if encounter not possible
+            float TimeToApoapsis = 0.0f;
+            float TargetRotationalMovement = 0.0f;
+
+            for(int i = 0; i < segments; i++)
+            {
+                float segmentLength = 3.1415926f / segments;
+                float altitude = Descriptor.GetDistanceFromCenterAt(segmentLength * i + Descriptor.RotationalPosition);
+                float targetAltitude = Destination.GetDistanceFromCenterAt(segmentLength + TargetRotationalMovement + Destination.RotationalPosition);
+
+                float segmentDuration = segmentLength * altitude * altitude;
+
+                TimeToApoapsis += segmentDuration;
+                TargetRotationalMovement += segmentDuration / targetAltitude / targetAltitude;
+            }
+
+            float[] ApoapsisPos = Descriptor.GetPositionAt(Descriptor.RotationalPosition + 3.1415926f);
+            float[] TargetPos = Destination.GetPositionAt(Destination.RotationalPosition + TargetRotationalMovement);
+
+            if(Math.Abs(ApoapsisPos[0] - TargetPos[0]) < 0.25 && Math.Abs(ApoapsisPos[1] - TargetPos[1]) < 0.25)
+            {
+                return PathPlanned = true;
+            }
+
+            Descriptor.SemiMajorAxis = Start.SemiMajorAxis;
+            Descriptor.SemiMinorAxis = Start.SemiMinorAxis;
+            Descriptor.Rotation = Start.Rotation;
+            Descriptor.RotationalPosition = Start.RotationalPosition;
+
+            return PathPlanned = false;
         }
 
         public void UpdatePosition(float dt)

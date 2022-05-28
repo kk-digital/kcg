@@ -39,6 +39,8 @@ namespace SystemView
             sr.color = shipColor;
             or.color = orbitColor;
 
+            or.descriptor = ship.Descriptor;
+
             or.UpdateRenderer(128);
         }
     }

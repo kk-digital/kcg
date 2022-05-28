@@ -16,6 +16,21 @@ namespace SystemView
 
         public float RotationalPosition;
 
+        public OrbitingObjectDescriptor()
+        {
+
+        }
+
+        public OrbitingObjectDescriptor(OrbitingObjectDescriptor Copy)
+        {
+            CenterX = Copy.CenterX;
+            CenterY = Copy.CenterY;
+            SemiMinorAxis = Copy.SemiMinorAxis;
+            SemiMajorAxis = Copy.SemiMajorAxis;
+            Rotation = Copy.Rotation;
+            RotationalPosition = Copy.RotationalPosition;
+        }
+
         public float GetEccentricDistance()
         {
             return (float)Math.Sqrt(SemiMajorAxis * SemiMajorAxis - SemiMinorAxis * SemiMinorAxis);
@@ -111,6 +126,14 @@ namespace SystemView
             Intersection[1] += CenterY;
 
             return Intersection;
+        }
+
+        public float GetDistanceFrom(OrbitingObjectDescriptor Descriptor)
+        {
+            float[] Pos = GetPosition();
+            float[] TargetPos = Descriptor.GetPosition();
+
+            return (float)Math.Sqrt((Pos[0] - TargetPos[0]) * (Pos[0] - TargetPos[0]) + (Pos[1] - TargetPos[1]) * (Pos[1] - TargetPos[1]));
         }
     }
 }

@@ -99,34 +99,43 @@ namespace SystemView
                 State.Planets.Add(testPlanet);
             }
 
-            SystemShip testShip = new SystemShip();
-            testShip.PlanPath(State.Planets[2].Descriptor, State.Planets[4].Descriptor);
-            testRenderers[2].orbitColor = testRenderers[4].orbitColor = new Color(0.5f, 1.0f, 0.5f, 1.0f);
+            for (int i = 0; i < 3; i++)
+            {
+                SystemShip testShip = new SystemShip();
 
-            State.Ships.Add(testShip);
+                State.Ships.Add(testShip);
 
-            var ship = new GameObject();
-            ship.name = "Ship Renderer 1";
+                var shipRendererObject = new GameObject();
+                shipRendererObject.name = "Ship Renderer " + (i + 1);
 
-            SystemShipRenderer shipRenderer = ship.AddComponent<SystemShipRenderer>();
-            shipRenderer.ship = testShip;
+                testShip.Start = State.Planets[i].Descriptor;
+                testShip.Destination = State.Planets[2 + i].Descriptor;
+
+                SystemShipRenderer shipRenderer = shipRendererObject.AddComponent<SystemShipRenderer>();
+                shipRenderer.ship = testShip;
+            }
         }
 
         void Update()
         {
             foreach (SystemPlanet p in State.Planets)
             {
-                p.UpdatePosition(0.15f);
+                p.UpdatePosition(0.45f);
             }
             
             foreach (SystemAsteroidBelt b in State.AsteroidBelts)
             {
-                b.UpdatePositions(0.15f);
+                b.UpdatePositions(0.45f);
             }
 
             foreach (SystemShip b in State.Ships)
             {
-                b.UpdatePosition(0.15f);
+                if (!b.PathPlanned)
+                    b.PlanPath(b.Start, b.Destination);
+                else if (!b.Reached && b.Descriptor.GetDistanceFrom(b.Destination) < 0.25f)
+                    b.Descriptor = new OrbitingObjectDescriptor(b.Destination);
+
+                b.UpdatePosition(0.45f);
             }
         }
     }
