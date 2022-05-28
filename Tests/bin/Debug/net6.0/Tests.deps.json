@@ -1,0 +1,67 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "Tests/1.0.0": {
+        "dependencies": {
+          "NSpec": "1.0.7.0",
+          "NSpecRunner": "1.0.7.0",
+          "nunit.framework": "2.6.4.14350"
+        },
+        "runtime": {
+          "Tests.dll": {}
+        }
+      },
+      "NSpec/1.0.7.0": {
+        "runtime": {
+          "NSpec.dll": {
+            "assemblyVersion": "1.0.7.0",
+            "fileVersion": "1.0.7.0"
+          }
+        }
+      },
+      "NSpecRunner/1.0.7.0": {
+        "runtime": {
+          "NSpecRunner.dll": {
+            "assemblyVersion": "1.0.7.0",
+            "fileVersion": "1.0.7.0"
+          }
+        }
+      },
+      "nunit.framework/2.6.4.14350": {
+        "runtime": {
+          "nunit.framework.dll": {
+            "assemblyVersion": "2.6.4.14350",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Tests/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "NSpec/1.0.7.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "NSpecRunner/1.0.7.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "nunit.framework/2.6.4.14350": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
