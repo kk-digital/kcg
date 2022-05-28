@@ -51,7 +51,6 @@ namespace SystemView
                 (x, y) = (cos * x - sin * y, sin * x + cos * y);
             }
 
-
             linerenderer.startWidth = linerenderer.endWidth = LineWidth;
             linerenderer.startColor = linerenderer.endColor = color;
             linerenderer.SetPositions(vertices);

@@ -40,6 +40,8 @@ namespace SystemView
 
                 testPlanet.Descriptor.Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
+                testPlanet.Descriptor.RotationalPosition = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+
                 var child = new GameObject();
                 child.name = "Planet Renderer " + i;
 
@@ -96,18 +98,35 @@ namespace SystemView
 
                 State.Planets.Add(testPlanet);
             }
+
+            SystemShip testShip = new SystemShip();
+            testShip.PlanPath(State.Planets[2].Descriptor, State.Planets[4].Descriptor);
+            testRenderers[2].orbitColor = testRenderers[4].orbitColor = new Color(0.5f, 1.0f, 0.5f, 1.0f);
+
+            State.Ships.Add(testShip);
+
+            var ship = new GameObject();
+            ship.name = "Ship Renderer 1";
+
+            SystemShipRenderer shipRenderer = ship.AddComponent<SystemShipRenderer>();
+            shipRenderer.ship = testShip;
         }
 
         void Update()
         {
-            foreach(SystemPlanet p in State.Planets)
+            foreach (SystemPlanet p in State.Planets)
             {
-                p.UpdatePosition(0.05f);
+                p.UpdatePosition(0.15f);
             }
             
-            foreach(SystemAsteroidBelt b in State.AsteroidBelts)
+            foreach (SystemAsteroidBelt b in State.AsteroidBelts)
             {
-                b.UpdatePositions(0.05f);
+                b.UpdatePositions(0.15f);
+            }
+
+            foreach (SystemShip b in State.Ships)
+            {
+                b.UpdatePosition(0.15f);
             }
         }
     }

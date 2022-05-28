@@ -7,6 +7,7 @@ namespace SystemView
     {
         public List<SystemPlanet> Planets = new List<SystemPlanet>();
         public List<SystemAsteroidBelt> AsteroidBelts = new List<SystemAsteroidBelt>();
+        public List<SystemShip> Ships = new List<SystemShip>();
         public SystemStar Star;
     }
 }

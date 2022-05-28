@@ -42,20 +42,14 @@ namespace SystemView
         //       of objects, this is far more efficient.
         public float[] GetPositionAt(float Pos)
         {
-            // sine and cosine of position
-            float sin = (float)Math.Sin(Pos);
-            float cos = (float)Math.Cos(Pos);
-
             // sine and cosine of the rotation
             float rotsin = (float)Math.Sin(Rotation);
             float rotcos = (float)Math.Cos(Rotation);
 
             float[] pos = new float[2];
 
-            float x = 1.0f;
-            float y = 0.0f;
-
-            (x, y) = (cos * x - sin * y, sin * x + cos * y);
+            float x = (float)Math.Cos(Pos);
+            float y = (float)Math.Sin(Pos);
 
             float posx = x * SemiMajorAxis - GetEccentricDistance();
             float posy = y * SemiMinorAxis;
@@ -84,6 +78,39 @@ namespace SystemView
         public float GetDistanceFromCenter()
         {
             return GetDistanceFromCenterAt(RotationalPosition);
+        }
+
+        // this math is a mess
+        public float GetRotationalPositionAt(float x, float y)
+        {
+            float rotsin = (float)Math.Sin(Rotation);
+            float rotcos = (float)Math.Cos(Rotation);
+
+            // not needed - will never happen
+            // if (rotcos * rotcos + rotsin * rotsin == 0.0f) throw new IndexOutOfRangeException();
+
+            // not needed - only one of the two coordinates are needed
+            // float posx = (((x - CenterX) * rotcos + (y - CenterY) * rotsin) / (rotcos * rotcos + rotsin * rotsin) + GetEccentricDistance()) / SemiMajorAxis;
+
+            float posy = ((y - CenterY) * rotcos + (CenterX - x) * rotsin) / ((rotcos * rotcos + rotsin * rotsin) * SemiMinorAxis);
+
+            return (float)Math.Asin(posy);
+        }
+
+        public float[] GetIntersectionWith(float slope)
+        {
+            float[] Intersection = new float[2];
+
+            // Rotate slope to match rotation of orbit
+            slope = (float)Math.Tan(Math.Atan(slope) - Rotation);
+
+            Intersection[0] = (SemiMajorAxis * SemiMinorAxis) / (float)Math.Sqrt(SemiMajorAxis * SemiMajorAxis * slope * slope + SemiMinorAxis * SemiMinorAxis);
+            Intersection[1] = slope * Intersection[0];
+
+            Intersection[0] += CenterX;
+            Intersection[1] += CenterY;
+
+            return Intersection;
         }
     }
 }

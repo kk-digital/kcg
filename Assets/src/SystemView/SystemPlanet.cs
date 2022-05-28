@@ -13,7 +13,7 @@ namespace SystemView
 
         public void UpdatePosition(float dt)
         {
-            Descriptor.RotationalPosition += 0.05f / Descriptor.GetDistanceFromCenter();
+            Descriptor.RotationalPosition += dt / Descriptor.GetDistanceFromCenter() / Descriptor.GetDistanceFromCenter();
         }
     }
 }
