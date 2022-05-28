@@ -18,7 +18,7 @@ namespace PlanetTileMap.Unity
     // there will be things like rendering, collision, TileMap
     // that are not supposed to be here.
 
-    class TilesRenderer : MonoBehaviour
+    class MapLoaderTestScript : MonoBehaviour
     {
         //public string TileMap = "Moonbunker/Moon Bunker.tmx";
         [SerializeField] Material Material;
@@ -33,7 +33,6 @@ namespace PlanetTileMap.Unity
         RectangleBoundingBoxCollision Player;
         Vector2 PlayerPosition;
 
-        int PlayerSpriteID;
         int PlayerSprite2ID;
         const float TileSize = 1.0f;
 
@@ -44,41 +43,33 @@ namespace PlanetTileMap.Unity
 
         public void Start()
         {
+            // inittialize the sprites/ tiles ect..
             if (!InitTiles)
             {
+                // loads the sprites into memory
+                LoadSprites();
+
+                // creates the tiles properties
                 CreateDefaultTiles();
+
+                // creates collision stuff
                 CreateTestPlayer();
+
                 InitTiles = true;
             }
             // TODO(Mahdi): does not make sense to put them here
             // move them out ! 
-            InitStage1();
-            InitStage2();
-        }
-
-        //All memory allocations/setups go here
-        //File loading should not occur at this stage
-        public void InitStage1()
-        {
-            // todo: commented out the tmx stuff for now
-            /*FileLoader = new TmxImporter(Path.Combine(BaseDir, TileMap));
-            FileLoader.LoadStage1();*/
-        }
-
-        //Load settings from files and other init, that requires systems to be intialized
-        public void InitStage2()
-        {
- 
-
-            //TestDrawTiles();
             LateUpdate();
+        }  
 
 
-        }      
-
+        
         public void Update()
         {
-                       //remove all children MeshRenderer
+            // in here we will draw everything to the screen
+
+
+            //remove all children MeshRenderer
             foreach(var mr in GetComponentsInChildren<MeshRenderer>())
                 if (Application.isPlaying)
                     Destroy(mr.gameObject);
@@ -105,10 +96,17 @@ namespace PlanetTileMap.Unity
                 PlayerPosition.x -= speed * Time.deltaTime;
             }
 
+
+            // drawing the player to the screen
             PlayerCollidersTest();
+
+            // drawing the tile map to the screen
             DrawMapTest();
         }
 
+        // this function is used to draw a tile map to the screen
+        // it will only draw the tiles that are visible
+        // only works for orthographic mode
         void DrawMapTest()
         {
 
@@ -147,20 +145,32 @@ namespace PlanetTileMap.Unity
             }
         }
 
-
-        //NOTE(Mahdi): this is used to create some test tiles
-        // to make sure the system is working
-        public void CreateDefaultTiles()
+        // loading the sprite sheets and filling up the sprite atlas
+        public void LoadSprites()
         {
+
+            // load all the sprite sheets
             int MetalSlabsTileSheet = 
                         GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png");
             int StoneBulkheads = 
                         GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tile_wallbase\\Tiles_stone_bulkheads.png");
             int TilesMoon = 
                         GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png");
+            int PlayerTileSheet = 
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png",
+                         32, 48);
+
+
+
+          // blit the player sprite sheet to the atlas.
+          // returns an id, we can use that for drawing
+           PlayerSprite2ID = GameState.SpriteAtlasManager.Blit(PlayerTileSheet, 0, 0);;
+
+            //
 
 
             // creating the tiles
+            // we can add more properties to the tiles
             GameState.TileCreationApi.CreateTile(0);
             GameState.TileCreationApi.SetTileName("slab1");
             GameState.TileCreationApi.SetTileTexture16(MetalSlabsTileSheet, 0, 0);
@@ -202,6 +212,14 @@ namespace PlanetTileMap.Unity
             GameState.TileCreationApi.EndTile();
 
 
+
+        }
+
+        //NOTE(Mahdi): this is used to create some test tiles
+        // to make sure the system is working
+        public void CreateDefaultTiles()
+        {
+            
             // Generating the map
             int mapWidth = 128;
             int mapHeight = 128;
@@ -238,56 +256,44 @@ namespace PlanetTileMap.Unity
             }
 
         }
-
-
-      
+        
         void CreateTestPlayer()
         {
-            int PlayerTileSheet = 
-                        GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png");
-
-            int PlayerTileSheet2 = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png",
-                         32, 48);
-
-
-            PlayerSpriteID =  GameState.TileSpriteAtlasManager.Blit(PlayerTileSheet, 0, 0);
-            PlayerSprite2ID =  GameState.SpriteAtlasManager.Blit(PlayerTileSheet2, 0, 0, 32, 48);;
-
             PlayerPosition = new Vector2(6, 6);
 
             // 1f - considered to be 32 pixel
-            Player = new RectangleBoundingBoxCollision(PlayerPosition - MapOffset, new Vector2(1f, 1f));
+            Player = new RectangleBoundingBoxCollision(PlayerPosition - MapOffset, new Vector2(1f, 48.0f / 32.0f));
         }
 
+
+        // draws the player to the screen
         void PlayerCollidersTest()
         {
-            Player = new RectangleBoundingBoxCollision(PlayerPosition - MapOffset, new Vector2(1f, 1f));
+            Player = new RectangleBoundingBoxCollision(PlayerPosition - MapOffset, new Vector2(1f, 48.0f / 32.0f));
             bool isCollidingBottom = Player.IsCollidingBottom(ref TileMap);
 
-            Debug.Log($"Player Bottom Collided: {isCollidingBottom}");
+            //Debug.Log($"Player Bottom Collided: {isCollidingBottom}");
 
 
-            byte[] spriteBytes = new Byte[32 * 32 * 4];
+            byte[] spriteBytes = new Byte[32 * 48 * 4];
 
             if (isCollidingBottom)
             {
-                GameState.TileSpriteAtlasManager.GetSpriteBytes(PlayerSpriteID, spriteBytes);
+                GameState.SpriteAtlasManager.GetSpriteBytes(PlayerSprite2ID, spriteBytes);
             }
             else
             {
-                 GameState.TileSpriteAtlasManager.GetSpriteBytes(PlayerSpriteID, spriteBytes);
+                 GameState.SpriteAtlasManager.GetSpriteBytes(PlayerSprite2ID, spriteBytes);
             }
 
-            DrawSprite(PlayerPosition.x, PlayerPosition.y, 1.0f, 1.0f, spriteBytes, 32, 32);
+            DrawSprite(PlayerPosition.x, PlayerPosition.y, 1.0f, 48.0f / 32.0f, spriteBytes, 32, 48);
 
         }
 
 
         public void LoadMap()
         {
-            InitStage1();
-            InitStage2();
+            LateUpdate();
         }
 
 
@@ -372,11 +378,7 @@ namespace PlanetTileMap.Unity
 
         private void LateUpdate()
         {
-         /*   var visibleRect = CalcVisibleRect();
 
-            //rebuild all layers for visible rect
-            foreach (var mb in meshBuildersByLayers)
-                mb.BuildMesh(visibleRect);*/
         }
 
         public struct R
@@ -404,6 +406,8 @@ namespace PlanetTileMap.Unity
             return visibleRect;
         }
 
+
+        // converts pixel to a unity Texture2D
         private Texture2D CreateTextureFromRGBA(byte[] rgba, int w, int h)
         {
 
@@ -481,12 +485,12 @@ namespace PlanetTileMap.Unity
     }
 
 #if UNITY_EDITOR
-    [CustomEditor(typeof(TilesRenderer))]
+    [CustomEditor(typeof(MapLoaderTestScript))]
     public class TerrainGeneratorEditor : Editor
     {
         public override void OnInspectorGUI()
         {
-            var myTarget = (TilesRenderer)target;
+            var myTarget = (MapLoaderTestScript)target;
 
             // Show default inspector property editor
             DrawDefaultInspector();
