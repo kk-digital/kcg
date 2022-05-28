@@ -4,7 +4,7 @@ using Enums;
 public class InputManager : MonoBehaviour
 {
     // Key struct to keep key settings
-    struct Key
+    public struct Key
     {
         public KeyCode keyCode;
         public eKeyEvent keyEvent;
@@ -15,8 +15,9 @@ public class InputManager : MonoBehaviour
     private eInputDevice inputDevice;
 
     // Currently Active Key
-    private Key activeKey;
+    public Key activeKey;
 
+    // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Awake.html
     void Awake()
     {
         //Check if Scene has SceneManager setup
@@ -26,32 +27,34 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    // On Key Pressed
+    // Event: On Key Pressed
     private void OnKeyPressed()
     {
-        
         // Increase Zoom with +
         if (activeKey.keyName == KeyCode.KeypadPlus.ToString())
         {
-            CameraInfo camInfo = Camera.main.GetComponent<CameraInfo>();
-            camInfo.IncreaseZoom();
+            PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
+            if(pixelCam.targetCameraHalfWidth < 15.0f)
+                pixelCam.targetCameraHalfWidth += 1.0f;
+            // Update Zoomed ortho pixel perfect calculation
+            pixelCam.adjustCameraFOV();
         }
 
         // Decrease zoom with -
         if (activeKey.keyName == KeyCode.KeypadMinus.ToString())
         {
-            CameraInfo camInfo = Camera.main.GetComponent<CameraInfo>();
-            camInfo.DecreaseZoom();
+            PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
+            if(pixelCam.targetCameraHalfWidth > 1.5f)
+                pixelCam.targetCameraHalfWidth -= 1.0f;
+            // Update Zoomed ortho pixel perfect calculation
+            pixelCam.adjustCameraFOV();
         }
     }
 
-    // On Key Released
+    // Event: On Key Released
     private void OnKeyReleased()
     {
-        if(activeKey.keyName == KeyCode.KeypadPlus.ToString())
-        {
-            Debug.Log(activeKey.keyName + " Released");
-        }
+        
     }
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html
@@ -123,6 +126,8 @@ public class InputManager : MonoBehaviour
             return eInputDevice.KeyboardMouse;
         }
 
+        // Else, return none device.
         return eInputDevice.Invalid;
     }
 }
+
