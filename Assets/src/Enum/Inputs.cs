@@ -15,4 +15,12 @@ namespace Enums
         Release,
         Invalid
     }
+
+
+    // Enum for specifing player state to assign inputs
+    public enum PlayerState
+    {
+        Pedestrian,
+        Vehicle
+    }
 }

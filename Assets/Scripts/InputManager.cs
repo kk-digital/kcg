@@ -14,6 +14,9 @@ public class InputManager : MonoBehaviour
     // Input Device
     private eInputDevice inputDevice;
 
+    // Player State
+    private PlayerState playerState;
+
     // Currently Active Key
     public Key activeKey;
 
@@ -30,31 +33,45 @@ public class InputManager : MonoBehaviour
     // Event: On Key Pressed
     private void OnKeyPressed()
     {
-        // Increase Zoom with +
-        if (activeKey.keyName == KeyCode.KeypadPlus.ToString())
+        if(playerState == PlayerState.Pedestrian)
         {
-            PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
-            if(pixelCam.targetCameraHalfWidth < 15.0f)
-                pixelCam.targetCameraHalfWidth += 1.0f;
-            // Update Zoomed ortho pixel perfect calculation
-            pixelCam.adjustCameraFOV();
-        }
+            // Increase Zoom with +
+            if (activeKey.keyName == KeyCode.KeypadPlus.ToString())
+            {
+                PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
+                if(pixelCam.targetCameraHalfWidth < 15.0f)
+                    pixelCam.targetCameraHalfWidth += 1.0f;
+                // Update Zoomed ortho pixel perfect calculation
+                pixelCam.adjustCameraFOV();
+            }
 
-        // Decrease zoom with -
-        if (activeKey.keyName == KeyCode.KeypadMinus.ToString())
+            // Decrease zoom with -
+            if (activeKey.keyName == KeyCode.KeypadMinus.ToString())
+            {
+                PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
+                if(pixelCam.targetCameraHalfWidth > 1.5f)
+                    pixelCam.targetCameraHalfWidth -= 1.0f;
+                // Update Zoomed ortho pixel perfect calculation
+                pixelCam.adjustCameraFOV();
+            }
+        }
+        else if(playerState == PlayerState.Vehicle)
         {
-            PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
-            if(pixelCam.targetCameraHalfWidth > 1.5f)
-                pixelCam.targetCameraHalfWidth -= 1.0f;
-            // Update Zoomed ortho pixel perfect calculation
-            pixelCam.adjustCameraFOV();
+
         }
     }
 
     // Event: On Key Released
     private void OnKeyReleased()
     {
-        
+        if(playerState == PlayerState.Pedestrian)
+        {
+
+        }
+        else if(playerState == PlayerState.Vehicle)
+        {
+
+        }
     }
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html
