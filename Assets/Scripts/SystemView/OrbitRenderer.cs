@@ -19,6 +19,13 @@ namespace SystemView
 
         public void UpdateRenderer(int segments)
         {
+            if (linerenderer == null) return;
+            if (descriptor == null)
+            {
+                linerenderer.startWidth = linerenderer.endWidth = 0.0f;
+                return;
+            }
+
             Vector3[] vertices = new Vector3[segments];
 
             float angle = 2.0f * 3.1415926f / (float)segments;
