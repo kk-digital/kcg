@@ -9,7 +9,8 @@ namespace SpriteLoader
         public byte[] Data;
 
         public int id;
-        public int SpriteSize;
+        public int tileWidth;
+        public int tileHeight;
 
         public int Width;
         public int Height;
@@ -18,8 +19,13 @@ namespace SpriteLoader
     public class SpriteLoader
     {
         public SpriteSheet[] SpriteSheets;
-        public int ImageCount;
-        public Dictionary<string, int> SpriteSheetID = new Dictionary<string, int>();
+        public Dictionary<string, int> SpriteSheetID;
+
+        public SpriteLoader()
+        {
+            SpriteSheets = new SpriteSheet[0];
+            SpriteSheetID = new Dictionary<string, int>();
+        }
 
         public void InitStage1()
         {
@@ -31,16 +37,51 @@ namespace SpriteLoader
         
         }
 
-        public int GetSpriteSheetID(string filename, int width, int height) // tileWidth needed when first creating sprite sheet
+        public int GetSpriteSheetID(string filename, int width, int height)
         {
 
-            // Note(Mahdi) : Not Implemented
-           return 0;
+            if (SpriteSheetID.ContainsKey(filename))
+            {
+                return SpriteSheetID[filename];
+            }
+
+            return LoadImageFile(filename, width, height);
         }
 
-        private void LoadImageFile(string filename, int tileWidth)
+        private int LoadImageFile(string filename, int tileWidth, int tileHeight)
         {
-            // Note(Mahdi) : Not Implemented
+            int imageCount = SpriteSheets.Length + 1;
+
+            Array.Resize(ref SpriteSheets, imageCount);
+
+            SpriteSheetID.Add(filename, imageCount - 1);
+
+            var data = Png.Open(filename);
+            SpriteSheet spriteSheet = new SpriteSheet();
+            spriteSheet.id = imageCount - 1;
+            spriteSheet.tileWidth = tileWidth;
+            spriteSheet.tileHeight = tileHeight;
+            spriteSheet.Width = data.Header.Width;
+            spriteSheet.Height = data.Header.Height;
+
+            spriteSheet.Data = new byte[4 * data.Header.Width * data.Header.Height];
+
+            for (int y = 0; y < data.Header.Height; y++)
+            {
+                for (int x = 0; x < data.Header.Width; x++)
+                {
+                    var pixel = data.GetPixel(x, y);
+                    int index = y * data.Header.Width + x;
+                    spriteSheet.Data[4 * index + 0] = pixel.R;
+                    spriteSheet.Data[4 * index + 1] = pixel.G;
+                    spriteSheet.Data[4 * index + 2] = pixel.B;
+                    spriteSheet.Data[4 * index + 3] = pixel.A;
+                }
+            }
+
+            SpriteSheets[imageCount - 1] = spriteSheet;
+
+            return imageCount - 1;
         }
 
         public ref SpriteSheet GetSpriteSheet(int id)
