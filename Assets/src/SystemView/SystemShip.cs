@@ -14,11 +14,9 @@ namespace SystemView
             Descriptor = new OrbitingObjectDescriptor();
         }
 
-        const int segments = 64;
+        const int segments = 256;
 
-        // this math is a mess
-        // todo: clean it up
-        public bool PlanPath(OrbitingObjectDescriptor Start, OrbitingObjectDescriptor Destination)
+        public bool PlanPath(OrbitingObjectDescriptor Start, OrbitingObjectDescriptor Destination, float AcceptableDeviation)
         {
             // Copy center coordinates from start location
             Descriptor.CenterX = Start.CenterX;
@@ -71,12 +69,13 @@ namespace SystemView
             Descriptor.SemiMinorAxis = (float)Math.Sqrt(2 * Descriptor.SemiMajorAxis * Periapsis - Periapsis * Periapsis);
 
             float[] StartPos = Start.GetPosition();
-            Descriptor.RotationalPosition = Descriptor.GetRotationalPositionAt(StartPos[0], StartPos[1]);
+            Descriptor.RotationalPosition = 0.0f;
 
             // Estimating time to apoapsis and how far the target will have moved in that time to try and see
             // whether the orbits are lined up in a way that an encounter is possible.
-            // 
-            // todo: this is a linear estimation and should be replaced with an integral
+            
+            // This is called apoapsis, but might be the periapsis if we are travelling from high altitude to low altitude.
+            // Nevertheless, this makes no difference for the calculation.
 
             float TimeToApoapsis = 0.0f;
             float TargetRotationalMovement = 0.0f;
@@ -101,11 +100,11 @@ namespace SystemView
             }
 
             // Turn rotational positions into position vectors
-            float[] ApoapsisPos = Descriptor.GetPositionAt(Descriptor.RotationalPosition + 3.1415926f);
+            float[] ApoapsisPos = Descriptor.GetPositionAt(3.1415926f);
             float[] TargetPos = Destination.GetPositionAt(Destination.RotationalPosition + TargetRotationalMovement);
 
             // Check whether apoapsis is close enough to where the target will be to ensure an encounter
-            if(Math.Sqrt((ApoapsisPos[0] - TargetPos[0]) * (ApoapsisPos[0] - TargetPos[0]) + (ApoapsisPos[1] - TargetPos[1]) * (ApoapsisPos[1] - TargetPos[1])) < 0.25)
+            if (Math.Sqrt((ApoapsisPos[0] - TargetPos[0]) * (ApoapsisPos[0] - TargetPos[0]) + (ApoapsisPos[1] - TargetPos[1]) * (ApoapsisPos[1] - TargetPos[1])) < AcceptableDeviation)
             {
                 return PathPlanned = true;
             }

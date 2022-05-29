@@ -137,8 +137,8 @@ namespace SystemView
             foreach (SystemShip b in State.Ships)
             {
                 if (!b.PathPlanned)
-                    b.PlanPath(b.Start, b.Destination);
-                else if (!b.Reached && b.Descriptor.GetDistanceFrom(b.Destination) < 0.25f)
+                    b.PlanPath(b.Start, b.Destination, 0.5f);
+                else if (!b.Reached && b.Descriptor.GetDistanceFrom(b.Destination) < 0.6f)
                 {
                     b.Descriptor = new OrbitingObjectDescriptor(b.Destination);
                     b.PathPlanned = false;
