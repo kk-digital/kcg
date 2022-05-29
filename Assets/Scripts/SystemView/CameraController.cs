@@ -11,11 +11,11 @@ public class CameraController : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
-            transform.position += Vector3.right * Input.GetAxis("Mouse X") * -0.28f * scale;
-            transform.position += Vector3.up    * Input.GetAxis("Mouse Y") * -0.28f * scale;
+            transform.position += Vector3.right * Input.GetAxis("Mouse X") * -0.28f / scale;
+            transform.position += Vector3.up    * Input.GetAxis("Mouse Y") * -0.28f / scale;
         }
 
-        scale += Input.GetAxis("Mouse ScrollWheel");
-        GetComponent<Camera>().orthographicSize = 20.0f * scale;
+        scale += Input.GetAxis("Mouse ScrollWheel") * 0.3f * scale;
+        GetComponent<Camera>().orthographicSize = 20.0f / scale;
     }
 }

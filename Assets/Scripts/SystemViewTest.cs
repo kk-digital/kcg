@@ -51,23 +51,27 @@ namespace SystemView
                 State.Planets.Add(testPlanet);
             }
 
-            SystemAsteroidBelt testBelt = new SystemAsteroidBelt();
+            OrbitingObjectDescriptor testBeltDescriptor = new OrbitingObjectDescriptor();
 
-            testBelt.Descriptor.CenterX = State.Star.PosX;
-            testBelt.Descriptor.CenterY = State.Star.PosY;
+            testBeltDescriptor.CenterX = State.Star.PosX;
+            testBeltDescriptor.CenterY = State.Star.PosY;
 
-            testBelt.Descriptor.SemiMinorAxis = State.Planets[2].Descriptor.SemiMajorAxis + 4.0f + (float)rnd.NextDouble();
-            testBelt.Descriptor.SemiMajorAxis = testBelt.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() / 4.0f;
+            testBeltDescriptor.SemiMinorAxis = State.Planets[2].Descriptor.SemiMajorAxis + 4.0f + (float)rnd.NextDouble();
+            testBeltDescriptor.SemiMajorAxis = testBeltDescriptor.SemiMinorAxis + (float)rnd.NextDouble() / 4.0f;
 
-            testBelt.BeltWidth = (float)rnd.NextDouble() * 4.0f;
+            SystemAsteroidBelt testBelt = new SystemAsteroidBelt(16, testBeltDescriptor);
 
-            for (int i = 0; i < 4096; i++)
+            for (int Layer = 0; Layer < 16; Layer++)
             {
-                SystemAsteroid testAsteroid = new SystemAsteroid();
-                
-                testAsteroid.RotationalPosition = (float)i * 2.0f * 3.1415926f / 4096.0f;
+                for (int i = 0; i < 256; i++)
+                {
+                    SystemAsteroid testAsteroid = new SystemAsteroid();
 
-                testBelt.Asteroids.Add(testAsteroid);
+                    testAsteroid.RotationalPosition = (float)i * 3.1415926f / 128.0f;
+                    testAsteroid.Layer = Layer;
+
+                    testBelt.Asteroids.Add(testAsteroid);
+                }
             }
 
             State.AsteroidBelts.Add(testBelt);
@@ -85,7 +89,7 @@ namespace SystemView
                 testPlanet.Descriptor.CenterX = State.Star.PosX;
                 testPlanet.Descriptor.CenterY = State.Star.PosY;
 
-                testPlanet.Descriptor.SemiMinorAxis = testBelt.Descriptor.SemiMajorAxis + testBelt.BeltWidth + 4.0f * (float)rnd.NextDouble() * (i + 1);
+                testPlanet.Descriptor.SemiMinorAxis = testBeltDescriptor.SemiMajorAxis + testBelt.BeltWidth + 4.0f * (float)rnd.NextDouble() * (i + 1);
                 testPlanet.Descriptor.SemiMajorAxis = testPlanet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * (i + 1) / 4.0f;
 
                 testPlanet.Descriptor.Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
