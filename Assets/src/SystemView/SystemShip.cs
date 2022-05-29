@@ -14,7 +14,7 @@ namespace SystemView
             Descriptor = new OrbitingObjectDescriptor();
         }
 
-        private const int segments = 64;
+        const int segments = 64;
 
         // this math is a mess
         // todo: clean it up
@@ -80,8 +80,10 @@ namespace SystemView
 
             float TimeToApoapsis = 0.0f;
             float TargetRotationalMovement = 0.0f;
-
-            for(int i = 0; i < segments; i++)
+            
+            // This could be an integral. However, after messing around with it I'm not sure it would be any faster
+            // than this estimate, and this is definitely a lot easier and simpler to read.
+            for (int i = 0; i < segments; i++)
             {
                 // Total distance from periapsis to apoapsis is 180 degrees (pi) - so each segment is (pi / amount of segments) long
                 float segmentLength = 3.1415926f / segments;
@@ -103,7 +105,7 @@ namespace SystemView
             float[] TargetPos = Destination.GetPositionAt(Destination.RotationalPosition + TargetRotationalMovement);
 
             // Check whether apoapsis is close enough to where the target will be to ensure an encounter
-            if(Math.Abs(ApoapsisPos[0] - TargetPos[0]) < 0.5 && Math.Abs(ApoapsisPos[1] - TargetPos[1]) < 0.5)
+            if(Math.Sqrt((ApoapsisPos[0] - TargetPos[0]) * (ApoapsisPos[0] - TargetPos[0]) + (ApoapsisPos[1] - TargetPos[1]) * (ApoapsisPos[1] - TargetPos[1])) < 0.25)
             {
                 return PathPlanned = true;
             }

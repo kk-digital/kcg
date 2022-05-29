@@ -35,7 +35,7 @@ namespace SystemView
                 testPlanet.Descriptor.CenterX = State.Star.PosX;
                 testPlanet.Descriptor.CenterY = State.Star.PosY;
 
-                testPlanet.Descriptor.SemiMinorAxis = 1.0f + 3.0f * (float)rnd.NextDouble() * i;
+                testPlanet.Descriptor.SemiMinorAxis = 1.0f + 2.0f * (float)rnd.NextDouble() * i;
                 testPlanet.Descriptor.SemiMajorAxis = testPlanet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() / 8.0f;
 
                 testPlanet.Descriptor.Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
@@ -85,8 +85,8 @@ namespace SystemView
                 testPlanet.Descriptor.CenterX = State.Star.PosX;
                 testPlanet.Descriptor.CenterY = State.Star.PosY;
 
-                testPlanet.Descriptor.SemiMinorAxis = testBelt.Descriptor.SemiMajorAxis + testBelt.BeltWidth + 8.0f * (float)rnd.NextDouble() * (i + 1);
-                testPlanet.Descriptor.SemiMajorAxis = testPlanet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * (i + 1);
+                testPlanet.Descriptor.SemiMinorAxis = testBelt.Descriptor.SemiMajorAxis + testBelt.BeltWidth + 4.0f * (float)rnd.NextDouble() * (i + 1);
+                testPlanet.Descriptor.SemiMajorAxis = testPlanet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * (i + 1) / 4.0f;
 
                 testPlanet.Descriptor.Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
@@ -99,20 +99,26 @@ namespace SystemView
                 State.Planets.Add(testPlanet);
             }
 
-            for (int i = 0; i < 3; i++)
+            int shipnr = 1;
+            for (int i = 0; i < 6; i++)
             {
-                SystemShip testShip = new SystemShip();
+                for (int j = 0; j < 6; j++)
+                {
+                    if (j == i) continue;
 
-                State.Ships.Add(testShip);
+                    SystemShip testShip = new SystemShip();
 
-                var shipRendererObject = new GameObject();
-                shipRendererObject.name = "Ship Renderer " + (i + 1);
+                    State.Ships.Add(testShip);
 
-                testShip.Start = State.Planets[i].Descriptor;
-                testShip.Destination = State.Planets[2 + i].Descriptor;
+                    var shipRendererObject = new GameObject();
+                    shipRendererObject.name = "Ship Renderer " + shipnr++;
 
-                SystemShipRenderer shipRenderer = shipRendererObject.AddComponent<SystemShipRenderer>();
-                shipRenderer.ship = testShip;
+                    testShip.Start = State.Planets[i].Descriptor;
+                    testShip.Destination = State.Planets[j].Descriptor;
+
+                    SystemShipRenderer shipRenderer = shipRendererObject.AddComponent<SystemShipRenderer>();
+                    shipRenderer.ship = testShip;
+                }
             }
         }
 
@@ -133,7 +139,11 @@ namespace SystemView
                 if (!b.PathPlanned)
                     b.PlanPath(b.Start, b.Destination);
                 else if (!b.Reached && b.Descriptor.GetDistanceFrom(b.Destination) < 0.25f)
+                {
                     b.Descriptor = new OrbitingObjectDescriptor(b.Destination);
+                    b.PathPlanned = false;
+                    (b.Start, b.Destination) = (b.Destination, b.Start);
+                }
 
                 b.UpdatePosition(0.45f);
             }
