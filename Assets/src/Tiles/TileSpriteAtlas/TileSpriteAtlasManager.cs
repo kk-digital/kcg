@@ -68,10 +68,6 @@ namespace TileSpriteAtlas
             for (int y = 0; y < 32; y++)
                 for (int x = 0; x < 32; x++)
                 {
-                    /*
-                    int atlasindex = 4 * ((yOffset + y) * atlas.Width + (x + xOffset));
-                    int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));
-                    */
 
                     int atlasIndex = 4 * ((yOffset + y)  * (atlas.Width * 32) + (xOffset + x));
                     int sheetIndex = 4 * ((x + row * 32) + ((y + column * 32) * sheet.Width));
@@ -103,12 +99,6 @@ namespace TileSpriteAtlas
             {
                 for (int x = 0; x < 16; x++)
                 {
-                    /*
-                    int atlasindex = 4 * ((yOffset + y) * atlas.Width + (x + xOffset));
-                    int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));
-                    */
-
-                    //int atlasindex = 4 * 4 * ((yOffset + y) * (atlas.Width * 32) + (xOffset + x));
                     int sheetindex = 4 * ((x + row * 16) + ((y + column * 16) * sheet.Width));
 
                     for (int j = 0; j < 2; j++)
@@ -145,13 +135,6 @@ namespace TileSpriteAtlas
             for (int y = 0; y < 8; y++)
                 for (int x = 0; x < 8; x++)
                 {
-
-                    /*
-                    int atlasindex = 4 * ((yOffset + y) * atlas.Width + (x + xOffset));
-                    int sheetindex = 4 * ((x + Row) + ( (y + Column) * sheet.Width));
-                    */
-
-                    //int atlasindex = 4 * 4 * ((yOffset + y) * (atlas.Width * 32) + (xOffset + x));
                     int sheetindex = 4 * ((x + row * 8) + ( (y + column * 8) * sheet.Width));
 
                     for(int j = 0; j < 4; j++)
