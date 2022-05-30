@@ -35,14 +35,15 @@ namespace Components
     public struct Particle2dPositionComponent
     {
         public Vector2 Position;
+        public Vector2 Acceleration;
         public Vector2 Velocity;
-        public Vector2 Direction;
 
-        public Particle2dPositionComponent(Vector2 position, Vector2 velocity, Vector2 direction)
+        public Particle2dPositionComponent(Vector2 position, Vector2 acceleration,
+                    Vector2 velocity)
         {
             Position = position;
+            Acceleration = acceleration;
             Velocity = velocity;
-            Direction = direction;
         }
     }
 

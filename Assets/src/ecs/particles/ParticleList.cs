@@ -4,23 +4,23 @@ using Components;
 using System;
 using System.Collections.Generic;
 
-class ParticleList
+public class ParticleList
 {
-    private Particle2dHealthComponent[] HealthList ;
-    private Particle2dPositionComponent[] PositionList;
-    private Particle2dRotationComponent[] RotationList;
-    private Particle2dScaleComponent[] ScaleList;
-    private Particle2dSpriteComponent[] SpriteList;
-    private Particle2dAnimationComponent[] AnimationList;
-    private ParticleStateComponent[] StateList;
+    public Particle2dHealthComponent[] HealthList;
+    public Particle2dPositionComponent[] PositionList;
+    public Particle2dRotationComponent[] RotationList;
+    public Particle2dScaleComponent[] ScaleList;
+    public Particle2dSpriteComponent[] SpriteList;
+    public Particle2dAnimationComponent[] AnimationList;
+    public ParticleStateComponent[] StateList;
 
 
     // used to Queue up the particles to be removed at the end of the frame
     private List < int > ParticlesToRemove;
 
 
-    private int Capacity;
-    private int Size;
+    public int Capacity;
+    public int Size;
 
     private int LastFreeParticle;
 
@@ -39,7 +39,8 @@ class ParticleList
 
  
     // returns the particle id
-    public int AddParticle(float decayRate, Vector2 position, Vector2 velocity, Vector2 direction,
+    public int AddParticle(float decayRate, Vector2 position, Vector2 acceleration,
+        Vector2 velocity,
         float rotation, float deltaRotation, float scale, float deltaScale, int spriteId,
         Color color, float animationSpeed)
     {
@@ -86,7 +87,7 @@ class ParticleList
         StateList[Found] = new ParticleStateComponent(ParticleState.Running);
 
         HealthList[Found] = new Particle2dHealthComponent(1.0f, decayRate);
-        PositionList[Found] = new Particle2dPositionComponent(position, velocity, direction);
+        PositionList[Found] = new Particle2dPositionComponent(position, acceleration, velocity);
         RotationList[Found] = new Particle2dRotationComponent(rotation, deltaRotation);
         ScaleList[Found] = new Particle2dScaleComponent(scale, deltaScale);
         SpriteList[Found] = new Particle2dSpriteComponent(spriteId, color);
