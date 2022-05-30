@@ -31,9 +31,7 @@ namespace SystemView
         // Update is called once per frame
         void Update()
         {
-            float[] pos = ship.Descriptor.GetPosition();
-
-            sr.transform.position   = new Vector3(pos[0], pos[1], -0.1f);
+            sr.transform.position   = new Vector3(ship.PosX, ship.PosY, -0.1f);
             sr.transform.localScale = new Vector3(5.0f, 5.0f, 5.0f);
 
             sr.color = shipColor;

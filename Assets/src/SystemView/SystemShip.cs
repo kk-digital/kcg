@@ -1,5 +1,5 @@
 using System;
-using UnityEngine;
+using System.Collections.Generic;
 
 namespace SystemView
 {
@@ -10,9 +10,19 @@ namespace SystemView
         public bool PathPlanned = false;
         public bool Reached = false;
 
+        public int Health, MaxHealth;
+        public int Shield, MaxShield;
+
+        public int ShieldRegenerationRate;
+
+        public float PosX, PosY;
+
+        public List<ShipWeapon> Weapons;
+
         public SystemShip()
         {
             Descriptor = new OrbitingObjectDescriptor();
+            Weapons = new List<ShipWeapon>();
         }
 
         public bool PlanPath(OrbitingObjectDescriptor Start, OrbitingObjectDescriptor Destination, float AcceptableDeviation)
@@ -128,6 +138,11 @@ namespace SystemView
         public void UpdatePosition(float dt)
         {
             Descriptor.RotationalPosition += dt / Descriptor.GetDistanceFromCenter() / Descriptor.GetDistanceFromCenter();
+
+            float[] Pos = Descriptor.GetPosition();
+
+            PosX = Pos[0];
+            PosY = Pos[1];
         }
     }
 }
