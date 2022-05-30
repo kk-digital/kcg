@@ -17,6 +17,10 @@ namespace SystemView
         public SystemShipRenderer Fighter1Renderer;
         public SystemShipRenderer Fighter2Renderer;
 
+        public int LastTime;
+
+        public List<GameObject> ProjectileRenderers;
+
         void Start()
         {
             GameLoop gl = GetComponent<GameLoop>();
@@ -73,11 +77,78 @@ namespace SystemView
 
             Fighter1Renderer.ship = Fighter1;
             Fighter2Renderer.ship = Fighter2;
+
+            LastTime = (int)(Time.time * 1000);
         }
 
         void Update()
         {
+            int CurrentTime = (int)(Time.time * 1000) - LastTime;
+            LastTime = (int)(Time.time * 1000);
 
+            foreach (ShipWeapon Weapon in Fighter1.Weapons)
+            {
+                if (Weapon.TryFiringAt(Fighter2, CurrentTime))
+                {
+                    GameObject RendererObject = new GameObject();
+                    RendererObject.name = "Fighter 1 Projectile " + Weapon.ProjectilesFired.Count;
+
+                    ShipWeaponProjectileRenderer ProjectileRenderer = RendererObject.AddComponent<ShipWeaponProjectileRenderer>();
+
+                    ProjectileRenderer.Projectile = Weapon.ProjectilesFired[Weapon.ProjectilesFired.Count - 1];
+
+                    ProjectileRenderers.Add(RendererObject);
+                }
+
+                foreach (ShipWeaponProjectile Projectile in Weapon.ProjectilesFired)
+                {
+                    if(Projectile.UpdatePosition(0.1f))
+                    {
+                        if(Projectile.InRangeOf(Fighter2))
+                        {
+                            Projectile.DoDamage(Fighter2);
+
+                            // todo: remove renderer for projectile
+                        }
+                    }
+                    else
+                    {
+                        // todo: remove renderer for projectile
+                    }
+                }
+            }
+
+            foreach (ShipWeapon Weapon in Fighter2.Weapons)
+            {
+                if (Weapon.TryFiringAt(Fighter1, CurrentTime))
+                {
+                    GameObject RendererObject = new GameObject();
+                    RendererObject.name = "Fighter 2 Projectile " + Weapon.ProjectilesFired.Count;
+
+                    ShipWeaponProjectileRenderer ProjectileRenderer = RendererObject.AddComponent<ShipWeaponProjectileRenderer>();
+
+                    ProjectileRenderer.Projectile = Weapon.ProjectilesFired[Weapon.ProjectilesFired.Count - 1];
+
+                    ProjectileRenderers.Add(RendererObject);
+                }
+
+                foreach (ShipWeaponProjectile Projectile in Weapon.ProjectilesFired)
+                {
+                    if (Projectile.UpdatePosition(0.1f))
+                    {
+                        if (Projectile.InRangeOf(Fighter1))
+                        {
+                            Projectile.DoDamage(Fighter1);
+
+                            // todo: remove renderer for projectile
+                        }
+                    }
+                    else
+                    {
+                        // todo: remove renderer for projectile
+                    }
+                }
+            }
         }
     }
 }

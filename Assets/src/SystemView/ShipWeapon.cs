@@ -23,13 +23,12 @@ namespace SystemView
 
         public List<ShipWeaponProjectile> ProjectilesFired;
 
-        public void TryFiring(SystemShip Target)
+        public bool TryFiringAt(SystemShip Target, int CurrentTime)
         {
-            if (Cooldown > 0) return;
+            Cooldown -= CurrentTime;
+            if (Cooldown < 0) Cooldown = 0;
 
-            if (Self == Target) return;
-
-            if (Math.Sqrt(Self.PosX - Target.PosX) * (Self.PosX - Target.PosX) + (Self.PosY - Target.PosY) * (Self.PosY - Target.PosY) > Range) return;
+            if (Cooldown > 0 || Self == Target || Math.Sqrt(Self.PosX - Target.PosX) * (Self.PosX - Target.PosX) + (Self.PosY - Target.PosY) * (Self.PosY - Target.PosY) > Range) return false;
 
             Cooldown = AttackSpeed;
 
@@ -57,6 +56,8 @@ namespace SystemView
             Projectile.Damage = Damage;
 
             ProjectilesFired.Add(Projectile);
+
+            return true;
         }
     }
 }
