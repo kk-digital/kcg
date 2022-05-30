@@ -8,19 +8,37 @@
 //------------------------------------------------------------------------------
 public static class GameComponentsLookup {
 
-    public const int GameObject = 0;
-    public const int Particle = 1;
-    public const int Position = 2;
+    public const int Agent2dInventory = 0;
+    public const int InventoryItem = 1;
+    public const int Item2DPosition = 2;
+    public const int Item = 3;
+    public const int ItemMove = 4;
+    public const int ItemStack = 5;
+    public const int GameObject = 6;
+    public const int Particle = 7;
+    public const int Position = 8;
 
-    public const int TotalComponents = 3;
+    public const int TotalComponents = 9;
 
     public static readonly string[] componentNames = {
+        "Agent2dInventory",
+        "InventoryItem",
+        "Item2DPosition",
+        "Item",
+        "ItemMove",
+        "ItemStack",
         "GameObject",
         "Particle",
         "Position"
     };
 
     public static readonly System.Type[] componentTypes = {
+        typeof(Components.Agent2dInventoryComponent),
+        typeof(Components.InventoryItemComponent),
+        typeof(Components.Item2DPosition),
+        typeof(Components.ItemComponent),
+        typeof(Components.ItemMoveComponent),
+        typeof(Components.ItemStackComponent),
         typeof(src.ecs.Game.Particle.ParticleSpawn.GameObjectComponent),
         typeof(src.ecs.Game.Particle.ParticleSpawn.ParticleComponent),
         typeof(src.ecs.Game.Particle.ParticleSpawn.PositionComponent)
