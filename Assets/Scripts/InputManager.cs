@@ -35,8 +35,8 @@ public class InputManager : MonoBehaviour
     {
         if(playerState == PlayerState.Pedestrian)
         {
-            // Increase Zoom with +
-            if (activeKey.keyName == KeyCode.KeypadPlus.ToString())
+            // Decrease zoom with -
+            if (activeKey.keyName == KeyCode.KeypadMinus.ToString())
             {
                 PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
                 if(pixelCam.targetCameraHalfWidth < 15.0f)
@@ -45,8 +45,8 @@ public class InputManager : MonoBehaviour
                 pixelCam.adjustCameraFOV();
             }
 
-            // Decrease zoom with -
-            if (activeKey.keyName == KeyCode.KeypadMinus.ToString())
+            // Increase Zoom with +
+            if (activeKey.keyName == KeyCode.KeypadPlus.ToString())
             {
                 PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
                 if(pixelCam.targetCameraHalfWidth > 1.5f)
