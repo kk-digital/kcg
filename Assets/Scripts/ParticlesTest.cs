@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Entity;
 using Components;
 using Systems;
+using Entitas;
 
 
 #if UNITY_EDITOR
@@ -31,8 +32,11 @@ namespace PlanetTileMap.Unity
         List<Vector3> verticies = new List<Vector3>();
 
         ParticleEmitterEntity Emitter = new ParticleEmitterEntity();
+        int PipeSprite;
 
-        ParticleUpdateSystem UpdateSystem = new ParticleUpdateSystem();
+
+        Contexts contexts = Contexts.sharedInstance;
+        ParticleUpdateSystem ParticleUpdateSystem;
 
         static bool Init = false;
         
@@ -56,13 +60,20 @@ namespace PlanetTileMap.Unity
                 else
                     DestroyImmediate(mr.gameObject);
 
+            Emitter.Update(contexts);
+            ParticleUpdateSystem.Execute();
             DrawParticles();
         }
 
         // create the sprite atlas for testing purposes
         public void Initialize()
         {
-            Emitter = new ParticleEmitterEntity();
+            ParticleUpdateSystem = new ParticleUpdateSystem(contexts);
+
+            Emitter = new ParticleEmitterEntity(new Vector2(-2.0f, 0),
+             1.0f, new Vector2(0, -20.0f), 0.2f, 0.0f, new int[]{0}, new Vector2(1.0f, 10.0f),
+            0.0f, 1.0f, new Color(255.0f, 255.0f, 255.0f, 255.0f),
+            0.2f, 3.0f, true, 1, 0.1f);
 
             // we load the sprite sheets here
             int SomeObjectTileSheet = 
@@ -72,7 +83,7 @@ namespace PlanetTileMap.Unity
                         GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png",
                          32, 48);
             int PipeTileSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\sprite\\item\\admin_icon_pipesim.png",
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\sprite\\item\\admin_icon_pipesim.png",
             16, 16);
 
 
@@ -86,15 +97,24 @@ namespace PlanetTileMap.Unity
             GameState.SpriteAtlasManager.Blit(SomeObjectTileSheet, 0, 0);
             GameState.SpriteAtlasManager.Blit(PlayerTileSheet, 0, 0);
             GameState.SpriteAtlasManager.Blit(PlayerTileSheet, 0, 0);
-            GameState.SpriteAtlasManager.Blit(PipeTileSheet, 0, 0);
+            PipeSprite = GameState.SpriteAtlasManager.Blit(PipeTileSheet, 0, 0);
         }
 
         void DrawParticles()
         {
-            SpriteAtlas.SpriteAtlas atlas = GameState.SpriteAtlasManager.GetSpriteAtlas(0);
+            /*SpriteAtlas.SpriteAtlas atlas = GameState.SpriteAtlasManager.GetSpriteAtlas(0);
             DrawSprite(-3, -1, 
                   atlas.Width / 32.0f, atlas.Height / 32.0f,
-                 atlas.Data, atlas.Width, atlas.Height);
+                 atlas.Data, atlas.Width, atlas.Height);*/
+            byte[] pipeBytes = new byte[16 * 16 * 4];
+            GameState.SpriteAtlasManager.GetSpriteBytes(PipeSprite, pipeBytes);
+            IGroup<GameEntity> entities = 
+            contexts.game.GetGroup(GameMatcher.Particle2dPosition);
+            foreach (var gameEntity in entities)
+            {
+                var pos = gameEntity.particle2dPosition;
+                DrawSprite(pos.Position.x, pos.Position.y, 0.5f, 0.5f, pipeBytes, 16, 16);
+            }
         }
 
 
@@ -173,6 +193,30 @@ namespace PlanetTileMap.Unity
         }
 
 
+      /*   void CreateSlots(int InventoryID)
+        {
+            // To do: Change size of grid to match width and height of inventory.
+            GameEntity entity = context.game.GetEntityWithAgent2dInventory(InventoryID);
+
+            int size = entity.agent2dInventory.Width * entity.agent2dInventory.Height;
+            for (int i = 0; i < size; i++)
+            {
+                GameObject obj = new GameObject("slot" + i.ToString(), typeof(RectTransform));
+                obj.transform.parent = ParentObject.transform;
+            }
+        }
+
+        void CreateInventoryEntity(int InventoryID)
+        {
+            GameEntity entity = context.game.CreateEntity();
+            const int height = 8;
+            const int width = 8;
+            const int selectedSlot = 0;
+
+            BitArray slots = new BitArray(height * width, false);
+            entity.AddAgent2dInventory(InventoryID, width, height, selectedSlot, slots);
+        }
+*/
         public struct R
         {
             public float X;
