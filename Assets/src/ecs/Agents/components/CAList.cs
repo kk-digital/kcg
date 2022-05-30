@@ -1,8 +1,8 @@
 using Entities.Agents;
 
-namespace Systems.Agents
+namespace Components.Agents
 {
-    public struct SAList
+    public struct CAList
     {
         public EntityAgent[] Agents;
     }
