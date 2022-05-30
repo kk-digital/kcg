@@ -84,7 +84,7 @@ public class ParticleList
 
 
         // here we have found an empty index
-        StateList[Found] = new ParticleStateComponent(ParticleState.Running);
+        StateList[Found] = new ParticleStateComponent(ParticleState.Running, Found);
 
         HealthList[Found] = new Particle2dHealthComponent(1.0f, decayRate);
         PositionList[Found] = new Particle2dPositionComponent(position, acceleration, velocity);
