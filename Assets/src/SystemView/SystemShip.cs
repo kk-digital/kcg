@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace SystemView
 {
@@ -14,8 +15,6 @@ namespace SystemView
             Descriptor = new OrbitingObjectDescriptor();
         }
 
-        const int segments = 256;
-
         public bool PlanPath(OrbitingObjectDescriptor Start, OrbitingObjectDescriptor Destination, float AcceptableDeviation)
         {
             // Copy center coordinates from start location
@@ -25,8 +24,13 @@ namespace SystemView
             // Set rotation to match current position of start object
             Descriptor.Rotation = Start.Rotation + Start.RotationalPosition;
 
+            float[] StartPos = Start.GetPosition();
+
             // Calculate intersection point between line with slope perpendicular to our orbit and the destination target's orbit
-            float[] IntersectionAt = Destination.GetIntersectionWith((float)Math.Sin(Descriptor.Rotation) / (float)Math.Cos(Descriptor.Rotation));
+            float[] IntersectionAt = Destination.GetIntersectionWith(StartPos[0], StartPos[1], (float)Math.Sin(Descriptor.Rotation) / (float)Math.Cos(Descriptor.Rotation));
+
+            float[] DestinationPos = Destination.GetPosition();
+            float[] EndPos = Destination.GetPositionAt(Destination.GetRotationalPositionAt(IntersectionAt[0], IntersectionAt[1]));
 
             // Start altitude = current altitude of start object
             float StartAltitude = Start.GetDistanceFromCenter();
@@ -37,6 +41,9 @@ namespace SystemView
             // Choose periapsis and apoapsis from start/destination altitude (lower value = periapsis, higher value = apoapsis)
             float Periapsis = StartAltitude < DestinationAltitude ? StartAltitude : DestinationAltitude;
             float Apoapsis  = StartAltitude > DestinationAltitude ? StartAltitude : DestinationAltitude;
+
+            // Rotate orbit 180 degrees if we're going from high altitude to low
+            if (StartAltitude > DestinationAltitude) Descriptor.Rotation += 3.1415926f;
 
             // Semi major axis = the longer "radius" of the ellipse
             // Can be calculated by adding periapsis and apoapsis together as they are the 2 farthest points on the orbit, and then dividing it in half
@@ -68,8 +75,7 @@ namespace SystemView
 
             Descriptor.SemiMinorAxis = (float)Math.Sqrt(2 * Descriptor.SemiMajorAxis * Periapsis - Periapsis * Periapsis);
 
-            float[] StartPos = Start.GetPosition();
-            Descriptor.RotationalPosition = 0.0f;
+            Descriptor.RotationalPosition = StartAltitude > DestinationAltitude ? 3.1415926f : 0.0f;
 
             // Estimating time to apoapsis and how far the target will have moved in that time to try and see
             // whether the orbits are lined up in a way that an encounter is possible.
@@ -79,9 +85,10 @@ namespace SystemView
 
             float TimeToApoapsis = 0.0f;
             float TargetRotationalMovement = 0.0f;
-            
+
             // This could be an integral. However, after messing around with it I'm not sure it would be any faster
             // than this estimate, and this is definitely a lot easier and simpler to read.
+            int segments = 128 + (int)((Periapsis + Apoapsis) * 16);
             for (int i = 0; i < segments; i++)
             {
                 // Total distance from periapsis to apoapsis is 180 degrees (pi) - so each segment is (pi / amount of segments) long
@@ -100,7 +107,7 @@ namespace SystemView
             }
 
             // Turn rotational positions into position vectors
-            float[] ApoapsisPos = Descriptor.GetPositionAt(3.1415926f);
+            float[] ApoapsisPos = Descriptor.GetPositionAt(Descriptor.RotationalPosition + 3.1415926f);
             float[] TargetPos = Destination.GetPositionAt(Destination.RotationalPosition + TargetRotationalMovement);
 
             // Check whether apoapsis is close enough to where the target will be to ensure an encounter

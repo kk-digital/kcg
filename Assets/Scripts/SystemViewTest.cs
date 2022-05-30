@@ -63,11 +63,11 @@ namespace SystemView
 
             for (int Layer = 0; Layer < 16; Layer++)
             {
-                for (int i = 0; i < 256; i++)
+                for (int i = 0; i < 192 + 8 * Layer; i++)
                 {
                     SystemAsteroid testAsteroid = new SystemAsteroid();
 
-                    testAsteroid.RotationalPosition = (float)i * 3.1415926f / 128.0f;
+                    testAsteroid.RotationalPosition = (float)i * 3.1415926f / (96.0f + 4.0f * Layer);
                     testAsteroid.Layer = Layer;
 
                     testBelt.Asteroids.Add(testAsteroid);
@@ -130,26 +130,26 @@ namespace SystemView
         {
             foreach (SystemPlanet p in State.Planets)
             {
-                p.UpdatePosition(0.45f);
+                p.UpdatePosition(0.2f);
             }
             
             foreach (SystemAsteroidBelt b in State.AsteroidBelts)
             {
-                b.UpdatePositions(0.45f);
+                b.UpdatePositions(0.2f);
             }
 
             foreach (SystemShip b in State.Ships)
             {
                 if (!b.PathPlanned)
-                    b.PlanPath(b.Start, b.Destination, 0.5f);
-                else if (!b.Reached && b.Descriptor.GetDistanceFrom(b.Destination) < 0.6f)
+                    b.PlanPath(b.Start, b.Destination, 0.1f);
+                else if (!b.Reached && b.Descriptor.GetDistanceFrom(b.Destination) < 1.0f)
                 {
                     b.Descriptor = new OrbitingObjectDescriptor(b.Destination);
                     b.PathPlanned = false;
                     (b.Start, b.Destination) = (b.Destination, b.Start);
                 }
 
-                b.UpdatePosition(0.45f);
+                b.UpdatePosition(0.2f);
             }
         }
     }

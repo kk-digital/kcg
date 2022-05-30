@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace SystemView
 {
@@ -112,20 +112,46 @@ namespace SystemView
             return (float)Math.Asin(posy);
         }
 
-        public float[] GetIntersectionWith(float slope)
+        public float[] GetIntersectionWith(float startx, float starty, float slope)
         {
-            float[] Intersection = new float[2];
+            // sine and cosine of the orbit's rotation
+            float rotsin = (float)Math.Sin(Rotation);
+            float rotcos = (float)Math.Cos(Rotation);
+
+            // Find both intersection points and return the farther one
+            float[] Intersection1 = new float[2];
+            float[] Intersection2 = new float[2];
 
             // Rotate slope to match rotation of orbit
             slope = (float)Math.Tan(Math.Atan(slope) - Rotation);
 
-            Intersection[0] = (SemiMajorAxis * SemiMinorAxis) / (float)Math.Sqrt(SemiMajorAxis * SemiMajorAxis * slope * slope + SemiMinorAxis * SemiMinorAxis);
-            Intersection[1] = slope * Intersection[0];
+            // (1) y = mx
 
-            Intersection[0] += CenterX;
-            Intersection[1] += CenterY;
+            //     x^2   y^2                           b √ (a^2 - x^2)
+            // (2) --- + --- = 1            =>   y = ± ---------------
+            //     a^2   b^2                                  a
 
-            return Intersection;
+            //            b √ (a^2 - x^2)                      a * b
+            // (3) mx = ± ---------------   =>   x = ± --------------------
+            //                   a                     √ (a^2 * m^2 + b^2 )
+
+            Intersection1[0] = (float)(SemiMajorAxis * SemiMinorAxis / Math.Sqrt(SemiMajorAxis * SemiMajorAxis * slope * slope + SemiMinorAxis * SemiMinorAxis));
+            Intersection1[1] = slope * Intersection1[0];
+
+            Intersection2[0] = -Intersection1[0];
+            Intersection2[1] = -Intersection1[1];
+
+            // Rotate points to match orbit's rotation
+
+            (Intersection1[0], Intersection1[1]) = (rotcos * Intersection1[0] - rotsin * Intersection1[1] + CenterX,
+                                                    rotsin * Intersection1[0] + rotcos * Intersection1[1] + CenterY);
+            (Intersection2[0], Intersection2[1]) = (rotcos * Intersection2[0] - rotsin * Intersection2[1] + CenterX,
+                                                    rotsin * Intersection2[0] + rotcos * Intersection2[1] + CenterY);
+
+            float d1 = (float)Math.Sqrt((Intersection1[0] - startx) * (Intersection1[0] - startx) + (Intersection1[1] - starty) * (Intersection1[1] - starty));
+            float d2 = (float)Math.Sqrt((Intersection2[0] - startx) * (Intersection2[0] - startx) + (Intersection2[1] - starty) * (Intersection2[1] - starty));
+
+            return d1 > d2 ? Intersection1 : Intersection2;
         }
 
         public float GetDistanceFrom(OrbitingObjectDescriptor Descriptor)

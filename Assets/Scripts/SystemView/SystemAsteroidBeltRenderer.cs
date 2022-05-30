@@ -57,6 +57,7 @@ namespace SystemView
                     float[] pos = belt.Descriptor[belt.Asteroids[i].Layer].GetPositionAt(belt.Asteroids[i].RotationalPosition);
 
                     GameObjects[i].transform.position = new Vector3(pos[0], pos[1], -0.1f);
+                    GameObjects[i].transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
                 }
             }
             else
