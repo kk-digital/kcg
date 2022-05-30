@@ -1,3 +1,6 @@
+using System.Numerics;
+using System.Drawing;
+
 namespace Entity
 {
     public struct ParticleEmitter
@@ -17,7 +20,6 @@ namespace Entity
 
         // the starting properties of the particles
         public Vector2 ParticleStartingVelocity;
-        public Vector2 ParticleStartingDirection;
         public float ParticleStartingRotation;
         public float ParticleStartingScale;
         public Color ParticleStartingColor;
@@ -30,9 +32,28 @@ namespace Entity
         public float TimeBetweenEmissions;
 
 
-        public ParticleEmitter()
+        public ParticleEmitter(Vector2 position, float decayRate,
+            Vector2 acceleration, float deltaRotation, float deltaScale,
+            int[] spriteIds, Vector2 startingVelocity,
+            float startingRotation, float startingScale, Color startingColor,
+            float animationSpeed, float duration, bool loop, int particleCount, 
+            float timeBetweenEmissions)
         {
-
+            Position = position;
+            ParticleDecayRate = decayRate;
+            ParticleAcceleration = acceleration;
+            ParticleDeltaRotation = deltaRotation;
+            ParticleDeltaScale = deltaScale;
+            SpriteIds = spriteIds;
+            ParticleStartingVelocity = startingVelocity;
+            ParticleStartingRotation = startingRotation;
+            ParticleStartingScale = startingScale;
+            ParticleStartingColor = startingColor;
+            ParticleAnimationSpeed = animationSpeed;
+            Duration = duration;
+            Loop = loop;
+            ParticleCount = particleCount;
+            TimeBetweenEmissions = timeBetweenEmissions;
         }
 
         // Used to spawn particles off the emitter
@@ -46,7 +67,7 @@ namespace Entity
                 System.Random random = new System.Random(); 
                 int spriteId = (random.Next() % SpriteIds.Length);
                 GameState.ParticleList.AddParticle(ParticleDecayRate, Position, ParticleStartingVelocity,
-                     ParticleStartingDirection, ParticleStartingRotation, ParticleDeltaRotation,
+                     ParticleAcceleration, ParticleStartingRotation, ParticleDeltaRotation,
                      ParticleStartingScale, ParticleDeltaScale, spriteId,
                     ParticleStartingColor, ParticleAnimationSpeed);
             }
