@@ -1,8 +1,9 @@
+using Tiles.PlanetMap;
 using UnityEngine;
 
-namespace Tiles.PlanetMap
+namespace Components.Agents
 {
-    public struct ACBoxCollider
+    public struct CABoxCollider
     {
         // epsilon parameter for values that are "close enough"
         public const float Eps = 0.05f;
@@ -23,7 +24,7 @@ namespace Tiles.PlanetMap
         public bool IsIgnoringPlatforms;
         public bool IsOnGround => CollisionInfo.Below;
 
-        public ACBoxCollider(Vector2 size) : this()
+        public CABoxCollider(Vector2 size) : this()
         {
             Size = size;
         }

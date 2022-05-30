@@ -1,12 +1,12 @@
 using Tiles.PlanetMap;
 using TileProperties;
 
-namespace Planets.Systems
+namespace Systems.Planets
 {
-    public class PSTileCreator
+    public class SPTileCreator
     {
-        private static PSTileCreator instance;
-        public static PSTileCreator Instance => instance ??= new PSTileCreator();
+        private static SPTileCreator instance;
+        public static SPTileCreator Instance => instance ??= new SPTileCreator();
         
         public void CreateTiles(ref TilesPlanetMap tilesPlanetMap)
         {

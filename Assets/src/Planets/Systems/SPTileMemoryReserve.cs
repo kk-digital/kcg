@@ -1,9 +1,9 @@
-namespace Planets.Systems
+namespace Systems.Planets
 {
-    public class PSTileMemoryReserve
+    public class SPTileMemoryReserve
     {
-        private static PSTileMemoryReserve instance;
-        public static PSTileMemoryReserve Instance => instance ??= new PSTileMemoryReserve();
+        private static SPTileMemoryReserve instance;
+        public static SPTileMemoryReserve Instance => instance ??= new SPTileMemoryReserve();
         
         public void ReserveTiles()
         {

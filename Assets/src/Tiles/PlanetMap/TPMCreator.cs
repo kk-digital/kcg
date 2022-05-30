@@ -1,5 +1,5 @@
 using UnityEngine;
-using Planets.Systems;
+using Systems.Planets;
 
 namespace Tiles.PlanetMap
 {
@@ -23,8 +23,8 @@ namespace Tiles.PlanetMap
         public void InitStage1()
         {
             PlanetTilesMap = new TilesPlanetMap(new Vector2Int(128, 128));
-            PSTileMemoryReserve.Instance.ReserveTiles();
-            PSTileCreator.Instance.CreateTiles(ref PlanetTilesMap);
+            SPTileMemoryReserve.Instance.ReserveTiles();
+            SPTileCreator.Instance.CreateTiles(ref PlanetTilesMap);
         }
 
         //Load settings from files and other init, that requires systems to be intialized

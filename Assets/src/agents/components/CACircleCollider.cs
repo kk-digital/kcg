@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Tiles.PlanetMap;
 using UnityEngine;
 
-namespace Tiles.PlanetMap
+namespace Components.Agents
 {
-    public struct ACCircleCollider
+    public struct CACircleCollider
     {
         // epsilon parameter for values that are "close enough"
         public const float Eps = 0.05f;

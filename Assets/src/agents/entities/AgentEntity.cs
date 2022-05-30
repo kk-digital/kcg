@@ -1,4 +1,4 @@
-namespace Agents.Entities
+namespace Entities.Agents
 {
     public struct AgentEntity
     {

@@ -1,5 +1,5 @@
 using Tiles.PlanetMap;
-using Planets.Systems;
+using Systems.Planets;
 using UnityEngine;
 
 public class GameLoop : MonoBehaviour
@@ -43,6 +43,6 @@ public class GameLoop : MonoBehaviour
             else
                 DestroyImmediate(mr.gameObject);
 
-        PSTileUpdater.Instance.UpdateTileMap(ref TPMCreator.Instance.PlanetTilesMap, ref tileParent, ref tileAtlas);
+        SPTileUpdater.Instance.UpdateTileMap(ref TPMCreator.Instance.PlanetTilesMap, ref tileParent, ref tileAtlas);
     }
 }

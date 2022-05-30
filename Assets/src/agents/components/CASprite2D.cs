@@ -1,6 +1,6 @@
-namespace Tiles.PlanetMap
+namespace Components.Agents
 {
-    public class ACSprite2D
+    public class CASprite2D
     {
         public int SpriteID;
         public int Sprite2ID;

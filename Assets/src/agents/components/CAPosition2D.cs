@@ -1,10 +1,8 @@
-
-
 using UnityEngine;
 
-namespace Tiles.PlanetMap
+namespace Components.Agents
 {
-    public struct ACPosition2D
+    public struct CAPosition2D
     {
         public Vector2 Position;
         public Vector2 PreviousPosition;

@@ -1,4 +1,4 @@
-using Agents.Entities;
+using Entities.Agents;
 
 namespace Agents
 {

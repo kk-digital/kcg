@@ -1,12 +1,12 @@
 using Tiles.PlanetMap;
 using TileProperties;
 
-namespace Planets.Systems
+namespace Systems.Planets
 {
-    public class PSTileUpdater
+    public class SPTileUpdater
     {
-        private static PSTileUpdater instance;
-        public static PSTileUpdater Instance => instance ??= new PSTileUpdater();
+        private static SPTileUpdater instance;
+        public static SPTileUpdater Instance => instance ??= new SPTileUpdater();
         
         public void UpdateTileMap(ref TilesPlanetMap tilesMap, ref UnityEngine.Transform tileParent, ref UnityEngine.Material tileAtlas)
         {
