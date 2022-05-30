@@ -1,6 +1,6 @@
 namespace Entities.Agents
 {
-    public struct AgentEntity
+    public struct EntityAgent
     {
         public int AgentID;
     }
