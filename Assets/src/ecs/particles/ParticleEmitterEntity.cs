@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace Entity
 {
-    public struct ParticleEmitter
+    public struct ParticleEmitterEntity
     {
         public Vector2 Position;
 
@@ -32,7 +32,7 @@ namespace Entity
         public float TimeBetweenEmissions;
 
 
-        public ParticleEmitter(Vector2 position, float decayRate,
+        public ParticleEmitterEntity(Vector2 position, float decayRate,
             Vector2 acceleration, float deltaRotation, float deltaScale,
             int[] spriteIds, Vector2 startingVelocity,
             float startingRotation, float startingScale, Color startingColor,

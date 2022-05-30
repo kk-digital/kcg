@@ -13,10 +13,12 @@ namespace Components
     public struct ParticleStateComponent
     {
         public ParticleState State;
+        public int Id;
 
-        public ParticleStateComponent(ParticleState state)
+        public ParticleStateComponent(ParticleState state, int id)
         {
             State = state;
+            Id = id;
         }
     }
 
