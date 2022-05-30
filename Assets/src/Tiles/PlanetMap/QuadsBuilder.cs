@@ -4,7 +4,7 @@ using TileProperties;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
-namespace PlanetTileMap
+namespace Tiles.PlanetMap
 {
     /// <summary> Builds array of sprite quads (2 triangles) for specified layer </summary>
     //TODO: WTF is difference between mesh builder and quad builder?

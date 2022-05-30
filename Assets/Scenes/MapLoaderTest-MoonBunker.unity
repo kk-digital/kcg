@@ -152,6 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1439d86a369e82441acc187fb2ef1fad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileParent: {fileID: 546800184}
+  tileAtlas: {fileID: 2100000, guid: 4073de6af124b4f40bdce02691603836, type: 2}
 --- !u!4 &166190783
 Transform:
   m_ObjectHideFlags: 0
@@ -268,7 +270,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 4.0859375
+  orthographic size: 2.109375
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -326,10 +328,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxCameraHalfWidthEnabled: 1
   maxCameraHalfHeightEnabled: 1
-  maxCameraHalfWidth: 41.32
-  maxCameraHalfHeight: 58.2
-  targetDimension: 0
-  targetCameraHalfWidth: 8
+  maxCameraHalfWidth: 6
+  maxCameraHalfHeight: 3
+  targetDimension: 1
+  targetCameraHalfWidth: 2
   targetCameraHalfHeight: 2
   pixelPerfect: 1
   assetsPixelsPerUnit: 32
@@ -355,9 +357,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 546800184}
-  - component: {fileID: 546800188}
   m_Layer: 0
-  m_Name: TilesTest
+  m_Name: TilesParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -377,61 +378,4 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &546800188
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 546800182}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbcde75a8691ce94e982bf1c6b37fd7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Material: {fileID: 2100000, guid: 4073de6af124b4f40bdce02691603836, type: 2}
---- !u!1 &1572100629
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1572100631}
-  - component: {fileID: 1572100630}
-  m_Layer: 0
-  m_Name: InputManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1572100630
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1572100629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4b5d32f3bada314bafe366947afdc0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1572100631
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1572100629}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.89, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

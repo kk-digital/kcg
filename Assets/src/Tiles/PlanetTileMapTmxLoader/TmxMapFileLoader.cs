@@ -9,7 +9,7 @@ using TiledCS;
 
 
 using TileProperties;
-using PlanetTileMap;
+using Tiles.PlanetMap;
 
 //Note:
 //TMX files are created by map editor "Tiled"

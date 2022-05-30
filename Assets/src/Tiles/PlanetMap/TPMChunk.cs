@@ -1,8 +1,8 @@
 using TileProperties;
 
-namespace PlanetTileMap
+namespace Tiles.PlanetMap
 {
-    public class PlanetTileMapChunk
+    public class TPMChunk
     {
         public PlanetTile[,] Tiles;
 
@@ -13,7 +13,7 @@ namespace PlanetTileMap
         public int Usage; // Used for sorting chunks by usage
         public int Seq;
 
-        public PlanetTileMapChunk()
+        public TPMChunk()
         {
             Tiles = new PlanetTile[16, 16];
             

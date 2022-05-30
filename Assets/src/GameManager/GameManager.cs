@@ -1,11 +1,5 @@
-using Entitas;
 using src.ecs.Game;
-using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
-using ImageLoader;
-using TileProperties;
-using TileSpriteLoader;
 
 // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.html
 

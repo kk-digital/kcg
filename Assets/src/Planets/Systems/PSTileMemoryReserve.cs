@@ -1,24 +1,11 @@
-using TileProperties;
-using UnityEngine;
-
-namespace Agents.Entities
+namespace Planets.Systems
 {
-    public struct World
+    public class PSTileMemoryReserve
     {
-        public struct EntityListRef
-        {
-            public AgentList AgentList;
-        }
-
-        public EntityListRef EntityList;
-        public Agents.Components.Planet Planet;
-
-        public World(Vector2Int size) : this()
-        {
-            Planet.Size = size;
-        }
+        private static PSTileMemoryReserve instance;
+        public static PSTileMemoryReserve Instance => instance ??= new PSTileMemoryReserve();
         
-        public void CreateDefaultTiles()
+        public void ReserveTiles()
         {
             int metalSlabsTileSheet = 
                         GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png");
@@ -68,55 +55,7 @@ namespace Agents.Entities
             GameState.TileCreationApi.SetTileName("tile_moon_1");
             GameState.TileCreationApi.SetTileTexture(tilesMoon, 0, 0);
             GameState.TileCreationApi.EndTile();
-
-            for(int j = 0; j < Planet.Size.y; j++)
-            {
-                for(int i = 0; i < Planet.Size.x; i++)
-                {
-                    PlanetTile tile = PlanetTile.EmptyTile();
-                    tile.TileIdPerLayer[0] = 0;
-                    if (i % 10 == 0)
-                    {
-                        tile.TileIdPerLayer[0] = 7;
-                    }
-                    if (j % 2 == 0)
-                    {
-                        tile.TileIdPerLayer[0] = 2;
-                    }
-                    if (j % 3 == 0)
-                    {
-                        tile.TileIdPerLayer[0] = 1;
-                    }
-
-                    if ((j > 1 && j < 6) || j > 10)
-                    {
-                       tile.TileIdPerLayer[0] = -1; 
-                    }
-
-                    
-                    Planet.SetTile(i, j, tile);
-                }
-            }
-
-        }
-        
-        public Mesh CreateMesh(Transform parent, string name, int sortingOrder, Material material)
-        {
-            var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
-            go.transform.SetParent(parent);
-
-            var mesh = new Mesh
-            {
-                indexFormat = UnityEngine.Rendering.IndexFormat.UInt32
-            };
-
-            var mf = go.GetComponent<MeshFilter>();
-            mf.sharedMesh = mesh;
-            var mr = go.GetComponent<MeshRenderer>();
-            mr.sharedMaterial = material;
-            mr.sortingOrder = sortingOrder;
-
-            return mesh;
         }
     }
 }
+

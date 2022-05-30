@@ -2,9 +2,9 @@
 
 using UnityEngine;
 
-namespace Agents.Components
+namespace Tiles.PlanetMap
 {
-    public struct Position2D
+    public struct ACPosition2D
     {
         public Vector2 Position;
         public Vector2 PreviousPosition;

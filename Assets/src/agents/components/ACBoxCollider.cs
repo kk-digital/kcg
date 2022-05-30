@@ -1,8 +1,8 @@
 using UnityEngine;
 
-namespace Agents.Components
+namespace Tiles.PlanetMap
 {
-    public struct BoxCollider
+    public struct ACBoxCollider
     {
         // epsilon parameter for values that are "close enough"
         public const float Eps = 0.05f;
@@ -23,7 +23,7 @@ namespace Agents.Components
         public bool IsIgnoringPlatforms;
         public bool IsOnGround => CollisionInfo.Below;
 
-        public BoxCollider(Vector2 size) : this()
+        public ACBoxCollider(Vector2 size) : this()
         {
             Size = size;
         }
@@ -56,7 +56,7 @@ namespace Agents.Components
             };
         }
     
-        public bool IsCollidingLeft(ref Planet map, Vector2 newPos)
+        public bool IsCollidingLeft(ref TilesPlanetMap tilesPlanetMap, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving right
@@ -64,7 +64,7 @@ namespace Agents.Components
             
             for (int y = bounds.BottomTile; y <= bounds.TopTile; y++) 
             {
-                var tile = map.getTile(bounds.LeftTile, y);
+                var tile = tilesPlanetMap.getTile(bounds.LeftTile, y);
                 int tilePropertiesIndex = tile.TileIdPerLayer[0];
 
                 if (tilePropertiesIndex >= 0)
@@ -78,7 +78,7 @@ namespace Agents.Components
             return false;
         }
     
-        public bool IsCollidingRight(ref Planet map, Vector2 newPos)
+        public bool IsCollidingRight(ref TilesPlanetMap tilesPlanetMap, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving Left
@@ -86,7 +86,7 @@ namespace Agents.Components
             
             for (int y = bounds.BottomTile; y <= bounds.TopTile; y++) 
             {
-                var tile = map.getTile(bounds.RightTile, y);
+                var tile = tilesPlanetMap.getTile(bounds.RightTile, y);
                 int tilePropertiesIndex = tile.TileIdPerLayer[0];
 
                 if (tilePropertiesIndex >= 0)
@@ -100,7 +100,7 @@ namespace Agents.Components
             return false;
         }
     
-        public bool IsCollidingTop(ref Planet map, Vector2 newPos)
+        public bool IsCollidingTop(ref TilesPlanetMap tilesPlanetMap, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving Down
@@ -108,7 +108,7 @@ namespace Agents.Components
             
             for (int x = bounds.LeftTile; x <= bounds.RightTile; x++) 
             {
-                var tile = map.getTile(x, bounds.TopTile);
+                var tile = tilesPlanetMap.getTile(x, bounds.TopTile);
                 int tilePropertiesIndex = tile.TileIdPerLayer[0];
 
                 if (tilePropertiesIndex >= 0)
@@ -122,7 +122,7 @@ namespace Agents.Components
             return false;
         }
 
-        public bool IsCollidingBottom(ref Planet map, Vector2 newPos)
+        public bool IsCollidingBottom(ref TilesPlanetMap tilesPlanetMap, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving Up
@@ -130,7 +130,7 @@ namespace Agents.Components
             
             for (int x = bounds.LeftTile; x <= bounds.RightTile; x++)
             {
-                var tile = map.getTile(x, bounds.BottomTile);
+                var tile = tilesPlanetMap.getTile(x, bounds.BottomTile);
                 int tilePropertiesIndex = tile.TileIdPerLayer[0];
 
                 if (tilePropertiesIndex >= 0)
@@ -162,7 +162,7 @@ namespace Agents.Components
             return partialDisplacements.ToArray();
         }*/
 
-        public Vector2 ResolveCollisions(ref Planet map, Vector2 newPos)
+        public Vector2 ResolveCollisions(ref TilesPlanetMap tilesPlanetMap, Vector2 newPos)
         {
             //var partialDisplacements = DiscretizeDisplacement(totalDisplacement);
             /*Vector2 newPos = default;

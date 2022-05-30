@@ -1,32 +1,30 @@
+using Tiles.PlanetMap;
+using Planets.Systems;
 using UnityEngine;
-using Enums;
-using TileProperties;
+
 public class GameLoop : MonoBehaviour
 {
+    [SerializeField] private Transform tileParent;
+    [SerializeField] private Material tileAtlas;
+    
     private const int FPS = 60;
-    public TilePropertiesManager TilePropertiesManager;
+
+
     // Method for setting everything up, for like init GameManager for example
-    private void Init()
+    private void InitStage1()
     {
-
-        //check if SceneManager even exists
-        if (SceneManager.Instance != null)
-        {
-            SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
-
-        }
-        
         Application.targetFrameRate = FPS; // Cap at 60 FPS
+        TPMCreator.Instance.InitStage1();
     }
     
-    private void LoadAssets()
+    private void InitStage2()
     {
     }
 
     private void Awake()
     {
-        Init();
-        LoadAssets();
+        InitStage1();
+        InitStage2();
     }
     
     // Method to update physics
@@ -36,8 +34,15 @@ public class GameLoop : MonoBehaviour
     }
 
     // Method for Drawing
-    private void Update()
+    public void Update()
     {
-        
+        //remove all children MeshRenderer
+        foreach(var mr in tileParent.GetComponentsInChildren<MeshRenderer>())
+            if (Application.isPlaying)
+                Destroy(mr.gameObject);
+            else
+                DestroyImmediate(mr.gameObject);
+
+        PSUpdate.Instance.UpdateTileMap(ref TPMCreator.Instance.PlanetTilesMap, ref tileParent, ref tileAtlas);
     }
 }

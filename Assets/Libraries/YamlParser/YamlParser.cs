@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 
-namespace PlanetTileMap.Utils
+namespace Tiles.PlanetMap.Utils
 {
     static class YamlParser
     {

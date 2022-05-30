@@ -1,4 +1,4 @@
-namespace Agents.Components
+namespace Tiles.PlanetMap
 {
     public struct CollisionInfo
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace PlanetTileMap.Unity
+namespace Tiles.PlanetMap.Unity
 {
     //TODO: Improve naming PlanetTileMapRender ?
     static class GLDrawPlanetTileMap
