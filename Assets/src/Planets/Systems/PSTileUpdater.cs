@@ -3,10 +3,10 @@ using TileProperties;
 
 namespace Planets.Systems
 {
-    public class PSUpdate
+    public class PSTileUpdater
     {
-        private static PSUpdate instance;
-        public static PSUpdate Instance => instance ??= new PSUpdate();
+        private static PSTileUpdater instance;
+        public static PSTileUpdater Instance => instance ??= new PSTileUpdater();
         
         public void UpdateTileMap(ref TilesPlanetMap tilesMap, ref UnityEngine.Transform tileParent, ref UnityEngine.Material tileAtlas)
         {

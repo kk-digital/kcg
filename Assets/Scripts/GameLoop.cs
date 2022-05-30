@@ -43,6 +43,6 @@ public class GameLoop : MonoBehaviour
             else
                 DestroyImmediate(mr.gameObject);
 
-        PSUpdate.Instance.UpdateTileMap(ref TPMCreator.Instance.PlanetTilesMap, ref tileParent, ref tileAtlas);
+        PSTileUpdater.Instance.UpdateTileMap(ref TPMCreator.Instance.PlanetTilesMap, ref tileParent, ref tileAtlas);
     }
 }
