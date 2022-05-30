@@ -167,13 +167,13 @@ public class ParticleList
         Capacity = 0;
         Size = 0;
 
-        StateList = new ParticleStateComponent[0];
-        HealthList = new Particle2dHealthComponent[0];
-        PositionList = new Particle2dPositionComponent[0];
-        RotationList = new Particle2dRotationComponent[0];
-        ScaleList = new Particle2dScaleComponent[0];
-        SpriteList = new Particle2dSpriteComponent[0];
-        AnimationList = new Particle2dAnimationComponent[0];
+        StateList = Array.Empty<ParticleStateComponent>();
+        HealthList = Array.Empty<Particle2dHealthComponent>();
+        PositionList = Array.Empty<Particle2dPositionComponent>();
+        RotationList = Array.Empty<Particle2dRotationComponent>();
+        ScaleList = Array.Empty<Particle2dScaleComponent>();
+        SpriteList = Array.Empty<Particle2dSpriteComponent>();
+        AnimationList = Array.Empty<Particle2dAnimationComponent>();
 
         ParticlesToRemove = new List<int>();
 
