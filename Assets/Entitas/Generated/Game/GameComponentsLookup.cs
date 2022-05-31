@@ -14,23 +14,19 @@ public static class GameComponentsLookup {
     public const int Item = 3;
     public const int ItemMove = 4;
     public const int ItemStack = 5;
-    public const int VehicleComponentCollider = 6;
-    public const int VehicleComponentDraw = 7;
-    public const int GameObject = 8;
-    public const int Particle = 9;
-    public const int Position = 10;
-
-    public const int TotalComponents = 11;
     public const int Particle2dAnimation = 6;
     public const int Particle2dHealth = 7;
     public const int Particle2dPosition = 8;
     public const int Particle2dRotation = 9;
     public const int Particle2dScale = 10;
     public const int Particle2dSprite = 11;
-    public const int GameObject = 12;
-    public const int Particle = 13;
-    public const int Position = 14;
-    public const int TotalComponents = 15;
+    public const int VehicleComponentCollider = 12;
+    public const int VehicleComponentDraw = 13;
+    public const int GameObject = 14;
+    public const int Particle = 15;
+    public const int Position = 16;
+
+    public const int TotalComponents = 17;
 
     public static readonly string[] componentNames = {
         "Agent2dInventory",
@@ -39,14 +35,14 @@ public static class GameComponentsLookup {
         "Item",
         "ItemMove",
         "ItemStack",
-        "VehicleComponentCollider",
-        "VehicleComponentDraw",
         "Particle2dAnimation",
         "Particle2dHealth",
         "Particle2dPosition",
         "Particle2dRotation",
         "Particle2dScale",
         "Particle2dSprite",
+        "VehicleComponentCollider",
+        "VehicleComponentDraw",
         "GameObject",
         "Particle",
         "Position"
@@ -59,14 +55,14 @@ public static class GameComponentsLookup {
         typeof(Components.ItemComponent),
         typeof(Components.ItemMoveComponent),
         typeof(Components.ItemStackComponent),
-        typeof(Components.VehicleComponentCollider),
-        typeof(Components.VehicleComponentDraw),
         typeof(Components.Particle2dAnimationComponent),
         typeof(Components.Particle2dHealthComponent),
         typeof(Components.Particle2dPositionComponent),
         typeof(Components.Particle2dRotationComponent),
         typeof(Components.Particle2dScaleComponent),
         typeof(Components.Particle2dSpriteComponent),
+        typeof(Components.VehicleComponentCollider),
+        typeof(Components.VehicleComponentDraw),
         typeof(src.ecs.Game.Particle.ParticleSpawn.GameObjectComponent),
         typeof(src.ecs.Game.Particle.ParticleSpawn.ParticleComponent),
         typeof(src.ecs.Game.Particle.ParticleSpawn.PositionComponent)
