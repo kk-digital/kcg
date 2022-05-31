@@ -5,12 +5,6 @@ using UnityEngine;
 
 namespace SystemView
 {
-    public struct ShipInfo
-    {
-        public GameObject Object;
-        public SystemShipRenderer Renderer;
-    }
-
     public class SystemViewFightTest : MonoBehaviour
     {
         public SystemState State;
@@ -126,7 +120,7 @@ namespace SystemView
 
                     do
                     {
-                        Target = State.Ships[rand.Next(Ships.Count)];
+                        Target = State.Ships[rand.Next(State.Ships.Count)];
                     }
                     while (Target == Ship);
 
