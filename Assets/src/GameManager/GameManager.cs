@@ -1,5 +1,4 @@
 using Entitas;
-using src.ecs.Game;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
@@ -13,7 +12,6 @@ public class GameManager : MonoBehaviour
 {
 
     public string filePath = "/SimpleSpriteSheet/Table1.png";
-    private Entitas.Systems ecsSystems;
 
     //Documentation: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Awake.html
     //Awake is called when the script instance is being loaded.
@@ -39,8 +37,7 @@ public class GameManager : MonoBehaviour
     {
         //TODO: put per frame calls here
         //Example: Drawing calls
-        ecsSystems.Execute();
-        ecsSystems.Cleanup();
+
     }
 
     /* https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html
@@ -106,8 +103,6 @@ public class GameManager : MonoBehaviour
     {
         //TODO: Intialize all managers here
         //Setup ECS system
-        ecsSystems = new GameFeatures(Contexts.sharedInstance);
-        ecsSystems.Initialize();
     }
 
     //Load settings from files and other init, that requires systems to be intialized
@@ -120,7 +115,5 @@ public class GameManager : MonoBehaviour
     public void TearDown()
     {
         //TODO: Call code to tear down object
-        ecsSystems.TearDown();
-        Contexts.sharedInstance = null;
     }
 }

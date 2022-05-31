@@ -32,11 +32,15 @@ namespace PlanetTileMap.Unity
         List<Vector3> verticies = new List<Vector3>();
 
         ParticleEmitterEntity Emitter = new ParticleEmitterEntity();
-        int PipeSprite;
+        ParticleEmitterEntity Emitter2 = new ParticleEmitterEntity();
+        Texture2D PipeSprite;
+        Texture2D OreSprite;
 
-
-        Contexts contexts = Contexts.sharedInstance;
+        Contexts EntitasContext = Contexts.sharedInstance;
         ParticleUpdateSystem ParticleUpdateSystem;
+
+        GameObject prefab;
+        GameObject orePrefab;
 
         static bool Init = false;
         
@@ -53,27 +57,34 @@ namespace PlanetTileMap.Unity
 
         public void Update()
         {
-                       //remove all children MeshRenderer
-            foreach(var mr in GetComponentsInChildren<MeshRenderer>())
+            //remove all children MeshRenderer
+            /*foreach(var mr in GetComponentsInChildren<MeshRenderer>())
                 if (Application.isPlaying)
                     Destroy(mr.gameObject);
                 else
-                    DestroyImmediate(mr.gameObject);
+                    DestroyImmediate(mr.gameObject);*/
 
-            Emitter.Update(contexts);
+            Emitter.Update(EntitasContext, prefab);
+            Emitter2.Update(EntitasContext, orePrefab);
             ParticleUpdateSystem.Execute();
-            DrawParticles();
+           // DrawParticles();
         }
 
         // create the sprite atlas for testing purposes
         public void Initialize()
         {
-            ParticleUpdateSystem = new ParticleUpdateSystem(contexts);
+            
+            ParticleUpdateSystem = new ParticleUpdateSystem(EntitasContext);
 
-            Emitter = new ParticleEmitterEntity(new Vector2(-2.0f, 0),
-             1.0f, new Vector2(0, -20.0f), 0.2f, 0.0f, new int[]{0}, new Vector2(1.0f, 10.0f),
+            Emitter = new ParticleEmitterEntity(new Vector2(-4.0f, 0),
+             1.0f, new Vector2(0, -20.0f), 1.7f, 0.0f, new int[]{0}, new Vector2(1.0f, 10.0f),
             0.0f, 1.0f, new Color(255.0f, 255.0f, 255.0f, 255.0f),
-            0.2f, 3.0f, true, 1, 0.1f);
+            0.2f, 3.0f, true, 1, 0.05f);
+
+            Emitter2 = new ParticleEmitterEntity(new Vector2(2.0f, 0),
+             1.0f, new Vector2(0, -20.0f), 3.5f, 0.0f, new int[]{0}, new Vector2(1.0f, 10.0f),
+            0.0f, 1.0f, new Color(255.0f, 255.0f, 255.0f, 255.0f),
+            0.2f, 3.0f, true, 20, 0.5f);
 
             // we load the sprite sheets here
             int SomeObjectTileSheet = 
@@ -84,6 +95,10 @@ namespace PlanetTileMap.Unity
                          32, 48);
             int PipeTileSheet = 
             GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\sprite\\item\\admin_icon_pipesim.png",
+            16, 16);
+
+            int OreTileSheet = 
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png",
             16, 16);
 
 
@@ -97,36 +112,44 @@ namespace PlanetTileMap.Unity
             GameState.SpriteAtlasManager.Blit(SomeObjectTileSheet, 0, 0);
             GameState.SpriteAtlasManager.Blit(PlayerTileSheet, 0, 0);
             GameState.SpriteAtlasManager.Blit(PlayerTileSheet, 0, 0);
-            PipeSprite = GameState.SpriteAtlasManager.Blit(PipeTileSheet, 0, 0);
+
+            int PipeSpriteIndex = GameState.SpriteAtlasManager.Blit(PipeTileSheet, 0, 0);
+            byte[] pipeBytes = new byte[16 * 16 * 4];
+            GameState.SpriteAtlasManager.GetSpriteBytes(PipeSpriteIndex, pipeBytes);
+
+            int OreSpriteIndex = GameState.SpriteAtlasManager.Blit(OreTileSheet, 0, 0);
+            byte[] oreBytes = new byte[16 * 16 * 4];
+            GameState.SpriteAtlasManager.GetSpriteBytes(OreSpriteIndex, oreBytes);
+
+            PipeSprite = CreateTextureFromRGBA(pipeBytes, 16, 16);
+            OreSprite = CreateTextureFromRGBA(oreBytes, 16, 16);
+
+            prefab = CreateParticlePrefab(0, 0, 0.5f, 0.5f, PipeSprite);
+            orePrefab = CreateParticlePrefab(0, 0, 0.5f, 0.5f, OreSprite);
+            
         }
 
         void DrawParticles()
         {
-            /*SpriteAtlas.SpriteAtlas atlas = GameState.SpriteAtlasManager.GetSpriteAtlas(0);
-            DrawSprite(-3, -1, 
-                  atlas.Width / 32.0f, atlas.Height / 32.0f,
-                 atlas.Data, atlas.Width, atlas.Height);*/
-            byte[] pipeBytes = new byte[16 * 16 * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(PipeSprite, pipeBytes);
             IGroup<GameEntity> entities = 
-            contexts.game.GetGroup(GameMatcher.Particle2dPosition);
+            EntitasContext.game.GetGroup(GameMatcher.Particle2dPosition);
             foreach (var gameEntity in entities)
             {
                 var pos = gameEntity.particle2dPosition;
-                DrawSprite(pos.Position.x, pos.Position.y, 0.5f, 0.5f, pipeBytes, 16, 16);
+                DrawSprite(pos.Position.x, pos.Position.y, 0.5f, 0.5f, PipeSprite);
             }
         }
 
 
          // draws 1 sprite into the screen
         // Note(Mahdi): this code is for testing purpose
-        void DrawSprite(float x, float y, float w, float h, byte[] spriteBytes,
-             int spriteW, int spriteH)
+        void DrawSprite(float x, float y, float w, float h, Texture2D tex)
         {
-            var tex = CreateTextureFromRGBA(spriteBytes, spriteW, spriteH);
             var mat = Instantiate(Material);
             mat.SetTexture("_MainTex", tex);
-            var mesh = CreateMesh(transform, "abc", 0, mat);
+            var go = CreateObject(transform, "abc", 0, mat);
+            var mf = go.GetComponent<MeshFilter>();
+            var mesh =  mf.sharedMesh;
 
             triangles.Clear();
             uvs.Clear();
@@ -172,8 +195,63 @@ namespace PlanetTileMap.Unity
             mesh.SetTriangles(triangles, 0);
         }
 
+        private GameObject CreateParticlePrefab(float x, float y, float w, float h, Texture2D tex)
+        {
+            var mat = Instantiate(Material);
+            mat.SetTexture("_MainTex", tex);
+            var go = CreateObject(transform, "abc", 0, mat);
+            var mf = go.GetComponent<MeshFilter>();
+            var mesh =  mf.sharedMesh;
 
-        private Mesh CreateMesh(Transform parent, string name, int sortingOrder, Material material)
+            triangles.Clear();
+            uvs.Clear();
+            verticies.Clear();
+
+
+            var p0 = new Vector3(x, y, 0);
+            var p1 = new Vector3((x + w), (y + h), 0);
+            var p2 = p0; p2.y = p1.y;
+            var p3 = p1; p3.y = p0.y;
+
+            verticies.Add(p0);
+            verticies.Add(p1);
+            verticies.Add(p2);
+            verticies.Add(p3);
+
+            triangles.Add(0);
+            triangles.Add(2);
+            triangles.Add(1);
+            triangles.Add(0);
+            triangles.Add(1);
+            triangles.Add(3);
+
+            var u0 = 0;
+            var u1 = 1;
+            var v1 = -1;
+            var v0 = 0;
+
+            var uv0 = new Vector2(u0, v0);
+            var uv1 = new Vector2(u1, v1);
+            var uv2 = uv0; uv2.y = uv1.y;
+            var uv3 = uv1; uv3.y = uv0.y;
+
+
+            uvs.Add(uv0);
+            uvs.Add(uv1);
+            uvs.Add(uv2);
+            uvs.Add(uv3);
+    
+
+            mesh.SetVertices(verticies);
+            mesh.SetUVs(0, uvs);
+            mesh.SetTriangles(triangles, 0);
+
+            go.transform.position = new Vector3(99999, 99999, 99999);
+            return go;
+        }
+
+
+        private GameObject CreateObject(Transform parent, string name, int sortingOrder, Material material)
         {
             var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
             go.transform.SetParent(parent);
@@ -189,9 +267,8 @@ namespace PlanetTileMap.Unity
             mr.sharedMaterial = material;
             mr.sortingOrder = sortingOrder;
 
-            return mesh;
+            return go;
         }
-
 
       /*   void CreateSlots(int InventoryID)
         {

@@ -1,4 +1,6 @@
 using UnityEngine;
+using Entitas;
+using Entitas.Unity;
 
 namespace Entity
 {
@@ -30,6 +32,8 @@ namespace Entity
         public int ParticleCount;
         public float TimeBetweenEmissions;
 
+        public float CurrentTime;
+
 
         public ParticleEmitterEntity(Vector2 position, float decayRate,
             Vector2 acceleration, float deltaRotation, float deltaScale,
@@ -53,27 +57,35 @@ namespace Entity
             Loop = loop;
             ParticleCount = particleCount;
             TimeBetweenEmissions = timeBetweenEmissions;
+            CurrentTime = TimeBetweenEmissions;
         }
 
         // Used to spawn particles off the emitter
-        public void Update(Contexts contexts)
+        public void Update(Contexts contexts, GameObject prefab)
         {
 
             //TODO(Mahdi): use the Duration, Loop, TimeBetweenEmissions
             // to have a smooth emission
-            for(int i = 0; i < ParticleCount; i++)
-            {
-                System.Random random = new System.Random(); 
-                int spriteId = (random.Next() % SpriteIds.Length);
-                float randomX = (float)random.NextDouble() * 2.0f - 1.0f;
 
-                var e = contexts.game.CreateEntity();
-                e.AddParticle2dHealth(1.0f, ParticleDecayRate);
-                e.AddParticle2dPosition(Position, ParticleAcceleration, new Vector2(ParticleStartingVelocity.x + randomX, ParticleStartingVelocity.y));
-                e.AddParticle2dRotation(ParticleStartingRotation, ParticleDeltaRotation);
-                e.AddParticle2dScale(ParticleStartingScale, ParticleDeltaScale);
-                e.AddParticle2dSprite(spriteId, ParticleStartingColor);
-                e.AddParticle2dAnimation(0.0f, ParticleAnimationSpeed);
+            if (CurrentTime <= 0.0f)
+            {
+                for(int i = 0; i < ParticleCount; i++)
+                {
+                    System.Random random = new System.Random(); 
+                    int spriteId = (random.Next() % SpriteIds.Length);
+                    float randomX = (float)random.NextDouble() * 2.0f - 1.0f;
+
+                    var e = contexts.game.CreateEntity();
+                    var gameObject = Object.Instantiate(prefab);
+                    e.AddParticleState(gameObject, 1.0f, ParticleDecayRate, ParticleDeltaRotation, ParticleDeltaScale);
+                    e.AddParticle2dPosition(Position, ParticleAcceleration, new Vector2(ParticleStartingVelocity.x + randomX, ParticleStartingVelocity.y));
+                }
+
+                CurrentTime = TimeBetweenEmissions;
+            }
+            else
+            {
+                CurrentTime -= Time.deltaTime;
             }
         }
 
