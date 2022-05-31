@@ -1,4 +1,4 @@
-namespace Systems.Agent
+namespace Agent
 {
     public class SpawnerSystem
     {

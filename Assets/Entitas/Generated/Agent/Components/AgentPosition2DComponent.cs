@@ -8,12 +8,12 @@
 //------------------------------------------------------------------------------
 public partial class AgentEntity {
 
-    public Components.Agent.Position2DComponent position2D { get { return (Components.Agent.Position2DComponent)GetComponent(AgentComponentsLookup.Position2D); } }
+    public Agent.Position2DComponent position2D { get { return (Agent.Position2DComponent)GetComponent(AgentComponentsLookup.Position2D); } }
     public bool hasPosition2D { get { return HasComponent(AgentComponentsLookup.Position2D); } }
 
     public void AddPosition2D(UnityEngine.Vector2 newPosition, UnityEngine.Vector2 newPreviousPosition) {
         var index = AgentComponentsLookup.Position2D;
-        var component = (Components.Agent.Position2DComponent)CreateComponent(index, typeof(Components.Agent.Position2DComponent));
+        var component = (Agent.Position2DComponent)CreateComponent(index, typeof(Agent.Position2DComponent));
         component.Position = newPosition;
         component.PreviousPosition = newPreviousPosition;
         AddComponent(index, component);
@@ -21,7 +21,7 @@ public partial class AgentEntity {
 
     public void ReplacePosition2D(UnityEngine.Vector2 newPosition, UnityEngine.Vector2 newPreviousPosition) {
         var index = AgentComponentsLookup.Position2D;
-        var component = (Components.Agent.Position2DComponent)CreateComponent(index, typeof(Components.Agent.Position2DComponent));
+        var component = (Agent.Position2DComponent)CreateComponent(index, typeof(Agent.Position2DComponent));
         component.Position = newPosition;
         component.PreviousPosition = newPreviousPosition;
         ReplaceComponent(index, component);

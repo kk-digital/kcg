@@ -8,19 +8,19 @@
 //------------------------------------------------------------------------------
 public partial class AgentEntity {
 
-    public Components.Agent.Sprite2DComponent sprite2D { get { return (Components.Agent.Sprite2DComponent)GetComponent(AgentComponentsLookup.Sprite2D); } }
+    public Agent.Sprite2DComponent sprite2D { get { return (Agent.Sprite2DComponent)GetComponent(AgentComponentsLookup.Sprite2D); } }
     public bool hasSprite2D { get { return HasComponent(AgentComponentsLookup.Sprite2D); } }
 
     public void AddSprite2D(int newSpriteID) {
         var index = AgentComponentsLookup.Sprite2D;
-        var component = (Components.Agent.Sprite2DComponent)CreateComponent(index, typeof(Components.Agent.Sprite2DComponent));
+        var component = (Agent.Sprite2DComponent)CreateComponent(index, typeof(Agent.Sprite2DComponent));
         component.SpriteID = newSpriteID;
         AddComponent(index, component);
     }
 
     public void ReplaceSprite2D(int newSpriteID) {
         var index = AgentComponentsLookup.Sprite2D;
-        var component = (Components.Agent.Sprite2DComponent)CreateComponent(index, typeof(Components.Agent.Sprite2DComponent));
+        var component = (Agent.Sprite2DComponent)CreateComponent(index, typeof(Agent.Sprite2DComponent));
         component.SpriteID = newSpriteID;
         ReplaceComponent(index, component);
     }

@@ -21,8 +21,8 @@ public static class AgentComponentsLookup {
     };
 
     public static readonly System.Type[] componentTypes = {
-        typeof(Components.Agent.Inventory2DComponent),
-        typeof(Components.Agent.Position2DComponent),
-        typeof(Components.Agent.Sprite2DComponent)
+        typeof(Agent.Inventory2DComponent),
+        typeof(Agent.Position2DComponent),
+        typeof(Agent.Sprite2DComponent)
     };
 }

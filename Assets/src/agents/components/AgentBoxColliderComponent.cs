@@ -1,6 +1,7 @@
+using Components;
 using UnityEngine;
 
-namespace Components.Agent
+namespace Agent
 {
     public struct AgentBoxColliderComponent
     {

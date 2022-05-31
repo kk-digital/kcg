@@ -69,7 +69,7 @@ public partial class Contexts {
         agent.AddEntityIndex(new Entitas.PrimaryEntityIndex<AgentEntity, int>(
             Inventory2D,
             agent.GetGroup(AgentMatcher.Inventory2D),
-            (e, c) => ((Components.Agent.Inventory2DComponent)c).InventoryID));
+            (e, c) => ((Agent.Inventory2DComponent)c).InventoryID));
 
         game.AddEntityIndex(new Entitas.EntityIndex<GameEntity, int>(
             InventoryItem,

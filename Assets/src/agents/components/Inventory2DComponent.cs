@@ -2,12 +2,12 @@
 using Entitas.CodeGeneration.Attributes;
 using System.Collections;
 
-namespace Components.Agent
+namespace Agent
 {
     [Agent]
     public struct Inventory2DComponent : IComponent
     {
-        [PrimaryEntityIndexAttribute]
+        [PrimaryEntityIndex]
         public int  InventoryID;
         public int  Width;
         public int  Height;
