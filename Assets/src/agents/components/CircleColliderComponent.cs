@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Components;
 using UnityEngine;
 
-namespace Components
+namespace Agent
 {
-    public struct AgentCircleColliderComponent
+    public struct CircleColliderComponent
     {
         // epsilon parameter for values that are "close enough"
         public const float Eps = 0.05f;
