@@ -8,25 +8,29 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    static readonly Components.VehicleComponentDraw vehicleComponentDrawComponent = new Components.VehicleComponentDraw();
+    public Components.VehicleComponentDraw vehicleComponentDraw { get { return (Components.VehicleComponentDraw)GetComponent(GameComponentsLookup.VehicleComponentDraw); } }
+    public bool hasVehicleComponentDraw { get { return HasComponent(GameComponentsLookup.VehicleComponentDraw); } }
 
-    public bool isVehicleComponentDraw {
-        get { return HasComponent(GameComponentsLookup.VehicleComponentDraw); }
-        set {
-            if (value != isVehicleComponentDraw) {
-                var index = GameComponentsLookup.VehicleComponentDraw;
-                if (value) {
-                    var componentPool = GetComponentPool(index);
-                    var component = componentPool.Count > 0
-                            ? componentPool.Pop()
-                            : vehicleComponentDrawComponent;
+    public void AddVehicleComponentDraw(int newSpriteId, int newWidth, int newHeight) {
+        var index = GameComponentsLookup.VehicleComponentDraw;
+        var component = (Components.VehicleComponentDraw)CreateComponent(index, typeof(Components.VehicleComponentDraw));
+        component.spriteId = newSpriteId;
+        component.width = newWidth;
+        component.height = newHeight;
+        AddComponent(index, component);
+    }
 
-                    AddComponent(index, component);
-                } else {
-                    RemoveComponent(index);
-                }
-            }
-        }
+    public void ReplaceVehicleComponentDraw(int newSpriteId, int newWidth, int newHeight) {
+        var index = GameComponentsLookup.VehicleComponentDraw;
+        var component = (Components.VehicleComponentDraw)CreateComponent(index, typeof(Components.VehicleComponentDraw));
+        component.spriteId = newSpriteId;
+        component.width = newWidth;
+        component.height = newHeight;
+        ReplaceComponent(index, component);
+    }
+
+    public void RemoveVehicleComponentDraw() {
+        RemoveComponent(GameComponentsLookup.VehicleComponentDraw);
     }
 }
 

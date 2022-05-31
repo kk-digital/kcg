@@ -5,7 +5,7 @@ using Entitas;
 
 namespace Components
 {
-    public struct VehicleComponentCollider: IComponent
+    public class VehicleComponentCollider: IComponent
     {
         
     }
