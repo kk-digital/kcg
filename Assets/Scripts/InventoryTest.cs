@@ -11,7 +11,7 @@ public class InventoryTest : MonoBehaviour
     Contexts context;
     SpriteLoaderTest SpriteLoader = new SpriteLoaderTest();
     List<Sprite> Sprites = new  List<Sprite>();
-    Systems.InventoryManager InventoryManager;
+    Agent.InventoryManagerSystem inventoryManagerSystem;
 
     [SerializeField] Material Material;
 
@@ -22,7 +22,7 @@ public class InventoryTest : MonoBehaviour
     public void Start()
     {
         context = Contexts.sharedInstance;
-        InventoryManager = new Systems.InventoryManager(context);
+        inventoryManagerSystem = new Agent.InventoryManagerSystem(context);
         ParentObject = GameObject.Find("Canvas/InventoryView/Viewport/Content");
         LoadSprites();
 
@@ -135,7 +135,7 @@ public class InventoryTest : MonoBehaviour
                 Debug.Log("Invalid Item Type");
                 break;
         }
-        InventoryManager.AddItem(entity, InventoryID);
+        inventoryManagerSystem.AddItem(entity, InventoryID);
 
     }
 

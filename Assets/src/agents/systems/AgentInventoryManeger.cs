@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
-using Entitas;
+﻿using System.Collections;
 
-namespace Systems
+namespace Agent
 {
-    public class InventoryManager
+    public class InventoryManagerSystem
     {
         public Contexts _contexts;
 
-        public InventoryManager(Contexts contexts)
+        public InventoryManagerSystem(Contexts contexts)
         {
             _contexts = contexts;
         }

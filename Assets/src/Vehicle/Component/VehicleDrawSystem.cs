@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Entitas;
 
-namespace Systems
+namespace Agent
 {
     public class VehicleDrawSystem : IInitializeSystem
     {
