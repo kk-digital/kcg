@@ -11,19 +11,19 @@ public partial class AgentEntity {
     public Agent.Position2DComponent position2D { get { return (Agent.Position2DComponent)GetComponent(AgentComponentsLookup.Position2D); } }
     public bool hasPosition2D { get { return HasComponent(AgentComponentsLookup.Position2D); } }
 
-    public void AddPosition2D(UnityEngine.Vector2 newPosition, UnityEngine.Vector2 newPreviousPosition) {
+    public void AddPosition2D(UnityEngine.Vector2 newValue, UnityEngine.Vector2 newPreviousValue) {
         var index = AgentComponentsLookup.Position2D;
         var component = (Agent.Position2DComponent)CreateComponent(index, typeof(Agent.Position2DComponent));
-        component.Position = newPosition;
-        component.PreviousPosition = newPreviousPosition;
+        component.Value = newValue;
+        component.PreviousValue = newPreviousValue;
         AddComponent(index, component);
     }
 
-    public void ReplacePosition2D(UnityEngine.Vector2 newPosition, UnityEngine.Vector2 newPreviousPosition) {
+    public void ReplacePosition2D(UnityEngine.Vector2 newValue, UnityEngine.Vector2 newPreviousValue) {
         var index = AgentComponentsLookup.Position2D;
         var component = (Agent.Position2DComponent)CreateComponent(index, typeof(Agent.Position2DComponent));
-        component.Position = newPosition;
-        component.PreviousPosition = newPreviousPosition;
+        component.Value = newValue;
+        component.PreviousValue = newPreviousValue;
         ReplaceComponent(index, component);
     }
 
