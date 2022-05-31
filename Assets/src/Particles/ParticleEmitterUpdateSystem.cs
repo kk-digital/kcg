@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Entitas;
 using UnityEngine;
 
-namespace Systems
+namespace Agent
 {
      public class ParticleEmitterUpdateSystem
     {

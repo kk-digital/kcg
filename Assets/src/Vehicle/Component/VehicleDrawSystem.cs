@@ -3,33 +3,52 @@ using System.Collections.Generic;
 using UnityEngine;
 using Entitas;
 
-namespace Systems
+namespace Agent
 {
-    public class VehicleDrawSystem
+    public class VehicleDrawSystem : IInitializeSystem
     {
+        // Entitas Context
         public Contexts _contexts;
+
+        // Streaming Asset File Path
         public string _filePath;
+
+        // Sprite ID
         public int _spriteID;
+        
+        // Image width
         public int _width;
+        
+        // Image Height
         public int _height;
 
-        public VehicleDrawSystem(Contexts contexts)
+        // Sprite Loader for loading image
+        TileSpriteLoader.TileSpriteLoader tileSpriteLoader;
+
+        // Constructor, variables setup
+        public VehicleDrawSystem(Contexts contexts, string filePath, int width, int height)
         {
             _contexts = contexts;
-        }
-
-        public void Initialize(string filePath, int spriteID, int width, int height)
-        {
             _filePath = filePath;
-            _spriteID = spriteID;
             _width = width;
             _height = height;
+        }
 
+        // Initializing image and component
+        public void Initialize()
+        {
             GameEntity vehicleDraw = _contexts.game.CreateEntity();
+            tileSpriteLoader = new TileSpriteLoader.TileSpriteLoader();
 
-            spriteID = GameState.SpriteLoader.GetSpriteSheetID(_filePath, _width, _height);
+            tileSpriteLoader.GetSpriteSheetID(_filePath);
 
-            vehicleDraw.AddVehicleComponentDraw(_spriteID, _width, _height);
+            vehicleDraw.AddVehicleComponentDraw(GetSpriteID(), _width, _height);
+        }
+
+        // Get sprite id
+        public int GetSpriteID()
+        {
+            return _spriteID;
         }
     }
 }

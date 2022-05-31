@@ -1,4 +1,4 @@
-namespace Systems
+namespace Agent
 {
     public class AgentPhysicsSystem
     {
