@@ -8,24 +8,22 @@
 //------------------------------------------------------------------------------
 public static class GameComponentsLookup {
 
-    public const int Agent2dInventory = 0;
-    public const int InventoryItem = 1;
-    public const int Item2DPosition = 2;
-    public const int Item = 3;
-    public const int ItemMove = 4;
-    public const int ItemStack = 5;
-    public const int Particle2dPosition = 6;
-    public const int ParticleState = 7;
-    public const int VehicleComponentCollider = 8;
-    public const int VehicleComponentDraw = 9;
-    public const int GameObject = 10;
-    public const int Particle = 11;
-    public const int Position = 12;
+    public const int InventoryItem = 0;
+    public const int Item2DPosition = 1;
+    public const int Item = 2;
+    public const int ItemMove = 3;
+    public const int ItemStack = 4;
+    public const int Particle2dPosition = 5;
+    public const int ParticleState = 6;
+    public const int VehicleComponentCollider = 7;
+    public const int VehicleComponentDraw = 8;
+    public const int GameObject = 9;
+    public const int Particle = 10;
+    public const int Position = 11;
 
-    public const int TotalComponents = 13;
+    public const int TotalComponents = 12;
 
     public static readonly string[] componentNames = {
-        "Agent2dInventory",
         "InventoryItem",
         "Item2DPosition",
         "Item",
@@ -41,7 +39,6 @@ public static class GameComponentsLookup {
     };
 
     public static readonly System.Type[] componentTypes = {
-        typeof(Components.Agent2dInventoryComponent),
         typeof(Components.InventoryItemComponent),
         typeof(Components.Item2DPosition),
         typeof(Components.ItemComponent),
