@@ -78,7 +78,7 @@ namespace SystemView
                     {
                         if (Ship == Projectile.Self) continue;
 
-                        if (Projectile.InRangeOf(Ship))
+                        if (Projectile.InRangeOf(Ship, 0.5f))
                         {
                             Projectile.DoDamage(Ship);
 

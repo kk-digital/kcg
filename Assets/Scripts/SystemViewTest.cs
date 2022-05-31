@@ -154,7 +154,7 @@ namespace SystemView
                 Fighter.Descriptor.SemiMajorAxis = 20.0f;
                 Fighter.Descriptor.SemiMinorAxis = 6.0f;
 
-                Fighter.Descriptor.RotationalPosition = 3.1415926f / 16.0f * i;
+                Fighter.Descriptor.RotationalPosition = 0.002f * i;
 
                 ShipWeapon Weapon = new ShipWeapon();
 
@@ -165,53 +165,7 @@ namespace SystemView
                 Weapon.AttackSpeed = rnd.Next(200, 800);
                 Weapon.Cooldown = 0;
                 Weapon.Self = Fighter;
-                Weapon.ProjectileVelocity = (float)rnd.NextDouble() * 1.5f + 1.0f;
-
-                Fighter.Weapons.Add(Weapon);
-
-                Info.Object = new GameObject();
-                Info.Object.name = "Fighter " + i;
-
-                Info.Renderer = Info.Object.AddComponent<SystemShipRenderer>();
-                Info.Renderer.ship = Fighter;
-                Info.Renderer.shipColor = new Color(0.0f, 1.0f, 0.0f, 1.0f);
-
-                Fighter.PathPlanned = true;
-                Fighter.Reached = true;
-
-                Fighters.Add(Fighter, Info);
-            }
-
-            for (int i = 0; i < 16; i++)
-            {
-                SystemShip Fighter = new SystemShip();
-                ShipInfo Info = new ShipInfo();
-
-                State.Ships.Add(Fighter);
-
-                Fighter.Health = Fighter.MaxHealth = Fighter.Shield = Fighter.MaxShield = 10000;
-                Fighter.ShieldRegenerationRate = 1;
-
-                Fighter.Descriptor.CenterX = State.Star.PosX;
-                Fighter.Descriptor.CenterY = State.Star.PosY;
-
-                Fighter.Descriptor.SemiMajorAxis = 16.0f;
-                Fighter.Descriptor.SemiMinorAxis = 10.0f;
-
-                Fighter.Descriptor.Rotation = 1.0f;
-
-                Fighter.Descriptor.RotationalPosition = 3.1415926f / 8.0f * i;
-
-                ShipWeapon Weapon = new ShipWeapon();
-
-                Weapon.ProjectileColor = new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1.0f);
-                Weapon.Range = 50.0f;
-                Weapon.ShieldPenetration = (float)rnd.NextDouble() * 0.3f;
-                Weapon.Damage = rnd.Next(200, 800);
-                Weapon.AttackSpeed = rnd.Next(200, 800);
-                Weapon.Cooldown = 0;
-                Weapon.Self = Fighter;
-                Weapon.ProjectileVelocity = (float)rnd.NextDouble() * 1.5f + 1.0f;
+                Weapon.ProjectileVelocity = 0.1f;
 
                 Fighter.Weapons.Add(Weapon);
 
@@ -272,7 +226,7 @@ namespace SystemView
                     {
                         if (Ship == Projectile.Self) continue;
 
-                        if (Projectile.InRangeOf(Ship))
+                        if (Projectile.InRangeOf(Ship, 0.05f))
                         {
                             Projectile.DoDamage(Ship);
 

@@ -12,10 +12,14 @@ namespace SystemView
 
         public Color color = Color.white;
 
+        public CameraController Camera;
+
         // Start is called before the first frame update
         void Start()
         {
             sr = gameObject.AddComponent<SpriteRenderer>();
+
+            Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
             // Temporary circular sprite
             sr.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
@@ -25,7 +29,7 @@ namespace SystemView
         void Update()
         {
             sr.transform.position = new Vector3(Star.PosX, Star.PosY, -0.1f);
-            sr.transform.localScale = new Vector3(5.0f, 5.0f, 5.0f);
+            sr.transform.localScale = new Vector3(5.0f / Camera.scale, 5.0f / Camera.scale, 1.0f);
 
             sr.color = color;
         }

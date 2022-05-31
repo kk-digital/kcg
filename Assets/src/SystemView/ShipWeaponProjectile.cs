@@ -65,9 +65,9 @@ namespace SystemView
             return true;
         }
 
-        public bool InRangeOf(SystemShip Target)
+        public bool InRangeOf(SystemShip Target, float AcceptableRange)
         {
-            return Target != null && Math.Sqrt((PosX - Target.PosX) * (PosX - Target.PosX) + (PosY - Target.PosY) * (PosY - Target.PosY)) < 0.5;
+            return Target != null && Math.Sqrt((PosX - Target.PosX) * (PosX - Target.PosX) + (PosY - Target.PosY) * (PosY - Target.PosY)) < AcceptableRange;
         }
 
         public void DoDamage(SystemShip Target)

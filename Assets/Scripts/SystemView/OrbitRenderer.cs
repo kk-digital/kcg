@@ -17,6 +17,8 @@ namespace SystemView
 
         public float LineWidth = 0.1f;
 
+        public CameraController Camera;
+
         public void UpdateRenderer(int segments)
         {
             if (linerenderer == null) return;
@@ -58,7 +60,7 @@ namespace SystemView
                 (x, y) = (cos * x - sin * y, sin * x + cos * y);
             }
 
-            linerenderer.startWidth = linerenderer.endWidth = LineWidth;
+            linerenderer.startWidth = linerenderer.endWidth = LineWidth == 0.1f ? LineWidth / Camera.scale : LineWidth;
             linerenderer.startColor = linerenderer.endColor = color;
             linerenderer.SetPositions(vertices);
             linerenderer.positionCount = segments;
@@ -67,6 +69,8 @@ namespace SystemView
         // Start is called before the first frame update
         void Start()
         {
+            Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
+
             linerenderer = gameObject.AddComponent<LineRenderer>();
 
             // Load unity test shader

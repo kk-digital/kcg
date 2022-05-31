@@ -17,11 +17,15 @@ namespace SystemView
         public Color orbitColor  = new Color(0.5f, 0.7f, 1.0f, 1.0f);
         public Color planetColor = Color.white;
 
+        public CameraController Camera;
+
         // Start is called before the first frame update
         void Start()
         {
             or = gameObject.AddComponent<OrbitRenderer>();
             sr = gameObject.AddComponent<SpriteRenderer>();
+
+            Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
             or.descriptor = planet.Descriptor;
 
@@ -35,7 +39,7 @@ namespace SystemView
             float[] pos = planet.Descriptor.GetPosition();
 
             sr.transform.position = new Vector3(pos[0], pos[1], -0.1f);
-            sr.transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);
+            sr.transform.localScale = new Vector3(3.0f / Camera.scale, 3.0f / Camera.scale, 1.0f);
 
             sr.color = planetColor;
             or.color = orbitColor;

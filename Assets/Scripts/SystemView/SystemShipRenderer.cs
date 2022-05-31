@@ -20,6 +20,8 @@ namespace SystemView
 
         public GameObject ShieldObject;
 
+        public CameraController Camera;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -33,6 +35,8 @@ namespace SystemView
 
             OrbitRender.descriptor = ship.Descriptor;
 
+            Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
+
             // Temporary sprites
             ShipRender.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
             ShieldRender.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
@@ -42,10 +46,10 @@ namespace SystemView
         void Update()
         {
             ShipRender.transform.position     = new Vector3(ship.PosX, ship.PosY, -0.1f);
-            ShipRender.transform.localScale   = new Vector3(5.0f, 5.0f, 1.0f);
+            ShipRender.transform.localScale   = new Vector3(5.0f / Camera.scale, 5.0f / Camera.scale, 1.0f);
 
             ShieldRender.transform.position   = new Vector3(ship.PosX, ship.PosY, -0.05f);
-            ShieldRender.transform.localScale = new Vector3(15.0f, 15.0f, 1.0f);
+            ShieldRender.transform.localScale = new Vector3(15.0f / Camera.scale, 15.0f / Camera.scale, 1.0f);
 
             ShipRender.color   = shipColor;
             OrbitRender.color  = orbitColor;
