@@ -21,12 +21,14 @@ public partial class Contexts : Entitas.IContexts {
 
     static Contexts _sharedInstance;
 
+    public AgentContext agent { get; set; }
     public GameContext game { get; set; }
     public InputContext input { get; set; }
 
-    public Entitas.IContext[] allContexts { get { return new Entitas.IContext [] { game, input }; } }
+    public Entitas.IContext[] allContexts { get { return new Entitas.IContext [] { agent, game, input }; } }
 
     public Contexts() {
+        agent = new AgentContext();
         game = new GameContext();
         input = new InputContext();
 
@@ -110,6 +112,7 @@ public partial class Contexts {
     [Entitas.CodeGeneration.Attributes.PostConstructor]
     public void InitializeContextObservers() {
         try {
+            CreateContextObserver(agent);
             CreateContextObserver(game);
             CreateContextObserver(input);
         } catch(System.Exception) {

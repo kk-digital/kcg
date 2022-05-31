@@ -2,7 +2,6 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 using Components;
-using Entities;
 using TileProperties;
 
 #if UNITY_EDITOR
