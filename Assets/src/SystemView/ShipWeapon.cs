@@ -34,17 +34,23 @@ namespace SystemView
 
             ShipWeaponProjectile Projectile = new ShipWeaponProjectile();
 
-            // todo: Projectile orbit
+            /*if (Self.Descriptor != null) // orbit
+            {
+                // todo
+                // is this even needed? a straight line approximation might be fine either way as ships are fighting within very short range, right?
+            }
+            else // straight line
+            {*/
+                Projectile.Self = Self;
+                Projectile.Weapon = this;
 
-            Projectile.Self = Self;
-            Projectile.Weapon = this;
+                Projectile.PosX = Self.PosX;
+                Projectile.PosY = Self.PosY;
 
-            Projectile.PosX = Self.PosX;
-            Projectile.PosY = Self.PosY;
-
-            // todo: Math doesn't like vertical lines.
-            Projectile.Slope = (Target.PosY - Self.PosY) / (Target.PosX - Self.PosX);
-            Projectile.NegativeDirection = (Target.PosX - Self.PosX) < 0.0f;
+                // todo: Math doesn't like vertical lines.
+                Projectile.Slope = (Target.PosY - Self.PosY) / (Target.PosX - Self.PosX);
+                Projectile.NegativeDirection = (Target.PosX - Self.PosX) < 0.0f;
+            //}
 
             Projectile.DistanceTravelled = 0.0f;
             Projectile.Range = Range;

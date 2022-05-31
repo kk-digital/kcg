@@ -5,6 +5,7 @@ namespace SystemView
 {
     public class ShipWeaponProjectile
     {
+        // todo: is this even needed?        v
         public OrbitingObjectDescriptor Descriptor;
 
         public SystemShip Self;

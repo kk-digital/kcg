@@ -28,7 +28,7 @@ namespace SystemView
 
             State = gl.CurrentSystemState;
 
-            for(int i = 0; i < 32; i++)
+            for(int i = 0; i < 64; i++)
             {
                 ShipInfo Info = new ShipInfo();
 
@@ -58,7 +58,7 @@ namespace SystemView
 
                 Info.Renderer = Info.Object.AddComponent<SystemShipRenderer>();
                 Info.Renderer.ship = Ship;
-                Info.Renderer.shipColor = Weapon.ProjectileColor;
+                Info.Renderer.shipColor = new Color(0.0f, 1.0f, 0.0f, 1.0f);
 
                 Ships.Add(Ship, Info);
                 State.Ships.Add(Ship);
@@ -110,6 +110,7 @@ namespace SystemView
 
                 if (Ship.Destroyed)
                 {
+                    GameObject.Destroy(Ships[Ship].Renderer.ShieldObject);
                     GameObject.Destroy(Ships[Ship].Object);
 
                     Ships.Remove(Ship);
@@ -144,6 +145,9 @@ namespace SystemView
 
                 Ship.Shield += Ship.ShieldRegenerationRate * CurrentMillis;
                 if (Ship.Shield > Ship.MaxShield) Ship.Shield = Ship.MaxShield;
+
+                Ships[Ship].Renderer.shipColor.g = (float)Ship.Health / Ship.MaxHealth;
+                Ships[Ship].Renderer.shipColor.r = 1.0f - Ships[Ship].Renderer.shipColor.g;
             }
         }
     }
