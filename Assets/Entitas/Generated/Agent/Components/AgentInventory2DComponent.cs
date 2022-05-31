@@ -8,12 +8,12 @@
 //------------------------------------------------------------------------------
 public partial class AgentEntity {
 
-    public Components.Inventory2DComponent inventory2D { get { return (Components.Inventory2DComponent)GetComponent(AgentComponentsLookup.Inventory2D); } }
+    public Components.Agent.Inventory2DComponent inventory2D { get { return (Components.Agent.Inventory2DComponent)GetComponent(AgentComponentsLookup.Inventory2D); } }
     public bool hasInventory2D { get { return HasComponent(AgentComponentsLookup.Inventory2D); } }
 
     public void AddInventory2D(int newInventoryID, int newWidth, int newHeight, int newSelectedSlot, System.Collections.BitArray newSlots) {
         var index = AgentComponentsLookup.Inventory2D;
-        var component = (Components.Inventory2DComponent)CreateComponent(index, typeof(Components.Inventory2DComponent));
+        var component = (Components.Agent.Inventory2DComponent)CreateComponent(index, typeof(Components.Agent.Inventory2DComponent));
         component.InventoryID = newInventoryID;
         component.Width = newWidth;
         component.Height = newHeight;
@@ -24,7 +24,7 @@ public partial class AgentEntity {
 
     public void ReplaceInventory2D(int newInventoryID, int newWidth, int newHeight, int newSelectedSlot, System.Collections.BitArray newSlots) {
         var index = AgentComponentsLookup.Inventory2D;
-        var component = (Components.Inventory2DComponent)CreateComponent(index, typeof(Components.Inventory2DComponent));
+        var component = (Components.Agent.Inventory2DComponent)CreateComponent(index, typeof(Components.Agent.Inventory2DComponent));
         component.InventoryID = newInventoryID;
         component.Width = newWidth;
         component.Height = newHeight;

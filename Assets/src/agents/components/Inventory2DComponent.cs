@@ -2,7 +2,7 @@
 using Entitas.CodeGeneration.Attributes;
 using System.Collections;
 
-namespace Components
+namespace Components.Agent
 {
     [Agent]
     public struct Inventory2DComponent : IComponent

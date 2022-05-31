@@ -1,7 +1,7 @@
 using Entitas;
 using UnityEngine;
 
-namespace Components
+namespace Components.Agent
 {
     [Agent]
     public struct Position2DComponent : IComponent

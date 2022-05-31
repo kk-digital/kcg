@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Components;
 using UnityEngine;
 
-namespace Components
+namespace Components.Agent
 {
     public struct AgentCircleColliderComponent
     {

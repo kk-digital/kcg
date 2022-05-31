@@ -1,6 +1,6 @@
 using Entitas;
 
-namespace Components
+namespace Components.Agent
 {
     [Agent]
     public struct Sprite2DComponent : IComponent
