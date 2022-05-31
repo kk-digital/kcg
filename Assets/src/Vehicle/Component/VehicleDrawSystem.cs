@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Entitas;
 
 namespace Systems
@@ -22,9 +19,6 @@ namespace Systems
         // Image Height
         public int _height;
 
-        // Sprite Loader for loading image
-        TileSpriteLoader.TileSpriteLoader tileSpriteLoader;
-
         // Constructor, variables setup
         public VehicleDrawSystem(Contexts contexts, string filePath, int width, int height)
         {
@@ -38,17 +32,34 @@ namespace Systems
         public void Initialize()
         {
             GameEntity vehicleDraw = _contexts.game.CreateEntity();
-            tileSpriteLoader = new TileSpriteLoader.TileSpriteLoader();
 
-            tileSpriteLoader.GetSpriteSheetID(_filePath);
+            _spriteID = GameState.SpriteLoader.GetSpriteSheetID(_filePath, _width, _height);
 
-            vehicleDraw.AddVehicleComponentDraw(GetSpriteID(), _width, _height);
+            vehicleDraw.AddVehicleComponentDraw(GetSpriteID(), GetWidth(), GetHeight());
         }
 
-        // Get sprite id
+        // Get Sprite ID
         public int GetSpriteID()
         {
             return _spriteID;
+        }
+
+        // Get Contextx Object
+        public Contexts GetContexts()
+        {
+            return _contexts;
+        }
+
+        // Get Width
+        public int GetWidth()
+        {
+            return _width;
+        }
+
+        // Get Height
+        public int GetHeight()
+        {
+            return _height;
         }
     }
 }
