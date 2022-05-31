@@ -31,16 +31,18 @@ namespace PlanetTileMap.Unity
         List<Vector2> uvs = new List<Vector2>();
         List<Vector3> verticies = new List<Vector3>();
 
-        ParticleEmitterEntity Emitter = new ParticleEmitterEntity();
-        ParticleEmitterEntity Emitter2 = new ParticleEmitterEntity();
         Texture2D PipeSprite;
         Texture2D OreSprite;
 
+        Texture2D VentSprite;
+
         Contexts EntitasContext = Contexts.sharedInstance;
         ParticleUpdateSystem ParticleUpdateSystem;
+        ParticleEmitterUpdateSystem ParticleEmitterUpdateSystem;
 
-        GameObject prefab;
-        GameObject orePrefab;
+        GameObject PipePrefab;
+        GameObject OrePrefab;
+        GameObject VentPrefab;
 
         static bool Init = false;
         
@@ -57,17 +59,8 @@ namespace PlanetTileMap.Unity
 
         public void Update()
         {
-            //remove all children MeshRenderer
-            /*foreach(var mr in GetComponentsInChildren<MeshRenderer>())
-                if (Application.isPlaying)
-                    Destroy(mr.gameObject);
-                else
-                    DestroyImmediate(mr.gameObject);*/
-
-            Emitter.Update(EntitasContext, prefab);
-            Emitter2.Update(EntitasContext, orePrefab);
             ParticleUpdateSystem.Execute();
-           // DrawParticles();
+            ParticleEmitterUpdateSystem.Execute();
         }
 
         // create the sprite atlas for testing purposes
@@ -75,24 +68,9 @@ namespace PlanetTileMap.Unity
         {
             
             ParticleUpdateSystem = new ParticleUpdateSystem(EntitasContext);
-
-            Emitter = new ParticleEmitterEntity(new Vector2(-4.0f, 0),
-             1.0f, new Vector2(0, -20.0f), 1.7f, 0.0f, new int[]{0}, new Vector2(1.0f, 10.0f),
-            0.0f, 1.0f, new Color(255.0f, 255.0f, 255.0f, 255.0f),
-            0.2f, 3.0f, true, 1, 0.05f);
-
-            Emitter2 = new ParticleEmitterEntity(new Vector2(2.0f, 0),
-             1.0f, new Vector2(0, -20.0f), 3.5f, 0.0f, new int[]{0}, new Vector2(1.0f, 10.0f),
-            0.0f, 1.0f, new Color(255.0f, 255.0f, 255.0f, 255.0f),
-            0.2f, 3.0f, true, 20, 0.5f);
+            ParticleEmitterUpdateSystem = new ParticleEmitterUpdateSystem(EntitasContext);
 
             // we load the sprite sheets here
-            int SomeObjectTileSheet = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Objects\\algaeTank1.png",
-                         32, 64);
-            int PlayerTileSheet = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png",
-                         32, 48);
             int PipeTileSheet = 
             GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\sprite\\item\\admin_icon_pipesim.png",
             16, 16);
@@ -101,17 +79,8 @@ namespace PlanetTileMap.Unity
             GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png",
             16, 16);
 
+            int VentTileSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Objects\\vent1.png", 16, 16);
 
-            // bit the sprites into the sprite atlas
-            // we can blit the same sprite
-            // but its only for testing purpose
-            // we should remove that in the future
-            GameState.SpriteAtlasManager.Blit(SomeObjectTileSheet, 0, 0);
-            GameState.SpriteAtlasManager.Blit(PlayerTileSheet, 0, 0);;
-            GameState.SpriteAtlasManager.Blit(PlayerTileSheet, 0, 0);
-            GameState.SpriteAtlasManager.Blit(SomeObjectTileSheet, 0, 0);
-            GameState.SpriteAtlasManager.Blit(PlayerTileSheet, 0, 0);
-            GameState.SpriteAtlasManager.Blit(PlayerTileSheet, 0, 0);
 
             int PipeSpriteIndex = GameState.SpriteAtlasManager.Blit(PipeTileSheet, 0, 0);
             byte[] pipeBytes = new byte[16 * 16 * 4];
@@ -121,85 +90,36 @@ namespace PlanetTileMap.Unity
             byte[] oreBytes = new byte[16 * 16 * 4];
             GameState.SpriteAtlasManager.GetSpriteBytes(OreSpriteIndex, oreBytes);
 
+            int VentSpriteIndex = GameState.SpriteAtlasManager.Blit(VentTileSheet, 0, 0);
+            byte[] ventBytes = new byte[16 * 16 * 4];
+            GameState.SpriteAtlasManager.GetSpriteBytes(VentSpriteIndex, ventBytes);
+
             PipeSprite = CreateTextureFromRGBA(pipeBytes, 16, 16);
             OreSprite = CreateTextureFromRGBA(oreBytes, 16, 16);
+            VentSprite = CreateTextureFromRGBA(ventBytes, 16, 16);
 
-            prefab = CreateParticlePrefab(0, 0, 0.5f, 0.5f, PipeSprite);
-            orePrefab = CreateParticlePrefab(0, 0, 0.5f, 0.5f, OreSprite);
+            PipePrefab = CreateParticlePrefab(0, 0, 0.5f, 0.5f, PipeSprite);
+            OrePrefab = CreateParticlePrefab(0, 0, 0.5f, 0.5f, OreSprite);
+            VentPrefab = CreateParticlePrefab(0, 0, 0.5f, 0.5f, VentSprite);
+
+
+            CreateParticleEmitterEntity(VentPrefab, new Vector2(-4.0f, 0),
+             1.0f, new Vector2(0, -20.0f), 1.7f, 0.0f, new int[]{0}, new Vector2(1.0f, 10.0f),
+            0.0f, 1.0f, new Color(255.0f, 255.0f, 255.0f, 255.0f),
+            0.2f, 3.0f, true, 1, 0.05f, PipePrefab);
+
+            CreateParticleEmitterEntity(VentPrefab, new Vector2(2.0f, 0),
+             1.0f, new Vector2(0, -20.0f), 3.5f, 0.0f, new int[]{0}, new Vector2(1.0f, 10.0f),
+            0.0f, 1.0f, new Color(255.0f, 255.0f, 255.0f, 255.0f),
+            0.2f, 3.0f, true, 20, 0.5f, OrePrefab);
             
-        }
-
-        void DrawParticles()
-        {
-            IGroup<GameEntity> entities = 
-            EntitasContext.game.GetGroup(GameMatcher.Particle2dPosition);
-            foreach (var gameEntity in entities)
-            {
-                var pos = gameEntity.particle2dPosition;
-                DrawSprite(pos.Position.x, pos.Position.y, 0.5f, 0.5f, PipeSprite);
-            }
-        }
-
-
-         // draws 1 sprite into the screen
-        // Note(Mahdi): this code is for testing purpose
-        void DrawSprite(float x, float y, float w, float h, Texture2D tex)
-        {
-            var mat = Instantiate(Material);
-            mat.SetTexture("_MainTex", tex);
-            var go = CreateObject(transform, "abc", 0, mat);
-            var mf = go.GetComponent<MeshFilter>();
-            var mesh =  mf.sharedMesh;
-
-            triangles.Clear();
-            uvs.Clear();
-            verticies.Clear();
-
-
-            var p0 = new Vector3(x, y, 0);
-            var p1 = new Vector3((x + w), (y + h), 0);
-            var p2 = p0; p2.y = p1.y;
-            var p3 = p1; p3.y = p0.y;
-
-            verticies.Add(p0);
-            verticies.Add(p1);
-            verticies.Add(p2);
-            verticies.Add(p3);
-
-            triangles.Add(0);
-            triangles.Add(2);
-            triangles.Add(1);
-            triangles.Add(0);
-            triangles.Add(1);
-            triangles.Add(3);
-
-            var u0 = 0;
-            var u1 = 1;
-            var v1 = -1;
-            var v0 = 0;
-
-            var uv0 = new Vector2(u0, v0);
-            var uv1 = new Vector2(u1, v1);
-            var uv2 = uv0; uv2.y = uv1.y;
-            var uv3 = uv1; uv3.y = uv0.y;
-
-
-            uvs.Add(uv0);
-            uvs.Add(uv1);
-            uvs.Add(uv2);
-            uvs.Add(uv3);
-    
-
-            mesh.SetVertices(verticies);
-            mesh.SetUVs(0, uvs);
-            mesh.SetTriangles(triangles, 0);
         }
 
         private GameObject CreateParticlePrefab(float x, float y, float w, float h, Texture2D tex)
         {
             var mat = Instantiate(Material);
             mat.SetTexture("_MainTex", tex);
-            var go = CreateObject(transform, "abc", 0, mat);
+            var go = CreateObject(transform, "particle", 0, mat);
             var mf = go.GetComponent<MeshFilter>();
             var mesh =  mf.sharedMesh;
 
@@ -270,30 +190,23 @@ namespace PlanetTileMap.Unity
             return go;
         }
 
-      /*   void CreateSlots(int InventoryID)
+        private void CreateParticleEmitterEntity(GameObject emitterPrefab, Vector2 position, float decayRate,
+            Vector2 acceleration, float deltaRotation, float deltaScale,
+            int[] spriteIds, Vector2 startingVelocity,
+            float startingRotation, float startingScale, Color startingColor,
+            float animationSpeed, float duration, bool loop, int particleCount, 
+            float timeBetweenEmissions, GameObject prefab)
         {
-            // To do: Change size of grid to match width and height of inventory.
-            GameEntity entity = context.game.GetEntityWithAgent2dInventory(InventoryID);
-
-            int size = entity.agent2dInventory.Width * entity.agent2dInventory.Height;
-            for (int i = 0; i < size; i++)
-            {
-                GameObject obj = new GameObject("slot" + i.ToString(), typeof(RectTransform));
-                obj.transform.parent = ParentObject.transform;
-            }
+            var e = EntitasContext.game.CreateEntity();
+            var gameObject = UnityEngine.Object.Instantiate(emitterPrefab);
+            gameObject.transform.position = new Vector3(position.x, position.y, 0.0f);
+                
+            e.AddParticleEmitter2dPosition(position, new Vector2(), new Vector2());
+            e.AddParticleEmitterState(gameObject, prefab, decayRate, acceleration, deltaRotation,
+            deltaScale, spriteIds, startingVelocity, startingRotation, startingScale, startingColor,
+            animationSpeed, duration, loop, particleCount, timeBetweenEmissions, 0.0f);
         }
 
-        void CreateInventoryEntity(int InventoryID)
-        {
-            GameEntity entity = context.game.CreateEntity();
-            const int height = 8;
-            const int width = 8;
-            const int selectedSlot = 0;
-
-            BitArray slots = new BitArray(height * width, false);
-            entity.AddAgent2dInventory(InventoryID, width, height, selectedSlot, slots);
-        }
-*/
         public struct R
         {
             public float X;

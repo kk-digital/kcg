@@ -18,7 +18,7 @@ namespace Systems
             ToDestroy.Clear();
 
             float deltaTime = Time.deltaTime;
-            IGroup<GameEntity> entities = EntitasContext.game.GetGroup(GameMatcher.Particle2dPosition);
+            IGroup<GameEntity> entities = EntitasContext.game.GetGroup(GameMatcher.ParticleState);
             foreach (var gameEntity in entities)
             {
                 var state = gameEntity.particleState;
