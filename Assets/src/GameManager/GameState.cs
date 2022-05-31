@@ -6,7 +6,6 @@ public class GameState
     private static TileSpriteLoader.TileSpriteLoader _tileSpriteLoader;
     private static SpriteLoader.SpriteLoader _spriteLoader;
     private static ImageLoader.FileLoadingManager _fileLoadingManager;
-    private static ParticleList _particleList;
     
     public static TileProperties.TileCreationApi TileCreationApi =>
         _tileCreationApi ??= new TileProperties.TileCreationApi();
@@ -29,9 +28,6 @@ public class GameState
 
     public static SpriteAtlas.SpriteAtlasManager SpriteAtlasManager  =>
         _spriteAtlasManager ??= new SpriteAtlas.SpriteAtlasManager();
-
-    public static ParticleList ParticleList =>
-        _particleList ??= new ParticleList();
 
 
   

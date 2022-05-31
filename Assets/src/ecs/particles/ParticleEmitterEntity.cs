@@ -1,5 +1,4 @@
-using System.Numerics;
-using System.Drawing;
+using UnityEngine;
 
 namespace Entity
 {
@@ -57,7 +56,7 @@ namespace Entity
         }
 
         // Used to spawn particles off the emitter
-        public void update()
+        public void Update(Contexts contexts)
         {
 
             //TODO(Mahdi): use the Duration, Loop, TimeBetweenEmissions
@@ -66,10 +65,15 @@ namespace Entity
             {
                 System.Random random = new System.Random(); 
                 int spriteId = (random.Next() % SpriteIds.Length);
-                GameState.ParticleList.AddParticle(ParticleDecayRate, Position, ParticleStartingVelocity,
-                     ParticleAcceleration, ParticleStartingRotation, ParticleDeltaRotation,
-                     ParticleStartingScale, ParticleDeltaScale, spriteId,
-                    ParticleStartingColor, ParticleAnimationSpeed);
+                float randomX = (float)random.NextDouble() * 2.0f - 1.0f;
+
+                var e = contexts.game.CreateEntity();
+                e.AddParticle2dHealth(1.0f, ParticleDecayRate);
+                e.AddParticle2dPosition(Position, ParticleAcceleration, new Vector2(ParticleStartingVelocity.x + randomX, ParticleStartingVelocity.y));
+                e.AddParticle2dRotation(ParticleStartingRotation, ParticleDeltaRotation);
+                e.AddParticle2dScale(ParticleStartingScale, ParticleDeltaScale);
+                e.AddParticle2dSprite(spriteId, ParticleStartingColor);
+                e.AddParticle2dAnimation(0.0f, ParticleAnimationSpeed);
             }
         }
 
