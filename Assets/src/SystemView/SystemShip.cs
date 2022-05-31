@@ -19,6 +19,8 @@ namespace SystemView
 
         public List<ShipWeapon> Weapons;
 
+        public bool Destroyed = false;
+
         public SystemShip()
         {
             Descriptor = new OrbitingObjectDescriptor();
@@ -143,6 +145,11 @@ namespace SystemView
 
             PosX = Pos[0];
             PosY = Pos[1];
+        }
+
+        public void Destroy()
+        {
+            Destroyed = true;
         }
     }
 }

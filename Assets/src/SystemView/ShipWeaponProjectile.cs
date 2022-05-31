@@ -42,9 +42,9 @@ namespace SystemView
 
                 // (2) dy^2 + dx^2 = d^2
 
-                //                                              d
-                // (3) (m^2 + 1) * dx^2 = d^2   =>   x = ± -----------
-                //                                         √ (m^2 + 1)
+                //                                               d
+                // (3) (m^2 + 1) * dx^2 = d^2   =>   dx = ± -----------
+                //                                          √ (m^2 + 1)
 
                 float dx = d / (float)Math.Sqrt(Slope * Slope + 1) * (NegativeDirection ? -1 : 1);
 
@@ -66,12 +66,26 @@ namespace SystemView
 
         public bool InRangeOf(SystemShip Target)
         {
-            return Math.Sqrt((PosX - Target.PosX) * (PosX - Target.PosX) + (PosY - Target.PosY) * (PosY - Target.PosY)) < 0.25;
+            return Target != null && Math.Sqrt((PosX - Target.PosX) * (PosX - Target.PosX) + (PosY - Target.PosY) * (PosY - Target.PosY)) < 0.25;
         }
 
         public void DoDamage(SystemShip Target)
         {
-            // todo
+            Target.Shield -= (int)(Damage * (1.0 - ShieldPenetration));
+            Target.Health -= (int)(Damage * ShieldPenetration);
+
+            if (Target.Shield < 0)
+            {
+                Target.Health += Target.Shield;
+                Target.Shield = 0;
+            }
+
+            if (Target.Health <= 0)
+            {
+                Target.Destroy();
+            }
+
+            Weapon.ProjectilesFired.Remove(this);
         }
     }
 }

@@ -21,14 +21,14 @@ namespace SystemView
         public int AttackSpeed; // in milliseconds
         public int Cooldown;    // in milliseconds
 
-        public List<ShipWeaponProjectile> ProjectilesFired;
+        public List<ShipWeaponProjectile> ProjectilesFired = new List<ShipWeaponProjectile>();
 
         public bool TryFiringAt(SystemShip Target, int CurrentTime)
         {
             Cooldown -= CurrentTime;
             if (Cooldown < 0) Cooldown = 0;
 
-            if (Cooldown > 0 || Self == Target || Math.Sqrt(Self.PosX - Target.PosX) * (Self.PosX - Target.PosX) + (Self.PosY - Target.PosY) * (Self.PosY - Target.PosY) > Range) return false;
+            if (Cooldown > 0 || Self == Target || Target == null || Math.Sqrt((Self.PosX - Target.PosX) * (Self.PosX - Target.PosX) + (Self.PosY - Target.PosY) * (Self.PosY - Target.PosY)) > Range) return false;
 
             Cooldown = AttackSpeed;
 
@@ -37,11 +37,13 @@ namespace SystemView
             // todo: Projectile orbit
 
             Projectile.Self = Self;
+            Projectile.Weapon = this;
 
             Projectile.PosX = Self.PosX;
             Projectile.PosY = Self.PosY;
 
-            Projectile.Slope = (Target.PosX - Self.PosX) / (Target.PosY - Self.PosY);
+            // todo: Math doesn't like vertical lines.
+            Projectile.Slope = (Target.PosY - Self.PosY) / (Target.PosX - Self.PosX);
             Projectile.NegativeDirection = (Target.PosX - Self.PosX) < 0.0f;
 
             Projectile.DistanceTravelled = 0.0f;

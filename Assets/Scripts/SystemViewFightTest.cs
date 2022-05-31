@@ -1,25 +1,26 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace SystemView
 {
+    public struct ShipInfo
+    {
+        public GameObject Object;
+        public SystemShipRenderer Renderer;
+    }
+
     public class SystemViewFightTest : MonoBehaviour
     {
         public SystemState State;
 
-        public SystemShip Fighter1;
-        public SystemShip Fighter2;
-
-        public GameObject Fighter1Object;
-        public GameObject Fighter2Object;
-
-        public SystemShipRenderer Fighter1Renderer;
-        public SystemShipRenderer Fighter2Renderer;
-
         public int LastTime;
 
-        public List<GameObject> ProjectileRenderers;
+        public Dictionary<SystemShip, ShipInfo> Ships = new Dictionary<SystemShip, ShipInfo>();
+        public Dictionary<ShipWeaponProjectile, GameObject> ProjectileRenderers = new Dictionary<ShipWeaponProjectile, GameObject>();
+
+        System.Random rand = new System.Random();
 
         void Start()
         {
@@ -27,127 +28,122 @@ namespace SystemView
 
             State = gl.CurrentSystemState;
 
-            Fighter1 = new SystemShip();
-            Fighter1.Health = Fighter1.MaxHealth = Fighter1.Shield = Fighter1.MaxShield = 1000;
-            Fighter1.ShieldRegenerationRate = 1;
+            for(int i = 0; i < 32; i++)
+            {
+                ShipInfo Info = new ShipInfo();
 
-            Fighter1.PosX = -5.0f;
-            Fighter1.PosY = 0.0f;
+                SystemShip Ship = new SystemShip();
 
-            ShipWeapon Fighter1Weapon = new ShipWeapon();
+                Ship.Health = Ship.MaxHealth = Ship.Shield = Ship.MaxShield = 10000;
+                Ship.ShieldRegenerationRate = 1;
 
-            Fighter1Weapon.ProjectileColor = new Color(1.0f, 0.0f, 0.0f, 1.0f);
-            Fighter1Weapon.Range = 20.0f;
-            Fighter1Weapon.ShieldPenetration = 0.1f;
-            Fighter1Weapon.Damage = 600;
-            Fighter1Weapon.AttackSpeed = 400;
-            Fighter1Weapon.Cooldown = 0;
+                Ship.PosX = (float)rand.NextDouble() * 30.0f - 15.0f;
+                Ship.PosY = (float)rand.NextDouble() * 30.0f - 15.0f;
 
-            Fighter1.Weapons.Add(Fighter1Weapon);
+                ShipWeapon Weapon = new ShipWeapon();
 
-            Fighter2 = new SystemShip();
-            Fighter2.Health = Fighter2.MaxHealth = Fighter2.Shield = Fighter2.MaxShield = 1000;
-            Fighter1.ShieldRegenerationRate = 2;
+                Weapon.ProjectileColor = new Color((float)rand.NextDouble(), (float)rand.NextDouble(), (float)rand.NextDouble(), 1.0f);
+                Weapon.Range = 50.0f;
+                Weapon.ShieldPenetration = (float)rand.NextDouble() * 0.3f;
+                Weapon.Damage = rand.Next(200, 800);
+                Weapon.AttackSpeed = rand.Next(200, 800);
+                Weapon.Cooldown = 0;
+                Weapon.Self = Ship;
+                Weapon.ProjectileVelocity = (float)rand.NextDouble() * 1.5f + 1.0f;
 
-            Fighter2.PosX = 5.0f;
-            Fighter2.PosY = 0.0f;
+                Ship.Weapons.Add(Weapon);
 
-            ShipWeapon Fighter2Weapon = new ShipWeapon();
+                Info.Object = new GameObject();
+                Info.Object.name = "Fighter " + (i + 1) + " Renderer";
 
-            Fighter2Weapon.ProjectileColor = new Color(0.0f, 1.0f, 0.0f, 1.0f);
-            Fighter2Weapon.Range = 20.0f;
-            Fighter2Weapon.ShieldPenetration = 0.2f;
-            Fighter2Weapon.Damage = 1800;
-            Fighter2Weapon.AttackSpeed = 1500;
-            Fighter2Weapon.Cooldown = 0;
+                Info.Renderer = Info.Object.AddComponent<SystemShipRenderer>();
+                Info.Renderer.ship = Ship;
+                Info.Renderer.shipColor = Weapon.ProjectileColor;
 
-            Fighter2.Weapons.Add(Fighter2Weapon);
-
-            State.Ships.Add(Fighter1);
-            State.Ships.Add(Fighter2);
-
-            Fighter1Object = new GameObject();
-            Fighter2Object = new GameObject();
-
-            Fighter1Object.name = "Fighter 1 Renderer";
-            Fighter2Object.name = "Fighter 2 Renderer";
-
-            Fighter1Renderer = Fighter1Object.AddComponent<SystemShipRenderer>();
-            Fighter2Renderer = Fighter2Object.AddComponent<SystemShipRenderer>();
-
-            Fighter1Renderer.ship = Fighter1;
-            Fighter2Renderer.ship = Fighter2;
+                Ships.Add(Ship, Info);
+                State.Ships.Add(Ship);
+            }
 
             LastTime = (int)(Time.time * 1000);
         }
 
         void Update()
         {
-            int CurrentTime = (int)(Time.time * 1000) - LastTime;
+            int CurrentMillis = (int)(Time.time * 1000) - LastTime;
             LastTime = (int)(Time.time * 1000);
 
-            foreach (ShipWeapon Weapon in Fighter1.Weapons)
+            for (int i = 0; i < ProjectileRenderers.Count; i++)
             {
-                if (Weapon.TryFiringAt(Fighter2, CurrentTime))
+                KeyValuePair<ShipWeaponProjectile, GameObject> ProjectileRenderer = ProjectileRenderers.ElementAt(i);
+                ShipWeaponProjectile Projectile = ProjectileRenderer.Key;
+                GameObject Renderer = ProjectileRenderer.Value;
+
+                if (Projectile.UpdatePosition(CurrentMillis / 200.0f))
                 {
-                    GameObject RendererObject = new GameObject();
-                    RendererObject.name = "Fighter 1 Projectile " + Weapon.ProjectilesFired.Count;
-
-                    ShipWeaponProjectileRenderer ProjectileRenderer = RendererObject.AddComponent<ShipWeaponProjectileRenderer>();
-
-                    ProjectileRenderer.Projectile = Weapon.ProjectilesFired[Weapon.ProjectilesFired.Count - 1];
-
-                    ProjectileRenderers.Add(RendererObject);
-                }
-
-                foreach (ShipWeaponProjectile Projectile in Weapon.ProjectilesFired)
-                {
-                    if(Projectile.UpdatePosition(0.1f))
+                    foreach (SystemShip Ship in State.Ships)
                     {
-                        if(Projectile.InRangeOf(Fighter2))
-                        {
-                            Projectile.DoDamage(Fighter2);
+                        if (Ship == Projectile.Self) continue;
 
-                            // todo: remove renderer for projectile
+                        if (Projectile.InRangeOf(Ship))
+                        {
+                            Projectile.DoDamage(Ship);
+
+                            GameObject.Destroy(ProjectileRenderers[Projectile]);
+                            ProjectileRenderers.Remove(Projectile);
+                            i--;
+
+                            break;
                         }
                     }
-                    else
-                    {
-                        // todo: remove renderer for projectile
-                    }
+                }
+                else
+                {
+                    GameObject.Destroy(ProjectileRenderers[Projectile]);
+                    ProjectileRenderers.Remove(Projectile);
+                    i--;
                 }
             }
 
-            foreach (ShipWeapon Weapon in Fighter2.Weapons)
+            for (int i = 0; i < State.Ships.Count; i++)
             {
-                if (Weapon.TryFiringAt(Fighter1, CurrentTime))
+                SystemShip Ship = State.Ships[i];
+
+                if (Ship.Destroyed)
                 {
-                    GameObject RendererObject = new GameObject();
-                    RendererObject.name = "Fighter 2 Projectile " + Weapon.ProjectilesFired.Count;
+                    GameObject.Destroy(Ships[Ship].Object);
 
-                    ShipWeaponProjectileRenderer ProjectileRenderer = RendererObject.AddComponent<ShipWeaponProjectileRenderer>();
+                    Ships.Remove(Ship);
+                    State.Ships.Remove(Ship);
 
-                    ProjectileRenderer.Projectile = Weapon.ProjectilesFired[Weapon.ProjectilesFired.Count - 1];
-
-                    ProjectileRenderers.Add(RendererObject);
+                    i--;
+                    continue;
                 }
 
-                foreach (ShipWeaponProjectile Projectile in Weapon.ProjectilesFired)
+                if(Ships.Count > 1) foreach (ShipWeapon Weapon in Ship.Weapons)
                 {
-                    if (Projectile.UpdatePosition(0.1f))
-                    {
-                        if (Projectile.InRangeOf(Fighter1))
-                        {
-                            Projectile.DoDamage(Fighter1);
+                    SystemShip Target = null;
 
-                            // todo: remove renderer for projectile
-                        }
-                    }
-                    else
+                    do
                     {
-                        // todo: remove renderer for projectile
+                        Target = State.Ships[rand.Next(Ships.Count)];
+                    }
+                    while (Target == Ship);
+
+                    if (Weapon.TryFiringAt(Target, CurrentMillis))
+                    {
+                        GameObject RendererObject = new GameObject();
+                        RendererObject.name = "Fighter Projectile";
+
+                        ShipWeaponProjectileRenderer ProjectileRenderer = RendererObject.AddComponent<ShipWeaponProjectileRenderer>();
+
+                        ProjectileRenderer.Projectile = Weapon.ProjectilesFired[Weapon.ProjectilesFired.Count - 1];
+
+                        ProjectileRenderers.Add(Weapon.ProjectilesFired[Weapon.ProjectilesFired.Count - 1], RendererObject);
                     }
                 }
+
+                Ship.Shield += Ship.ShieldRegenerationRate * CurrentMillis;
+                if (Ship.Shield > Ship.MaxShield) Ship.Shield = Ship.MaxShield;
             }
         }
     }
