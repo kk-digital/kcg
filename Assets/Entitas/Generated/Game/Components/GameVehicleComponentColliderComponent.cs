@@ -8,18 +8,18 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    static readonly Entities.VehicleEntity vehicleEntityComponent = new Entities.VehicleEntity();
+    static readonly Components.VehicleComponentCollider vehicleComponentColliderComponent = new Components.VehicleComponentCollider();
 
-    public bool isVehicleEntity {
-        get { return HasComponent(GameComponentsLookup.VehicleEntity); }
+    public bool isVehicleComponentCollider {
+        get { return HasComponent(GameComponentsLookup.VehicleComponentCollider); }
         set {
-            if (value != isVehicleEntity) {
-                var index = GameComponentsLookup.VehicleEntity;
+            if (value != isVehicleComponentCollider) {
+                var index = GameComponentsLookup.VehicleComponentCollider;
                 if (value) {
                     var componentPool = GetComponentPool(index);
                     var component = componentPool.Count > 0
                             ? componentPool.Pop()
-                            : vehicleEntityComponent;
+                            : vehicleComponentColliderComponent;
 
                     AddComponent(index, component);
                 } else {
@@ -40,17 +40,17 @@ public partial class GameEntity {
 //------------------------------------------------------------------------------
 public sealed partial class GameMatcher {
 
-    static Entitas.IMatcher<GameEntity> _matcherVehicleEntity;
+    static Entitas.IMatcher<GameEntity> _matcherVehicleComponentCollider;
 
-    public static Entitas.IMatcher<GameEntity> VehicleEntity {
+    public static Entitas.IMatcher<GameEntity> VehicleComponentCollider {
         get {
-            if (_matcherVehicleEntity == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.VehicleEntity);
+            if (_matcherVehicleComponentCollider == null) {
+                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.VehicleComponentCollider);
                 matcher.componentNames = GameComponentsLookup.componentNames;
-                _matcherVehicleEntity = matcher;
+                _matcherVehicleComponentCollider = matcher;
             }
 
-            return _matcherVehicleEntity;
+            return _matcherVehicleComponentCollider;
         }
     }
 }

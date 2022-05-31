@@ -14,12 +14,13 @@ public static class GameComponentsLookup {
     public const int Item = 3;
     public const int ItemMove = 4;
     public const int ItemStack = 5;
-    public const int VehicleEntity = 6;
-    public const int GameObject = 7;
-    public const int Particle = 8;
-    public const int Position = 9;
+    public const int VehicleComponentCollider = 6;
+    public const int VehicleComponentDraw = 7;
+    public const int GameObject = 8;
+    public const int Particle = 9;
+    public const int Position = 10;
 
-    public const int TotalComponents = 10;
+    public const int TotalComponents = 11;
 
     public static readonly string[] componentNames = {
         "Agent2dInventory",
@@ -28,7 +29,8 @@ public static class GameComponentsLookup {
         "Item",
         "ItemMove",
         "ItemStack",
-        "VehicleEntity",
+        "VehicleComponentCollider",
+        "VehicleComponentDraw",
         "GameObject",
         "Particle",
         "Position"
@@ -41,7 +43,8 @@ public static class GameComponentsLookup {
         typeof(Components.ItemComponent),
         typeof(Components.ItemMoveComponent),
         typeof(Components.ItemStackComponent),
-        typeof(Entities.VehicleEntity),
+        typeof(Components.VehicleComponentCollider),
+        typeof(Components.VehicleComponentDraw),
         typeof(src.ecs.Game.Particle.ParticleSpawn.GameObjectComponent),
         typeof(src.ecs.Game.Particle.ParticleSpawn.ParticleComponent),
         typeof(src.ecs.Game.Particle.ParticleSpawn.PositionComponent)
