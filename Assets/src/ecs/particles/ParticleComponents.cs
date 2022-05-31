@@ -1,28 +1,10 @@
-using System.Numerics;
-using System.Drawing;
+using Entitas;
+using Entitas.CodeGeneration.Attributes;
+using UnityEngine;
 
 namespace Components
 {
-    public enum ParticleState
-    {
-        Empty = 0,
-        Loading = 1,
-        Running = 2,
-    }
-
-    public struct ParticleStateComponent
-    {
-        public ParticleState State;
-        public int Id;
-
-        public ParticleStateComponent(ParticleState state, int id)
-        {
-            State = state;
-            Id = id;
-        }
-    }
-
-    public struct Particle2dHealthComponent
+    public struct Particle2dHealthComponent : IComponent
     {
         public float Health;
         public float DecayRate;
@@ -34,7 +16,7 @@ namespace Components
         }
     }
 
-    public struct Particle2dPositionComponent
+    public struct Particle2dPositionComponent : IComponent
     {
         public Vector2 Position;
         public Vector2 Acceleration;
@@ -49,7 +31,7 @@ namespace Components
         }
     }
 
-    public struct Particle2dRotationComponent
+    public struct Particle2dRotationComponent : IComponent
     {
         public float Rotation;
         public float DeltaRotation;
@@ -61,7 +43,7 @@ namespace Components
         }
     }
 
-    public struct Particle2dScaleComponent
+    public struct Particle2dScaleComponent : IComponent
     {
         public float Scale;
         public float DeltaScale;
@@ -73,7 +55,7 @@ namespace Components
         }
     }
 
-    public struct Particle2dSpriteComponent
+    public struct Particle2dSpriteComponent : IComponent
     {
         public int SpriteId;
         public Color Color;
@@ -85,7 +67,7 @@ namespace Components
         }
     }
 
-    public struct Particle2dAnimationComponent
+    public struct Particle2dAnimationComponent : IComponent
     {
         public float CurrentFrame;
         public float AnimationSpeed;
