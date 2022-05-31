@@ -13,19 +13,15 @@ public static class GameComponentsLookup {
     public const int Item = 2;
     public const int ItemMove = 3;
     public const int ItemStack = 4;
-    public const int Particle2dAnimation = 5;
-    public const int Particle2dHealth = 6;
-    public const int Particle2dPosition = 7;
-    public const int Particle2dRotation = 8;
-    public const int Particle2dScale = 9;
-    public const int Particle2dSprite = 10;
-    public const int VehicleComponentCollider = 11;
-    public const int VehicleComponentDraw = 12;
-    public const int GameObject = 13;
-    public const int Particle = 14;
-    public const int Position = 15;
+    public const int Particle2dPosition = 5;
+    public const int ParticleState = 6;
+    public const int VehicleComponentCollider = 7;
+    public const int VehicleComponentDraw = 8;
+    public const int GameObject = 9;
+    public const int Particle = 10;
+    public const int Position = 11;
 
-    public const int TotalComponents = 16;
+    public const int TotalComponents = 12;
 
     public static readonly string[] componentNames = {
         "InventoryItem",
