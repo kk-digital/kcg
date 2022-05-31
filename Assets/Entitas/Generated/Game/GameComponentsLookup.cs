@@ -14,14 +14,16 @@ public static class GameComponentsLookup {
     public const int ItemMove = 3;
     public const int ItemStack = 4;
     public const int Particle2dPosition = 5;
-    public const int ParticleState = 6;
-    public const int VehicleComponentCollider = 7;
-    public const int VehicleComponentDraw = 8;
-    public const int GameObject = 9;
-    public const int Particle = 10;
-    public const int Position = 11;
+    public const int ParticleEmitter2dPosition = 6;
+    public const int ParticleEmitterState = 7;
+    public const int ParticleState = 8;
+    public const int VehicleComponentCollider = 9;
+    public const int VehicleComponentDraw = 10;
+    public const int GameObject = 11;
+    public const int Particle = 12;
+    public const int Position = 13;
 
-    public const int TotalComponents = 12;
+    public const int TotalComponents = 14;
 
     public static readonly string[] componentNames = {
         "InventoryItem",
@@ -30,6 +32,8 @@ public static class GameComponentsLookup {
         "ItemMove",
         "ItemStack",
         "Particle2dPosition",
+        "ParticleEmitter2dPosition",
+        "ParticleEmitterState",
         "ParticleState",
         "VehicleComponentCollider",
         "VehicleComponentDraw",
@@ -45,6 +49,8 @@ public static class GameComponentsLookup {
         typeof(Components.ItemMoveComponent),
         typeof(Components.ItemStackComponent),
         typeof(Components.Particle2dPositionComponent),
+        typeof(Components.ParticleEmitter2dPositionComponent),
+        typeof(Components.ParticleEmitterStateComponent),
         typeof(Components.ParticleStateComponent),
         typeof(Components.VehicleComponentCollider),
         typeof(Components.VehicleComponentDraw),
