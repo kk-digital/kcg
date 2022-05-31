@@ -36,16 +36,16 @@ namespace Systems
                 }
             }
 
-            GameEntity InventoryEntity = _contexts.game.GetEntityWithAgent2dInventory(inventoryID);
-            int FistEmptySlot = GetFirstEmptySlot(InventoryEntity.agent2dInventory.Slots);
+            AgentEntity InventoryEntity = _contexts.agent.GetEntityWithInventory2D(inventoryID);
+            int FistEmptySlot = GetFirstEmptySlot(InventoryEntity.inventory2D.Slots);
             entity.AddInventoryItem(inventoryID, FistEmptySlot);
-            InventoryEntity.agent2dInventory.Slots.Set(FistEmptySlot, true);
+            InventoryEntity.inventory2D.Slots.Set(FistEmptySlot, true);
         }
 
         public void RemoveItem(GameEntity entity, int slot)
         {
-            GameEntity InventoryEntity = _contexts.game.GetEntityWithAgent2dInventory(entity.inventoryItem.InventoryID);
-            InventoryEntity.agent2dInventory.Slots.Set(slot, false);
+            AgentEntity agent = _contexts.agent.GetEntityWithInventory2D(entity.inventoryItem.InventoryID);
+            agent.inventory2D.Slots.Set(slot, false);
             entity.RemoveInventoryItem();
         }
         

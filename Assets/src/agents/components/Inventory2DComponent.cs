@@ -4,7 +4,8 @@ using System.Collections;
 
 namespace Components
 {
-    sealed public class Agent2dInventoryComponent : IComponent
+    [Agent]
+    public struct Inventory2DComponent : IComponent
     {
         [PrimaryEntityIndexAttribute]
         public int  InventoryID;

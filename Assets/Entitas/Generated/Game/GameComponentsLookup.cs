@@ -8,24 +8,26 @@
 //------------------------------------------------------------------------------
 public static class GameComponentsLookup {
 
-    public const int Agent2dInventory = 0;
-    public const int InventoryItem = 1;
-    public const int Item2DPosition = 2;
-    public const int Item = 3;
-    public const int ItemMove = 4;
-    public const int ItemStack = 5;
-    public const int Particle2dPosition = 6;
-    public const int ParticleState = 7;
-    public const int VehicleComponentCollider = 8;
-    public const int VehicleComponentDraw = 9;
-    public const int GameObject = 10;
-    public const int Particle = 11;
-    public const int Position = 12;
+    public const int InventoryItem = 0;
+    public const int Item2DPosition = 1;
+    public const int Item = 2;
+    public const int ItemMove = 3;
+    public const int ItemStack = 4;
+    public const int Particle2dAnimation = 5;
+    public const int Particle2dHealth = 6;
+    public const int Particle2dPosition = 7;
+    public const int Particle2dRotation = 8;
+    public const int Particle2dScale = 9;
+    public const int Particle2dSprite = 10;
+    public const int VehicleComponentCollider = 11;
+    public const int VehicleComponentDraw = 12;
+    public const int GameObject = 13;
+    public const int Particle = 14;
+    public const int Position = 15;
 
-    public const int TotalComponents = 13;
+    public const int TotalComponents = 16;
 
     public static readonly string[] componentNames = {
-        "Agent2dInventory",
         "InventoryItem",
         "Item2DPosition",
         "Item",
@@ -41,7 +43,6 @@ public static class GameComponentsLookup {
     };
 
     public static readonly System.Type[] componentTypes = {
-        typeof(Components.Agent2dInventoryComponent),
         typeof(Components.InventoryItemComponent),
         typeof(Components.Item2DPosition),
         typeof(Components.ItemComponent),

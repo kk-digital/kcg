@@ -93,9 +93,9 @@ public class InventoryTest : MonoBehaviour
     void CreateSlots(int InventoryID)
     {
         // To do: Change size of grid to match width and height of inventory.
-        GameEntity entity = context.game.GetEntityWithAgent2dInventory(InventoryID);
+        AgentEntity agent = context.agent.GetEntityWithInventory2D(InventoryID);
 
-        int size = entity.agent2dInventory.Width * entity.agent2dInventory.Height;
+        int size = agent.inventory2D.Width * agent.inventory2D.Height;
         for (int i = 0; i < size; i++)
         {
             GameObject obj = new GameObject("slot" + i.ToString(), typeof(RectTransform));
@@ -105,13 +105,13 @@ public class InventoryTest : MonoBehaviour
 
     void CreateInventoryEntity(int InventoryID)
     {
-        GameEntity entity = context.game.CreateEntity();
+        AgentEntity agent = context.agent.CreateEntity();
         const int height = 8;
         const int width = 8;
         const int selectedSlot = 0;
 
         BitArray slots = new BitArray(height * width, false);
-        entity.AddAgent2dInventory(InventoryID, width, height, selectedSlot, slots);
+        agent.AddInventory2D(InventoryID, width, height, selectedSlot, slots);
     }
 
     void CreateItemsEntity(string Label, int InventoryID, ItemType itemType, int SpriteID)
