@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Components
 {
-    [Game]
     sealed public class ItemComponent : IComponent // Basic Item Component.
     {
         public string           Label;

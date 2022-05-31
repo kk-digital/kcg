@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Components
 {
-    [Game]
     sealed public class InventoryItemComponent : IComponent // Indicates item is inside a Inventory.
     {
         [EntityIndex]

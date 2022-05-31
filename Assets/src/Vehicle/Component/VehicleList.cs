@@ -7,7 +7,6 @@ using Systems;
 
 public class VehicleList
 {
-    public VehicleEntity[] vehicleEntityList;
     public VehiclePhysicsSystem[] vehiclePhysicsList;
     public VehicleDrawSystem[] vehicleDrawList;
     public VehicleComponentCollider[] vehicleComponentColliderList;
