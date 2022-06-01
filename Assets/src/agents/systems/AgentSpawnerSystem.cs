@@ -8,8 +8,6 @@ namespace Agent
         {
             var entity = agentContext.CreateEntity();
 
-            entity.isPlayer = true;
-            
             var spriteSize = new Vector2Int(32, 48);
             var spriteID = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png", spriteSize.x, spriteSize.y);
             var atlasIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, SpriteAtlas.AtlasType.Agent);

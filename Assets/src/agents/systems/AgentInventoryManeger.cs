@@ -33,7 +33,7 @@ namespace Agent
                 }
             }
 
-            AgentEntity InventoryEntity = _contexts.agent.GetEntityWithInventory2D(inventoryID);
+            var InventoryEntity = _contexts.inventory.GetEntityWithInventory2D(inventoryID);
             int FistEmptySlot = GetFirstEmptySlot(InventoryEntity.inventory2D.Slots);
             entity.AddInventoryItem(inventoryID, FistEmptySlot);
             InventoryEntity.inventory2D.Slots.Set(FistEmptySlot, true);
@@ -41,7 +41,7 @@ namespace Agent
 
         public void RemoveItem(GameEntity entity, int slot)
         {
-            AgentEntity agent = _contexts.agent.GetEntityWithInventory2D(entity.inventoryItem.InventoryID);
+            var agent = _contexts.inventory.GetEntityWithInventory2D(entity.inventoryItem.InventoryID);
             agent.inventory2D.Slots.Set(slot, false);
             entity.RemoveInventoryItem();
         }

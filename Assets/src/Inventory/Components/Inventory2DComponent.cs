@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace Agent
 {
-    [Agent]
+    [Inventory]
     public struct Inventory2DComponent : IComponent
     {
         [PrimaryEntityIndex]

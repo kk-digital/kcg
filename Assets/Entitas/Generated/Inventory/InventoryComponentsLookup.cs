@@ -6,23 +6,17 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public static class AgentComponentsLookup {
+public static class InventoryComponentsLookup {
 
-    public const int Player = 0;
-    public const int Position2D = 1;
-    public const int Sprite2D = 2;
+    public const int Inventory2D = 0;
 
-    public const int TotalComponents = 3;
+    public const int TotalComponents = 1;
 
     public static readonly string[] componentNames = {
-        "Player",
-        "Position2D",
-        "Sprite2D"
+        "Inventory2D"
     };
 
     public static readonly System.Type[] componentTypes = {
-        typeof(Agent.PlayerComponent),
-        typeof(Agent.Position2DComponent),
-        typeof(Agent.Sprite2DComponent)
+        typeof(Agent.Inventory2DComponent)
     };
 }

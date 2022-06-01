@@ -6,13 +6,13 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public partial class AgentEntity {
+public partial class InventoryEntity {
 
-    public Agent.Inventory2DComponent inventory2D { get { return (Agent.Inventory2DComponent)GetComponent(AgentComponentsLookup.Inventory2D); } }
-    public bool hasInventory2D { get { return HasComponent(AgentComponentsLookup.Inventory2D); } }
+    public Agent.Inventory2DComponent inventory2D { get { return (Agent.Inventory2DComponent)GetComponent(InventoryComponentsLookup.Inventory2D); } }
+    public bool hasInventory2D { get { return HasComponent(InventoryComponentsLookup.Inventory2D); } }
 
     public void AddInventory2D(int newInventoryID, int newWidth, int newHeight, int newSelectedSlot, System.Collections.BitArray newSlots) {
-        var index = AgentComponentsLookup.Inventory2D;
+        var index = InventoryComponentsLookup.Inventory2D;
         var component = (Agent.Inventory2DComponent)CreateComponent(index, typeof(Agent.Inventory2DComponent));
         component.InventoryID = newInventoryID;
         component.Width = newWidth;
@@ -23,7 +23,7 @@ public partial class AgentEntity {
     }
 
     public void ReplaceInventory2D(int newInventoryID, int newWidth, int newHeight, int newSelectedSlot, System.Collections.BitArray newSlots) {
-        var index = AgentComponentsLookup.Inventory2D;
+        var index = InventoryComponentsLookup.Inventory2D;
         var component = (Agent.Inventory2DComponent)CreateComponent(index, typeof(Agent.Inventory2DComponent));
         component.InventoryID = newInventoryID;
         component.Width = newWidth;
@@ -34,7 +34,7 @@ public partial class AgentEntity {
     }
 
     public void RemoveInventory2D() {
-        RemoveComponent(AgentComponentsLookup.Inventory2D);
+        RemoveComponent(InventoryComponentsLookup.Inventory2D);
     }
 }
 
@@ -46,15 +46,15 @@ public partial class AgentEntity {
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public sealed partial class AgentMatcher {
+public sealed partial class InventoryMatcher {
 
-    static Entitas.IMatcher<AgentEntity> _matcherInventory2D;
+    static Entitas.IMatcher<InventoryEntity> _matcherInventory2D;
 
-    public static Entitas.IMatcher<AgentEntity> Inventory2D {
+    public static Entitas.IMatcher<InventoryEntity> Inventory2D {
         get {
             if (_matcherInventory2D == null) {
-                var matcher = (Entitas.Matcher<AgentEntity>)Entitas.Matcher<AgentEntity>.AllOf(AgentComponentsLookup.Inventory2D);
-                matcher.componentNames = AgentComponentsLookup.componentNames;
+                var matcher = (Entitas.Matcher<InventoryEntity>)Entitas.Matcher<InventoryEntity>.AllOf(InventoryComponentsLookup.Inventory2D);
+                matcher.componentNames = InventoryComponentsLookup.componentNames;
                 _matcherInventory2D = matcher;
             }
 
