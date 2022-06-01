@@ -8,25 +8,27 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    static readonly Components.ProjectileComponent projectileComponent = new Components.ProjectileComponent();
+    public Components.ProjectileComponent projectile { get { return (Components.ProjectileComponent)GetComponent(GameComponentsLookup.Projectile); } }
+    public bool hasProjectile { get { return HasComponent(GameComponentsLookup.Projectile); } }
 
-    public bool isProjectile {
-        get { return HasComponent(GameComponentsLookup.Projectile); }
-        set {
-            if (value != isProjectile) {
-                var index = GameComponentsLookup.Projectile;
-                if (value) {
-                    var componentPool = GetComponentPool(index);
-                    var component = componentPool.Count > 0
-                            ? componentPool.Pop()
-                            : projectileComponent;
+    public void AddProjectile(Enums.ProjectileType newProjectileType, Enums.ProjectileDrawType newProjectileDrawType) {
+        var index = GameComponentsLookup.Projectile;
+        var component = (Components.ProjectileComponent)CreateComponent(index, typeof(Components.ProjectileComponent));
+        component.projectileType = newProjectileType;
+        component.projectileDrawType = newProjectileDrawType;
+        AddComponent(index, component);
+    }
 
-                    AddComponent(index, component);
-                } else {
-                    RemoveComponent(index);
-                }
-            }
-        }
+    public void ReplaceProjectile(Enums.ProjectileType newProjectileType, Enums.ProjectileDrawType newProjectileDrawType) {
+        var index = GameComponentsLookup.Projectile;
+        var component = (Components.ProjectileComponent)CreateComponent(index, typeof(Components.ProjectileComponent));
+        component.projectileType = newProjectileType;
+        component.projectileDrawType = newProjectileDrawType;
+        ReplaceComponent(index, component);
+    }
+
+    public void RemoveProjectile() {
+        RemoveComponent(GameComponentsLookup.Projectile);
     }
 }
 
