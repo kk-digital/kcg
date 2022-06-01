@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Agent;
+using Vehicle;
 using Entitas;
 
 public class VehicleTest : MonoBehaviour

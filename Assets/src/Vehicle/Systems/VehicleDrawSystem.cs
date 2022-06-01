@@ -1,6 +1,6 @@
 using Entitas;
 
-namespace Agent
+namespace Vehicle
 {
     public class VehicleDrawSystem : IInitializeSystem
     {
