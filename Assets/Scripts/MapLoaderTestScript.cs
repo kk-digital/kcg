@@ -166,9 +166,9 @@ namespace PlanetTileMap.Unity
             GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\sprite\\item\\admin_icon_pipesim.png",
             16, 16);
 
-            int PipeSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(PipeTileSheet, 0, 0, 0);
+            int PipeSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(PipeTileSheet, 0, 0, SpriteAtlas.AtlasType.Particle);
             byte[] pipeBytes = new byte[16 * 16 * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(PipeSpriteIndex, pipeBytes);
+            GameState.SpriteAtlasManager.GetSpriteBytes(PipeSpriteIndex, pipeBytes, SpriteAtlas.AtlasType.Particle);
 
             byte[] bytes = new byte[32 * 32* 4];
 
