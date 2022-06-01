@@ -31,6 +31,8 @@ namespace PlanetTileMap.Unity
         AgentEntity Player;
         PlanetTileMap TileMap;
 
+        int SortingOrder = 0;
+
         int PlayerSpriteID;
         int PlayerSprite2ID;
         const float TileSize = 1.0f;
@@ -48,34 +50,7 @@ namespace PlanetTileMap.Unity
                 CreateTestPlayer();
                 InitTiles = true;
             }
-            // TODO(Mahdi): does not make sense to put them here
-            // move them out ! 
-            InitStage1();
-            InitStage2();
-        }
 
-        //All memory allocations/setups go here
-        //File loading should not occur at this stage
-        public void InitStage1()
-        {
-            // todo: commented out the tmx stuff for now
-            /*FileLoader = new TmxImporter(Path.Combine(BaseDir, TileMap));
-            FileLoader.LoadStage1();*/
-        }
-
-        //Load settings from files and other init, that requires systems to be intialized
-        public void InitStage2()
-        {
- 
-
-            //TestDrawTiles();
-            LateUpdate();
-
-
-        }      
-
-        public void Update()
-        {
             //remove all children MeshRenderer
             foreach(var mr in GetComponentsInChildren<MeshRenderer>())
                 if (Application.isPlaying)
@@ -86,70 +61,14 @@ namespace PlanetTileMap.Unity
             //TODO: Move DrawMapTest to DrawMap()
             DrawMapTest();
             DrawPlayer();
-        }
+        }   
 
-        void DrawMapTest()
+        public void Update()
         {
-            var visibleRect = CalcVisibleRect();
-
-            byte[] bytes = new byte[32 * 32* 4];
-
-            for(int layerIndex = 0; layerIndex < 1; layerIndex++)
-            {
-                for(int j = 0; j < TileMap.Size.y; j++)
-                {
-                    for(int i = 0; i < TileMap.Size.x; i++)
-                    {
-                        ref PlanetTile tile = ref TileMap.getTile(i, j);
-                        int tilePropertiesIndex = tile.TileIdPerLayer[layerIndex];
-
-                        if (tilePropertiesIndex >= 0)
-                        {
-                            TilePropertiesData tileProperties =
-                                GameState.TileCreationApi.GetTileProperties(tilePropertiesIndex);
-
-                            GameState.TileSpriteAtlasManager.GetSpriteBytes(tileProperties.SpriteId, bytes);
-
-                            var x = (i * TileSize);
-                            var y = (j * TileSize);
-
-                            if (x + TileSize >= visibleRect.X && x <= visibleRect.X + visibleRect.W &&
-                            y + TileSize >= visibleRect.Y && y <= visibleRect.Y + visibleRect.H)
-                            {
-                                DrawTile(x, y, TileSize, TileSize, bytes);
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
-        
-        void CreateTestPlayer()
-        {
-            //  Player = new RectangleBoundingBoxCollision(PlayerPosition - MapOffset, new Vector2(1f, 48.0f / 32.0f));
-            Player = SpawnerSystem.Instance.SpawnPlayer();
-        }
-
-
-        void DrawPlayer()
-        {
-            /*Player = new RectangleBoundingBoxCollision(PlayerPosition - MapOffset, new Vector2(1f, 48.0f / 32.0f));
-            bool isCollidingBottom = Player.IsCollidingBottom(ref TileMap);
-
-            //Debug.Log($"Player Bottom Collided: {isCollidingBottom}");
-            */
-
-            byte[] spriteBytes = new byte[32 * 48 * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(PlayerSprite2ID, spriteBytes);
-
-            float height = Player.sprite2D.Size.y / (float)Player.sprite2D.Size.x;
-            DrawSprite(Player.position2D.Value.x, Player.position2D.Value.y, 1.0f, height, spriteBytes, Player.sprite2D.Size.x, Player.sprite2D.Size.y);
 
         }
-        
-        //NOTE(Mahdi): this is used to create some test tiles
-        // to make sure the system is working
+
+
         public void CreateDefaultTiles()
         {
             int MetalSlabsTileSheet = 
@@ -158,7 +77,8 @@ namespace PlanetTileMap.Unity
                         GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tile_wallbase\\Tiles_stone_bulkheads.png");
             int TilesMoon = 
                         GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png");
-
+            int OreTileSheet = 
+            GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
 
             // creating the tiles
             GameState.TileCreationApi.CreateTile(0);
@@ -202,6 +122,7 @@ namespace PlanetTileMap.Unity
             GameState.TileCreationApi.EndTile();
 
 
+
             // Generating the map
             Vector2Int mapSize = new Vector2Int(128, 128);
 
@@ -212,23 +133,25 @@ namespace PlanetTileMap.Unity
                 for(int i = 0; i < mapSize.x; i++)
                 {
                     PlanetTile tile = PlanetTile.EmptyTile();
-                    tile.TileIdPerLayer[0] = 0;
+                    tile.BackTilePropertiesId = 0;
+                    tile.FrontTilePropertiesId = -1;
+
                     if (i % 10 == 0)
                     {
-                        tile.TileIdPerLayer[0] = 7;
+                        tile.BackTilePropertiesId = 7;
                     }
                     if (j % 2 == 0)
                     {
-                        tile.TileIdPerLayer[0] = 2;
+                        tile.BackTilePropertiesId = 2;
                     }
                     if (j % 3 == 0)
                     {
-                        tile.TileIdPerLayer[0] = 1;
+                        tile.BackTilePropertiesId = 1;
                     }
 
-                    if ((j > 1 && j < 6) || j > 10)
+                    if ((j > 1 && j < 6) || (j > (8 + i)))
                     {
-                       tile.TileIdPerLayer[0] = -1; 
+                       tile.BackTilePropertiesId = -1; 
                     }
 
                     
@@ -236,13 +159,88 @@ namespace PlanetTileMap.Unity
                 }
             }
 
+            TileMap.UpdateTopTilesMap();
         }
 
-        public void LoadMap()
+        void DrawMapTest()
         {
-            InitStage1();
-            InitStage2();
+
+            int PipeTileSheet = 
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\sprite\\item\\admin_icon_pipesim.png",
+            16, 16);
+
+            int PipeSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(PipeTileSheet, 0, 0, 0);
+            byte[] pipeBytes = new byte[16 * 16 * 4];
+            GameState.SpriteAtlasManager.GetSpriteBytes(PipeSpriteIndex, pipeBytes);
+
+            byte[] bytes = new byte[32 * 32* 4];
+
+            for(int layerIndex = 0; layerIndex < 1; layerIndex++)
+            {
+                for(int j = 0; j < TileMap.Size.y; j++)
+                {
+                    for(int i = 0; i < TileMap.Size.x; i++)
+                    {
+                        ref PlanetTile tile = ref TileMap.getTile(i, j);
+                        int tilePropertiesIndex = tile.BackTilePropertiesId;
+
+                        if (tilePropertiesIndex >= 0)
+                        {
+                            TilePropertiesData tileProperties =
+                                GameState.TileCreationApi.GetTileProperties(tilePropertiesIndex);
+
+                            GameState.TileSpriteAtlasManager.GetSpriteBytes(tileProperties.SpriteId, bytes);
+
+                            var x = (i * TileSize);
+                            var y = (j * TileSize);
+                            DrawTile(x, y, TileSize, TileSize, bytes);
+                        }
+
+                        tilePropertiesIndex = tile.FrontTilePropertiesId;
+                        if (tilePropertiesIndex >= 0)
+                        {
+                            TilePropertiesData tileProperties =
+                                GameState.TileCreationApi.GetTileProperties(tilePropertiesIndex);
+
+                            GameState.TileSpriteAtlasManager.GetSpriteBytes(tileProperties.SpriteId, bytes);
+
+                            var x = (i * TileSize);
+                            var y = (j * TileSize);
+                            DrawTile(x, y, TileSize, TileSize, bytes);
+                        }
+                    }
+                }
+            }
+
+            for(int i = 0; i < TileMap.Size.x; i++)
+            {
+                int topTileIndex = TileMap.TopTilesMap.Data[i];
+
+                var x = (i * TileSize);
+                var y = (topTileIndex * TileSize);
+
+                DrawSprite(x + 0.25f, y + 0.25f, 0.5f, 0.5f, pipeBytes, 16, 16);
+            }
         }
+        
+        void CreateTestPlayer()
+        {
+            Player = SpawnerSystem.Instance.SpawnPlayer();
+        }
+
+
+        void DrawPlayer()
+        {
+
+            byte[] spriteBytes = new byte[32 * 48 * 4];
+            GameState.SpriteAtlasManager.GetSpriteBytes(PlayerSprite2ID, spriteBytes);
+
+            float height = Player.sprite2D.Size.y / (float)Player.sprite2D.Size.x;
+            DrawSprite(Player.position2D.Value.x, Player.position2D.Value.y, 1.0f, height, spriteBytes, Player.sprite2D.Size.x, Player.sprite2D.Size.y);
+
+        }
+        
+        
 
 
          // draws 1 tile into the screen
@@ -253,7 +251,7 @@ namespace PlanetTileMap.Unity
             var tex = CreateTextureFromRGBA(spriteBytes, spriteW, spriteH);
             var mat = Instantiate(Material);
             mat.SetTexture("_MainTex", tex);
-            var mesh = CreateMesh(transform, "abc", 0, mat);
+            var mesh = CreateMesh(transform, "abc", SortingOrder++, mat);
 
             triangles.Clear();
             uvs.Clear();
@@ -323,14 +321,6 @@ namespace PlanetTileMap.Unity
             return mesh;
         }
 
-        private void LateUpdate()
-        {
-         /*   var visibleRect = CalcVisibleRect();
-
-            //rebuild all layers for visible rect
-            foreach (var mb in meshBuildersByLayers)
-                mb.BuildMesh(visibleRect);*/
-        }
 
         public struct R
         {
@@ -382,75 +372,6 @@ namespace PlanetTileMap.Unity
 
             return res;
         }
-        
-#if UNITY_EDITOR
-        public void OnDrawGizmos()
-        {
-            if (!Application.isPlaying) return;
-            
-            float WorldPositionX(float pos) => pos * TileSize;
-            float WorldPositionY(float pos) => pos * TileSize;
 
-            //var playerBound = AgentBoxColliderComponent.Bounds(Player.Pos, Player.Size);
-            
-            /*void DrawBottomCollision()
-            {
-                if (!Player.IsCollidingBottom(ref TileMap)) return;
-                
-                var y = WorldPositionY(playerBound.BottomTile + 1f);
-                var leftTilePos = new Vector3(WorldPositionX(playerBound.LeftTile), y, 0);
-                var rightTilePos = new Vector3(WorldPositionX(playerBound.RightTile) + TileSize, y, 0);
-                Gizmos.color = Color.red;
-                
-                Gizmos.DrawLine(leftTilePos, rightTilePos);
-            }*/
-
-            /*void DrawPlayerBottomCorners(int length)
-            {
-                // Centralized on player
-                var y = WorldPositionY(playerBound.BottomTile + 1f);
-
-                var localPosStartX = (int) Player.Pos.x - (length / 2);
-                if (localPosStartX < 0) localPosStartX = 0;
-                
-                for (; localPosStartX < (int)Player.Pos.x + (length / 2) + length % 2; localPosStartX++)
-                {
-                    var tile = TileMap.getTile(localPosStartX, playerBound.BottomTile);
-
-                    if (tile.TileIdPerLayer[0] >= 0)
-                    {
-                        var startPos = new Vector3(WorldPositionX(localPosStartX), y, 0);
-                        var endPos = new Vector3(WorldPositionX(localPosStartX) + TileSize, y, 0);;
-                        
-                        Gizmos.color = Color.green;
-                        Gizmos.DrawLine(startPos, endPos);
-                    }
-                }
-            }*/
-            
-            //DrawPlayerBottomCorners(9);
-            //DrawBottomCollision();
-        }
-#endif
     }
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(MapLoaderTestScript))]
-    public class TerrainGeneratorEditor : Editor
-    {
-        public override void OnInspectorGUI()
-        {
-            var myTarget = (MapLoaderTestScript)target;
-
-            // Show default inspector property editor
-            DrawDefaultInspector();
-
-            if (GUILayout.Button("Load Map"))
-            {
-                myTarget.LoadMap();
-            }
-
-        }
-    }
-#endif
 }

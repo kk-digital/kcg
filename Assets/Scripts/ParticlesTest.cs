@@ -81,15 +81,15 @@ namespace PlanetTileMap.Unity
             int VentTileSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Objects\\vent1.png", 16, 16);
 
 
-            int PipeSpriteIndex = GameState.SpriteAtlasManager.Blit(PipeTileSheet, 0, 0);
+            int PipeSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(PipeTileSheet, 0, 0, 0);
             byte[] pipeBytes = new byte[16 * 16 * 4];
             GameState.SpriteAtlasManager.GetSpriteBytes(PipeSpriteIndex, pipeBytes);
 
-            int OreSpriteIndex = GameState.SpriteAtlasManager.Blit(OreTileSheet, 0, 0);
+            int OreSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(OreTileSheet, 0, 0, 0);
             byte[] oreBytes = new byte[16 * 16 * 4];
             GameState.SpriteAtlasManager.GetSpriteBytes(OreSpriteIndex, oreBytes);
 
-            int VentSpriteIndex = GameState.SpriteAtlasManager.Blit(VentTileSheet, 0, 0);
+            int VentSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(VentTileSheet, 0, 0, 0);
             byte[] ventBytes = new byte[16 * 16 * 4];
             GameState.SpriteAtlasManager.GetSpriteBytes(VentSpriteIndex, ventBytes);
 

@@ -16,7 +16,7 @@ namespace Agent
         public void InitSprite()
         {
             SpriteID = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png", Size.x, Size.y);
-            BlitSpriteAtlasID = GameState.SpriteAtlasManager.Blit(SpriteID, 0, 0);
+            BlitSpriteAtlasID = GameState.SpriteAtlasManager.CopySpriteToAtlas(SpriteID, 0, 0, 0);
         }
     }
 }

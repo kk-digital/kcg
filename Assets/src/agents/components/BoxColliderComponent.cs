@@ -66,7 +66,7 @@ namespace Agent
             for (int y = bounds.BottomTile; y <= bounds.TopTile; y++) 
             {
                 var tile = map.getTile(bounds.LeftTile, y);
-                int tilePropertiesIndex = tile.TileIdPerLayer[0];
+                int tilePropertiesIndex = tile.BackTilePropertiesId;
 
                 if (tilePropertiesIndex >= 0)
                 {
@@ -88,7 +88,7 @@ namespace Agent
             for (int y = bounds.BottomTile; y <= bounds.TopTile; y++) 
             {
                 var tile = map.getTile(bounds.RightTile, y);
-                int tilePropertiesIndex = tile.TileIdPerLayer[0];
+                int tilePropertiesIndex = tile.BackTilePropertiesId;
 
                 if (tilePropertiesIndex >= 0)
                 {
@@ -110,7 +110,7 @@ namespace Agent
             for (int x = bounds.LeftTile; x <= bounds.RightTile; x++) 
             {
                 var tile = map.getTile(x, bounds.TopTile);
-                int tilePropertiesIndex = tile.TileIdPerLayer[0];
+                int tilePropertiesIndex = tile.BackTilePropertiesId;
 
                 if (tilePropertiesIndex >= 0)
                 {
@@ -132,7 +132,7 @@ namespace Agent
             for (int x = bounds.LeftTile; x <= bounds.RightTile; x++)
             {
                 var tile = map.getTile(x, bounds.BottomTile);
-                int tilePropertiesIndex = tile.TileIdPerLayer[0];
+                int tilePropertiesIndex = tile.BackTilePropertiesId;
 
                 if (tilePropertiesIndex >= 0)
                 {

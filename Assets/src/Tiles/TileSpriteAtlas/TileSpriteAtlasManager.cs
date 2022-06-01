@@ -56,11 +56,11 @@ namespace TileSpriteAtlas
         }
 
         // Returns sprite sheet id
-        public int Blit(int spriteSheetID, int row, int column)
+        public int CopySpriteToAtlas(int spriteSheetID, int row, int column, int atlasId)
         {
             SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[spriteSheetID];
-            ref TileSpriteAtlas atlas = ref SpritesArray[0];
-            ref int count = ref Count[0];
+            ref TileSpriteAtlas atlas = ref SpritesArray[atlasId];
+            ref int count = ref Count[atlasId];
             
             int xOffset = (count % atlas.Width) * 32;
             int yOffset = (count / atlas.Height) * 32;
@@ -86,11 +86,11 @@ namespace TileSpriteAtlas
         }
 
 
-         public int Blit16(int spriteSheetID, int row, int column)
+         public int CopySpriteToAtlas16To32(int spriteSheetID, int row, int column, int atlasId)
         {
             SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[spriteSheetID];
-            ref TileSpriteAtlas atlas = ref SpritesArray[0];
-            ref int count = ref Count[0];
+            ref TileSpriteAtlas atlas = ref SpritesArray[atlasId];
+            ref int count = ref Count[atlasId];
             
             int xOffset = (count % atlas.Width) * 32;
             int yOffset = (count / atlas.Height) * 32;
@@ -122,12 +122,13 @@ namespace TileSpriteAtlas
 
             return count - 1;
         }
+        
 
-        public int Blit8(int spriteSheetID, int row, int column)
+        public int CopySpriteToAtlas8To32(int spriteSheetID, int row, int column, int atlasId)
         {
             SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[spriteSheetID];
-            ref TileSpriteAtlas atlas = ref SpritesArray[0];
-            ref int count = ref Count[0];
+            ref TileSpriteAtlas atlas = ref SpritesArray[atlasId];
+            ref int count = ref Count[atlasId];
             
             int xOffset = (count % atlas.Width) * 32;
             int yOffset = (count / atlas.Height) * 32;

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Systems;
+using Agent;
 using Entitas;
 
 public class VehicleTest : MonoBehaviour
@@ -41,7 +41,7 @@ public class VehicleTest : MonoBehaviour
 
     private void InitImage(int spriteID)
     {
-        int imageSpriteIndex = GameState.SpriteAtlasManager.Blit(spriteID, 0, 0);
+        int imageSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, 0);
         byte[] imageBytes = new byte[224 * 96 * 32];
 
         GameState.SpriteAtlasManager.GetSpriteBytes(imageSpriteIndex, imageBytes);

@@ -89,12 +89,12 @@ namespace PlanetTileMap.Unity
             // we can blit the same sprite
             // but its only for testing purpose
             // we should remove that in the future
-            GameState.SpriteAtlasManager.Blit(SomeObjectTileSheet, 0, 0);
-            GameState.SpriteAtlasManager.Blit(PlayerTileSheet, 0, 0);;
-            GameState.SpriteAtlasManager.Blit(PlayerTileSheet, 0, 0);
-            GameState.SpriteAtlasManager.Blit(SomeObjectTileSheet, 0, 0);
-            GameState.SpriteAtlasManager.Blit(PlayerTileSheet, 0, 0);
-            GameState.SpriteAtlasManager.Blit(PlayerTileSheet, 0, 0);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(SomeObjectTileSheet, 0, 0, 0);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, 0);;
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, 0);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(SomeObjectTileSheet, 0, 0, 0);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, 0);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, 0);
         }
 
         // drawing the sprite atlas
