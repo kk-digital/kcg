@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using Agent;
 using UnityEngine;
-using Systems;
 using Entitas;
 
 public class VehicleTest : MonoBehaviour
@@ -12,9 +12,9 @@ public class VehicleTest : MonoBehaviour
     Contexts contexts;
 
     // Rendering elements
-    List<int> triangles = new List<int>();
-    List<Vector2> uvs = new List<Vector2>();
-    List<Vector3> verticies = new List<Vector3>();
+    List<int> triangles = new();
+    List<Vector2> uvs = new();
+    List<Vector3> verticies = new();
     [SerializeField] Material Material;
 
     // Sprite to Render
@@ -42,7 +42,7 @@ public class VehicleTest : MonoBehaviour
     private void InitImage(int spriteID)
     {
         int imageSpriteIndex = GameState.SpriteAtlasManager.Blit(spriteID, 0, 0);
-        byte[] imageBytes = new byte[224 * 96 * 32];
+        byte[] imageBytes = new byte[224 * 96 * 4];
 
         GameState.SpriteAtlasManager.GetSpriteBytes(imageSpriteIndex, imageBytes);
 

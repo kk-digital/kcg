@@ -420,6 +420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1ae60f37bc6d184499e6a5db706106b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Material: {fileID: 2100000, guid: 4073de6af124b4f40bdce02691603836, type: 2}
 --- !u!4 &1365705244
 Transform:
   m_ObjectHideFlags: 0
