@@ -1,6 +1,5 @@
 using Entitas;
 using Entitas.CodeGeneration.Attributes;
-using UnityEngine;
 
 namespace Agent
 {
@@ -9,8 +8,6 @@ namespace Agent
     {
         [PrimaryEntityIndex]
         public int ID;
-
-        public Transform ParentGameObject;
     }
 }
 

@@ -27,14 +27,6 @@ namespace Agent
         {
             foreach (var agent in agents.agentsWithSprite)
             {
-                byte[] spriteBytes = new byte[agent.sprite2D.Size.x * agent.sprite2D.Size.y * 4];
-                GameState.SpriteAtlasManager.GetSpriteBytes(agent.sprite2D.AtlasIndex, spriteBytes, SpriteAtlas.AtlasType.Particle);
-                
-                var tex = CreateTextureFromRGBA(spriteBytes, agent.sprite2D.Size.x, agent.sprite2D.Size.y);
-                var mat = Object.Instantiate(agent.sprite2D.Material);
-                mat.SetTexture("_MainTex", tex);
-                var mesh = CreateMesh(agent.sprite2D.Parent, "Agent", 0, mat);
-                
                 triangles.Clear();
                 uvs.Clear();
                 verticies.Clear();
@@ -78,58 +70,10 @@ namespace Agent
                 uvs.Add(uv3);
     
 
-                mesh.SetVertices(verticies);
-                mesh.SetUVs(0, uvs);
-                mesh.SetTriangles(triangles, 0);
+                agent.sprite2D.Mesh.SetVertices(verticies);
+                agent.sprite2D.Mesh.SetUVs(0, uvs);
+                agent.sprite2D.Mesh.SetTriangles(triangles, 0);
             }
-        }
-
-        private Texture2D CreateTextureFromRGBA(byte[] rgba, int w, int h)
-        {
-
-            var res = new Texture2D(w, h, TextureFormat.RGBA32, false)
-            {
-                filterMode = FilterMode.Point
-            };
-
-            var pixels = new Color32[w * h];
-            for (int x = 0; x < w; x++)
-            {
-                for (int y = 0; y < h; y++)
-                {
-                    int index = (x + y * w) * 4;
-                    var r = rgba[index];
-                    var g = rgba[index + 1];
-                    var b = rgba[index + 2];
-                    var a = rgba[index + 3];
-
-                    pixels[x + y * w] = new Color32(r, g, b, a);
-                }
-            }
-
-            res.SetPixels32(pixels);
-            res.Apply();
-
-            return res;
-        }
-
-        private Mesh CreateMesh(Transform parent, string name, int sortingOrder, Material material)
-        {
-            var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
-            go.transform.SetParent(parent);
-
-            var mesh = new Mesh
-            {
-                indexFormat = UnityEngine.Rendering.IndexFormat.UInt32
-            };
-
-            var mf = go.GetComponent<MeshFilter>();
-            mf.sharedMesh = mesh;
-            var mr = go.GetComponent<MeshRenderer>();
-            mr.sharedMaterial = material;
-            mr.sortingOrder = sortingOrder;
-
-            return mesh;
         }
     }
 }

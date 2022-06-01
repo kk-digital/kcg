@@ -11,19 +11,17 @@ public partial class AgentEntity {
     public Agent.PlayerComponent player { get { return (Agent.PlayerComponent)GetComponent(AgentComponentsLookup.Player); } }
     public bool hasPlayer { get { return HasComponent(AgentComponentsLookup.Player); } }
 
-    public void AddPlayer(int newID, UnityEngine.Transform newParentGameObject) {
+    public void AddPlayer(int newID) {
         var index = AgentComponentsLookup.Player;
         var component = (Agent.PlayerComponent)CreateComponent(index, typeof(Agent.PlayerComponent));
         component.ID = newID;
-        component.ParentGameObject = newParentGameObject;
         AddComponent(index, component);
     }
 
-    public void ReplacePlayer(int newID, UnityEngine.Transform newParentGameObject) {
+    public void ReplacePlayer(int newID) {
         var index = AgentComponentsLookup.Player;
         var component = (Agent.PlayerComponent)CreateComponent(index, typeof(Agent.PlayerComponent));
         component.ID = newID;
-        component.ParentGameObject = newParentGameObject;
         ReplaceComponent(index, component);
     }
 
