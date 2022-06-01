@@ -56,33 +56,36 @@ namespace SpriteAtlas
         public void GetSpriteBytes(int id, byte[] data)
         {
             ref SpriteAtlas atlas = ref SpritesArray[0];
-            
+
             if (id >= 0 && id < atlas.Rectangles.Length)
             {
-                RectpackSharp.PackingRectangle rectangle = atlas.Rectangles[id];
+                // TODO: Refactor
+                int recIndex = Array.FindIndex(atlas.Rectangles, packingRectangle => packingRectangle.Id == id);
+                
+                RectpackSharp.PackingRectangle rectangle = atlas.Rectangles[recIndex];
 
                 int xOffset = (int)rectangle.X;
                 int yOffset = (int)rectangle.Y;
-                int Width = (int)rectangle.Width;
-                int Height = (int)rectangle.Height;
+                int width = (int)rectangle.Width;
+                int height = (int)rectangle.Height;
 
-                for(int y = 0; y < Height; y++)
+                for(int y = 0; y < height; y++)
                 {
-                    for(int x = 0; x < Width; x++)
+                    for(int x = 0; x < width; x++)
                     {
-                        int index = 4 * (x + y * Width);
-                        int atlasindex = 4 * ((yOffset + y) * (atlas.Width) +
+                        int index = 4 * (x + y * width);
+                        int atlasIndex = 4 * ((yOffset + y) * (atlas.Width) +
                                             (xOffset + x));
                         
                         //RGBA8
                         data[index + 0] = 
-                            atlas.Data[atlasindex + 0];
+                            atlas.Data[atlasIndex + 0];
                         data[index + 1] = 
-                            atlas.Data[atlasindex + 1];
+                            atlas.Data[atlasIndex + 1];
                         data[index + 2] = 
-                            atlas.Data[atlasindex + 2];
+                            atlas.Data[atlasIndex + 2];
                         data[index + 3] = 
-                            atlas.Data[atlasindex + 3];
+                            atlas.Data[atlasIndex + 3];
                     }
                 }
             }
@@ -210,8 +213,8 @@ namespace SpriteAtlas
                             sheet.Data[sheetIndex + 3];
                 }
             }
-
-           return index;
+            
+            return index;
         }
     }
 }

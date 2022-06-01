@@ -27,25 +27,22 @@ namespace PlanetTileMap.Unity
         List<int> triangles = new();
         List<Vector2> uvs = new();
         List<Vector3> verticies = new();
-
-        AgentEntity Player;
+        
         PlanetTileMap TileMap;
-
-        int PlayerSpriteID;
-        int PlayerSprite2ID;
+        
         const float TileSize = 1.0f;
 
         readonly Vector2 MapOffset = new(-3.0f, 4.0f);
 
         static bool InitTiles;
-        
 
         public void Start()
         {
             if (!InitTiles)
             {
-                CreateDefaultTiles();
                 CreateTestPlayer();
+                CreateDefaultTiles();
+                
                 InitTiles = true;
             }
             // TODO(Mahdi): does not make sense to put them here
@@ -85,7 +82,7 @@ namespace PlanetTileMap.Unity
 
             //TODO: Move DrawMapTest to DrawMap()
             DrawMapTest();
-            DrawPlayer();
+            AgentDrawSystem.Instance.Draw();
         }
 
         void DrawMapTest()
@@ -128,26 +125,9 @@ namespace PlanetTileMap.Unity
         void CreateTestPlayer()
         {
             //  Player = new RectangleBoundingBoxCollision(PlayerPosition - MapOffset, new Vector2(1f, 48.0f / 32.0f));
-            Player = SpawnerSystem.Instance.SpawnPlayer();
+            AgentSpawnerSystem.Instance.SpawnPlayer(Material, transform);
         }
 
-
-        void DrawPlayer()
-        {
-            /*Player = new RectangleBoundingBoxCollision(PlayerPosition - MapOffset, new Vector2(1f, 48.0f / 32.0f));
-            bool isCollidingBottom = Player.IsCollidingBottom(ref TileMap);
-
-            //Debug.Log($"Player Bottom Collided: {isCollidingBottom}");
-            */
-
-            byte[] spriteBytes = new byte[32 * 48 * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(PlayerSprite2ID, spriteBytes);
-
-            float height = Player.sprite2D.Size.y / (float)Player.sprite2D.Size.x;
-            DrawSprite(Player.position2D.Value.x, Player.position2D.Value.y, 1.0f, height, spriteBytes, Player.sprite2D.Size.x, Player.sprite2D.Size.y);
-
-        }
-        
         //NOTE(Mahdi): this is used to create some test tiles
         // to make sure the system is working
         public void CreateDefaultTiles()
