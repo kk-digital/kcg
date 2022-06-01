@@ -1,34 +1,22 @@
+/// <summary>
+/// <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/static-constructors">Static Constructor</a>
+/// </summary>
 public class GameState
 {
-    private static TileSpriteAtlas.TileSpriteAtlasManager _tileSpriteAtlasManager;
-    private static SpriteAtlas.SpriteAtlasManager _spriteAtlasManager;
-    private static TileProperties.TileCreationApi _tileCreationApi;
-    private static TileSpriteLoader.TileSpriteLoader _tileSpriteLoader;
-    private static SpriteLoader.SpriteLoader _spriteLoader;
-    private static ImageLoader.FileLoadingManager _fileLoadingManager;
+    public static readonly TileSpriteAtlas.TileSpriteAtlasManager TileSpriteAtlasManager;
+    public static readonly SpriteAtlas.SpriteAtlasManager SpriteAtlasManager;
+    public static readonly TileProperties.TileCreationApi TileCreationApi;
+    public static readonly TileSpriteLoader.TileSpriteLoader TileSpriteLoader;
+    public static readonly SpriteLoader.SpriteLoader SpriteLoader;
+    public static readonly ImageLoader.FileLoadingManager FileLoadingManager;
     
-    public static TileProperties.TileCreationApi TileCreationApi =>
-        _tileCreationApi ??= new TileProperties.TileCreationApi();
-    
-
-    public static TileSpriteAtlas.TileSpriteAtlasManager TileSpriteAtlasManager =>
-         _tileSpriteAtlasManager ??= new TileSpriteAtlas.TileSpriteAtlasManager();
-    
-
-    public static TileSpriteLoader.TileSpriteLoader TileSpriteLoader  =>
-         _tileSpriteLoader ??= new TileSpriteLoader.TileSpriteLoader();
-
-    public static SpriteLoader.SpriteLoader SpriteLoader  =>
-         _spriteLoader ??= new SpriteLoader.SpriteLoader();
-    
-
-    public static ImageLoader.FileLoadingManager FileLoadingManager  =>
-        _fileLoadingManager ??= new ImageLoader.FileLoadingManager();
-    
-
-    public static SpriteAtlas.SpriteAtlasManager SpriteAtlasManager  =>
-        _spriteAtlasManager ??= new SpriteAtlas.SpriteAtlasManager();
-
-
-  
+    static GameState()
+    {
+        TileSpriteAtlasManager = new TileSpriteAtlas.TileSpriteAtlasManager();
+        SpriteAtlasManager = new SpriteAtlas.SpriteAtlasManager();
+        TileCreationApi = new TileProperties.TileCreationApi();
+        TileSpriteLoader = new TileSpriteLoader.TileSpriteLoader();
+        SpriteLoader = new SpriteLoader.SpriteLoader();
+        FileLoadingManager = new ImageLoader.FileLoadingManager();
+    }
 }

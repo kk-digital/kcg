@@ -9,19 +9,22 @@
 public static class AgentComponentsLookup {
 
     public const int Inventory2D = 0;
-    public const int Position2D = 1;
-    public const int Sprite2D = 2;
+    public const int Player = 1;
+    public const int Position2D = 2;
+    public const int Sprite2D = 3;
 
-    public const int TotalComponents = 3;
+    public const int TotalComponents = 4;
 
     public static readonly string[] componentNames = {
         "Inventory2D",
+        "Player",
         "Position2D",
         "Sprite2D"
     };
 
     public static readonly System.Type[] componentTypes = {
         typeof(Agent.Inventory2DComponent),
+        typeof(Agent.PlayerComponent),
         typeof(Agent.Position2DComponent),
         typeof(Agent.Sprite2DComponent)
     };
