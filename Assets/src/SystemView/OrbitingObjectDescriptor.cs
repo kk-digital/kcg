@@ -166,7 +166,7 @@ namespace SystemView
             // Intersection1[0] = (float)(SemiMajorAxis * SemiMinorAxis / Math.Sqrt(SemiMajorAxis * SemiMajorAxis * slope * slope + SemiMinorAxis * SemiMinorAxis));
 
             // Use fast inverse square root for faster speed
-            Intersection1[0] = SemiMajorAxis * SemiMinorAxis / (float)Math.Sqrt(SemiMajorAxis * SemiMajorAxis * slope * slope + SemiMinorAxis * SemiMinorAxis); // *Q_rsqrt(SemiMajorAxis * SemiMajorAxis * slope * slope + SemiMinorAxis * SemiMinorAxis);
+            Intersection1[0] = SemiMajorAxis * SemiMinorAxis * Q_rsqrt(SemiMajorAxis * SemiMajorAxis * slope * slope + SemiMinorAxis * SemiMinorAxis);
             Intersection1[1] = slope * Intersection1[0];
 
             Intersection2[0] = -Intersection1[0];
