@@ -7,9 +7,29 @@ using UnityEngine;
 
 namespace PlanetTileMap
 {
-    //public struct PlanetMap : IComponent
+    public struct TopTilesMap
+    {
+        public int[] Data;
+
+        // more attributes if needed
+
+        public int Width
+        {
+            get
+            {
+                return Data.Length;
+            }
+        }
+
+        public TopTilesMap(int width)
+        {
+            Data = new int[width];
+        }
+    }
+
     public struct PlanetTileMap
     {
+
         public struct ChunkBehaviour
         {
             public Vector2Int Size;
@@ -28,11 +48,19 @@ namespace PlanetTileMap
 
         public Vector2Int Size;
         public ChunkBehaviour Chunk;
-        
+        public TopTilesMap TopTilesMap;
         public PlanetWrapBehavior WrapBehavior;
+
+        public Vector2Int NaturalLayerChunkSize;
+        public Vector2Int NaturalLayerSize;
+
+        public NaturalLayerChunk[] NaturalLayerChunkList;
+        public int[] OreMap;
 
         public PlanetTileMap(Vector2Int size) : this()
         {
+            NaturalLayerChunkSize = new Vector2Int(16, 16);
+
             Size.x = size.x;
             Size.y = size.y;
 
@@ -46,8 +74,39 @@ namespace PlanetTileMap
             Chunk.IndexList = new int[Chunk.Size.x * Chunk.Size.y];
             Chunk.List = new PlanetTileMapChunk[Chunk.Size.x * Chunk.Size.y];
 
+            TopTilesMap = new TopTilesMap(Size.x);
+            OreMap = new int[Size.x * Size.y];
+            NaturalLayerSize = new Vector2Int(Size.x / NaturalLayerChunkSize.x + 1, Size.y / NaturalLayerChunkSize.y + 1);
+            NaturalLayerChunkList = new NaturalLayerChunk[NaturalLayerSize.x * NaturalLayerSize.y];
+
             for (int i = 0; i < Chunk.IndexList.Length; i++)
                 Chunk.IndexList[i] = 2;
+        }
+        
+
+
+        public void UpdateTopTilesMap()
+        {
+            for(int i = 0; i < Size.x; i++)
+            {
+                TopTilesMap.Data[i] = 0;
+                for(int j = Size.y - 1; j >= 0; j--)
+                {
+                    ref PlanetTile tile = ref GetTileRef(i, j);
+                    if (tile.Initialized || tile.BackTilePropertiesId != -1)
+                    {
+                        TopTilesMap.Data[i] = j;
+                        break;
+                    }
+                }
+            }
+        }
+
+        public ref NaturalLayerChunk GetNaturalLayerChunk(int x, int y)
+        {
+            int index = x / NaturalLayerChunkSize.x + (y / NaturalLayerChunkSize.y) * NaturalLayerSize.x;
+
+            return ref NaturalLayerChunkList[index];
         }
 
         // Is this really the only way to inline a function in c#?

@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Systems;
+using Agent;
 using Entitas;
 
 public class VehicleTest : MonoBehaviour
 {
     // Vehilce Draw System
-    VehicleDrawSystem vehicleDrawSystem;
+    Systems.VehicleDrawSystem vehicleDrawSystem;
 
     // Entitas's Contexts
     Contexts contexts;
@@ -22,7 +22,7 @@ public class VehicleTest : MonoBehaviour
         contexts = Contexts.sharedInstance;
 
         // Initialize Vehicle Draw System
-        vehicleDrawSystem = new VehicleDrawSystem(contexts, "Assets\\StreamingAssets\\assets\\luis\\vehicles\\Jet_chassis.png", 144, 96, transform, Material);
+        vehicleDrawSystem = new Systems.VehicleDrawSystem(contexts, "Assets\\StreamingAssets\\assets\\luis\\vehicles\\Jet_chassis.png", 144, 96, transform, Material);
 
         // Loading Image
         vehicleDrawSystem.Initialize();

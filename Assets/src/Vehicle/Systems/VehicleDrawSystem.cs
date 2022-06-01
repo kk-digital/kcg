@@ -52,7 +52,7 @@ namespace Systems
             int _spriteID = GameState.SpriteLoader.GetSpriteSheetID(_filePath, _width, _height);
 
             // Blit
-            int imageSpriteIndex = GameState.SpriteAtlasManager.Blit(_spriteID, 0, 0);
+            int imageSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(_spriteID, 0, 0, 0);
             // Calculating Bytes
             byte[] imageBytes = new byte[_width * _height * 4];
 

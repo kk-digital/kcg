@@ -114,7 +114,7 @@ namespace TileProperties
             if (CurrentTileIndex != -1)
             {
                 int atlasSpriteId = 
-                    GameState.TileSpriteAtlasManager.Blit(spriteSheetId, row, column);
+                    GameState.TileSpriteAtlasManager.CopySpriteToAtlas(spriteSheetId, row, column, 0);
                 PropertiesArray[CurrentTileIndex].SpriteId = atlasSpriteId;
             }
         }
@@ -123,7 +123,7 @@ namespace TileProperties
         {
             if (CurrentTileIndex == -1) return;
             
-            int atlasSpriteId = GameState.TileSpriteAtlasManager.Blit16(spriteSheetId, row, column);
+            int atlasSpriteId = GameState.TileSpriteAtlasManager.CopySpriteToAtlas16To32(spriteSheetId, row, column, 0);
             PropertiesArray[CurrentTileIndex].SpriteId = atlasSpriteId;
         }
 
@@ -175,7 +175,7 @@ namespace TileProperties
                 if (PropertiesArray[CurrentTileIndex].VariantCount < PropertiesArray[CurrentTileIndex].Variants.Length)
                 {
                     int atlasSpriteId = 
-                        GameState.TileSpriteAtlasManager.Blit(spriteSheetId, row, column);
+                        GameState.TileSpriteAtlasManager.CopySpriteToAtlas(spriteSheetId, row, column, 0);
                     PropertiesArray[CurrentTileIndex].Variants[PropertiesArray[CurrentTileIndex].VariantCount++] = atlasSpriteId;
                 }
             }
@@ -188,7 +188,7 @@ namespace TileProperties
                 if (PropertiesArray[CurrentTileIndex].VariantCount < PropertiesArray[CurrentTileIndex].Variants.Length)
                 {
                     int atlasSpriteId = 
-                        GameState.TileSpriteAtlasManager.Blit16(spriteSheetId, row, column);
+                        GameState.TileSpriteAtlasManager.CopySpriteToAtlas16To32(spriteSheetId, row, column, 0);
                     PropertiesArray[CurrentTileIndex].Variants[PropertiesArray[CurrentTileIndex].VariantCount++] = atlasSpriteId;
                 }
             }

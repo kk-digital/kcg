@@ -12,7 +12,7 @@ namespace Agent
             
             var spriteSize = new Vector2Int(32, 48);
             var spriteID = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png", spriteSize.x, spriteSize.y);
-            var atlasIndex = GameState.SpriteAtlasManager.Blit(spriteID, 0, 0);
+            var atlasIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, 0);
             entity.AddSprite2D(atlasIndex, parent, material, spriteSize);
 
             entity.AddPosition2D(new Vector2(3f, 2f), default);

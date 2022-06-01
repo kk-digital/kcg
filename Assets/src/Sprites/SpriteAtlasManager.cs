@@ -56,7 +56,6 @@ namespace SpriteAtlas
         public void GetSpriteBytes(int id, byte[] data)
         {
             ref SpriteAtlas atlas = ref SpritesArray[0];
-
             if (id >= 0 && id < atlas.Rectangles.Length)
             {
                 // TODO: Refactor
@@ -68,6 +67,7 @@ namespace SpriteAtlas
                 int yOffset = (int)rectangle.Y;
                 int width = (int)rectangle.Width;
                 int height = (int)rectangle.Height;
+
 
                 for(int y = 0; y < height; y++)
                 {
@@ -93,9 +93,9 @@ namespace SpriteAtlas
 
         // generic blit function used to add a sprite 
         // to the sprite atlas
-        public int Blit(int spriteSheetID, int row, int column)
+        public int CopySpriteToAtlas(int spriteSheetID, int row, int column, int atlasId)
         {
-            ref SpriteAtlas atlas = ref SpritesArray[0];
+            ref SpriteAtlas atlas = ref SpritesArray[atlasId];
             int oldSize = atlas.Rectangles.Length;
             SpriteLoader.SpriteSheet sheet = GameState.SpriteLoader.SpriteSheets[spriteSheetID];
 

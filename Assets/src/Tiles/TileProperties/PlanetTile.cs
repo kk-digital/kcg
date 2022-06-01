@@ -7,10 +7,9 @@
         public bool Initialized;
         
         // Contains the TileProperties Ids for every layer
-        public int[] TileIdPerLayer;
-
-        public sbyte[] LayerOffsetX;
-        public sbyte[] LayerOffsetY;
+        public int BackTilePropertiesId;
+        public int MidTilePropertiesId;
+        public int FrontTilePropertiesId;
 
         //Health
         public byte Durability;
@@ -20,9 +19,9 @@
             PlanetTile tile = new PlanetTile();
             tile.Initialized = false;
          
-            tile.TileIdPerLayer = new int[4];
-            tile.LayerOffsetX = new sbyte[4];
-            tile.LayerOffsetY = new sbyte[4];
+            tile.BackTilePropertiesId = -1;
+            tile.MidTilePropertiesId = -1;
+            tile.FrontTilePropertiesId = -1;
 
             return tile;
         }
