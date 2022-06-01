@@ -23,11 +23,9 @@ namespace Agent
             AgentContext = Contexts.sharedInstance.agent;
         }
         
-        public void Draw()
+        public void Draw(ref AgentList agents)
         {
-            var agents = AgentContext.GetGroup(AgentMatcher.Sprite2D);
-            
-            foreach (var agent in agents)
+            foreach (var agent in agents.agentsWithSprite)
             {
                 byte[] spriteBytes = new byte[agent.sprite2D.Size.x * agent.sprite2D.Size.y * 4];
                 GameState.SpriteAtlasManager.GetSpriteBytes(agent.sprite2D.AtlasIndex, spriteBytes);

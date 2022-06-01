@@ -27,6 +27,8 @@ namespace PlanetTileMap.Unity
         List<int> triangles = new();
         List<Vector2> uvs = new();
         List<Vector3> verticies = new();
+
+        private AgentList agentList;
         
         PlanetTileMap TileMap;
         
@@ -40,6 +42,7 @@ namespace PlanetTileMap.Unity
         {
             if (!InitTiles)
             {
+                agentList = new AgentList();
                 CreateTestPlayer();
                 CreateDefaultTiles();
                 
@@ -82,7 +85,7 @@ namespace PlanetTileMap.Unity
 
             //TODO: Move DrawMapTest to DrawMap()
             DrawMapTest();
-            AgentDrawSystem.Instance.Draw();
+            AgentDrawSystem.Instance.Draw(ref agentList);
         }
 
         void DrawMapTest()
@@ -215,7 +218,6 @@ namespace PlanetTileMap.Unity
                     TileMap.SetTile(i, j, tile);
                 }
             }
-
         }
 
         public void LoadMap()
@@ -305,11 +307,11 @@ namespace PlanetTileMap.Unity
 
         private void LateUpdate()
         {
-         /*   var visibleRect = CalcVisibleRect();
-
-            //rebuild all layers for visible rect
-            foreach (var mb in meshBuildersByLayers)
-                mb.BuildMesh(visibleRect);*/
+            /*   var visibleRect = CalcVisibleRect();
+   
+               //rebuild all layers for visible rect
+               foreach (var mb in meshBuildersByLayers)
+                   mb.BuildMesh(visibleRect);*/
         }
 
         public struct R
