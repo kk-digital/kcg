@@ -27,8 +27,7 @@ namespace PlanetTileMap.Unity
         List<int> triangles = new();
         List<Vector2> uvs = new();
         List<Vector3> verticies = new();
-
-        AgentEntity Player;
+        
         PlanetTileMap TileMap;
 
         int SortingOrder = 0;
@@ -40,14 +39,13 @@ namespace PlanetTileMap.Unity
         readonly Vector2 MapOffset = new(-3.0f, 4.0f);
 
         static bool InitTiles;
-        
 
         public void Start()
         {
             if (!InitTiles)
             {
                 CreateDefaultTiles();
-                CreateTestPlayer();
+                
                 InitTiles = true;
             }
 
@@ -60,7 +58,6 @@ namespace PlanetTileMap.Unity
 
             //TODO: Move DrawMapTest to DrawMap()
             DrawMapTest();
-            DrawPlayer();
         }   
 
         public void Update()
@@ -223,25 +220,7 @@ namespace PlanetTileMap.Unity
             }
         }
         
-        void CreateTestPlayer()
-        {
-            Player = SpawnerSystem.Instance.SpawnPlayer();
-        }
-
-
-        void DrawPlayer()
-        {
-
-            byte[] spriteBytes = new byte[32 * 48 * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(PlayerSprite2ID, spriteBytes);
-
-            float height = Player.sprite2D.Size.y / (float)Player.sprite2D.Size.x;
-            DrawSprite(Player.position2D.Value.x, Player.position2D.Value.y, 1.0f, height, spriteBytes, Player.sprite2D.Size.x, Player.sprite2D.Size.y);
-
-        }
         
-        
-
 
          // draws 1 tile into the screen
         // Note(Mahdi): this code is for testing purpose
