@@ -1,8 +1,8 @@
 using Entitas;
 
-namespace Agent
+namespace Systems
 {
-    public class VehicleDrawSystem : IInitializeSystem
+    public class VehicleDrawSystem
     {
         // Entitas Context
         public Contexts _contexts;

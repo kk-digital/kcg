@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Agent;
+using Systems;
 using Entitas;
 
 public class VehicleTest : MonoBehaviour
@@ -28,7 +28,7 @@ public class VehicleTest : MonoBehaviour
         contexts = Contexts.sharedInstance;
 
         // Initialize Vehicle Draw System
-        vehicleDrawSystem = new VehicleDrawSystem(contexts, "Assets\\StreamingAssets\\assets\\luis\\vehicles\\flyingVan.png", 224, 96);
+        vehicleDrawSystem = new VehicleDrawSystem(contexts, "Assets\\StreamingAssets\\assets\\luis\\vehicles\\Jet_chassis.png", 144, 96);
 
         // Loading Image
         vehicleDrawSystem.Initialize();
@@ -42,11 +42,11 @@ public class VehicleTest : MonoBehaviour
     private void InitImage(int spriteID)
     {
         int imageSpriteIndex = GameState.SpriteAtlasManager.Blit(spriteID, 0, 0);
-        byte[] imageBytes = new byte[224 * 96 * 32];
+        byte[] imageBytes = new byte[144 * 96 * 32];
 
         GameState.SpriteAtlasManager.GetSpriteBytes(imageSpriteIndex, imageBytes);
 
-        vehicleSprite = CreateTextureFromRGBA(imageBytes, 224, 96);
+        vehicleSprite = CreateTextureFromRGBA(imageBytes, 144, 96);
 
         prefab = CreateParticlePrefab(0, 0, 0.5f, 0.5f, vehicleSprite);
     }
