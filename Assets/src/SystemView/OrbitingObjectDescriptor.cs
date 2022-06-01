@@ -6,6 +6,7 @@ namespace SystemView
     // Will be used to define orbiting parameters of planets, asteroids, ships, etc.
     public class OrbitingObjectDescriptor
     {
+        // Math symbols used in equations
         public float CenterX;
         public float CenterY;
 
@@ -15,6 +16,25 @@ namespace SystemView
         public float Rotation;
 
         public float RotationalPosition;
+
+        // Fast inverse square root using Quake's floating bit hack
+        // Using more accurate 0x5f375a86 instead of the original 0x5f3759df
+        static unsafe float Q_rsqrt(float number)
+        {
+            int i;
+            float x2, y;
+
+            x2 = number * 0.5f;
+            y = number;
+
+            i = *(int*)&number;
+            i = 0x5f375a86 - (i >> 1);
+
+            y = *(float*)&i;
+            y = y * (1.5f - (x2 * y * y));
+
+            return y;
+        }
 
         public OrbitingObjectDescriptor()
         {
@@ -136,6 +156,10 @@ namespace SystemView
             //                   a                     √ (a^2 * m^2 + b^2 )
 
             Intersection1[0] = (float)(SemiMajorAxis * SemiMinorAxis / Math.Sqrt(SemiMajorAxis * SemiMajorAxis * slope * slope + SemiMinorAxis * SemiMinorAxis));
+            // Intersection1[0] = (float)(SemiMajorAxis * SemiMinorAxis / Math.Sqrt(SemiMajorAxis * SemiMajorAxis * slope * slope + SemiMinorAxis * SemiMinorAxis));
+
+            // Use fast inverse square root for faster speed
+            Intersection1[0] = SemiMajorAxis * SemiMinorAxis / (float)Math.Sqrt(SemiMajorAxis * SemiMajorAxis * slope * slope + SemiMinorAxis * SemiMinorAxis); // *Q_rsqrt(SemiMajorAxis * SemiMajorAxis * slope * slope + SemiMinorAxis * SemiMinorAxis);
             Intersection1[1] = slope * Intersection1[0];
 
             Intersection2[0] = -Intersection1[0];
