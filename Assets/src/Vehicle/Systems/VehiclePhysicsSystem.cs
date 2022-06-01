@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Systems
 {
-    public struct VehiclePhysicsSystem
+    public class VehiclePhysicsSystem
     {
 
     }
