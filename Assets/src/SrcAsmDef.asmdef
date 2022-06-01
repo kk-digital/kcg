@@ -1,0 +1,16 @@
+{
+    "name": "SrcAsmDef",
+    "rootNamespace": "",
+    "references": [
+        "GUID:e5751dc15a7323846aa698c40c6f27a1"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
