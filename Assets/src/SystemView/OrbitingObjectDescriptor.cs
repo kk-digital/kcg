@@ -7,6 +7,17 @@ namespace SystemView
     public class OrbitingObjectDescriptor
     {
         // Math symbols used in equations
+        // 
+        // a = semi major axis
+        // b = semi minor axis
+        // q = periapsis
+        // Q = apoapsis
+        // ω = rotation
+        // E = distance from focal point to radius
+        // e = eccentricity
+        // cx = x coordinate of center
+        // cy = y coordinate of center
+
         public float CenterX;
         public float CenterY;
 
@@ -71,10 +82,6 @@ namespace SystemView
             return SemiMajorAxis + GetEccentricDistance();
         }
 
-        // Note: orbits are kind of simplified and don't actually take into account
-        //       factors like gravity, this leads to the movements not being quite
-        //       perfectly accurate, but considering there might be hundreds of thousands
-        //       of objects, this is far more efficient.
         public float[] GetPositionAt(float Pos)
         {
             // sine and cosine of the rotation
@@ -115,7 +122,7 @@ namespace SystemView
             return GetDistanceFromCenterAt(RotationalPosition);
         }
 
-        // this math is a mess
+        // this function is basically the reverse of the GetPositionAt function
         public float GetRotationalPositionAt(float x, float y)
         {
             float rotsin = (float)Math.Sin(Rotation);
@@ -135,6 +142,7 @@ namespace SystemView
         public float[] GetIntersectionWith(float startx, float starty, float slope)
         {
             // sine and cosine of the orbit's rotation
+            // would be faster if C# had a function that calls x86's fsincos instruction (as it calculates both sin and cos in one single instruction)
             float rotsin = (float)Math.Sin(Rotation);
             float rotcos = (float)Math.Cos(Rotation);
 
@@ -155,7 +163,6 @@ namespace SystemView
             // (3) mx = ± ---------------   =>   x = ± --------------------
             //                   a                     √ (a^2 * m^2 + b^2 )
 
-            Intersection1[0] = (float)(SemiMajorAxis * SemiMinorAxis / Math.Sqrt(SemiMajorAxis * SemiMajorAxis * slope * slope + SemiMinorAxis * SemiMinorAxis));
             // Intersection1[0] = (float)(SemiMajorAxis * SemiMinorAxis / Math.Sqrt(SemiMajorAxis * SemiMajorAxis * slope * slope + SemiMinorAxis * SemiMinorAxis));
 
             // Use fast inverse square root for faster speed
@@ -167,10 +174,16 @@ namespace SystemView
 
             // Rotate points to match orbit's rotation
 
+            // (1) x = cos(ω) * x_0 - sin(ω) * y_0 + cx
+
+            // (2) y = sin(ω) * x_0 + cos(ω) * y_0 + cy
+
             (Intersection1[0], Intersection1[1]) = (rotcos * Intersection1[0] - rotsin * Intersection1[1] + CenterX,
                                                     rotsin * Intersection1[0] + rotcos * Intersection1[1] + CenterY);
             (Intersection2[0], Intersection2[1]) = (rotcos * Intersection2[0] - rotsin * Intersection2[1] + CenterX,
                                                     rotsin * Intersection2[0] + rotcos * Intersection2[1] + CenterY);
+
+            // (1) d = √(𐤃x^2 + 𐤃y^2)
 
             float d1 = (float)Math.Sqrt((Intersection1[0] - startx) * (Intersection1[0] - startx) + (Intersection1[1] - starty) * (Intersection1[1] - starty));
             float d2 = (float)Math.Sqrt((Intersection2[0] - startx) * (Intersection2[0] - startx) + (Intersection2[1] - starty) * (Intersection2[1] - starty));
