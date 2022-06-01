@@ -161,5 +161,100 @@ namespace SystemView
 
             return (float)Math.Sqrt((Pos[0] - TargetPos[0]) * (Pos[0] - TargetPos[0]) + (Pos[1] - TargetPos[1]) * (Pos[1] - TargetPos[1]));
         }
+
+        public bool PlanPath(OrbitingObjectDescriptor Destination, float AcceptableDeviation)
+        {
+            // Make a copy of the current state in case we cannot establish an orbit from our current position
+            OrbitingObjectDescriptor Start = new OrbitingObjectDescriptor(this);
+            float[] StartPos = GetPosition();
+
+            // Turn orbit so that our rotational position is 0
+            Rotation += RotationalPosition;
+            RotationalPosition = 0.0f;
+
+            // Find intersection between planned orbit and destination orbit
+            float[] IntersectionAt = Destination.GetIntersectionWith(StartPos[0], StartPos[1], (float)Math.Tan(Rotation));
+
+            // Start altitude = current altitude of start object
+            float StartAltitude = Start.GetDistanceFromCenter();
+
+            // Destination altitude = altitude at intersection point
+            float DestinationAltitude = Destination.GetDistanceFromCenterAt(Destination.GetRotationalPositionAt(IntersectionAt[0], IntersectionAt[1]));
+
+            // Choose periapsis and apoapsis from start/destination altitude (lower value = periapsis, higher value = apoapsis)
+            float Periapsis = StartAltitude < DestinationAltitude ? StartAltitude : DestinationAltitude;
+            float Apoapsis = StartAltitude > DestinationAltitude ? StartAltitude : DestinationAltitude;
+
+            // Rotate orbit 180 degrees if we're going from high altitude to low
+            if (StartAltitude > DestinationAltitude)
+            {
+                Rotation += 3.1415926f;
+                RotationalPosition = 3.1415926f;
+            }
+
+            // Semi major axis = the longer "radius" of the ellipse
+            // Can be calculated by adding periapsis and apoapsis together as they are the 2 farthest points on the orbit, and then dividing it in half
+            SemiMajorAxis = (Periapsis + Apoapsis) / 2.0f;
+
+            // This value represents how far off center the periapsis and apoapsis are, in other words it's the distance between the periapsis/apoapsis and the nearest focal point
+            float EccentricDistance = SemiMajorAxis - Periapsis;
+
+            // (1) E     = √(a^2 - b^2)
+
+            // (2) E     = a - q
+
+            // (3) a - q = √(a^2 - b^2)   =>   b = √(q * (2a - q))
+
+            SemiMinorAxis = (float)Math.Sqrt(Periapsis * (2 * SemiMajorAxis - Periapsis));
+
+            float TimeToEncounter = 0.0f;
+            float TargetRotationalMovement = 0.0f;
+
+            // This could be an integral. However, after messing around with it I'm not sure it would be any faster
+            // than this estimate, and this is definitely a lot easier and simpler to read.
+            int segments = 128 + (int)((Periapsis + Apoapsis) * 16);
+            for (int i = 0; i < segments; i++)
+            {
+                // Total distance from periapsis to apoapsis is 180 degrees (pi) - so each segment is (pi / amount of segments) long
+                float segmentLength = 3.1415926f / segments;
+
+                // Use the segment length to calculate the altitude the ship and destination object will reach after this segment
+                float altitude = GetDistanceFromCenterAt(segmentLength * i + RotationalPosition);
+                float targetAltitude = Destination.GetDistanceFromCenterAt(segmentLength + TargetRotationalMovement + Destination.RotationalPosition);
+
+                // We then use the altitude to calculate how much time passed, as d = t / altitude^2
+                float segmentDuration = segmentLength * altitude * altitude;
+
+                // Add values to our counters
+                TimeToEncounter += segmentDuration;
+                TargetRotationalMovement += segmentDuration / targetAltitude / targetAltitude;
+            }
+
+            float[] TargetPosAtEncounter = Destination.GetPositionAt(Destination.RotationalPosition + TargetRotationalMovement);
+
+            // Check whether apoapsis is close enough to where the target will be to ensure an encounter
+            // 
+            // if (Math.Sqrt((IntersectionAt[0] - TargetPosAtEncounter[0]) * (IntersectionAt[0] - TargetPosAtEncounter[0])
+            //  + (IntersectionAt[1] - TargetPosAtEncounter[1]) * (IntersectionAt[1] - TargetPosAtEncounter[1]))
+            //  < AcceptableDeviation)
+            // 
+            // Instead of calculating square root, just square the acceptable deviation instead. Much faster this way.
+
+            float dx = IntersectionAt[0] - TargetPosAtEncounter[0];
+            float dy = IntersectionAt[1] - TargetPosAtEncounter[1];
+
+            dx *= dx;
+            dy *= dy;
+
+            if (dx + dy < AcceptableDeviation * AcceptableDeviation)
+                return true;
+
+            SemiMajorAxis = Start.SemiMajorAxis;
+            SemiMinorAxis = Start.SemiMinorAxis;
+            Rotation = Start.Rotation;
+            RotationalPosition = Start.RotationalPosition;
+
+            return false;
+        }
     }
 }
