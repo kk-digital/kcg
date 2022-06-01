@@ -21,6 +21,11 @@ namespace SystemView
         public Dictionary<SystemShip, ShipInfo> Fighters = new Dictionary<SystemShip, ShipInfo>();
         public Dictionary<ShipWeaponProjectile, GameObject> ProjectileRenderers = new Dictionary<ShipWeaponProjectile, GameObject>();
 
+        public const int ItemsPerTick = 32;
+
+        // use a queue to prevent game slowing down from thousands of orbits being planned at the same time
+        public List<SystemShip> PathPlanningQueue = new List<SystemShip>();
+
         public System.Random rnd = new System.Random();
 
         private void Start()
@@ -29,7 +34,7 @@ namespace SystemView
 
             State = gl.CurrentSystemState;
 
-            SystemPlanetRenderer[] testRenderers = new SystemPlanetRenderer[6];
+            SystemPlanetRenderer[] testRenderers = new SystemPlanetRenderer[12];
 
             State.Star = new SystemStar();
             State.Star.PosX = (float)rnd.NextDouble() * 8.0f - 4.0f;
@@ -41,7 +46,7 @@ namespace SystemView
             SystemStarRenderer starRenderer = StarObject.AddComponent<SystemStarRenderer>();
             starRenderer.Star = State.Star;
 
-            for (int i = 1; i <= 3; i++)
+            for (int i = 1; i <= 5; i++)
             {
                 SystemPlanet testPlanet = new SystemPlanet();
 
@@ -69,7 +74,7 @@ namespace SystemView
             testBeltDescriptor.CenterX = State.Star.PosX;
             testBeltDescriptor.CenterY = State.Star.PosY;
 
-            testBeltDescriptor.SemiMinorAxis = State.Planets[2].Descriptor.SemiMajorAxis + 4.0f + (float)rnd.NextDouble();
+            testBeltDescriptor.SemiMinorAxis = State.Planets[4].Descriptor.SemiMajorAxis + 4.0f + (float)rnd.NextDouble();
             testBeltDescriptor.SemiMajorAxis = testBeltDescriptor.SemiMinorAxis + (float)rnd.NextDouble() / 4.0f;
 
             SystemAsteroidBelt testBelt = new SystemAsteroidBelt(16, testBeltDescriptor);
@@ -95,41 +100,43 @@ namespace SystemView
             SystemAsteroidBeltRenderer asteroidBeltRenderer = AsteroidBeltObject.AddComponent<SystemAsteroidBeltRenderer>();
             asteroidBeltRenderer.belt = testBelt;
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 7; i++)
             {
                 SystemPlanet testPlanet = new SystemPlanet();
 
                 testPlanet.Descriptor.CenterX = State.Star.PosX;
                 testPlanet.Descriptor.CenterY = State.Star.PosY;
 
-                testPlanet.Descriptor.SemiMinorAxis = testBeltDescriptor.SemiMajorAxis + testBelt.BeltWidth + 4.0f * (float)rnd.NextDouble() * (i + 1);
-                testPlanet.Descriptor.SemiMajorAxis = testPlanet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * (i + 1) / 4.0f;
+                testPlanet.Descriptor.SemiMinorAxis = testBeltDescriptor.SemiMajorAxis + testBelt.BeltWidth + 8.0f * (float)rnd.NextDouble() * (i + 1);
+                testPlanet.Descriptor.SemiMajorAxis = testPlanet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * (i + 1) * (i + 1) / 4.0f;
 
                 testPlanet.Descriptor.Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
                 var child = new GameObject();
-                child.name = "Planet Renderer " + (i + 4);
+                child.name = "Planet Renderer " + (i + 6);
 
-                testRenderers[i + 3] = child.AddComponent<SystemPlanetRenderer>();
-                testRenderers[i + 3].planet = testPlanet;
+                testRenderers[i + 5] = child.AddComponent<SystemPlanetRenderer>();
+                testRenderers[i + 5].planet = testPlanet;
 
                 State.Planets.Add(testPlanet);
             }
 
             int shipnr = 1;
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 12; i++)
             {
-                for (int j = 0; j < 6; j++)
+                for (int j = 0; j < 12; j++)
                 {
                     if (j == i) continue;
 
                     SystemShip testShip = new SystemShip();
 
                     State.Ships.Add(testShip);
+                    PathPlanningQueue.Add(testShip);
 
                     var shipRendererObject = new GameObject();
                     shipRendererObject.name = "Ship Renderer " + shipnr++;
 
+                    testShip.Descriptor = new OrbitingObjectDescriptor(State.Planets[i].Descriptor);
                     testShip.Start = State.Planets[i].Descriptor;
                     testShip.Destination = State.Planets[j].Descriptor;
 
@@ -138,7 +145,7 @@ namespace SystemView
                 }
             }
 
-            for (int i = 0; i < 32; i++)
+            /*for (int i = 0; i < 32; i++)
             {
                 SystemShip Fighter = new SystemShip();
                 ShipInfo Info = new ShipInfo();
@@ -159,7 +166,7 @@ namespace SystemView
                 ShipWeapon Weapon = new ShipWeapon();
 
                 Weapon.ProjectileColor = new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1.0f);
-                Weapon.Range = 50.0f;
+                Weapon.Range = 5.0f;
                 Weapon.ShieldPenetration = (float)rnd.NextDouble() * 0.3f;
                 Weapon.Damage = rnd.Next(200, 800);
                 Weapon.AttackSpeed = rnd.Next(200, 800);
@@ -182,6 +189,50 @@ namespace SystemView
                 Fighters.Add(Fighter, Info);
             }
 
+            for (int i = 0; i < 16; i++)
+            {
+                SystemShip Fighter = new SystemShip();
+                ShipInfo Info = new ShipInfo();
+
+                State.Ships.Add(Fighter);
+
+                Fighter.Health = Fighter.MaxHealth = Fighter.Shield = Fighter.MaxShield = 10000;
+                Fighter.ShieldRegenerationRate = 1;
+
+                Fighter.Descriptor.CenterX = State.Star.PosX;
+                Fighter.Descriptor.CenterY = State.Star.PosY;
+
+                Fighter.Descriptor.SemiMajorAxis = 19.0f;
+                Fighter.Descriptor.SemiMinorAxis = 5.7f;
+
+                Fighter.Descriptor.RotationalPosition = 0.004f * i;
+
+                ShipWeapon Weapon = new ShipWeapon();
+
+                Weapon.ProjectileColor = new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1.0f);
+                Weapon.Range = 5.0f;
+                Weapon.ShieldPenetration = (float)rnd.NextDouble() * 0.3f;
+                Weapon.Damage = rnd.Next(200, 800);
+                Weapon.AttackSpeed = rnd.Next(200, 800);
+                Weapon.Cooldown = 0;
+                Weapon.Self = Fighter;
+                Weapon.ProjectileVelocity = 0.1f;
+
+                Fighter.Weapons.Add(Weapon);
+
+                Info.Object = new GameObject();
+                Info.Object.name = "Fighter " + i;
+
+                Info.Renderer = Info.Object.AddComponent<SystemShipRenderer>();
+                Info.Renderer.ship = Fighter;
+                Info.Renderer.shipColor = new Color(0.0f, 1.0f, 0.0f, 1.0f);
+
+                Fighter.PathPlanned = true;
+                Fighter.Reached = true;
+
+                Fighters.Add(Fighter, Info);
+            }*/
+
             LastTime = (int)(Time.time * 1000);
         }
 
@@ -190,6 +241,8 @@ namespace SystemView
             int CurrentMillis = (int)(Time.time * 1000) - LastTime;
             LastTime = (int)(Time.time * 1000);
 
+            // todo: this could be split into multiple threads
+            //       however it doesn't really matter as this is just a test view anyway
             foreach (SystemPlanet p in State.Planets)
             {
                 p.UpdatePosition(CurrentMillis / 200.0f);
@@ -200,21 +253,29 @@ namespace SystemView
                 b.UpdatePositions(CurrentMillis / 200.0f);
             }
 
-            foreach (SystemShip b in State.Ships)
+            foreach (SystemShip s in State.Ships)
             {
-                if (!b.PathPlanned && !b.Reached)
-                    b.PlanPath(b.Start, b.Destination, 0.1f);
-                else if (!b.Reached && b.Descriptor.GetDistanceFrom(b.Destination) < 1.0f)
+                if (!s.Reached && s.Descriptor.GetDistanceFrom(s.Destination) < 0.5f)
                 {
-                    b.Descriptor = new OrbitingObjectDescriptor(b.Destination);
-                    b.PathPlanned = false;
-                    (b.Start, b.Destination) = (b.Destination, b.Start);
+                    s.Descriptor = new OrbitingObjectDescriptor(s.Destination);
+                    s.PathPlanned = false;
+                    (s.Start, s.Destination) = (s.Destination, s.Start);
+                    PathPlanningQueue.Add(s);
                 }
 
-                b.UpdatePosition(CurrentMillis / 200.0f);
+                s.UpdatePosition(CurrentMillis / 200.0f);
             }
 
-            for (int i = 0; i < ProjectileRenderers.Count; i++)
+            for (int i = 0; i < PathPlanningQueue.Count && i < ItemsPerTick; i++)
+            {
+                SystemShip s = PathPlanningQueue[i];
+                PathPlanningQueue.Remove(s);
+
+                if (!(s.PathPlanned = s.Descriptor.PlanPath(s.Destination, 0.2f)))
+                    PathPlanningQueue.Add(s);
+            }
+
+            /*for (int i = 0; i < ProjectileRenderers.Count; i++)
             {
                 KeyValuePair<ShipWeaponProjectile, GameObject> ProjectileRenderer = ProjectileRenderers.ElementAt(i);
                 ShipWeaponProjectile Projectile = ProjectileRenderer.Key;
@@ -246,7 +307,7 @@ namespace SystemView
                 }
             }
 
-            for (int i = 30; i < State.Ships.Count; i++)
+            for (int i = 132; i < State.Ships.Count; i++)
             {
                 SystemShip Ship = State.Ships[i];
 
@@ -290,7 +351,7 @@ namespace SystemView
 
                 Fighters[Ship].Renderer.shipColor.g = (float)Ship.Health / Ship.MaxHealth;
                 Fighters[Ship].Renderer.shipColor.r = 1.0f - Fighters[Ship].Renderer.shipColor.g;
-            }
+            }*/
         }
     }
 }
