@@ -28,7 +28,7 @@ namespace Agent
             foreach (var agent in agents.agentsWithSprite)
             {
                 byte[] spriteBytes = new byte[agent.sprite2D.Size.x * agent.sprite2D.Size.y * 4];
-                GameState.SpriteAtlasManager.GetSpriteBytes(agent.sprite2D.AtlasIndex, spriteBytes);
+                GameState.SpriteAtlasManager.GetSpriteBytes(agent.sprite2D.AtlasIndex, spriteBytes, SpriteAtlas.AtlasType.Particle);
                 
                 var tex = CreateTextureFromRGBA(spriteBytes, agent.sprite2D.Size.x, agent.sprite2D.Size.y);
                 var mat = Object.Instantiate(agent.sprite2D.Material);

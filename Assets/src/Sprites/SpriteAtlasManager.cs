@@ -5,6 +5,15 @@ using UnityEngine;
 
 namespace SpriteAtlas
 {
+    public enum AtlasType
+    {
+        Error = 0,
+        Generic = 1,
+        Agent = 2,
+        Vehicule = 3,
+        Particle = 4,
+    }
+
     public struct SpriteAtlas
     {
         public int AtlasID;
@@ -20,42 +29,40 @@ namespace SpriteAtlas
     
     public class SpriteAtlasManager
     {
-        private SpriteAtlas[] SpritesArray;
+        private SpriteAtlas[] AtlasArray;
 
         public SpriteAtlasManager()
         {
-            SpritesArray = new SpriteAtlas[1];
+            AtlasArray = new SpriteAtlas[Enum.GetNames(typeof(AtlasType)).Length - 1];
 
-            SpriteAtlas atlas = new SpriteAtlas();
-            atlas.Width = 128;
-            atlas.Height = 128;
-            atlas.Data = new byte[4 * atlas.Width * atlas.Height]; // 4 * 32 * 32 = 4096
-            atlas.Rectangles = new RectpackSharp.PackingRectangle[0];
-
-            for(int i = 0; i < atlas.Data.Length; i++)
+            for (int i = 0; i < AtlasArray.Length; i++)
             {
-                atlas.Data[i] = 255;
-            }
+                SpriteAtlas atlas = new SpriteAtlas();
+                atlas.Width = 128;
+                atlas.Height = 128;
+                atlas.Data = new byte[4 * atlas.Width * atlas.Height]; // 4 * 32 * 32 = 4096
+                atlas.Rectangles = new RectpackSharp.PackingRectangle[0];
 
-            SpritesArray[0] = atlas;
+                for(int j = 0; j < atlas.Data.Length; j++)
+                {
+                    atlas.Data[j] = 255;
+                }
+
+                AtlasArray[i] = atlas;
+            }
+        }
+
+        public ref SpriteAtlas GetSpriteAtlas(AtlasType type)
+        {
+            return ref AtlasArray[(int)type - 1];
         }
         
-        public ref SpriteAtlas GetSpriteAtlas(int id)
-        {
-            return ref SpritesArray[id];
-        }
-
-        public int GetGlTextureId(int id)
-        {
-            SpriteAtlas atlas = GetSpriteAtlas(id);
-            return atlas.GLTextureID;
-        }
 
         // use the id to find the Sprite coordinates in the list
         // and return the sprite RGBA8 that correspond
-        public void GetSpriteBytes(int id, byte[] data)
+        public void GetSpriteBytes(int id, byte[] data, AtlasType type)
         {
-            ref SpriteAtlas atlas = ref SpritesArray[0];
+            ref SpriteAtlas atlas = ref GetSpriteAtlas(type);
             if (id >= 0 && id < atlas.Rectangles.Length)
             {
                 // TODO: Refactor
@@ -93,9 +100,9 @@ namespace SpriteAtlas
 
         // generic blit function used to add a sprite 
         // to the sprite atlas
-        public int CopySpriteToAtlas(int spriteSheetID, int row, int column, int atlasId)
+        public int CopySpriteToAtlas(int spriteSheetID, int row, int column, AtlasType type)
         {
-            ref SpriteAtlas atlas = ref SpritesArray[atlasId];
+            ref SpriteAtlas atlas = ref GetSpriteAtlas(type);
             int oldSize = atlas.Rectangles.Length;
             SpriteLoader.SpriteSheet sheet = GameState.SpriteLoader.SpriteSheets[spriteSheetID];
 

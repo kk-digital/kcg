@@ -55,8 +55,10 @@ namespace TileSpriteAtlas
             }
         }
 
-        // Returns sprite sheet id
-        public int CopySpriteToAtlas(int spriteSheetID, int row, int column, int atlasId)
+        // Copies a tile sprite from the Tile sprite sheet
+        // to the Tile Sprite Atlas
+        // returns an id that can be used later to get texture coordinates
+        public int CopyTileSpriteToAtlas(int spriteSheetID, int row, int column, int atlasId)
         {
             SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[spriteSheetID];
             ref TileSpriteAtlas atlas = ref SpritesArray[atlasId];
@@ -85,8 +87,10 @@ namespace TileSpriteAtlas
             return count - 1;
         }
 
-
-         public int CopySpriteToAtlas16To32(int spriteSheetID, int row, int column, int atlasId)
+        // Copies a 16x16 tile sprite from the Tile sprite sheet
+        // to the Tile Sprite Atlas
+        // returns an id that can be used later to get texture coordinates
+         public int CopyTileSpriteToAtlas16To32(int spriteSheetID, int row, int column, int atlasId)
         {
             SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[spriteSheetID];
             ref TileSpriteAtlas atlas = ref SpritesArray[atlasId];
@@ -124,7 +128,10 @@ namespace TileSpriteAtlas
         }
         
 
-        public int CopySpriteToAtlas8To32(int spriteSheetID, int row, int column, int atlasId)
+        // Copies a 8x8 tile sprite from the Tile sprite sheet
+        // to the Tile Sprite Atlas
+        // returns an id that can be used later to get texture coordinates
+        public int CopyTileSpriteToAtlas8To32(int spriteSheetID, int row, int column, int atlasId)
         {
             SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[spriteSheetID];
             ref TileSpriteAtlas atlas = ref SpritesArray[atlasId];
