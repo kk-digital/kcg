@@ -6,8 +6,13 @@ using Enums;
 
 namespace Projectile
 {
-    public class DrawSystem : IInitializeSystem, IExecuteSystem
+    public class DrawSystem
     {
+        //Singleton
+        public static readonly DrawSystem Instance;
+
+        public readonly GameContext GameContext;
+
         // Entitas Context
         public Contexts _contexts;
 
@@ -36,8 +41,19 @@ namespace Projectile
         public ProjectileType _projectileType = ProjectileType.Invalid;
         public ProjectileDrawType _projectileDrawType = ProjectileDrawType.Invalid;
 
+        static DrawSystem()
+        {
+            Instance = new DrawSystem();
+        }
+
         // Constructor, variables setup
-        public DrawSystem(Contexts contexts, string filePath, int width, int height, Transform transform, Material mat, ProjectileType projectileType,
+        public DrawSystem()
+        {
+            GameContext = Contexts.sharedInstance.game;
+        }
+
+        // Initializing image and component
+        public void Initialize(Contexts contexts, string filePath, int width, int height, Transform transform, Material mat, ProjectileType projectileType,
             ProjectileDrawType projectileDrawType)
         {
             _contexts = contexts;
@@ -48,11 +64,7 @@ namespace Projectile
             Material = mat;
             _projectileType = projectileType;
             _projectileDrawType = projectileDrawType;
-        }
 
-        // Initializing image and component
-        public void Initialize()
-        {
             // Create Entity
             GameEntity projectileEntity = _contexts.game.CreateEntity();
 
@@ -81,7 +93,7 @@ namespace Projectile
         }
 
         // Drawing in Exectue (Execute runs every frame)
-        public void Execute()
+        public void Draw()
         {
             if (Init)
             {
