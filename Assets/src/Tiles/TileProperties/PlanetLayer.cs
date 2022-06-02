@@ -2,8 +2,10 @@ namespace PlanetTileMap
 {
     public enum Layer
     {
-        Back = 0x1,
-        Mid = 0x2,
-        Front = 0x4
+        Error = 0,
+        Back = 1,
+        Mid = 2,
+        Front = 3,
+        Ore = 4
     }
 }

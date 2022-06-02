@@ -14,10 +14,13 @@ namespace TileSpriteAtlas
             Count = new int[1];
 
             TileSpriteAtlas atlas = new TileSpriteAtlas();
-            atlas.Width = 128;
-            atlas.Height = 128;
+            atlas.Width = 9;
+            atlas.Height = 9;
             atlas.Data = new byte[4 * 32 * 32 * atlas.Width * atlas.Height]; // 4 * 32 * 32 = 4096
-
+            for(int j = 0; j < atlas.Data.Length; j++)
+            {
+                atlas.Data[j] = 255;
+            }
             SpritesArray[0] = atlas;
         }
         
@@ -36,6 +39,24 @@ namespace TileSpriteAtlas
         {
             ref TileSpriteAtlas atlas = ref GetSpriteAtlas(id);
             return atlas.Texture; 
+        }
+
+        public Render.Sprite GetSprite(int id)
+        {
+            Render.Sprite sprite = new Render.Sprite();
+            ref TileSpriteAtlas atlas = ref GetSpriteAtlas(0);
+
+            sprite.Texture = atlas.Texture;
+
+            int xOffset = (id % atlas.Width) * 32;
+            int yOffset = (id / atlas.Height) * 32;
+            int width = 32;
+            int height = 32;
+
+            sprite.TextureCoords = new Vector4((float)xOffset / (float)(atlas.Width * 32), (float)yOffset / (float)(atlas.Height * 32),
+            (float)width / (float)(atlas.Width * 32), (float)height / (float)(atlas.Height * 32));
+
+            return sprite;
         }
 
         public void GetSpriteBytes(int id, byte[] data)
@@ -81,16 +102,21 @@ namespace TileSpriteAtlas
                     int atlasIndex = 4 * ((yOffset + y)  * (atlas.Width * 32) + (xOffset + x));
                     int sheetIndex = 4 * ((x + row * 32) + ((y + column * 32) * sheet.Width));
 
-                    atlas.Data[atlasIndex + 0] = sheet.Data[sheetIndex + 0];
-                    atlas.Data[atlasIndex + 1] = sheet.Data[sheetIndex + 1];
-                    atlas.Data[atlasIndex + 2] = sheet.Data[sheetIndex + 2];
-                    atlas.Data[atlasIndex + 3] = sheet.Data[sheetIndex + 3];
+                    atlas.Data[atlasIndex + 0] = 
+                        sheet.Data[sheetIndex + 0];
+                    atlas.Data[atlasIndex + 1] = 
+                        sheet.Data[sheetIndex + 1];
+                    atlas.Data[atlasIndex + 2] = 
+                        sheet.Data[sheetIndex + 2];
+                    atlas.Data[atlasIndex + 3] = 
+                        sheet.Data[sheetIndex + 3];
                 }
 
             // todo: upload texture to open gl
 
             count++;
-
+            atlas.Texture = Utility.TextureUtils.CreateTextureFromRGBA(atlas.Data, atlas.Width * 32, atlas.Height * 32);
+            
             return count - 1;
         }
 
@@ -130,7 +156,8 @@ namespace TileSpriteAtlas
             // todo: upload texture to open gl
 
             count++;
-
+            atlas.Texture = Utility.TextureUtils.CreateTextureFromRGBA(atlas.Data, atlas.Width * 32, atlas.Height * 32);
+            
             return count - 1;
         }
         
@@ -170,6 +197,8 @@ namespace TileSpriteAtlas
             // todo: upload texture to open gl
 
             count++;
+            atlas.Texture = Utility.TextureUtils.CreateTextureFromRGBA(atlas.Data, atlas.Width * 32, atlas.Height * 32);
+            
 
             return count - 1;
         }

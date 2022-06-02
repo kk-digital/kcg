@@ -16,7 +16,7 @@ namespace PlanetTileMap.Unity
     // there will be things like rendering, collision, TileMap
     // that are not supposed to be here.
 
-    class SpriteAtlasTest : MonoBehaviour
+    class TileSpriteAtlasTest : MonoBehaviour
     {
         //public string TileMap = "Moonbunker/Moon Bunker.tmx";
         [SerializeField] Material Material;
@@ -51,49 +51,44 @@ namespace PlanetTileMap.Unity
                     DestroyImmediate(mr.gameObject);
 
             DrawSpriteAtlas();
-            DrawSprite(2, 1, 1.0f, 2.0f, 3);
-            DrawSprite(2, -1, 1.0f, 1.5f, 2);
+            DrawSprite(2, 1, 1.0f, 1.0f, 0);
+            DrawSprite(2, -1, 1.0f, 1.0f, 3);
         }
 
         // create the sprite atlas for testing purposes
         public void LoadSprites()
         {
-            // we load the sprite sheets here
-            int SomeObjectTileSheet = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Objects\\algaeTank1.png",
-                         32, 64);
-            int PlayerTileSheet = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png",
-                         32, 48);
+            int MetalSlabsTileSheet = 
+                        GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png");
+            int StoneBulkheads = 
+                        GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tile_wallbase\\Tiles_stone_bulkheads.png");
+            int TilesMoon = 
+                        GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png");
+            int OreTileSheet = 
+            GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
 
 
-            // bit the sprites into the sprite atlas
-            // we can blit the same sprite
-            // but its only for testing purpose
-            // we should remove that in the future
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(SomeObjectTileSheet, 0, 0, SpriteAtlas.AtlasType.Generic);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, SpriteAtlas.AtlasType.Generic);;
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, SpriteAtlas.AtlasType.Generic);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(SomeObjectTileSheet, 0, 0, SpriteAtlas.AtlasType.Generic);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, SpriteAtlas.AtlasType.Generic);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, SpriteAtlas.AtlasType.Generic);
+            GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(MetalSlabsTileSheet, 0, 0, 0);
+            GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(MetalSlabsTileSheet, 1, 0, 0);
+            GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(MetalSlabsTileSheet, 4, 0, 0);
+            GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(MetalSlabsTileSheet, 5, 0, 0);
         }
 
         // drawing the sprite atlas
         void DrawSpriteAtlas()
         {
-            ref SpriteAtlas.SpriteAtlas atlas = ref GameState.SpriteAtlasManager.GetSpriteAtlas(SpriteAtlas.AtlasType.Generic);
+            ref TileSpriteAtlas.TileSpriteAtlas atlas = ref GameState.TileSpriteAtlasManager.GetSpriteAtlas(0);
             Render.Sprite sprite = new Render.Sprite();
             sprite.Texture = atlas.Texture;
             sprite.TextureCoords = new Vector4(0, 0, 1, 1);
             Utility.RenderUtils.DrawSprite(-3, -1, 
-                  atlas.Width / 32.0f, atlas.Height / 32.0f, sprite, Instantiate(Material), transform);
+                  atlas.Width, atlas.Height, sprite, Instantiate(Material), transform);
         }
 
         void DrawSprite(float x, float y, float w, float h, int spriteId)
         {
             Render.Sprite sprite = 
-                GameState.SpriteAtlasManager.GetSprite(spriteId, SpriteAtlas.AtlasType.Generic);
+                GameState.TileSpriteAtlasManager.GetSprite(spriteId);
 
             Utility.RenderUtils.DrawSprite(x, y, w, h, sprite, Instantiate(Material), transform);
         }

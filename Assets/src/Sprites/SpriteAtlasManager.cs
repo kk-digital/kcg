@@ -27,13 +27,6 @@ namespace SpriteAtlas
         public RectpackSharp.PackingRectangle[] Rectangles;
     }
 
-    public struct Sprite
-    {
-        public Texture2D Texture;
-        public Vector4 TextureCoords;
-    }
-
-    
     public class SpriteAtlasManager
     {
         private SpriteAtlas[] AtlasArray;
@@ -65,9 +58,9 @@ namespace SpriteAtlas
         }
         
 
-        public Sprite GetSprite(int id, AtlasType type)
+        public Render.Sprite GetSprite(int id, AtlasType type)
         {
-            Sprite sprite = new Sprite();
+            Render.Sprite sprite = new Render.Sprite();
             ref SpriteAtlas atlas = ref GetSpriteAtlas(type);
 
             sprite.Texture = atlas.Texture;
@@ -250,7 +243,7 @@ namespace SpriteAtlas
                 }
             }
 
-            atlas.Texture = Utils.TextureUtils.CreateTextureFromRGBA(atlas.Data, atlas.Width, atlas.Height);
+            atlas.Texture = Utility.TextureUtils.CreateTextureFromRGBA(atlas.Data, atlas.Width, atlas.Height);
             
             return index;
         }
