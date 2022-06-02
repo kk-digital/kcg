@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Utils
+namespace Utility
 {
        // we use this helper function to generate a unity Texture2D
         // from pixels

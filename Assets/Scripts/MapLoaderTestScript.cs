@@ -48,21 +48,18 @@ namespace PlanetTileMap.Unity
                 
                 InitTiles = true;
             }
+        }   
 
-            //remove all children MeshRenderer
+        public void Update()
+        {
             foreach(var mr in GetComponentsInChildren<MeshRenderer>())
                 if (Application.isPlaying)
                     Destroy(mr.gameObject);
                 else
                     DestroyImmediate(mr.gameObject);
 
-            //TODO: Move DrawMapTest to DrawMap()
-            DrawMapTest();
-        }   
-
-        public void Update()
-        {
-
+            TileMap.DrawLayer(Layer.Front, Instantiate(Material), transform, 10);
+            TileMap.DrawLayer(Layer.Ore, Instantiate(Material), transform, 11);
         }
 
 
@@ -118,10 +115,15 @@ namespace PlanetTileMap.Unity
             GameState.TileCreationApi.SetTileTexture(TilesMoon, 0, 0);
             GameState.TileCreationApi.EndTile();
 
+            GameState.TileCreationApi.CreateTile(8);
+            GameState.TileCreationApi.SetTileName("ore_1");
+            GameState.TileCreationApi.SetTileTexture16(OreTileSheet, 0, 0);
+            GameState.TileCreationApi.EndTile();
+
 
 
             // Generating the map
-            Vector2Int mapSize = new Vector2Int(128, 128);
+            Vector2Int mapSize = new Vector2Int(16, 16);
 
             TileMap = new PlanetTileMap(mapSize);
 
@@ -130,25 +132,28 @@ namespace PlanetTileMap.Unity
                 for(int i = 0; i < mapSize.x; i++)
                 {
                     PlanetTile tile = PlanetTile.EmptyTile();
-                    tile.BackTilePropertiesId = 0;
-                    tile.FrontTilePropertiesId = -1;
+                    tile.FrontTilePropertiesId = 0;
+
 
                     if (i % 10 == 0)
                     {
-                        tile.BackTilePropertiesId = 7;
+                        tile.FrontTilePropertiesId = 7;
+                        tile.OreTilePropertiesId = 8;
                     }
                     if (j % 2 == 0)
                     {
-                        tile.BackTilePropertiesId = 2;
+                        tile.FrontTilePropertiesId = 2;
                     }
                     if (j % 3 == 0)
                     {
-                        tile.BackTilePropertiesId = 1;
+                        tile.FrontTilePropertiesId = 1;
+
                     }
 
                     if ((j > 1 && j < 6) || (j > (8 + i)))
                     {
-                       tile.BackTilePropertiesId = -1; 
+                       tile.FrontTilePropertiesId = -1; 
+                       tile.OreTilePropertiesId = -1;
                     }
 
                     
@@ -157,149 +162,11 @@ namespace PlanetTileMap.Unity
             }
 
             TileMap.UpdateTopTilesMap();
-        }
-
-        void DrawMapTest()
-        {
-
-            int PipeTileSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\sprite\\item\\admin_icon_pipesim.png",
-            16, 16);
-
-            int PipeSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(PipeTileSheet, 0, 0, SpriteAtlas.AtlasType.Particle);
-            byte[] pipeBytes = new byte[16 * 16 * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(PipeSpriteIndex, pipeBytes, SpriteAtlas.AtlasType.Particle);
-
-            byte[] bytes = new byte[32 * 32* 4];
-
-            for(int layerIndex = 0; layerIndex < 1; layerIndex++)
-            {
-                for(int j = 0; j < TileMap.Size.y; j++)
-                {
-                    for(int i = 0; i < TileMap.Size.x; i++)
-                    {
-                        ref PlanetTile tile = ref TileMap.getTile(i, j);
-                        int tilePropertiesIndex = tile.BackTilePropertiesId;
-
-                        if (tilePropertiesIndex >= 0)
-                        {
-                            TilePropertiesData tileProperties =
-                                GameState.TileCreationApi.GetTileProperties(tilePropertiesIndex);
-
-                            GameState.TileSpriteAtlasManager.GetSpriteBytes(tileProperties.SpriteId, bytes);
-
-                            var x = (i * TileSize);
-                            var y = (j * TileSize);
-                            DrawTile(x, y, TileSize, TileSize, bytes);
-                        }
-
-                        tilePropertiesIndex = tile.FrontTilePropertiesId;
-                        if (tilePropertiesIndex >= 0)
-                        {
-                            TilePropertiesData tileProperties =
-                                GameState.TileCreationApi.GetTileProperties(tilePropertiesIndex);
-
-                            GameState.TileSpriteAtlasManager.GetSpriteBytes(tileProperties.SpriteId, bytes);
-
-                            var x = (i * TileSize);
-                            var y = (j * TileSize);
-                            DrawTile(x, y, TileSize, TileSize, bytes);
-                        }
-                    }
-                }
-            }
-
-            for(int i = 0; i < TileMap.Size.x; i++)
-            {
-                int topTileIndex = TileMap.TopTilesMap.Data[i];
-
-                var x = (i * TileSize);
-                var y = (topTileIndex * TileSize);
-
-                DrawSprite(x + 0.25f, y + 0.25f, 0.5f, 0.5f, pipeBytes, 16, 16);
-            }
+            TileMap.BuildLayerTexture(Layer.Front);
+            TileMap.BuildLayerTexture(Layer.Ore);
         }
         
         
-
-         // draws 1 tile into the screen
-        // Note(Mahdi): this code is for testing purpose
-        void DrawSprite(float x, float y, float w, float h, byte[] spriteBytes,
-             int spriteW, int spriteH)
-        {
-            var tex = CreateTextureFromRGBA(spriteBytes, spriteW, spriteH);
-            var mat = Instantiate(Material);
-            mat.SetTexture("_MainTex", tex);
-            var mesh = CreateMesh(transform, "abc", SortingOrder++, mat);
-
-            triangles.Clear();
-            uvs.Clear();
-            verticies.Clear();
-
-
-            var p0 = new Vector3(x, y, 0);
-            var p1 = new Vector3((x + w), (y + h), 0);
-            var p2 = p0; p2.y = p1.y;
-            var p3 = p1; p3.y = p0.y;
-
-            verticies.Add(p0);
-            verticies.Add(p1);
-            verticies.Add(p2);
-            verticies.Add(p3);
-
-            triangles.Add(0);
-            triangles.Add(2);
-            triangles.Add(1);
-            triangles.Add(0);
-            triangles.Add(1);
-            triangles.Add(3);
-
-            var u0 = 0;
-            var u1 = 1;
-            var v1 = -1;
-            var v0 = 0;
-
-            var uv0 = new Vector2(u0, v0);
-            var uv1 = new Vector2(u1, v1);
-            var uv2 = uv0; uv2.y = uv1.y;
-            var uv3 = uv1; uv3.y = uv0.y;
-
-
-            uvs.Add(uv0);
-            uvs.Add(uv1);
-            uvs.Add(uv2);
-            uvs.Add(uv3);
-    
-
-            mesh.SetVertices(verticies);
-            mesh.SetUVs(0, uvs);
-            mesh.SetTriangles(triangles, 0);
-        }
-        
-        void DrawTile(float x, float y, float w, float h, byte[] spriteBytes)
-        {
-            DrawSprite(x, y, w, h, spriteBytes, 32, 32);
-        }
-        
-        private Mesh CreateMesh(Transform parent, string name, int sortingOrder, Material material)
-        {
-            var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
-            go.transform.SetParent(parent);
-
-            var mesh = new Mesh
-            {
-                indexFormat = UnityEngine.Rendering.IndexFormat.UInt32
-            };
-
-            var mf = go.GetComponent<MeshFilter>();
-            mf.sharedMesh = mesh;
-            var mr = go.GetComponent<MeshRenderer>();
-            mr.sharedMaterial = material;
-            mr.sortingOrder = sortingOrder;
-
-            return mesh;
-        }
-
 
         public struct R
         {

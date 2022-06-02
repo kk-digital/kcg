@@ -10,6 +10,7 @@
         public int BackTilePropertiesId;
         public int MidTilePropertiesId;
         public int FrontTilePropertiesId;
+        public int OreTilePropertiesId;
 
         //Health
         public byte Durability;
@@ -22,9 +23,9 @@
             tile.BackTilePropertiesId = -1;
             tile.MidTilePropertiesId = -1;
             tile.FrontTilePropertiesId = -1;
+            tile.OreTilePropertiesId = -1;
 
             return tile;
         }
     }
-
 }

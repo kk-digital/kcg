@@ -1,6 +1,5 @@
 ﻿//using Entitas;
 using System;
-using System.Runtime.CompilerServices;
 using TileProperties;
 using Enums;
 using UnityEngine;
@@ -57,8 +56,12 @@ namespace PlanetTileMap
         public NaturalLayerChunk[] NaturalLayerChunkList;
         public int[] OreMap;
 
+        public Texture2D[] LayerTextures;
+
         public PlanetTileMap(Vector2Int size) : this()
         {
+            int layersCount = Enum.GetNames(typeof(Layer)).Length;
+
             NaturalLayerChunkSize = new Vector2Int(16, 16);
 
             Size.x = size.x;
@@ -78,9 +81,76 @@ namespace PlanetTileMap
             OreMap = new int[Size.x * Size.y];
             NaturalLayerSize = new Vector2Int(Size.x / NaturalLayerChunkSize.x + 1, Size.y / NaturalLayerChunkSize.y + 1);
             NaturalLayerChunkList = new NaturalLayerChunk[NaturalLayerSize.x * NaturalLayerSize.y];
+            LayerTextures = new Texture2D[layersCount];
 
             for (int i = 0; i < Chunk.IndexList.Length; i++)
                 Chunk.IndexList[i] = 2;
+        }
+
+        public void BuildLayerTexture(Layer layer)
+        {
+            byte[] Bytes = new byte[32 * 32 * 4];
+            byte[] Data = new byte[Size.x * Size.y * 32 * 32 * 4];
+
+            for(int y = 0; y < Size.y; y++)
+            {
+                for(int x = 0; x < Size.x; x++)
+                {
+                    ref PlanetTile tile = ref GetTileRef(x, y);
+
+                    int propertiesId = -1;
+
+                    if (layer == Layer.Back)
+                    {
+                        propertiesId = tile.BackTilePropertiesId;
+                    }
+                    else if (layer == Layer.Mid)
+                    {
+                        propertiesId = tile.MidTilePropertiesId;
+                    }
+                    else if (layer == Layer.Front)
+                    {
+                        propertiesId = tile.FrontTilePropertiesId;
+                    }
+                    else if (layer == Layer.Ore)
+                    {
+                        propertiesId = tile.OreTilePropertiesId;
+                    }
+
+                    if (propertiesId >= 0)
+                    {
+                        TileProperties.TilePropertiesData properties = 
+                                GameState.TileCreationApi.GetTileProperties(propertiesId);
+
+                        
+                        GameState.TileSpriteAtlasManager.GetSpriteBytes(properties.SpriteId, Bytes);
+
+                        int tileX = (x * 32);
+                        int tileY = (y * 32);
+
+                        for (int j = 0; j <  32; j++)
+                        {
+                            for(int i = 0; i < 32; i++)
+                            {
+                                int index = 4 * (((i + tileX)) + ((j + tileY)) * (Size.x * 32));
+                                int bytesIndex = 4 * (i + (32 - j - 1) * 32);
+                                Data[index] = 
+                                     Bytes[bytesIndex];
+                                Data[index + 1] = 
+                                     Bytes[bytesIndex + 1];
+                                Data[index + 2] = 
+                                     Bytes[bytesIndex + 2];
+                                Data[index + 3] = 
+                                     Bytes[bytesIndex + 3];
+                            }
+                        }
+                    }
+                }
+            }
+            
+            LayerTextures[(int)layer] = Utility.TextureUtils.CreateTextureFromRGBA(Data, Size.x * 32, Size.y * 32);
+
+
         }
         
 
@@ -102,6 +172,16 @@ namespace PlanetTileMap
             }
         }
 
+        public void DrawLayer(Layer layer, Material material, Transform transform, int DrawOrder)
+        {
+            Render.Sprite sprite = new Render.Sprite();
+            sprite.Texture = LayerTextures[(int)layer];
+            sprite.TextureCoords = new Vector4(0, 0, 1, -1);
+
+            Utility.RenderUtils.DrawSprite(0, 0, 1.0f * Size.x, 1.0f * Size.y, sprite, material, transform, DrawOrder);
+            
+        }
+
         public ref NaturalLayerChunk GetNaturalLayerChunk(int x, int y)
         {
             int index = x / NaturalLayerChunkSize.x + (y / NaturalLayerChunkSize.y) * NaturalLayerSize.x;
@@ -110,7 +190,7 @@ namespace PlanetTileMap
         }
 
         // Is this really the only way to inline a function in c#?
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+       // [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private int GetChunkIndex(int x, int y)
         {
             if (WrapBehavior == PlanetWrapBehavior.WrapAround) x %= Size.x;
