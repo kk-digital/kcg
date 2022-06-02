@@ -15,7 +15,7 @@ namespace Agent
             Instance = new SpawnerSystem();
         }
 
-        public SpawnerSystem()
+        private SpawnerSystem()
         {
             GameContext = Contexts.sharedInstance.game;
         }
@@ -25,18 +25,18 @@ namespace Agent
             var entity = GameContext.CreateEntity();
 
             playerID++;
+            
+            var spritePath = "Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png";
+            var pngSize = new Vector2Int(32, 48);
+            var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath, pngSize.x, pngSize.y);
+            var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
 
             entity.isAgentPlayer = true;
-            
+            entity.isECSInput = true;
             entity.AddAgentID(1);
-
-            var spriteSize = new Vector2Int(32, 48);
-            var spritePath = "Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png";
-            var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath, spriteSize.x, spriteSize.y);
-
-            entity.AddAgentSprite2D(spriteID, spritePath, spriteSize, material, BuildMesh(spriteID, material, spriteSize));
-
+            entity.AddAgentSprite2D(spriteID, spritePath, spriteSize, pngSize, material, BuildMesh(spriteID, material, pngSize));
             entity.AddAgentPosition2D(new Vector2(3f, 2f), default);
+            entity.AddAgentVelocity(new Vector2(0f, 0f));
 
             return entity;
         }

@@ -8,12 +8,16 @@ namespace Agent
         /// <summary>
         /// New agents will be Added to that List if new Entity created with a Sprite Component
         /// </summary>
-        public IGroup<GameEntity> agentsWithSprite;
+        public IGroup<GameEntity> AgentsWithSprite;
+        public IGroup<GameEntity> AgentsWithInput;
+        public IGroup<GameEntity> AgentsWithVelocity;
         
         public List()
         {
             gameContext = Contexts.sharedInstance.game;
-            agentsWithSprite = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.AgentID, GameMatcher.AgentSprite2D));
+            AgentsWithSprite = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.AgentID, GameMatcher.AgentSprite2D));
+            AgentsWithInput = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.AgentID, GameMatcher.ECSInput));
+            AgentsWithVelocity = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.AgentID, GameMatcher.AgentVelocity, GameMatcher.AgentPosition2D));
         }
     }
 }

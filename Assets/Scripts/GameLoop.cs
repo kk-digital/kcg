@@ -39,7 +39,8 @@ public class GameLoop : MonoBehaviour
     // Method to update physics
     private void FixedUpdate()
     {
-        
+        ECSInput.ProcessSystem.Instance.Update(ref agents);
+        Agent.ProcessVelocitySystem.Instance.Process(ref agents);
     }
 
     // Method for Drawing
