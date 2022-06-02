@@ -8,18 +8,18 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    static readonly Projectile.Component projectileComponent = new Projectile.Component();
+    static readonly ECSInput.Component eCSInputComponent = new ECSInput.Component();
 
-    public bool isProjectile {
-        get { return HasComponent(GameComponentsLookup.Projectile); }
+    public bool isECSInput {
+        get { return HasComponent(GameComponentsLookup.ECSInput); }
         set {
-            if (value != isProjectile) {
-                var index = GameComponentsLookup.Projectile;
+            if (value != isECSInput) {
+                var index = GameComponentsLookup.ECSInput;
                 if (value) {
                     var componentPool = GetComponentPool(index);
                     var component = componentPool.Count > 0
                             ? componentPool.Pop()
-                            : projectileComponent;
+                            : eCSInputComponent;
 
                     AddComponent(index, component);
                 } else {
@@ -40,17 +40,17 @@ public partial class GameEntity {
 //------------------------------------------------------------------------------
 public sealed partial class GameMatcher {
 
-    static Entitas.IMatcher<GameEntity> _matcherProjectile;
+    static Entitas.IMatcher<GameEntity> _matcherECSInput;
 
-    public static Entitas.IMatcher<GameEntity> Projectile {
+    public static Entitas.IMatcher<GameEntity> ECSInput {
         get {
-            if (_matcherProjectile == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.Projectile);
+            if (_matcherECSInput == null) {
+                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.ECSInput);
                 matcher.componentNames = GameComponentsLookup.componentNames;
-                _matcherProjectile = matcher;
+                _matcherECSInput = matcher;
             }
 
-            return _matcherProjectile;
+            return _matcherECSInput;
         }
     }
 }

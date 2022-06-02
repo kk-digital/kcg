@@ -12,33 +12,38 @@ public static class GameComponentsLookup {
     public const int AgentPlayer = 1;
     public const int AgentPosition2D = 2;
     public const int AgentSprite2D = 3;
-    public const int Inventory = 4;
-    public const int InventoryID = 5;
-    public const int InventorySize = 6;
-    public const int InventorySlots = 7;
-    public const int ItemAttachedInventory = 8;
-    public const int Item = 9;
-    public const int ItemMove = 10;
-    public const int ItemPosition2D = 11;
-    public const int ItemStack = 12;
-    public const int ParticleEmitter2dPosition = 13;
-    public const int ParticleEmitterState = 14;
-    public const int ParticlePosition2D = 15;
-    public const int ParticleState = 16;
-    public const int Projectile = 17;
-    public const int srcecsGameParticleParticleSpawnGameObject = 18;
-    public const int srcecsGameParticleParticleSpawnParticle = 19;
-    public const int srcecsGameParticleParticleSpawnPosition = 20;
-    public const int VehicleComponentCollider = 21;
-    public const int VehicleComponentDraw = 22;
+    public const int AgentVelocity = 4;
+    public const int ECSInput = 5;
+    public const int Inventory = 6;
+    public const int InventoryID = 7;
+    public const int InventorySize = 8;
+    public const int InventorySlots = 9;
+    public const int ItemAttachedInventory = 10;
+    public const int Item = 11;
+    public const int ItemMove = 12;
+    public const int ItemPosition2D = 13;
+    public const int ItemStack = 14;
+    public const int ParticleEmitter2dPosition = 15;
+    public const int ParticleEmitterState = 16;
+    public const int ParticlePosition2D = 17;
+    public const int ParticleState = 18;
+    public const int Projectile = 19;
+    public const int ProjectileType = 20;
+    public const int srcecsGameParticleParticleSpawnGameObject = 21;
+    public const int srcecsGameParticleParticleSpawnParticle = 22;
+    public const int srcecsGameParticleParticleSpawnPosition = 23;
+    public const int VehicleComponentCollider = 24;
+    public const int VehicleComponentDraw = 25;
 
-    public const int TotalComponents = 23;
+    public const int TotalComponents = 26;
 
     public static readonly string[] componentNames = {
         "AgentID",
         "AgentPlayer",
         "AgentPosition2D",
         "AgentSprite2D",
+        "AgentVelocity",
+        "ECSInput",
         "Inventory",
         "InventoryID",
         "InventorySize",
@@ -53,6 +58,7 @@ public static class GameComponentsLookup {
         "ParticlePosition2D",
         "ParticleState",
         "Projectile",
+        "ProjectileType",
         "srcecsGameParticleParticleSpawnGameObject",
         "srcecsGameParticleParticleSpawnParticle",
         "srcecsGameParticleParticleSpawnPosition",
@@ -65,6 +71,8 @@ public static class GameComponentsLookup {
         typeof(Agent.PlayerComponent),
         typeof(Agent.Position2DComponent),
         typeof(Agent.Sprite2DComponent),
+        typeof(Agent.VelocityComponent),
+        typeof(ECSInput.Component),
         typeof(Inventory.Component),
         typeof(Inventory.IDComponent),
         typeof(Inventory.SizeComponent),
@@ -79,6 +87,7 @@ public static class GameComponentsLookup {
         typeof(Particle.Position2DComponent),
         typeof(Particle.StateComponent),
         typeof(Projectile.Component),
+        typeof(Projectile.TypeComponent),
         typeof(src.ecs.Game.Particle.ParticleSpawn.GameObjectComponent),
         typeof(src.ecs.Game.Particle.ParticleSpawn.ParticleComponent),
         typeof(src.ecs.Game.Particle.ParticleSpawn.PositionComponent),

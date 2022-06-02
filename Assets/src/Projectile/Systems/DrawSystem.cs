@@ -54,7 +54,7 @@ namespace Projectile
         public void Initialize()
         {
             // Create Entity
-            GameEntity projectileEntity = _contexts.game.CreateEntity();
+            GameEntity entity = _contexts.game.CreateEntity();
 
             // Get Image Sprite ID
             int _spriteID = GameState.SpriteLoader.GetSpriteSheetID(_filePath, _width, _height);
@@ -74,7 +74,8 @@ namespace Projectile
             prefab = CreateParticlePrefab(0, 0, 0.5f, 0.5f, projectileSprite);
 
             // Add Vehicle Component
-            projectileEntity.AddProjectile(_projectileType, _projectileDrawType);
+            entity.isProjectile = true;
+            entity.AddProjectileType(_projectileType, _projectileDrawType);
 
             // Initialization done
             Init = true;
