@@ -8,27 +8,25 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public Projectile.Component projectile { get { return (Projectile.Component)GetComponent(GameComponentsLookup.Projectile); } }
-    public bool hasProjectile { get { return HasComponent(GameComponentsLookup.Projectile); } }
+    static readonly Projectile.Component projectileComponent = new Projectile.Component();
 
-    public void AddProjectile(Enums.ProjectileType newProjectileType, Enums.ProjectileDrawType newProjectileDrawType) {
-        var index = GameComponentsLookup.Projectile;
-        var component = (Projectile.Component)CreateComponent(index, typeof(Projectile.Component));
-        component.projectileType = newProjectileType;
-        component.projectileDrawType = newProjectileDrawType;
-        AddComponent(index, component);
-    }
+    public bool isProjectile {
+        get { return HasComponent(GameComponentsLookup.Projectile); }
+        set {
+            if (value != isProjectile) {
+                var index = GameComponentsLookup.Projectile;
+                if (value) {
+                    var componentPool = GetComponentPool(index);
+                    var component = componentPool.Count > 0
+                            ? componentPool.Pop()
+                            : projectileComponent;
 
-    public void ReplaceProjectile(Enums.ProjectileType newProjectileType, Enums.ProjectileDrawType newProjectileDrawType) {
-        var index = GameComponentsLookup.Projectile;
-        var component = (Projectile.Component)CreateComponent(index, typeof(Projectile.Component));
-        component.projectileType = newProjectileType;
-        component.projectileDrawType = newProjectileDrawType;
-        ReplaceComponent(index, component);
-    }
-
-    public void RemoveProjectile() {
-        RemoveComponent(GameComponentsLookup.Projectile);
+                    AddComponent(index, component);
+                } else {
+                    RemoveComponent(index);
+                }
+            }
+        }
     }
 }
 

@@ -26,13 +26,14 @@ public static class GameComponentsLookup {
     public const int ParticlePosition2D = 15;
     public const int ParticleState = 16;
     public const int Projectile = 17;
-    public const int srcecsGameParticleParticleSpawnGameObject = 18;
-    public const int srcecsGameParticleParticleSpawnParticle = 19;
-    public const int srcecsGameParticleParticleSpawnPosition = 20;
-    public const int VehicleComponentCollider = 21;
-    public const int VehicleComponentDraw = 22;
+    public const int ProjectileType = 18;
+    public const int srcecsGameParticleParticleSpawnGameObject = 19;
+    public const int srcecsGameParticleParticleSpawnParticle = 20;
+    public const int srcecsGameParticleParticleSpawnPosition = 21;
+    public const int VehicleComponentCollider = 22;
+    public const int VehicleComponentDraw = 23;
 
-    public const int TotalComponents = 23;
+    public const int TotalComponents = 24;
 
     public static readonly string[] componentNames = {
         "AgentID",
@@ -53,6 +54,7 @@ public static class GameComponentsLookup {
         "ParticlePosition2D",
         "ParticleState",
         "Projectile",
+        "ProjectileType",
         "srcecsGameParticleParticleSpawnGameObject",
         "srcecsGameParticleParticleSpawnParticle",
         "srcecsGameParticleParticleSpawnPosition",
@@ -79,6 +81,7 @@ public static class GameComponentsLookup {
         typeof(Particle.Position2DComponent),
         typeof(Particle.StateComponent),
         typeof(Projectile.Component),
+        typeof(Projectile.TypeComponent),
         typeof(src.ecs.Game.Particle.ParticleSpawn.GameObjectComponent),
         typeof(src.ecs.Game.Particle.ParticleSpawn.ParticleComponent),
         typeof(src.ecs.Game.Particle.ParticleSpawn.PositionComponent),
