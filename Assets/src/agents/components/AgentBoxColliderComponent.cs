@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Agent
 {
-    public struct BoxColliderComponent
+    public struct AgentBoxColliderComponent
     {
         // epsilon parameter for values that are "close enough"
         public const float Eps = 0.05f;
@@ -24,7 +24,7 @@ namespace Agent
         public bool IsIgnoringPlatforms;
         public bool IsOnGround => CollisionInfo.Below;
 
-        public BoxColliderComponent(Vector2 size) : this()
+        public AgentBoxColliderComponent(Vector2 size) : this()
         {
             Size = size;
         }

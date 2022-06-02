@@ -33,16 +33,16 @@ namespace Agent
                 }
             }
 
-            var InventoryEntity = _contexts.inventory.GetEntityWithInventory2D(inventoryID);
-            int FistEmptySlot = GetFirstEmptySlot(InventoryEntity.inventory2D.Slots);
-            entity.AddInventoryItem(inventoryID, FistEmptySlot);
-            InventoryEntity.inventory2D.Slots.Set(FistEmptySlot, true);
+            var inventory = _contexts.game.GetEntityWithInventoryID(inventoryID);
+            int fistEmptySlot = GetFirstEmptySlot(inventory.inventorySlot.Slots);
+            entity.AddInventoryItem(inventoryID, fistEmptySlot);
+            inventory.inventorySlot.Slots.Set(fistEmptySlot, true);
         }
 
         public void RemoveItem(GameEntity entity, int slot)
         {
-            var agent = _contexts.inventory.GetEntityWithInventory2D(entity.inventoryItem.InventoryID);
-            agent.inventory2D.Slots.Set(slot, false);
+            var gameEntity = _contexts.game.GetEntityWithInventoryID(entity.inventoryItem.InventoryID);
+            gameEntity.inventorySlot.Slots.Set(slot, false);
             entity.RemoveInventoryItem();
         }
         

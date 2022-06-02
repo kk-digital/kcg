@@ -7,7 +7,7 @@ namespace Agent
     {
         public static readonly AgentDrawSystem Instance;
 
-        public readonly AgentContext AgentContext;
+        public readonly GameContext GameContext;
         
         List<int> triangles = new();
         List<Vector2> uvs = new();
@@ -20,7 +20,7 @@ namespace Agent
         
         public AgentDrawSystem()
         {
-            AgentContext = Contexts.sharedInstance.agent;
+            GameContext = Contexts.sharedInstance.game;
         }
         
         public void Draw(ref AgentList agents)
@@ -31,10 +31,10 @@ namespace Agent
                 uvs.Clear();
                 verticies.Clear();
 
-                var x = agent.position2D.Value.x;
-                var y = agent.position2D.Value.y;
+                var x = agent.agentPosition2D.Value.x;
+                var y = agent.agentPosition2D.Value.y;
                 var width = 1.0f;
-                var height = agent.sprite2D.Size.y / (float)agent.sprite2D.Size.x;
+                var height = agent.agentSprite2D.Size.y / (float)agent.agentSprite2D.Size.x;
                 
                 var p0 = new Vector3(x, y, 0);
                 var p1 = new Vector3((x + width), (y + height), 0);
@@ -70,9 +70,9 @@ namespace Agent
                 uvs.Add(uv3);
     
 
-                agent.sprite2D.Mesh.SetVertices(verticies);
-                agent.sprite2D.Mesh.SetUVs(0, uvs);
-                agent.sprite2D.Mesh.SetTriangles(triangles, 0);
+                agent.agentSprite2D.Mesh.SetVertices(verticies);
+                agent.agentSprite2D.Mesh.SetUVs(0, uvs);
+                agent.agentSprite2D.Mesh.SetTriangles(triangles, 0);
             }
         }
     }

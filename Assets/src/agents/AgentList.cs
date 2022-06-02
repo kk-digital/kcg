@@ -4,16 +4,16 @@ namespace Agent
 {
     public class AgentList
     {
-        private readonly AgentContext context;
+        private readonly GameContext gameContext;
         /// <summary>
         /// New agents will be Added to that List if new Entity created with a Sprite Component
         /// </summary>
-        public IGroup<AgentEntity> agentsWithSprite;
+        public IGroup<GameEntity> agentsWithSprite;
         
         public AgentList()
         {
-            context = Contexts.sharedInstance.agent;
-            agentsWithSprite = context.GetGroup(AgentMatcher.Sprite2D);
+            gameContext = Contexts.sharedInstance.game;
+            agentsWithSprite = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.AgentID, GameMatcher.AgentSprite2D));
         }
     }
 }

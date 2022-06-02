@@ -21,18 +21,14 @@ public partial class Contexts : Entitas.IContexts {
 
     static Contexts _sharedInstance;
 
-    public AgentContext agent { get; set; }
     public GameContext game { get; set; }
     public InputContext input { get; set; }
-    public InventoryContext inventory { get; set; }
 
-    public Entitas.IContext[] allContexts { get { return new Entitas.IContext [] { agent, game, input, inventory }; } }
+    public Entitas.IContext[] allContexts { get { return new Entitas.IContext [] { game, input }; } }
 
     public Contexts() {
-        agent = new AgentContext();
         game = new GameContext();
         input = new InputContext();
-        inventory = new InventoryContext();
 
         var postConstructors = System.Linq.Enumerable.Where(
             GetType().GetMethods(),
@@ -62,17 +58,22 @@ public partial class Contexts : Entitas.IContexts {
 //------------------------------------------------------------------------------
 public partial class Contexts {
 
-    public const string Inventory2D = "Inventory2D";
+    public const string AgentID = "AgentID";
+    public const string InventoryID = "InventoryID";
     public const string InventoryItem = "InventoryItem";
     public const string Item = "Item";
-    public const string Player = "Player";
 
     [Entitas.CodeGeneration.Attributes.PostConstructor]
     public void InitializeEntityIndices() {
-        inventory.AddEntityIndex(new Entitas.PrimaryEntityIndex<InventoryEntity, int>(
-            Inventory2D,
-            inventory.GetGroup(InventoryMatcher.Inventory2D),
-            (e, c) => ((Agent.Inventory2DComponent)c).InventoryID));
+        game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
+            AgentID,
+            game.GetGroup(GameMatcher.AgentID),
+            (e, c) => ((Agent.AgentIDComponent)c).ID));
+
+        game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
+            InventoryID,
+            game.GetGroup(GameMatcher.InventoryID),
+            (e, c) => ((Inventory.InventoryIDComponent)c).InventoryID));
 
         game.AddEntityIndex(new Entitas.EntityIndex<GameEntity, int>(
             InventoryItem,
@@ -83,18 +84,17 @@ public partial class Contexts {
             Item,
             game.GetGroup(GameMatcher.Item),
             (e, c) => ((Components.ItemComponent)c).ItemType));
-
-        agent.AddEntityIndex(new Entitas.PrimaryEntityIndex<AgentEntity, int>(
-            Player,
-            agent.GetGroup(AgentMatcher.Player),
-            (e, c) => ((Agent.PlayerComponent)c).ID));
     }
 }
 
 public static class ContextsExtensions {
 
-    public static InventoryEntity GetEntityWithInventory2D(this InventoryContext context, int InventoryID) {
-        return ((Entitas.PrimaryEntityIndex<InventoryEntity, int>)context.GetEntityIndex(Contexts.Inventory2D)).GetEntity(InventoryID);
+    public static GameEntity GetEntityWithAgentID(this GameContext context, int ID) {
+        return ((Entitas.PrimaryEntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.AgentID)).GetEntity(ID);
+    }
+
+    public static GameEntity GetEntityWithInventoryID(this GameContext context, int InventoryID) {
+        return ((Entitas.PrimaryEntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.InventoryID)).GetEntity(InventoryID);
     }
 
     public static System.Collections.Generic.HashSet<GameEntity> GetEntitiesWithInventoryItem(this GameContext context, int InventoryID) {
@@ -103,10 +103,6 @@ public static class ContextsExtensions {
 
     public static System.Collections.Generic.HashSet<GameEntity> GetEntitiesWithItem(this GameContext context, Enums.ItemType ItemType) {
         return ((Entitas.EntityIndex<GameEntity, Enums.ItemType>)context.GetEntityIndex(Contexts.Item)).GetEntities(ItemType);
-    }
-
-    public static AgentEntity GetEntityWithPlayer(this AgentContext context, int ID) {
-        return ((Entitas.PrimaryEntityIndex<AgentEntity, int>)context.GetEntityIndex(Contexts.Player)).GetEntity(ID);
     }
 }
 //------------------------------------------------------------------------------
@@ -124,10 +120,8 @@ public partial class Contexts {
     [Entitas.CodeGeneration.Attributes.PostConstructor]
     public void InitializeContextObservers() {
         try {
-            CreateContextObserver(agent);
             CreateContextObserver(game);
             CreateContextObserver(input);
-            CreateContextObserver(inventory);
         } catch(System.Exception) {
         }
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Agent
 {
-    public struct CircleColliderComponent
+    public struct AgentCircleColliderComponent
     {
         // epsilon parameter for values that are "close enough"
         public const float Eps = 0.05f;

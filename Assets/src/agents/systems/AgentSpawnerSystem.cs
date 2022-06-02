@@ -7,7 +7,7 @@ namespace Agent
     public class AgentSpawnerSystem
     {
         public static readonly AgentSpawnerSystem Instance;
-        public AgentContext AgentContext;
+        public GameContext GameContext;
 
         private static int playerID;
 
@@ -18,24 +18,26 @@ namespace Agent
 
         public AgentSpawnerSystem()
         {
-            AgentContext = Contexts.sharedInstance.agent;
+            GameContext = Contexts.sharedInstance.game;
         }
 
-        public AgentEntity SpawnPlayer(Material material)
+        public GameEntity SpawnPlayer(Material material)
         {
-            var entity = AgentContext.CreateEntity();
+            var entity = GameContext.CreateEntity();
 
             playerID++;
 
-            entity.AddPlayer(playerID);
+            entity.isPlayer = true;
+            
+            entity.AddAgentID(1);
 
             var spriteSize = new Vector2Int(32, 48);
             var spritePath = "Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png";
             var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath, spriteSize.x, spriteSize.y);
 
-            entity.AddSprite2D(spriteID, spritePath, spriteSize, material, BuildMesh(spriteID, material, spriteSize));
+            entity.AddAgentSprite2D(spriteID, spritePath, spriteSize, material, BuildMesh(spriteID, material, spriteSize));
 
-            entity.AddPosition2D(new Vector2(3f, 2f), default);
+            entity.AddAgentPosition2D(new Vector2(3f, 2f), default);
 
             return entity;
         }
