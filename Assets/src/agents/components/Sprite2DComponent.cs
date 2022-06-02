@@ -8,6 +8,10 @@ namespace Agent
         public int SpriteID;
         public string SpritePath;
         
+        /// <summary>
+        /// <p>x = PngSize.x / 32f</p>
+        /// <p>y = PngSize.y / 32f</p>
+        /// </summary>
         public Vector2 Size;
         public Vector2Int PngSize;
         public Material Material;
