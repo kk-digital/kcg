@@ -4,17 +4,22 @@ using UnityEngine;
 
 namespace Vehicle
 {
-    public class DrawSystem : IInitializeSystem, IExecuteSystem
+    public class DrawSystem
     {
+        //Singleton
+        public static readonly DrawSystem Instance;
+
+        public readonly GameContext GameContext;
+
         // Entitas Context
         public Contexts _contexts;
 
         // Streaming Asset File Path
         public string _filePath;
-        
+
         // Image width
         public int _width;
-        
+
         // Image Height
         public int _height;
 
@@ -30,8 +35,19 @@ namespace Vehicle
         GameObject prefab;
         bool Init = false;
 
+        static DrawSystem()
+        {
+            Instance = new DrawSystem();
+        }
+
         // Constructor, variables setup
-        public DrawSystem(Contexts contexts, string filePath, int width, int height, Transform transform, Material mat)
+        public DrawSystem()
+        {
+            GameContext = Contexts.sharedInstance.game;
+        }
+
+        // Initializing image and component
+        public void Initialize(Contexts contexts, string filePath, int width, int height, Transform transform, Material mat)
         {
             _contexts = contexts;
             _filePath = filePath;
@@ -39,11 +55,7 @@ namespace Vehicle
             _height = height;
             _transform = transform;
             Material = mat;
-        }
 
-        // Initializing image and component
-        public void Initialize()
-        {
             // Create Entity
             GameEntity vehicleDraw = _contexts.game.CreateEntity();
 
@@ -72,9 +84,9 @@ namespace Vehicle
         }
 
         // Drawing in Exectue (Execute runs every frame)
-        public void Execute()
+        public void Draw()
         {
-            if(Init)
+            if (Init)
             {
                 IGroup<GameEntity> entities =
                 _contexts.game.GetGroup(GameMatcher.ParticlePosition2D);

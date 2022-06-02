@@ -20,10 +20,16 @@ public class ProjectileTest : MonoBehaviour
         contexts = Contexts.sharedInstance;
 
         // Initialize Vehicle Draw System
-        projectileDrawSystem = new Projectile.DrawSystem(contexts, "Assets\\StreamingAssets\\assets\\luis\\grenades\\Grenades4.png", 16, 16, transform, Material,
-            ProjectileType.Grenade, ProjectileDrawType.Standard);
+        projectileDrawSystem = new Projectile.DrawSystem();
 
         // Loading Image
-        projectileDrawSystem.Initialize();
+        projectileDrawSystem.Initialize(contexts, "Assets\\StreamingAssets\\assets\\luis\\grenades\\Grenades4.png", 16, 16, transform, Material,
+            ProjectileType.Grenade, ProjectileDrawType.Standard);
+    }
+
+    // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
+    private void Update()
+    {
+        projectileDrawSystem.Draw();
     }
 }
