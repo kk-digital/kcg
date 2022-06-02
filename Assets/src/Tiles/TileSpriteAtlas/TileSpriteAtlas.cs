@@ -1,4 +1,6 @@
-﻿namespace TileSpriteAtlas
+﻿using UnityEngine;
+
+namespace TileSpriteAtlas
 {
     public struct TileSpriteAtlas
     {
@@ -9,6 +11,7 @@
         public int Height;
 
         public byte[] Data;
+        public Texture2D Texture;
 
         public void CreateData()
         {

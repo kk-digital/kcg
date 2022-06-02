@@ -71,6 +71,8 @@ namespace PlanetTileMap.Unity
                     DestroyImmediate(mr.gameObject);
 
             DrawSpriteAtlas();
+            DrawSprite(2, 1, 1.0f, 2.0f, 3);
+            DrawSprite(2, -1, 1.0f, 1.5f, 2);
         }
 
         // create the sprite atlas for testing purposes
@@ -100,19 +102,27 @@ namespace PlanetTileMap.Unity
         // drawing the sprite atlas
         void DrawSpriteAtlas()
         {
-            SpriteAtlas.SpriteAtlas atlas = GameState.SpriteAtlasManager.GetSpriteAtlas(0);
+            ref SpriteAtlas.SpriteAtlas atlas = ref GameState.SpriteAtlasManager.GetSpriteAtlas(SpriteAtlas.AtlasType.Generic);
             DrawSprite(-3, -1, 
                   atlas.Width / 32.0f, atlas.Height / 32.0f,
-                 atlas.Data, atlas.Width, atlas.Height);
+                 atlas.Texture, atlas.Width, atlas.Height);
+        }
+
+        void DrawSprite(float x, float y, float w, float h, int spriteId)
+        {
+            SpriteAtlas.Sprite sprite = 
+                GameState.SpriteAtlasManager.GetSprite(spriteId, SpriteAtlas.AtlasType.Generic);
+
+            DrawSprite(x, y, w, h, sprite);
         }
 
 
          // draws 1 sprite into the screen
         // Note(Mahdi): this code is for testing purpose
-        void DrawSprite(float x, float y, float w, float h, byte[] spriteBytes,
+        void DrawSprite(float x, float y, float w, float h, Texture2D texture,
              int spriteW, int spriteH)
         {
-            var tex = CreateTextureFromRGBA(spriteBytes, spriteW, spriteH);
+            var tex = texture;
             var mat = Instantiate(Material);
             mat.SetTexture("_MainTex", tex);
             var mesh = CreateMesh(transform, "abc", 0, mat);
@@ -140,12 +150,60 @@ namespace PlanetTileMap.Unity
             triangles.Add(3);
 
             var u0 = 0;
-            var u1 = 1;
-            var v1 = -1;
+            var u1 = 1.0f;
+            var v1 = -1.0f;
             var v0 = 0;
 
             var uv0 = new Vector2(u0, v0);
             var uv1 = new Vector2(u1, v1);
+            var uv2 = uv0; uv2.y = uv1.y;
+            var uv3 = uv1; uv3.y = uv0.y;
+
+
+            uvs.Add(uv0);
+            uvs.Add(uv1);
+            uvs.Add(uv2);
+            uvs.Add(uv3);
+    
+
+            mesh.SetVertices(verticies);
+            mesh.SetUVs(0, uvs);
+            mesh.SetTriangles(triangles, 0);
+        }
+
+
+
+        void DrawSprite(float x, float y, float w, float h, SpriteAtlas.Sprite sprite)
+        {
+            var tex = sprite.Texture;
+            var mat = Instantiate(Material);
+            mat.SetTexture("_MainTex", tex);
+            var mesh = CreateMesh(transform, "abc", 0, mat);
+
+            triangles.Clear();
+            uvs.Clear();
+            verticies.Clear();
+
+
+            var p0 = new Vector3(x, y, 0);
+            var p1 = new Vector3((x + w), (y + h), 0);
+            var p2 = p0; p2.y = p1.y;
+            var p3 = p1; p3.y = p0.y;
+
+            verticies.Add(p0);
+            verticies.Add(p1);
+            verticies.Add(p2);
+            verticies.Add(p3);
+
+            triangles.Add(0);
+            triangles.Add(2);
+            triangles.Add(1);
+            triangles.Add(0);
+            triangles.Add(1);
+            triangles.Add(3);
+
+            var uv0 = new Vector2(sprite.TextureCoords.x, sprite.TextureCoords.y + sprite.TextureCoords.w);
+            var uv1 = new Vector2(sprite.TextureCoords.x + sprite.TextureCoords.z, sprite.TextureCoords.y);
             var uv2 = uv0; uv2.y = uv1.y;
             var uv3 = uv1; uv3.y = uv0.y;
 

@@ -10,7 +10,7 @@ namespace SpriteAtlas
         Error = 0,
         Generic = 1,
         Agent = 2,
-        Vehicule = 3,
+        Vehicle = 3,
         Particle = 4,
     }
 
@@ -23,7 +23,14 @@ namespace SpriteAtlas
         public int Height;
 
         public byte[] Data;
+        public Texture2D Texture;
         public RectpackSharp.PackingRectangle[] Rectangles;
+    }
+
+    public struct Sprite
+    {
+        public Texture2D Texture;
+        public Vector4 TextureCoords;
     }
 
     
@@ -57,6 +64,28 @@ namespace SpriteAtlas
             return ref AtlasArray[(int)type - 1];
         }
         
+
+        public Sprite GetSprite(int id, AtlasType type)
+        {
+            Sprite sprite = new Sprite();
+            ref SpriteAtlas atlas = ref GetSpriteAtlas(type);
+
+            sprite.Texture = atlas.Texture;
+
+            int recIndex = Array.FindIndex(atlas.Rectangles, packingRectangle => packingRectangle.Id == id);
+                
+            RectpackSharp.PackingRectangle rectangle = atlas.Rectangles[recIndex];
+
+            int xOffset = (int)rectangle.X;
+            int yOffset = (int)rectangle.Y;
+            int width = (int)rectangle.Width;
+            int height = (int)rectangle.Height;
+
+            sprite.TextureCoords = new Vector4((float)xOffset / (float)atlas.Width, (float)yOffset / (float)atlas.Height,
+            (float)width / (float)atlas.Width, (float)height / (float)atlas.Height);
+
+            return sprite;
+        }
 
         // use the id to find the Sprite coordinates in the list
         // and return the sprite RGBA8 that correspond
@@ -220,6 +249,8 @@ namespace SpriteAtlas
                             sheet.Data[sheetIndex + 3];
                 }
             }
+
+            atlas.Texture = Utils.TextureUtils.CreateTextureFromRGBA(atlas.Data, atlas.Width, atlas.Height);
             
             return index;
         }
