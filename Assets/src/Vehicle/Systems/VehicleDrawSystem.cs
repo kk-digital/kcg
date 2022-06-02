@@ -52,12 +52,12 @@ namespace Systems
             int _spriteID = GameState.SpriteLoader.GetSpriteSheetID(_filePath, _width, _height);
 
             // Blit
-            int imageSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(_spriteID, 0, 0, SpriteAtlas.AtlasType.Vehicule);
+            int imageSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(_spriteID, 0, 0, SpriteAtlas.AtlasType.Vehicle);
             // Calculating Bytes
             byte[] imageBytes = new byte[_width * _height * 4];
 
             // Get Sprite Bytes
-            GameState.SpriteAtlasManager.GetSpriteBytes(imageSpriteIndex, imageBytes, SpriteAtlas.AtlasType.Vehicule);
+            GameState.SpriteAtlasManager.GetSpriteBytes(imageSpriteIndex, imageBytes, SpriteAtlas.AtlasType.Vehicle);
 
             // Creating Texture
             vehicleSprite = CreateTextureFromRGBA(imageBytes, _width, _height);

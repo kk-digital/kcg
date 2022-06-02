@@ -1,4 +1,5 @@
 ﻿using TileSpriteLoader;
+using UnityEngine;
 
 namespace TileSpriteAtlas
 {
@@ -29,6 +30,12 @@ namespace TileSpriteAtlas
         {
             TileSpriteAtlas atlas = GetSpriteAtlas(id);
             return atlas.GLTextureID;
+        }
+
+        public Texture2D GetTexture(int id)
+        {
+            ref TileSpriteAtlas atlas = ref GetSpriteAtlas(id);
+            return atlas.Texture; 
         }
 
         public void GetSpriteBytes(int id, byte[] data)
