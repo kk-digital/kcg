@@ -8,19 +8,19 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public Inventory.InventoryIDComponent inventoryID { get { return (Inventory.InventoryIDComponent)GetComponent(GameComponentsLookup.InventoryID); } }
+    public Inventory.IDComponent inventoryID { get { return (Inventory.IDComponent)GetComponent(GameComponentsLookup.InventoryID); } }
     public bool hasInventoryID { get { return HasComponent(GameComponentsLookup.InventoryID); } }
 
     public void AddInventoryID(int newInventoryID) {
         var index = GameComponentsLookup.InventoryID;
-        var component = (Inventory.InventoryIDComponent)CreateComponent(index, typeof(Inventory.InventoryIDComponent));
+        var component = (Inventory.IDComponent)CreateComponent(index, typeof(Inventory.IDComponent));
         component.InventoryID = newInventoryID;
         AddComponent(index, component);
     }
 
     public void ReplaceInventoryID(int newInventoryID) {
         var index = GameComponentsLookup.InventoryID;
-        var component = (Inventory.InventoryIDComponent)CreateComponent(index, typeof(Inventory.InventoryIDComponent));
+        var component = (Inventory.IDComponent)CreateComponent(index, typeof(Inventory.IDComponent));
         component.InventoryID = newInventoryID;
         ReplaceComponent(index, component);
     }

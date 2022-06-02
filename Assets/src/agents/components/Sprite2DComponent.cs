@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Agent
 {
-    public struct AgentSprite2DComponent : IComponent
+    public struct Sprite2DComponent : IComponent
     {
         public int SpriteID;
         public string SpritePath;

@@ -8,12 +8,12 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public Components.ItemStackComponent itemStack { get { return (Components.ItemStackComponent)GetComponent(GameComponentsLookup.ItemStack); } }
+    public Item.StackComponent itemStack { get { return (Item.StackComponent)GetComponent(GameComponentsLookup.ItemStack); } }
     public bool hasItemStack { get { return HasComponent(GameComponentsLookup.ItemStack); } }
 
     public void AddItemStack(int newStackCount, int newMaxStackSize) {
         var index = GameComponentsLookup.ItemStack;
-        var component = (Components.ItemStackComponent)CreateComponent(index, typeof(Components.ItemStackComponent));
+        var component = (Item.StackComponent)CreateComponent(index, typeof(Item.StackComponent));
         component.StackCount = newStackCount;
         component.MaxStackSize = newMaxStackSize;
         AddComponent(index, component);
@@ -21,7 +21,7 @@ public partial class GameEntity {
 
     public void ReplaceItemStack(int newStackCount, int newMaxStackSize) {
         var index = GameComponentsLookup.ItemStack;
-        var component = (Components.ItemStackComponent)CreateComponent(index, typeof(Components.ItemStackComponent));
+        var component = (Item.StackComponent)CreateComponent(index, typeof(Item.StackComponent));
         component.StackCount = newStackCount;
         component.MaxStackSize = newMaxStackSize;
         ReplaceComponent(index, component);

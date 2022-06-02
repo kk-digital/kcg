@@ -8,7 +8,7 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    static readonly Components.VehicleComponentCollider vehicleComponentColliderComponent = new Components.VehicleComponentCollider();
+    static readonly Vehicle.ComponentCollider vehicleComponentColliderComponent = new Vehicle.ComponentCollider();
 
     public bool isVehicleComponentCollider {
         get { return HasComponent(GameComponentsLookup.VehicleComponentCollider); }

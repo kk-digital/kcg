@@ -60,30 +60,30 @@ public partial class Contexts {
 
     public const string AgentID = "AgentID";
     public const string InventoryID = "InventoryID";
-    public const string InventoryItem = "InventoryItem";
     public const string Item = "Item";
+    public const string ItemAttachedInventory = "ItemAttachedInventory";
 
     [Entitas.CodeGeneration.Attributes.PostConstructor]
     public void InitializeEntityIndices() {
         game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
             AgentID,
             game.GetGroup(GameMatcher.AgentID),
-            (e, c) => ((Agent.AgentIDComponent)c).ID));
+            (e, c) => ((Agent.IDComponent)c).ID));
 
         game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
             InventoryID,
             game.GetGroup(GameMatcher.InventoryID),
-            (e, c) => ((Inventory.InventoryIDComponent)c).InventoryID));
-
-        game.AddEntityIndex(new Entitas.EntityIndex<GameEntity, int>(
-            InventoryItem,
-            game.GetGroup(GameMatcher.InventoryItem),
-            (e, c) => ((Components.InventoryItemComponent)c).InventoryID));
+            (e, c) => ((Inventory.IDComponent)c).InventoryID));
 
         game.AddEntityIndex(new Entitas.EntityIndex<GameEntity, Enums.ItemType>(
             Item,
             game.GetGroup(GameMatcher.Item),
-            (e, c) => ((Components.ItemComponent)c).ItemType));
+            (e, c) => ((Item.Component)c).ItemType));
+
+        game.AddEntityIndex(new Entitas.EntityIndex<GameEntity, int>(
+            ItemAttachedInventory,
+            game.GetGroup(GameMatcher.ItemAttachedInventory),
+            (e, c) => ((Item.AttachedInventoryComponent)c).InventoryID));
     }
 }
 
@@ -97,12 +97,12 @@ public static class ContextsExtensions {
         return ((Entitas.PrimaryEntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.InventoryID)).GetEntity(InventoryID);
     }
 
-    public static System.Collections.Generic.HashSet<GameEntity> GetEntitiesWithInventoryItem(this GameContext context, int InventoryID) {
-        return ((Entitas.EntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.InventoryItem)).GetEntities(InventoryID);
-    }
-
     public static System.Collections.Generic.HashSet<GameEntity> GetEntitiesWithItem(this GameContext context, Enums.ItemType ItemType) {
         return ((Entitas.EntityIndex<GameEntity, Enums.ItemType>)context.GetEntityIndex(Contexts.Item)).GetEntities(ItemType);
+    }
+
+    public static System.Collections.Generic.HashSet<GameEntity> GetEntitiesWithItemAttachedInventory(this GameContext context, int InventoryID) {
+        return ((Entitas.EntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.ItemAttachedInventory)).GetEntities(InventoryID);
     }
 }
 //------------------------------------------------------------------------------

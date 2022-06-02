@@ -8,12 +8,12 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public Components.ProjectileComponent projectile { get { return (Components.ProjectileComponent)GetComponent(GameComponentsLookup.Projectile); } }
+    public Projectile.Component projectile { get { return (Projectile.Component)GetComponent(GameComponentsLookup.Projectile); } }
     public bool hasProjectile { get { return HasComponent(GameComponentsLookup.Projectile); } }
 
     public void AddProjectile(Enums.ProjectileType newProjectileType, Enums.ProjectileDrawType newProjectileDrawType) {
         var index = GameComponentsLookup.Projectile;
-        var component = (Components.ProjectileComponent)CreateComponent(index, typeof(Components.ProjectileComponent));
+        var component = (Projectile.Component)CreateComponent(index, typeof(Projectile.Component));
         component.projectileType = newProjectileType;
         component.projectileDrawType = newProjectileDrawType;
         AddComponent(index, component);
@@ -21,7 +21,7 @@ public partial class GameEntity {
 
     public void ReplaceProjectile(Enums.ProjectileType newProjectileType, Enums.ProjectileDrawType newProjectileDrawType) {
         var index = GameComponentsLookup.Projectile;
-        var component = (Components.ProjectileComponent)CreateComponent(index, typeof(Components.ProjectileComponent));
+        var component = (Projectile.Component)CreateComponent(index, typeof(Projectile.Component));
         component.projectileType = newProjectileType;
         component.projectileDrawType = newProjectileDrawType;
         ReplaceComponent(index, component);

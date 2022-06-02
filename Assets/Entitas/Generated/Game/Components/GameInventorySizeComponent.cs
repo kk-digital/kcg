@@ -8,12 +8,12 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public Inventory.InventorySizeComponent inventorySize { get { return (Inventory.InventorySizeComponent)GetComponent(GameComponentsLookup.InventorySize); } }
+    public Inventory.SizeComponent inventorySize { get { return (Inventory.SizeComponent)GetComponent(GameComponentsLookup.InventorySize); } }
     public bool hasInventorySize { get { return HasComponent(GameComponentsLookup.InventorySize); } }
 
     public void AddInventorySize(int newWidth, int newHeight) {
         var index = GameComponentsLookup.InventorySize;
-        var component = (Inventory.InventorySizeComponent)CreateComponent(index, typeof(Inventory.InventorySizeComponent));
+        var component = (Inventory.SizeComponent)CreateComponent(index, typeof(Inventory.SizeComponent));
         component.Width = newWidth;
         component.Height = newHeight;
         AddComponent(index, component);
@@ -21,7 +21,7 @@ public partial class GameEntity {
 
     public void ReplaceInventorySize(int newWidth, int newHeight) {
         var index = GameComponentsLookup.InventorySize;
-        var component = (Inventory.InventorySizeComponent)CreateComponent(index, typeof(Inventory.InventorySizeComponent));
+        var component = (Inventory.SizeComponent)CreateComponent(index, typeof(Inventory.SizeComponent));
         component.Width = newWidth;
         component.Height = newHeight;
         ReplaceComponent(index, component);

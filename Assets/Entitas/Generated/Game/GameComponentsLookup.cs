@@ -9,80 +9,80 @@
 public static class GameComponentsLookup {
 
     public const int AgentID = 0;
-    public const int AgentPosition2D = 1;
-    public const int AgentSprite2D = 2;
-    public const int Player = 3;
-    public const int InventoryItem = 4;
-    public const int Item2DPosition = 5;
-    public const int Item = 6;
-    public const int ItemMove = 7;
-    public const int ItemStack = 8;
-    public const int Particle2dPosition = 9;
-    public const int ParticleEmitter2dPosition = 10;
-    public const int ParticleEmitterState = 11;
-    public const int ParticleState = 12;
-    public const int Projectile = 13;
-    public const int VehicleComponentCollider = 14;
-    public const int VehicleComponentDraw = 15;
-    public const int Inventory = 16;
-    public const int InventoryID = 17;
-    public const int InventorySize = 18;
-    public const int InventorySlot = 19;
-    public const int GameObject = 20;
-    public const int Particle = 21;
-    public const int Position = 22;
+    public const int AgentPlayer = 1;
+    public const int AgentPosition2D = 2;
+    public const int AgentSprite2D = 3;
+    public const int Inventory = 4;
+    public const int InventoryID = 5;
+    public const int InventorySize = 6;
+    public const int InventorySlots = 7;
+    public const int ItemAttachedInventory = 8;
+    public const int Item = 9;
+    public const int ItemMove = 10;
+    public const int ItemPosition2D = 11;
+    public const int ItemStack = 12;
+    public const int ParticleEmitter2dPosition = 13;
+    public const int ParticleEmitterState = 14;
+    public const int ParticlePosition2D = 15;
+    public const int ParticleState = 16;
+    public const int Projectile = 17;
+    public const int srcecsGameParticleParticleSpawnGameObject = 18;
+    public const int srcecsGameParticleParticleSpawnParticle = 19;
+    public const int srcecsGameParticleParticleSpawnPosition = 20;
+    public const int VehicleComponentCollider = 21;
+    public const int VehicleComponentDraw = 22;
 
     public const int TotalComponents = 23;
 
     public static readonly string[] componentNames = {
         "AgentID",
+        "AgentPlayer",
         "AgentPosition2D",
         "AgentSprite2D",
-        "Player",
-        "InventoryItem",
-        "Item2DPosition",
-        "Item",
-        "ItemMove",
-        "ItemStack",
-        "Particle2dPosition",
-        "ParticleEmitter2dPosition",
-        "ParticleEmitterState",
-        "ParticleState",
-        "Projectile",
-        "VehicleComponentCollider",
-        "VehicleComponentDraw",
         "Inventory",
         "InventoryID",
         "InventorySize",
-        "InventorySlot",
-        "GameObject",
-        "Particle",
-        "Position"
+        "InventorySlots",
+        "ItemAttachedInventory",
+        "Item",
+        "ItemMove",
+        "ItemPosition2D",
+        "ItemStack",
+        "ParticleEmitter2dPosition",
+        "ParticleEmitterState",
+        "ParticlePosition2D",
+        "ParticleState",
+        "Projectile",
+        "srcecsGameParticleParticleSpawnGameObject",
+        "srcecsGameParticleParticleSpawnParticle",
+        "srcecsGameParticleParticleSpawnPosition",
+        "VehicleComponentCollider",
+        "VehicleComponentDraw"
     };
 
     public static readonly System.Type[] componentTypes = {
-        typeof(Agent.AgentIDComponent),
-        typeof(Agent.AgentPosition2DComponent),
-        typeof(Agent.AgentSprite2DComponent),
+        typeof(Agent.IDComponent),
         typeof(Agent.PlayerComponent),
-        typeof(Components.InventoryItemComponent),
-        typeof(Components.Item2DPosition),
-        typeof(Components.ItemComponent),
-        typeof(Components.ItemMoveComponent),
-        typeof(Components.ItemStackComponent),
-        typeof(Components.Particle2dPositionComponent),
-        typeof(Components.ParticleEmitter2dPositionComponent),
-        typeof(Components.ParticleEmitterStateComponent),
-        typeof(Components.ParticleStateComponent),
-        typeof(Components.ProjectileComponent),
-        typeof(Components.VehicleComponentCollider),
-        typeof(Components.VehicleComponentDraw),
-        typeof(Inventory.InventoryComponent),
-        typeof(Inventory.InventoryIDComponent),
-        typeof(Inventory.InventorySizeComponent),
-        typeof(Inventory.InventorySlotComponent),
+        typeof(Agent.Position2DComponent),
+        typeof(Agent.Sprite2DComponent),
+        typeof(Inventory.Component),
+        typeof(Inventory.IDComponent),
+        typeof(Inventory.SizeComponent),
+        typeof(Inventory.SlotsComponent),
+        typeof(Item.AttachedInventoryComponent),
+        typeof(Item.Component),
+        typeof(Item.MoveComponent),
+        typeof(Item.Position2D),
+        typeof(Item.StackComponent),
+        typeof(Particle.Emitter2dPositionComponent),
+        typeof(Particle.EmitterStateComponent),
+        typeof(Particle.Position2DComponent),
+        typeof(Particle.StateComponent),
+        typeof(Projectile.Component),
         typeof(src.ecs.Game.Particle.ParticleSpawn.GameObjectComponent),
         typeof(src.ecs.Game.Particle.ParticleSpawn.ParticleComponent),
-        typeof(src.ecs.Game.Particle.ParticleSpawn.PositionComponent)
+        typeof(src.ecs.Game.Particle.ParticleSpawn.PositionComponent),
+        typeof(Vehicle.ComponentCollider),
+        typeof(Vehicle.ComponentDraw)
     };
 }

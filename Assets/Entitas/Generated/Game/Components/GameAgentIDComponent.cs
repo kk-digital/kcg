@@ -8,19 +8,19 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public Agent.AgentIDComponent agentID { get { return (Agent.AgentIDComponent)GetComponent(GameComponentsLookup.AgentID); } }
+    public Agent.IDComponent agentID { get { return (Agent.IDComponent)GetComponent(GameComponentsLookup.AgentID); } }
     public bool hasAgentID { get { return HasComponent(GameComponentsLookup.AgentID); } }
 
     public void AddAgentID(int newID) {
         var index = GameComponentsLookup.AgentID;
-        var component = (Agent.AgentIDComponent)CreateComponent(index, typeof(Agent.AgentIDComponent));
+        var component = (Agent.IDComponent)CreateComponent(index, typeof(Agent.IDComponent));
         component.ID = newID;
         AddComponent(index, component);
     }
 
     public void ReplaceAgentID(int newID) {
         var index = GameComponentsLookup.AgentID;
-        var component = (Agent.AgentIDComponent)CreateComponent(index, typeof(Agent.AgentIDComponent));
+        var component = (Agent.IDComponent)CreateComponent(index, typeof(Agent.IDComponent));
         component.ID = newID;
         ReplaceComponent(index, component);
     }

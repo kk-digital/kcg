@@ -11,7 +11,7 @@ public class InventoryTest : MonoBehaviour
     Contexts context;
     SpriteLoaderTest SpriteLoader = new();
     List<Sprite> Sprites = new();
-    Agent.InventoryManagerSystem inventoryManagerSystem;
+    Inventory.ManagerSystem inventoryManagerSystem;
 
     [SerializeField] Material material;
 
@@ -22,7 +22,7 @@ public class InventoryTest : MonoBehaviour
     public void Start()
     {
         context = Contexts.sharedInstance;
-        inventoryManagerSystem = new Agent.InventoryManagerSystem(context);
+        inventoryManagerSystem = new Inventory.ManagerSystem(context);
         parentObject = GameObject.Find("Canvas/InventoryView/Viewport/Content");
         LoadSprites();
 
@@ -115,7 +115,7 @@ public class InventoryTest : MonoBehaviour
         entity.isInventory = true;
         entity.AddInventoryID(inventoryID);
         entity.AddInventorySize(width, height);
-        entity.AddInventorySlot(selectedSlot, slots);
+        entity.AddInventorySlots(slots, selectedSlot);
     }
 
     void CreateItemsEntity(string label, int inventoryID, ItemType itemType, int spriteID)
@@ -146,17 +146,17 @@ public class InventoryTest : MonoBehaviour
     // TODO: use DrawSprite and PixelPerfectGrid?.
     void CreateObjects(int inventoryID)
     {
-        var group = context.game.GetEntitiesWithInventoryItem(inventoryID);
+        var group = context.game.GetEntitiesWithItemAttachedInventory(inventoryID);
         foreach (GameEntity entity in group)
         {
         
             GameObject obj = new GameObject(entity.item.Label, typeof(RectTransform), typeof(Image));
-            obj.transform.parent = parentObject.transform.GetChild(entity.inventoryItem.SlotNumber).gameObject.transform;
+            obj.transform.parent = parentObject.transform.GetChild(entity.itemAttachedInventory.SlotNumber).gameObject.transform;
             obj.GetComponent<RectTransform>().sizeDelta = parentObject.GetComponent<GridLayoutGroup>().cellSize;
             obj.GetComponent<Image>().sprite = Sprites[entity.item.SpriteID];
             if (entity.hasItemStack)
             {
-                Debug.Log("Slot" + entity.inventoryItem.SlotNumber + ": " + entity.itemStack.StackCount + "items");
+                Debug.Log("Slot" + entity.itemAttachedInventory.SlotNumber + ": " + entity.itemStack.StackCount + "items");
             }
             // TODO: Add item count to icon.
         }
@@ -164,7 +164,7 @@ public class InventoryTest : MonoBehaviour
 
     void DrawItemsIcons()
     {
-        var group = context.game.GetEntitiesWithInventoryItem(0);
+        var group = context.game.GetEntitiesWithItemAttachedInventory(0);
         foreach (var item in group)
         { 
             

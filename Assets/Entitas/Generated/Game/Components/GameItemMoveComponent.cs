@@ -8,12 +8,12 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public Components.ItemMoveComponent itemMove { get { return (Components.ItemMoveComponent)GetComponent(GameComponentsLookup.ItemMove); } }
+    public Item.MoveComponent itemMove { get { return (Item.MoveComponent)GetComponent(GameComponentsLookup.ItemMove); } }
     public bool hasItemMove { get { return HasComponent(GameComponentsLookup.ItemMove); } }
 
     public void AddItemMove(float newPreviuosPosX, float newPreviuosPosY) {
         var index = GameComponentsLookup.ItemMove;
-        var component = (Components.ItemMoveComponent)CreateComponent(index, typeof(Components.ItemMoveComponent));
+        var component = (Item.MoveComponent)CreateComponent(index, typeof(Item.MoveComponent));
         component.PreviuosPosX = newPreviuosPosX;
         component.PreviuosPosY = newPreviuosPosY;
         AddComponent(index, component);
@@ -21,7 +21,7 @@ public partial class GameEntity {
 
     public void ReplaceItemMove(float newPreviuosPosX, float newPreviuosPosY) {
         var index = GameComponentsLookup.ItemMove;
-        var component = (Components.ItemMoveComponent)CreateComponent(index, typeof(Components.ItemMoveComponent));
+        var component = (Item.MoveComponent)CreateComponent(index, typeof(Item.MoveComponent));
         component.PreviuosPosX = newPreviuosPosX;
         component.PreviuosPosY = newPreviuosPosY;
         ReplaceComponent(index, component);

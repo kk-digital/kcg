@@ -8,7 +8,7 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    static readonly Inventory.InventoryComponent inventoryComponent = new Inventory.InventoryComponent();
+    static readonly Inventory.Component inventoryComponent = new Inventory.Component();
 
     public bool isInventory {
         get { return HasComponent(GameComponentsLookup.Inventory); }
