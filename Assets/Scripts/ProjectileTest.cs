@@ -24,7 +24,7 @@ public class ProjectileTest : MonoBehaviour
 
         // Initialize Vehicle Draw System
         projectileDrawSystem = new ProjectileDrawSystem(contexts, "Assets\\StreamingAssets\\assets\\luis\\grenades\\Grenades4.png", 16, 16, transform, Material,
-            ProjectileType.Arrow, ProjectileDrawType.Standard);
+            ProjectileType.Grenade, ProjectileDrawType.Standard);
 
         // Loading Image
         projectileDrawSystem.Initialize();
