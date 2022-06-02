@@ -3,13 +3,14 @@ using UnityEngine;
 
 namespace Agent
 {
-    [Agent]
     public struct Sprite2DComponent : IComponent
     {
-        public int AtlasIndex;
+        public int SpriteID;
+        public string SpritePath;
         
-        public Transform Parent;
-        public Material Material;
         public Vector2Int Size;
+        public Material Material;
+        
+        public Mesh Mesh;
     }
 }

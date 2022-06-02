@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Enums;
-using Systems;
 
 public class ProjectileTest : MonoBehaviour
 {
     // Vehilce Draw System
-    ProjectileDrawSystem projectileDrawSystem;
+    Projectile.DrawSystem projectileDrawSystem;
 
     // Entitas's Contexts
     Contexts contexts;
@@ -23,7 +20,7 @@ public class ProjectileTest : MonoBehaviour
         contexts = Contexts.sharedInstance;
 
         // Initialize Vehicle Draw System
-        projectileDrawSystem = new ProjectileDrawSystem(contexts, "Assets\\StreamingAssets\\assets\\luis\\grenades\\Grenades4.png", 16, 16, transform, Material,
+        projectileDrawSystem = new Projectile.DrawSystem(contexts, "Assets\\StreamingAssets\\assets\\luis\\grenades\\Grenades4.png", 16, 16, transform, Material,
             ProjectileType.Grenade, ProjectileDrawType.Standard);
 
         // Loading Image

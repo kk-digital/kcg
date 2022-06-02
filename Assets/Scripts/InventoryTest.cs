@@ -7,13 +7,13 @@ using Enums;
 
 public class InventoryTest : MonoBehaviour
 {
-    GameObject ParentObject;
+    GameObject parentObject;
     Contexts context;
-    SpriteLoaderTest SpriteLoader = new SpriteLoaderTest();
-    List<Sprite> Sprites = new  List<Sprite>();
-    Agent.InventoryManagerSystem inventoryManagerSystem;
+    SpriteLoaderTest SpriteLoader = new();
+    List<Sprite> Sprites = new();
+    Inventory.ManagerSystem inventoryManagerSystem;
 
-    [SerializeField] Material Material;
+    [SerializeField] Material material;
 
     List<int> triangles = new();
     List<Vector2> uvs = new();
@@ -22,8 +22,8 @@ public class InventoryTest : MonoBehaviour
     public void Start()
     {
         context = Contexts.sharedInstance;
-        inventoryManagerSystem = new Agent.InventoryManagerSystem(context);
-        ParentObject = GameObject.Find("Canvas/InventoryView/Viewport/Content");
+        inventoryManagerSystem = new Inventory.ManagerSystem(context);
+        parentObject = GameObject.Find("Canvas/InventoryView/Viewport/Content");
         LoadSprites();
 
         // We load the sprite sheets here
@@ -44,24 +44,24 @@ public class InventoryTest : MonoBehaviour
 
 
         // Create inventory.
-        const int InventoryID = 0;
-        CreateInventoryEntity(InventoryID);
-        CreateSlots(InventoryID);
+        const int inventoryID = 0;
+        CreateInventoryEntity(inventoryID);
+        CreateSlots(inventoryID);
 
         // Test not stackable items.
         for (uint i = 0; i < 10; i++)
         {
-            CreateItemsEntity("Gun", InventoryID, ItemType.Gun, GunSpriteID);
+            CreateItemsEntity("Gun", inventoryID, ItemType.Gun, GunSpriteID);
         }
 
         // Testing stackable items.
         for (uint i = 0; i < 1000; i++)
         {
-            CreateItemsEntity("Rock", InventoryID, ItemType.Rock, RockSpriteID);
-            CreateItemsEntity("RockDust", InventoryID, ItemType.RockDust, RockDustSpriteID);
+            CreateItemsEntity("Rock", inventoryID, ItemType.Rock, RockSpriteID);
+            CreateItemsEntity("RockDust", inventoryID, ItemType.RockDust, RockDustSpriteID);
         }
 
-        CreateObjects(InventoryID);
+        CreateObjects(inventoryID);
     }
 
     public void Update()
@@ -90,69 +90,73 @@ public class InventoryTest : MonoBehaviour
         Sprites.Add(SpriteLoader.LoadNewSprite("Assets\\StreamingAssets\\assets\\item\\lasergun-temp.png"));
     }
     
-    void CreateSlots(int InventoryID)
+    void CreateSlots(int inventoryID)
     {
         // To do: Change size of grid to match width and height of inventory.
-        AgentEntity agent = context.agent.GetEntityWithInventory2D(InventoryID);
+        var entity = context.game.GetEntityWithInventoryID(inventoryID);
 
-        int size = agent.inventory2D.Width * agent.inventory2D.Height;
+        int size = entity.inventorySize.Width * entity.inventorySize.Height;
         for (int i = 0; i < size; i++)
         {
-            GameObject obj = new GameObject("slot" + i.ToString(), typeof(RectTransform));
-            obj.transform.parent = ParentObject.transform;
+            var obj = new GameObject("slot" + i, typeof(RectTransform));
+            obj.transform.parent = parentObject.transform;
         }
     }
 
-    void CreateInventoryEntity(int InventoryID)
+    void CreateInventoryEntity(int inventoryID)
     {
-        AgentEntity agent = context.agent.CreateEntity();
+        var entity = context.game.CreateEntity();
         const int height = 8;
         const int width = 8;
         const int selectedSlot = 0;
 
         BitArray slots = new BitArray(height * width, false);
-        agent.AddInventory2D(InventoryID, width, height, selectedSlot, slots);
+
+        entity.isInventory = true;
+        entity.AddInventoryID(inventoryID);
+        entity.AddInventorySize(width, height);
+        entity.AddInventorySlots(slots, selectedSlot);
     }
 
-    void CreateItemsEntity(string Label, int InventoryID, ItemType itemType, int SpriteID)
+    void CreateItemsEntity(string label, int inventoryID, ItemType itemType, int spriteID)
     {
         GameEntity entity = context.game.CreateEntity();
-        const int MaxStackCount = 99;
+        const int maxStackCount = 99;
         switch (itemType)
         {
             case ItemType.Gun:
-                entity.AddItem(Label, SpriteID, itemType);
+                entity.AddItem(label, spriteID, itemType);
                 break;
             case ItemType.Rock:
-                entity.AddItem(Label, SpriteID, itemType);
-                entity.AddItemStack(1, MaxStackCount);
+                entity.AddItem(label, spriteID, itemType);
+                entity.AddItemStack(1, maxStackCount);
                 break;
             case ItemType.RockDust:
-                entity.AddItem(Label, SpriteID, itemType);
-                entity.AddItemStack(1, MaxStackCount);
+                entity.AddItem(label, spriteID, itemType);
+                entity.AddItemStack(1, maxStackCount);
                 break;
             default:
                 Debug.Log("Invalid Item Type");
                 break;
         }
-        inventoryManagerSystem.AddItem(entity, InventoryID);
+        inventoryManagerSystem.AddItem(entity, inventoryID);
 
     }
 
     // TODO: use DrawSprite and PixelPerfectGrid?.
     void CreateObjects(int inventoryID)
     {
-        var group = context.game.GetEntitiesWithInventoryItem(inventoryID);
+        var group = context.game.GetEntitiesWithItemAttachedInventory(inventoryID);
         foreach (GameEntity entity in group)
         {
         
             GameObject obj = new GameObject(entity.item.Label, typeof(RectTransform), typeof(Image));
-            obj.transform.parent = ParentObject.transform.GetChild(entity.inventoryItem.SlotNumber).gameObject.transform;
-            obj.GetComponent<RectTransform>().sizeDelta = ParentObject.GetComponent<GridLayoutGroup>().cellSize;
+            obj.transform.parent = parentObject.transform.GetChild(entity.itemAttachedInventory.SlotNumber).gameObject.transform;
+            obj.GetComponent<RectTransform>().sizeDelta = parentObject.GetComponent<GridLayoutGroup>().cellSize;
             obj.GetComponent<Image>().sprite = Sprites[entity.item.SpriteID];
             if (entity.hasItemStack)
             {
-                Debug.Log("Slot" + entity.inventoryItem.SlotNumber + ": " + entity.itemStack.StackCount + "items");
+                Debug.Log("Slot" + entity.itemAttachedInventory.SlotNumber + ": " + entity.itemStack.StackCount + "items");
             }
             // TODO: Add item count to icon.
         }
@@ -160,7 +164,7 @@ public class InventoryTest : MonoBehaviour
 
     void DrawItemsIcons()
     {
-        var group = context.game.GetEntitiesWithInventoryItem(0);
+        var group = context.game.GetEntitiesWithItemAttachedInventory(0);
         foreach (var item in group)
         { 
             
@@ -173,7 +177,7 @@ public class InventoryTest : MonoBehaviour
          int spriteW, int spriteH)
     {
         var tex = CreateTextureFromRGBA(spriteBytes, spriteW, spriteH);
-        var mat = Instantiate(Material);
+        var mat = Instantiate(material);
         mat.SetTexture("_MainTex", tex);
         var mesh = CreateMesh(transform, "abc", 0, mat);
 

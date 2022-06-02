@@ -8,12 +8,12 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public Components.ParticleEmitter2dPositionComponent particleEmitter2dPosition { get { return (Components.ParticleEmitter2dPositionComponent)GetComponent(GameComponentsLookup.ParticleEmitter2dPosition); } }
+    public Particle.Emitter2dPositionComponent particleEmitter2dPosition { get { return (Particle.Emitter2dPositionComponent)GetComponent(GameComponentsLookup.ParticleEmitter2dPosition); } }
     public bool hasParticleEmitter2dPosition { get { return HasComponent(GameComponentsLookup.ParticleEmitter2dPosition); } }
 
     public void AddParticleEmitter2dPosition(UnityEngine.Vector2 newPosition, UnityEngine.Vector2 newAcceleration, UnityEngine.Vector2 newVelocity) {
         var index = GameComponentsLookup.ParticleEmitter2dPosition;
-        var component = (Components.ParticleEmitter2dPositionComponent)CreateComponent(index, typeof(Components.ParticleEmitter2dPositionComponent));
+        var component = (Particle.Emitter2dPositionComponent)CreateComponent(index, typeof(Particle.Emitter2dPositionComponent));
         component.Position = newPosition;
         component.Acceleration = newAcceleration;
         component.Velocity = newVelocity;
@@ -22,7 +22,7 @@ public partial class GameEntity {
 
     public void ReplaceParticleEmitter2dPosition(UnityEngine.Vector2 newPosition, UnityEngine.Vector2 newAcceleration, UnityEngine.Vector2 newVelocity) {
         var index = GameComponentsLookup.ParticleEmitter2dPosition;
-        var component = (Components.ParticleEmitter2dPositionComponent)CreateComponent(index, typeof(Components.ParticleEmitter2dPositionComponent));
+        var component = (Particle.Emitter2dPositionComponent)CreateComponent(index, typeof(Particle.Emitter2dPositionComponent));
         component.Position = newPosition;
         component.Acceleration = newAcceleration;
         component.Velocity = newVelocity;

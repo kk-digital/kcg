@@ -1,10 +1,5 @@
-using System;
 using UnityEngine;
 using System.Collections.Generic;
-using Components;
-using Agent;
-using Entitas;
-
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -36,8 +31,8 @@ namespace PlanetTileMap.Unity
         Texture2D VentSprite;
 
         Contexts EntitasContext = Contexts.sharedInstance;
-        ParticleUpdateSystem ParticleUpdateSystem;
-        ParticleEmitterUpdateSystem ParticleEmitterUpdateSystem;
+        Particle.UpdateSystem ParticleUpdateSystem;
+        Particle.EmitterUpdateSystem ParticleEmitterUpdateSystem;
 
         GameObject PipePrefab;
         GameObject OrePrefab;
@@ -66,8 +61,8 @@ namespace PlanetTileMap.Unity
         public void Initialize()
         {
             
-            ParticleUpdateSystem = new ParticleUpdateSystem(EntitasContext);
-            ParticleEmitterUpdateSystem = new ParticleEmitterUpdateSystem(EntitasContext);
+            ParticleUpdateSystem = new Particle.UpdateSystem(EntitasContext);
+            ParticleEmitterUpdateSystem = new Particle.EmitterUpdateSystem(EntitasContext);
 
             // we load the sprite sheets here
             int PipeTileSheet = 

@@ -8,12 +8,12 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public Components.VehicleComponentDraw vehicleComponentDraw { get { return (Components.VehicleComponentDraw)GetComponent(GameComponentsLookup.VehicleComponentDraw); } }
+    public Vehicle.ComponentDraw vehicleComponentDraw { get { return (Vehicle.ComponentDraw)GetComponent(GameComponentsLookup.VehicleComponentDraw); } }
     public bool hasVehicleComponentDraw { get { return HasComponent(GameComponentsLookup.VehicleComponentDraw); } }
 
     public void AddVehicleComponentDraw(int newSpriteId, int newWidth, int newHeight) {
         var index = GameComponentsLookup.VehicleComponentDraw;
-        var component = (Components.VehicleComponentDraw)CreateComponent(index, typeof(Components.VehicleComponentDraw));
+        var component = (Vehicle.ComponentDraw)CreateComponent(index, typeof(Vehicle.ComponentDraw));
         component.spriteId = newSpriteId;
         component.width = newWidth;
         component.height = newHeight;
@@ -22,7 +22,7 @@ public partial class GameEntity {
 
     public void ReplaceVehicleComponentDraw(int newSpriteId, int newWidth, int newHeight) {
         var index = GameComponentsLookup.VehicleComponentDraw;
-        var component = (Components.VehicleComponentDraw)CreateComponent(index, typeof(Components.VehicleComponentDraw));
+        var component = (Vehicle.ComponentDraw)CreateComponent(index, typeof(Vehicle.ComponentDraw));
         component.spriteId = newSpriteId;
         component.width = newWidth;
         component.height = newHeight;

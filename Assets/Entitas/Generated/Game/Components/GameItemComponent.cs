@@ -8,12 +8,12 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public Components.ItemComponent item { get { return (Components.ItemComponent)GetComponent(GameComponentsLookup.Item); } }
+    public Item.Component item { get { return (Item.Component)GetComponent(GameComponentsLookup.Item); } }
     public bool hasItem { get { return HasComponent(GameComponentsLookup.Item); } }
 
     public void AddItem(string newLabel, int newSpriteID, Enums.ItemType newItemType) {
         var index = GameComponentsLookup.Item;
-        var component = (Components.ItemComponent)CreateComponent(index, typeof(Components.ItemComponent));
+        var component = (Item.Component)CreateComponent(index, typeof(Item.Component));
         component.Label = newLabel;
         component.SpriteID = newSpriteID;
         component.ItemType = newItemType;
@@ -22,7 +22,7 @@ public partial class GameEntity {
 
     public void ReplaceItem(string newLabel, int newSpriteID, Enums.ItemType newItemType) {
         var index = GameComponentsLookup.Item;
-        var component = (Components.ItemComponent)CreateComponent(index, typeof(Components.ItemComponent));
+        var component = (Item.Component)CreateComponent(index, typeof(Item.Component));
         component.Label = newLabel;
         component.SpriteID = newSpriteID;
         component.ItemType = newItemType;
