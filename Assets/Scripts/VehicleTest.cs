@@ -1,9 +1,11 @@
 using UnityEngine;
+using Entitas;
 
 public class VehicleTest : MonoBehaviour
 {
     // Vehilce Draw System
     Vehicle.DrawSystem vehicleDrawSystem;
+    Vehicle.ProcessVelocitySystem vehiclePhysics;
 
     // Entitas's Contexts
     Contexts contexts;
@@ -20,6 +22,7 @@ public class VehicleTest : MonoBehaviour
 
         // Initialize Vehicle Draw System
         vehicleDrawSystem = new Vehicle.DrawSystem();
+        vehiclePhysics = new Vehicle.ProcessVelocitySystem();
 
         // Loading Image
         vehicleDrawSystem.Initialize(contexts, "Assets\\StreamingAssets\\assets\\luis\\vehicles\\Jet_chassis.png", 144, 96, transform, Material);
@@ -29,5 +32,6 @@ public class VehicleTest : MonoBehaviour
     private void Update()
     {
         vehicleDrawSystem.Draw();
+        vehiclePhysics.Process(contexts);
     }
 }

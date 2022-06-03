@@ -54,6 +54,7 @@ public class InputManager : MonoBehaviour
                 // Update Zoomed ortho pixel perfect calculation
                 pixelCam.adjustCameraFOV();
             }
+
         }
         else if(playerState == PlayerState.Vehicle)
         {
@@ -71,6 +72,26 @@ public class InputManager : MonoBehaviour
         else if(playerState == PlayerState.Vehicle)
         {
 
+        }
+    }
+
+    public void MouseInputs()
+    {
+        if (Input.mouseScrollDelta.y > 0)
+        {
+            PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
+            if (pixelCam.targetCameraHalfWidth > 1.5f)
+                pixelCam.targetCameraHalfWidth -= 1.0f;
+            // Update Zoomed ortho pixel perfect calculation
+            pixelCam.adjustCameraFOV();
+        }
+        else if (Input.mouseScrollDelta.y < -0.5f)
+        {
+            PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
+            if (pixelCam.targetCameraHalfWidth < 15.0f)
+                pixelCam.targetCameraHalfWidth += 1.0f;
+            // Update Zoomed ortho pixel perfect calculation
+            pixelCam.adjustCameraFOV();
         }
     }
 
@@ -117,6 +138,8 @@ public class InputManager : MonoBehaviour
                 activeKey.keyCode = KeyCode.None;
             }
         }
+
+        MouseInputs();
     }
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnGUI.html

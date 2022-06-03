@@ -44,11 +44,20 @@ public class AsmdefDebug
     {
         // Calling Update to measure Editor Running time
         EditorApplication.update += Update;
+        // Assign Quit Function to quitting event
+        EditorApplication.quitting += Quit;
         // Get Assembly Compilation Data
         CompilationPipeline.assemblyCompilationStarted += CompilationPipelineOnAssemblyCompilationStarted;
         CompilationPipeline.assemblyCompilationFinished += CompilationPipelineOnAssemblyCompilationFinished;
         AssemblyReloadEvents.beforeAssemblyReload += AssemblyReloadEventsOnBeforeAssemblyReload;
         AssemblyReloadEvents.afterAssemblyReload += AssemblyReloadEventsOnAfterAssemblyReload;
+    }
+
+    // Editor Quit Event
+    static void Quit()
+    {
+        // Reset running time when close editor
+        PlayerPrefs.SetFloat("editor_running_time", 0);
     }
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
@@ -102,12 +111,12 @@ public class AsmdefDebug
             var time = DateTime.UtcNow - date;
             var compilationTimes = EditorPrefs.GetString(AssemblyCompilationEventsEditorPref);
             var totalTimeSeconds = totalCompilationTimeSeconds + time.TotalSeconds;
-            var timeBetweenRunningCompilation = PlayerPrefs.GetFloat("editor_running_time") - totalTimeSeconds;
+            var timeBetweenRunningCompilation = Mathf.Abs(PlayerPrefs.GetFloat("editor_running_time") - (float)totalTimeSeconds);
             if (!string.IsNullOrEmpty(compilationTimes))
             {
-                Debug.Log($"Compilation Report: {totalTimeSeconds:F2} seconds\n" + compilationTimes + "Assembly Reload Time: " + time.TotalSeconds + "s\n");
                 Debug.Log($"Editor Running Time: {PlayerPrefs.GetFloat("editor_running_time"):F2} seconds\n");
                 Debug.Log($"Time Between Running and Compilation Time: { timeBetweenRunningCompilation:F2} seconds\n");
+                Debug.Log($"Compilation Report: {totalTimeSeconds:F2} seconds\n" + compilationTimes + "Assembly Reload Time: " + time.TotalSeconds + "s\n");
             }
         }
     }
