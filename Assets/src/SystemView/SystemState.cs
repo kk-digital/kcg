@@ -5,9 +5,11 @@ namespace SystemView
 {
     public class SystemState
     {
-        public List<SystemPlanet> Planets = new List<SystemPlanet>();
-        public List<SystemAsteroidBelt> AsteroidBelts = new List<SystemAsteroidBelt>();
-        public List<SystemShip> Ships = new List<SystemShip>();
+        public List<SystemPlanet>       Planets       = new();
+        public List<SystemAsteroidBelt> AsteroidBelts = new();
+        public List<SystemShip>         Ships         = new();
+        public List<SpaceStation>       Stations      = new();
+
         public SystemStar Star;
     }
 }

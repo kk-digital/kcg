@@ -4,5 +4,7 @@ namespace SystemView
     {
         public float PosX;
         public float PosY;
+
+        public float mass;
     }
 }

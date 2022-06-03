@@ -16,6 +16,11 @@ namespace SystemView
         public int ShieldRegenerationRate;
 
         public float PosX, PosY;
+        public float VelX, VelY;
+
+        public float Acceleration;
+
+        public float Rotation;
 
         public List<ShipWeapon> Weapons;
 

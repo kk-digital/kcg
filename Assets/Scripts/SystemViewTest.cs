@@ -6,10 +6,12 @@ using System.Collections.Generic;
 
 namespace SystemView
 {
-    public struct ShipInfo
+    public struct ObjectInfo<RendererT>
     {
         public GameObject Object;
-        public SystemShipRenderer Renderer;
+        public RendererT Renderer;
+        public int LastUpdateTime;
+        public int LastCycle;
     }
 
     public class SystemViewTest : MonoBehaviour
@@ -18,23 +20,28 @@ namespace SystemView
 
         public int LastTime;
 
-        public Dictionary<SystemShip, ShipInfo> Fighters = new Dictionary<SystemShip, ShipInfo>();
-        public Dictionary<ShipWeaponProjectile, GameObject> ProjectileRenderers = new Dictionary<ShipWeaponProjectile, GameObject>();
+        public Dictionary<SystemPlanet,       ObjectInfo<SystemPlanetRenderer>>       Planets   = new();
+        public Dictionary<SystemAsteroidBelt, ObjectInfo<SystemAsteroidBeltRenderer>> Asteroids = new();
+        public Dictionary<SystemShip,         ObjectInfo<SystemShipRenderer>>         Ships     = new();
+        public Dictionary<SpaceStation,       ObjectInfo<SpaceStationRenderer>>       Stations  = new();
 
-        public const int ItemsPerTick = 32;
-
-        // use a queue to prevent game slowing down from thousands of orbits being planned at the same time
-        public List<SystemShip> PathPlanningQueue = new List<SystemShip>();
+        public const int UpdatesPerTick = 64;
 
         public System.Random rnd = new System.Random();
 
+        public const int InnerPlanets    = 4;
+        public const int OuterPlanets    = 6;
+        public const int FarOrbitPlanets = 2;
+
+        public int CurrentCycle = 0;
+
         private void Start()
         {
+            LastTime = (int)(Time.time * 1000.0f);
+            
             GameLoop gl = GetComponent<GameLoop>();
 
             State = gl.CurrentSystemState;
-
-            SystemPlanetRenderer[] testRenderers = new SystemPlanetRenderer[12];
 
             State.Star = new SystemStar();
             State.Star.PosX = (float)rnd.NextDouble() * 8.0f - 4.0f;
@@ -46,312 +53,153 @@ namespace SystemView
             SystemStarRenderer starRenderer = StarObject.AddComponent<SystemStarRenderer>();
             starRenderer.Star = State.Star;
 
-            for (int i = 1; i <= 5; i++)
+            for (int i = 0; i < InnerPlanets; i++)
             {
-                SystemPlanet testPlanet = new SystemPlanet();
+                SystemPlanet Planet = new SystemPlanet();
 
-                testPlanet.Descriptor.CenterX = State.Star.PosX;
-                testPlanet.Descriptor.CenterY = State.Star.PosY;
+                Planet.Descriptor.CenterX = State.Star.PosX;
+                Planet.Descriptor.CenterY = State.Star.PosY;
 
-                testPlanet.Descriptor.SemiMinorAxis = 1.0f + 2.0f * (float)rnd.NextDouble() * i;
-                testPlanet.Descriptor.SemiMajorAxis = testPlanet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() / 8.0f;
+                Planet.Descriptor.SemiMinorAxis = 3.0f + (i + 1) * (i + 1);
+                Planet.Descriptor.SemiMajorAxis = Planet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() / (i + 2);
 
-                testPlanet.Descriptor.Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Planet.Descriptor.Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Planet.Descriptor.RotationalPosition = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
-                testPlanet.Descriptor.RotationalPosition = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                ObjectInfo<SystemPlanetRenderer> PlanetInfo = new();
 
-                var child = new GameObject();
-                child.name = "Planet Renderer " + i;
+                PlanetInfo.Object = new();
+                PlanetInfo.Object.name = "Planet renderer #" + (i + 1);
 
-                testRenderers[i - 1] = child.AddComponent<SystemPlanetRenderer>();
-                testRenderers[i - 1].planet = testPlanet;
+                PlanetInfo.Renderer = PlanetInfo.Object.AddComponent<SystemPlanetRenderer>();
+                PlanetInfo.Renderer.planet = Planet;
 
-                State.Planets.Add(testPlanet);
+                State.Planets.Add(Planet);
+                Planets.Add(Planet, PlanetInfo);
             }
 
-            OrbitingObjectDescriptor testBeltDescriptor = new OrbitingObjectDescriptor();
+            OrbitingObjectDescriptor InnerAsteroidBeltDescriptor = new();
 
-            testBeltDescriptor.CenterX = State.Star.PosX;
-            testBeltDescriptor.CenterY = State.Star.PosY;
+            InnerAsteroidBeltDescriptor.CenterX = State.Star.PosX;
+            InnerAsteroidBeltDescriptor.CenterY = State.Star.PosY;
 
-            testBeltDescriptor.SemiMinorAxis = State.Planets[4].Descriptor.SemiMajorAxis + 4.0f + (float)rnd.NextDouble();
-            testBeltDescriptor.SemiMajorAxis = testBeltDescriptor.SemiMinorAxis + (float)rnd.NextDouble() / 4.0f;
+            InnerAsteroidBeltDescriptor.SemiMinorAxis = State.Planets[InnerPlanets - 1].Descriptor.SemiMajorAxis + 6.0f;
+            InnerAsteroidBeltDescriptor.SemiMajorAxis = InnerAsteroidBeltDescriptor.SemiMinorAxis + (float)rnd.NextDouble() / 4.0f;
 
-            SystemAsteroidBelt testBelt = new SystemAsteroidBelt(16, testBeltDescriptor);
+            InnerAsteroidBeltDescriptor.Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+
+            SystemAsteroidBelt InnerAsteroidBelt = new(16, InnerAsteroidBeltDescriptor);
 
             for (int Layer = 0; Layer < 16; Layer++)
             {
-                for (int i = 0; i < 192 + 8 * Layer; i++)
+                for (int i = 0; i < 64 + 8 * Layer; i++)
                 {
-                    SystemAsteroid testAsteroid = new SystemAsteroid();
+                    SystemAsteroid Asteroid = new();
 
-                    testAsteroid.RotationalPosition = (float)i * 3.1415926f / (96.0f + 4.0f * Layer);
-                    testAsteroid.Layer = Layer;
+                    Asteroid.RotationalPosition = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                    Asteroid.Layer = Layer;
 
-                    testBelt.Asteroids.Add(testAsteroid);
+                    InnerAsteroidBelt.Asteroids.Add(Asteroid);
                 }
             }
 
-            State.AsteroidBelts.Add(testBelt);
+            ObjectInfo<SystemAsteroidBeltRenderer> InnerAsteroidBeltInfo = new();
 
-            var AsteroidBeltObject = new GameObject();
-            AsteroidBeltObject.name = "Asteroid Belt Renderer";
+            InnerAsteroidBeltInfo.Object = new();
+            InnerAsteroidBeltInfo.Object.name = "Inner asteroid belt renderer";
 
-            SystemAsteroidBeltRenderer asteroidBeltRenderer = AsteroidBeltObject.AddComponent<SystemAsteroidBeltRenderer>();
-            asteroidBeltRenderer.belt = testBelt;
+            InnerAsteroidBeltInfo.Renderer = InnerAsteroidBeltInfo.Object.AddComponent<SystemAsteroidBeltRenderer>();
+            InnerAsteroidBeltInfo.Renderer.belt = InnerAsteroidBelt;
 
-            for (int i = 0; i < 7; i++)
+            Asteroids.Add(InnerAsteroidBelt, InnerAsteroidBeltInfo);
+
+            for (int i = 0; i < OuterPlanets; i++)
             {
-                SystemPlanet testPlanet = new SystemPlanet();
+                SystemPlanet Planet = new SystemPlanet();
 
-                testPlanet.Descriptor.CenterX = State.Star.PosX;
-                testPlanet.Descriptor.CenterY = State.Star.PosY;
+                Planet.Descriptor.CenterX = State.Star.PosX;
+                Planet.Descriptor.CenterY = State.Star.PosY;
 
-                testPlanet.Descriptor.SemiMinorAxis = testBeltDescriptor.SemiMajorAxis + testBelt.BeltWidth + 8.0f * (float)rnd.NextDouble() * (i + 1);
-                testPlanet.Descriptor.SemiMajorAxis = testPlanet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * (i + 1) * (i + 1) / 4.0f;
+                Planet.Descriptor.SemiMinorAxis = InnerAsteroidBeltDescriptor.SemiMajorAxis + (i + 3) * (i + 3);
+                Planet.Descriptor.SemiMajorAxis = Planet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * i / 2.0f;
 
-                testPlanet.Descriptor.Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Planet.Descriptor.Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Planet.Descriptor.RotationalPosition = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
-                var child = new GameObject();
-                child.name = "Planet Renderer " + (i + 6);
+                ObjectInfo<SystemPlanetRenderer> PlanetInfo = new();
 
-                testRenderers[i + 5] = child.AddComponent<SystemPlanetRenderer>();
-                testRenderers[i + 5].planet = testPlanet;
+                PlanetInfo.Object = new();
+                PlanetInfo.Object.name = "Planet renderer #" + (i + InnerPlanets);
 
-                State.Planets.Add(testPlanet);
+                PlanetInfo.Renderer = PlanetInfo.Object.AddComponent<SystemPlanetRenderer>();
+                PlanetInfo.Renderer.planet = Planet;
+
+                State.Planets.Add(Planet);
+                Planets.Add(Planet, PlanetInfo);
             }
 
-            int shipnr = 1;
-            for (int i = 0; i < 12; i++)
+            OrbitingObjectDescriptor OuterAsteroidBeltDescriptor = new();
+
+            OuterAsteroidBeltDescriptor.CenterX = State.Star.PosX;
+            OuterAsteroidBeltDescriptor.CenterY = State.Star.PosY;
+
+            OuterAsteroidBeltDescriptor.SemiMinorAxis = State.Planets[InnerPlanets + OuterPlanets - 1].Descriptor.SemiMajorAxis + 24.0f;
+            OuterAsteroidBeltDescriptor.SemiMajorAxis = OuterAsteroidBeltDescriptor.SemiMinorAxis + (float)rnd.NextDouble() * 6.0f;
+
+            OuterAsteroidBeltDescriptor.Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+
+            SystemAsteroidBelt OuterAsteroidBelt = new(64, OuterAsteroidBeltDescriptor);
+
+            for (int Layer = 0; Layer < 64; Layer++)
             {
-                for (int j = 0; j < 12; j++)
+                for (int i = 0; i < 192 + 16 * Layer; i++)
                 {
-                    if (j == i) continue;
+                    SystemAsteroid Asteroid = new();
 
-                    SystemShip testShip = new SystemShip();
+                    Asteroid.RotationalPosition = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                    Asteroid.Layer = Layer;
 
-                    State.Ships.Add(testShip);
-                    PathPlanningQueue.Add(testShip);
-
-                    var shipRendererObject = new GameObject();
-                    shipRendererObject.name = "Ship Renderer " + shipnr++;
-
-                    testShip.Descriptor = new OrbitingObjectDescriptor(State.Planets[i].Descriptor);
-                    testShip.Start = State.Planets[i].Descriptor;
-                    testShip.Destination = State.Planets[j].Descriptor;
-
-                    SystemShipRenderer shipRenderer = shipRendererObject.AddComponent<SystemShipRenderer>();
-                    shipRenderer.ship = testShip;
+                    OuterAsteroidBelt.Asteroids.Add(Asteroid);
                 }
             }
 
-            /*for (int i = 0; i < 32; i++)
-            {
-                SystemShip Fighter = new SystemShip();
-                ShipInfo Info = new ShipInfo();
+            ObjectInfo<SystemAsteroidBeltRenderer> OuterAsteroidBeltInfo = new();
 
-                State.Ships.Add(Fighter);
+            OuterAsteroidBeltInfo.Object = new();
+            OuterAsteroidBeltInfo.Object.name = "Outer asteroid belt renderer";
 
-                Fighter.Health = Fighter.MaxHealth = Fighter.Shield = Fighter.MaxShield = 10000;
-                Fighter.ShieldRegenerationRate = 1;
+            OuterAsteroidBeltInfo.Renderer = OuterAsteroidBeltInfo.Object.AddComponent<SystemAsteroidBeltRenderer>();
+            OuterAsteroidBeltInfo.Renderer.belt = OuterAsteroidBelt;
 
-                Fighter.Descriptor.CenterX = State.Star.PosX;
-                Fighter.Descriptor.CenterY = State.Star.PosY;
-
-                Fighter.Descriptor.SemiMajorAxis = 20.0f;
-                Fighter.Descriptor.SemiMinorAxis = 6.0f;
-
-                Fighter.Descriptor.RotationalPosition = 0.002f * i;
-
-                ShipWeapon Weapon = new ShipWeapon();
-
-                Weapon.ProjectileColor = new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1.0f);
-                Weapon.Range = 5.0f;
-                Weapon.ShieldPenetration = (float)rnd.NextDouble() * 0.3f;
-                Weapon.Damage = rnd.Next(200, 800);
-                Weapon.AttackSpeed = rnd.Next(200, 800);
-                Weapon.Cooldown = 0;
-                Weapon.Self = Fighter;
-                Weapon.ProjectileVelocity = 0.1f;
-
-                Fighter.Weapons.Add(Weapon);
-
-                Info.Object = new GameObject();
-                Info.Object.name = "Fighter " + i;
-
-                Info.Renderer = Info.Object.AddComponent<SystemShipRenderer>();
-                Info.Renderer.ship = Fighter;
-                Info.Renderer.shipColor = new Color(0.0f, 1.0f, 0.0f, 1.0f);
-
-                Fighter.PathPlanned = true;
-                Fighter.Reached = true;
-
-                Fighters.Add(Fighter, Info);
-            }
-
-            for (int i = 0; i < 16; i++)
-            {
-                SystemShip Fighter = new SystemShip();
-                ShipInfo Info = new ShipInfo();
-
-                State.Ships.Add(Fighter);
-
-                Fighter.Health = Fighter.MaxHealth = Fighter.Shield = Fighter.MaxShield = 10000;
-                Fighter.ShieldRegenerationRate = 1;
-
-                Fighter.Descriptor.CenterX = State.Star.PosX;
-                Fighter.Descriptor.CenterY = State.Star.PosY;
-
-                Fighter.Descriptor.SemiMajorAxis = 19.0f;
-                Fighter.Descriptor.SemiMinorAxis = 5.7f;
-
-                Fighter.Descriptor.RotationalPosition = 0.004f * i;
-
-                ShipWeapon Weapon = new ShipWeapon();
-
-                Weapon.ProjectileColor = new Color((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), 1.0f);
-                Weapon.Range = 5.0f;
-                Weapon.ShieldPenetration = (float)rnd.NextDouble() * 0.3f;
-                Weapon.Damage = rnd.Next(200, 800);
-                Weapon.AttackSpeed = rnd.Next(200, 800);
-                Weapon.Cooldown = 0;
-                Weapon.Self = Fighter;
-                Weapon.ProjectileVelocity = 0.1f;
-
-                Fighter.Weapons.Add(Weapon);
-
-                Info.Object = new GameObject();
-                Info.Object.name = "Fighter " + i;
-
-                Info.Renderer = Info.Object.AddComponent<SystemShipRenderer>();
-                Info.Renderer.ship = Fighter;
-                Info.Renderer.shipColor = new Color(0.0f, 1.0f, 0.0f, 1.0f);
-
-                Fighter.PathPlanned = true;
-                Fighter.Reached = true;
-
-                Fighters.Add(Fighter, Info);
-            }*/
-
-            LastTime = (int)(Time.time * 1000);
+            Asteroids.Add(OuterAsteroidBelt, OuterAsteroidBeltInfo);
         }
 
         void Update()
         {
             int CurrentMillis = (int)(Time.time * 1000) - LastTime;
-            LastTime = (int)(Time.time * 1000);
+            int UpdatesCompleted = 0;
 
-            // todo: this could be split into multiple threads
-            //       however it doesn't really matter as this is just a test view anyway
             foreach (SystemPlanet p in State.Planets)
             {
+                if (Planets[p].LastCycle == CurrentCycle) continue;
+
                 p.UpdatePosition(CurrentMillis / 200.0f);
+                //Planets[p].LastCycle = CurrentCycle;
+
+                if (++UpdatesCompleted == UpdatesPerTick) return;
             }
-            
+
             foreach (SystemAsteroidBelt b in State.AsteroidBelts)
             {
+                if (Asteroids[b].LastCycle == CurrentCycle) continue;
+
                 b.UpdatePositions(CurrentMillis / 200.0f);
+                //Asteroids[b].LastCycle = CurrentCycle;
+
+                if (++UpdatesCompleted == UpdatesPerTick) return;
             }
 
-            foreach (SystemShip s in State.Ships)
-            {
-                if (!s.Reached && s.Descriptor.GetDistanceFrom(s.Destination) < 0.5f)
-                {
-                    s.Descriptor = new OrbitingObjectDescriptor(s.Destination);
-                    s.PathPlanned = false;
-                    (s.Start, s.Destination) = (s.Destination, s.Start);
-                    PathPlanningQueue.Add(s);
-                }
-
-                s.UpdatePosition(CurrentMillis / 200.0f);
-            }
-
-            for (int i = 0; i < PathPlanningQueue.Count && i < ItemsPerTick; i++)
-            {
-                SystemShip s = PathPlanningQueue[i];
-                PathPlanningQueue.Remove(s);
-
-                if (!(s.PathPlanned = s.Descriptor.PlanPath(s.Destination, 0.2f)))
-                    PathPlanningQueue.Add(s);
-            }
-
-            /*for (int i = 0; i < ProjectileRenderers.Count; i++)
-            {
-                KeyValuePair<ShipWeaponProjectile, GameObject> ProjectileRenderer = ProjectileRenderers.ElementAt(i);
-                ShipWeaponProjectile Projectile = ProjectileRenderer.Key;
-                GameObject Renderer = ProjectileRenderer.Value;
-
-                if (Projectile.UpdatePosition(CurrentMillis / 200.0f))
-                {
-                    foreach (SystemShip Ship in State.Ships)
-                    {
-                        if (Ship == Projectile.Self) continue;
-
-                        if (Projectile.InRangeOf(Ship, 0.05f))
-                        {
-                            Projectile.DoDamage(Ship);
-
-                            GameObject.Destroy(ProjectileRenderers[Projectile]);
-                            ProjectileRenderers.Remove(Projectile);
-                            i--;
-
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    GameObject.Destroy(ProjectileRenderers[Projectile]);
-                    ProjectileRenderers.Remove(Projectile);
-                    i--;
-                }
-            }
-
-            for (int i = 132; i < State.Ships.Count; i++)
-            {
-                SystemShip Ship = State.Ships[i];
-
-                if (Ship.Destroyed)
-                {
-                    GameObject.Destroy(Fighters[Ship].Renderer.ShieldObject);
-                    GameObject.Destroy(Fighters[Ship].Object);
-
-                    Fighters.Remove(Ship);
-                    State.Ships.Remove(Ship);
-
-                    i--;
-                    continue;
-                }
-
-                if (Fighters.Count > 1) foreach (ShipWeapon Weapon in Ship.Weapons)
-                {
-                    SystemShip Target = null;
-
-                    do
-                    {
-                        Target = State.Ships[rnd.Next(Fighters.Count) + 30];
-                    }
-                    while (Target == Ship);
-
-                    if (Weapon.TryFiringAt(Target, CurrentMillis))
-                    {
-                        GameObject RendererObject = new GameObject();
-                        RendererObject.name = "Fighter Projectile";
-
-                        ShipWeaponProjectileRenderer ProjectileRenderer = RendererObject.AddComponent<ShipWeaponProjectileRenderer>();
-
-                        ProjectileRenderer.Projectile = Weapon.ProjectilesFired[Weapon.ProjectilesFired.Count - 1];
-
-                        ProjectileRenderers.Add(Weapon.ProjectilesFired[Weapon.ProjectilesFired.Count - 1], RendererObject);
-                    }
-                }
-
-                Ship.Shield += Ship.ShieldRegenerationRate * CurrentMillis;
-                if (Ship.Shield > Ship.MaxShield) Ship.Shield = Ship.MaxShield;
-
-                Fighters[Ship].Renderer.shipColor.g = (float)Ship.Health / Ship.MaxHealth;
-                Fighters[Ship].Renderer.shipColor.r = 1.0f - Fighters[Ship].Renderer.shipColor.g;
-            }*/
+            CurrentCycle++;
         }
     }
 }
