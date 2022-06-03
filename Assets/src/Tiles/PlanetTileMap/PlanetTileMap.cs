@@ -98,32 +98,29 @@ namespace PlanetTileMap
                 {
                     ref PlanetTile tile = ref GetTileRef(x, y);
 
-                    int propertiesId = -1;
+                    int spriteId = -1;
 
                     if (layer == Layer.Back)
                     {
-                        propertiesId = tile.BackTilePropertiesId;
+                        spriteId = tile.BackSpriteId;
                     }
                     else if (layer == Layer.Mid)
                     {
-                        propertiesId = tile.MidTilePropertiesId;
+                        spriteId = tile.MidSpriteId;
                     }
                     else if (layer == Layer.Front)
                     {
-                        propertiesId = tile.FrontTilePropertiesId;
+                        spriteId = tile.FrontSpriteId;
                     }
                     else if (layer == Layer.Ore)
                     {
-                        propertiesId = tile.OreTilePropertiesId;
+                        spriteId = tile.OreSpriteId;
                     }
 
-                    if (propertiesId >= 0)
+                    if (spriteId >= 0)
                     {
-                        TileProperties.TilePropertiesData properties = 
-                                GameState.TileCreationApi.GetTileProperties(propertiesId);
-
                         
-                        GameState.TileSpriteAtlasManager.GetSpriteBytes(properties.SpriteId, Bytes);
+                        GameState.TileSpriteAtlasManager.GetSpriteBytes(spriteId, Bytes);
 
                         int tileX = (x * 32);
                         int tileY = (y * 32);
@@ -151,6 +148,99 @@ namespace PlanetTileMap
             LayerTextures[(int)layer] = Utility.TextureUtils.CreateTextureFromRGBA(Data, Size.x * 32, Size.y * 32);
 
 
+        }
+
+        public void UpdateTileVariants(int x, int y, Layer layer)
+        {
+            if (x < 0 || y < 0 | x >= Size.x || y >= Size.y)
+            {
+                return;
+            }
+
+            ref PlanetTile tile = ref GetTileRef(x, y);
+            
+            if (layer == Layer.Front)
+            {
+                if (tile.FrontTilePropertiesId >= 0)
+                {
+                    int[] neighbors = new int[8];
+                    for(int i = 0; i < neighbors.Length; i++)
+                    {
+                        neighbors[i] = -1;
+                    }
+
+                    if (x + 1 < Size.x)
+                    {
+                        ref PlanetTile neighborTile = ref GetTileRef(x + 1, y);
+                        neighbors[(int)TileVariant.Neighbor.Right] = neighborTile.FrontTilePropertiesId;
+                    }
+
+                    if (x - 1 >= 0)
+                    {
+                        ref PlanetTile neighborTile = ref GetTileRef(x - 1, y);
+                        neighbors[(int)TileVariant.Neighbor.Left] = neighborTile.FrontTilePropertiesId;
+                    }
+
+                    if (y + 1 < Size.y)
+                    {
+                        ref PlanetTile neighborTile = ref GetTileRef(x, y + 1);
+                        neighbors[(int)TileVariant.Neighbor.Top] = neighborTile.FrontTilePropertiesId;
+                    }
+
+                    if (y - 1 >= 0)
+                    {
+                        ref PlanetTile neighborTile = ref GetTileRef(x, y - 1);
+                        neighbors[(int)TileVariant.Neighbor.Bottom] = neighborTile.FrontTilePropertiesId;
+                    }
+
+                    if (x + 1 < Size.x && y + 1 < Size.y)
+                    {
+                        ref PlanetTile neighborTile = ref GetTileRef(x + 1, y + 1);
+                        neighbors[(int)TileVariant.Neighbor.TopRight] = neighborTile.FrontTilePropertiesId;
+                    }
+
+                    if (x - 1 >= 0 && y + 1 < Size.y)
+                    {
+                        ref PlanetTile neighborTile = ref GetTileRef(x - 1, y + 1);
+                        neighbors[(int)TileVariant.Neighbor.TopLeft] = neighborTile.FrontTilePropertiesId;
+                    }
+
+                    if (x + 1 < Size.x && y - 1 >= 0)
+                    {
+                        ref PlanetTile neighborTile = ref GetTileRef(x + 1, y - 1);
+                        neighbors[(int)TileVariant.Neighbor.BottomRight] = neighborTile.FrontTilePropertiesId;
+                    }
+                
+                    if (x - 1 >= 0 && y - 1 >= 0)
+                    {
+                        ref PlanetTile neighborTile = ref GetTileRef(x - 1, y - 1);
+                        neighbors[(int)TileVariant.Neighbor.BottomLeft] = neighborTile.FrontTilePropertiesId;
+                    }
+
+                    TileVariant.Variant variant = TileVariant.TileNeighbor.GetVariant(neighbors, tile.FrontTilePropertiesId);
+                    TileProperties.TilePropertiesData properties = 
+                                    GameState.TileCreationApi.GetTileProperties(tile.FrontTilePropertiesId);
+                    tile.FrontSpriteId = properties.Variants[(int)variant];
+                }
+                else
+                {
+                    tile.FrontSpriteId = -1;
+                }
+            }
+
+
+
+        }
+
+        public void UpdateAllTileVariants(Layer layer)
+        {
+            for(int y = 0; y < Size.y; y++)
+            {
+                for(int x = 0; x < Size.x; x++)
+                {
+                    UpdateTileVariants(x, y, layer);
+                }
+            }
         }
         
 
@@ -180,6 +270,47 @@ namespace PlanetTileMap
 
             Utility.RenderUtils.DrawSprite(0, 0, 1.0f * Size.x, 1.0f * Size.y, sprite, material, transform, DrawOrder);
             
+        }
+
+        public void RemoveTile(int x, int y, Layer layer)
+        {
+            if (x < 0 || y < 0 | x >= Size.x || y >= Size.y)
+            {
+                return;
+            }
+
+            if (layer == Layer.Back)
+            {
+                ref PlanetTile tile = ref GetTileRef(x, y);
+
+                tile.BackTilePropertiesId = -1;
+            }
+            else if (layer == Layer.Mid)
+            {
+                ref PlanetTile tile = ref GetTileRef(x, y);
+
+                tile.MidTilePropertiesId = -1;
+            }
+            else if (layer == Layer.Front)
+            {
+                ref PlanetTile tile = ref GetTileRef(x, y);
+
+                tile.FrontTilePropertiesId = -1;
+            }
+            else if (layer == Layer.Ore)
+            {
+                ref PlanetTile tile = ref GetTileRef(x, y);
+
+                tile.OreTilePropertiesId = -1;
+            }
+
+            for(int i = x - 1; i <= x + 1; i++)
+            {
+                for(int j = y - 1; j <= y + 1; j++)
+                {
+                    UpdateTileVariants(i, j, layer);
+                }
+            }
         }
 
         public ref NaturalLayerChunk GetNaturalLayerChunk(int x, int y)

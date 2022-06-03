@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using TileProperties;
+using System;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -51,6 +52,17 @@ namespace PlanetTileMap.Unity
 
         public void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                int x = (int)worldPosition.x;
+                int y = (int)worldPosition.y;
+                Debug.Log(x + " " + y);
+                TileMap.RemoveTile(x, y, Layer.Front);
+                 TileMap.BuildLayerTexture(Layer.Front);
+                
+            }
+
             foreach(var mr in GetComponentsInChildren<MeshRenderer>())
                 if (Application.isPlaying)
                     Destroy(mr.gameObject);
@@ -116,7 +128,43 @@ namespace PlanetTileMap.Unity
 
             GameState.TileCreationApi.CreateTile(8);
             GameState.TileCreationApi.SetTileName("ore_1");
-            GameState.TileCreationApi.SetTileTexture16(OreTileSheet, 0, 0);
+            for(int i = 0; i < Enum.GetNames(typeof(TileVariant.Variant)).Length; i++)
+            {
+                GameState.TileCreationApi.SetTileVariant16(OreTileSheet, 0, 0, (TileVariant.Variant)i);
+            }
+            GameState.TileCreationApi.EndTile();
+
+            GameState.TileCreationApi.CreateTile(9);
+            GameState.TileCreationApi.SetTileName("glass");
+            GameState.TileCreationApi.SetTileTexture16(TilesMoon, 12, 11);
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 12, 11, TileVariant.Variant.Middle);
+
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 13, 11, TileVariant.Variant.Right);
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 11, 11, TileVariant.Variant.Left);
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 12, 10, TileVariant.Variant.Top);
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 12, 12, TileVariant.Variant.Bottom);
+            
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 16, 12, TileVariant.Variant.InnerTopRight);
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 17, 12, TileVariant.Variant.InnerTopLeft);
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 16, 11, TileVariant.Variant.InnerBottomRight);
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 17, 11, TileVariant.Variant.InnerBottomLeft);
+
+
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 13, 10, TileVariant.Variant.OuterTopRight);
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 11, 10, TileVariant.Variant.OuterTopLeft);
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 13, 12, TileVariant.Variant.OuterBottomRight);
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 11, 12, TileVariant.Variant.OuterBottomLeft);
+
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 13, 13, TileVariant.Variant.TipRight);
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 11, 13, TileVariant.Variant.TipLeft);
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 14, 10, TileVariant.Variant.TipTop);
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 14, 12, TileVariant.Variant.TipBottom);
+
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 14, 11, TileVariant.Variant.TipVertical);
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 12, 13, TileVariant.Variant.TipHorizontal);
+
+            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 14, 13, TileVariant.Variant.Default);
+
             GameState.TileCreationApi.EndTile();
 
 
@@ -131,21 +179,21 @@ namespace PlanetTileMap.Unity
                 for(int i = 0; i < mapSize.x; i++)
                 {
                     PlanetTile tile = PlanetTile.EmptyTile();
-                    tile.FrontTilePropertiesId = 0;
+                    tile.FrontTilePropertiesId = 9;
 
 
                     if (i % 10 == 0)
                     {
-                        tile.FrontTilePropertiesId = 7;
+                        //tile.FrontTilePropertiesId = 7;
                         tile.OreTilePropertiesId = 8;
                     }
                     if (j % 2 == 0)
                     {
-                        tile.FrontTilePropertiesId = 2;
+                       // tile.FrontTilePropertiesId = 2;
                     }
                     if (j % 3 == 0)
                     {
-                        tile.FrontTilePropertiesId = 1;
+                       // tile.FrontTilePropertiesId = 9;
 
                     }
 
@@ -161,6 +209,8 @@ namespace PlanetTileMap.Unity
             }
 
             TileMap.UpdateTopTilesMap();
+            TileMap.UpdateAllTileVariants(Layer.Front);
+            TileMap.UpdateAllTileVariants(Layer.Ore);
             TileMap.BuildLayerTexture(Layer.Front);
             TileMap.BuildLayerTexture(Layer.Ore);
         }

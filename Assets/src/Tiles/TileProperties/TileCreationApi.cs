@@ -1,6 +1,7 @@
 using System;
 using Enums;
 using System.Collections.Generic;
+using UnityEngine;
 
 //MOST IMPORTANT TILE
 
@@ -58,6 +59,11 @@ namespace TileProperties
         {
             NameToID = new Dictionary<string, int>();
             PropertiesArray = new TilePropertiesData[1024];
+            for(int i = 0; i < PropertiesArray.Length; i++)
+            {
+                PropertiesArray[i] = new TilePropertiesData("", "", 0, TileDrawProperties.TileDrawPropertyNormal, 0,
+                                PlanetTileCollisionType.TileCollisionTypeSolid, 100, false);
+            }
             CurrentTileIndex = -1;
         }
 
@@ -168,29 +174,24 @@ namespace TileProperties
             }
         }
 
-        public void AddTileVariant(int spriteSheetId, int row, int column)
+        public void SetTileVariant(int spriteSheetId, int row, int column, TileVariant.Variant variant)
         {
             if (CurrentTileIndex != -1)
             {
-                if (PropertiesArray[CurrentTileIndex].VariantCount < PropertiesArray[CurrentTileIndex].Variants.Length)
-                {
-                    int atlasSpriteId = 
-                        GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas(spriteSheetId, row, column, 0);
-                    PropertiesArray[CurrentTileIndex].Variants[PropertiesArray[CurrentTileIndex].VariantCount++] = atlasSpriteId;
-                }
+                int atlasSpriteId = 
+                    GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas(spriteSheetId, row, column, 0);
+                PropertiesArray[CurrentTileIndex].Variants[(int)variant] = atlasSpriteId;
+                
             }
         }
 
-        public void AddTileVariant16(int spriteSheetId, int row, int column)
+        public void SetTileVariant16(int spriteSheetId, int row, int column, TileVariant.Variant variant)
         {
             if (CurrentTileIndex != -1)
             {
-                if (PropertiesArray[CurrentTileIndex].VariantCount < PropertiesArray[CurrentTileIndex].Variants.Length)
-                {
-                    int atlasSpriteId = 
-                        GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(spriteSheetId, row, column, 0);
-                    PropertiesArray[CurrentTileIndex].Variants[PropertiesArray[CurrentTileIndex].VariantCount++] = atlasSpriteId;
-                }
+                int atlasSpriteId = 
+                    GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(spriteSheetId, row, column, 0);
+                PropertiesArray[CurrentTileIndex].Variants[(int)variant] = atlasSpriteId;
             }
         }
 

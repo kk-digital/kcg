@@ -1,4 +1,5 @@
 ﻿using Enums;
+using System;
 
 namespace TileProperties
 {
@@ -9,11 +10,20 @@ namespace TileProperties
         public int TileId;
         
         public TileDrawProperties TileDrawType; //enum, hint for how tile should be drawn
-        public int SpriteId; //spriteId
-        public int SpriteId2; //used for composited tiles, like ore
 
         public int[] Variants;
-        public int VariantCount;
+
+        public int SpriteId
+        {
+            set
+            {
+                Variants[(int)TileVariant.Variant.Middle] = value;
+            }
+            get
+            {
+                return Variants[(int)TileVariant.Variant.Middle];
+            }
+        }
 
         public PlanetTileCollisionType TileCollisionType;
         public bool IsExplosive;
@@ -50,34 +60,28 @@ namespace TileProperties
             Name = name;
             Description = description;
             TileId = tileId;
+            int variantsCount = Enum.GetNames(typeof(TileVariant.Variant)).Length;
+            Variants = new int[variantsCount];
 
-            Variants = new int[16];
-            VariantCount = 0;
         }
 
         private TilePropertiesData(string name, string description, int tileId,
-            TileDrawProperties tileDrawType, int spriteId, int spriteId2) : this(name, description, tileId)
+            TileDrawProperties tileDrawType, int spriteId) : this(name, description, tileId)
         {
             TileDrawType = tileDrawType;
             SpriteId = spriteId;
-            SpriteId2 = spriteId2;
 
-            Variants = new int[16];
-            VariantCount = 0;
         }
 
         public TilePropertiesData(string name, string description, int tileId,
-            TileDrawProperties tileDrawType, int spriteId, int spriteId2,
+            TileDrawProperties tileDrawType, int spriteId,
             PlanetTileCollisionType tileCollisionType, byte durability,
              bool isExplosive = false)
-            : this(name, description, tileId, tileDrawType, spriteId, spriteId2)
+            : this(name, description, tileId, tileDrawType, spriteId)
         {
             TileCollisionType = tileCollisionType;
             Durability = durability;
             IsExplosive = isExplosive;
-
-            Variants = new int[16];
-            VariantCount = 0;
         }
     }
 }
