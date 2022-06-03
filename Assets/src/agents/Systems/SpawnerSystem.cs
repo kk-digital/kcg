@@ -33,10 +33,13 @@ namespace Agent
 
             entity.isAgentPlayer = true;
             entity.isECSInput = true;
-            entity.AddAgentID(1);
+            entity.AddECSInputXY(new Vector2(0, 0));
+            
+            entity.AddAgentID(playerID);
             entity.AddAgentSprite2D(spriteID, spritePath, spriteSize, pngSize, material, BuildMesh(spriteID, material, pngSize));
-            entity.AddAgentPosition2D(new Vector2(3f, 2f), default);
-            entity.AddAgentVelocity(new Vector2(0f, 0f));
+            entity.AddAgentPosition2D(new Vector2(3f, 2f), newPreviousValue: default);
+            
+            entity.AddAgentMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
 
             return entity;
         }
