@@ -86,14 +86,14 @@ public class AsmdefDebug
         s_BuildEvents.AppendFormat("compilation total: {0:0.00}s\n", totalCompilationTimeSeconds);
         EditorPrefs.SetString(AssemblyReloadEventsEditorPref, DateTime.UtcNow.ToBinary().ToString());
         EditorPrefs.SetString(AssemblyCompilationEventsEditorPref, s_BuildEvents.ToString());
-        EditorPrefs.SetString(AssemblyTotalCompilationTimeEditorPref, totalCompilationTimeSeconds.ToString(CultureInfo.InvariantCulture));
+        EditorPrefs.SetString(AssemblyTotalCompilationTimeEditorPref, totalCompilationTimeSeconds.ToString(CultureInfo.CurrentCulture));
     }
 
     // Assembly Reload Events
     static void AssemblyReloadEventsOnAfterAssemblyReload()
     {
         var binString = EditorPrefs.GetString(AssemblyReloadEventsEditorPref);
-        var totalCompilationTimeSeconds = float.Parse(EditorPrefs.GetString(AssemblyTotalCompilationTimeEditorPref));
+        var totalCompilationTimeSeconds = double.Parse(EditorPrefs.GetString(AssemblyTotalCompilationTimeEditorPref));
 
         long bin;
         if (long.TryParse(binString, out bin))

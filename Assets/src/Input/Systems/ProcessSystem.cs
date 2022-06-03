@@ -13,27 +13,9 @@ namespace ECSInput
 
         public void Update(ref Agent.List list)
         {
-            foreach (var entity in list.AgentsWithInput)
+            foreach (var entity in list.AgentsWithXY)
             {
-                entity.agentVelocity.Value = Vector2.zero;
-                
-                if (Input.GetKey(KeyCode.UpArrow))
-                {
-                    entity.agentVelocity.Value.y = 1f;
-                }
-                else if (Input.GetKey(KeyCode.DownArrow))
-                {
-                    entity.agentVelocity.Value.y = -1f;
-                }
-
-                if (Input.GetKey(KeyCode.RightArrow))
-                {
-                    entity.agentVelocity.Value.x = 1f;
-                }
-                else if (Input.GetKey(KeyCode.LeftArrow))
-                {
-                    entity.agentVelocity.Value.x = -1f;
-                }
+                entity.ReplaceECSInputXY(new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")));
             }
         }
     }

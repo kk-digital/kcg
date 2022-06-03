@@ -8,25 +8,25 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public Agent.VelocityComponent agentVelocity { get { return (Agent.VelocityComponent)GetComponent(GameComponentsLookup.AgentVelocity); } }
-    public bool hasAgentVelocity { get { return HasComponent(GameComponentsLookup.AgentVelocity); } }
+    public ECSInput.XYComponent eCSInputXY { get { return (ECSInput.XYComponent)GetComponent(GameComponentsLookup.ECSInputXY); } }
+    public bool hasECSInputXY { get { return HasComponent(GameComponentsLookup.ECSInputXY); } }
 
-    public void AddAgentVelocity(UnityEngine.Vector2 newValue) {
-        var index = GameComponentsLookup.AgentVelocity;
-        var component = (Agent.VelocityComponent)CreateComponent(index, typeof(Agent.VelocityComponent));
+    public void AddECSInputXY(UnityEngine.Vector2 newValue) {
+        var index = GameComponentsLookup.ECSInputXY;
+        var component = (ECSInput.XYComponent)CreateComponent(index, typeof(ECSInput.XYComponent));
         component.Value = newValue;
         AddComponent(index, component);
     }
 
-    public void ReplaceAgentVelocity(UnityEngine.Vector2 newValue) {
-        var index = GameComponentsLookup.AgentVelocity;
-        var component = (Agent.VelocityComponent)CreateComponent(index, typeof(Agent.VelocityComponent));
+    public void ReplaceECSInputXY(UnityEngine.Vector2 newValue) {
+        var index = GameComponentsLookup.ECSInputXY;
+        var component = (ECSInput.XYComponent)CreateComponent(index, typeof(ECSInput.XYComponent));
         component.Value = newValue;
         ReplaceComponent(index, component);
     }
 
-    public void RemoveAgentVelocity() {
-        RemoveComponent(GameComponentsLookup.AgentVelocity);
+    public void RemoveECSInputXY() {
+        RemoveComponent(GameComponentsLookup.ECSInputXY);
     }
 }
 
@@ -40,17 +40,17 @@ public partial class GameEntity {
 //------------------------------------------------------------------------------
 public sealed partial class GameMatcher {
 
-    static Entitas.IMatcher<GameEntity> _matcherAgentVelocity;
+    static Entitas.IMatcher<GameEntity> _matcherECSInputXY;
 
-    public static Entitas.IMatcher<GameEntity> AgentVelocity {
+    public static Entitas.IMatcher<GameEntity> ECSInputXY {
         get {
-            if (_matcherAgentVelocity == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.AgentVelocity);
+            if (_matcherECSInputXY == null) {
+                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.ECSInputXY);
                 matcher.componentNames = GameComponentsLookup.componentNames;
-                _matcherAgentVelocity = matcher;
+                _matcherECSInputXY = matcher;
             }
 
-            return _matcherAgentVelocity;
+            return _matcherECSInputXY;
         }
     }
 }
