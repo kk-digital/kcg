@@ -62,6 +62,7 @@ public partial class Contexts {
     public const string InventoryID = "InventoryID";
     public const string Item = "Item";
     public const string ItemAttachedInventory = "ItemAttachedInventory";
+    public const string VehicleID = "VehicleID";
 
     [Entitas.CodeGeneration.Attributes.PostConstructor]
     public void InitializeEntityIndices() {
@@ -84,6 +85,11 @@ public partial class Contexts {
             ItemAttachedInventory,
             game.GetGroup(GameMatcher.ItemAttachedInventory),
             (e, c) => ((Item.AttachedInventoryComponent)c).InventoryID));
+
+        game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
+            VehicleID,
+            game.GetGroup(GameMatcher.VehicleID),
+            (e, c) => ((Vehicle.IDComponent)c).ID));
     }
 }
 
@@ -103,6 +109,10 @@ public static class ContextsExtensions {
 
     public static System.Collections.Generic.HashSet<GameEntity> GetEntitiesWithItemAttachedInventory(this GameContext context, int InventoryID) {
         return ((Entitas.EntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.ItemAttachedInventory)).GetEntities(InventoryID);
+    }
+
+    public static GameEntity GetEntityWithVehicleID(this GameContext context, int ID) {
+        return ((Entitas.PrimaryEntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.VehicleID)).GetEntity(ID);
     }
 }
 //------------------------------------------------------------------------------

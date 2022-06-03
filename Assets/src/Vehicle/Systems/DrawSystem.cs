@@ -29,11 +29,14 @@ namespace Vehicle
         List<Vector3> verticies = new List<Vector3>();
         Material Material;
         Transform _transform;
+        Vector2 prefabPos = new Vector2(0,0);
 
         // Sprite to Render
         Texture2D vehicleSprite;
         GameObject prefab;
+        GameObject prePrefab;
         bool Init = false;
+        GameEntity vehicleDraw;
 
         static DrawSystem()
         {
@@ -44,6 +47,12 @@ namespace Vehicle
         public DrawSystem()
         {
             GameContext = Contexts.sharedInstance.game;
+        }
+
+        // Destructor
+        ~DrawSystem()
+        {
+            UnityEngine.Object.Destroy(prefab);
         }
 
         // Initializing image and component
@@ -57,7 +66,7 @@ namespace Vehicle
             Material = mat;
 
             // Create Entity
-            GameEntity vehicleDraw = _contexts.game.CreateEntity();
+            vehicleDraw = _contexts.game.CreateEntity();
 
             // Get Image Sprite ID
             int _spriteID = GameState.SpriteLoader.GetSpriteSheetID(_filePath, _width, _height);
@@ -74,10 +83,17 @@ namespace Vehicle
             vehicleSprite = CreateTextureFromRGBA(imageBytes, _width, _height);
 
             // Creating Prefab
-            prefab = CreateParticlePrefab(0, 0, 0.5f, 0.5f, vehicleSprite);
+            prefab = CreateParticlePrefab(prefabPos.x, prefabPos.y, 0.5f, 0.5f, vehicleSprite);
 
-            // Add Vehicle Component
-            vehicleDraw.AddVehicleComponentDraw(_spriteID, GetWidth(), GetHeight());
+            // Add Vehicle Components
+            vehicleDraw.AddVehicleID(0);
+
+            vehicleDraw.AddVehicleSprite2D(_spriteID, filePath, new Vector2(GetWidth(), GetHeight()), new Vector2Int(GetWidth(), GetHeight()),
+                Material, prefab.GetComponent<Mesh>());
+
+            vehicleDraw.AddVehicleVelocity(Vector2.zero);
+
+            vehicleDraw.AddVehiclePosition2D(Vector2.zero, Vector2.zero);
 
             // Initialization done
             Init = true;
@@ -89,11 +105,13 @@ namespace Vehicle
             if (Init)
             {
                 IGroup<GameEntity> entities =
-                _contexts.game.GetGroup(GameMatcher.ParticlePosition2D);
+                _contexts.game.GetGroup(GameMatcher.VehiclePosition2D);
                 foreach (var gameEntity in entities)
                 {
-                    var pos = gameEntity.particlePosition2D;
-                    DrawSprite(pos.Position.x, pos.Position.y, 0.5f, 0.5f, vehicleSprite);
+                    var pos = gameEntity.vehiclePosition2D;
+                    prePrefab = prefab;
+                    UnityEngine.Object.Destroy(prePrefab);
+                    prefab = CreateParticlePrefab(pos.Position.x, pos.Position.y, 0.5f, 0.5f, vehicleSprite);
                 }
             }
         }
@@ -110,7 +128,7 @@ namespace Vehicle
             return _width;
         }
 
-        // Get Height
+        // Get Heighta
         public int GetHeight()
         {
             return _height;
@@ -166,60 +184,10 @@ namespace Vehicle
             mesh.SetUVs(0, uvs);
             mesh.SetTriangles(triangles, 0);
 
-            go.transform.position = new Vector3(0, 2.2f, 0);
-            go.transform.localScale = new Vector3(5.84772444f, 3.20090008f, 3.20090008f);
+            
             return go;
         }
-        void DrawSprite(float x, float y, float w, float h, Texture2D tex)
-        {
-            Material.SetTexture("_MainTex", tex);
-            var go = CreateObject(_transform, "vehicle", 0, Material);
-            var mf = go.GetComponent<MeshFilter>();
-            var mesh = mf.sharedMesh;
-
-            triangles.Clear();
-            uvs.Clear();
-            verticies.Clear();
-
-
-            var p0 = new Vector3(x, y, 0);
-            var p1 = new Vector3((x + w), (y + h), 0);
-            var p2 = p0; p2.y = p1.y;
-            var p3 = p1; p3.y = p0.y;
-
-            verticies.Add(p0);
-            verticies.Add(p1);
-            verticies.Add(p2);
-            verticies.Add(p3);
-
-            triangles.Add(0);
-            triangles.Add(2);
-            triangles.Add(1);
-            triangles.Add(0);
-            triangles.Add(1);
-            triangles.Add(3);
-
-            var u0 = 0;
-            var u1 = 1;
-            var v1 = -1;
-            var v0 = 0;
-
-            var uv0 = new Vector2(u0, v0);
-            var uv1 = new Vector2(u1, v1);
-            var uv2 = uv0; uv2.y = uv1.y;
-            var uv3 = uv1; uv3.y = uv0.y;
-
-
-            uvs.Add(uv0);
-            uvs.Add(uv1);
-            uvs.Add(uv2);
-            uvs.Add(uv3);
-
-
-            mesh.SetVertices(verticies);
-            mesh.SetUVs(0, uvs);
-            mesh.SetTriangles(triangles, 0);
-        }
+        
         private GameObject CreateObject(Transform parent, string name, int sortingOrder, Material material)
         {
             var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
