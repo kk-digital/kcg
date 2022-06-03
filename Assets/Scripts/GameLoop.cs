@@ -1,6 +1,9 @@
 using UnityEngine;
 using Enums;
 using TileProperties;
+
+using SystemView;
+
 public class GameLoop : MonoBehaviour
 {
     [SerializeField] private Material material;
@@ -10,6 +13,9 @@ public class GameLoop : MonoBehaviour
     private const int FPS = 60;
     public TilePropertiesManager TilePropertiesManager;
     // Method for setting everything up, for like init GameManager for example
+
+    public SystemState CurrentSystemState;
+
     private void Init()
     {
 
@@ -17,10 +23,11 @@ public class GameLoop : MonoBehaviour
         if (SceneManager.Instance != null)
         {
             SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
-
         }
         
         Application.targetFrameRate = FPS; // Cap at 60 FPS
+
+        CurrentSystemState = new SystemState();
 
         Agent.SpawnerSystem.Instance.SpawnPlayer(material);
         agents = new Agent.List();
