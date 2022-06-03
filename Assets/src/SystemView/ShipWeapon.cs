@@ -49,7 +49,6 @@ namespace SystemView
 
                 // todo: Math doesn't like vertical lines.
                 Projectile.Slope = (Target.PosY - Self.PosY) / (Target.PosX - Self.PosX);
-                Projectile.NegativeDirection = (Target.PosX - Self.PosX) < 0.0f;
             //}
 
             Projectile.DistanceTravelled = 0.0f;
@@ -59,7 +58,7 @@ namespace SystemView
 
             Projectile.ShieldPenetration = ShieldPenetration;
 
-            Projectile.ProjectileVelocity = ProjectileVelocity;
+            Projectile.ProjectileVelocity = ProjectileVelocity * (((Target.PosX - Self.PosX) < 0.0f) ? -1 : 1);
 
             Projectile.Damage = Damage;
 
@@ -84,21 +83,20 @@ namespace SystemView
 
             // todo: Math doesn't like vertical lines.
             Projectile.Slope = (float)(Math.Sin(Self.Rotation) / Math.Cos(Self.Rotation));
-            Projectile.NegativeDirection = (float)Math.Cos(Self.Rotation) < 0.0f;
-
-            Projectile.DistanceTravelled = 0.0f;
-            Projectile.Range = Range + (float)Math.Sqrt(Self.VelX * Self.VelX + Self.VelY * Self.VelY) * Range / ProjectileVelocity;
-
-            Projectile.ProjectileColor = ProjectileColor;
-
-            Projectile.ShieldPenetration = ShieldPenetration;
 
             bool Reverse = Math.Cos(Self.Rotation) < 0.0f && Self.VelX > 0.0f
                         || Math.Cos(Self.Rotation) > 0.0f && Self.VelX < 0.0f
                         || Math.Sin(Self.Rotation) < 0.0f && Self.VelY > 0.0f
                         || Math.Sin(Self.Rotation) > 0.0f && Self.VelY < 0.0f;
 
-            Projectile.ProjectileVelocity = ProjectileVelocity + (float)Math.Sqrt(Self.VelX * Self.VelX + Self.VelY * Self.VelY) * (Reverse ? -1 : 1);
+            Projectile.DistanceTravelled = 0.0f;
+            Projectile.Range = Range + (float)Math.Sqrt(Self.VelX * Self.VelX + Self.VelY * Self.VelY) * (Reverse ? -1 : 1) * Range / ProjectileVelocity;
+
+            Projectile.ProjectileColor = ProjectileColor;
+
+            Projectile.ShieldPenetration = ShieldPenetration;
+
+            Projectile.ProjectileVelocity = (ProjectileVelocity + (float)Math.Sqrt(Self.VelX * Self.VelX + Self.VelY * Self.VelY) * (Reverse ? -1 : 1)) * ((Math.Cos(Self.Rotation) < 0.0) ? -1 : 1);
 
             Projectile.Damage = Damage;
 

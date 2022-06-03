@@ -14,7 +14,6 @@ namespace SystemView
         public float PosX, PosY;
 
         public float Slope;
-        public bool NegativeDirection;
 
         public float DistanceTravelled;
         public float Range;
@@ -47,7 +46,7 @@ namespace SystemView
                 // (3) (m^2 + 1) * dx^2 = d^2   =>   dx = ± -----------
                 //                                          √ (m^2 + 1)
 
-                float dx = d / (float)Math.Sqrt(Slope * Slope + 1) * (NegativeDirection ? -1 : 1);
+                float dx = d / (float)Math.Sqrt(Slope * Slope + 1);
 
                 PosX += dx;
                 PosY += dx * Slope;
