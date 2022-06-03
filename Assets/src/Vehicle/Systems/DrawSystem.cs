@@ -99,7 +99,7 @@ namespace Vehicle
             Init = true;
         }
 
-        // Drawing in Exectue (Execute runs every frame)
+        // Drawing
         public void Draw()
         {
             if (Init)
