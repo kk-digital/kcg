@@ -28,6 +28,8 @@ namespace SystemView
 
         public float RotationalPosition;
 
+        public float Mass;
+
         // Fast inverse square root using Quake's floating bit hack
         // Using more accurate 0x5f375a86 instead of the original 0x5f3759df
         static unsafe float Q_rsqrt(float number)
@@ -292,6 +294,39 @@ namespace SystemView
             RotationalPosition = Start.RotationalPosition;
 
             return false;
+        }
+
+        public float[] GetVelocityAt(float Pos)
+        {
+            // (1) x = cos(ω) * (cos(M) * a - √(a^2 - b^2)) - sin(ω) * sin(M) * b + cx
+
+            // (2) y = sin(ω) * (cos(M) * a - √(a^2 - b^2)) + cos(ω) * sin(M) * b + cy
+
+            //          𐤃x
+            // (3) vx = -- = -a * sin(M) * cos(ω) - b * cos(M) * sin(ω)
+            //          𐤃M
+
+            //          𐤃y
+            // (4) vy = -- =  b * cos(M) * cos(ω) - a * sin(M) * sin(ω)
+            //          𐤃M
+
+            float[] Velocity = new float[2];
+
+            float possin = (float)Math.Sin(Pos);
+            float poscos = (float)Math.Cos(Pos);
+
+            float rotsin = (float)Math.Sin(Rotation);
+            float rotcos = (float)Math.Cos(Rotation);
+
+            Velocity[0] = -SemiMajorAxis * possin * rotcos - SemiMinorAxis * poscos * rotsin;
+            Velocity[1] =  SemiMinorAxis * poscos * rotcos - SemiMajorAxis * possin * rotsin;
+
+            return Velocity;
+        }
+
+        public float[] GetVelocity()
+        {
+            return GetVelocityAt(RotationalPosition);
         }
     }
 }
