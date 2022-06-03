@@ -15,6 +15,7 @@ namespace SystemView
         // ω = rotation
         // E = distance from focal point to radius
         // e = eccentricity
+        // M = mean anomaly (rotational position)
         // cx = x coordinate of center
         // cy = y coordinate of center
 
@@ -249,8 +250,31 @@ namespace SystemView
             float TimeToEncounter = 0.0f;
             float TargetRotationalMovement = 0.0f;
 
-            // This could be an integral. However, after messing around with it I'm not sure it would be any faster
-            // than this estimate, and this is definitely a lot easier and simpler to read.
+            // WIP math for further optimizations to get rid of this for loop
+
+            // a, b, M = values for current object
+            // A, B, m = values for destination object
+
+            // X = segment length
+
+            // (1) x(M) = cos(ω) * (cos(M) * a - √(a^2 - b^2)) - sin(ω) * sin(M) * b
+
+            // (2) y(M) = sin(ω) * (cos(M) * a - √(a^2 - b^2)) + cos(ω) * sin(M) * b
+
+            //                                                a^2
+            // (3) h(M) = √(x(M)^2 + y(M)^2)      =>   h(M) = --- * (cos(2 M) + 3) - 2a * √((a - b) * (a + b)) * cos(M) - b^2 * cos(M)^2
+            //                                                 2
+
+            //                                                X
+            // (4) t(X) = x * h(M + X)^2          =>   t(X) = - * (a^2 * (cos(2(M + X)) + 3) - 4a * √((a - b) * (a + b)) * cos(M + X) - 2b^2 * cos(M + X)^2)
+            //                                                2
+
+            //                                                x^4 * (-4a * √(a^2-b^2) * cos(M+x) + a^2 * cos(2(M + x)) + 3a^2 - 2b^2 * cos(M+x)^2)^2
+            // (5) d(x) = x * (t(x) / h(m)^2)^2   =>   d(x) = --------------------------------------------------------------------------------------
+            //                                                   (-4A * √(A^2-B^2) * cos(m+x) + A^2 * cos(2(m + x)) + 3A^2 - 2B^2 * cos(m+x)^2)^2
+
+            // (6) todo
+
             int segments = 128 + (int)((Periapsis + Apoapsis) * 16);
             for (int i = 0; i < segments; i++)
             {
@@ -327,6 +351,45 @@ namespace SystemView
         public float[] GetVelocity()
         {
             return GetVelocityAt(RotationalPosition);
+        }
+
+        // TODO: finish this function at some point 
+        public void CalculateFromPosition(float PosX, float PosY, float VelX, float VelY, float ObjectX, float ObjectY)
+        {
+            // (1) x = cos(ω) * (cos(M) * a - √(a^2 - b^2)) - sin(ω) * sin(M) * b + cx
+
+            // (2) y = sin(ω) * (cos(M) * a - √(a^2 - b^2)) + cos(ω) * sin(M) * b + cy
+
+            //          𐤃x
+            // (3) vx = -- = -a * sin(M) * cos(ω) - b * cos(M) * sin(ω)                                            =>   a =  csc(M) * sec(ω) * (-vx - b * cos(M) * sin(ω))
+            //          𐤃M
+
+            //          𐤃y
+            // (4) vy = -- =  b * cos(M) * cos(ω) - a * sin(M) * sin(ω)                                            =>   b =  sec(M) * sec(ω) * ( vy + a * sin(M) * sin(ω))
+            //          𐤃M
+
+            // (5) a = csc(M) * sec(ω) * (-vx - sec(M) * sec(ω) * ( vy + a * sin(M) * sin(ω)) * cos(M) * sin(ω))   =>   a = -csc(M) * (vx * cos(ω) + vy * sin(ω))
+
+            // (6) b = sec(M) * sec(ω) * ( vy + csc(M) * sec(ω) * (-vx - b * cos(M) * sin(ω)) * sin(M) * sin(ω))   =>   b =  sec(M) * (vy * cos(ω) - vx * sin(ω))
+
+            // (7) x = cos(ω) * (cos(M) * (-csc(M) * (vx * cos(ω) + vy * sin(ω)))
+            //
+            //           (vx * cos(ω) + vy * sin(ω))^2   (vy * cos(ω) - vx * sin(ω))^2
+            //       - √(----------------------------- - -----------------------------))
+            //                      cos(M)^2                        sin(M)^2
+            // 
+            //       - sin(ω) * sin(M) * (sec(M) * (vy * cos(ω) - vx * sin(ω))) + cx
+
+            // (7) x - cx = cos(ω) * (cos(M) * (-csc(M) * (vx * cos(ω) + vy * sin(ω)))
+            //
+            //                (vx * cos(ω) + vy * sin(ω))^2   (vy * cos(ω) - vx * sin(ω))^2
+            //            - √(----------------------------- - -----------------------------))
+            //                           cos(M)^2                        sin(M)^2
+            //
+            //            - sin(ω) * sin(M) * (sec(M) * (vy * cos(ω) - vx * sin(ω)))
+
+            // todo: Solve (7) for ω and then insert it into (2) to solve it for M
+            // todo: Maybe just don't optimize it with this much math and just do it the simple way
         }
     }
 }
