@@ -12,8 +12,6 @@ namespace SystemView
         public SpriteRenderer sr;
         public OrbitRenderer or;
 
-        public Material mat;
-
         public Color orbitColor  = new Color(0.5f, 0.7f, 1.0f, 1.0f);
         public Color planetColor = Color.white;
 

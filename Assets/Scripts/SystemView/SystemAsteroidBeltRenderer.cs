@@ -15,8 +15,6 @@ namespace SystemView
         public GameObject[] GameObjects = new GameObject[0];
         public OrbitRenderer or;
 
-        public Material mat;
-
         public Color orbitColor = new Color(1.0f, 1.0f, 1.0f, 0.5f);
         public Color asteroidColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 
