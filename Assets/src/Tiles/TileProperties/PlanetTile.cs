@@ -12,6 +12,11 @@
         public int FrontTilePropertiesId;
         public int OreTilePropertiesId;
 
+        public int BackSpriteId;
+        public int MidSpriteId;
+        public int FrontSpriteId;
+        public int OreSpriteId;
+
         //Health
         public byte Durability;
 
@@ -24,6 +29,11 @@
             tile.MidTilePropertiesId = -1;
             tile.FrontTilePropertiesId = -1;
             tile.OreTilePropertiesId = -1;
+
+            tile.BackSpriteId = -1;
+            tile.MidSpriteId = -1;
+            tile.FrontSpriteId = -1;
+            tile.OreSpriteId = -1;
 
             return tile;
         }
