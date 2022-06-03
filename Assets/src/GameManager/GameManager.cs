@@ -1,5 +1,4 @@
 using Entitas;
-using src.ecs.Game;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
@@ -13,7 +12,6 @@ public class GameManager : MonoBehaviour
 {
 
     public string filePath = "/SimpleSpriteSheet/Table1.png";
-    private Systems ecsSystems;
 
     //Documentation: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Awake.html
     //Awake is called when the script instance is being loaded.
@@ -30,9 +28,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //TODO: Either put all intialiation in Awake, or put all in Start()
-        TileSpriteLoader.TileSpriteLoader tileSpriteLoader = new TileSpriteLoader.TileSpriteLoader();
-      //  tileSpriteLoader.GetSpriteSheetID(filePath); // finds png, add it to struct list and returns index
-      //  tileSpriteLoader.GetSpriteSheet(0); // returns the sprite struct of the given index
+        
     }
 
     //Documentation: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
@@ -41,8 +37,7 @@ public class GameManager : MonoBehaviour
     {
         //TODO: put per frame calls here
         //Example: Drawing calls
-        ecsSystems.Execute();
-        ecsSystems.Cleanup();
+
     }
 
     /* https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html
@@ -107,11 +102,7 @@ public class GameManager : MonoBehaviour
     public void InitStage1()
     {
         //TODO: Intialize all managers here
-        GameState.TilePropertiesManager.InitStage1();
-        GameState.TileSpriteLoader.InitStage1();
         //Setup ECS system
-        ecsSystems = new GameFeatures(Contexts.sharedInstance);
-        ecsSystems.Initialize();
     }
 
     //Load settings from files and other init, that requires systems to be intialized
@@ -119,14 +110,10 @@ public class GameManager : MonoBehaviour
     {
         //TODO: Start loading the files
         // file loading operations here
-        GameState.TilePropertiesManager.InitStage2();
-        GameState.TileSpriteLoader.InitStage2();
     }
 
     public void TearDown()
     {
         //TODO: Call code to tear down object
-        ecsSystems.TearDown();
-        Contexts.sharedInstance = null;
     }
 }

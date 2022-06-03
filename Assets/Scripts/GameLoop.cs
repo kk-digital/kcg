@@ -6,6 +6,10 @@ using SystemView;
 
 public class GameLoop : MonoBehaviour
 {
+    [SerializeField] private Material material;
+
+    private Agent.List agents;
+    
     private const int FPS = 60;
     public TilePropertiesManager TilePropertiesManager;
     // Method for setting everything up, for like init GameManager for example
@@ -24,6 +28,9 @@ public class GameLoop : MonoBehaviour
         Application.targetFrameRate = FPS; // Cap at 60 FPS
 
         CurrentSystemState = new SystemState();
+
+        Agent.SpawnerSystem.Instance.SpawnPlayer(material);
+        agents = new Agent.List();
     }
     
     private void LoadAssets()
@@ -39,12 +46,13 @@ public class GameLoop : MonoBehaviour
     // Method to update physics
     private void FixedUpdate()
     {
-        
+        ECSInput.ProcessSystem.Instance.Update(ref agents);
+        Agent.ProcessVelocitySystem.Instance.Process(ref agents);
     }
 
     // Method for Drawing
     private void Update()
     {
-        
+        Agent.DrawSystem.Instance.Draw(ref agents);
     }
 }
