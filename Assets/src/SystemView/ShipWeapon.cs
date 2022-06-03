@@ -67,5 +67,42 @@ namespace SystemView
 
             return true;
         }
+
+        public void Fire()
+        {
+            if (Cooldown > 0) return;
+
+            Cooldown = AttackSpeed;
+
+            ShipWeaponProjectile Projectile = new ShipWeaponProjectile();
+
+            Projectile.Self = Self;
+            Projectile.Weapon = this;
+
+            Projectile.PosX = Self.PosX;
+            Projectile.PosY = Self.PosY;
+
+            // todo: Math doesn't like vertical lines.
+            Projectile.Slope = (float)(Math.Sin(Self.Rotation) / Math.Cos(Self.Rotation));
+            Projectile.NegativeDirection = (float)Math.Cos(Self.Rotation) < 0.0f;
+
+            Projectile.DistanceTravelled = 0.0f;
+            Projectile.Range = Range + (float)Math.Sqrt(Self.VelX * Self.VelX + Self.VelY * Self.VelY) * Range / ProjectileVelocity;
+
+            Projectile.ProjectileColor = ProjectileColor;
+
+            Projectile.ShieldPenetration = ShieldPenetration;
+
+            bool Reverse = Math.Cos(Self.Rotation) < 0.0f && Self.VelX > 0.0f
+                        || Math.Cos(Self.Rotation) > 0.0f && Self.VelX < 0.0f
+                        || Math.Sin(Self.Rotation) < 0.0f && Self.VelY > 0.0f
+                        || Math.Sin(Self.Rotation) > 0.0f && Self.VelY < 0.0f;
+
+            Projectile.ProjectileVelocity = ProjectileVelocity + (float)Math.Sqrt(Self.VelX * Self.VelX + Self.VelY * Self.VelY) * (Reverse ? -1 : 1);
+
+            Projectile.Damage = Damage;
+
+            ProjectilesFired.Add(Projectile);
+        }
     }
 }

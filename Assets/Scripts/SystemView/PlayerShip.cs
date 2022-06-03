@@ -16,7 +16,7 @@ namespace SystemView
 
         public float rotation = 0.0f;
 
-        public float RotationSpeedModifier = 1.0f;
+        public float RotationSpeedModifier = 2.0f;
 
         public bool Reverse = false;
 
@@ -42,6 +42,20 @@ namespace SystemView
             Ship.Shield = Ship.MaxShield = 50000;
 
             Ship.ShieldRegenerationRate = 2;
+
+            ShipWeapon Weapon = new ShipWeapon();
+
+            Weapon.ProjectileColor = Color.white;
+
+            Weapon.Range = 15.0f;
+            Weapon.ShieldPenetration = 0.1f;
+            Weapon.ProjectileVelocity = 5.0f;
+            Weapon.Damage = 1000;
+            Weapon.AttackSpeed = 400;
+            Weapon.Cooldown = 0;
+            Weapon.Self = Ship;
+
+            Ship.Weapons.Add(Weapon);
         }
 
         private void Update()
@@ -81,7 +95,12 @@ namespace SystemView
             Ship.VelX = (3.0f * Ship.VelX + (float)Math.Cos(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / 4.0f;
             Ship.VelY = (3.0f * Ship.VelY + (float)Math.Sin(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / 4.0f;
 
-            Renderer.shipColor.b = Ship.Health / Ship.MaxHealth;
+            Renderer.shipColor.b = (float) Ship.Health / Ship.MaxHealth;
+
+            Ship.Weapons[0].Cooldown -= (int)(CurrentTime * 1000.0f);
+            if (Ship.Weapons[0].Cooldown < 0) Ship.Weapons[0].Cooldown = 0;
+
+            if (Input.GetKey("space")) Ship.Weapons[0].Fire();
         }
     }
 }

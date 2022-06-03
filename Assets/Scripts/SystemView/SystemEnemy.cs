@@ -56,7 +56,7 @@ namespace SystemView
 
             Ship.UpdatePosition(CurrentTime / 100.0f);
 
-            Renderer.shipColor.r = Ship.Health / Ship.MaxHealth;
+            Renderer.shipColor.r = (float) Ship.Health / Ship.MaxHealth;
         }
     }
 }
