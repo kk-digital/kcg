@@ -1,9 +1,9 @@
 using Entitas;
 using UnityEngine;
 
-namespace Agent
+namespace ECSInput
 {
-    public class VelocityComponent : IComponent
+    public class XYComponent : IComponent
     {
         public Vector2 Value;
     }

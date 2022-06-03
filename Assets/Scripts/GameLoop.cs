@@ -40,7 +40,7 @@ public class GameLoop : MonoBehaviour
     private void FixedUpdate()
     {
         ECSInput.ProcessSystem.Instance.Update(ref agents);
-        Agent.ProcessVelocitySystem.Instance.Process(ref agents);
+        Agent.MovableSystem.Instance.CalculatePosition(ref agents);
     }
 
     // Method for Drawing
