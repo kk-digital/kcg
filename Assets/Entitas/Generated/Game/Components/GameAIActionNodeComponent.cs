@@ -8,11 +8,11 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public AI.ActionNodeComponent actionNode { get { return (AI.ActionNodeComponent)GetComponent(GameComponentsLookup.ActionNode); } }
-    public bool hasActionNode { get { return HasComponent(GameComponentsLookup.ActionNode); } }
+    public AI.ActionNodeComponent aIActionNode { get { return (AI.ActionNodeComponent)GetComponent(GameComponentsLookup.AIActionNode); } }
+    public bool hasAIActionNode { get { return HasComponent(GameComponentsLookup.AIActionNode); } }
 
-    public void AddActionNode(int newActionNodeID, int newParentNodeID, int newPlannerID, AI.GoapState newWorldState, int newPathCost, int newHeuristicCost) {
-        var index = GameComponentsLookup.ActionNode;
+    public void AddAIActionNode(int newActionNodeID, int newParentNodeID, int newPlannerID, AI.GoapState newWorldState, int newPathCost, int newHeuristicCost) {
+        var index = GameComponentsLookup.AIActionNode;
         var component = (AI.ActionNodeComponent)CreateComponent(index, typeof(AI.ActionNodeComponent));
         component.ActionNodeID = newActionNodeID;
         component.ParentNodeID = newParentNodeID;
@@ -23,8 +23,8 @@ public partial class GameEntity {
         AddComponent(index, component);
     }
 
-    public void ReplaceActionNode(int newActionNodeID, int newParentNodeID, int newPlannerID, AI.GoapState newWorldState, int newPathCost, int newHeuristicCost) {
-        var index = GameComponentsLookup.ActionNode;
+    public void ReplaceAIActionNode(int newActionNodeID, int newParentNodeID, int newPlannerID, AI.GoapState newWorldState, int newPathCost, int newHeuristicCost) {
+        var index = GameComponentsLookup.AIActionNode;
         var component = (AI.ActionNodeComponent)CreateComponent(index, typeof(AI.ActionNodeComponent));
         component.ActionNodeID = newActionNodeID;
         component.ParentNodeID = newParentNodeID;
@@ -35,8 +35,8 @@ public partial class GameEntity {
         ReplaceComponent(index, component);
     }
 
-    public void RemoveActionNode() {
-        RemoveComponent(GameComponentsLookup.ActionNode);
+    public void RemoveAIActionNode() {
+        RemoveComponent(GameComponentsLookup.AIActionNode);
     }
 }
 
@@ -50,17 +50,17 @@ public partial class GameEntity {
 //------------------------------------------------------------------------------
 public sealed partial class GameMatcher {
 
-    static Entitas.IMatcher<GameEntity> _matcherActionNode;
+    static Entitas.IMatcher<GameEntity> _matcherAIActionNode;
 
-    public static Entitas.IMatcher<GameEntity> ActionNode {
+    public static Entitas.IMatcher<GameEntity> AIActionNode {
         get {
-            if (_matcherActionNode == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.ActionNode);
+            if (_matcherAIActionNode == null) {
+                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.AIActionNode);
                 matcher.componentNames = GameComponentsLookup.componentNames;
-                _matcherActionNode = matcher;
+                _matcherAIActionNode = matcher;
             }
 
-            return _matcherActionNode;
+            return _matcherAIActionNode;
         }
     }
 }

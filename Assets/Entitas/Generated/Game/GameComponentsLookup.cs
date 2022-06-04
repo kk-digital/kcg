@@ -12,41 +12,51 @@ public static class GameComponentsLookup {
     public const int AgentMovable = 1;
     public const int AgentPlayer = 2;
     public const int AgentPosition2D = 3;
-    public const int AgentSprite2D = 4;
-    public const int ECSInput = 5;
-    public const int ECSInputXY = 6;
-    public const int Inventory = 7;
-    public const int InventoryID = 8;
-    public const int InventorySize = 9;
-    public const int InventorySlots = 10;
-    public const int ItemAttachedInventory = 11;
-    public const int Item = 12;
-    public const int ItemMove = 13;
-    public const int ItemPosition2D = 14;
-    public const int ItemStack = 15;
-    public const int ParticleEmitter2dPosition = 16;
-    public const int ParticleEmitterState = 17;
-    public const int ParticlePosition2D = 18;
-    public const int ParticleState = 19;
-    public const int Projectile = 20;
-    public const int ProjectileType = 21;
-    public const int srcecsGameParticleParticleSpawnGameObject = 22;
-    public const int srcecsGameParticleParticleSpawnParticle = 23;
-    public const int srcecsGameParticleParticleSpawnPosition = 24;
-    public const int VehicleComponentCollider = 25;
-    public const int VehicleID = 26;
-    public const int VehiclePosition2D = 27;
-    public const int VehicleSprite2D = 28;
-    public const int VehicleVelocity = 29;
+    public const int AgentPositionDiscrete2D = 4;
+    public const int AgentSprite2D = 5;
+    public const int AIAction = 6;
+    public const int AIActionNode = 7;
+    public const int AIAgentPlanner = 8;
+    public const int AIGoal = 9;
+    public const int ECSInput = 10;
+    public const int ECSInputXY = 11;
+    public const int Inventory = 12;
+    public const int InventoryID = 13;
+    public const int InventorySize = 14;
+    public const int InventorySlots = 15;
+    public const int ItemAttachedInventory = 16;
+    public const int Item = 17;
+    public const int ItemMove = 18;
+    public const int ItemPosition2D = 19;
+    public const int ItemStack = 20;
+    public const int ParticleEmitter2dPosition = 21;
+    public const int ParticleEmitterState = 22;
+    public const int ParticlePosition2D = 23;
+    public const int ParticleState = 24;
+    public const int Projectile = 25;
+    public const int ProjectileType = 26;
+    public const int srcecsGameParticleParticleSpawnGameObject = 27;
+    public const int srcecsGameParticleParticleSpawnParticle = 28;
+    public const int srcecsGameParticleParticleSpawnPosition = 29;
+    public const int VehicleComponentCollider = 30;
+    public const int VehicleID = 31;
+    public const int VehiclePosition2D = 32;
+    public const int VehicleSprite2D = 33;
+    public const int VehicleVelocity = 34;
 
-    public const int TotalComponents = 30;
+    public const int TotalComponents = 35;
 
     public static readonly string[] componentNames = {
         "AgentID",
         "AgentMovable",
         "AgentPlayer",
         "AgentPosition2D",
+        "AgentPositionDiscrete2D",
         "AgentSprite2D",
+        "AIAction",
+        "AIActionNode",
+        "AIAgentPlanner",
+        "AIGoal",
         "ECSInput",
         "ECSInputXY",
         "Inventory",
@@ -79,7 +89,12 @@ public static class GameComponentsLookup {
         typeof(Agent.MovableComponent),
         typeof(Agent.PlayerComponent),
         typeof(Agent.Position2DComponent),
+        typeof(Agent.PositionDiscrete2DComponent),
         typeof(Agent.Sprite2DComponent),
+        typeof(AI.ActionComponent),
+        typeof(AI.ActionNodeComponent),
+        typeof(AI.AgentPlannerComponent),
+        typeof(AI.GoalComponent),
         typeof(ECSInput.Component),
         typeof(ECSInput.XYComponent),
         typeof(Inventory.Component),

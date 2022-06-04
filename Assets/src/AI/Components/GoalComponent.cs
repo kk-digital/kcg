@@ -6,7 +6,7 @@ using Entitas.CodeGeneration.Attributes;
 
 namespace AI
 {
-    sealed public class GoalComponent: IComponent
+    public struct GoalComponent: IComponent
     {
         [PrimaryEntityIndex]
         public int GoalID;

@@ -20,18 +20,18 @@ namespace AI
 
         public void Update()
         {
-            var group = context.agent.GetGroup(AgentMatcher.Planner);
-            foreach (AgentEntity entity in group)
+            var group = context.game.GetGroup(GameMatcher.AIAgentPlanner);
+            foreach (GameEntity entity in group)
             {
                 // Get action.
-                Queue<int> Actions = entity.planner.ActionIDs;
+                Queue<int> Actions = entity.aIAgentPlanner.ActionIDs;
                 if (Actions.Count == 0)
                 {
                     GameEntity NextGoalEntity = GetNextGoal(entity);
                     if (NextGoalEntity == null)
                         continue;
                     
-                    MakePlan(entity, NextGoalEntity.goal.GoalState);
+                    MakePlan(entity, NextGoalEntity.aIGoal.GoalState);
                 }
 
                 //int CurrentActionID = entity.planner.RunningActionID;
@@ -49,49 +49,49 @@ namespace AI
                 //}
 
                 // Get Next Action.
-                int ActionID = entity.planner.ActionIDs.Dequeue();
+                int ActionID = entity.aIAgentPlanner.ActionIDs.Dequeue();
                 //entity.planner.RunningActionID = ActionID;
                 //entity.planner.ActionStartTime = DateTime.Now.Millisecond;
-                GameEntity ActionEntity = context.game.GetEntityWithAction(ActionID);
+                GameEntity ActionEntity = context.game.GetEntityWithAIAction(ActionID);
 
                 // Update Agent(Testing purpose) Todo: Move this code out of planner System.
-                var Effects = ActionEntity.action.Effects;
+                var Effects = ActionEntity.aIAction.Effects;
                 // Todo: State class with get method.
                 if (Effects.states.ContainsKey("pos"))
                     // Todo: This doen't look good. Look into how I should do this in c#.
-                    entity.positionDiscrete2D.Value = (Vector2Int)ActionEntity.action.Effects.states["pos"];
+                    entity.ReplaceAgentPositionDiscrete2D((Vector2Int)ActionEntity.aIAction.Effects.states["pos"]);
                 else
                     Debug.Log("There is no key called pos.");
             }
         }
 
         // Todo: Very Expensive call. Precalculate some node connections.
-        private void MakePlan(AgentEntity entity, GoapState GoalState)
+        private void MakePlan(GameEntity entity, GoapState GoalState)
         {
             // Get List of all possible Actions.
-            GameEntity[] Actions = context.game.GetGroup(GameMatcher.Action).GetEntities();
+            GameEntity[] Actions = context.game.GetGroup(GameMatcher.AIAction).GetEntities();
 
             GoapAStar goapAStar = new GoapAStar();
-            if (!goapAStar.CreateActionPath(GoalState, entity.planner.CurrentWorldState, Actions, entity.planner.ActionIDs))
+            if (!goapAStar.CreateActionPath(GoalState, entity.aIAgentPlanner.CurrentWorldState, Actions, entity.aIAgentPlanner.ActionIDs))
                 Debug.Log("No available Plan");
         }
 
-        private GameEntity GetNextGoal(AgentEntity entity)
+        private GameEntity GetNextGoal(GameEntity entity)
         {
-            List<int> Goals = entity.planner.GoalIDs;
+            List<int> Goals = entity.aIAgentPlanner.GoalIDs;
             if (Goals.Count == 0)
                 return null;
 
-            GameEntity NextGoalEntity = context.game.GetEntityWithGoal(Goals[0]); ;
+            GameEntity NextGoalEntity = context.game.GetEntityWithAIGoal(Goals[0]); ;
             foreach (int GoalID in Goals)
             {
-                GameEntity GoalEntity = context.game.GetEntityWithGoal(GoalID);
-                if (NextGoalEntity.goal.Priority < GoalEntity.goal.Priority)
+                GameEntity GoalEntity = context.game.GetEntityWithAIGoal(GoalID);
+                if (NextGoalEntity.aIGoal.Priority < GoalEntity.aIGoal.Priority)
                 {
                     NextGoalEntity = GoalEntity;
                 }
             }
-            Goals.Remove(NextGoalEntity.goal.GoalID);
+            Goals.Remove(NextGoalEntity.aIGoal.GoalID);
             return NextGoalEntity;
         }
     }

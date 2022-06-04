@@ -48,7 +48,7 @@ namespace AI
 
             for (int i = 0; i < ActionsList.Length; i++)
             {
-                if (!ActionsList[i].action.Effects.MatchCondition(Parent.WorldState))
+                if (!ActionsList[i].aIAction.Effects.MatchCondition(Parent.WorldState))
                 {
                     continue;
                 }
@@ -60,10 +60,10 @@ namespace AI
             foreach (GameEntity action in NeighborActions)
             {
                 GoapState NewWorldState = new GoapState(new Dictionary<string, object>());
-                NewWorldState = GoapState.ApplyEffect(Parent.WorldState, action.action.PreConditions);
+                NewWorldState = GoapState.ApplyEffect(Parent.WorldState, action.aIAction.PreConditions);
                 if (GoalState.MatchCondition(NewWorldState)) // Check If goal was reached.
                 {
-                    ListofActions.Enqueue(action.action.ActionID);
+                    ListofActions.Enqueue(action.aIAction.ActionID);
                     Node node = Parent;
                     while (node != RootNode)
                     {
@@ -73,7 +73,7 @@ namespace AI
                     return true;
                 }
 
-                int NewPathCost = Parent.PathCost + action.action.Cost;
+                int NewPathCost = Parent.PathCost + action.aIAction.Cost;
 
                 // Check if node in this position Exist.
                 bool HasNode = false;
@@ -86,7 +86,7 @@ namespace AI
                         {
                             NodeIt.PathCost = NewPathCost;
                             NodeIt.TotalCost = NewPathCost + NodeIt.HeuristicCost;
-                            NodeIt.LinkedActionID = action.action.ActionID;
+                            NodeIt.LinkedActionID = action.aIAction.ActionID;
                         }
                         break;
                     }
@@ -102,7 +102,7 @@ namespace AI
                         {
                             NodeIt.PathCost = NewPathCost;
                             NodeIt.TotalCost = NewPathCost + NodeIt.HeuristicCost;
-                            NodeIt.LinkedActionID = action.action.ActionID;
+                            NodeIt.LinkedActionID = action.aIAction.ActionID;
                         }
                         break;
                     }
@@ -111,7 +111,7 @@ namespace AI
                 // Add List in OpenList
                 if (!HasNode)
                 {
-                    Node node = new Node(Parent, NewWorldState, action.action.ActionID, 
+                    Node node = new Node(Parent, NewWorldState, action.aIAction.ActionID, 
                         NewPathCost, GetHeuristicWeight(NewWorldState, GoalState));
                     OpenList.Add(node);
                 }

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace AI
 {
-    sealed public class ActionNodeComponent : IComponent
+    public struct ActionNodeComponent : IComponent
     {
         [PrimaryEntityIndex]
         public int          ActionNodeID;

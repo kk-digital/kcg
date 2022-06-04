@@ -27,7 +27,7 @@ public class AIGridWorldTest : MonoBehaviour
 
     Contexts context;
     
-    AgentEntity agent;
+    GameEntity agent;
 
     // Systems.
     AI.PlannerSystem planner;
@@ -73,7 +73,7 @@ public class AIGridWorldTest : MonoBehaviour
 
     private void UpdateBord()
     {
-        Vector2Int NewPos = agent.positionDiscrete2D.Value;
+        Vector2Int NewPos = agent.agentPositionDiscrete2D.Value;
         map[CurrentAgentPos.x, CurrentAgentPos.y] = SquareType.AgentPathSquare;
 
         CurrentAgentPos = NewPos;
@@ -115,14 +115,14 @@ public class AIGridWorldTest : MonoBehaviour
         GoalState.states.Add("pos", GoalPos);
         int GoalID = 0;
         GameEntity Goal = context.game.CreateEntity();
-        Goal.AddGoal(GoalID, GoalState, 1);
+        Goal.AddAIGoal(GoalID, GoalState, 1);
 
         GoapState initialWorldState = new GoapState(new Dictionary<string, object>());
         initialWorldState.states.Add("pos", CurrentAgentPos);
 
-        agent = context.agent.CreateEntity();
-        agent.AddPositionDiscrete2D(CurrentAgentPos);
-        agent.AddPlanner(0, new Queue<int>(), new List<int>() { GoalID }, initialWorldState);
+        agent = context.game.CreateEntity();
+        agent.AddAgentPositionDiscrete2D(CurrentAgentPos);
+        agent.AddAIAgentPlanner(0, new Queue<int>(), new List<int>() { GoalID }, initialWorldState);
 
         int numRows = map.GetLength(0);
         int numColls = map.GetLength(1);
@@ -160,7 +160,7 @@ public class AIGridWorldTest : MonoBehaviour
 
                         GameEntity entityAction = context.game.CreateEntity();
                         ActionID++;
-                        entityAction.AddAction(ActionID, PreConditions, Effects, 1);
+                        entityAction.AddAIAction(ActionID, PreConditions, Effects, 1);
                     }
                 }
             }
