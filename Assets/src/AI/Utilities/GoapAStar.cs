@@ -17,14 +17,14 @@ namespace AI
             TotalCost = PathCost + HeuristicCost;
         }
 
-        public Node Parent;
+        public Node                 Parent;
 
-        public readonly GoapState WorldState;
-        public int LinkedActionID;
+        public readonly GoapState   WorldState;
+        public int                  LinkedActionID;
 
-        public int PathCost;
-        public int HeuristicCost;
-        public int TotalCost;
+        public int                  PathCost;
+        public int                  HeuristicCost;
+        public int                  TotalCost;
     }
     public class GoapAStar
     {
@@ -33,7 +33,7 @@ namespace AI
         Node RootNode;
         GameEntity[] ActionsList;
 
-        public bool CreateActionPath(GoapState WorldState, GoapState GoalState, GameEntity[] Actions, 
+        public bool CreateActionPath(GoapState WorldState, GoapState GoalState, GameEntity[] Actions,
             Queue<int> ListofActions)
         {
             ActionsList = Actions;
@@ -61,7 +61,9 @@ namespace AI
             {
                 GoapState NewWorldState = new GoapState(new Dictionary<string, object>());
                 NewWorldState = GoapState.ApplyEffect(Parent.WorldState, action.aIAction.PreConditions);
-                if (GoalState.MatchCondition(NewWorldState)) // Check If goal was reached.
+
+                // Check If goal was reached.
+                if (GoalState.MatchCondition(NewWorldState))
                 {
                     ListofActions.Enqueue(action.aIAction.ActionID);
                     Node node = Parent;
@@ -75,71 +77,61 @@ namespace AI
 
                 int NewPathCost = Parent.PathCost + action.aIAction.Cost;
 
-                // Check if node in this position Exist.
-                bool HasNode = false;
-                foreach (Node NodeIt in OpenList)
-                {
-                    if (NodeIt.WorldState == NewWorldState)
-                    {
-                        HasNode = true;
-                        if (NodeIt.PathCost > NewPathCost)
-                        {
-                            NodeIt.PathCost = NewPathCost;
-                            NodeIt.TotalCost = NewPathCost + NodeIt.HeuristicCost;
-                            NodeIt.LinkedActionID = action.aIAction.ActionID;
-                        }
-                        break;
-                    }
+                if (IsNodeOnList(OpenList, NewWorldState, NewPathCost, action.aIAction.ActionID))
+                    continue;
+                if (IsNodeOnList(ClosedList, NewWorldState, NewPathCost, action.aIAction.ActionID))
+                    continue;
 
-                }
-
-                foreach (Node NodeIt in ClosedList)
-                {
-                    if (NodeIt.WorldState == NewWorldState)
-                    {
-                        HasNode = true;
-                        if (NodeIt.PathCost > NewPathCost)
-                        {
-                            NodeIt.PathCost = NewPathCost;
-                            NodeIt.TotalCost = NewPathCost + NodeIt.HeuristicCost;
-                            NodeIt.LinkedActionID = action.aIAction.ActionID;
-                        }
-                        break;
-                    }
-                }
-
-                // Add List in OpenList
-                if (!HasNode)
-                {
-                    Node node = new Node(Parent, NewWorldState, action.aIAction.ActionID, 
-                        NewPathCost, GetHeuristicWeight(NewWorldState, GoalState));
-                    OpenList.Add(node);
-                }
+                // Add new node to OpenList.
+                OpenList.Add(new Node(Parent, NewWorldState, action.aIAction.ActionID,
+                        NewPathCost, GetHeuristicWeight(NewWorldState, GoalState)));
             }
 
             // Choose cheapest node in OpenList
             Node NextNode = null;
             int Cost = int.MaxValue;
-            foreach (Node NodeIt in OpenList)
+            int NodeIndex = -1;
+            for (int i = 0; i < OpenList.Count; i++)
             {
                 // Choose Cheapest Node in OpenList.
+                Node NodeIt = OpenList[i];
                 if (NodeIt.TotalCost < Cost)
                 {
                     NextNode = NodeIt;
                     Cost = NodeIt.TotalCost;
+                    NodeIndex = i;
                 }
             }
 
-            OpenList.Remove(NextNode);
-            ClosedList.Add(NextNode);
-
             if (NextNode != null)
+            {
+                OpenList.RemoveAt(NodeIndex);
+                ClosedList.Add(NextNode);
                 CreateActionPath(GoalState, NextNode, ListofActions);
+            }
             
-
             return false;
         }
 
+        private bool IsNodeOnList(List<Node> List, GoapState WorldState, int PathCost, int ActionID)
+        {
+            foreach (Node NodeIt in OpenList)
+            {
+                if (NodeIt.WorldState == WorldState)
+                {
+                    if (NodeIt.PathCost > PathCost)
+                    {
+                        NodeIt.PathCost = PathCost;
+                        NodeIt.TotalCost = PathCost + NodeIt.HeuristicCost;
+                        NodeIt.LinkedActionID = ActionID;
+                    }
+                    return true;
+                }
+
+            }
+            return false;
+        }
+       
         private int GetHeuristicWeight(GoapState WorldState, GoapState GoalState)
         {
             GoapState MissingStates = GoalState.GetMissing(WorldState);

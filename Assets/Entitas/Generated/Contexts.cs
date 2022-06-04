@@ -60,8 +60,6 @@ public partial class Contexts {
 
     public const string AgentID = "AgentID";
     public const string AIAction = "AIAction";
-    public const string AIActionNodeActionNodeID = "AIActionNodeActionNodeID";
-    public const string AIActionNodeParentNodeID = "AIActionNodeParentNodeID";
     public const string AIAgentPlanner = "AIAgentPlanner";
     public const string AIGoal = "AIGoal";
     public const string InventoryID = "InventoryID";
@@ -80,16 +78,6 @@ public partial class Contexts {
             AIAction,
             game.GetGroup(GameMatcher.AIAction),
             (e, c) => ((AI.ActionComponent)c).ActionID));
-
-        game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
-            AIActionNodeActionNodeID,
-            game.GetGroup(GameMatcher.AIActionNode),
-            (e, c) => ((AI.ActionNodeComponent)c).ActionNodeID));
-
-        game.AddEntityIndex(new Entitas.EntityIndex<GameEntity, int>(
-            AIActionNodeParentNodeID,
-            game.GetGroup(GameMatcher.AIActionNode),
-            (e, c) => ((AI.ActionNodeComponent)c).ParentNodeID));
 
         game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
             AIAgentPlanner,
@@ -131,14 +119,6 @@ public static class ContextsExtensions {
 
     public static GameEntity GetEntityWithAIAction(this GameContext context, int ActionID) {
         return ((Entitas.PrimaryEntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.AIAction)).GetEntity(ActionID);
-    }
-
-    public static GameEntity GetEntityWithAIActionNodeActionNodeID(this GameContext context, int ActionNodeID) {
-        return ((Entitas.PrimaryEntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.AIActionNodeActionNodeID)).GetEntity(ActionNodeID);
-    }
-
-    public static System.Collections.Generic.HashSet<GameEntity> GetEntitiesWithAIActionNodeParentNodeID(this GameContext context, int ParentNodeID) {
-        return ((Entitas.EntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.AIActionNodeParentNodeID)).GetEntities(ParentNodeID);
     }
 
     public static GameEntity GetEntityWithAIAgentPlanner(this GameContext context, int AgentPlannerID) {

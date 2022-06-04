@@ -9,12 +9,12 @@ namespace AI
     public struct ActionComponent : IComponent
     {
         [PrimaryEntityIndex]
-        public int ActionID;
+        public int          ActionID;
 
-        public GoapState PreConditions;
-        public GoapState Effects;
+        public GoapState    PreConditions;
+        public GoapState    Effects;
 
-        //public int Duration;  // How long it takes to execute the action in miliseconds.
-        public int      Cost;
+        public int          Duration;  // How long it takes to execute the action in miliseconds.
+        public int          Cost;
     }
 }

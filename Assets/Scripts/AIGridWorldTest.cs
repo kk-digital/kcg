@@ -30,7 +30,8 @@ public class AIGridWorldTest : MonoBehaviour
     GameEntity agent;
 
     // Systems.
-    AI.PlannerSystem planner;
+    PlannerSystem           planner;
+    ActionControllerSystem  ActionController;
 
     SquareType[,] map;
     Vector2Int CurrentAgentPos = new Vector2Int(3, 0);
@@ -39,7 +40,8 @@ public class AIGridWorldTest : MonoBehaviour
     public void Start()
     {
         context = Contexts.sharedInstance;
-        planner = new AI.PlannerSystem();
+        planner = new PlannerSystem();
+        ActionController = new ActionControllerSystem();
 
         if (!Init)
         {
@@ -48,6 +50,7 @@ public class AIGridWorldTest : MonoBehaviour
         }
 
         planner.Initialize();
+        ActionController.Initialize();
     }
 
     private bool IsValidPosition(Vector2Int pos)
@@ -90,6 +93,7 @@ public class AIGridWorldTest : MonoBehaviour
                 DestroyImmediate(mr.gameObject);
 
         planner.Update();
+        ActionController.Update();
 
         UpdateBord();
         DrawBoard();
@@ -122,7 +126,7 @@ public class AIGridWorldTest : MonoBehaviour
 
         agent = context.game.CreateEntity();
         agent.AddAgentPositionDiscrete2D(CurrentAgentPos);
-        agent.AddAIAgentPlanner(0, new Queue<int>(), new List<int>() { GoalID }, initialWorldState);
+        agent.AddAIAgentPlanner(0, new Queue<int>(), new List<ActionInfo>(), new List<int>() { GoalID }, initialWorldState);
 
         int numRows = map.GetLength(0);
         int numColls = map.GetLength(1);
@@ -133,7 +137,7 @@ public class AIGridWorldTest : MonoBehaviour
             new Vector2Int(0, 1),
             new Vector2Int(0, -1) };
 
-        int ActionID = 0;   // Todo Declariotion Should be inside loop. It's here for testing purpose. 
+        int ActionID = 0;
         for (int i = 0; i < numRows; i++)
         {
             for (int j = 0; j < numColls; j++)
@@ -160,7 +164,8 @@ public class AIGridWorldTest : MonoBehaviour
 
                         GameEntity entityAction = context.game.CreateEntity();
                         ActionID++;
-                        entityAction.AddAIAction(ActionID, PreConditions, Effects, 1);
+                        int DurationTime = 200; // Miliseconds
+                        entityAction.AddAIAction(ActionID, PreConditions, Effects, DurationTime, 1);
                     }
                 }
             }

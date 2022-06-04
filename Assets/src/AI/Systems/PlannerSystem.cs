@@ -18,7 +18,7 @@ namespace AI
             context = Contexts.sharedInstance;
         }
 
-        public void Update()
+        public void Update() // Todo: This should not be running every frame.
         {
             var group = context.game.GetGroup(GameMatcher.AIAgentPlanner);
             foreach (GameEntity entity in group)
@@ -33,19 +33,6 @@ namespace AI
                     
                     MakePlan(entity, NextGoalEntity.aIGoal.GoalState);
                 }
-
-                // Get Next Action.
-                int ActionID = entity.aIAgentPlanner.ActionIDs.Dequeue();
-                GameEntity ActionEntity = context.game.GetEntityWithAIAction(ActionID);
-
-                // Update Agent(Testing purpose) Todo: Move this code out of planner System.
-                var Effects = ActionEntity.aIAction.Effects;
-                // Todo: State class with get method.
-                if (Effects.states.ContainsKey("pos"))
-                    // Todo: This doen't look good. Look into how I should do this in c#.
-                    entity.ReplaceAgentPositionDiscrete2D((Vector2Int)ActionEntity.aIAction.Effects.states["pos"]);
-                else
-                    Debug.Log("There is no key called pos.");
             }
         }
 

@@ -9,9 +9,9 @@ namespace AI
     public struct GoalComponent: IComponent
     {
         [PrimaryEntityIndex]
-        public int GoalID;
+        public int          GoalID;
 
-        public GoapState GoalState;
-        public int Priority;
+        public GoapState    GoalState;
+        public int          Priority;
     }
 }

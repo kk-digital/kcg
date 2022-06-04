@@ -99,5 +99,10 @@ namespace AI
         {
             return !g1.Equals(g2);
         }
+
+        public override int GetHashCode()
+        {
+            return states.GetHashCode();
+        }
     }
 }

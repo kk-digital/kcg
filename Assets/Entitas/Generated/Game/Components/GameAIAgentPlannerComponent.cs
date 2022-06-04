@@ -11,21 +11,23 @@ public partial class GameEntity {
     public AI.AgentPlannerComponent aIAgentPlanner { get { return (AI.AgentPlannerComponent)GetComponent(GameComponentsLookup.AIAgentPlanner); } }
     public bool hasAIAgentPlanner { get { return HasComponent(GameComponentsLookup.AIAgentPlanner); } }
 
-    public void AddAIAgentPlanner(int newAgentPlannerID, System.Collections.Generic.Queue<int> newActionIDs, System.Collections.Generic.List<int> newGoalIDs, AI.GoapState newCurrentWorldState) {
+    public void AddAIAgentPlanner(int newAgentPlannerID, System.Collections.Generic.Queue<int> newActionIDs, System.Collections.Generic.List<AI.ActionInfo> newActiveActionIDs, System.Collections.Generic.List<int> newGoalIDs, AI.GoapState newCurrentWorldState) {
         var index = GameComponentsLookup.AIAgentPlanner;
         var component = (AI.AgentPlannerComponent)CreateComponent(index, typeof(AI.AgentPlannerComponent));
         component.AgentPlannerID = newAgentPlannerID;
         component.ActionIDs = newActionIDs;
+        component.ActiveActionIDs = newActiveActionIDs;
         component.GoalIDs = newGoalIDs;
         component.CurrentWorldState = newCurrentWorldState;
         AddComponent(index, component);
     }
 
-    public void ReplaceAIAgentPlanner(int newAgentPlannerID, System.Collections.Generic.Queue<int> newActionIDs, System.Collections.Generic.List<int> newGoalIDs, AI.GoapState newCurrentWorldState) {
+    public void ReplaceAIAgentPlanner(int newAgentPlannerID, System.Collections.Generic.Queue<int> newActionIDs, System.Collections.Generic.List<AI.ActionInfo> newActiveActionIDs, System.Collections.Generic.List<int> newGoalIDs, AI.GoapState newCurrentWorldState) {
         var index = GameComponentsLookup.AIAgentPlanner;
         var component = (AI.AgentPlannerComponent)CreateComponent(index, typeof(AI.AgentPlannerComponent));
         component.AgentPlannerID = newAgentPlannerID;
         component.ActionIDs = newActionIDs;
+        component.ActiveActionIDs = newActiveActionIDs;
         component.GoalIDs = newGoalIDs;
         component.CurrentWorldState = newCurrentWorldState;
         ReplaceComponent(index, component);

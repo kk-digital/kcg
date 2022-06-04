@@ -11,22 +11,24 @@ public partial class GameEntity {
     public AI.ActionComponent aIAction { get { return (AI.ActionComponent)GetComponent(GameComponentsLookup.AIAction); } }
     public bool hasAIAction { get { return HasComponent(GameComponentsLookup.AIAction); } }
 
-    public void AddAIAction(int newActionID, AI.GoapState newPreConditions, AI.GoapState newEffects, int newCost) {
+    public void AddAIAction(int newActionID, AI.GoapState newPreConditions, AI.GoapState newEffects, int newDuration, int newCost) {
         var index = GameComponentsLookup.AIAction;
         var component = (AI.ActionComponent)CreateComponent(index, typeof(AI.ActionComponent));
         component.ActionID = newActionID;
         component.PreConditions = newPreConditions;
         component.Effects = newEffects;
+        component.Duration = newDuration;
         component.Cost = newCost;
         AddComponent(index, component);
     }
 
-    public void ReplaceAIAction(int newActionID, AI.GoapState newPreConditions, AI.GoapState newEffects, int newCost) {
+    public void ReplaceAIAction(int newActionID, AI.GoapState newPreConditions, AI.GoapState newEffects, int newDuration, int newCost) {
         var index = GameComponentsLookup.AIAction;
         var component = (AI.ActionComponent)CreateComponent(index, typeof(AI.ActionComponent));
         component.ActionID = newActionID;
         component.PreConditions = newPreConditions;
         component.Effects = newEffects;
+        component.Duration = newDuration;
         component.Cost = newCost;
         ReplaceComponent(index, component);
     }
