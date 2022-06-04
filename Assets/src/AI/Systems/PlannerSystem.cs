@@ -34,24 +34,8 @@ namespace AI
                     MakePlan(entity, NextGoalEntity.aIGoal.GoalState);
                 }
 
-                //int CurrentActionID = entity.planner.RunningActionID;
-                //if (CurrentActionID != -1)
-                //{
-                //    // Check if Action has finished.
-                //    if ((DateTime.Now.Millisecond - entity.planner.ActionStartTime) >= context.game.GetEntityWithAction(CurrentActionID).action.Duration)
-                //    {
-                //        CurrentActionID = -1;
-                //    }
-                //    else
-                //    {
-                //        return;
-                //    }
-                //}
-
                 // Get Next Action.
                 int ActionID = entity.aIAgentPlanner.ActionIDs.Dequeue();
-                //entity.planner.RunningActionID = ActionID;
-                //entity.planner.ActionStartTime = DateTime.Now.Millisecond;
                 GameEntity ActionEntity = context.game.GetEntityWithAIAction(ActionID);
 
                 // Update Agent(Testing purpose) Todo: Move this code out of planner System.
