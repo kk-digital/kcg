@@ -138,6 +138,18 @@ namespace SystemView
                     }
 
                     i--;
+                    continue;
+                }
+
+                Ship.Shield += Ship.ShieldRegenerationRate * CurrentMillis;
+                if (Ship.Shield > Ship.MaxShield) Ship.Shield = Ship.MaxShield;
+            }
+
+            foreach (SystemEnemy Enemy in Enemies)
+            {
+                foreach (ShipWeapon Weapon in Enemy.Ship.Weapons)
+                {
+                    Weapon.TryFiringAt(Player.Ship, CurrentMillis);
                 }
             }
         }
