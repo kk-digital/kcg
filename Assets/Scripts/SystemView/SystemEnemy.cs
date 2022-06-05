@@ -46,6 +46,20 @@ namespace SystemView
             Ship.Shield = Ship.MaxShield = 50000;
 
             Ship.ShieldRegenerationRate = 2;
+
+            ShipWeapon Weapon = new ShipWeapon();
+
+            Weapon.ProjectileColor = Color.white;
+
+            Weapon.Range = 15.0f;
+            Weapon.ShieldPenetration = 0.1f;
+            Weapon.ProjectileVelocity = 5.0f;
+            Weapon.Damage = 4000;
+            Weapon.AttackSpeed = 400;
+            Weapon.Cooldown = 0;
+            Weapon.Self = Ship;
+
+            Ship.Weapons.Add(Weapon);
         }
 
         private void Update()
