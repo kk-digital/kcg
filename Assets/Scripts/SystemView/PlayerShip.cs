@@ -49,9 +49,9 @@ namespace SystemView
 
             Weapon.Range = 15.0f;
             Weapon.ShieldPenetration = 0.1f;
-            Weapon.ProjectileVelocity = 5.0f;
-            Weapon.Damage = 1000;
-            Weapon.AttackSpeed = 400;
+            Weapon.ProjectileVelocity = 8.0f;
+            Weapon.Damage = 400;
+            Weapon.AttackSpeed = 30;
             Weapon.Cooldown = 0;
             Weapon.Self = Ship;
 
