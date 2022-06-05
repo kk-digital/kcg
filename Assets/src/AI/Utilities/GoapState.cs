@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace AI
 {
     // Todo add Register state method.
-    public struct GoapState: IEquatable<GoapState>
+    public class GoapState: IEquatable<GoapState>
     {
         // Todo use more efficient data structure.
         public Dictionary<string, object> states;
@@ -41,7 +42,7 @@ namespace AI
                     continue;
                 }
 
-                if (other.states[key] == states[key])
+                if (Equals(other.states[key], states[key]))
                 {
                     continue;
                 }
@@ -77,7 +78,20 @@ namespace AI
 
         public bool Equals(GoapState Other)
         {
-            return states == Other.states;
+            if (this.states.Count != Other.states.Count)
+            {
+                return false;
+            }
+            if (this.states.Keys.Except(Other.states.Keys).Any())
+            {
+                return false;
+            }
+            foreach (var state in Other.states)
+            {
+                if (!Equals(state.Value, this.states[state.Key]))
+                    return false;
+            }
+            return true;
         }
 
         public override bool Equals(object obj)

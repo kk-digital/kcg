@@ -26,6 +26,7 @@ namespace AI
         public int                  HeuristicCost;
         public int                  TotalCost;
     }
+
     public class GoapAStar
     {
         List<Node> OpenList = new List<Node>();
@@ -107,7 +108,7 @@ namespace AI
             {
                 OpenList.RemoveAt(NodeIndex);
                 ClosedList.Add(NextNode);
-                CreateActionPath(GoalState, NextNode, ListofActions);
+                return CreateActionPath(GoalState, NextNode, ListofActions);
             }
             
             return false;

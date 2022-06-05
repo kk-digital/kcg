@@ -35,7 +35,7 @@ public class AIGridWorldTest : MonoBehaviour
 
     SquareType[,] map;
     Vector2Int CurrentAgentPos = new Vector2Int(3, 0);
-    Vector2Int GoalPos = new Vector2Int(1, 3);
+    Vector2Int GoalPos = new Vector2Int(5, 7);
 
     public void Start()
     {
@@ -102,12 +102,15 @@ public class AIGridWorldTest : MonoBehaviour
     // Create GridWorld board.
     public void Initialize()
     {
-        map = new SquareType[5, 5]
-            {   { SquareType.NormalSquare, SquareType.NormalSquare,    SquareType.NormalSquare,     SquareType.NormalSquare,    SquareType.NormalSquare},
-                { SquareType.NormalSquare, SquareType.Obstaclesquares, SquareType.NormalSquare,     SquareType.GoalSquare,      SquareType.NormalSquare},
-                { SquareType.NormalSquare, SquareType.Obstaclesquares, SquareType.Obstaclesquares,  SquareType.Obstaclesquares, SquareType.NormalSquare},
-                { SquareType.AgentSquare,  SquareType.NormalSquare,    SquareType.NormalSquare,     SquareType.Obstaclesquares, SquareType.NormalSquare},
-                { SquareType.NormalSquare, SquareType.NormalSquare,    SquareType.NormalSquare,     SquareType.NormalSquare,    SquareType.NormalSquare}};
+        map = new SquareType[8, 8]
+            {   { SquareType.NormalSquare, SquareType.NormalSquare,    SquareType.NormalSquare,     SquareType.NormalSquare,    SquareType.NormalSquare, SquareType.NormalSquare,    SquareType.NormalSquare, SquareType.NormalSquare},
+                { SquareType.NormalSquare, SquareType.Obstaclesquares, SquareType.NormalSquare,     SquareType.NormalSquare,    SquareType.NormalSquare, SquareType.NormalSquare,    SquareType.NormalSquare, SquareType.NormalSquare},
+                { SquareType.NormalSquare, SquareType.Obstaclesquares, SquareType.Obstaclesquares,  SquareType.Obstaclesquares, SquareType.NormalSquare, SquareType.Obstaclesquares, SquareType.NormalSquare, SquareType.NormalSquare},
+                { SquareType.AgentSquare,  SquareType.NormalSquare,    SquareType.NormalSquare,     SquareType.Obstaclesquares, SquareType.NormalSquare, SquareType.Obstaclesquares, SquareType.NormalSquare, SquareType.NormalSquare},
+                { SquareType.NormalSquare, SquareType.Obstaclesquares, SquareType.NormalSquare,     SquareType.Obstaclesquares, SquareType.NormalSquare, SquareType.NormalSquare,    SquareType.NormalSquare, SquareType.NormalSquare},
+                { SquareType.NormalSquare, SquareType.Obstaclesquares, SquareType.NormalSquare,     SquareType.Obstaclesquares, SquareType.NormalSquare, SquareType.Obstaclesquares, SquareType.NormalSquare, SquareType.GoalSquare},
+                { SquareType.NormalSquare, SquareType.Obstaclesquares, SquareType.NormalSquare,     SquareType.NormalSquare,    SquareType.NormalSquare, SquareType.Obstaclesquares, SquareType.NormalSquare, SquareType.NormalSquare},
+                { SquareType.NormalSquare, SquareType.NormalSquare,    SquareType.NormalSquare,     SquareType.NormalSquare,    SquareType.NormalSquare, SquareType.Obstaclesquares, SquareType.NormalSquare, SquareType.NormalSquare} };
 
         InitEntities();
     }
