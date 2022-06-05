@@ -88,11 +88,11 @@ namespace SystemView
 
             InnerAsteroidBeltDescriptor.Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
-            SystemAsteroidBelt InnerAsteroidBelt = new(16, InnerAsteroidBeltDescriptor);
+            SystemAsteroidBelt InnerAsteroidBelt = new(32, InnerAsteroidBeltDescriptor);
 
-            for (int Layer = 0; Layer < 16; Layer++)
+            for (int Layer = 0; Layer < 32; Layer++)
             {
-                for (int i = 0; i < 64 + 8 * Layer; i++)
+                for (int i = 0; i < 32 + 4 * Layer; i++)
                 {
                     SystemAsteroid Asteroid = new();
 
@@ -148,11 +148,11 @@ namespace SystemView
 
             OuterAsteroidBeltDescriptor.Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
-            SystemAsteroidBelt OuterAsteroidBelt = new(64, OuterAsteroidBeltDescriptor);
+            SystemAsteroidBelt OuterAsteroidBelt = new(128, OuterAsteroidBeltDescriptor);
 
-            for (int Layer = 0; Layer < 64; Layer++)
+            for (int Layer = 0; Layer < 128; Layer++)
             {
-                for (int i = 0; i < 192 + 16 * Layer; i++)
+                for (int i = 0; i < 96 + 8 * Layer; i++)
                 {
                     SystemAsteroid Asteroid = new();
 
@@ -185,22 +185,22 @@ namespace SystemView
 
             foreach (SystemPlanet p in State.Planets)
             {
-                if (Planets[p].LastCycle == CurrentCycle) continue;
+                //if (Planets[p].LastCycle == CurrentCycle) continue;
 
                 p.UpdatePosition(CurrentMillis / 200.0f);
                 //Planets[p].LastCycle = CurrentCycle;
 
-                if (++UpdatesCompleted == UpdatesPerTick) return;
+                //if (++UpdatesCompleted == UpdatesPerTick) return;
             }
 
             foreach (SystemAsteroidBelt b in State.AsteroidBelts)
             {
-                if (Asteroids[b].LastCycle == CurrentCycle) continue;
+                //if (Asteroids[b].LastCycle == CurrentCycle) continue;
 
                 b.UpdatePositions(CurrentMillis / 200.0f);
                 //Asteroids[b].LastCycle = CurrentCycle;
 
-                if (++UpdatesCompleted == UpdatesPerTick) return;
+                //if (++UpdatesCompleted == UpdatesPerTick) return;
             }
 
             CurrentCycle++;
