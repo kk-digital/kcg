@@ -172,11 +172,15 @@ namespace SystemView
             OuterAsteroidBeltInfo.Renderer.belt = OuterAsteroidBelt;
 
             Asteroids.Add(OuterAsteroidBelt, OuterAsteroidBeltInfo);
+
+            State.AsteroidBelts.Add(InnerAsteroidBelt);
+            State.AsteroidBelts.Add(OuterAsteroidBelt);
         }
 
         void Update()
         {
             int CurrentMillis = (int)(Time.time * 1000) - LastTime;
+            LastTime = (int)(Time.time * 1000);
             int UpdatesCompleted = 0;
 
             foreach (SystemPlanet p in State.Planets)
