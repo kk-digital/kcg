@@ -10,6 +10,7 @@ namespace Vehicle
         public IGroup<GameEntity> VehiclesWithInput;
         public IGroup<GameEntity> VehiclesWithVelocity;
 
+        // List of vehicles
         public List()
         {
             gameContext = Contexts.sharedInstance.game;

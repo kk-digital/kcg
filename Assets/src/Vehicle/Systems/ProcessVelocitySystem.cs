@@ -26,15 +26,19 @@ namespace Vehicle
         // Move Function
         public void Process(Contexts contexts)
         {
+            // Get Vehicle Entites
             IGroup<GameEntity> entities =
             contexts.game.GetGroup(GameMatcher.VehiclePosition2D);
             foreach (var vehicle in entities)
             {
+                // Get position from component
                 var position = vehicle.vehiclePosition2D;
                 position.TempPosition = position.Position;
 
+                // Accelerate the vehicle
                 position.Position += vehicle.vehicleVelocity.Value * Time.deltaTime;
 
+                // Update the position
                 vehicle.ReplaceVehiclePosition2D(position.Position, position.TempPosition);
             }
         }

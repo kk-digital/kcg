@@ -38,6 +38,7 @@ namespace Vehicle
         bool Init = false;
         GameEntity vehicleDraw;
 
+        // Static Constructor
         static DrawSystem()
         {
             Instance = new DrawSystem();
@@ -58,6 +59,7 @@ namespace Vehicle
         // Initializing image and component
         public void Initialize(Contexts contexts, string filePath, int width, int height, Transform transform, Material mat)
         {
+            // Set local's to references
             _contexts = contexts;
             _filePath = filePath;
             _width = width;
@@ -85,14 +87,17 @@ namespace Vehicle
             // Creating Prefab
             prefab = CreateParticlePrefab(prefabPos.x, prefabPos.y, 0.5f, 0.5f, vehicleSprite);
 
-            // Add Vehicle Components
+            // Add Vehicle ID
             vehicleDraw.AddVehicleID(0);
 
+            // Add Vehicle Sprite Component
             vehicleDraw.AddVehicleSprite2D(_spriteID, filePath, new Vector2(GetWidth(), GetHeight()), new Vector2Int(GetWidth(), GetHeight()),
                 Material, prefab.GetComponent<Mesh>());
 
+            // Add Vehicle Velocity Component
             vehicleDraw.AddVehicleVelocity(Vector2.zero);
 
+            // Add Vehicle Position Component
             vehicleDraw.AddVehiclePosition2D(Vector2.zero, Vector2.zero);
 
             // Initialization done
@@ -104,13 +109,16 @@ namespace Vehicle
         {
             if (Init)
             {
+                // Add vehilce enitites
                 IGroup<GameEntity> entities =
                 _contexts.game.GetGroup(GameMatcher.VehiclePosition2D);
                 foreach (var gameEntity in entities)
                 {
+                    // Get position
                     var pos = gameEntity.vehiclePosition2D;
                     prePrefab = prefab;
                     UnityEngine.Object.Destroy(prePrefab);
+                    // Draw car at the position component
                     prefab = CreateParticlePrefab(pos.Position.x, pos.Position.y, 0.5f, 0.5f, vehicleSprite);
                 }
             }
@@ -128,7 +136,7 @@ namespace Vehicle
             return _width;
         }
 
-        // Get Heighta
+        // Get Height
         public int GetHeight()
         {
             return _height;

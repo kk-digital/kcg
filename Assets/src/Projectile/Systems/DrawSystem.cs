@@ -41,12 +41,13 @@ namespace Projectile
         public ProjectileType _projectileType = ProjectileType.Invalid;
         public ProjectileDrawType _projectileDrawType = ProjectileDrawType.Invalid;
 
+        // Static Constructor
         static DrawSystem()
         {
             Instance = new DrawSystem();
         }
 
-        // Constructor, variables setup
+        // Constructor
         public DrawSystem()
         {
             GameContext = Contexts.sharedInstance.game;
@@ -56,6 +57,7 @@ namespace Projectile
         public void Initialize(Contexts contexts, string filePath, int width, int height, Transform transform, Material mat, ProjectileType projectileType,
             ProjectileDrawType projectileDrawType)
         {
+            // Set local's to references
             _contexts = contexts;
             _filePath = filePath;
             _width = width;
@@ -93,16 +95,20 @@ namespace Projectile
             Init = true;
         }
 
-        // Drawing in Exectue (Execute runs every frame)
+        // Drawing Projectile
         public void Draw()
         {
             if (Init)
             {
+                // Get Projectile entites
                 IGroup<GameEntity> entities =
                 _contexts.game.GetGroup(GameMatcher.ParticlePosition2D);
                 foreach (var gameEntity in entities)
                 {
+                    // Get Projectile Position Component
                     var pos = gameEntity.particlePosition2D;
+
+                    // Draw Sprite
                     DrawSprite(pos.Position.x, pos.Position.y, 0.5f, 0.5f, projectileSprite);
                 }
             }
