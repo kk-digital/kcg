@@ -42,12 +42,20 @@ namespace SystemView
             starRenderer.Star = State.Star;
 
             Invoke("ReadyShips", 1);
+
+            State.LaserTowers.Add((new GameObject()).AddComponent<LaserTower>());
+            State.LaserTowers.Add((new GameObject()).AddComponent<LaserTower>());
+            State.LaserTowers.Add((new GameObject()).AddComponent<LaserTower>());
+            State.LaserTowers.Add((new GameObject()).AddComponent<LaserTower>());
         }
 
         void ReadyShips()
         {
             State.Ships.Add(Player.Ship);
             State.Ships.Add(Enemies[0].Ship);
+
+            foreach (LaserTower Laser in State.LaserTowers)
+                Laser.State = State;
         }
 
         void Update()
