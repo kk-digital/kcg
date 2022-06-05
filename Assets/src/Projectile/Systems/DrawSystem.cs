@@ -95,7 +95,7 @@ namespace Projectile
             Init = true;
         }
 
-        // Drawing Projectile
+        // Drawing Projectile                                       
         public void Draw()
         {
             if (Init)
