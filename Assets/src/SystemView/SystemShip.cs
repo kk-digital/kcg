@@ -34,12 +34,16 @@ namespace SystemView
 
         public void UpdatePosition(float dt)
         {
-            Descriptor.RotationalPosition += dt / Descriptor.GetDistanceFromCenter() / Descriptor.GetDistanceFromCenter();
+            if (Descriptor.SemiMajorAxis != 0.0f)
+            {
+                Descriptor.RotationalPosition += dt / Descriptor.GetDistanceFromCenter() / Descriptor.GetDistanceFromCenter();
+                Rotation = Descriptor.RotationalPosition + 3.1415926f / 2.0f;
 
-            float[] Pos = Descriptor.GetPosition();
+                float[] Pos = Descriptor.GetPosition();
 
-            PosX = Pos[0];
-            PosY = Pos[1];
+                PosX = Pos[0];
+                PosY = Pos[1];
+            }
         }
 
         public void Destroy()
