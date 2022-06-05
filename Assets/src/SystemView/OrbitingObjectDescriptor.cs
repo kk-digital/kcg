@@ -252,28 +252,25 @@ namespace SystemView
 
             // WIP math for further optimizations to get rid of this for loop
 
-            // a, b, M = values for current object
-            // A, B, m = values for destination object
+            // a, b, M, ω, q1 = values for current object
+            // A, B, m, w, q2 = values for destination object
 
             // X = segment length
 
-            // (1) x(M) = cos(ω) * (cos(M) * a - √(a^2 - b^2)) - sin(ω) * sin(M) * b
+            // (1) x(M) = cos(ω) * (cos(M) * q) - sin(ω) * sin(M) * b
 
-            // (2) y(M) = sin(ω) * (cos(M) * a - √(a^2 - b^2)) + cos(ω) * sin(M) * b
+            // (2) y(M) = sin(ω) * (cos(M) * q) + cos(ω) * sin(M) * b
 
-            //                                                a^2
-            // (3) h(M) = √(x(M)^2 + y(M)^2)      =>   h(M) = --- * (cos(2 M) + 3) - 2a * √((a - b) * (a + b)) * cos(M) - b^2 * cos(M)^2
-            //                                                 2
+            // (3) h(M) = √(x(M)^2 + y(M)^2)            =>   h(M) = √((cos(ω) * (cos(M) * q) - sin(ω) * sin(M) * b)^2 + (sin(ω) * (cos(M) * q) + cos(ω) * sin(M) * b)^2)
 
-            //                                                X
-            // (4) t(X) = x * h(M + X)^2          =>   t(X) = - * (a^2 * (cos(2(M + X)) + 3) - 4a * √((a - b) * (a + b)) * cos(M + X) - 2b^2 * cos(M + X)^2)
-            //                                                2
+            // (4) h(x) = √(x(M + x)^2 + y(M + x)^2)    =>   h(x) = √((cos(ω) * (cos(M + x) * q) - sin(ω) * sin(M + x) * b)^2 + (sin(ω) * (cos(M + x) * q) + cos(ω) * sin(M + x) * b)^2)
 
-            //                                                x^4 * (-4a * √(a^2-b^2) * cos(M+x) + a^2 * cos(2(M + x)) + 3a^2 - 2b^2 * cos(M+x)^2)^2
-            // (5) d(x) = x * (t(x) / h(m)^2)^2   =>   d(x) = --------------------------------------------------------------------------------------
-            //                                                   (-4A * √(A^2-B^2) * cos(m+x) + A^2 * cos(2(m + x)) + 3A^2 - 2B^2 * cos(m+x)^2)^2
+            // (4) 5(x) = x * h(M + x)^2                =>   t(x) = x(cos(ω) * (cos(M + x) * q) - sin(ω) * sin(M + x) * b)^2 + x(sin(ω) * (cos(M + x) * q) + cos(ω) * sin(M + x) * b)^2
 
-            // (6) todo
+            //                                                        x(cos(ω) * (cos(M + x) * q1) - sin(ω) * sin(M + x) * b)^2 + x(sin(ω) * (cos(M + x) * q1) + cos(ω) * sin(M + x) * b)^2
+            // (5) d(x) = t(x) / h(m + x)^2             =>   d(x) = -----------------------------------------------------------------------------------------------------------------------
+            //                                                      ((cos(w) * (cos(m + x) * q2) - sin(w) * sin(m + x) * B)^2 + (sin(w) * (cos(m + x) * q2) + cos(w) * sin(m + x) * B)^2)^2
+
 
             int segments = 128 + (int)((Periapsis + Apoapsis) * 16);
             for (int i = 0; i < segments; i++)
