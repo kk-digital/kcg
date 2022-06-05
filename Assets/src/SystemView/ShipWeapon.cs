@@ -23,6 +23,7 @@ namespace SystemView
 
         public List<ShipWeaponProjectile> ProjectilesFired = new List<ShipWeaponProjectile>();
 
+        // todo update this later
         public bool TryFiringAt(SystemShip Target, int CurrentTime)
         {
             Cooldown -= CurrentTime;
@@ -37,7 +38,7 @@ namespace SystemView
             /*if (Self.Descriptor != null) // orbit
             {
                 // todo
-                // is this even needed? a straight line approximation might be fine either way as ships are fighting within very short range, right?
+                // is this even needed? a straight line approximation might be fine either way as ships are fighting within very short LifeSpan, right?
             }
             else // straight line
             {*/
@@ -47,18 +48,18 @@ namespace SystemView
                 Projectile.PosX = Self.PosX;
                 Projectile.PosY = Self.PosY;
 
-                // todo: Math doesn't like vertical lines.
-                Projectile.Slope = (Target.PosY - Self.PosY) / (Target.PosX - Self.PosX);
+                float d = (float)Math.Sqrt((Target.PosX - Self.PosX) * (Target.PosX - Self.PosX) + (Target.PosY - Self.PosY) * (Target.PosY - Self.PosY));
+
+                Projectile.VelX = (Target.PosX - Self.PosX) / d * ProjectileVelocity;
+                Projectile.VelY = (Target.PosY - Self.PosY) / d * ProjectileVelocity;
             //}
 
-            Projectile.DistanceTravelled = 0.0f;
-            Projectile.Range = Range;
+            Projectile.TimeElapsed = 0.0f;
+            Projectile.LifeSpan = Range / ProjectileVelocity;
 
             Projectile.ProjectileColor = ProjectileColor;
 
             Projectile.ShieldPenetration = ShieldPenetration;
-
-            Projectile.ProjectileVelocity = ProjectileVelocity * (((Target.PosX - Self.PosX) < 0.0f) ? -1 : 1);
 
             Projectile.Damage = Damage;
 
@@ -81,22 +82,18 @@ namespace SystemView
             Projectile.PosX = Self.PosX;
             Projectile.PosY = Self.PosY;
 
-            // todo: Math doesn't like vertical lines.
-            Projectile.Slope = (float)(Math.Sin(Self.Rotation) / Math.Cos(Self.Rotation));
+            float cos = (float)Math.Cos(Self.Rotation);
+            float sin = (float)Math.Sin(Self.Rotation);
 
-            bool Reverse = Math.Cos(Self.Rotation) < 0.0f && Self.VelX > 0.0f
-                        || Math.Cos(Self.Rotation) > 0.0f && Self.VelX < 0.0f
-                        || Math.Sin(Self.Rotation) < 0.0f && Self.VelY > 0.0f
-                        || Math.Sin(Self.Rotation) > 0.0f && Self.VelY < 0.0f;
+            Projectile.VelX = cos * (float)Math.Sqrt(ProjectileVelocity * ProjectileVelocity - sin * sin) + Self.VelX;
+            Projectile.VelY = sin * (float)Math.Sqrt(ProjectileVelocity * ProjectileVelocity - cos * cos) + Self.VelY;
 
-            Projectile.DistanceTravelled = 0.0f;
-            Projectile.Range = Range + (float)Math.Sqrt(Self.VelX * Self.VelX + Self.VelY * Self.VelY) * (Reverse ? -1 : 1) * Range / ProjectileVelocity;
+            Projectile.TimeElapsed = 0.0f;
+            Projectile.LifeSpan = Range / ProjectileVelocity;
 
             Projectile.ProjectileColor = ProjectileColor;
 
             Projectile.ShieldPenetration = ShieldPenetration;
-
-            Projectile.ProjectileVelocity = (ProjectileVelocity + (float)Math.Sqrt(Self.VelX * Self.VelX + Self.VelY * Self.VelY) * (Reverse ? -1 : 1)) * ((Math.Cos(Self.Rotation) < 0.0) ? -1 : 1);
 
             Projectile.Damage = Damage;
 

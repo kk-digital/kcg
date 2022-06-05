@@ -13,24 +13,20 @@ namespace SystemView
 
         public float PosX, PosY;
 
-        public float Slope;
+        public float VelX, VelY;
 
-        public float DistanceTravelled;
-        public float Range;
+        public float TimeElapsed;
+        public float LifeSpan;
 
         public Color ProjectileColor;
 
         public float ShieldPenetration;
 
-        public float ProjectileVelocity;
-
         public int Damage;
 
         public bool UpdatePosition(float dt)
         {
-            float d = dt * ProjectileVelocity;
-
-            if((DistanceTravelled += d) > Range)
+            if((TimeElapsed += dt) > LifeSpan)
             {
                 Weapon.ProjectilesFired.Remove(this);
                 return false;
@@ -38,20 +34,10 @@ namespace SystemView
 
             if (Descriptor == null) // Linear trajectory
             {
-                // (1) dy = m * dx
-
-                // (2) dy^2 + dx^2 = d^2
-
-                //                                               d
-                // (3) (m^2 + 1) * dx^2 = d^2   =>   dx = ± -----------
-                //                                          √ (m^2 + 1)
-
-                float dx = d / (float)Math.Sqrt(Slope * Slope + 1);
-
-                PosX += dx;
-                PosY += dx * Slope;
+                PosX += dt * VelX;
+                PosY += dt * VelY;
             }
-            else // Orbital trajectory
+            else // Orbital trajectory todo
             {
                 Descriptor.RotationalPosition += dt / Descriptor.GetDistanceFromCenter() / Descriptor.GetDistanceFromCenter();
 
