@@ -22,7 +22,7 @@ namespace TileMap
     {
         public ChunkList Chunks;
         public NaturalLayer NaturalLayer;
-        
+
         public TopMap TopMap;
         public PlanetWrapBehavior WrapBehavior;
 
@@ -47,9 +47,9 @@ namespace TileMap
             var bytes = new byte[32 * 32 * 4];
             var data = new byte[Chunks.Size.x * Chunks.Size.y * 32 * 32 * 4];
 
-            for(int y = 0; y < Chunks.Size.y; y++)
+            for (int y = 0; y < Chunks.Size.y; y++)
             {
-                for(int x = 0; x < Chunks.Size.x; x++)
+                for (int x = 0; x < Chunks.Size.x; x++)
                 {
                     ref Tile.Component tile = ref GetTile(x, y);
 
@@ -74,33 +74,34 @@ namespace TileMap
 
                     if (spriteId >= 0)
                     {
-                        
+
                         GameState.TileSpriteAtlasManager.GetSpriteBytes(spriteId, bytes);
 
                         int tileX = (x * 32);
                         int tileY = (y * 32);
 
-                        for (int j = 0; j <  32; j++)
+                        for (int j = 0; j < 32; j++)
                         {
-                            for(int i = 0; i < 32; i++)
+                            for (int i = 0; i < 32; i++)
                             {
                                 int index = 4 * (((i + tileX)) + ((j + tileY)) * (Chunks.Size.x * 32));
                                 int bytesIndex = 4 * (i + (32 - j - 1) * 32);
-                                data[index] = 
-                                     bytes[bytesIndex];
-                                data[index + 1] = 
-                                     bytes[bytesIndex + 1];
-                                data[index + 2] = 
-                                     bytes[bytesIndex + 2];
-                                data[index + 3] = 
-                                     bytes[bytesIndex + 3];
+                                data[index] =
+                                    bytes[bytesIndex];
+                                data[index + 1] =
+                                    bytes[bytesIndex + 1];
+                                data[index + 2] =
+                                    bytes[bytesIndex + 2];
+                                data[index + 3] =
+                                    bytes[bytesIndex + 3];
                             }
                         }
                     }
                 }
             }
-            
-            LayerTextures[(int)layer] = Utility.TextureUtils.CreateTextureFromRGBA(data, Chunks.Size.x * 32, Chunks.Size.y * 32);
+
+            LayerTextures[(int) layer] =
+                Utility.TextureUtils.CreateTextureFromRGBA(data, Chunks.Size.x * 32, Chunks.Size.y * 32);
         }
 
         public void UpdateTileVariants(int x, int y, PlanetLayer planetLayer)
@@ -111,13 +112,13 @@ namespace TileMap
             }
 
             ref Tile.Component tile = ref GetTile(x, y);
-            
+
             if (planetLayer == PlanetLayer.Front)
             {
                 if (tile.FrontTilePropertiesId >= 0)
                 {
                     int[] neighbors = new int[8];
-                    for(int i = 0; i < neighbors.Length; i++)
+                    for (int i = 0; i < neighbors.Length; i++)
                     {
                         neighbors[i] = -1;
                     }
@@ -125,54 +126,55 @@ namespace TileMap
                     if (x + 1 < Chunks.Size.x)
                     {
                         ref Tile.Component neighborTile = ref GetTile(x + 1, y);
-                        neighbors[(int)Enums.TileNeighbor.Right] = neighborTile.FrontTilePropertiesId;
+                        neighbors[(int) Enums.TileNeighbor.Right] = neighborTile.FrontTilePropertiesId;
                     }
 
                     if (x - 1 >= 0)
                     {
                         ref Tile.Component neighborTile = ref GetTile(x - 1, y);
-                        neighbors[(int)Enums.TileNeighbor.Left] = neighborTile.FrontTilePropertiesId;
+                        neighbors[(int) Enums.TileNeighbor.Left] = neighborTile.FrontTilePropertiesId;
                     }
 
                     if (y + 1 < Chunks.Size.y)
                     {
                         ref Tile.Component neighborTile = ref GetTile(x, y + 1);
-                        neighbors[(int)Enums.TileNeighbor.Top] = neighborTile.FrontTilePropertiesId;
+                        neighbors[(int) Enums.TileNeighbor.Top] = neighborTile.FrontTilePropertiesId;
                     }
 
                     if (y - 1 >= 0)
                     {
                         ref Tile.Component neighborTile = ref GetTile(x, y - 1);
-                        neighbors[(int)Enums.TileNeighbor.Bottom] = neighborTile.FrontTilePropertiesId;
+                        neighbors[(int) Enums.TileNeighbor.Bottom] = neighborTile.FrontTilePropertiesId;
                     }
 
                     if (x + 1 < Chunks.Size.x && y + 1 < Chunks.Size.y)
                     {
                         ref Tile.Component neighborTile = ref GetTile(x + 1, y + 1);
-                        neighbors[(int)Enums.TileNeighbor.TopRight] = neighborTile.FrontTilePropertiesId;
+                        neighbors[(int) Enums.TileNeighbor.TopRight] = neighborTile.FrontTilePropertiesId;
                     }
 
                     if (x - 1 >= 0 && y + 1 < Chunks.Size.y)
                     {
                         ref Tile.Component neighborTile = ref GetTile(x - 1, y + 1);
-                        neighbors[(int)Enums.TileNeighbor.TopLeft] = neighborTile.FrontTilePropertiesId;
+                        neighbors[(int) Enums.TileNeighbor.TopLeft] = neighborTile.FrontTilePropertiesId;
                     }
 
                     if (x + 1 < Chunks.Size.x && y - 1 >= 0)
                     {
                         ref Tile.Component neighborTile = ref GetTile(x + 1, y - 1);
-                        neighbors[(int)Enums.TileNeighbor.BottomRight] = neighborTile.FrontTilePropertiesId;
+                        neighbors[(int) Enums.TileNeighbor.BottomRight] = neighborTile.FrontTilePropertiesId;
                     }
-                
+
                     if (x - 1 >= 0 && y - 1 >= 0)
                     {
                         ref Tile.Component neighborTile = ref GetTile(x - 1, y - 1);
-                        neighbors[(int)Enums.TileNeighbor.BottomLeft] = neighborTile.FrontTilePropertiesId;
+                        neighbors[(int) Enums.TileNeighbor.BottomLeft] = neighborTile.FrontTilePropertiesId;
                     }
 
                     TileVariants tileVariants = TileNeighborExt.GetVariant(neighbors, tile.FrontTilePropertiesId);
-                    Tile.PropertiesData properties = GameState.CreationAPISystem.GetTileProperties(tile.FrontTilePropertiesId);
-                    tile.FrontSpriteId = properties.Variants[(int)tileVariants];
+                    Tile.PropertiesData properties =
+                        GameState.CreationAPISystem.GetTileProperties(tile.FrontTilePropertiesId);
+                    tile.FrontSpriteId = properties.Variants[(int) tileVariants];
                 }
                 else
                 {
@@ -186,23 +188,21 @@ namespace TileMap
 
         public void UpdateAllTileVariants(PlanetLayer layer)
         {
-            for(int y = 0; y < Chunks.Size.y; y++)
+            for (int y = 0; y < Chunks.Size.y; y++)
             {
-                for(int x = 0; x < Chunks.Size.x; x++)
+                for (int x = 0; x < Chunks.Size.x; x++)
                 {
                     UpdateTileVariants(x, y, layer);
                 }
             }
         }
-        
-
 
         public void UpdateTopTilesMap()
         {
-            for(int i = 0; i < Chunks.Size.x; i++)
+            for (int i = 0; i < Chunks.Size.x; i++)
             {
                 TopMap.Data[i] = 0;
-                for(int j = Chunks.Size.y - 1; j >= 0; j--)
+                for (int j = Chunks.Size.y - 1; j >= 0; j--)
                 {
                     ref Tile.Component tile = ref GetTile(i, j);
                     if (tile.BackTilePropertiesId != -1)
@@ -217,11 +217,12 @@ namespace TileMap
         public void DrawLayer(PlanetLayer layer, Material material, Transform transform, int DrawOrder)
         {
             Render.Sprite sprite = new Render.Sprite();
-            sprite.Texture = LayerTextures[(int)layer];
+            sprite.Texture = LayerTextures[(int) layer];
             sprite.TextureCoords = new Vector4(0, 0, 1, -1);
 
-            Utility.RenderUtils.DrawSprite(0, 0, 1.0f * Chunks.Size.x, 1.0f * Chunks.Size.y, sprite, material, transform, DrawOrder);
-            
+            Utility.RenderUtils.DrawSprite(0, 0, 1.0f * Chunks.Size.x, 1.0f * Chunks.Size.y, sprite, material,
+                transform, DrawOrder);
+
         }
 
         public void RemoveTile(int x, int y, PlanetLayer layer)
@@ -256,9 +257,9 @@ namespace TileMap
                 tile.OreTilePropertiesId = -1;
             }
 
-            for(int i = x - 1; i <= x + 1; i++)
+            for (int i = x - 1; i <= x + 1; i++)
             {
-                for(int j = y - 1; j <= y + 1; j++)
+                for (int j = y - 1; j <= y + 1; j++)
                 {
                     UpdateTileVariants(i, j, layer);
                 }
@@ -277,7 +278,7 @@ namespace TileMap
             Array.Resize(ref Chunks.List, Chunks.Next + 1);
 
             var chunk = new Chunk();
-            
+
             Chunks.List[Chunks.Next] = chunk;
             Chunks.Next++;
             return chunk;
@@ -291,12 +292,12 @@ namespace TileMap
 
             return chunkIndex;
         }
-        
+
         public Chunk GetChunk(int x, int y)
         {
             var chunkIndex = GetChunkIndex(x, y);
             var chunk = Chunks.List[chunkIndex];
-            
+
             switch (chunk.Behaviour)
             {
                 case ChunkBehaviour.Error: return Chunks.Error;
@@ -327,9 +328,10 @@ namespace TileMap
             chunk.Seq++;
 
             for (int i = 0; i < 16; i++)
-                for (int j = 0; j < 16; j++)
-                    chunk.Tiles[i, j] = tiles[i, j];
+            for (int j = 0; j < 16; j++)
+                chunk.Tiles[i, j] = tiles[i, j];
         }
+
         public ref Tile.Component GetTile(int x, int y)
         {
             var chunk = GetChunk(x, y);
