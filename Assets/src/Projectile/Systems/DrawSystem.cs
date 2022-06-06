@@ -31,11 +31,18 @@ namespace Projectile
         List<Vector3> verticies = new List<Vector3>();
         Material Material;
         Transform _transform;
+        Vector2 prefabPos = new Vector2(0, 0);
 
         // Sprite to Render
         Texture2D projectileSprite;
         GameObject prefab;
         bool Init = false;
+        GameEntity projectileEntity;
+        GameObject prePrefab;
+
+        // Physics
+        BoxColliderComponent boxColliderComponent;
+        PlanetTileMap.Unity.MapLoaderTestScript mapLoader;
 
         // Projectile Properties
         public ProjectileType _projectileType = ProjectileType.Invalid;
@@ -53,6 +60,12 @@ namespace Projectile
             GameContext = Contexts.sharedInstance.game;
         }
 
+        // Destructor
+        ~DrawSystem()
+        {
+            UnityEngine.Object.Destroy(prefab);
+        }
+
         // Initializing image and component
         public void Initialize(Contexts contexts, string filePath, int width, int height, Transform transform, Material mat, ProjectileType projectileType,
             ProjectileDrawType projectileDrawType)
@@ -68,7 +81,7 @@ namespace Projectile
             _projectileDrawType = projectileDrawType;
 
             // Create Entity
-            GameEntity entity = _contexts.game.CreateEntity();
+            projectileEntity = _contexts.game.CreateEntity();
 
             // Get Image Sprite ID
             int _spriteID = GameState.SpriteLoader.GetSpriteSheetID(_filePath, _width, _height);
@@ -85,11 +98,32 @@ namespace Projectile
             projectileSprite = CreateTextureFromRGBA(imageBytes, _width, _height);
 
             // Creating Prefab
-            prefab = CreateParticlePrefab(0, 0, 0.5f, 0.5f, projectileSprite);
+            prefab = CreateParticlePrefab(prefabPos.x, prefabPos.y, 0.5f, 0.5f, projectileSprite);
 
-            // Add Vehicle Component
-            entity.isProjectile = true;
-            entity.AddProjectileType(_projectileType, _projectileDrawType);
+            // Add Projectile ID
+            projectileEntity.AddProjectileID(0);
+
+            // Add Projectile Sprite Component
+            projectileEntity.AddProjectileSprite2D(_spriteID, _filePath, new Vector2(GetWidth(), GetHeight()), new Vector2Int(GetWidth(), GetHeight()), Material,
+                prefab.GetComponent<Mesh>());
+
+            // Add Projectile Velocity Component
+            projectileEntity.AddProjectileVelocity(Vector2.zero);
+
+            // Add Projectile Position Component
+            projectileEntity.AddProjectilePosition2D(Vector2.zero, Vector2.zero);
+
+            // Add Projectile Component
+            projectileEntity.AddProjectileType(GetProjectileType(), GetProjectileDrawType());
+
+            // Physics Init
+            boxColliderComponent = new BoxColliderComponent(new Vector2(0.5f, 0.5f));
+
+            // Collider Component Init
+            projectileEntity.AddProjectileCollider(false, false, false, false);
+
+            // Init Map Loader
+            mapLoader = GameObject.Find("TilesTest").GetComponent<PlanetTileMap.Unity.MapLoaderTestScript>();
 
             // Initialization done
             Init = true;
@@ -102,19 +136,32 @@ namespace Projectile
             {
                 // Get Projectile entites
                 IGroup<GameEntity> entities =
-                _contexts.game.GetGroup(GameMatcher.ParticlePosition2D);
+                _contexts.game.GetGroup(GameMatcher.ProjectilePosition2D);
                 foreach (var gameEntity in entities)
                 {
                     // Get Projectile Position Component
-                    var pos = gameEntity.particlePosition2D;
-
+                    var pos = gameEntity.projectilePosition2D;
+                    prePrefab = prefab;
+                    UnityEngine.Object.Destroy(prePrefab);
                     // Draw Sprite
-                    DrawSprite(pos.Position.x, pos.Position.y, 0.5f, 0.5f, projectileSprite);
+                    prefab = CreateParticlePrefab(pos.Position.x, pos.Position.y, 0.5f, 0.5f, projectileSprite);
                 }
             }
         }
 
-        // Get Contextx Object
+        // Update Physics 
+        public void UpdateCollision()
+        {
+            if (Init)
+            {
+                // Update Collider Component
+                projectileEntity.ReplaceProjectileCollider(boxColliderComponent.IsCollidingLeft(ref mapLoader.TileMap, _transform.transform.position), boxColliderComponent.IsCollidingRight(ref mapLoader.TileMap, _transform.transform.position),
+                    boxColliderComponent.IsCollidingTop(ref mapLoader.TileMap, _transform.transform.position), boxColliderComponent.IsCollidingBottom(ref mapLoader.TileMap, _transform.transform.position));
+
+            }
+        }
+
+        // Get Context Object
         public Contexts GetContexts()
         {
             return _contexts;
@@ -146,7 +193,7 @@ namespace Projectile
         private GameObject CreateParticlePrefab(float x, float y, float w, float h, Texture2D tex)
         {
             Material.SetTexture("_MainTex", tex);
-            var go = CreateObject(_transform, "vehicle", 0, Material);
+            var go = CreateObject(_transform, "projectile", 0, Material);
             var mf = go.GetComponent<MeshFilter>();
             var mesh = mf.sharedMesh;
 
@@ -197,56 +244,7 @@ namespace Projectile
             go.transform.localScale = new Vector3(5.84772444f, 3.20090008f, 3.20090008f);
             return go;
         }
-        void DrawSprite(float x, float y, float w, float h, Texture2D tex)
-        {
-            Material.SetTexture("_MainTex", tex);
-            var go = CreateObject(_transform, "vehicle", 0, Material);
-            var mf = go.GetComponent<MeshFilter>();
-            var mesh = mf.sharedMesh;
-
-            triangles.Clear();
-            uvs.Clear();
-            verticies.Clear();
-
-
-            var p0 = new Vector3(x, y, 0);
-            var p1 = new Vector3((x + w), (y + h), 0);
-            var p2 = p0; p2.y = p1.y;
-            var p3 = p1; p3.y = p0.y;
-
-            verticies.Add(p0);
-            verticies.Add(p1);
-            verticies.Add(p2);
-            verticies.Add(p3);
-
-            triangles.Add(0);
-            triangles.Add(2);
-            triangles.Add(1);
-            triangles.Add(0);
-            triangles.Add(1);
-            triangles.Add(3);
-
-            var u0 = 0;
-            var u1 = 1;
-            var v1 = -1;
-            var v0 = 0;
-
-            var uv0 = new Vector2(u0, v0);
-            var uv1 = new Vector2(u1, v1);
-            var uv2 = uv0; uv2.y = uv1.y;
-            var uv3 = uv1; uv3.y = uv0.y;
-
-
-            uvs.Add(uv0);
-            uvs.Add(uv1);
-            uvs.Add(uv2);
-            uvs.Add(uv3);
-
-
-            mesh.SetVertices(verticies);
-            mesh.SetUVs(0, uvs);
-            mesh.SetTriangles(triangles, 0);
-        }
+        
         private GameObject CreateObject(Transform parent, string name, int sortingOrder, Material material)
         {
             var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
