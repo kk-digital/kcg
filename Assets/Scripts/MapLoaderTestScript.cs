@@ -28,7 +28,7 @@ namespace PlanetTileMap.Unity
         List<Vector2> uvs = new();
         List<Vector3> verticies = new();
         
-        PlanetTileMap TileMap;
+        public PlanetTileMap TileMap;
 
         int SortingOrder = 0;
 

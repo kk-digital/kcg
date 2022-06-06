@@ -39,7 +39,7 @@ public static class GameComponentsLookup {
     public const int srcecsGameParticleParticleSpawnGameObject = 28;
     public const int srcecsGameParticleParticleSpawnParticle = 29;
     public const int srcecsGameParticleParticleSpawnPosition = 30;
-    public const int VehicleComponentCollider = 31;
+    public const int VehicleCollider = 31;
     public const int VehicleID = 32;
     public const int VehiclePosition2D = 33;
     public const int VehicleSprite2D = 34;
@@ -79,7 +79,7 @@ public static class GameComponentsLookup {
         "srcecsGameParticleParticleSpawnGameObject",
         "srcecsGameParticleParticleSpawnParticle",
         "srcecsGameParticleParticleSpawnPosition",
-        "VehicleComponentCollider",
+        "VehicleCollider",
         "VehicleID",
         "VehiclePosition2D",
         "VehicleSprite2D",
@@ -118,7 +118,7 @@ public static class GameComponentsLookup {
         typeof(src.ecs.Game.Particle.ParticleSpawn.GameObjectComponent),
         typeof(src.ecs.Game.Particle.ParticleSpawn.ParticleComponent),
         typeof(src.ecs.Game.Particle.ParticleSpawn.PositionComponent),
-        typeof(Vehicle.ComponentCollider),
+        typeof(Vehicle.ColliderComponent),
         typeof(Vehicle.IDComponent),
         typeof(Vehicle.Position2DComponent),
         typeof(Vehicle.Sprite2DComponent),

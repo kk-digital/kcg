@@ -37,6 +37,9 @@ namespace Vehicle
         GameObject prePrefab;
         bool Init = false;
         GameEntity vehicleDraw;
+        // Physics
+        BoxColliderComponent boxColliderComponent;
+        PlanetTileMap.Unity.MapLoaderTestScript mapLoader;
 
         // Static Constructor
         static DrawSystem()
@@ -100,6 +103,15 @@ namespace Vehicle
             // Add Vehicle Position Component
             vehicleDraw.AddVehiclePosition2D(Vector2.zero, Vector2.zero);
 
+            // Physics Init
+            boxColliderComponent = new BoxColliderComponent(new Vector2(0.5f, 0.5f));
+
+            // Collider Component Init
+            vehicleDraw.AddVehicleCollider(false, false, false, false);
+
+            // Init Map Loader
+            mapLoader = GameObject.Find("TilesTest").GetComponent<PlanetTileMap.Unity.MapLoaderTestScript>();
+
             // Initialization done
             Init = true;
         }
@@ -124,7 +136,19 @@ namespace Vehicle
             }
         }
 
-        // Get Contextx Object
+        // Update Physics 
+        public void UpdateCollision()
+        {
+            if (Init)
+            {
+                // Update Collider Component
+                vehicleDraw.ReplaceVehicleCollider(boxColliderComponent.IsCollidingLeft(ref mapLoader.TileMap, _transform.transform.position), boxColliderComponent.IsCollidingRight(ref mapLoader.TileMap, _transform.transform.position),
+                    boxColliderComponent.IsCollidingTop(ref mapLoader.TileMap, _transform.transform.position), boxColliderComponent.IsCollidingBottom(ref mapLoader.TileMap, _transform.transform.position));
+
+            }
+        }
+
+        // Get Contexts Object
         public Contexts GetContexts()
         {
             return _contexts;
