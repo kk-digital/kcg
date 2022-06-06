@@ -3,6 +3,7 @@
 namespace TileVariant
 {
 
+    // any tile has 8 neighbors
     public enum Neighbor
     {
         Right = 0,
@@ -15,6 +16,9 @@ namespace TileVariant
         BottomLeft = 7
     }
 
+    // the total variants a tile can have
+    // the variants will be determined
+    // by the adjacent tiles
     public enum Variant
     {
         Right = 0,
@@ -43,6 +47,8 @@ namespace TileVariant
 
     public static class TileNeighbor 
     {
+        // the neighbors is a list of neighbor tileIds, each tile
+        // has 8 neighbors, returns a tile variant
         public static Variant GetVariant(int[] neighbors, int tileId)
         {
             if (IsRightTile(neighbors, tileId))
