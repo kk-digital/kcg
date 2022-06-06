@@ -9,6 +9,7 @@ namespace TileMap
     {
         public Vector2Int Size;
         public Chunk[] List;
+        public NaturalLayer NaturalLayer;
         public int Next;
         
         public PlanetWrapBehavior WrapBehavior;
@@ -16,10 +17,12 @@ namespace TileMap
         public Chunk Error; // todo: fill this with error tiles
         public Chunk Empty;
 
-        public ChunkList(Vector2Int size, PlanetWrapBehavior wrapBehavior) : this()
+        public ChunkList(Vector2Int size, PlanetWrapBehavior wrapBehavior, NaturalLayer naturalLayer) : this()
         {
             Size = size;
             List = Enumerable.Repeat(new Chunk(size), size.x * size.y).ToArray();
+
+            NaturalLayer = naturalLayer;
 
             WrapBehavior = wrapBehavior;
 

@@ -15,13 +15,18 @@ namespace TileMap
             Instance = new DrawSystem();
         }
 
+        private DrawSystem()
+        {
+            
+        }
+
         public void Initialize(Material material, Transform transform)
         {
             this.material = material;
             parent = transform;
         }
 
-        public void DrawTiles(ref Component tileComponent)
+        public void DrawTiles(ref GameEntity tileMap)
         {
             foreach (var mr in parent.GetComponentsInChildren<MeshRenderer>())
                 if (Application.isPlaying)
@@ -29,19 +34,19 @@ namespace TileMap
                 else
                     Object.DestroyImmediate(mr.gameObject);
 
-            DrawLayer(ref tileComponent, PlanetLayer.Front, 10);
-            DrawLayer(ref tileComponent, PlanetLayer.Ore, 11);
+            DrawLayer(ref tileMap, PlanetLayer.Front, 10);
+            DrawLayer(ref tileMap, PlanetLayer.Ore, 11);
         }
 
-        public void DrawLayer(ref Component tileComponent, PlanetLayer layer, int drawOrder)
+        public void DrawLayer(ref GameEntity entity, PlanetLayer layer, int drawOrder)
         {
             var sprite = new Render.Sprite
             {
-                Texture = tileComponent.LayerTextures[(int) layer],
+                Texture = entity.tileMapData.LayerTextures[(int) layer],
                 TextureCoords = new Vector4(0, 0, 1, -1)
             };
 
-            Utility.RenderUtils.DrawSprite(0, 0, tileComponent.Chunks.Size.x, tileComponent.Chunks.Size.y, sprite, Object.Instantiate(material), parent, drawOrder);
+            Utility.RenderUtils.DrawSprite(0, 0, entity.tileMapData.Chunks.Size.x, entity.tileMapData.Chunks.Size.y, sprite, Object.Instantiate(material), parent, drawOrder);
         }
     }
 }

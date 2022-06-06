@@ -58,7 +58,7 @@ namespace Agent
             };
         }
     
-        public bool IsCollidingLeft(ref TileMap.Component tileMap, Vector2 newPos)
+        public bool IsCollidingLeft(ref GameEntity tileMap, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving right
@@ -80,7 +80,7 @@ namespace Agent
             return false;
         }
     
-        public bool IsCollidingRight(ref TileMap.Component tileMap, Vector2 newPos)
+        public bool IsCollidingRight(ref GameEntity tileMap, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving Left
@@ -102,7 +102,7 @@ namespace Agent
             return false;
         }
     
-        public bool IsCollidingTop(ref TileMap.Component tileMap, Vector2 newPos)
+        public bool IsCollidingTop(ref GameEntity tileMap, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving Down
@@ -124,7 +124,7 @@ namespace Agent
             return false;
         }
 
-        public bool IsCollidingBottom(ref TileMap.Component tileMap, Vector2 newPos)
+        public bool IsCollidingBottom(ref GameEntity tileMap, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving Up
@@ -164,7 +164,7 @@ namespace Agent
             return partialDisplacements.ToArray();
         }*/
 
-        public Vector2 ResolveCollisions(ref TileMap.Component component, Vector2 newPos)
+        public Vector2 ResolveCollisions(ref TileMap.Data data, Vector2 newPos)
         {
             //var partialDisplacements = DiscretizeDisplacement(totalDisplacement);
             /*Vector2 newPos = default;

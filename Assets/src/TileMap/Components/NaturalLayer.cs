@@ -1,3 +1,4 @@
+using Entitas;
 using UnityEngine;
 
 namespace TileMap
@@ -17,11 +18,11 @@ namespace TileMap
             List = new NaturalLayer[Size.x * Size.y];
         }
         
-        public ref NaturalLayer GetNaturalLayerChunk(ref Component tileMap, int x, int y)
+        public ref NaturalLayer GetNaturalLayerChunk(int x, int y)
         {
-            int index = x / tileMap.NaturalLayer.ChunkSize.x + (y / tileMap.NaturalLayer.ChunkSize.y) * tileMap.NaturalLayer.Size.x;
+            int index = x / ChunkSize.x + (y / ChunkSize.y) * Size.x;
 
-            return ref tileMap.NaturalLayer.List[index];
+            return ref List[index];
         }
     }
 }

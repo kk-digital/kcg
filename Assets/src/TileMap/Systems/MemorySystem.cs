@@ -14,7 +14,6 @@ namespace TileMap
         static MemorySystem()
         {
             Instance = new MemorySystem();
-            
         }
 
         private MemorySystem()
