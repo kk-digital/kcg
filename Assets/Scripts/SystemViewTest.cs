@@ -175,6 +175,24 @@ namespace SystemView
 
             State.AsteroidBelts.Add(InnerAsteroidBelt);
             State.AsteroidBelts.Add(OuterAsteroidBelt);
+
+            for (int i = 0; i < State.Planets.Count; i++)
+                for (int j = 0; j < State.Planets.Count; j++)
+                    if (i != j)
+                    {
+                        SystemShip Ship = new SystemShip();
+                        Ship.Start = State.Planets[i].Descriptor;
+                        Ship.Destination = State.Planets[j].Descriptor;
+                        Ship.Descriptor = new OrbitingObjectDescriptor(Ship.Start);
+
+                        State.Ships.Add(Ship);
+
+                        GameObject ShipObject = new GameObject();
+                        ShipObject.name = "Ship renderer";
+
+                        SystemShipRenderer ShipRenderer = ShipObject.AddComponent<SystemShipRenderer>();
+                        ShipRenderer.ship = Ship;
+                    }
         }
 
         void Update()
@@ -201,6 +219,20 @@ namespace SystemView
                 //Asteroids[b].LastCycle = CurrentCycle;
 
                 //if (++UpdatesCompleted == UpdatesPerTick) return;
+            }
+
+            foreach (SystemShip s in State.Ships)
+            {
+                if (!s.PathPlanned && !s.Reached)
+                    s.PathPlanned = s.Descriptor.PlanPath(s.Destination, 0.1f);
+                else if (!s.Reached && s.Descriptor.GetDistanceFrom(s.Destination) < 1.0f)
+                {
+                    s.Descriptor = new OrbitingObjectDescriptor(s.Destination);
+                    s.PathPlanned = false;
+                    (s.Start, s.Destination) = (s.Destination, s.Start);
+                }
+
+                s.UpdatePosition(CurrentMillis / 200.0f);
             }
 
             CurrentCycle++;
