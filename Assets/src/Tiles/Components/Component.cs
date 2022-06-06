@@ -17,9 +17,9 @@
         //Health
         public byte Durability;
 
-        public static Tile.Component EmptyTile()
+        public static Component EmptyTile()
         {
-            var tile = new Tile.Component
+            var tile = new Component
             {
                 BackTilePropertiesId = -1,
                 MidTilePropertiesId = -1,

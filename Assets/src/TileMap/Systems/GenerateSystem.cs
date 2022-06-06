@@ -12,12 +12,12 @@ namespace TileMap
             Instance = new GenerateSystem();
         }
 
-        public TileMap.Component GenerateTileMap()
+        public Component GenerateTileMap()
         {
             // Generating the map
             Vector2Int mapSize = new Vector2Int(16, 16);
 
-            var tileMap = new TileMap.Component(mapSize);
+            var tileMap = new Component(mapSize);
 
             for(int j = 0; j < mapSize.y; j++)
             {
