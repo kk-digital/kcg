@@ -17,10 +17,9 @@ namespace Agent
             EntitasContext = entitasContext;
         }
 
-        public void Draw(Transform transform)
+        public void Draw(ref Agent.List list, Transform transform)
         {
-            var AgentsWithSprite = EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentSprite2D));
-            foreach (var entity in AgentsWithSprite)
+            foreach (var entity in list.AgentsWithSprite)
             {
                 //Transform newTr = Transform.Instantiate(transform);
                // transform.Translate(new Vector3(entity.agentPosition2D.Value.x, entity.agentPosition2D.Value.y, 0.0f));

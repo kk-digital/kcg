@@ -13,11 +13,10 @@ namespace Agent
         }
 
 
-        public void Update()
+        public void Update(ref List list)
         {
             float deltaTime = Time.deltaTime;
-            var AgentsWithVelocity = EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentMovable, GameMatcher.AgentPosition2D));
-            foreach (var entity in AgentsWithVelocity)
+            foreach (var entity in list.AgentsWithVelocity)
             {
                 // NOTE(Mahdi): lets try another way to update the agents
                 // we can comment this code for now

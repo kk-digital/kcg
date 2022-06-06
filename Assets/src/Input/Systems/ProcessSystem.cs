@@ -11,11 +11,9 @@ namespace ECSInput
             EntitasContext = entitasContext;
         }
 
-        public void Update()
+        public void ProcessAgentInput(ref Agent.List list)
         {
-            var AgentsWithXY = EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.ECSInput, GameMatcher.ECSInputXY));
-
-            foreach (var entity in AgentsWithXY)
+            foreach (var entity in list.AgentsWithXY)
             {
                 entity.ReplaceECSInputXY(new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")));
             }

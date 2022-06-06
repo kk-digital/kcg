@@ -46,6 +46,7 @@ namespace PlanetTileMap.Unity
         ECSInput.ProcessSystem ProcessSystems;
         Agent.MovableSystem MovableSystem;
         Agent.DrawSystem DrawSystem;
+        Agent.List AgentList;
 
         public void Start()
         {
@@ -63,6 +64,7 @@ namespace PlanetTileMap.Unity
             ProcessSystems = new ECSInput.ProcessSystem(EntitasContext);
             MovableSystem = new Agent.MovableSystem(EntitasContext);
             DrawSystem = new Agent.DrawSystem(EntitasContext);
+            AgentList = new Agent.List();
 
             Agent.SpawnerSystem.Instance.SpawnPlayer(Material);
         }
@@ -88,11 +90,11 @@ namespace PlanetTileMap.Unity
                 else
                     DestroyImmediate(mr.gameObject);
 
-            ProcessSystems.Update();
-            MovableSystem.Update();
+            ProcessSystems.ProcessAgentInput(ref AgentList);
+            MovableSystem.Update(ref AgentList);
             TileMap.DrawLayer(Layer.Front, Instantiate(Material), transform, 10);
             TileMap.DrawLayer(Layer.Ore, Instantiate(Material), transform, 11);
-            DrawSystem.Draw(transform);
+            DrawSystem.Draw(ref AgentList, transform);
         }
 
 
