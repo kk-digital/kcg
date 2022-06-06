@@ -1,4 +1,3 @@
-using TileProperties;
 using UnityEngine;
 
 namespace Planet
@@ -12,18 +11,18 @@ namespace Planet
             Instance = new GenerateSystem();
         }
 
-        public PlanetTileMap.PlanetTileMap GenerateTileMap()
+        public Tile.Map GenerateTileMap()
         {
             // Generating the map
             Vector2Int mapSize = new Vector2Int(16, 16);
 
-            var tileMap = new PlanetTileMap.PlanetTileMap(mapSize);
+            var tileMap = new Tile.Map(mapSize);
 
             for(int j = 0; j < mapSize.y; j++)
             {
                 for(int i = 0; i < mapSize.x; i++)
                 {
-                    PlanetTile tile = PlanetTile.EmptyTile();
+                    var tile = Tile.Component.EmptyTile();
                     tile.FrontTilePropertiesId = 9;
 
 
@@ -54,10 +53,10 @@ namespace Planet
             }
 
             tileMap.UpdateTopTilesMap();
-            tileMap.UpdateAllTileVariants(PlanetTileMap.Layer.Front);
-            tileMap.UpdateAllTileVariants(PlanetTileMap.Layer.Ore);
-            tileMap.BuildLayerTexture(PlanetTileMap.Layer.Front);
-            tileMap.BuildLayerTexture(PlanetTileMap.Layer.Ore);
+            tileMap.UpdateAllTileVariants(Planet.Layer.Front);
+            tileMap.UpdateAllTileVariants(Planet.Layer.Ore);
+            tileMap.BuildLayerTexture(Planet.Layer.Front);
+            tileMap.BuildLayerTexture(Planet.Layer.Ore);
 
             return tileMap;
         }

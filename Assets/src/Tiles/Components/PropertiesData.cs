@@ -1,9 +1,9 @@
 ﻿using Enums;
 using System;
 
-namespace TileProperties
+namespace Tile
 {
-    public struct TilePropertiesData
+    public struct PropertiesData
     {
         public string Name; //later use string pool
         public string Description;
@@ -15,14 +15,8 @@ namespace TileProperties
 
         public int SpriteId
         {
-            set
-            {
-                Variants[(int)TileVariant.Variant.Middle] = value;
-            }
-            get
-            {
-                return Variants[(int)TileVariant.Variant.Middle];
-            }
+            set => Variants[(int)Variant.Middle] = value;
+            get => Variants[(int)Variant.Middle];
         }
 
         public PlanetTileCollisionType TileCollisionType;
@@ -47,25 +41,19 @@ namespace TileProperties
             TileCollisionType = collisionType;
         }
 
-        public bool IsSolid 
-        {
-            get
-            {
-                return TileCollisionType == PlanetTileCollisionType.TileCollisionTypeSolid;
-            }
-        }
+        public bool IsSolid => TileCollisionType == PlanetTileCollisionType.TileCollisionTypeSolid;
 
-        private TilePropertiesData(string name, string description, int tileId) : this()
+        private PropertiesData(string name, string description, int tileId) : this()
         {
             Name = name;
             Description = description;
             TileId = tileId;
-            int variantsCount = Enum.GetNames(typeof(TileVariant.Variant)).Length;
+            int variantsCount = Enum.GetNames(typeof(Variant)).Length;
             Variants = new int[variantsCount];
 
         }
 
-        private TilePropertiesData(string name, string description, int tileId,
+        private PropertiesData(string name, string description, int tileId,
             TileDrawProperties tileDrawType, int spriteId) : this(name, description, tileId)
         {
             TileDrawType = tileDrawType;
@@ -73,7 +61,7 @@ namespace TileProperties
 
         }
 
-        public TilePropertiesData(string name, string description, int tileId,
+        public PropertiesData(string name, string description, int tileId,
             TileDrawProperties tileDrawType, int spriteId,
             PlanetTileCollisionType tileCollisionType, byte durability,
              bool isExplosive = false)

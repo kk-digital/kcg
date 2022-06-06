@@ -1,10 +1,10 @@
-namespace TileSpriteLoader
+namespace Tile
 {
     public struct SpriteSheet
     {
         public byte[] Data;
 
-        public int id;
+        public int ID;
         public int SpriteSize;
 
         public int Width;

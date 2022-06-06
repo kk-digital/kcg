@@ -1,4 +1,4 @@
-namespace PlanetTileMap
+namespace Planet
 {
     public enum Layer
     {

@@ -28,86 +28,86 @@ namespace Planet
         public void InitializeTiles()
         {
             // creating the tiles
-            GameState.TileCreationApi.CreateTile(0);
-            GameState.TileCreationApi.SetTileName("slab1");
-            GameState.TileCreationApi.SetTileTexture16(MetalSlabsTileSheet, 0, 0);
-            GameState.TileCreationApi.EndTile();
+            GameState.CreationAPISystem.CreateTile(0);
+            GameState.CreationAPISystem.SetTileName("slab1");
+            GameState.CreationAPISystem.SetTileTexture16(MetalSlabsTileSheet, 0, 0);
+            GameState.CreationAPISystem.EndTile();
 
-            GameState.TileCreationApi.CreateTile(1);
-            GameState.TileCreationApi.SetTileName("slab2");
-            GameState.TileCreationApi.SetTileTexture16(MetalSlabsTileSheet, 1, 0);
-            GameState.TileCreationApi.EndTile();
+            GameState.CreationAPISystem.CreateTile(1);
+            GameState.CreationAPISystem.SetTileName("slab2");
+            GameState.CreationAPISystem.SetTileTexture16(MetalSlabsTileSheet, 1, 0);
+            GameState.CreationAPISystem.EndTile();
 
-            GameState.TileCreationApi.CreateTile(2);
-            GameState.TileCreationApi.SetTileName("slab3");
-            GameState.TileCreationApi.SetTileTexture16(MetalSlabsTileSheet, 4, 0);
-            GameState.TileCreationApi.EndTile();
+            GameState.CreationAPISystem.CreateTile(2);
+            GameState.CreationAPISystem.SetTileName("slab3");
+            GameState.CreationAPISystem.SetTileTexture16(MetalSlabsTileSheet, 4, 0);
+            GameState.CreationAPISystem.EndTile();
 
-            GameState.TileCreationApi.CreateTile(3);
-            GameState.TileCreationApi.SetTileName("slab4");
-            GameState.TileCreationApi.SetTileTexture16(MetalSlabsTileSheet, 5, 0);
-            GameState.TileCreationApi.EndTile();
+            GameState.CreationAPISystem.CreateTile(3);
+            GameState.CreationAPISystem.SetTileName("slab4");
+            GameState.CreationAPISystem.SetTileTexture16(MetalSlabsTileSheet, 5, 0);
+            GameState.CreationAPISystem.EndTile();
 
-            GameState.TileCreationApi.CreateTile(4);
-            GameState.TileCreationApi.SetTileName("tile5");
-            GameState.TileCreationApi.SetTileTexture16(StoneBulkheads, 5, 1);
-            GameState.TileCreationApi.EndTile();
+            GameState.CreationAPISystem.CreateTile(4);
+            GameState.CreationAPISystem.SetTileName("tile5");
+            GameState.CreationAPISystem.SetTileTexture16(StoneBulkheads, 5, 1);
+            GameState.CreationAPISystem.EndTile();
 
-            GameState.TileCreationApi.CreateTile(5);
-            GameState.TileCreationApi.SetTileName("tile6");
-            GameState.TileCreationApi.SetTileTexture16(StoneBulkheads, 4, 1);
-            GameState.TileCreationApi.EndTile();
+            GameState.CreationAPISystem.CreateTile(5);
+            GameState.CreationAPISystem.SetTileName("tile6");
+            GameState.CreationAPISystem.SetTileTexture16(StoneBulkheads, 4, 1);
+            GameState.CreationAPISystem.EndTile();
 
-            GameState.TileCreationApi.CreateTile(6);
-            GameState.TileCreationApi.SetTileName("tile7");
-            GameState.TileCreationApi.SetTileTexture16(StoneBulkheads, 7, 1);
-            GameState.TileCreationApi.EndTile();
+            GameState.CreationAPISystem.CreateTile(6);
+            GameState.CreationAPISystem.SetTileName("tile7");
+            GameState.CreationAPISystem.SetTileTexture16(StoneBulkheads, 7, 1);
+            GameState.CreationAPISystem.EndTile();
 
-            GameState.TileCreationApi.CreateTile(7);
-            GameState.TileCreationApi.SetTileName("tile_moon_1");
-            GameState.TileCreationApi.SetTileTexture(TilesMoon, 0, 0);
-            GameState.TileCreationApi.EndTile();
+            GameState.CreationAPISystem.CreateTile(7);
+            GameState.CreationAPISystem.SetTileName("tile_moon_1");
+            GameState.CreationAPISystem.SetTileTexture(TilesMoon, 0, 0);
+            GameState.CreationAPISystem.EndTile();
 
-            GameState.TileCreationApi.CreateTile(8);
-            GameState.TileCreationApi.SetTileName("ore_1");
-            for(int i = 0; i < Enum.GetNames(typeof(TileVariant.Variant)).Length; i++)
+            GameState.CreationAPISystem.CreateTile(8);
+            GameState.CreationAPISystem.SetTileName("ore_1");
+            for(int i = 0; i < Enum.GetNames(typeof(Tile.Variant)).Length; i++)
             {
-                GameState.TileCreationApi.SetTileVariant16(OreTileSheet, 0, 0, (TileVariant.Variant)i);
+                GameState.CreationAPISystem.SetTileVariant16(OreTileSheet, 0, 0, (Tile.Variant)i);
             }
-            GameState.TileCreationApi.EndTile();
+            GameState.CreationAPISystem.EndTile();
 
-            GameState.TileCreationApi.CreateTile(9);
-            GameState.TileCreationApi.SetTileName("glass");
-            GameState.TileCreationApi.SetTileTexture16(TilesMoon, 12, 11);
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 12, 11, TileVariant.Variant.Middle);
+            GameState.CreationAPISystem.CreateTile(9);
+            GameState.CreationAPISystem.SetTileName("glass");
+            GameState.CreationAPISystem.SetTileTexture16(TilesMoon, 12, 11);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 12, 11, Tile.Variant.Middle);
 
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 13, 11, TileVariant.Variant.Right);
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 11, 11, TileVariant.Variant.Left);
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 12, 10, TileVariant.Variant.Top);
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 12, 12, TileVariant.Variant.Bottom);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 13, 11, Tile.Variant.Right);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 11, 11, Tile.Variant.Left);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 12, 10, Tile.Variant.Top);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 12, 12, Tile.Variant.Bottom);
             
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 16, 12, TileVariant.Variant.InnerTopRight);
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 17, 12, TileVariant.Variant.InnerTopLeft);
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 16, 11, TileVariant.Variant.InnerBottomRight);
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 17, 11, TileVariant.Variant.InnerBottomLeft);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 16, 12, Tile.Variant.InnerTopRight);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 17, 12, Tile.Variant.InnerTopLeft);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 16, 11, Tile.Variant.InnerBottomRight);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 17, 11, Tile.Variant.InnerBottomLeft);
 
 
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 13, 10, TileVariant.Variant.OuterTopRight);
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 11, 10, TileVariant.Variant.OuterTopLeft);
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 13, 12, TileVariant.Variant.OuterBottomRight);
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 11, 12, TileVariant.Variant.OuterBottomLeft);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 13, 10, Tile.Variant.OuterTopRight);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 11, 10, Tile.Variant.OuterTopLeft);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 13, 12, Tile.Variant.OuterBottomRight);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 11, 12, Tile.Variant.OuterBottomLeft);
 
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 13, 13, TileVariant.Variant.TipRight);
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 11, 13, TileVariant.Variant.TipLeft);
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 14, 10, TileVariant.Variant.TipTop);
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 14, 12, TileVariant.Variant.TipBottom);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 13, 13, Tile.Variant.TipRight);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 11, 13, Tile.Variant.TipLeft);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 14, 10, Tile.Variant.TipTop);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 14, 12, Tile.Variant.TipBottom);
 
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 14, 11, TileVariant.Variant.TipVertical);
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 12, 13, TileVariant.Variant.TipHorizontal);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 14, 11, Tile.Variant.TipVertical);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 12, 13, Tile.Variant.TipHorizontal);
 
-            GameState.TileCreationApi.SetTileVariant16(TilesMoon, 14, 13, TileVariant.Variant.Default);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 14, 13, Tile.Variant.Default);
 
-            GameState.TileCreationApi.EndTile();
+            GameState.CreationAPISystem.EndTile();
         }
     }
 }

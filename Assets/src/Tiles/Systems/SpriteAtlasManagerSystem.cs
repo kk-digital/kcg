@@ -1,19 +1,18 @@
-﻿using TileSpriteLoader;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace TileSpriteAtlas
+namespace Tile
 {
-    public class TileSpriteAtlasManager
+    public class SpriteAtlasManagerSystem
     {
-        private TileSpriteAtlas[] SpritesArray;
+        private Tile.SpriteAtlas[] SpritesArray;
         private int[] Count;
 
-        public TileSpriteAtlasManager()
+        public SpriteAtlasManagerSystem()
         {
-            SpritesArray = new TileSpriteAtlas[1];
+            SpritesArray = new Tile.SpriteAtlas[1];
             Count = new int[1];
 
-            TileSpriteAtlas atlas = new TileSpriteAtlas();
+            Tile.SpriteAtlas atlas = new Tile.SpriteAtlas();
             atlas.Width = 9;
             atlas.Height = 9;
             atlas.Data = new byte[4 * 32 * 32 * atlas.Width * atlas.Height]; // 4 * 32 * 32 = 4096
@@ -24,27 +23,27 @@ namespace TileSpriteAtlas
             SpritesArray[0] = atlas;
         }
         
-        public ref TileSpriteAtlas GetSpriteAtlas(int id)
+        public ref Tile.SpriteAtlas GetSpriteAtlas(int id)
         {
             return ref SpritesArray[id];
         }
 
         public int GetGlTextureId(int id)
         {
-            TileSpriteAtlas atlas = GetSpriteAtlas(id);
+            Tile.SpriteAtlas atlas = GetSpriteAtlas(id);
             return atlas.GLTextureID;
         }
 
         public Texture2D GetTexture(int id)
         {
-            ref TileSpriteAtlas atlas = ref GetSpriteAtlas(id);
+            ref Tile.SpriteAtlas atlas = ref GetSpriteAtlas(id);
             return atlas.Texture; 
         }
 
         public Render.Sprite GetSprite(int id)
         {
             Render.Sprite sprite = new Render.Sprite();
-            ref TileSpriteAtlas atlas = ref GetSpriteAtlas(0);
+            ref Tile.SpriteAtlas atlas = ref GetSpriteAtlas(0);
 
             sprite.Texture = atlas.Texture;
 
@@ -53,15 +52,15 @@ namespace TileSpriteAtlas
             int width = 32;
             int height = 32;
 
-            sprite.TextureCoords = new Vector4((float)xOffset / (float)(atlas.Width * 32), (float)yOffset / (float)(atlas.Height * 32),
-            (float)width / (float)(atlas.Width * 32), (float)height / (float)(atlas.Height * 32));
+            sprite.TextureCoords = new Vector4(xOffset / (float)(atlas.Width * 32), yOffset / (float)(atlas.Height * 32),
+            width / (float)(atlas.Width * 32), height / (float)(atlas.Height * 32));
 
             return sprite;
         }
 
         public void GetSpriteBytes(int id, byte[] data)
         {
-            ref TileSpriteAtlas atlas = ref SpritesArray[0];
+            ref var atlas = ref SpritesArray[0];
 
             int xOffset = (id % atlas.Width) * 32;
             int yOffset = (id / atlas.Height) * 32;
@@ -88,8 +87,8 @@ namespace TileSpriteAtlas
         // returns an id that can be used later to get texture coordinates
         public int CopyTileSpriteToAtlas(int spriteSheetID, int row, int column, int atlasId)
         {
-            SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[spriteSheetID];
-            ref TileSpriteAtlas atlas = ref SpritesArray[atlasId];
+            var sheet = GameState.TileSpriteLoader.SpriteSheets[spriteSheetID];
+            ref var atlas = ref SpritesArray[atlasId];
             ref int count = ref Count[atlasId];
             
             int xOffset = (count % atlas.Width) * 32;
@@ -125,8 +124,8 @@ namespace TileSpriteAtlas
         // returns an id that can be used later to get texture coordinates
          public int CopyTileSpriteToAtlas16To32(int spriteSheetID, int row, int column, int atlasId)
         {
-            SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[spriteSheetID];
-            ref TileSpriteAtlas atlas = ref SpritesArray[atlasId];
+            var sheet = GameState.TileSpriteLoader.SpriteSheets[spriteSheetID];
+            ref var atlas = ref SpritesArray[atlasId];
             ref int count = ref Count[atlasId];
             
             int xOffset = (count % atlas.Width) * 32;
@@ -167,8 +166,8 @@ namespace TileSpriteAtlas
         // returns an id that can be used later to get texture coordinates
         public int CopyTileSpriteToAtlas8To32(int spriteSheetID, int row, int column, int atlasId)
         {
-            SpriteSheet sheet = GameState.TileSpriteLoader.SpriteSheets[spriteSheetID];
-            ref TileSpriteAtlas atlas = ref SpritesArray[atlasId];
+            var sheet = GameState.TileSpriteLoader.SpriteSheets[spriteSheetID];
+            ref var atlas = ref SpritesArray[atlasId];
             ref int count = ref Count[atlasId];
             
             int xOffset = (count % atlas.Width) * 32;

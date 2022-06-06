@@ -84,7 +84,7 @@ namespace Agent
             var top = (int) Mathf.Round(Pos.y + Radius - Eps);
             for (int y = bottom; y <= top; y++) 
             {
-                if (GameState.TileCreationApi.GetTile(bounds.LeftTile, y).IsSolid) return true;
+                if (GameState.CreationAPISystem.GetTile(bounds.LeftTile, y).IsSolid) return true;
             }
 
             return false;
@@ -100,7 +100,7 @@ namespace Agent
             var top = (int) Mathf.Round(Pos.y + Radius - Eps);
             for (int y = bottom; y <= top; y++) 
             {
-                if (GameState.TileCreationApi.GetTile(bounds.RightTile, y).IsSolid) return true;
+                if (GameState.CreationAPISystem.GetTile(bounds.RightTile, y).IsSolid) return true;
             }
 
             return false;
@@ -116,7 +116,7 @@ namespace Agent
             var right = (int) Mathf.Round(Pos.x + Radius + Eps);
             for (int x = left; x <= right; x++) 
             {
-               if (GameState.TileCreationApi.GetTile(x, bounds.TopTile).IsSolid) return true;
+               if (GameState.CreationAPISystem.GetTile(x, bounds.TopTile).IsSolid) return true;
             }
 
             return false;
@@ -132,7 +132,7 @@ namespace Agent
             var right = (int) Mathf.Round(Pos.x + Radius + Eps);
             for (int x = left; x <= right; x++) 
             {
-                if (GameState.TileCreationApi.GetTile(x, bounds.BottomTile).IsSolid) return true;
+                if (GameState.CreationAPISystem.GetTile(x, bounds.BottomTile).IsSolid) return true;
             }
 
             return false;

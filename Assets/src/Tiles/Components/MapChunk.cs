@@ -1,10 +1,8 @@
-using TileProperties;
-
-namespace PlanetTileMap
+namespace Tile
 {
-    public class PlanetTileMapChunk
+    public class MapChunk
     {
-        public PlanetTile[,] Tiles;
+        public Component[,] Tiles;
 
         // Makes sorting function much easier and faster
         // This is the index of this chunk in the ChunkIndexList
@@ -13,16 +11,16 @@ namespace PlanetTileMap
         public int Usage; // Used for sorting chunks by usage
         public int Seq;
 
-        public PlanetTileMapChunk()
+        public MapChunk()
         {
-            Tiles = new PlanetTile[16, 16];
+            Tiles = new Component[16, 16];
             Seq = 0;
         }
-    }
-
-    public struct NaturalLayerChunk
-    {
-        int Property;
-        // chunk properties
+        
+        public struct NaturalLayerChunk
+        {
+            int Property;
+            // chunk properties
+        }
     }
 }

@@ -2,13 +2,13 @@ using BigGustave;
 using System;
 using System.Collections.Generic;
 
-namespace TileSpriteLoader
+namespace Tile
 {
-    public class TileSpriteLoader
+    public class SpriteLoaderSystem
     {
-        public SpriteSheet[] SpriteSheets;
+        public Tile.SpriteSheet[] SpriteSheets;
         public int ImageCount;
-        public Dictionary<string, int> SpriteSheetID = new Dictionary<string, int>();
+        public Dictionary<string, int> SpriteSheetID = new();
 
         public void InitStage1()
         {
@@ -39,13 +39,14 @@ namespace TileSpriteLoader
             Array.Resize(ref SpriteSheets, ImageCount);
 
             var data = Png.Open(filename);
-            SpriteSheets[ImageCount - 1] = new SpriteSheet();
-            SpriteSheets[ImageCount - 1].id = ImageCount - 1;
-            SpriteSheets[ImageCount - 1].SpriteSize = tileWidth;
-            SpriteSheets[ImageCount - 1].Width = data.Header.Width;
-            SpriteSheets[ImageCount - 1].Height = data.Header.Height;
-
-            SpriteSheets[ImageCount - 1].Data = new byte[4 * data.Header.Width * data.Header.Height];
+            SpriteSheets[ImageCount - 1] = new Tile.SpriteSheet
+            {
+                ID = ImageCount - 1,
+                SpriteSize = tileWidth,
+                Width = data.Header.Width,
+                Height = data.Header.Height,
+                Data = new byte[4 * data.Header.Width * data.Header.Height]
+            };
 
             for (int y = 0; y < data.Header.Height; y++)
             {
@@ -61,7 +62,7 @@ namespace TileSpriteLoader
             }
         }
 
-        public ref SpriteSheet GetSpriteSheet(int id)
+        public ref Tile.SpriteSheet GetSpriteSheet(int id)
         {
             return ref SpriteSheets[id];
         }

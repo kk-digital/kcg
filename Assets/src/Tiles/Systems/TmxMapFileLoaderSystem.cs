@@ -1,24 +1,11 @@
-using BigGustave; //SHOULD NOT IMPORT
-
-using Enums;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using TiledCS;
-
-
-using TileProperties;
-using PlanetTileMap;
-
 //Note:
 //TMX files are created by map editor "Tiled"
 //Tiled can be downloaded at mapeditor.org
 //Tiled saves maps in TMX format
 
-namespace TmxMapFileLoader
+namespace Tile
 {
-    static class TmxImporter
+    static class TmxMapFileLoaderSystem
     {
         //Todo: Break into stages
         //First stage, iterates over map and gets all sprite sheets used (loads them)

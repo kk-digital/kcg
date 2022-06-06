@@ -1,7 +1,6 @@
 using System;
 using Enums;
 using System.Collections.Generic;
-using UnityEngine;
 
 //MOST IMPORTANT TILE
 
@@ -38,7 +37,7 @@ SetTileTextDescription("Regolith is a kind of dust commonly found on the surface
 EndTile();
 */
 
-namespace TileProperties
+namespace Tile
 {
     //https://github.com/kk-digital/kcg/issues/89
 
@@ -46,38 +45,38 @@ namespace TileProperties
     //ALL TILES ARE CREATED FROM FUNCTIONS IN THIS FILE
     //ALL SPRITES FOR TILES ARE SET AND ASSIGNED FROM THIS API
 
-    public class TileCreationApi
+    public class CreationAPISystem
     {
         // Start is called before the first frame update
 
         private int CurrentTileIndex;
-        private TilePropertiesData[] PropertiesArray;
+        private PropertiesData[] PropertiesArray;
 
         private  Dictionary<string, int> NameToID;
 
-        public TileCreationApi()
+        public CreationAPISystem()
         {
             NameToID = new Dictionary<string, int>();
-            PropertiesArray = new TilePropertiesData[1024];
+            PropertiesArray = new PropertiesData[1024];
             for(int i = 0; i < PropertiesArray.Length; i++)
             {
-                PropertiesArray[i] = new TilePropertiesData("", "", 0, TileDrawProperties.TileDrawPropertyNormal, 0,
+                PropertiesArray[i] = new PropertiesData("", "", 0, TileDrawProperties.TileDrawPropertyNormal, 0,
                                 PlanetTileCollisionType.TileCollisionTypeSolid, 100, false);
             }
             CurrentTileIndex = -1;
         }
 
-        public TilePropertiesData GetTileProperties(int TileId)
+        public PropertiesData GetTileProperties(int TileId)
         {
             if (TileId >= 0 && TileId < PropertiesArray.Length)
             {
                 return PropertiesArray[TileId];
             }
 
-            return new TilePropertiesData();
+            return new PropertiesData();
         }
 
-        public TilePropertiesData GetTileProperties(string name)
+        public PropertiesData GetTileProperties(string name)
         {
             int value;
             bool exists = NameToID.TryGetValue(name, out value);
@@ -86,7 +85,7 @@ namespace TileProperties
                 return GetTileProperties(value);
             }
 
-            return new TilePropertiesData();
+            return new PropertiesData();
         }
 
         public void CreateTile(int TileId)
@@ -174,7 +173,7 @@ namespace TileProperties
             }
         }
 
-        public void SetTileVariant(int spriteSheetId, int row, int column, TileVariant.Variant variant)
+        public void SetTileVariant(int spriteSheetId, int row, int column, Variant variant)
         {
             if (CurrentTileIndex != -1)
             {
@@ -185,7 +184,7 @@ namespace TileProperties
             }
         }
 
-        public void SetTileVariant16(int spriteSheetId, int row, int column, TileVariant.Variant variant)
+        public void SetTileVariant16(int spriteSheetId, int row, int column, Variant variant)
         {
             if (CurrentTileIndex != -1)
             {
@@ -200,7 +199,7 @@ namespace TileProperties
             CurrentTileIndex = -1;
         }
 
-        public TilePropertiesData GetTile(int x, int y)
+        public PropertiesData GetTile(int x, int y)
         {
             // 0, 0 = 0
             // 32, 0 = 1

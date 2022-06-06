@@ -1,7 +1,5 @@
-using System;
 using UnityEngine;
 using System.Collections.Generic;
-using TileProperties;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -77,7 +75,7 @@ namespace PlanetTileMap.Unity
         // drawing the sprite atlas
         void DrawSpriteAtlas()
         {
-            ref TileSpriteAtlas.TileSpriteAtlas atlas = ref GameState.TileSpriteAtlasManager.GetSpriteAtlas(0);
+            ref Tile.SpriteAtlas atlas = ref GameState.TileSpriteAtlasManager.GetSpriteAtlas(0);
             Render.Sprite sprite = new Render.Sprite();
             sprite.Texture = atlas.Texture;
             sprite.TextureCoords = new Vector4(0, 0, 1, 1);

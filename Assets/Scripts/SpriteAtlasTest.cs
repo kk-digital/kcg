@@ -1,7 +1,5 @@
-using System;
 using UnityEngine;
 using System.Collections.Generic;
-using TileProperties;
 
 #if UNITY_EDITOR
 using UnityEditor;

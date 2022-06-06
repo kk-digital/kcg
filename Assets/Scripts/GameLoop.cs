@@ -1,6 +1,5 @@
 using UnityEngine;
 using Enums;
-using TileProperties;
 
 using SystemView;
 
@@ -11,7 +10,6 @@ public class GameLoop : MonoBehaviour
     private Agent.List agents;
     
     private const int FPS = 60;
-    public TilePropertiesManager TilePropertiesManager;
     // Method for setting everything up, for like init GameManager for example
 
     public SystemState CurrentSystemState;

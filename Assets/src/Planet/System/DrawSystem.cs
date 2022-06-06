@@ -20,7 +20,7 @@ namespace Planet
             parent = transform;
         }
 
-        public void DrawTiles(ref PlanetTileMap.PlanetTileMap tileMap)
+        public void DrawTiles(ref Tile.Map tileMap)
         {
             foreach(var mr in parent.GetComponentsInChildren<MeshRenderer>())
                 if (Application.isPlaying)
@@ -28,8 +28,8 @@ namespace Planet
                 else
                     Object.DestroyImmediate(mr.gameObject);
             
-            tileMap.DrawLayer(PlanetTileMap.Layer.Front, Object.Instantiate(material), parent, 10);
-            tileMap.DrawLayer(PlanetTileMap.Layer.Ore, Object.Instantiate(material), parent, 11);
+            tileMap.DrawLayer(Layer.Front, Object.Instantiate(material), parent, 10);
+            tileMap.DrawLayer(Layer.Ore, Object.Instantiate(material), parent, 11);
         }
     }
 }

@@ -1,8 +1,5 @@
-
-
-namespace TileVariant
+namespace Tile
 {
-
     public enum Neighbor
     {
         Right = 0,
@@ -38,9 +35,7 @@ namespace TileVariant
         Middle = 18,
         Default = 19
     }
-
-
-
+    
     public static class TileNeighbor 
     {
         public static Variant GetVariant(int[] neighbors, int tileId)

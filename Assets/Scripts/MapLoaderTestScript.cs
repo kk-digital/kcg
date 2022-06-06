@@ -1,7 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
-using TileProperties;
-using System;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -22,7 +19,7 @@ namespace PlanetTileMap.Unity
         //public string TileMap = "Moonbunker/Moon Bunker.tmx";
         [SerializeField] Material Material;
 
-        PlanetTileMap TileMap;
+        Tile.Map TileMap;
         static bool InitTiles;
 
         public void Start()
@@ -50,8 +47,8 @@ namespace PlanetTileMap.Unity
                 int x = (int)worldPosition.x;
                 int y = (int)worldPosition.y;
                 Debug.Log(x + " " + y);
-                TileMap.RemoveTile(x, y, Layer.Front);
-                TileMap.BuildLayerTexture(Layer.Front);
+                TileMap.RemoveTile(x, y, Planet.Layer.Front);
+                TileMap.BuildLayerTexture(Planet.Layer.Front);
             }
             
             Planet.DrawSystem.Instance.DrawTiles(ref TileMap);

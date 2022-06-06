@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace TileSpriteAtlas
+namespace Tile
 {
-    public struct TileSpriteAtlas
+    public struct SpriteAtlas
     {
         public int AtlasID;
         public int GLTextureID;

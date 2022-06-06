@@ -57,7 +57,7 @@ namespace Agent
             };
         }
     
-        public bool IsCollidingLeft(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
+        public bool IsCollidingLeft(ref Tile.Map map, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving right
@@ -70,7 +70,7 @@ namespace Agent
 
                 if (tilePropertiesIndex >= 0)
                 {
-                    var tileProperties = GameState.TileCreationApi.GetTileProperties(tilePropertiesIndex);
+                    var tileProperties = GameState.CreationAPISystem.GetTileProperties(tilePropertiesIndex);
                     return true;
                     //TODO: Use IsSolid and etc then return true if isSolid
                 }
@@ -79,7 +79,7 @@ namespace Agent
             return false;
         }
     
-        public bool IsCollidingRight(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
+        public bool IsCollidingRight(ref Tile.Map map, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving Left
@@ -92,7 +92,7 @@ namespace Agent
 
                 if (tilePropertiesIndex >= 0)
                 {
-                    var tileProperties = GameState.TileCreationApi.GetTileProperties(tilePropertiesIndex);
+                    var tileProperties = GameState.CreationAPISystem.GetTileProperties(tilePropertiesIndex);
                     return true;
                     //TODO: Use IsSolid and etc then return true if isSolid
                 }
@@ -101,7 +101,7 @@ namespace Agent
             return false;
         }
     
-        public bool IsCollidingTop(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
+        public bool IsCollidingTop(ref Tile.Map map, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving Down
@@ -114,7 +114,7 @@ namespace Agent
 
                 if (tilePropertiesIndex >= 0)
                 {
-                    var tileProperties = GameState.TileCreationApi.GetTileProperties(tilePropertiesIndex);
+                    var tileProperties = GameState.CreationAPISystem.GetTileProperties(tilePropertiesIndex);
                     return true;
                     //TODO: Use IsSolid and etc then return true if isSolid
                 }
@@ -123,7 +123,7 @@ namespace Agent
             return false;
         }
 
-        public bool IsCollidingBottom(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
+        public bool IsCollidingBottom(ref Tile.Map map, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving Up
@@ -136,7 +136,7 @@ namespace Agent
 
                 if (tilePropertiesIndex >= 0)
                 {
-                    var tileProperties = GameState.TileCreationApi.GetTileProperties(tilePropertiesIndex);
+                    var tileProperties = GameState.CreationAPISystem.GetTileProperties(tilePropertiesIndex);
                     return true;
                     //TODO: Use IsSolid and etc then return true if isSolid
                 }
@@ -163,7 +163,7 @@ namespace Agent
             return partialDisplacements.ToArray();
         }*/
 
-        public Vector2 ResolveCollisions(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
+        public Vector2 ResolveCollisions(ref Tile.Map map, Vector2 newPos)
         {
             //var partialDisplacements = DiscretizeDisplacement(totalDisplacement);
             /*Vector2 newPos = default;
