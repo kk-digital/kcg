@@ -37,6 +37,7 @@ namespace Vehicle
         GameObject prePrefab;
         bool Init = false;
         GameEntity vehicleDraw;
+
         // Physics
         BoxColliderComponent boxColliderComponent;
         PlanetTileMap.Unity.MapLoaderTestScript mapLoader;
@@ -94,7 +95,7 @@ namespace Vehicle
             vehicleDraw.AddVehicleID(0);
 
             // Add Vehicle Sprite Component
-            vehicleDraw.AddVehicleSprite2D(_spriteID, filePath, new Vector2(GetWidth(), GetHeight()), new Vector2Int(GetWidth(), GetHeight()),
+            vehicleDraw.AddVehicleSprite2D(_spriteID, _filePath, new Vector2(GetWidth(), GetHeight()), new Vector2Int(GetWidth(), GetHeight()),
                 Material, prefab.GetComponent<Mesh>());
 
             // Add Vehicle Velocity Component

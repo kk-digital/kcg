@@ -3,8 +3,9 @@ using Enums;
 
 public class ProjectileTest : MonoBehaviour
 {
-    // Vehilce Draw System
+    // Projectile Draw System
     Projectile.DrawSystem projectileDrawSystem;
+    Projectile.ProcessVelocitySystem processVelocitySystem;
 
     // Entitas's Contexts
     Contexts contexts;
@@ -19,8 +20,11 @@ public class ProjectileTest : MonoBehaviour
         // Assign Contexts
         contexts = Contexts.sharedInstance;
 
-        // Initialize Vehicle Draw System
+        // Initialize Projectile Draw System
         projectileDrawSystem = new Projectile.DrawSystem();
+
+        // Initialize Projectile Velocity System
+        processVelocitySystem = new Projectile.ProcessVelocitySystem();
 
         // Loading Image
         projectileDrawSystem.Initialize(contexts, "Assets\\StreamingAssets\\assets\\luis\\grenades\\Grenades4.png", 16, 16, transform, Material,
@@ -32,5 +36,8 @@ public class ProjectileTest : MonoBehaviour
     {
         // Draw Initialized Projectile
         projectileDrawSystem.Draw();
+
+        // Process Physics
+        processVelocitySystem.Process(contexts);
     }
 }
