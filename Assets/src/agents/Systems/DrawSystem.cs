@@ -22,7 +22,7 @@ namespace Agent
             var AgentsWithSprite = EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentSprite2D));
             foreach (var entity in AgentsWithSprite)
             {
-                Transform newTr = Transform.Instantiate(transform);
+                //Transform newTr = Transform.Instantiate(transform);
                // transform.Translate(new Vector3(entity.agentPosition2D.Value.x, entity.agentPosition2D.Value.y, 0.0f));
                 SetMesh(entity/*, newTr*/);
             }
