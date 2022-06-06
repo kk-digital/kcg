@@ -30,7 +30,7 @@ namespace Agent
             var spriteID = GameState.SpriteLoaderSystem.GetSpriteSheetID(spritePath);
             var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
 
-            entity.isAgentPlayer = true;
+            entity.isAgentPlayerEntity = true;
             entity.isECSInput = true;
             entity.AddECSInputXY(new Vector2(0, 0));
             
