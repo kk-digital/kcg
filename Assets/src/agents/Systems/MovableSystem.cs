@@ -3,25 +3,21 @@ using UnityEngine;
 
 namespace Agent
 {
-    public sealed class MovableSystem
+    public class MovableSystem
     {
-        public static readonly MovableSystem Instance;
-        private GameContext gameContext;
+        Contexts EntitasContext;
 
-        static MovableSystem()
+        public MovableSystem(Contexts entitasContext)
         {
-            Instance = new MovableSystem();
+            EntitasContext = entitasContext;
         }
 
-        private MovableSystem()
-        {
-            gameContext = Contexts.sharedInstance.game;
-        }
 
-        public void CalculatePosition(ref List list)
+        public void Update()
         {
             float deltaTime = Time.deltaTime;
-            foreach (var entity in list.AgentsWithVelocity)
+            var AgentsWithVelocity = EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentMovable, GameMatcher.AgentPosition2D));
+            foreach (var entity in AgentsWithVelocity)
             {
                 // NOTE(Mahdi): lets try another way to update the agents
                 // we can comment this code for now
@@ -60,9 +56,10 @@ namespace Agent
                 Vector2 newVelocity = movable.Acceleration * deltaTime + movable.Velocity;
                 newVelocity *= 0.7f;
 
+
                 Vector2 newPosition = pos.Value + displacement;
 
-                movable.Acceleration = entity.eCSInputXY.Value * 100.0f;
+                movable.Acceleration = entity.eCSInputXY.Value * entity.agentMovable.Speed * 50.0f;
 
                 entity.ReplaceAgentMovable(entity.agentMovable.Speed, newVelocity, movable.Acceleration, entity.agentMovable.AccelerationTime);
                 entity.ReplaceAgentPosition2D(newPosition, pos.Value);

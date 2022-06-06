@@ -1,7 +1,8 @@
 using Components;
 using UnityEngine;
+using Entitas;
 
-namespace Agent
+namespace Components
 {
     public struct BoxColliderComponent
     {

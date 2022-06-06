@@ -2,18 +2,20 @@ using UnityEngine;
 
 namespace ECSInput
 {
-    public sealed class ProcessSystem
+    public class ProcessSystem
     {
-        public static readonly ProcessSystem Instance;
-
-        static ProcessSystem()
+        Contexts EntitasContext;
+        
+        public ProcessSystem(Contexts entitasContext)
         {
-            Instance = new ProcessSystem();
+            EntitasContext = entitasContext;
         }
 
-        public void Update(ref Agent.List list)
+        public void Update()
         {
-            foreach (var entity in list.AgentsWithXY)
+            var AgentsWithXY = EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.ECSInput, GameMatcher.ECSInputXY));
+
+            foreach (var entity in AgentsWithXY)
             {
                 entity.ReplaceECSInputXY(new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")));
             }

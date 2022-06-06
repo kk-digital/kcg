@@ -26,7 +26,7 @@ namespace PlanetTileMap
         }
     }
 
-    public struct PlanetTileMap
+    public class PlanetTileMap
     {
 
         public struct ChunkBehaviour
@@ -58,7 +58,7 @@ namespace PlanetTileMap
 
         public Texture2D[] LayerTextures;
 
-        public PlanetTileMap(Vector2Int size) : this()
+        public PlanetTileMap(Vector2Int size)
         {
             int layersCount = Enum.GetNames(typeof(Layer)).Length;
 

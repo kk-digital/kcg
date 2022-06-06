@@ -5,32 +5,30 @@ namespace Agent
 {
     public class DrawSystem
     {
-        public static readonly DrawSystem Instance;
-        private readonly GameContext gameContext;
+
+        Contexts EntitasContext;
         
         List<int> triangles = new();
         List<Vector2> uvs = new();
         List<Vector3> verticies = new();
 
-        static DrawSystem()
+        public DrawSystem(Contexts entitasContext)
         {
-            Instance = new DrawSystem();
+            EntitasContext = entitasContext;
         }
-        
-        private DrawSystem()
+
+        public void Draw(Transform transform)
         {
-            gameContext = Contexts.sharedInstance.game;
-        }
-        
-        public void Draw(ref List entities)
-        {
-            foreach (var entity in entities.AgentsWithSprite)
+            var AgentsWithSprite = EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentSprite2D));
+            foreach (var entity in AgentsWithSprite)
             {
-                SetMesh(entity);
+                Transform newTr = Transform.Instantiate(transform);
+               // transform.Translate(new Vector3(entity.agentPosition2D.Value.x, entity.agentPosition2D.Value.y, 0.0f));
+                SetMesh(entity/*, newTr*/);
             }
         }
 
-        private void SetMesh(GameEntity entity)
+        private void SetMesh(GameEntity entity/*, Transform transform*/)
         {
             triangles.Clear();
             uvs.Clear();
@@ -78,6 +76,8 @@ namespace Agent
             entity.agentSprite2D.Mesh.SetVertices(verticies);
             entity.agentSprite2D.Mesh.SetUVs(0, uvs);
             entity.agentSprite2D.Mesh.SetTriangles(triangles, 0);
+
+            //entity.agentSprite2D.Mesh
         }
     }
 }

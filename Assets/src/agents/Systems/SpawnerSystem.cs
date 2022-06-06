@@ -38,7 +38,7 @@ namespace Agent
             entity.AddAgentID(playerID);
             entity.AddAgentSprite2D(spriteID, spritePath, spriteSize, pngSize, material, BuildMesh(spriteID, material, pngSize));
             entity.AddAgentPosition2D(new Vector2(3f, 2f), newPreviousValue: default);
-            
+            entity.AddComponentsBox2DCollider(new Vector2(1.0f, 1.5f));
             entity.AddAgentMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
 
             return entity;

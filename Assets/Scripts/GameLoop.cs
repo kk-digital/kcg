@@ -12,6 +12,7 @@ public class GameLoop : MonoBehaviour
     
     private const int FPS = 60;
     public TilePropertiesManager TilePropertiesManager;
+
     // Method for setting everything up, for like init GameManager for example
 
     public SystemState CurrentSystemState;
@@ -24,7 +25,7 @@ public class GameLoop : MonoBehaviour
         {
             SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
         }
-        
+
         Application.targetFrameRate = FPS; // Cap at 60 FPS
 
         CurrentSystemState = new SystemState();
@@ -46,13 +47,13 @@ public class GameLoop : MonoBehaviour
     // Method to update physics
     private void FixedUpdate()
     {
-        ECSInput.ProcessSystem.Instance.Update(ref agents);
-        Agent.MovableSystem.Instance.CalculatePosition(ref agents);
+        //ECSInput.ProcessSystem.Instance.Update(ref agents);
+        //Agent.MovableSystem.Instance.CalculatePosition(ref agents);
     }
 
     // Method for Drawing
     private void Update()
     {
-        Agent.DrawSystem.Instance.Draw(ref agents);
+       // Agent.DrawSystem.Instance.Draw(ref agents);
     }
 }

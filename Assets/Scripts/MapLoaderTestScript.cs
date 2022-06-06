@@ -36,22 +36,41 @@ namespace PlanetTileMap.Unity
         int PlayerSprite2ID;
         const float TileSize = 1.0f;
 
+        Contexts EntitasContext = Contexts.sharedInstance;
+
         readonly Vector2 MapOffset = new(-3.0f, 4.0f);
 
         static bool InitTiles;
+
+
+        ECSInput.ProcessSystem ProcessSystems;
+        Agent.MovableSystem MovableSystem;
+        Agent.DrawSystem DrawSystem;
 
         public void Start()
         {
             if (!InitTiles)
             {
+                InitializeSystems();
                 CreateDefaultTiles();
-                
+
                 InitTiles = true;
             }
         }   
 
+        void InitializeSystems()
+        {
+            ProcessSystems = new ECSInput.ProcessSystem(EntitasContext);
+            MovableSystem = new Agent.MovableSystem(EntitasContext);
+            DrawSystem = new Agent.DrawSystem(EntitasContext);
+
+            Agent.SpawnerSystem.Instance.SpawnPlayer(Material);
+        }
+
         public void Update()
         {
+            
+        
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -69,8 +88,11 @@ namespace PlanetTileMap.Unity
                 else
                     DestroyImmediate(mr.gameObject);
 
+            ProcessSystems.Update();
+            MovableSystem.Update();
             TileMap.DrawLayer(Layer.Front, Instantiate(Material), transform, 10);
             TileMap.DrawLayer(Layer.Ore, Instantiate(Material), transform, 11);
+            DrawSystem.Draw(transform);
         }
 
 
