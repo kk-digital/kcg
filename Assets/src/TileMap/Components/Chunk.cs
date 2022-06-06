@@ -1,8 +1,8 @@
-namespace Tile
+namespace TileMap
 {
-    public class MapChunk
+    public class Chunk
     {
-        public Component[,] Tiles;
+        public Tile.Component[,] Tiles;
 
         // Makes sorting function much easier and faster
         // This is the index of this chunk in the ChunkIndexList
@@ -11,9 +11,9 @@ namespace Tile
         public int Usage; // Used for sorting chunks by usage
         public int Seq;
 
-        public MapChunk()
+        public Chunk()
         {
-            Tiles = new Component[16, 16];
+            Tiles = new Tile.Component[16, 16];
             Seq = 0;
         }
         

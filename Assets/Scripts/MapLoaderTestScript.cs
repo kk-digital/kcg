@@ -1,3 +1,4 @@
+using Enums;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -19,7 +20,7 @@ namespace PlanetTileMap.Unity
         //public string TileMap = "Moonbunker/Moon Bunker.tmx";
         [SerializeField] Material Material;
 
-        Tile.Map TileMap;
+        TileMap.Component tileComponent;
         static bool InitTiles;
 
         public void Start()
@@ -34,9 +35,9 @@ namespace PlanetTileMap.Unity
 
         public void InitializeSystems()
         {
-            Planet.MemorySystem.Instance.InitializeTiles();
-            Planet.DrawSystem.Instance.Initialize(Material, transform);
-            TileMap = Planet.GenerateSystem.Instance.GenerateTileMap();
+            TileMap.MemorySystem.Instance.InitializeTiles();
+            TileMap.DrawSystem.Instance.Initialize(Material, transform);
+            tileComponent = TileMap.GenerateSystem.Instance.GenerateTileMap();
         }
 
         public void Update()
@@ -47,11 +48,11 @@ namespace PlanetTileMap.Unity
                 int x = (int)worldPosition.x;
                 int y = (int)worldPosition.y;
                 Debug.Log(x + " " + y);
-                TileMap.RemoveTile(x, y, Planet.Layer.Front);
-                TileMap.BuildLayerTexture(Planet.Layer.Front);
+                tileComponent.RemoveTile(x, y, PlanetLayer.Front);
+                tileComponent.BuildLayerTexture(PlanetLayer.Front);
             }
             
-            Planet.DrawSystem.Instance.DrawTiles(ref TileMap);
+            TileMap.DrawSystem.Instance.DrawTiles(ref tileComponent);
         }
     }
 }

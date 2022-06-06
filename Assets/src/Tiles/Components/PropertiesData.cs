@@ -18,14 +18,10 @@ namespace Tile
             set => Variants[(int)TileVariants.Middle] = value;
             get => Variants[(int)TileVariants.Middle];
         }
-
+        
         public PlanetTileCollisionType TileCollisionType;
         public bool IsExplosive;
-
-        //note: ore is composited, others are just normal
-
         public byte Durability; //max health of tile
-
         public bool IsSolid => TileCollisionType == PlanetTileCollisionType.TileCollisionTypeSolid;
 
         private PropertiesData(string name, string description, int tileId) : this()
@@ -35,7 +31,6 @@ namespace Tile
             TileId = tileId;
             int variantsCount = Enum.GetNames(typeof(TileVariants)).Length;
             Variants = new int[variantsCount];
-
         }
 
         private PropertiesData(string name, string description, int tileId,

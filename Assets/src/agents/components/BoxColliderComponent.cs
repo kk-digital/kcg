@@ -57,7 +57,7 @@ namespace Agent
             };
         }
     
-        public bool IsCollidingLeft(ref Tile.Map map, Vector2 newPos)
+        public bool IsCollidingLeft(ref TileMap.Component component, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving right
@@ -65,7 +65,7 @@ namespace Agent
             
             for (int y = bounds.BottomTile; y <= bounds.TopTile; y++) 
             {
-                var tile = map.getTile(bounds.LeftTile, y);
+                var tile = component.GetTile(bounds.LeftTile, y);
                 int tilePropertiesIndex = tile.BackTilePropertiesId;
 
                 if (tilePropertiesIndex >= 0)
@@ -79,7 +79,7 @@ namespace Agent
             return false;
         }
     
-        public bool IsCollidingRight(ref Tile.Map map, Vector2 newPos)
+        public bool IsCollidingRight(ref TileMap.Component component, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving Left
@@ -87,7 +87,7 @@ namespace Agent
             
             for (int y = bounds.BottomTile; y <= bounds.TopTile; y++) 
             {
-                var tile = map.getTile(bounds.RightTile, y);
+                var tile = component.GetTile(bounds.RightTile, y);
                 int tilePropertiesIndex = tile.BackTilePropertiesId;
 
                 if (tilePropertiesIndex >= 0)
@@ -101,7 +101,7 @@ namespace Agent
             return false;
         }
     
-        public bool IsCollidingTop(ref Tile.Map map, Vector2 newPos)
+        public bool IsCollidingTop(ref TileMap.Component component, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving Down
@@ -109,7 +109,7 @@ namespace Agent
             
             for (int x = bounds.LeftTile; x <= bounds.RightTile; x++) 
             {
-                var tile = map.getTile(x, bounds.TopTile);
+                var tile = component.GetTile(x, bounds.TopTile);
                 int tilePropertiesIndex = tile.BackTilePropertiesId;
 
                 if (tilePropertiesIndex >= 0)
@@ -123,7 +123,7 @@ namespace Agent
             return false;
         }
 
-        public bool IsCollidingBottom(ref Tile.Map map, Vector2 newPos)
+        public bool IsCollidingBottom(ref TileMap.Component component, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving Up
@@ -131,7 +131,7 @@ namespace Agent
             
             for (int x = bounds.LeftTile; x <= bounds.RightTile; x++)
             {
-                var tile = map.getTile(x, bounds.BottomTile);
+                var tile = component.GetTile(x, bounds.BottomTile);
                 int tilePropertiesIndex = tile.BackTilePropertiesId;
 
                 if (tilePropertiesIndex >= 0)
@@ -163,7 +163,7 @@ namespace Agent
             return partialDisplacements.ToArray();
         }*/
 
-        public Vector2 ResolveCollisions(ref Tile.Map map, Vector2 newPos)
+        public Vector2 ResolveCollisions(ref TileMap.Component component, Vector2 newPos)
         {
             //var partialDisplacements = DiscretizeDisplacement(totalDisplacement);
             /*Vector2 newPos = default;

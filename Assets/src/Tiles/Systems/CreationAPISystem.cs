@@ -118,8 +118,7 @@ namespace Tile
         {
             if (CurrentTileIndex != -1)
             {
-                int atlasSpriteId = 
-                    GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas(spriteSheetId, row, column, 0);
+                int atlasSpriteId = GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas(spriteSheetId, row, column, 0);
                 PropertiesArray[CurrentTileIndex].SpriteId = atlasSpriteId;
             }
         }

@@ -1,6 +1,7 @@
+using Enums;
 using UnityEngine;
 
-namespace Planet
+namespace TileMap
 {
     public class GenerateSystem
     {
@@ -11,12 +12,12 @@ namespace Planet
             Instance = new GenerateSystem();
         }
 
-        public Tile.Map GenerateTileMap()
+        public TileMap.Component GenerateTileMap()
         {
             // Generating the map
             Vector2Int mapSize = new Vector2Int(16, 16);
 
-            var tileMap = new Tile.Map(mapSize);
+            var tileMap = new TileMap.Component(mapSize);
 
             for(int j = 0; j < mapSize.y; j++)
             {
@@ -53,10 +54,10 @@ namespace Planet
             }
 
             tileMap.UpdateTopTilesMap();
-            tileMap.UpdateAllTileVariants(Planet.Layer.Front);
-            tileMap.UpdateAllTileVariants(Planet.Layer.Ore);
-            tileMap.BuildLayerTexture(Planet.Layer.Front);
-            tileMap.BuildLayerTexture(Planet.Layer.Ore);
+            tileMap.UpdateAllTileVariants(PlanetLayer.Front);
+            tileMap.UpdateAllTileVariants(PlanetLayer.Ore);
+            tileMap.BuildLayerTexture(PlanetLayer.Front);
+            tileMap.BuildLayerTexture(PlanetLayer.Ore);
 
             return tileMap;
         }

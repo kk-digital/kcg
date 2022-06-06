@@ -1,6 +1,6 @@
-namespace Planet
+namespace Enums
 {
-    public enum Layer
+    public enum PlanetLayer
     {
         Error = 0,
         Back = 1,

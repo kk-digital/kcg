@@ -1,6 +1,6 @@
 using System;
 
-namespace Planet
+namespace TileMap
 {
     public class MemorySystem
     {
