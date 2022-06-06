@@ -55,23 +55,32 @@ namespace Agent
                 if (input.Jump)
                 {
                     movable.Acceleration.y += 100.0f;
-                    movable.Velocity.y = 3.0f;
+                    movable.Velocity.y = 5.0f;
                 }
 
-                if (movable.Acceleration.y <= -20.0f)
+                if (movable.Acceleration.y <= -30.0f)
                 {
-                    movable.Acceleration.y = -20.0f;
+                    movable.Acceleration.y = -30.0f;
                 }
 
-                if (movable.Acceleration.y >= 20.0f)
+                if (movable.Acceleration.y >= 30.0f)
                 {
-                    movable.Acceleration.y = 20.0f;
+                    movable.Acceleration.y = 30.0f;
                 }
 
                 Vector2 displacement = 
                         0.5f * movable.Acceleration * (deltaTime * deltaTime) + movable.Velocity * deltaTime;
                 Vector2 newVelocity = movable.Acceleration * deltaTime + movable.Velocity;
                 newVelocity.x *= 0.7f;
+
+                if (newVelocity.y > 5.0f)
+                {
+                    newVelocity.y = 5.0f;
+                }
+                if (newVelocity.y < -5.0f)
+                {
+                    newVelocity.y = -5.0f;
+                }
 
 
                 Vector2 newPosition = pos.Value + displacement;

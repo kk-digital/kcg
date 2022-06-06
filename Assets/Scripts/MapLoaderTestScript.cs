@@ -203,14 +203,16 @@ namespace PlanetTileMap.Unity
             {
                 for(int i = 0; i < mapSize.x; i++)
                 {
-                    PlanetTile tile = PlanetTile.EmptyTile();
-                    tile.FrontTilePropertiesId = 9;
+                    PlanetTile frontTile = PlanetTile.EmptyTile();
+                    PlanetTile oreTile = PlanetTile.EmptyTile();
+
+                    frontTile.PropertiesId = 9;
 
 
                     if (i % 10 == 0)
                     {
                         //tile.FrontTilePropertiesId = 7;
-                        tile.OreTilePropertiesId = 8;
+                        oreTile.PropertiesId = 8;
                     }
                     if (j % 2 == 0)
                     {
@@ -224,12 +226,13 @@ namespace PlanetTileMap.Unity
 
                     if ((j > 1 && j < 6) || (j > (8 + i)))
                     {
-                       tile.FrontTilePropertiesId = -1; 
-                       tile.OreTilePropertiesId = -1;
+                       frontTile.PropertiesId = -1; 
+                       oreTile.PropertiesId = -1;
                     }
 
                     
-                    TileMap.SetTile(i, j, tile);
+                    TileMap.SetTile(i, j, frontTile, Layer.Front);
+                    TileMap.SetTile(i, j, oreTile, Layer.Ore);
                 }
             }
 

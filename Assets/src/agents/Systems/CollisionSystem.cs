@@ -24,7 +24,8 @@ namespace Agent
                 var pos = entity.agentPosition2D;
                 var movable = entity.agentMovable;
 
-                if (Physics.BoxCollision.IsCollidingBottom(tileMap, pos.Value, boxComponent.Size))
+                if (Physics.BoxCollision.IsCollidingBottom(tileMap, pos.Value, boxComponent.Size) && 
+                movable.Velocity.y <= 0.0f)
                 {
                     entity.ReplaceAgentPosition2D(new Vector2(pos.Value.x, pos.PreviousValue.y), pos.PreviousValue);
                     entity.ReplaceAgentMovable(movable.Speed, movable.Velocity, new Vector2(movable.Acceleration.x, 0.0f), movable.AccelerationTime);

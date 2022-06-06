@@ -21,8 +21,8 @@ namespace Physics
                 if (x >= 0 && x < tileMap.Size.x && 
                    y >= 0 && y < tileMap.Size.y)
                    {
-                        ref TileProperties.PlanetTile tile = ref tileMap.GetTileRef(x, y);
-                        if (tile.FrontTilePropertiesId >= 0)
+                        ref TileProperties.PlanetTile tile = ref tileMap.GetTileRef(x, y, PlanetTileMap.Layer.Front);
+                        if (tile.PropertiesId >= 0)
                         {
                             return true;
                         }
