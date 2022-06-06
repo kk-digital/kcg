@@ -44,6 +44,7 @@ namespace PlanetTileMap.Unity
 
 
         ECSInput.ProcessSystem ProcessSystems;
+        Agent.SpawnerSystem SpawnerSystem;
         Agent.MovableSystem MovableSystem;
         Agent.DrawSystem DrawSystem;
         Agent.CollisionSystem CollisionSystem;
@@ -62,11 +63,12 @@ namespace PlanetTileMap.Unity
         void InitializeSystems()
         {
             ProcessSystems = new ECSInput.ProcessSystem(EntitasContext);
+            SpawnerSystem = new Agent.SpawnerSystem(EntitasContext);
             MovableSystem = new Agent.MovableSystem(EntitasContext);
             DrawSystem = new Agent.DrawSystem(EntitasContext);
             CollisionSystem = new Agent.CollisionSystem(EntitasContext);
 
-            Agent.SpawnerSystem.Instance.SpawnPlayer(Material);
+            SpawnerSystem.SpawnPlayer(Material);
         }
 
         public void Update()
@@ -80,7 +82,7 @@ namespace PlanetTileMap.Unity
                 int y = (int)worldPosition.y;
                 Debug.Log(x + " " + y);
                 TileMap.RemoveTile(x, y, Layer.Front);
-                 TileMap.BuildLayerTexture(Layer.Front);
+                TileMap.BuildLayerTexture(Layer.Front);
                 
             }
 
@@ -95,7 +97,7 @@ namespace PlanetTileMap.Unity
             CollisionSystem.Update(TileMap);
             TileMap.DrawLayer(Layer.Front, Instantiate(Material), transform, 10);
             TileMap.DrawLayer(Layer.Ore, Instantiate(Material), transform, 11);
-            DrawSystem.Draw(transform);
+            DrawSystem.Draw(Instantiate(Material), transform, 12);
         }
 
 

@@ -30,8 +30,8 @@ public class GameLoop : MonoBehaviour
 
         CurrentSystemState = new SystemState();
 
-        Agent.SpawnerSystem.Instance.SpawnPlayer(material);
-        agents = new Agent.List();
+        //Agent.SpawnerSystem.Instance.SpawnPlayer(material);
+       // agents = new Agent.List();
     }
     
     private void LoadAssets()
