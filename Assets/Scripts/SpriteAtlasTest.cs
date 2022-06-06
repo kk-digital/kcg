@@ -57,30 +57,25 @@ namespace PlanetTileMap.Unity
         public void LoadSprites()
         {
             // we load the sprite sheets here
-            int SomeObjectTileSheet = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Objects\\algaeTank1.png",
-                         32, 64);
-            int PlayerTileSheet = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png",
-                         32, 48);
-
+            int someObjectTileSheet = GameState.SpriteLoaderSystem.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Objects\\algaeTank1.png");
+            int playerTileSheet = GameState.SpriteLoaderSystem.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png");
 
             // bit the sprites into the sprite atlas
             // we can blit the same sprite
             // but its only for testing purpose
             // we should remove that in the future
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(SomeObjectTileSheet, 0, 0, SpriteAtlas.AtlasType.Generic);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, SpriteAtlas.AtlasType.Generic);;
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, SpriteAtlas.AtlasType.Generic);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(SomeObjectTileSheet, 0, 0, SpriteAtlas.AtlasType.Generic);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, SpriteAtlas.AtlasType.Generic);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, SpriteAtlas.AtlasType.Generic);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(someObjectTileSheet, 0, 0, Sprites.AtlasType.Generic);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(playerTileSheet, 0, 0, Sprites.AtlasType.Generic);;
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(playerTileSheet, 0, 0, Sprites.AtlasType.Generic);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(someObjectTileSheet, 0, 0, Sprites.AtlasType.Generic);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(playerTileSheet, 0, 0, Sprites.AtlasType.Generic);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(playerTileSheet, 0, 0, Sprites.AtlasType.Generic);
         }
 
         // drawing the sprite atlas
         void DrawSpriteAtlas()
         {
-            ref SpriteAtlas.SpriteAtlas atlas = ref GameState.SpriteAtlasManager.GetSpriteAtlas(SpriteAtlas.AtlasType.Generic);
+            ref var atlas = ref GameState.SpriteAtlasManager.GetSpriteAtlas(Sprites.AtlasType.Generic);
             Render.Sprite sprite = new Render.Sprite();
             sprite.Texture = atlas.Texture;
             sprite.TextureCoords = new Vector4(0, 0, 1, 1);
@@ -91,7 +86,7 @@ namespace PlanetTileMap.Unity
         void DrawSprite(float x, float y, float w, float h, int spriteId)
         {
             Render.Sprite sprite = 
-                GameState.SpriteAtlasManager.GetSprite(spriteId, SpriteAtlas.AtlasType.Generic);
+                GameState.SpriteAtlasManager.GetSprite(spriteId, Sprites.AtlasType.Generic);
 
             Utility.RenderUtils.DrawSprite(x, y, w, h, sprite, Instantiate(Material), transform);
         }

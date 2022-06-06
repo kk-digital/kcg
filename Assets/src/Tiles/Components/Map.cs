@@ -171,54 +171,54 @@ namespace Tile
                     if (x + 1 < Size.x)
                     {
                         ref Tile.Component neighborTile = ref GetTileRef(x + 1, y);
-                        neighbors[(int)Neighbor.Right] = neighborTile.FrontTilePropertiesId;
+                        neighbors[(int)Enums.TileNeighbor.Right] = neighborTile.FrontTilePropertiesId;
                     }
 
                     if (x - 1 >= 0)
                     {
                         ref Tile.Component neighborTile = ref GetTileRef(x - 1, y);
-                        neighbors[(int)Neighbor.Left] = neighborTile.FrontTilePropertiesId;
+                        neighbors[(int)Enums.TileNeighbor.Left] = neighborTile.FrontTilePropertiesId;
                     }
 
                     if (y + 1 < Size.y)
                     {
                         ref Tile.Component neighborTile = ref GetTileRef(x, y + 1);
-                        neighbors[(int)Neighbor.Top] = neighborTile.FrontTilePropertiesId;
+                        neighbors[(int)Enums.TileNeighbor.Top] = neighborTile.FrontTilePropertiesId;
                     }
 
                     if (y - 1 >= 0)
                     {
                         ref Tile.Component neighborTile = ref GetTileRef(x, y - 1);
-                        neighbors[(int)Neighbor.Bottom] = neighborTile.FrontTilePropertiesId;
+                        neighbors[(int)Enums.TileNeighbor.Bottom] = neighborTile.FrontTilePropertiesId;
                     }
 
                     if (x + 1 < Size.x && y + 1 < Size.y)
                     {
                         ref Tile.Component neighborTile = ref GetTileRef(x + 1, y + 1);
-                        neighbors[(int)Neighbor.TopRight] = neighborTile.FrontTilePropertiesId;
+                        neighbors[(int)Enums.TileNeighbor.TopRight] = neighborTile.FrontTilePropertiesId;
                     }
 
                     if (x - 1 >= 0 && y + 1 < Size.y)
                     {
                         ref Tile.Component neighborTile = ref GetTileRef(x - 1, y + 1);
-                        neighbors[(int)Neighbor.TopLeft] = neighborTile.FrontTilePropertiesId;
+                        neighbors[(int)Enums.TileNeighbor.TopLeft] = neighborTile.FrontTilePropertiesId;
                     }
 
                     if (x + 1 < Size.x && y - 1 >= 0)
                     {
                         ref Tile.Component neighborTile = ref GetTileRef(x + 1, y - 1);
-                        neighbors[(int)Neighbor.BottomRight] = neighborTile.FrontTilePropertiesId;
+                        neighbors[(int)Enums.TileNeighbor.BottomRight] = neighborTile.FrontTilePropertiesId;
                     }
                 
                     if (x - 1 >= 0 && y - 1 >= 0)
                     {
                         ref Tile.Component neighborTile = ref GetTileRef(x - 1, y - 1);
-                        neighbors[(int)Neighbor.BottomLeft] = neighborTile.FrontTilePropertiesId;
+                        neighbors[(int)Enums.TileNeighbor.BottomLeft] = neighborTile.FrontTilePropertiesId;
                     }
 
-                    Variant variant = TileNeighbor.GetVariant(neighbors, tile.FrontTilePropertiesId);
+                    TileVariants tileVariants = TileNeighborExt.GetVariant(neighbors, tile.FrontTilePropertiesId);
                     PropertiesData properties = GameState.CreationAPISystem.GetTileProperties(tile.FrontTilePropertiesId);
-                    tile.FrontSpriteId = properties.Variants[(int)variant];
+                    tile.FrontSpriteId = properties.Variants[(int)tileVariants];
                 }
                 else
                 {

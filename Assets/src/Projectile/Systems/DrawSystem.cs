@@ -84,15 +84,15 @@ namespace Projectile
             projectileEntity = _contexts.game.CreateEntity();
 
             // Get Image Sprite ID
-            int _spriteID = GameState.SpriteLoader.GetSpriteSheetID(_filePath, _width, _height);
+            int _spriteID = GameState.SpriteLoaderSystem.GetSpriteSheetID(_filePath);
 
             // Blit
-            int imageSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(_spriteID, 0, 0, SpriteAtlas.AtlasType.Particle);
+            int imageSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(_spriteID, 0, 0, Sprites.AtlasType.Particle);
             // Calculating Bytes
             byte[] imageBytes = new byte[_width * _height * 4];
 
             // Get Sprite Bytes
-            GameState.SpriteAtlasManager.GetSpriteBytes(imageSpriteIndex, imageBytes, SpriteAtlas.AtlasType.Particle);
+            GameState.SpriteAtlasManager.GetSpriteBytes(imageSpriteIndex, imageBytes, Sprites.AtlasType.Particle);
 
             // Creating Texture
             projectileSprite = CreateTextureFromRGBA(imageBytes, _width, _height);

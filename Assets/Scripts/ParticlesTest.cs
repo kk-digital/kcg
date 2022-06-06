@@ -65,28 +65,22 @@ namespace PlanetTileMap.Unity
             ParticleEmitterUpdateSystem = new Particle.EmitterUpdateSystem(EntitasContext);
 
             // we load the sprite sheets here
-            int PipeTileSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\sprite\\item\\admin_icon_pipesim.png",
-            16, 16);
-
-            int OreTileSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png",
-            16, 16);
-
-            int VentTileSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Objects\\vent1.png", 16, 16);
+            int pipeTileSheet = GameState.SpriteLoaderSystem.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\sprite\\item\\admin_icon_pipesim.png");
+            int oreTileSheet = GameState.SpriteLoaderSystem.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
+            int ventTileSheet = GameState.SpriteLoaderSystem.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Objects\\vent1.png");
 
 
-            int PipeSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(PipeTileSheet, 0, 0, SpriteAtlas.AtlasType.Particle);
+            int pipeSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(pipeTileSheet, 0, 0, Sprites.AtlasType.Particle);
             byte[] pipeBytes = new byte[16 * 16 * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(PipeSpriteIndex, pipeBytes, SpriteAtlas.AtlasType.Particle);
+            GameState.SpriteAtlasManager.GetSpriteBytes(pipeSpriteIndex, pipeBytes, Sprites.AtlasType.Particle);
 
-            int OreSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(OreTileSheet, 0, 0, SpriteAtlas.AtlasType.Particle);
+            int oreSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(oreTileSheet, 0, 0, Sprites.AtlasType.Particle);
             byte[] oreBytes = new byte[16 * 16 * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(OreSpriteIndex, oreBytes, SpriteAtlas.AtlasType.Particle);
+            GameState.SpriteAtlasManager.GetSpriteBytes(oreSpriteIndex, oreBytes, Sprites.AtlasType.Particle);
 
-            int VentSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(VentTileSheet, 0, 0, SpriteAtlas.AtlasType.Particle);
+            int ventSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(ventTileSheet, 0, 0, Sprites.AtlasType.Particle);
             byte[] ventBytes = new byte[16 * 16 * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(VentSpriteIndex, ventBytes, SpriteAtlas.AtlasType.Particle);
+            GameState.SpriteAtlasManager.GetSpriteBytes(ventSpriteIndex, ventBytes, Sprites.AtlasType.Particle);
 
             PipeSprite = CreateTextureFromRGBA(pipeBytes, 16, 16);
             OreSprite = CreateTextureFromRGBA(oreBytes, 16, 16);

@@ -15,8 +15,8 @@ namespace Tile
 
         public int SpriteId
         {
-            set => Variants[(int)Variant.Middle] = value;
-            get => Variants[(int)Variant.Middle];
+            set => Variants[(int)TileVariants.Middle] = value;
+            get => Variants[(int)TileVariants.Middle];
         }
 
         public PlanetTileCollisionType TileCollisionType;
@@ -25,21 +25,6 @@ namespace Tile
         //note: ore is composited, others are just normal
 
         public byte Durability; //max health of tile
-        
-        //In case after the first newly created tileproperty with already properties being set,
-        //you might want to change it anytime by accessing the id of a tile
-        public void SetDescription(string description)
-        {
-            Description = description;
-        }
-        public void SetDurability(byte durability)
-        {
-            Durability = durability;
-        }
-        public void SetCollisionType(PlanetTileCollisionType collisionType)
-        {
-            TileCollisionType = collisionType;
-        }
 
         public bool IsSolid => TileCollisionType == PlanetTileCollisionType.TileCollisionTypeSolid;
 
@@ -48,7 +33,7 @@ namespace Tile
             Name = name;
             Description = description;
             TileId = tileId;
-            int variantsCount = Enum.GetNames(typeof(Variant)).Length;
+            int variantsCount = Enum.GetNames(typeof(TileVariants)).Length;
             Variants = new int[variantsCount];
 
         }

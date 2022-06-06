@@ -1,4 +1,3 @@
-using SpriteAtlas;
 using UnityEngine;
 
 namespace Agent
@@ -28,7 +27,7 @@ namespace Agent
             
             var spritePath = "Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png";
             var pngSize = new Vector2Int(32, 48);
-            var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath, pngSize.x, pngSize.y);
+            var spriteID = GameState.SpriteLoaderSystem.GetSpriteSheetID(spritePath);
             var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
 
             entity.isAgentPlayer = true;
@@ -46,10 +45,10 @@ namespace Agent
         
         private Mesh BuildMesh(int spriteID, Material material, Vector2Int spriteSize)
         {
-            var atlasIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, AtlasType.Agent);
+            var atlasIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Sprites.AtlasType.Agent);
             
             byte[] spriteBytes = new byte[spriteSize.x * spriteSize.y * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(atlasIndex, spriteBytes, AtlasType.Agent);
+            GameState.SpriteAtlasManager.GetSpriteBytes(atlasIndex, spriteBytes, Sprites.AtlasType.Agent);
             var mat = UnityEngine.Object.Instantiate(material);
             var tex = CreateTextureFromRGBA(spriteBytes, spriteSize.x, spriteSize.y);
             mat.SetTexture("_MainTex", tex);

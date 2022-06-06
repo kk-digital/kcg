@@ -173,24 +173,24 @@ namespace Tile
             }
         }
 
-        public void SetTileVariant(int spriteSheetId, int row, int column, Variant variant)
+        public void SetTileVariant(int spriteSheetId, int row, int column, TileVariants tileVariants)
         {
             if (CurrentTileIndex != -1)
             {
                 int atlasSpriteId = 
                     GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas(spriteSheetId, row, column, 0);
-                PropertiesArray[CurrentTileIndex].Variants[(int)variant] = atlasSpriteId;
+                PropertiesArray[CurrentTileIndex].Variants[(int)tileVariants] = atlasSpriteId;
                 
             }
         }
 
-        public void SetTileVariant16(int spriteSheetId, int row, int column, Variant variant)
+        public void SetTileVariant16(int spriteSheetId, int row, int column, TileVariants tileVariants)
         {
             if (CurrentTileIndex != -1)
             {
                 int atlasSpriteId = 
                     GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(spriteSheetId, row, column, 0);
-                PropertiesArray[CurrentTileIndex].Variants[(int)variant] = atlasSpriteId;
+                PropertiesArray[CurrentTileIndex].Variants[(int)tileVariants] = atlasSpriteId;
             }
         }
 

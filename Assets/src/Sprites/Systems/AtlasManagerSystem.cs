@@ -1,43 +1,23 @@
 using System;
 using UnityEngine;
 
-namespace SpriteAtlas
+namespace Sprites
 {
-    public enum AtlasType
+    public class AtlasManagerSystem
     {
-        Error = 0,
-        Generic = 1,
-        Agent = 2,
-        Vehicle = 3,
-        Particle = 4,
-    }
+        private Atlas[] AtlasArray;
 
-    public struct SpriteAtlas
-    {
-        public int AtlasID;
-        public int GLTextureID;
-
-        public int Width;
-        public int Height;
-
-        public byte[] Data;
-        public Texture2D Texture;
-        public RectpackSharp.PackingRectangle[] Rectangles;
-    }
-
-    public class SpriteAtlasManager
-    {
-        private SpriteAtlas[] AtlasArray;
-
-        public SpriteAtlasManager()
+        public AtlasManagerSystem()
         {
-            AtlasArray = new SpriteAtlas[Enum.GetNames(typeof(AtlasType)).Length - 1];
+            AtlasArray = new Atlas[Enum.GetNames(typeof(AtlasType)).Length - 1];
 
             for (int i = 0; i < AtlasArray.Length; i++)
             {
-                SpriteAtlas atlas = new SpriteAtlas();
-                atlas.Width = 128;
-                atlas.Height = 128;
+                var atlas = new Atlas
+                {
+                    Width = 128,
+                    Height = 128
+                };
                 atlas.Data = new byte[4 * atlas.Width * atlas.Height]; // 4 * 32 * 32 = 4096
                 atlas.Rectangles = new RectpackSharp.PackingRectangle[0];
 
@@ -50,16 +30,16 @@ namespace SpriteAtlas
             }
         }
 
-        public ref SpriteAtlas GetSpriteAtlas(AtlasType type)
+        public ref Atlas GetSpriteAtlas(AtlasType atlasType)
         {
-            return ref AtlasArray[(int)type - 1];
+            return ref AtlasArray[(int)atlasType - 1];
         }
         
 
-        public Render.Sprite GetSprite(int id, AtlasType type)
+        public Render.Sprite GetSprite(int id, AtlasType atlasType)
         {
             Render.Sprite sprite = new Render.Sprite();
-            ref SpriteAtlas atlas = ref GetSpriteAtlas(type);
+            ref Atlas atlas = ref GetSpriteAtlas(atlasType);
 
             sprite.Texture = atlas.Texture;
 
@@ -80,9 +60,9 @@ namespace SpriteAtlas
 
         // use the id to find the Sprite coordinates in the list
         // and return the sprite RGBA8 that correspond
-        public void GetSpriteBytes(int id, byte[] data, AtlasType type)
+        public void GetSpriteBytes(int id, byte[] data, AtlasType atlasType)
         {
-            ref SpriteAtlas atlas = ref GetSpriteAtlas(type);
+            ref Atlas atlas = ref GetSpriteAtlas(atlasType);
             if (id >= 0 && id < atlas.Rectangles.Length)
             {
                 // TODO: Refactor
@@ -120,11 +100,11 @@ namespace SpriteAtlas
 
         // generic blit function used to add a sprite 
         // to the sprite atlas
-        public int CopySpriteToAtlas(int spriteSheetID, int row, int column, AtlasType type)
+        public int CopySpriteToAtlas(int spriteSheetID, int row, int column, AtlasType atlasType)
         {
-            ref SpriteAtlas atlas = ref GetSpriteAtlas(type);
+            ref var atlas = ref GetSpriteAtlas(atlasType);
             int oldSize = atlas.Rectangles.Length;
-            SpriteLoader.SpriteSheet sheet = GameState.SpriteLoader.SpriteSheets[spriteSheetID];
+            var sheet = GameState.SpriteLoaderSystem.SpriteSheets[spriteSheetID];
 
             int index = atlas.Rectangles.Length;
 
@@ -157,7 +137,7 @@ namespace SpriteAtlas
             // we add the new sprite packing rectangle in the array
             atlas.Rectangles[index] = 
                  new RectpackSharp.PackingRectangle(0, 0, 
-                                    (uint)sheet.tileWidth, (uint)sheet.tileHeight, index);
+                                    (uint)sheet.Width, (uint)sheet.Height, index);
 
 
             // calling the retpackSharp library
@@ -221,13 +201,13 @@ namespace SpriteAtlas
             int xOffset = (int)rectangle.X;
             int yOffset = (int)rectangle.Y;
 
-            for (int y = 0; y < sheet.tileHeight; y++)
+            for (int y = 0; y < sheet.Height; y++)
             {
-                for (int x = 0; x < sheet.tileWidth; x++)
+                for (int x = 0; x < sheet.Width; x++)
                 {
                     int atlasIndex = 4 * ((yOffset + y)  * (atlas.Width) + (xOffset + x));
-                    int sheetIndex = 4 * ((x + row * sheet.tileWidth) + 
-                                    ((y + column * sheet.tileHeight) * sheet.Width));
+                    int sheetIndex = 4 * ((x + row * sheet.Width) + 
+                                    ((y + column * sheet.Height) * sheet.Width));
 
                     // RGBA8
                     atlas.Data[atlasIndex + 0] = 

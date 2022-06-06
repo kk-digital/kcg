@@ -24,12 +24,12 @@ namespace Vehicle
         public int _height;
 
         // Rendering elements
-        List<int> triangles = new List<int>();
-        List<Vector2> uvs = new List<Vector2>();
-        List<Vector3> verticies = new List<Vector3>();
+        List<int> triangles = new();
+        List<Vector2> uvs = new();
+        List<Vector3> verticies = new();
         Material Material;
         Transform _transform;
-        Vector2 prefabPos = new Vector2(0,0);
+        Vector2 prefabPos = new(0,0);
 
         // Sprite to Render
         Texture2D vehicleSprite;
@@ -75,15 +75,15 @@ namespace Vehicle
             vehicleDraw = _contexts.game.CreateEntity();
 
             // Get Image Sprite ID
-            int _spriteID = GameState.SpriteLoader.GetSpriteSheetID(_filePath, _width, _height);
+            int spriteID = GameState.SpriteLoaderSystem.GetSpriteSheetID(_filePath);
 
             // Blit
-            int imageSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(_spriteID, 0, 0, SpriteAtlas.AtlasType.Vehicle);
+            int imageSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Sprites.AtlasType.Vehicle);
             // Calculating Bytes
             byte[] imageBytes = new byte[_width * _height * 4];
 
             // Get Sprite Bytes
-            GameState.SpriteAtlasManager.GetSpriteBytes(imageSpriteIndex, imageBytes, SpriteAtlas.AtlasType.Vehicle);
+            GameState.SpriteAtlasManager.GetSpriteBytes(imageSpriteIndex, imageBytes, Sprites.AtlasType.Vehicle);
 
             // Creating Texture
             vehicleSprite = CreateTextureFromRGBA(imageBytes, _width, _height);
@@ -95,7 +95,7 @@ namespace Vehicle
             vehicleDraw.AddVehicleID(0);
 
             // Add Vehicle Sprite Component
-            vehicleDraw.AddVehicleSprite2D(_spriteID, _filePath, new Vector2(GetWidth(), GetHeight()), new Vector2Int(GetWidth(), GetHeight()),
+            vehicleDraw.AddVehicleSprite2D(spriteID, filePath, new Vector2(GetWidth(), GetHeight()), new Vector2Int(GetWidth(), GetHeight()),
                 Material, prefab.GetComponent<Mesh>());
 
             // Add Vehicle Velocity Component

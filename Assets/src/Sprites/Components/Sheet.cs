@@ -1,13 +1,13 @@
-namespace Tile
+namespace Sprites
 {
-    public struct SpriteSheet
+    public struct Sheet
     {
         public byte[] Data;
 
         public int ID;
-        public int SpriteSize;
 
         public int Width;
         public int Height;
     }
 }
+

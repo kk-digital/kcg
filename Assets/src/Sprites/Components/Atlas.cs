@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
 
-namespace Tile
+namespace Sprites
 {
-    public struct SpriteAtlas
+    public struct Atlas
     {
         public int AtlasID;
         public int GLTextureID;
@@ -12,10 +12,7 @@ namespace Tile
 
         public byte[] Data;
         public Texture2D Texture;
-
-        public void CreateData()
-        {
-            
-        }
+        public RectpackSharp.PackingRectangle[] Rectangles;
     }
 }
+

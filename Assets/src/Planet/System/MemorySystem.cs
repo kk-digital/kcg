@@ -19,10 +19,10 @@ namespace Planet
 
         private MemorySystem()
         {
-            MetalSlabsTileSheet = GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png");
-            StoneBulkheads = GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tile_wallbase\\Tiles_stone_bulkheads.png");
-            TilesMoon = GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png");
-            OreTileSheet = GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
+            MetalSlabsTileSheet = GameState.SpriteLoaderSystem.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png");
+            StoneBulkheads = GameState.SpriteLoaderSystem.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tile_wallbase\\Tiles_stone_bulkheads.png");
+            TilesMoon = GameState.SpriteLoaderSystem.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png");
+            OreTileSheet = GameState.SpriteLoaderSystem.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
         }
 
         public void InitializeTiles()
@@ -70,42 +70,42 @@ namespace Planet
 
             GameState.CreationAPISystem.CreateTile(8);
             GameState.CreationAPISystem.SetTileName("ore_1");
-            for(int i = 0; i < Enum.GetNames(typeof(Tile.Variant)).Length; i++)
+            for(int i = 0; i < Enum.GetNames(typeof(Enums.TileVariants)).Length; i++)
             {
-                GameState.CreationAPISystem.SetTileVariant16(OreTileSheet, 0, 0, (Tile.Variant)i);
+                GameState.CreationAPISystem.SetTileVariant16(OreTileSheet, 0, 0, (Enums.TileVariants)i);
             }
             GameState.CreationAPISystem.EndTile();
 
             GameState.CreationAPISystem.CreateTile(9);
             GameState.CreationAPISystem.SetTileName("glass");
             GameState.CreationAPISystem.SetTileTexture16(TilesMoon, 12, 11);
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 12, 11, Tile.Variant.Middle);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 12, 11, Enums.TileVariants.Middle);
 
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 13, 11, Tile.Variant.Right);
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 11, 11, Tile.Variant.Left);
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 12, 10, Tile.Variant.Top);
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 12, 12, Tile.Variant.Bottom);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 13, 11, Enums.TileVariants.Right);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 11, 11, Enums.TileVariants.Left);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 12, 10, Enums.TileVariants.Top);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 12, 12, Enums.TileVariants.Bottom);
             
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 16, 12, Tile.Variant.InnerTopRight);
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 17, 12, Tile.Variant.InnerTopLeft);
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 16, 11, Tile.Variant.InnerBottomRight);
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 17, 11, Tile.Variant.InnerBottomLeft);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 16, 12, Enums.TileVariants.InnerTopRight);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 17, 12, Enums.TileVariants.InnerTopLeft);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 16, 11, Enums.TileVariants.InnerBottomRight);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 17, 11, Enums.TileVariants.InnerBottomLeft);
 
 
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 13, 10, Tile.Variant.OuterTopRight);
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 11, 10, Tile.Variant.OuterTopLeft);
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 13, 12, Tile.Variant.OuterBottomRight);
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 11, 12, Tile.Variant.OuterBottomLeft);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 13, 10, Enums.TileVariants.OuterTopRight);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 11, 10, Enums.TileVariants.OuterTopLeft);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 13, 12, Enums.TileVariants.OuterBottomRight);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 11, 12, Enums.TileVariants.OuterBottomLeft);
 
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 13, 13, Tile.Variant.TipRight);
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 11, 13, Tile.Variant.TipLeft);
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 14, 10, Tile.Variant.TipTop);
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 14, 12, Tile.Variant.TipBottom);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 13, 13, Enums.TileVariants.TipRight);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 11, 13, Enums.TileVariants.TipLeft);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 14, 10, Enums.TileVariants.TipTop);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 14, 12, Enums.TileVariants.TipBottom);
 
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 14, 11, Tile.Variant.TipVertical);
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 12, 13, Tile.Variant.TipHorizontal);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 14, 11, Enums.TileVariants.TipVertical);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 12, 13, Enums.TileVariants.TipHorizontal);
 
-            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 14, 13, Tile.Variant.Default);
+            GameState.CreationAPISystem.SetTileVariant16(TilesMoon, 14, 13, Enums.TileVariants.Default);
 
             GameState.CreationAPISystem.EndTile();
         }
