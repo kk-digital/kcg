@@ -30,6 +30,7 @@ public class ProjectileTest : MonoBehaviour
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
     private void Update()
     {
+        // Draw Initialized Projectile
         projectileDrawSystem.Draw();
     }
 }

@@ -31,7 +31,10 @@ public class VehicleTest : MonoBehaviour
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
     private void Update()
     {
+        // Draw Vehicle
         vehicleDrawSystem.Draw();
+
+        // Update Physics
         vehiclePhysics.Process(contexts);
     }
 }
