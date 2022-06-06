@@ -247,48 +247,14 @@ namespace SystemView
 
             SemiMinorAxis = (float)Math.Sqrt(Periapsis * (2 * SemiMajorAxis - Periapsis));
 
-            float TimeToEncounter = 0.0f;
-            float TargetRotationalMovement = 0.0f;
+            // Use Kepler's thrid law to calculate the orbital period
 
-            // WIP math for further optimizations to get rid of this for loop
+            //     √ a^3
+            // T = -----
+            //       2
 
-            // a, b, M, ω, q1 = values for current object
-            // A, B, m, w, q2 = values for destination object
-
-            // X = segment length
-
-            // (1) x(M) = cos(ω) * (cos(M) * q) - sin(ω) * sin(M) * b
-
-            // (2) y(M) = sin(ω) * (cos(M) * q) + cos(ω) * sin(M) * b
-
-            // (3) h(M) = √(x(M)^2 + y(M)^2)            =>   h(M) = √((cos(ω) * (cos(M) * q) - sin(ω) * sin(M) * b)^2 + (sin(ω) * (cos(M) * q) + cos(ω) * sin(M) * b)^2)
-
-            // (4) h(x) = √(x(M + x)^2 + y(M + x)^2)    =>   h(x) = √((cos(ω) * (cos(M + x) * q) - sin(ω) * sin(M + x) * b)^2 + (sin(ω) * (cos(M + x) * q) + cos(ω) * sin(M + x) * b)^2)
-
-            // (4) 5(x) = x * h(M + x)^2                =>   t(x) = x(cos(ω) * (cos(M + x) * q) - sin(ω) * sin(M + x) * b)^2 + x(sin(ω) * (cos(M + x) * q) + cos(ω) * sin(M + x) * b)^2
-
-            //                                                        x(cos(ω) * (cos(M + x) * q1) - sin(ω) * sin(M + x) * b)^2 + x(sin(ω) * (cos(M + x) * q1) + cos(ω) * sin(M + x) * b)^2
-            // (5) d(x) = t(x) / h(m + x)^2             =>   d(x) = -----------------------------------------------------------------------------------------------------------------------
-            //                                                      ((cos(w) * (cos(m + x) * q2) - sin(w) * sin(m + x) * B)^2 + (sin(w) * (cos(m + x) * q2) + cos(w) * sin(m + x) * B)^2)^2
-
-
-            int segments = 128 + (int)((Periapsis + Apoapsis) * 16);
-            for (int i = 0; i < segments; i++)
-            {
-                // Total distance from periapsis to apoapsis is 180 degrees (pi) - so each segment is (pi / amount of segments) long
-                float segmentLength = 3.1415926f / segments;
-
-                // Use the segment length to calculate the altitude the ship and destination object will reach after this segment
-                float altitude = GetDistanceFromCenterAt(segmentLength * i + RotationalPosition);
-                float targetAltitude = Destination.GetDistanceFromCenterAt(segmentLength + TargetRotationalMovement + Destination.RotationalPosition);
-
-                // We then use the altitude to calculate how much time passed, as d = t / altitude^2
-                float segmentDuration = segmentLength * altitude * altitude;
-
-                // Add values to our counters
-                TimeToEncounter += segmentDuration;
-                TargetRotationalMovement += segmentDuration / targetAltitude / targetAltitude;
-            }
+            float TimeToEncounter = (float)Math.Sqrt(SemiMajorAxis * SemiMajorAxis * SemiMajorAxis) / 2.0f;
+            float TargetRotationalMovement = TimeToEncounter / (float)Math.Sqrt(Destination.SemiMajorAxis * Destination.SemiMajorAxis * Destination.SemiMajorAxis) * 2.0f * 3.1415926f;
 
             float[] TargetPosAtEncounter = Destination.GetPositionAt(Destination.RotationalPosition + TargetRotationalMovement);
 
