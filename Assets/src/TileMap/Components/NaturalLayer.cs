@@ -16,6 +16,13 @@ namespace TileMap
             Size = new Vector2Int(size.x / ChunkSize.x + 1, size.y / ChunkSize.y + 1);
             List = new NaturalLayer[Size.x * Size.y];
         }
+        
+        public ref NaturalLayer GetNaturalLayerChunk(ref Component tileMap, int x, int y)
+        {
+            int index = x / tileMap.NaturalLayer.ChunkSize.x + (y / tileMap.NaturalLayer.ChunkSize.y) * tileMap.NaturalLayer.Size.x;
+
+            return ref tileMap.NaturalLayer.List[index];
+        }
     }
 }
 

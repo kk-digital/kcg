@@ -1,4 +1,5 @@
 using Components;
+using TileMap;
 using UnityEngine;
 
 namespace Agent
@@ -57,7 +58,7 @@ namespace Agent
             };
         }
     
-        public bool IsCollidingLeft(ref TileMap.Component component, Vector2 newPos)
+        public bool IsCollidingLeft(ref TileMap.Component tileMap, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving right
@@ -65,7 +66,7 @@ namespace Agent
             
             for (int y = bounds.BottomTile; y <= bounds.TopTile; y++) 
             {
-                var tile = component.GetTile(bounds.LeftTile, y);
+                var tile = ManagerSystem.Instance.GetTile(ref tileMap, bounds.LeftTile, y);
                 int tilePropertiesIndex = tile.BackTilePropertiesId;
 
                 if (tilePropertiesIndex >= 0)
@@ -79,7 +80,7 @@ namespace Agent
             return false;
         }
     
-        public bool IsCollidingRight(ref TileMap.Component component, Vector2 newPos)
+        public bool IsCollidingRight(ref TileMap.Component tileMap, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving Left
@@ -87,7 +88,7 @@ namespace Agent
             
             for (int y = bounds.BottomTile; y <= bounds.TopTile; y++) 
             {
-                var tile = component.GetTile(bounds.RightTile, y);
+                var tile = ManagerSystem.Instance.GetTile(ref tileMap, bounds.RightTile, y);
                 int tilePropertiesIndex = tile.BackTilePropertiesId;
 
                 if (tilePropertiesIndex >= 0)
@@ -101,7 +102,7 @@ namespace Agent
             return false;
         }
     
-        public bool IsCollidingTop(ref TileMap.Component component, Vector2 newPos)
+        public bool IsCollidingTop(ref TileMap.Component tileMap, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving Down
@@ -109,7 +110,7 @@ namespace Agent
             
             for (int x = bounds.LeftTile; x <= bounds.RightTile; x++) 
             {
-                var tile = component.GetTile(x, bounds.TopTile);
+                var tile = ManagerSystem.Instance.GetTile(ref tileMap, x, bounds.TopTile);
                 int tilePropertiesIndex = tile.BackTilePropertiesId;
 
                 if (tilePropertiesIndex >= 0)
@@ -123,7 +124,7 @@ namespace Agent
             return false;
         }
 
-        public bool IsCollidingBottom(ref TileMap.Component component, Vector2 newPos)
+        public bool IsCollidingBottom(ref TileMap.Component tileMap, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
             // TODO: don't bother checking if not moving Up
@@ -131,7 +132,7 @@ namespace Agent
             
             for (int x = bounds.LeftTile; x <= bounds.RightTile; x++)
             {
-                var tile = component.GetTile(x, bounds.BottomTile);
+                var tile = ManagerSystem.Instance.GetTile(ref tileMap, x, bounds.BottomTile);
                 int tilePropertiesIndex = tile.BackTilePropertiesId;
 
                 if (tilePropertiesIndex >= 0)

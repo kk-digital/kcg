@@ -8,18 +8,18 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    static readonly Agent.PlayerComponent agentPlayerComponent = new Agent.PlayerComponent();
+    static readonly Agent.PlayerEntity agentPlayerEntityComponent = new Agent.PlayerEntity();
 
-    public bool isAgentPlayer {
-        get { return HasComponent(GameComponentsLookup.AgentPlayer); }
+    public bool isAgentPlayerEntity {
+        get { return HasComponent(GameComponentsLookup.AgentPlayerEntity); }
         set {
-            if (value != isAgentPlayer) {
-                var index = GameComponentsLookup.AgentPlayer;
+            if (value != isAgentPlayerEntity) {
+                var index = GameComponentsLookup.AgentPlayerEntity;
                 if (value) {
                     var componentPool = GetComponentPool(index);
                     var component = componentPool.Count > 0
                             ? componentPool.Pop()
-                            : agentPlayerComponent;
+                            : agentPlayerEntityComponent;
 
                     AddComponent(index, component);
                 } else {
@@ -40,17 +40,17 @@ public partial class GameEntity {
 //------------------------------------------------------------------------------
 public sealed partial class GameMatcher {
 
-    static Entitas.IMatcher<GameEntity> _matcherAgentPlayer;
+    static Entitas.IMatcher<GameEntity> _matcherAgentPlayerEntity;
 
-    public static Entitas.IMatcher<GameEntity> AgentPlayer {
+    public static Entitas.IMatcher<GameEntity> AgentPlayerEntity {
         get {
-            if (_matcherAgentPlayer == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.AgentPlayer);
+            if (_matcherAgentPlayerEntity == null) {
+                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.AgentPlayerEntity);
                 matcher.componentNames = GameComponentsLookup.componentNames;
-                _matcherAgentPlayer = matcher;
+                _matcherAgentPlayerEntity = matcher;
             }
 
-            return _matcherAgentPlayer;
+            return _matcherAgentPlayerEntity;
         }
     }
 }

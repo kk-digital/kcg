@@ -20,7 +20,7 @@ namespace PlanetTileMap.Unity
         //public string TileMap = "Moonbunker/Moon Bunker.tmx";
         [SerializeField] Material Material;
 
-        TileMap.Component tileComponent;
+        TileMap.Component tileMap;
         static bool InitTiles;
 
         public void Start()
@@ -37,7 +37,7 @@ namespace PlanetTileMap.Unity
         {
             TileMap.MemorySystem.Instance.InitializeTiles();
             TileMap.DrawSystem.Instance.Initialize(Material, transform);
-            tileComponent = TileMap.GenerateSystem.Instance.GenerateTileMap();
+            tileMap = TileMap.GenerateSystem.Instance.GenerateTileMap();
         }
 
         public void Update()
@@ -48,11 +48,11 @@ namespace PlanetTileMap.Unity
                 int x = (int)worldPosition.x;
                 int y = (int)worldPosition.y;
                 Debug.Log(x + " " + y);
-                tileComponent.RemoveTile(x, y, PlanetLayer.Front);
-                tileComponent.BuildLayerTexture(PlanetLayer.Front);
+                TileMap.ManagerSystem.Instance.RemoveTile(ref tileMap, x, y, PlanetLayer.Front);
+                TileMap.GenerateSystem.Instance.BuildLayerTexture(ref tileMap, PlanetLayer.Front);
             }
             
-            TileMap.DrawSystem.Instance.DrawTiles(ref tileComponent);
+            TileMap.DrawSystem.Instance.DrawTiles(ref tileMap);
         }
     }
 }

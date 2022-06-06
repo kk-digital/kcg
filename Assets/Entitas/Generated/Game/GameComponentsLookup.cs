@@ -10,7 +10,7 @@ public static class GameComponentsLookup {
 
     public const int AgentID = 0;
     public const int AgentMovable = 1;
-    public const int AgentPlayer = 2;
+    public const int AgentPlayerEntity = 2;
     public const int AgentPosition2D = 3;
     public const int AgentPositionDiscrete2D = 4;
     public const int AgentSprite2D = 5;
@@ -54,7 +54,7 @@ public static class GameComponentsLookup {
     public static readonly string[] componentNames = {
         "AgentID",
         "AgentMovable",
-        "AgentPlayer",
+        "AgentPlayerEntity",
         "AgentPosition2D",
         "AgentPositionDiscrete2D",
         "AgentSprite2D",
@@ -97,7 +97,7 @@ public static class GameComponentsLookup {
     public static readonly System.Type[] componentTypes = {
         typeof(Agent.IDComponent),
         typeof(Agent.MovableComponent),
-        typeof(Agent.PlayerComponent),
+        typeof(Agent.PlayerEntity),
         typeof(Agent.Position2DComponent),
         typeof(Agent.PositionDiscrete2DComponent),
         typeof(Agent.Sprite2DComponent),
