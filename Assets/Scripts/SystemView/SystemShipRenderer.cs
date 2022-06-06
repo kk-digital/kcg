@@ -16,6 +16,8 @@ namespace SystemView
         public Color shieldColor = new Color(0.4f, 0.7f, 1.0f, 0.5f);
         public Color shipColor = Color.white;
 
+        public float width = 1.0f;
+
         public GameObject ShieldObject;
 
         public CameraController Camera;
@@ -46,7 +48,7 @@ namespace SystemView
         void Update()
         {
             ShipRender.transform.position     = new Vector3(ship.PosX, ship.PosY, -0.1f);
-            ShipRender.transform.localScale   = new Vector3(15.0f / Camera.scale, 5.0f / Camera.scale, 1.0f);
+            ShipRender.transform.localScale   = new Vector3(5.0f * width / Camera.scale, 5.0f / Camera.scale, 1.0f);
 
             ShipRender.transform.Rotate(new Vector3(0.0f, 0.0f, (ship.Rotation - LastRotation) * 180.0f / 3.1415926f));
 

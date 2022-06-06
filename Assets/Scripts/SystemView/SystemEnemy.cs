@@ -41,6 +41,7 @@ namespace SystemView
             Renderer = Object.AddComponent<SystemShipRenderer>();
             Renderer.ship = Ship;
             Renderer.shipColor = Color.red;
+            Renderer.width = 3.0f;
 
             Ship.Health = Ship.MaxHealth = 25000;
             Ship.Shield = Ship.MaxShield = 50000;
