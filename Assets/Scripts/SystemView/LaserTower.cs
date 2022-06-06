@@ -21,6 +21,11 @@ namespace SystemView
         public int LastMillis;
         public int Cooldown;
 
+        public float ShieldPenetration;
+
+        public float ShieldDamageMultiplier;
+        public float HullDamageMultiplier;
+
         public System.Random rand;
 
         public SpriteRenderer sr;
@@ -28,7 +33,11 @@ namespace SystemView
 
         private LineRenderer DebugLineRenderer1;
         private LineRenderer DebugLineRenderer2;
+
         private Color DebugConeColor = new Color(0.8f, 0.6f, 0.1f, 0.4f);
+
+        public LineRenderer LaserLineRenderer;
+        public Color LaserColor = new Color(0.2f, 0.8f, 0.3f, 0.7f);
 
         public SystemState State;
 
@@ -48,6 +57,11 @@ namespace SystemView
             FOV = 3.1415926f / 4.0f;
             Range = 15.0f;
 
+            FiringRate = 800;
+            Damage = 600;
+            ShieldDamageMultiplier = 3.0f;
+            HullDamageMultiplier = 0.4f;
+
             sr = gameObject.AddComponent<SpriteRenderer>();
             sr.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
 
@@ -55,6 +69,7 @@ namespace SystemView
 
             DebugLineRenderer1 = (new GameObject()).AddComponent<LineRenderer>();
             DebugLineRenderer2 = (new GameObject()).AddComponent<LineRenderer>();
+            LaserLineRenderer  = (new GameObject()).AddComponent<LineRenderer>();
 
             Shader shader = Shader.Find("Hidden/Internal-Colored");
             Material mat = new Material(shader);
@@ -68,9 +83,9 @@ namespace SystemView
             mat.SetInt("_ZWrite", 0);
             mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
 
-            DebugLineRenderer1.material = DebugLineRenderer2.material = mat;
+            DebugLineRenderer1.material = DebugLineRenderer2.material = LaserLineRenderer.material = mat;
 
-            DebugLineRenderer1.useWorldSpace = DebugLineRenderer2.useWorldSpace = true;
+            DebugLineRenderer1.useWorldSpace = DebugLineRenderer2.useWorldSpace = LaserLineRenderer.useWorldSpace = true;
 
             LastMillis = (int)(Time.time * 1000.0f);
         }
@@ -102,6 +117,28 @@ namespace SystemView
             int CurrentMillis = (int)(Time.time * 1000.0f) - LastMillis;
             LastMillis = (int)(Time.time * 1000.0f);
 
+            int LaserDurationTime = FiringRate / 4;
+            int RemainingTime = Cooldown - (FiringRate - LaserDurationTime);
+            if (RemainingTime > 0)
+            {
+                if (Target != null)
+                {
+                    Vector3[] vertices = new Vector3[2];
+                    vertices[0] = new Vector3(PosX, PosY, 0.0f);
+                    vertices[1] = new Vector3(Target.PosX, Target.PosY, 0.0f);
+                    LaserLineRenderer.SetPositions(vertices);
+                }
+
+                float RemainingTimeAsPercentage = (float)RemainingTime / (float)LaserDurationTime;
+                LaserLineRenderer.startWidth = RemainingTimeAsPercentage * 0.15f / Camera.scale;
+                LaserLineRenderer.endWidth   = RemainingTimeAsPercentage * 0.15f / Camera.scale;
+                LaserLineRenderer.startColor = new Color(LaserColor.r, LaserColor.g, LaserColor.b, LaserColor.a * RemainingTimeAsPercentage + 0.10f);
+                LaserLineRenderer.endColor   = new Color(LaserColor.r, LaserColor.g, LaserColor.b, LaserColor.a * RemainingTimeAsPercentage + 0.02f);
+            }
+
+            Cooldown -= CurrentMillis;
+            if (Cooldown < 0) Cooldown = 0;
+
             // Pick target
             if (Target != null)
             {
@@ -127,9 +164,9 @@ namespace SystemView
 
             if (Target != null)
             {
-                if(TryTargeting(Target, CurrentMillis))
+                if (TryTargeting(Target, CurrentMillis) && Cooldown == 0)
                 {
-
+                    TryShooting();
                 }
             }
         }
@@ -143,7 +180,7 @@ namespace SystemView
             if (Rotation < 0.0f) Rotation = 2.0f * 3.1415926f + Rotation;
             while (Rotation > 2.0f * 3.1415926f) Rotation -= 2.0f * 3.1415926f;
 
-            if (Cooldown > 0.0f || Distance > Range) return false;
+            if (Distance > Range) return false;
 
             float Angle = (float)Math.Acos(DistanceX / Distance);
             if (ship.PosY < PosY) Angle = 2.0f * 3.1415926f - Angle;
@@ -184,19 +221,50 @@ namespace SystemView
             return true;
         }
 
-        public bool TryShooting(SystemShip ship)
+        public bool TryShooting()
         {
-            if (Cooldown > 0.0f) return false;
+            if (Cooldown > 0) return false;
 
-            float DistanceX = ship.PosX - PosX;
-            float DistanceY = ship.PosY - PosY;
+            float DistanceX = Target.PosX - PosX;
+            float DistanceY = Target.PosY - PosY;
             float Distance = (float)Math.Sqrt(DistanceX * DistanceX + DistanceY * DistanceY);
 
+            if (Rotation < 0.0f) Rotation = 2.0f * 3.1415926f + Rotation;
+            while (Rotation > 2.0f * 3.1415926f) Rotation -= 2.0f * 3.1415926f;
+
+            if (Distance > Range) return false;
+
             float Angle = (float)Math.Acos(DistanceX / Distance);
+            if (Target.PosY < PosY) Angle = 2.0f * 3.1415926f - Angle;
 
             if (Angle > Rotation + FOV / 2.0f || Angle < Rotation - FOV / 2.0f) return false;
 
-            
+            Vector3[] vertices = new Vector3[2];
+            vertices[0] = new Vector3(PosX, PosY, 0.0f);
+            vertices[1] = new Vector3(Target.PosX, Target.PosY, 0.0f);
+            LaserLineRenderer.SetPositions(vertices);
+            LaserLineRenderer.positionCount = 2;
+
+            float ShieldDamage = Damage * ShieldDamageMultiplier * 1.0f - ShieldPenetration;
+            float HullDamage   = Damage * HullDamageMultiplier   *        ShieldPenetration;
+
+            Target.Shield -= (int)ShieldDamage;
+
+            if (Target.Shield < 0)
+            {
+                HullDamage += (float)Target.Shield / ShieldDamageMultiplier * HullDamageMultiplier;
+                Target.Shield = 0;
+            }
+
+            Target.Health -= (int)HullDamage;
+
+            if (Target.Health <= 0)
+            {
+                Target.Destroy();
+                Target = null;
+            }
+
+            Cooldown = FiringRate;
 
             return true;
         }
