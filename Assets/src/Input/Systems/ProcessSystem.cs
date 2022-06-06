@@ -15,9 +15,11 @@ namespace ECSInput
         {
             var AgentsWithXY = EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.ECSInput, GameMatcher.ECSInputXY));
 
+            bool jump = Input.GetKeyDown(KeyCode.UpArrow);
+
             foreach (var entity in AgentsWithXY)
             {
-                entity.ReplaceECSInputXY(new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")));
+                entity.ReplaceECSInputXY(new Vector2(Input.GetAxisRaw("Horizontal"), 0.0f), jump);
             }
         }
     }

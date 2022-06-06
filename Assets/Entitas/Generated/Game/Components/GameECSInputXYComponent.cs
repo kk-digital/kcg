@@ -11,17 +11,19 @@ public partial class GameEntity {
     public ECSInput.XYComponent eCSInputXY { get { return (ECSInput.XYComponent)GetComponent(GameComponentsLookup.ECSInputXY); } }
     public bool hasECSInputXY { get { return HasComponent(GameComponentsLookup.ECSInputXY); } }
 
-    public void AddECSInputXY(UnityEngine.Vector2 newValue) {
+    public void AddECSInputXY(UnityEngine.Vector2 newValue, bool newJump) {
         var index = GameComponentsLookup.ECSInputXY;
         var component = (ECSInput.XYComponent)CreateComponent(index, typeof(ECSInput.XYComponent));
         component.Value = newValue;
+        component.Jump = newJump;
         AddComponent(index, component);
     }
 
-    public void ReplaceECSInputXY(UnityEngine.Vector2 newValue) {
+    public void ReplaceECSInputXY(UnityEngine.Vector2 newValue, bool newJump) {
         var index = GameComponentsLookup.ECSInputXY;
         var component = (ECSInput.XYComponent)CreateComponent(index, typeof(ECSInput.XYComponent));
         component.Value = newValue;
+        component.Jump = newJump;
         ReplaceComponent(index, component);
     }
 

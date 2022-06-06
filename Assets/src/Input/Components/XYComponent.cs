@@ -6,6 +6,7 @@ namespace ECSInput
     public class XYComponent : IComponent
     {
         public Vector2 Value;
+        public bool Jump;
     }
 }
 

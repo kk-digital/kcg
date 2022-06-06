@@ -33,7 +33,7 @@ namespace Agent
 
             entity.isAgentPlayer = true;
             entity.isECSInput = true;
-            entity.AddECSInputXY(new Vector2(0, 0));
+            entity.AddECSInputXY(new Vector2(0, 0), false);
             
             entity.AddAgentID(playerID);
             entity.AddAgentSprite2D(spriteID, spritePath, spriteSize, pngSize, material, BuildMesh(spriteID, material, pngSize));

@@ -48,18 +48,33 @@ namespace Agent
 
                 var pos = entity.agentPosition2D;
                 var movable = entity.agentMovable;
+                var input = entity.eCSInputXY;
 
+                movable.Acceleration = input.Value * entity.agentMovable.Speed * 50.0f;
+                movable.Acceleration.y -= 400.0f * deltaTime;
+                if (input.Jump)
+                {
+                    movable.Acceleration.y += 100.0f;
+                    movable.Velocity.y = 3.0f;
+                }
 
+                if (movable.Acceleration.y <= -20.0f)
+                {
+                    movable.Acceleration.y = -20.0f;
+                }
+
+                if (movable.Acceleration.y >= 20.0f)
+                {
+                    movable.Acceleration.y = 20.0f;
+                }
 
                 Vector2 displacement = 
                         0.5f * movable.Acceleration * (deltaTime * deltaTime) + movable.Velocity * deltaTime;
                 Vector2 newVelocity = movable.Acceleration * deltaTime + movable.Velocity;
-                newVelocity *= 0.7f;
+                newVelocity.x *= 0.7f;
 
 
                 Vector2 newPosition = pos.Value + displacement;
-
-                movable.Acceleration = entity.eCSInputXY.Value * entity.agentMovable.Speed * 50.0f;
 
                 entity.ReplaceAgentMovable(entity.agentMovable.Speed, newVelocity, movable.Acceleration, entity.agentMovable.AccelerationTime);
                 entity.ReplaceAgentPosition2D(newPosition, pos.Value);

@@ -11,19 +11,23 @@ namespace Agent
             EntitasContext = entitasContext;
         }
 
-        public void Execute(PlanetTileMap.PlanetTileMap tileMap)
+        public void Update(PlanetTileMap.PlanetTileMap tileMap)
         {
             float deltaTime = Time.deltaTime;
             var entities = EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.ComponentsBox2DCollider,
                              GameMatcher.AgentPosition2D));
+
+
             foreach (var entity in entities)
             {
                 var boxComponent = entity.componentsBox2DCollider;
                 var pos = entity.agentPosition2D;
+                var movable = entity.agentMovable;
 
                 if (Physics.BoxCollision.IsCollidingBottom(tileMap, pos.Value, boxComponent.Size))
                 {
                     entity.ReplaceAgentPosition2D(pos.PreviousValue, pos.PreviousValue);
+                    entity.ReplaceAgentMovable(movable.Speed, movable.Velocity, new Vector2(movable.Acceleration.x, 0.0f), movable.AccelerationTime);
                 }
             }
         }
