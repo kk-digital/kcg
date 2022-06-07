@@ -8,22 +8,11 @@ namespace TileProperties
         public string Name; //later use string pool
         public string Description;
         public int TileId;
+        public bool AutoMapping;
         
         public TileDrawProperties TileDrawType; //enum, hint for how tile should be drawn
 
-        public int[] Variants;
-
-        public int SpriteId
-        {
-            set
-            {
-                Variants[(int)TileVariant.Variant.Middle] = value;
-            }
-            get
-            {
-                return Variants[(int)TileVariant.Variant.Middle];
-            }
-        }
+        public int BaseSpriteId;
 
         public PlanetTileCollisionType TileCollisionType;
         public bool IsExplosive;
@@ -55,29 +44,27 @@ namespace TileProperties
             }
         }
 
-        private TilePropertiesData(string name, string description, int tileId) : this()
+        private TilePropertiesData(string name, string description, int baseSpriteId) : this()
         {
             Name = name;
             Description = description;
-            TileId = tileId;
-            int variantsCount = Enum.GetNames(typeof(TileVariant.Variant)).Length;
-            Variants = new int[variantsCount];
+            BaseSpriteId = baseSpriteId;
+            
 
         }
 
-        private TilePropertiesData(string name, string description, int tileId,
-            TileDrawProperties tileDrawType, int spriteId) : this(name, description, tileId)
+        private TilePropertiesData(string name, string description, int baseSpriteId,
+            TileDrawProperties tileDrawType, int spriteId) : this(name, description, baseSpriteId)
         {
             TileDrawType = tileDrawType;
-            SpriteId = spriteId;
 
         }
 
-        public TilePropertiesData(string name, string description, int tileId,
+        public TilePropertiesData(string name, string description, int baseSpriteId,
             TileDrawProperties tileDrawType, int spriteId,
             PlanetTileCollisionType tileCollisionType, byte durability,
              bool isExplosive = false)
-            : this(name, description, tileId, tileDrawType, spriteId)
+            : this(name, description, baseSpriteId, tileDrawType, spriteId)
         {
             TileCollisionType = tileCollisionType;
             Durability = durability;
