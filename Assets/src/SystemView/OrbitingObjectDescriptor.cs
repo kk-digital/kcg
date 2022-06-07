@@ -6,25 +6,27 @@ namespace SystemView
     // Will be used to define orbiting parameters of planets, asteroids, ships, etc.
     public class OrbitingObjectDescriptor
     {
-                                                             //                                   -11    m³
-        const  float   GravitationalConstant = 6.67408E-11f; //  G                    6.67408 * 10    -------
-                                                             //                                       kg * s²
+                                                             //                                  -11    m³
+        const  float   GravitationalConstant = 6.67408E-11f; // G                    6.67408 * 10    -------
+                                                             //                                      kg * s²
 
-        public float   SemiMajorAxis;                        //  a                    Half of the major axis
-        public float   SemiMinorAxis;                        //  b                    Half of the minor axis
-        public float   Rotation;                             //  ω                    Orbit's rotation across the Z-axis
-        public float   OrbitalPeriod;                        //  P                    Amount of time needed for body to complete an orbit
-        public float   MeanMotion;                           //  n                    Angular speed required to complete the orbit assuming constant speed
-        public float   MeanAnomaly;                          //  M                    Position as a fraction of the body's orbital period
-        public float   EccentricAnomaly;                     //  E                    Required to calculate true anomaly and velocity
-        public float   TrueAnomaly;                          //  ν                    Real angular position of body
-        public float[] EccentricityVector;                   //  e                    Dimensionless vector pointing from apoapsis to periapsis, with magnitude equal to the scalar eccentricity
-        public float   Eccentricity;                         //  ε                    Orbital eccentricity (ε = 0: central, 0 < ε < 1: elliptical, ε = 1: parabolic, ε > 1: hyperbolic)
-        public float   EccentricDistance;                    //  D                    Distance between foci and radius
-        public float   Periapsis;                            //  q                    Lowest distance between orbit and center of gravity
-        public float   Apoapsis;                             //  Q                    Highest distance between orbit and center of gravity
-        public float   StandardGravitationalParameter;       //  μ                    μ = G(m1+m2)
-        public float   HeliocentricDistance;                 //  rc                   Distance from central body at current position
+        public float   SemiMajorAxis;                        // a                    Half of the major axis
+        public float   SemiMinorAxis;                        // b                    Half of the minor axis
+        public float   Rotation;                             // ω                    Orbit's rotation across the Z-axis
+        public float   OrbitalPeriod;                        // P                    Amount of time needed for body to complete an orbit
+        public float   MeanMotion;                           // n                    Angular speed required to complete the orbit assuming constant speed
+        public float   MeanAnomaly;                          // M                    Position as a fraction of the body's orbital period
+        public float   EccentricAnomaly;                     // E                    Required to calculate true anomaly and velocity
+        public float   TrueAnomaly;                          // ν                    Real angular position of body
+        public float[] EccentricityVector;                   // e                    Dimensionless vector pointing from apoapsis to periapsis, with magnitude equal to the scalar eccentricity
+        public float   Eccentricity;                         // ε                    Orbital eccentricity (ε = 0: central, 0 < ε < 1: elliptical, ε = 1: parabolic, ε > 1: hyperbolic)
+        public float   EccentricDistance;                    // D                    Distance between foci and radius
+        public float   Periapsis;                            // q                    Lowest distance between orbit and center of gravity
+        public float   Apoapsis;                             // Q                    Highest distance between orbit and center of gravity
+        public float   StandardGravitationalParameter;       // μ                    μ = G(m1 + m2)
+
+        public float   HeliocentricDistance;                 // r                    Distance from central body at current position
+                                                             //  c
 
         public SystemViewBody CentralBody;
         public SystemViewBody Self;
