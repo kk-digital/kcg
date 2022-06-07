@@ -8,7 +8,7 @@ namespace Vehicle
 
         public IGroup<GameEntity> VehiclesWithSprite;
         public IGroup<GameEntity> VehiclesWithInput;
-        public IGroup<GameEntity> VehiclesWithVelocity;
+        public IGroup<GameEntity> VehiclesWithPhysics;
 
         // List of vehicles
         public List()
@@ -16,7 +16,7 @@ namespace Vehicle
             gameContext = Contexts.sharedInstance.game;
             VehiclesWithSprite = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.VehicleID, GameMatcher.VehicleSprite2D));
             VehiclesWithInput = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.VehicleID, GameMatcher.ECSInput));
-            VehiclesWithVelocity = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.VehicleID, GameMatcher.VehicleVelocity, GameMatcher.VehiclePosition2D));
+            VehiclesWithPhysics = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.VehicleID, GameMatcher.VehiclePhysicsState2D, GameMatcher.VehiclePhysicsState2D));
         }
     }
 }
