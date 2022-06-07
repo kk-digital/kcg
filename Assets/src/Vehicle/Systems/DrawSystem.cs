@@ -38,6 +38,10 @@ namespace Vehicle
         bool Init = false;
         GameEntity vehicleDraw;
 
+        // Physics
+        BoxColliderComponent boxColliderComponent;
+        PlanetTileMap.Unity.MapLoaderTestScript mapLoader;
+
         // Static Constructor
         static DrawSystem()
         {
@@ -91,7 +95,7 @@ namespace Vehicle
             vehicleDraw.AddVehicleID(0);
 
             // Add Vehicle Sprite Component
-            vehicleDraw.AddVehicleSprite2D(_spriteID, filePath, new Vector2(GetWidth(), GetHeight()), new Vector2Int(GetWidth(), GetHeight()),
+            vehicleDraw.AddVehicleSprite2D(_spriteID, _filePath, new Vector2(GetWidth(), GetHeight()), new Vector2Int(GetWidth(), GetHeight()),
                 Material, prefab.GetComponent<Mesh>());
 
             // Add Vehicle Velocity Component
@@ -99,6 +103,15 @@ namespace Vehicle
 
             // Add Vehicle Position Component
             vehicleDraw.AddVehiclePosition2D(Vector2.zero, Vector2.zero);
+
+            // Physics Init
+            boxColliderComponent = new BoxColliderComponent(new Vector2(0.5f, 0.5f));
+
+            // Collider Component Init
+            vehicleDraw.AddVehicleCollider(false, false, false, false);
+
+            // Init Map Loader
+            mapLoader = GameObject.Find("TilesTest").GetComponent<PlanetTileMap.Unity.MapLoaderTestScript>();
 
             // Initialization done
             Init = true;
@@ -124,7 +137,19 @@ namespace Vehicle
             }
         }
 
-        // Get Contextx Object
+        // Update Physics 
+        public void UpdateCollision()
+        {
+            if (Init)
+            {
+                // Update Collider Component
+                vehicleDraw.ReplaceVehicleCollider(boxColliderComponent.IsCollidingLeft(ref mapLoader.TileMap, _transform.transform.position), boxColliderComponent.IsCollidingRight(ref mapLoader.TileMap, _transform.transform.position),
+                    boxColliderComponent.IsCollidingTop(ref mapLoader.TileMap, _transform.transform.position), boxColliderComponent.IsCollidingBottom(ref mapLoader.TileMap, _transform.transform.position));
+
+            }
+        }
+
+        // Get Contexts Object
         public Contexts GetContexts()
         {
             return _contexts;
