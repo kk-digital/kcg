@@ -145,75 +145,79 @@ namespace PlanetTileMap
 
         }
 
-        public void UpdateTileVariants(int x, int y, Layer layer)
+        public void UpdateTilePositions(int x, int y, Layer layer)
         {
+            // standard sheet mapping
+            // every tile has a constant offset
+            // in the sprite atlas
+
+            // example: 15 is (3,3)
+            //           8 is (0,2)
+            //           1 is (1,0)
+            int[] TilePositionToTileSet = new int[]
+            {
+                 15, 12, 14, 13, 3, 0, 2, 1, 11, 8, 10, 9, 7, 4, 6, 5
+            };
+            
+
             if (x < 0 || y < 0 | x >= Size.x || y >= Size.y)
             {
                 return;
             }
 
             ref PlanetTile tile = ref GetTileRef(x, y, layer);
-            
+             
             if (tile.PropertiesId >= 0)
             {
-                int[] neighbors = new int[8];
-                for(int i = 0; i < neighbors.Length; i++)
-                {
-                    neighbors[i] = -1;
-                }
-
-                if (x + 1 < Size.x)
-                {
-                    ref PlanetTile neighborTile = ref GetTileRef(x + 1, y, layer);
-                    neighbors[(int)TileVariant.Neighbor.Right] = neighborTile.PropertiesId;
-                }
-
-                if (x - 1 >= 0)
-                {
-                    ref PlanetTile neighborTile = ref GetTileRef(x - 1, y, layer);
-                    neighbors[(int)TileVariant.Neighbor.Left] = neighborTile.PropertiesId;
-                }
-
-                if (y + 1 < Size.y)
-                {
-                    ref PlanetTile neighborTile = ref GetTileRef(x, y + 1, layer);
-                    neighbors[(int)TileVariant.Neighbor.Top] = neighborTile.PropertiesId;
-                }
-
-                if (y - 1 >= 0)
-                {
-                    ref PlanetTile neighborTile = ref GetTileRef(x, y - 1, layer);
-                    neighbors[(int)TileVariant.Neighbor.Bottom] = neighborTile.PropertiesId;
-                }
-
-                if (x + 1 < Size.x && y + 1 < Size.y)
-                {
-                    ref PlanetTile neighborTile = ref GetTileRef(x + 1, y + 1, layer);
-                    neighbors[(int)TileVariant.Neighbor.TopRight] = neighborTile.PropertiesId;
-                }
-
-                if (x - 1 >= 0 && y + 1 < Size.y)
-                {
-                    ref PlanetTile neighborTile = ref GetTileRef(x - 1, y + 1, layer);
-                    neighbors[(int)TileVariant.Neighbor.TopLeft] = neighborTile.PropertiesId;
-                }
-
-                if (x + 1 < Size.x && y - 1 >= 0)
-                {
-                    ref PlanetTile neighborTile = ref GetTileRef(x + 1, y - 1, layer);
-                    neighbors[(int)TileVariant.Neighbor.BottomRight] = neighborTile.PropertiesId;
-                }
-            
-                if (x - 1 >= 0 && y - 1 >= 0)
-                {
-                    ref PlanetTile neighborTile = ref GetTileRef(x - 1, y - 1, layer);
-                    neighbors[(int)TileVariant.Neighbor.BottomLeft] = neighborTile.PropertiesId;
-                }
-
-                TileVariant.Variant variant = TileVariant.TileNeighbor.GetVariant(neighbors, tile.PropertiesId);
                 TileProperties.TilePropertiesData properties = 
                                 GameState.TileCreationApi.GetTileProperties(tile.PropertiesId);
-                tile.SpriteId = properties.Variants[(int)variant];
+                if (properties.AutoMapping)
+                {
+                    // we have 4 neighbors per tile
+                    // could be more but its 4 for now
+                    // right/left/down/up
+                    int[] neighbors = new int[4];
+
+                    for(int i = 0; i < neighbors.Length; i++)
+                    {
+                        neighbors[i] = -1;
+                    }
+
+                    if (x + 1 < Size.x)
+                    {
+                        ref PlanetTile neighborTile = ref GetTileRef(x + 1, y, layer);
+                        neighbors[(int)Neighbor.Right] = neighborTile.PropertiesId;
+                    }
+
+                    if (x - 1 >= 0)
+                    {
+                        ref PlanetTile neighborTile = ref GetTileRef(x - 1, y, layer);
+                        neighbors[(int)Neighbor.Left] = neighborTile.PropertiesId;
+                    }
+
+                    if (y + 1 < Size.y)
+                    {
+                        ref PlanetTile neighborTile = ref GetTileRef(x, y + 1, layer);
+                        neighbors[(int)Neighbor.Up] = neighborTile.PropertiesId;
+                    }
+
+                    if (y - 1 >= 0)
+                    {
+                        ref PlanetTile neighborTile = ref GetTileRef(x, y - 1, layer);
+                        neighbors[(int)Neighbor.Down] = neighborTile.PropertiesId;
+                    }
+
+
+                    TilePosition position = GetTilePosition(neighbors, tile.PropertiesId);
+
+                    // the sprite ids are next to each other in the sprite atlas
+                    // we jus thave to know which one to draw based on the offset
+                    tile.SpriteId = properties.BaseSpriteId + TilePositionToTileSet[(int)position];
+                }
+                else
+                {
+                    tile.SpriteId = properties.BaseSpriteId;
+                }
             }
             else
             {
@@ -225,13 +229,13 @@ namespace PlanetTileMap
 
         }
 
-        public void UpdateAllTileVariants(Layer layer)
+        public void UpdateAllTilePositions(Layer layer)
         {
             for(int y = 0; y < Size.y; y++)
             {
                 for(int x = 0; x < Size.x; x++)
                 {
-                    UpdateTileVariants(x, y, layer);
+                    UpdateTilePositions(x, y, layer);
                 }
             }
         }
@@ -281,7 +285,7 @@ namespace PlanetTileMap
             {
                 for(int j = y - 1; j <= y + 1; j++)
                 {
-                    UpdateTileVariants(i, j, layer);
+                    UpdateTilePositions(i, j, layer);
                 }
             }
         }
@@ -467,5 +471,60 @@ namespace PlanetTileMap
 
 
         }
+
+         public static int CheckTile(int[] neighbors, int rules, int tileId)
+         {
+             // 16 different values can be stored
+             // using only 4 bits for the
+             // adjacent tiles 
+
+            int[] NeighborBit = new int[] {
+                0x1, 0x2, 0x4, 0x8
+            };
+
+            int match = 0;
+            // number of total neighbors is 4 right/left/down/up
+            for(int i = 0; i < neighbors.Length; i++)
+            {
+                // check if we have to have the same tileId
+                // in this particular neighbor                      
+                if ((rules & NeighborBit[i]) == NeighborBit[i])
+                {
+                    // if this neighbor does not match return -1 immediately
+                    if (neighbors[i] != tileId)
+                    {
+                        return -1;
+                    }
+                    else 
+                    {
+                        match++;
+                    }
+                }
+            }
+
+
+            return match;
+        }
+
+        public static TilePosition GetTilePosition(int[] neighbors, int tileId)
+        {
+            int biggestMatch = 0;
+            TilePosition position = (TilePosition)0;
+
+            // we have 16 different values for the spriteId
+            for(int i = 1; i < 16; i++)
+            {
+                int match = CheckTile(neighbors, i, tileId);
+
+                // pick only tiles with the biggest match count
+                if (match > biggestMatch)
+                {
+                    biggestMatch = match;
+                    position = (TilePosition)i;
+                }
+            }
+
+            return position;
+        } 
     }
 }

@@ -115,13 +115,60 @@ namespace TileProperties
             PropertiesArray[CurrentTileIndex].Name = name;
         }
 
+        public void SetTileSpriteSheet16(int spriteSheetId, int row, int column)
+        {
+            if (CurrentTileIndex != -1)
+            {
+                int baseId = 0;
+
+                for(int j = column; j < column + 4; j++)
+                {
+                    for(int i = row; i < row + 4; i++)
+                    {
+                        int atlasSpriteId = 
+                            GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(spriteSheetId, i, j, 0);
+                        if (i == row && j == column)
+                        {
+                            baseId = atlasSpriteId;
+                        }
+                    }
+                }
+                
+                PropertiesArray[CurrentTileIndex].BaseSpriteId = baseId;
+                PropertiesArray[CurrentTileIndex].AutoMapping = true;  
+            } 
+        }
+
+        public void SetTileSpriteSheet(int spriteSheetId, int row, int column)
+        {
+            if (CurrentTileIndex != -1)
+            {
+                int baseId = 0;
+                for(int i = row; i <= row + 4; i++)
+                {
+                    for(int j = column; j <= column + 4; j++)
+                    {
+                        int atlasSpriteId = 
+                            GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas(spriteSheetId, i, j, 0);
+                        if (i == row && j == column)
+                        {
+                            baseId = atlasSpriteId;
+                        }
+                    }
+                }
+                PropertiesArray[CurrentTileIndex].BaseSpriteId = baseId;
+                PropertiesArray[CurrentTileIndex].AutoMapping = true;          
+            } 
+        }
+
         public void SetTileTexture(int spriteSheetId, int row, int column)
         {
             if (CurrentTileIndex != -1)
             {
                 int atlasSpriteId = 
                     GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas(spriteSheetId, row, column, 0);
-                PropertiesArray[CurrentTileIndex].SpriteId = atlasSpriteId;
+                PropertiesArray[CurrentTileIndex].BaseSpriteId = atlasSpriteId;
+                PropertiesArray[CurrentTileIndex].AutoMapping = false;
             }
         }
 
@@ -130,7 +177,8 @@ namespace TileProperties
             if (CurrentTileIndex == -1) return;
             
             int atlasSpriteId = GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(spriteSheetId, row, column, 0);
-            PropertiesArray[CurrentTileIndex].SpriteId = atlasSpriteId;
+            PropertiesArray[CurrentTileIndex].BaseSpriteId = atlasSpriteId;
+            PropertiesArray[CurrentTileIndex].AutoMapping = false;
         }
 
         public void SetTilePropertyIsExplosive(bool isExplosive)
@@ -174,7 +222,7 @@ namespace TileProperties
             }
         }
 
-        public void SetTileVariant(int spriteSheetId, int row, int column, TileVariant.Variant variant)
+       /* public void SetTileVariant(int spriteSheetId, int row, int column, PlanetTileMap.TilePosition variant)
         {
             if (CurrentTileIndex != -1)
             {
@@ -185,7 +233,7 @@ namespace TileProperties
             }
         }
 
-        public void SetTileVariant16(int spriteSheetId, int row, int column, TileVariant.Variant variant)
+        public void SetTileVariant16(int spriteSheetId, int row, int column, PlanetTileMap.TilePosition variant)
         {
             if (CurrentTileIndex != -1)
             {
@@ -193,7 +241,7 @@ namespace TileProperties
                     GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(spriteSheetId, row, column, 0);
                 PropertiesArray[CurrentTileIndex].Variants[(int)variant] = atlasSpriteId;
             }
-        }
+        }*/
 
         public void EndTile()
         {
