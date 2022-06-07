@@ -1,50 +1,52 @@
 using SpriteAtlas;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Agent
 {
     public class SpawnerSystem
     {
-        public static readonly SpawnerSystem Instance;
-        public GameContext GameContext;
+        public Contexts EntitasContext;
 
         private static int playerID;
 
-        static SpawnerSystem()
+        public SpawnerSystem(Contexts entitasContext)
         {
-            Instance = new SpawnerSystem();
-        }
-
-        private SpawnerSystem()
-        {
-            GameContext = Contexts.sharedInstance.game;
+            EntitasContext = entitasContext;
         }
 
         public GameEntity SpawnPlayer(Material material)
         {
-            var entity = GameContext.CreateEntity();
+            var entity = EntitasContext.game.CreateEntity();
 
             playerID++;
             
             var spritePath = "Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png";
             var pngSize = new Vector2Int(32, 48);
             var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath, pngSize.x, pngSize.y);
+            var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, SpriteAtlas.AtlasType.Agent);
+            byte[] spriteData = new byte[32 * 48 * 4];
+            GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, SpriteAtlas.AtlasType.Agent);
+            var Texture = Utility.TextureUtils.CreateTextureFromRGBA(spriteData, 32, 48);
             var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
 
             entity.isAgentPlayer = true;
             entity.isECSInput = true;
-            entity.AddECSInputXY(new Vector2(0, 0));
+            entity.AddECSInputXY(new Vector2(0, 0), false);
             
             entity.AddAgentID(playerID);
-            entity.AddAgentSprite2D(spriteID, spritePath, spriteSize, pngSize, material, BuildMesh(spriteID, material, pngSize));
+
+            Vector2 box2dCollider = new Vector2(1.0f, 1.5f);
+
+            entity.AddAgentSprite2D(Texture, spriteSize);
             entity.AddAgentPosition2D(new Vector2(3f, 2f), newPreviousValue: default);
-            
+            entity.AddComponentsBox2DCollider(box2dCollider);
             entity.AddAgentMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
 
             return entity;
         }
         
-        private Mesh BuildMesh(int spriteID, Material material, Vector2Int spriteSize)
+        private GameObject BuildGameObject(int spriteID, Material material, Vector2Int spriteSize, Vector2 box2dCollider)
         {
             var atlasIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, AtlasType.Agent);
             
@@ -54,7 +56,7 @@ namespace Agent
             var tex = CreateTextureFromRGBA(spriteBytes, spriteSize.x, spriteSize.y);
             mat.SetTexture("_MainTex", tex);
 
-            return InstantiateMesh("Agent", 0, mat);
+            return InstantiateGameObject("Agent", 0, mat, box2dCollider);
         }
         
         private Texture2D CreateTextureFromRGBA(byte[] rgba, int w, int h)
@@ -86,7 +88,7 @@ namespace Agent
             return res;
         }
         
-        private Mesh InstantiateMesh(string name, int sortingOrder, Material material)
+        private GameObject InstantiateGameObject(string name, int sortingOrder, Material material, Vector2 size)
         {
             var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
 
@@ -101,7 +103,52 @@ namespace Agent
             mr.sharedMaterial = material;
             mr.sortingOrder = sortingOrder;
 
-            return mesh;
+            List<Vector3> verticies = new List<Vector3>();
+            List<int> triangles = new List<int>();
+            List<Vector2> uvs = new List<Vector2>();
+
+            float width = size.x;
+            float height = size.y;
+
+            var p0 = new Vector3(0, 0, 0);
+            var p1 = new Vector3((width), (height), 0);
+            var p2 = p0; p2.y = p1.y;
+            var p3 = p1; p3.y = p0.y;
+                
+            verticies.Add(p0);
+            verticies.Add(p1);
+            verticies.Add(p2);
+            verticies.Add(p3);
+
+            triangles.Add(0);
+            triangles.Add(2);
+            triangles.Add(1);
+            triangles.Add(0);
+            triangles.Add(1);
+            triangles.Add(3);
+
+            var u0 = 0;
+            var u1 = 1;
+            var v1 = -1;
+            var v0 = 0;
+
+            var uv0 = new Vector2(u0, v0);
+            var uv1 = new Vector2(u1, v1);
+            var uv2 = uv0; uv2.y = uv1.y;
+            var uv3 = uv1; uv3.y = uv0.y;
+
+
+            uvs.Add(uv0);
+            uvs.Add(uv1);
+            uvs.Add(uv2);
+            uvs.Add(uv3);
+    
+
+            mesh.SetVertices(verticies);
+            mesh.SetUVs(0, uvs);
+            mesh.SetTriangles(triangles, 0);
+
+            return go;
         }
     }
 }

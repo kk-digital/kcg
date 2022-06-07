@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Components;
+using PlanetTileMap;
 
 namespace Vehicle
 {
@@ -65,8 +66,8 @@ namespace Vehicle
 
             for (int y = bounds.BottomTile; y <= bounds.TopTile; y++)
             {
-                var tile = map.getTile(bounds.LeftTile, y);
-                int tilePropertiesIndex = tile.BackTilePropertiesId;
+                var tile = map.GetTile(bounds.LeftTile, y, Layer.Front);
+                int tilePropertiesIndex = tile.PropertiesId;
 
                 if (tilePropertiesIndex >= 0)
                 {
@@ -84,8 +85,8 @@ namespace Vehicle
 
             for (int y = bounds.BottomTile; y <= bounds.TopTile; y++)
             {
-                var tile = map.getTile(bounds.RightTile, y);
-                int tilePropertiesIndex = tile.BackTilePropertiesId;
+                var tile = map.GetTile(bounds.RightTile, y, Layer.Front);
+                int tilePropertiesIndex = tile.PropertiesId;
 
                 if (tilePropertiesIndex >= 0)
                 {
@@ -103,8 +104,8 @@ namespace Vehicle
 
             for (int x = bounds.LeftTile; x <= bounds.RightTile; x++)
             {
-                var tile = map.getTile(x, bounds.TopTile);
-                int tilePropertiesIndex = tile.BackTilePropertiesId;
+                var tile = map.GetTile(x, bounds.TopTile, Layer.Front);
+                int tilePropertiesIndex = tile.PropertiesId;
 
                 if (tilePropertiesIndex >= 0)
                 {
@@ -122,8 +123,8 @@ namespace Vehicle
 
             for (int x = bounds.LeftTile; x <= bounds.RightTile; x++)
             {
-                var tile = map.getTile(x, bounds.BottomTile);
-                int tilePropertiesIndex = tile.BackTilePropertiesId;
+                var tile = map.GetTile(x, bounds.BottomTile, Layer.Front);
+                int tilePropertiesIndex = tile.PropertiesId;
 
                 if (tilePropertiesIndex >= 0)
                 {

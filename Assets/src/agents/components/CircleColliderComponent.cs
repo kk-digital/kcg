@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using Components;
 using UnityEngine;
+using Entitas;
 
-namespace Agent
+namespace Components
 {
     public struct CircleColliderComponent
     {

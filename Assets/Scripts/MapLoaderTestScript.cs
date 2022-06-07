@@ -36,22 +36,45 @@ namespace PlanetTileMap.Unity
         int PlayerSprite2ID;
         const float TileSize = 1.0f;
 
+        Contexts EntitasContext = Contexts.sharedInstance;
+
         readonly Vector2 MapOffset = new(-3.0f, 4.0f);
 
         static bool InitTiles;
+
+
+        ECSInput.ProcessSystem ProcessSystems;
+        Agent.SpawnerSystem SpawnerSystem;
+        Agent.MovableSystem MovableSystem;
+        Agent.DrawSystem DrawSystem;
+        Agent.CollisionSystem CollisionSystem;
 
         public void Start()
         {
             if (!InitTiles)
             {
+                InitializeSystems();
                 CreateDefaultTiles();
-                
+
                 InitTiles = true;
             }
         }   
 
+        void InitializeSystems()
+        {
+            ProcessSystems = new ECSInput.ProcessSystem(EntitasContext);
+            SpawnerSystem = new Agent.SpawnerSystem(EntitasContext);
+            MovableSystem = new Agent.MovableSystem(EntitasContext);
+            DrawSystem = new Agent.DrawSystem(EntitasContext);
+            CollisionSystem = new Agent.CollisionSystem(EntitasContext);
+
+            SpawnerSystem.SpawnPlayer(Material);
+        }
+
         public void Update()
         {
+            
+        
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -59,7 +82,7 @@ namespace PlanetTileMap.Unity
                 int y = (int)worldPosition.y;
                 Debug.Log(x + " " + y);
                 TileMap.RemoveTile(x, y, Layer.Front);
-                 TileMap.BuildLayerTexture(Layer.Front);
+                TileMap.BuildLayerTexture(Layer.Front);
                 
             }
 
@@ -69,8 +92,12 @@ namespace PlanetTileMap.Unity
                 else
                     DestroyImmediate(mr.gameObject);
 
+            ProcessSystems.Update();
+            MovableSystem.Update();
+            CollisionSystem.Update(TileMap);
             TileMap.DrawLayer(Layer.Front, Instantiate(Material), transform, 10);
             TileMap.DrawLayer(Layer.Ore, Instantiate(Material), transform, 11);
+            DrawSystem.Draw(Instantiate(Material), transform, 12);
         }
 
 
@@ -178,14 +205,16 @@ namespace PlanetTileMap.Unity
             {
                 for(int i = 0; i < mapSize.x; i++)
                 {
-                    PlanetTile tile = PlanetTile.EmptyTile();
-                    tile.FrontTilePropertiesId = 9;
+                    PlanetTile frontTile = PlanetTile.EmptyTile();
+                    PlanetTile oreTile = PlanetTile.EmptyTile();
+
+                    frontTile.PropertiesId = 9;
 
 
                     if (i % 10 == 0)
                     {
                         //tile.FrontTilePropertiesId = 7;
-                        tile.OreTilePropertiesId = 8;
+                        oreTile.PropertiesId = 8;
                     }
                     if (j % 2 == 0)
                     {
@@ -199,12 +228,13 @@ namespace PlanetTileMap.Unity
 
                     if ((j > 1 && j < 6) || (j > (8 + i)))
                     {
-                       tile.FrontTilePropertiesId = -1; 
-                       tile.OreTilePropertiesId = -1;
+                       frontTile.PropertiesId = -1; 
+                       oreTile.PropertiesId = -1;
                     }
 
                     
-                    TileMap.SetTile(i, j, tile);
+                    TileMap.SetTile(i, j, frontTile, Layer.Front);
+                    TileMap.SetTile(i, j, oreTile, Layer.Ore);
                 }
             }
 

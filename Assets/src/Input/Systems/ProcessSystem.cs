@@ -2,20 +2,33 @@ using UnityEngine;
 
 namespace ECSInput
 {
-    public sealed class ProcessSystem
+    public class ProcessSystem
     {
-        public static readonly ProcessSystem Instance;
-
-        static ProcessSystem()
+        Contexts EntitasContext;
+        
+        public ProcessSystem(Contexts entitasContext)
         {
-            Instance = new ProcessSystem();
+            EntitasContext = entitasContext;
         }
 
-        public void Update(ref Agent.List list)
+        public void Update()
         {
-            foreach (var entity in list.AgentsWithXY)
+            var AgentsWithXY = EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.ECSInput, GameMatcher.ECSInputXY));
+
+            bool jump = Input.GetKeyDown(KeyCode.UpArrow);
+            float x = 0.0f;
+            if (Input.GetKey(KeyCode.RightArrow))
             {
-                entity.ReplaceECSInputXY(new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")));
+                x = 1.0f;
+            }
+            else if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                x = -1.0f;
+            }
+
+            foreach (var entity in AgentsWithXY)
+            {
+                entity.ReplaceECSInputXY(new Vector2(x, 0.0f), jump);
             }
         }
     }

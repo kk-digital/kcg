@@ -3,45 +3,66 @@ using UnityEngine;
 
 namespace Agent
 {
-    public sealed class MovableSystem
+    public class MovableSystem
     {
-        public static readonly MovableSystem Instance;
-        private GameContext gameContext;
+        Contexts EntitasContext;
 
-        static MovableSystem()
+        public MovableSystem(Contexts entitasContext)
         {
-            Instance = new MovableSystem();
+            EntitasContext = entitasContext;
         }
 
-        private MovableSystem()
-        {
-            gameContext = Contexts.sharedInstance.game;
-        }
 
-        public void CalculatePosition(ref List list)
+        public void Update()
         {
-            foreach (var entity in list.AgentsWithVelocity)
+            float deltaTime = Time.deltaTime;
+            var AgentsWithVelocity = EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentMovable, GameMatcher.AgentPosition2D));
+            foreach (var entity in AgentsWithVelocity)
             {
-                var position = entity.agentPosition2D;
-                position.PreviousValue = position.Value;
 
-                var newVelocity = entity.agentMovable.Velocity;
-                var speed = new Vector2(entity.agentMovable.Speed, entity.agentMovable.Speed) * entity.eCSInputXY.Value;
-                var newAcceleration = Vector2.SmoothDamp(entity.agentMovable.Velocity, speed, ref newVelocity, entity.agentMovable.AccelerationTime, entity.agentMovable.Speed);
+                var pos = entity.agentPosition2D;
+                var movable = entity.agentMovable;
+                var input = entity.eCSInputXY;
 
-                if (speed.x == 0)
+                movable.Acceleration = input.Value * entity.agentMovable.Speed * 50.0f;
+                movable.Acceleration.y -= 400.0f * deltaTime;
+                if (input.Jump)
                 {
-                    newVelocity.x.CheckPrecision();
+                    movable.Acceleration.y += 100.0f;
+                    movable.Velocity.y = 5.0f;
                 }
-                if (speed.y == 0)
-                {
-                    newVelocity.y.CheckPrecision();
-                }
-                
-                var newPosition = position + newVelocity * Time.fixedDeltaTime;
 
-                entity.ReplaceAgentMovable(entity.agentMovable.Speed, newVelocity, newAcceleration, entity.agentMovable.AccelerationTime);
-                entity.ReplaceAgentPosition2D(newPosition, position.PreviousValue);
+                if (movable.Acceleration.y <= -30.0f)
+                {
+                    movable.Acceleration.y = -30.0f;
+                }
+
+                if (movable.Acceleration.y >= 30.0f)
+                {
+                    movable.Acceleration.y = 30.0f;
+                }
+
+                Vector2 displacement = 
+                        0.5f * movable.Acceleration * (deltaTime * deltaTime) + movable.Velocity * deltaTime;
+                Vector2 newVelocity = movable.Acceleration * deltaTime + movable.Velocity;
+                newVelocity.x *= 0.7f;
+
+                if (newVelocity.y > 5.0f)
+                {
+                    newVelocity.y = 5.0f;
+                }
+                if (newVelocity.y < -5.0f)
+                {
+                    newVelocity.y = -5.0f;
+                }
+
+
+                Vector2 newPosition = pos.Value + displacement;
+
+                entity.ReplaceAgentMovable(entity.agentMovable.Speed, newVelocity, movable.Acceleration, entity.agentMovable.AccelerationTime);
+                entity.ReplaceAgentPosition2D(newPosition, pos.Value);
+
+
             }
         }
     }
