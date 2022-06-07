@@ -59,18 +59,18 @@ namespace Vehicle
             };
         }
 
-        public bool IsCollidingLeft(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
+        public bool IsCollidingLeft(ref GameEntity tileMap, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
 
             for (int y = bounds.BottomTile; y <= bounds.TopTile; y++)
             {
-                var tile = map.getTile(bounds.LeftTile, y);
+                var tile = TileMap.ManagerSystem.Instance.GetTile(ref tileMap, bounds.LeftTile, y);
                 int tilePropertiesIndex = tile.BackTilePropertiesId;
 
                 if (tilePropertiesIndex >= 0)
                 {
-                    var tileProperties = GameState.TileCreationApi.GetTileProperties(tilePropertiesIndex);
+                    var tileProperties = GameState.CreationAPISystem.GetTileProperties(tilePropertiesIndex);
                     return true;
                 }
             }
@@ -78,18 +78,18 @@ namespace Vehicle
             return false;
         }
 
-        public bool IsCollidingRight(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
+        public bool IsCollidingRight(ref GameEntity map, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
 
             for (int y = bounds.BottomTile; y <= bounds.TopTile; y++)
             {
-                var tile = map.getTile(bounds.RightTile, y);
+                var tile = TileMap.ManagerSystem.Instance.GetTile(ref map,bounds.RightTile, y);
                 int tilePropertiesIndex = tile.BackTilePropertiesId;
 
                 if (tilePropertiesIndex >= 0)
                 {
-                    var tileProperties = GameState.TileCreationApi.GetTileProperties(tilePropertiesIndex);
+                    var tileProperties = GameState.CreationAPISystem.GetTileProperties(tilePropertiesIndex);
                     return true;
                 }
             }
@@ -97,18 +97,18 @@ namespace Vehicle
             return false;
         }
 
-        public bool IsCollidingTop(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
+        public bool IsCollidingTop(ref GameEntity map, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
 
             for (int x = bounds.LeftTile; x <= bounds.RightTile; x++)
             {
-                var tile = map.getTile(x, bounds.TopTile);
+                var tile = TileMap.ManagerSystem.Instance.GetTile(ref map, x, bounds.TopTile);
                 int tilePropertiesIndex = tile.BackTilePropertiesId;
 
                 if (tilePropertiesIndex >= 0)
                 {
-                    var tileProperties = GameState.TileCreationApi.GetTileProperties(tilePropertiesIndex);
+                    var tileProperties = GameState.CreationAPISystem.GetTileProperties(tilePropertiesIndex);
                     return true;
                 }
             }
@@ -116,25 +116,25 @@ namespace Vehicle
             return false;
         }
 
-        public bool IsCollidingBottom(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
+        public bool IsCollidingBottom(ref GameEntity map, Vector2 newPos)
         {
             var bounds = Bounds(newPos, Size);
 
             for (int x = bounds.LeftTile; x <= bounds.RightTile; x++)
             {
-                var tile = map.getTile(x, bounds.BottomTile);
+                var tile = TileMap.ManagerSystem.Instance.GetTile(ref map, x, bounds.BottomTile);
                 int tilePropertiesIndex = tile.BackTilePropertiesId;
 
                 if (tilePropertiesIndex >= 0)
                 {
-                    var tileProperties = GameState.TileCreationApi.GetTileProperties(tilePropertiesIndex);
+                    var tileProperties = GameState.CreationAPISystem.GetTileProperties(tilePropertiesIndex);
                     return true;
                 }
             }
 
             return false;
         }
-        public Vector2 ResolveCollisions(ref PlanetTileMap.PlanetTileMap map, Vector2 newPos)
+        public Vector2 ResolveCollisions(ref GameEntity map, Vector2 newPos)
         {
             //var partialDisplacements = DiscretizeDisplacement(totalDisplacement);
             /*Vector2 newPos = default;

@@ -40,7 +40,6 @@ namespace Vehicle
 
         // Physics
         BoxColliderComponent boxColliderComponent;
-        PlanetTileMap.Unity.MapLoaderTestScript mapLoader;
 
         // Static Constructor
         static DrawSystem()
@@ -110,9 +109,6 @@ namespace Vehicle
             // Collider Component Init
             vehicleDraw.AddVehicleCollider(false, false, false, false);
 
-            // Init Map Loader
-            mapLoader = GameObject.Find("TilesTest").GetComponent<PlanetTileMap.Unity.MapLoaderTestScript>();
-
             // Initialization done
             Init = true;
         }
@@ -143,8 +139,8 @@ namespace Vehicle
             if (Init)
             {
                 // Update Collider Component
-                vehicleDraw.ReplaceVehicleCollider(boxColliderComponent.IsCollidingLeft(ref mapLoader.TileMap, _transform.transform.position), boxColliderComponent.IsCollidingRight(ref mapLoader.TileMap, _transform.transform.position),
-                    boxColliderComponent.IsCollidingTop(ref mapLoader.TileMap, _transform.transform.position), boxColliderComponent.IsCollidingBottom(ref mapLoader.TileMap, _transform.transform.position));
+                vehicleDraw.ReplaceVehicleCollider(boxColliderComponent.IsCollidingLeft(ref vehicleDraw, _transform.transform.position), boxColliderComponent.IsCollidingRight(ref vehicleDraw, _transform.transform.position),
+                    boxColliderComponent.IsCollidingTop(ref vehicleDraw, _transform.transform.position), boxColliderComponent.IsCollidingBottom(ref vehicleDraw, _transform.transform.position));
 
             }
         }
