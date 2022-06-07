@@ -6,9 +6,9 @@ namespace SystemView
     // Will be used to define orbiting parameters of planets, asteroids, ships, etc.
     public class OrbitingObjectDescriptor
     {
-                                                             //                                   -11   m^3
-        const  float   GravitationalConstant = 6.67408E-11f; //  G                    6.67408 * 10    --------
-                                                             //                                       kg * s^2
+                                                             //                                   -11    m³
+        const  float   GravitationalConstant = 6.67408E-11f; //  G                    6.67408 * 10    -------
+                                                             //                                       kg * s²
 
         public float   SemiMajorAxis;                        //  a                    Half of the major axis
         public float   SemiMinorAxis;                        //  b                    Half of the minor axis
@@ -110,8 +110,8 @@ namespace SystemView
             StandardGravitationalParameter = GravitationalConstant * (Self.Mass + CentralBody.Mass);
 
             //        μ
-            // n = √ ---
-            //       a^3
+            // n = √ --
+            //       a³
 
             MeanMotion           = (float)Math.Sqrt(StandardGravitationalParameter / (SemiMajorAxis * SemiMajorAxis * SemiMajorAxis));
 
@@ -133,9 +133,9 @@ namespace SystemView
             Self.VelX            = Vel[0];
             Self.VelY            = Vel[1];
 
-            //               b^2
-            // ε = √ (1.0f - --- )
-            //               a^2
+            //               b²
+            // ε = √ (1.0f - --)
+            //               a²
 
             Eccentricity = (float)Math.Sqrt(1.0f - (SemiMinorAxis * SemiMinorAxis) / (SemiMajorAxis * SemiMajorAxis));
 
@@ -218,9 +218,9 @@ namespace SystemView
 
         public float[] GetPositionAt(float True, float Radius)
         {
-            // →       cos(ν)
-            // r = r ( sin(ν) )
-            //      c    0
+            // →          cos(ν)
+            // r = r  * ( sin(ν) )
+            //      c       0
 
             float posx = (float)Math.Cos(True) * Radius;
             float posy = (float)Math.Sin(True) * Radius;
@@ -246,7 +246,7 @@ namespace SystemView
 
         public float GetDistanceFromCenterAt(float True)
         {
-            //          1 - e^2
+            //           1 - e²
             // r = a --------------
             //       1 + e * cos(ν)
 
@@ -291,13 +291,13 @@ namespace SystemView
 
             // (1) y = mx
 
-            //     x^2   y^2                           b √ (a^2 - x^2)
-            // (2) --- + --- = 1            =>   y = ± ---------------
-            //     a^2   b^2                                  a
+            //     x²   y²                           b √ (a² - x²)
+            // (2) -- + -- = 1            =>   y = ± -------------
+            //     a²   b²                                 a
 
-            //            b √ (a^2 - x^2)                      a * b
-            // (3) mx = ± ---------------   =>   x = ± --------------------
-            //                   a                     √ (a^2 * m^2 + b^2 )
+            //            b √ (a² - x²)                    a * b
+            // (3) mx = ± -------------   =>   x = ± ----------------
+            //                  a                    √ (a² * m² + b²)
 
             // Use fast inverse square root for faster speed
             Intersection1[0] = SemiMajorAxis * SemiMinorAxis * Q_rsqrt(SemiMajorAxis * SemiMajorAxis * slope * slope + SemiMinorAxis * SemiMinorAxis);
@@ -317,7 +317,7 @@ namespace SystemView
             (Intersection2[0], Intersection2[1]) = (rotcos * Intersection2[0] - rotsin * Intersection2[1] + CentralBody.PosX,
                                                     rotsin * Intersection2[0] + rotcos * Intersection2[1] + CentralBody.PosY);
 
-            // (1) d = √(𐤃x^2 + 𐤃y^2)
+            // (1) d = √(𐤃x² + 𐤃y²)
 
             float d1 = (float)Math.Sqrt((Intersection1[0] - startx) * (Intersection1[0] - startx) + (Intersection1[1] - starty) * (Intersection1[1] - starty));
             float d2 = (float)Math.Sqrt((Intersection2[0] - startx) * (Intersection2[0] - startx) + (Intersection2[1] - starty) * (Intersection2[1] - starty));
@@ -370,11 +370,11 @@ namespace SystemView
             // This value represents how far off center the periapsis and apoapsis are, in other words it's the distance between the periapsis/apoapsis and the nearest focal point
             EccentricDistance = SemiMajorAxis - Periapsis;
 
-            // (1) E     = √(a^2 - b^2)
+            // (1) E     = √(a² - b²)
 
             // (2) E     = a - q
 
-            // (3) a - q = √(a^2 - b^2)   =>   b = √(q * (2a - q))
+            // (3) a - q = √(a² - b²)   =>   b = √(q * (2a - q))
 
             SemiMinorAxis = (float)Math.Sqrt(Periapsis * (2 * SemiMajorAxis - Periapsis));
 
@@ -412,7 +412,7 @@ namespace SystemView
         public float[] GetVelocityAt(float Radius, float E)
         {
             // →   √ (μa)        -sin(E)
-            // v = ------ ( √(1 - e^2) cos(E) )
+            // v = ------ ( √(1 - e²) cos(E) )
             //       rc             0
 
             float Factor = (float)Math.Sqrt(StandardGravitationalParameter * SemiMajorAxis) / Radius;
@@ -463,44 +463,97 @@ namespace SystemView
         }
         */
 
-        public void CalculateFromPosition(float PosX, float PosY, float VelX, float VelY, float ObjectX, float ObjectY, float Mass)
+        public void ChangeFrameOfReference(SystemViewBody NewFrameOfReference)
         {
-            //
+            // Unrotated positions
+            float PosX = Self.PosX - CentralBody.PosX;
+            float PosY = Self.PosY - CentralBody.PosY;
 
-            // (1) x = cos(ω) * (cos(M) * a - √(a^2 - b^2)) - sin(ω) * sin(M) * b + cx
+            float rotsin = (float)Math.Sin(Rotation);
+            float rotcos = (float)Math.Cos(Rotation);
 
-            // (2) y = sin(ω) * (cos(M) * a - √(a^2 - b^2)) + cos(ω) * sin(M) * b + cy
+            (PosX, PosY) = ((PosX + rotsin * PosY) / rotcos,
+                            (PosY - rotsin * PosX) / rotcos);
 
-            //          𐤃x
-            // (3) vx = -- = -a * sin(M) * cos(ω) - b * cos(M) * sin(ω)                                            =>   a =  csc(M) * sec(ω) * (-vx - b * cos(M) * sin(ω))
-            //          𐤃M
+            CentralBody = NewFrameOfReference;
 
-            //          𐤃y
-            // (4) vy = -- =  b * cos(M) * cos(ω) - a * sin(M) * sin(ω)                                            =>   b =  sec(M) * sec(ω) * ( vy + a * sin(M) * sin(ω))
-            //          𐤃M
+            // μ = G(m1+m2)
 
-            // (5) a = csc(M) * sec(ω) * (-vx - sec(M) * sec(ω) * ( vy + a * sin(M) * sin(ω)) * cos(M) * sin(ω))   =>   a = -csc(M) * (vx * cos(ω) + vy * sin(ω))
+            StandardGravitationalParameter = GravitationalConstant * (Self.Mass + CentralBody.Mass);
 
-            // (6) b = sec(M) * sec(ω) * ( vy + csc(M) * sec(ω) * (-vx - b * cos(M) * sin(ω)) * sin(M) * sin(ω))   =>   b =  sec(M) * (vy * cos(ω) - vx * sin(ω))
+            // h = r x v   =>   h = x * v  - y * v
+            //                           y        x
 
-            // (7) x = cos(ω) * (cos(M) * (-csc(M) * (vx * cos(ω) + vy * sin(ω)))
-            //
-            //           (vx * cos(ω) + vy * sin(ω))^2   (vy * cos(ω) - vx * sin(ω))^2
-            //       - √(----------------------------- - -----------------------------))
-            //                      cos(M)^2                        sin(M)^2
-            // 
-            //       - sin(ω) * sin(M) * (sec(M) * (vy * cos(ω) - vx * sin(ω))) + cx
+            float AngularMomentum = Self.PosX * Self.VelY - Self.PosY * Self.VelX;
 
-            // (7) x - cx = cos(ω) * (cos(M) * (-csc(M) * (vx * cos(ω) + vy * sin(ω)))
-            //
-            //                (vx * cos(ω) + vy * sin(ω))^2   (vy * cos(ω) - vx * sin(ω))^2
-            //            - √(----------------------------- - -----------------------------))
-            //                           cos(M)^2                        sin(M)^2
-            //
-            //            - sin(ω) * sin(M) * (sec(M) * (vy * cos(ω) - vx * sin(ω)))
+            //                     v  * h        v  * h
+            //     v x h    r       y        x    x        y
+            // e = ----- - --- = ( ------ - ---, ------ - --- )
+            //       μ     |r|        μ     |r|     μ     |r|
 
-            // todo: Solve (7) for ω and then insert it into (2) to solve it for M
-            // todo: Maybe just don't optimize it with this much math and just do it the simple way
+            float PosMagnitude = (float)Math.Sqrt(Self.PosX * Self.PosX + Self.PosY * Self.PosY);
+
+            EccentricityVector[0] = (Self.VelY * AngularMomentum / StandardGravitationalParameter) - Self.PosX / PosMagnitude;
+            EccentricityVector[1] = (Self.VelX * AngularMomentum / StandardGravitationalParameter) - Self.PosY / PosMagnitude;
+
+            // ε = |e|
+
+            Eccentricity = (float)Math.Sqrt(EccentricityVector[0] * EccentricityVector[0] + EccentricityVector[1] * EccentricityVector[1]);
+
+            //         h²
+            // a = ---------
+            //     μ(1 - ε²)
+
+            SemiMajorAxis = AngularMomentum * AngularMomentum / (StandardGravitationalParameter * (1.0f - Eccentricity * Eccentricity));
+
+            //               b²
+            // ε = √ (1.0f - --)   =>   b = √ (a² * (1 - ε²))
+            //               a²
+
+            SemiMinorAxis = (float)Math.Sqrt(SemiMajorAxis * SemiMajorAxis * (1.0f - Eccentricity * Eccentricity));
+
+            //           e
+            //            y
+            // ω = atan( -- )
+            //           e
+            //            x
+
+            Rotation = (float)Math.Atan(EccentricityVector[1] / EccentricityVector[0]);
+
+            //                                      r            r
+            // →          cos(ν)                     x            y
+            // r = r  * ( sin(ν) )   =>   ν = acos( -- ) = asin( -- )
+            //      c       0                       r            r
+            //                                       c            c
+
+            float dx = Self.PosX - CentralBody.PosX;
+            float dy = Self.PosY - CentralBody.PosY;
+
+            float Radius = (float)Math.Sqrt(dx * dx + dy * dy);
+
+            TrueAnomaly = (float)Math.Acos(PosX / Radius);
+
+            //          x                  x
+            // cos(E) = -   =>   E = acos( - )
+            //          a                  a
+
+            EccentricAnomaly = (float)Math.Acos(Self.PosX / SemiMajorAxis);
+
+            // M = E - ε sin(E)
+
+            MeanAnomaly = EccentricAnomaly - Eccentricity * (float)Math.Sin(EccentricAnomaly);
+
+            //        μ
+            // n = √ --
+            //       a³
+
+            MeanMotion = (float)Math.Sqrt(StandardGravitationalParameter / (SemiMajorAxis * SemiMajorAxis * SemiMajorAxis));
+
+            //     2*π
+            // P = ---
+            //      n
+
+            OrbitalPeriod = 2.0f * 3.1415926f / MeanMotion;
         }
     }
 }
