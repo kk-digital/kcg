@@ -128,10 +128,12 @@ namespace SystemView
                 Planet.Descriptor.SemiMinorAxis = State.Planets[InnerPlanets - 1].Descriptor.SemiMajorAxis + (i + 3) * (i + 3);
                 Planet.Descriptor.SemiMajorAxis = Planet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * i / 2.0f;
 
-                Planet.Descriptor.Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
-                Planet.Descriptor.MeanAnomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Planet.Descriptor.Rotation      = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Planet.Descriptor.MeanAnomaly   = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
                 Planet.Descriptor.Compute();
+
+                Planet.Descriptor.Self.Mass = 100000;
 
                 ObjectInfo<SystemPlanetRenderer> PlanetInfo = new();
 
@@ -143,6 +145,34 @@ namespace SystemView
 
                 State.Planets.Add(Planet);
                 Planets.Add(Planet, PlanetInfo);
+
+                for (int j = 0; j < rnd.Next(i + 1); j++)
+                {
+                    SystemPlanet Moon = new SystemPlanet();
+
+                    Moon.Descriptor.Self.Mass = 20000;
+
+                    Moon.Descriptor.CentralBody = Planet.Descriptor.Self;
+
+                    Moon.Descriptor.SemiMinorAxis = (float)rnd.NextDouble() * (j + 1) + 0.5f;
+                    Moon.Descriptor.SemiMajorAxis = Moon.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * 0.2f;
+
+                    Moon.Descriptor.Rotation      = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                    Moon.Descriptor.MeanAnomaly   = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+
+                    Moon.Descriptor.Compute();
+
+                    State.Planets.Add(Moon);
+
+                    ObjectInfo<SystemPlanetRenderer> MoonInfo = new();
+
+                    MoonInfo.Object = new();
+                    MoonInfo.Object.name = "Moon renderer";
+
+                    MoonInfo.Renderer = MoonInfo.Object.AddComponent<SystemPlanetRenderer>();
+                    MoonInfo.Renderer.planet = Moon;
+
+                }
             }
 
             /*OrbitingObjectDescriptor OuterAsteroidBeltDescriptor = new();
@@ -184,22 +214,23 @@ namespace SystemView
             State.AsteroidBelts.Add(OuterAsteroidBelt);*/
 
             for (int i = 0; i < State.Planets.Count; i++)
-                for (int j = 0; j < State.Planets.Count; j++)
-                    if (i != j)
-                    {
-                        SystemShip Ship = new SystemShip();
-                        Ship.Start = State.Planets[i].Descriptor;
-                        Ship.Destination = State.Planets[j].Descriptor;
-                        Ship.Descriptor = new OrbitingObjectDescriptor(Ship.Start, Ship.Self);
+                if (State.Planets[i].Descriptor.CentralBody == State.Star)
+                    for (int j = 0; j < State.Planets.Count; j++)
+                        if (i != j && State.Planets[j].Descriptor.CentralBody == State.Star)
+                        {
+                            SystemShip Ship = new SystemShip();
+                            Ship.Start = State.Planets[i].Descriptor;
+                            Ship.Destination = State.Planets[j].Descriptor;
+                            Ship.Descriptor = new OrbitingObjectDescriptor(Ship.Start, Ship.Self);
 
-                        State.Ships.Add(Ship);
+                            State.Ships.Add(Ship);
 
-                        GameObject ShipObject = new GameObject();
-                        ShipObject.name = "Ship renderer";
+                            GameObject ShipObject = new GameObject();
+                            ShipObject.name = "Ship renderer";
 
-                        SystemShipRenderer ShipRenderer = ShipObject.AddComponent<SystemShipRenderer>();
-                        ShipRenderer.ship = Ship;
-                    }
+                            SystemShipRenderer ShipRenderer = ShipObject.AddComponent<SystemShipRenderer>();
+                            ShipRenderer.ship = Ship;
+                        }
         }
 
         void Update()
