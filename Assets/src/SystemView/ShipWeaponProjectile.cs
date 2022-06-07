@@ -11,9 +11,7 @@ namespace SystemView
         public SystemShip Self;
         public ShipWeapon Weapon;
 
-        public float PosX, PosY;
-
-        public float VelX, VelY;
+        public SystemViewBody Body;
 
         public float TimeElapsed;
         public float LifeSpan;
@@ -23,6 +21,12 @@ namespace SystemView
         public float ShieldPenetration;
 
         public int Damage;
+
+        public ShipWeaponProjectile()
+        {
+            Body = new();
+            Body.Mass = 1.0f;
+        }
 
         public bool UpdatePosition(float dt)
         {
@@ -34,10 +38,10 @@ namespace SystemView
 
             if (Descriptor == null) // Linear trajectory
             {
-                PosX += dt * VelX;
-                PosY += dt * VelY;
+                Body.PosX += dt * Body.VelX;
+                Body.PosY += dt * Body.VelY;
             }
-            else // Orbital trajectory todo
+            /*else // Orbital trajectory todo
             {
                 Descriptor.RotationalPosition += dt / Descriptor.GetDistanceFromCenter() / Descriptor.GetDistanceFromCenter();
 
@@ -45,14 +49,17 @@ namespace SystemView
 
                 PosX = Pos[0];
                 PosY = Pos[1];
-            }
+            }*/
 
             return true;
         }
 
         public bool InRangeOf(SystemShip Target, float AcceptableRange)
         {
-            return Target != null && Math.Sqrt((PosX - Target.PosX) * (PosX - Target.PosX) + (PosY - Target.PosY) * (PosY - Target.PosY)) < AcceptableRange;
+            float dx = Body.PosX - Target.Self.PosX;
+            float dy = Body.PosY - Target.Self.PosY;
+
+            return Target != null && Math.Sqrt(dx * dx + dy * dy) < AcceptableRange;
         }
 
         public void DoDamage(SystemShip Target)

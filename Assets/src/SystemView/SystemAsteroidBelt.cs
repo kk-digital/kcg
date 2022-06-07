@@ -2,6 +2,7 @@ using System.Collections.Generic;
 
 namespace SystemView
 {
+    /*
     public class SystemAsteroidBelt
     {
         public List<SystemAsteroid> Asteroids;
@@ -13,10 +14,11 @@ namespace SystemView
 
         public SystemAsteroidBelt(int Layers, OrbitingObjectDescriptor d)
         {
-            Asteroids = new List<SystemAsteroid>();
-            Descriptor = new OrbitingObjectDescriptor[Layers];
+
+            Asteroids       = new List<SystemAsteroid>();
+            Descriptor      = new OrbitingObjectDescriptor[Layers];
             AverageAltitude = new float[Layers];
-            RotationalPos = new float[Layers];
+            RotationalPos   = new float[Layers];
 
             CentralDescriptor = new OrbitingObjectDescriptor(d);
 
@@ -45,14 +47,14 @@ namespace SystemView
                 RotationalPos[i] += dt / AverageAltitude[i] / AverageAltitude[i];
             }
 
-            /*foreach(SystemAsteroid Asteroid in Asteroids)
+            foreach(SystemAsteroid Asteroid in Asteroids)
             {
                 // this would be slow
                 // float altitude = Descriptor[Asteroid.Layer].GetDistanceFromCenterAt(Asteroid.RotationalPosition);
                 // Asteroid.UpdatePosition(dt / altitude / altitude);
 
                 Asteroid.UpdatePosition(dt / AverageAltitude[Asteroid.Layer] / AverageAltitude[Asteroid.Layer]);
-            }*/
+            }
         }
-    }
+    }*/
 }

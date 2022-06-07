@@ -21,7 +21,7 @@ namespace SystemView
         public int LastTime;
 
         public Dictionary<SystemPlanet,       ObjectInfo<SystemPlanetRenderer>>       Planets   = new();
-        public Dictionary<SystemAsteroidBelt, ObjectInfo<SystemAsteroidBeltRenderer>> Asteroids = new();
+        //public Dictionary<SystemAsteroidBelt, ObjectInfo<SystemAsteroidBeltRenderer>> Asteroids = new();
         public Dictionary<SystemShip,         ObjectInfo<SystemShipRenderer>>         Ships     = new();
         public Dictionary<SpaceStation,       ObjectInfo<SpaceStationRenderer>>       Stations  = new();
 
@@ -43,7 +43,7 @@ namespace SystemView
 
             State = gl.CurrentSystemState;
 
-            State.Star = new SystemStar();
+            State.Star.Mass = 5000000.0f;
             State.Star.PosX = (float)rnd.NextDouble() * 8.0f - 4.0f;
             State.Star.PosY = (float)rnd.NextDouble() * 8.0f - 4.0f;
 
@@ -57,14 +57,15 @@ namespace SystemView
             {
                 SystemPlanet Planet = new SystemPlanet();
 
-                Planet.Descriptor.CenterX = State.Star.PosX;
-                Planet.Descriptor.CenterY = State.Star.PosY;
+                Planet.Descriptor.CentralBody = State.Star;
 
                 Planet.Descriptor.SemiMinorAxis = 3.0f + (i + 1) * (i + 1);
                 Planet.Descriptor.SemiMajorAxis = Planet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() / (i + 2);
 
-                Planet.Descriptor.Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
-                Planet.Descriptor.RotationalPosition = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Planet.Descriptor.Rotation    = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Planet.Descriptor.MeanAnomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+
+                Planet.Descriptor.Compute();
 
                 ObjectInfo<SystemPlanetRenderer> PlanetInfo = new();
 
@@ -78,6 +79,7 @@ namespace SystemView
                 Planets.Add(Planet, PlanetInfo);
             }
 
+            /*
             OrbitingObjectDescriptor InnerAsteroidBeltDescriptor = new();
 
             InnerAsteroidBeltDescriptor.CenterX = State.Star.PosX;
@@ -96,7 +98,7 @@ namespace SystemView
                 {
                     SystemAsteroid Asteroid = new();
 
-                    Asteroid.RotationalPosition = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                    Asteroid.MeanAnomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
                     Asteroid.Layer = Layer;
 
                     InnerAsteroidBelt.Asteroids.Add(Asteroid);
@@ -112,19 +114,24 @@ namespace SystemView
             InnerAsteroidBeltInfo.Renderer.belt = InnerAsteroidBelt;
 
             Asteroids.Add(InnerAsteroidBelt, InnerAsteroidBeltInfo);
+            */
 
             for (int i = 0; i < OuterPlanets; i++)
             {
                 SystemPlanet Planet = new SystemPlanet();
 
-                Planet.Descriptor.CenterX = State.Star.PosX;
-                Planet.Descriptor.CenterY = State.Star.PosY;
+                Planet.Descriptor.CentralBody = State.Star;
 
-                Planet.Descriptor.SemiMinorAxis = InnerAsteroidBeltDescriptor.SemiMajorAxis + (i + 3) * (i + 3);
+                //Planet.Descriptor.SemiMinorAxis = InnerAsteroidBeltDescriptor.SemiMajorAxis + (i + 3) * (i + 3);
+                //Planet.Descriptor.SemiMajorAxis = Planet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * i / 2.0f;
+
+                Planet.Descriptor.SemiMinorAxis = State.Planets[InnerPlanets - 1].Descriptor.SemiMajorAxis + (i + 3) * (i + 3);
                 Planet.Descriptor.SemiMajorAxis = Planet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * i / 2.0f;
 
                 Planet.Descriptor.Rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
-                Planet.Descriptor.RotationalPosition = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Planet.Descriptor.MeanAnomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+
+                Planet.Descriptor.Compute();
 
                 ObjectInfo<SystemPlanetRenderer> PlanetInfo = new();
 
@@ -138,7 +145,7 @@ namespace SystemView
                 Planets.Add(Planet, PlanetInfo);
             }
 
-            OrbitingObjectDescriptor OuterAsteroidBeltDescriptor = new();
+            /*OrbitingObjectDescriptor OuterAsteroidBeltDescriptor = new();
 
             OuterAsteroidBeltDescriptor.CenterX = State.Star.PosX;
             OuterAsteroidBeltDescriptor.CenterY = State.Star.PosY;
@@ -156,7 +163,7 @@ namespace SystemView
                 {
                     SystemAsteroid Asteroid = new();
 
-                    Asteroid.RotationalPosition = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                    Asteroid.MeanAnomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
                     Asteroid.Layer = Layer;
 
                     OuterAsteroidBelt.Asteroids.Add(Asteroid);
@@ -174,7 +181,7 @@ namespace SystemView
             Asteroids.Add(OuterAsteroidBelt, OuterAsteroidBeltInfo);
 
             State.AsteroidBelts.Add(InnerAsteroidBelt);
-            State.AsteroidBelts.Add(OuterAsteroidBelt);
+            State.AsteroidBelts.Add(OuterAsteroidBelt);*/
 
             for (int i = 0; i < State.Planets.Count; i++)
                 for (int j = 0; j < State.Planets.Count; j++)
@@ -183,7 +190,7 @@ namespace SystemView
                         SystemShip Ship = new SystemShip();
                         Ship.Start = State.Planets[i].Descriptor;
                         Ship.Destination = State.Planets[j].Descriptor;
-                        Ship.Descriptor = new OrbitingObjectDescriptor(Ship.Start);
+                        Ship.Descriptor = new OrbitingObjectDescriptor(Ship.Start, Ship.Self);
 
                         State.Ships.Add(Ship);
 
@@ -205,13 +212,13 @@ namespace SystemView
             {
                 //if (Planets[p].LastCycle == CurrentCycle) continue;
 
-                p.UpdatePosition(CurrentMillis / 200.0f);
+                p.Descriptor.UpdatePosition(CurrentMillis);
                 //Planets[p].LastCycle = CurrentCycle;
 
                 //if (++UpdatesCompleted == UpdatesPerTick) return;
             }
 
-            foreach (SystemAsteroidBelt b in State.AsteroidBelts)
+            /*foreach (SystemAsteroidBelt b in State.AsteroidBelts)
             {
                 //if (Asteroids[b].LastCycle == CurrentCycle) continue;
 
@@ -219,7 +226,7 @@ namespace SystemView
                 //Asteroids[b].LastCycle = CurrentCycle;
 
                 //if (++UpdatesCompleted == UpdatesPerTick) return;
-            }
+            }*/
 
             foreach (SystemShip s in State.Ships)
             {
@@ -227,12 +234,12 @@ namespace SystemView
                     s.PathPlanned = s.Descriptor.PlanPath(s.Destination, 0.1f);
                 else if (!s.Reached && s.Descriptor.GetDistanceFrom(s.Destination) < 1.0f)
                 {
-                    s.Descriptor = new OrbitingObjectDescriptor(s.Destination);
+                    s.Descriptor.Copy(s.Destination);
                     s.PathPlanned = false;
                     (s.Start, s.Destination) = (s.Destination, s.Start);
                 }
 
-                s.UpdatePosition(CurrentMillis / 200.0f);
+                s.Descriptor.UpdatePosition(CurrentMillis);
             }
 
             CurrentCycle++;

@@ -14,20 +14,29 @@ namespace SystemView
 
         public System.Random Rand;
 
-        public float LastTime;
+        public int LastTime;
 
         private void Start()
         {
-            LastTime = Time.time * 1000.0f;
+            LastTime = (int)(Time.time * 1000);
 
             Rand = new System.Random();
 
             Ship = new SystemShip();
 
-            Ship.Descriptor = new OrbitingObjectDescriptor();
+            Ship.Descriptor = new OrbitingObjectDescriptor(Ship.Self);
 
             Ship.Descriptor.SemiMinorAxis = (float)Rand.NextDouble() * 5.0f + 6.0f;
             Ship.Descriptor.SemiMajorAxis = (float)Rand.NextDouble() * 2.0f + Ship.Descriptor.SemiMinorAxis;
+
+            Ship.Descriptor.Rotation      = (float)Rand.NextDouble() * 2.0f * 3.1415926f;
+            Ship.Descriptor.MeanAnomaly   = (float)Rand.NextDouble() * 2.0f * 3.1415926f;
+
+            GameLoop gl = GetComponent<GameLoop>();
+
+            SystemState State = gl.CurrentSystemState;
+
+            Ship.Descriptor.CentralBody = State.Star;
 
             Ship.Start = Ship.Destination = Ship.Descriptor;
 
@@ -36,7 +45,7 @@ namespace SystemView
             Object = new GameObject();
             Object.name = "Enemy ship";
 
-            Ship.UpdatePosition(0.01f);
+            Ship.Descriptor.Compute();
 
             Renderer = Object.AddComponent<SystemShipRenderer>();
             Renderer.ship = Ship;
@@ -65,11 +74,10 @@ namespace SystemView
 
         private void Update()
         {
-            float CurrentTime = Time.time - LastTime;
+            int CurrentMillis = (int)(Time.time * 1000) - LastTime;
+            LastTime = (int)(Time.time * 1000);
 
-            if (CurrentTime == 0.0f) return;
-
-            Ship.UpdatePosition(CurrentTime / 100.0f);
+            Ship.Descriptor.UpdatePosition(CurrentMillis);
 
             Renderer.shipColor.r = (float) Ship.Health / Ship.MaxHealth;
         }

@@ -47,12 +47,12 @@ namespace SystemView
         // Update is called once per frame
         void Update()
         {
-            ShipRender.transform.position     = new Vector3(ship.PosX, ship.PosY, -0.1f);
+            ShipRender.transform.position     = new Vector3(ship.Self.PosX, ship.Self.PosY, -0.1f);
             ShipRender.transform.localScale   = new Vector3(5.0f * width / Camera.scale, 5.0f / Camera.scale, 1.0f);
 
             ShipRender.transform.Rotate(new Vector3(0.0f, 0.0f, (ship.Rotation - LastRotation) * 180.0f / 3.1415926f));
 
-            ShieldRender.transform.position   = new Vector3(ship.PosX, ship.PosY, -0.05f);
+            ShieldRender.transform.position   = new Vector3(ship.Self.PosX, ship.Self.PosY, -0.05f);
             ShieldRender.transform.localScale = new Vector3(20.0f / Camera.scale, 15.0f / Camera.scale, 1.0f);
 
             ShieldRender.transform.Rotate(new Vector3(0.0f, 0.0f, (ship.Rotation - LastRotation) * 180.0f / 3.1415926f));

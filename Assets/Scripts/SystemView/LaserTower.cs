@@ -43,6 +43,8 @@ namespace SystemView
 
         public SystemShip Target;
 
+        // todo apply gravity to laser tower
+
         // Start is called before the first frame update
         void Start()
         {
@@ -125,7 +127,7 @@ namespace SystemView
                 {
                     Vector3[] vertices = new Vector3[2];
                     vertices[0] = new Vector3(PosX, PosY, 0.0f);
-                    vertices[1] = new Vector3(Target.PosX, Target.PosY, 0.0f);
+                    vertices[1] = new Vector3(Target.Self.PosX, Target.Self.PosY, 0.0f);
                     LaserLineRenderer.SetPositions(vertices);
                 }
 
@@ -142,8 +144,8 @@ namespace SystemView
             // Pick target
             if (Target != null)
             {
-                float DistanceX = Target.PosX - PosX;
-                float DistanceY = Target.PosY - PosY;
+                float DistanceX = Target.Self.PosX - PosX;
+                float DistanceY = Target.Self.PosY - PosY;
                 float Distance  = (float)Math.Sqrt(DistanceX * DistanceX + DistanceY * DistanceY);
 
                 if (Distance > Range) Target = null;
@@ -154,8 +156,8 @@ namespace SystemView
                 if (State != null) foreach (SystemShip Ship in State.Ships)
                 {
 
-                    float DistanceX = Ship.PosX - PosX;
-                    float DistanceY = Ship.PosY - PosY;
+                    float DistanceX = Ship.Self.PosX - PosX;
+                    float DistanceY = Ship.Self.PosY - PosY;
                     float Distance = (float)Math.Sqrt(DistanceX * DistanceX + DistanceY * DistanceY);
 
                     if (Distance <= Range) { Target = Ship; break; }
@@ -173,17 +175,17 @@ namespace SystemView
 
         public bool TryTargeting(SystemShip ship, int CurrentMillis)
         {
-            float DistanceX = ship.PosX - PosX;
-            float DistanceY = ship.PosY - PosY;
+            float DistanceX = ship.Self.PosX - PosX;
+            float DistanceY = ship.Self.PosY - PosY;
             float Distance = (float)Math.Sqrt(DistanceX * DistanceX + DistanceY * DistanceY);
 
-            if (Rotation < 0.0f) Rotation = 2.0f * 3.1415926f + Rotation;
+            while (Rotation < 0.0f) Rotation = 2.0f * 3.1415926f + Rotation;
             while (Rotation > 2.0f * 3.1415926f) Rotation -= 2.0f * 3.1415926f;
 
             if (Distance > Range) return false;
 
             float Angle = (float)Math.Acos(DistanceX / Distance);
-            if (ship.PosY < PosY) Angle = 2.0f * 3.1415926f - Angle;
+            if (ship.Self.PosY < PosY) Angle = 2.0f * 3.1415926f - Angle;
 
             if (Rotation == Angle) return true;
 
@@ -225,8 +227,8 @@ namespace SystemView
         {
             if (Cooldown > 0) return false;
 
-            float DistanceX = Target.PosX - PosX;
-            float DistanceY = Target.PosY - PosY;
+            float DistanceX = Target.Self.PosX - PosX;
+            float DistanceY = Target.Self.PosY - PosY;
             float Distance = (float)Math.Sqrt(DistanceX * DistanceX + DistanceY * DistanceY);
 
             if (Rotation < 0.0f) Rotation = 2.0f * 3.1415926f + Rotation;
@@ -235,13 +237,13 @@ namespace SystemView
             if (Distance > Range) return false;
 
             float Angle = (float)Math.Acos(DistanceX / Distance);
-            if (Target.PosY < PosY) Angle = 2.0f * 3.1415926f - Angle;
+            if (Target.Self.PosY < PosY) Angle = 2.0f * 3.1415926f - Angle;
 
             if (Angle > Rotation + FOV / 2.0f || Angle < Rotation - FOV / 2.0f) return false;
 
             Vector3[] vertices = new Vector3[2];
             vertices[0] = new Vector3(PosX, PosY, 0.0f);
-            vertices[1] = new Vector3(Target.PosX, Target.PosY, 0.0f);
+            vertices[1] = new Vector3(Target.Self.PosX, Target.Self.PosY, 0.0f);
             LaserLineRenderer.SetPositions(vertices);
             LaserLineRenderer.positionCount = 2;
 

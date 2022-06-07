@@ -25,15 +25,15 @@ namespace SystemView
 
             State = gl.CurrentSystemState;
 
+            State.Star.Mass = 5000000.0f;
+            State.Star.PosX = 0.0f;
+            State.Star.PosY = 0.0f;
+
             SystemEnemy Enemy = gameObject.AddComponent<SystemEnemy>();
 
             Enemies.Add(Enemy);
 
             Player = gameObject.AddComponent<PlayerShip>();
-
-            State.Star = new SystemStar();
-            State.Star.PosX = 0.0f;
-            State.Star.PosY = 0.0f;
 
             var StarObject = new GameObject();
             StarObject.name = "Star Renderer";

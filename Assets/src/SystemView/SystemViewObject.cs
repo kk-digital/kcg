@@ -1,10 +1,10 @@
 namespace SystemView
 {
-    public class SystemStar
+    public class SystemViewObject
     {
         public float PosX;
         public float PosY;
 
-        public float mass;
+        public float Mass;
     }
 }

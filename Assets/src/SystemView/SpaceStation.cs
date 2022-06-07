@@ -4,9 +4,15 @@ namespace SystemView
 {
     public class SpaceStation
     {
-        public List<SystemShip> LandedShips = new();
-        public List<SystemShip> OwnedShips  = new();
+        public List<SystemShip>         LandedShips = new();
+        public List<SystemShip>         OwnedShips  = new();
 
-        public OrbitingObjectDescriptor Descriptor = new();
+        public SystemViewBody           Self        = new();
+        public OrbitingObjectDescriptor Descriptor;
+
+        public SpaceStation()
+        {
+            Descriptor = new(Self);
+        }
     }
 }

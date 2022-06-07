@@ -41,7 +41,7 @@ namespace SystemView
             float rotcos = (float)Math.Cos(descriptor.Rotation);
 
             // eccentricity
-            float c = descriptor.GetEccentricDistance();
+            float c = descriptor.EccentricDistance;
 
             float x = 1.0f;
             float y = 0.0f;
@@ -52,8 +52,8 @@ namespace SystemView
                 float vy = y * descriptor.SemiMinorAxis;
 
                 vertices[i] = new Vector3(
-                    rotcos * vx - rotsin * vy + descriptor.CenterX,
-                    rotsin * vx + rotcos * vy + descriptor.CenterY,
+                    rotcos * vx - rotsin * vy + descriptor.CentralBody.PosX,
+                    rotsin * vx + rotcos * vy + descriptor.CentralBody.PosY,
                     0.0f
                 );
 

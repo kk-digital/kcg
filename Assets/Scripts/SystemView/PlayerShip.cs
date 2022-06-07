@@ -29,9 +29,8 @@ namespace SystemView
             Object = new GameObject();
             Object.name = "Player ship";
 
-            Ship.UpdatePosition(0.01f);
-            Ship.PosX = 10.0f;
-            Ship.PosY = 10.0f;
+            Ship.Self.PosX = 10.0f;
+            Ship.Self.PosY = 10.0f;
             Ship.Acceleration = 250.0f;
 
             Renderer = Object.AddComponent<SystemShipRenderer>();
@@ -69,8 +68,8 @@ namespace SystemView
 
             Ship.Rotation -= Input.GetAxis("Horizontal") * CurrentTime * RotationSpeedModifier;
 
-            if (Input.GetAxis("Vertical") > 0.0f && Ship.VelX * Ship.VelX + Ship.VelY * Ship.VelY < 0.1f) Reverse = false;
-            if (Input.GetAxis("Vertical") < 0.0f && Ship.VelX * Ship.VelX + Ship.VelY * Ship.VelY < 0.1f) Reverse = true;
+            if (Input.GetAxis("Vertical") > 0.0f && Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY < 0.1f) Reverse = false;
+            if (Input.GetAxis("Vertical") < 0.0f && Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY < 0.1f) Reverse = true;
 
             float AccX = (float)Math.Cos(Ship.Rotation);
             float AccY = (float)Math.Sin(Ship.Rotation);
@@ -80,21 +79,21 @@ namespace SystemView
             AccX = AccX / Magnitude * Ship.Acceleration * CurrentTime * Input.GetAxis("Vertical");
             AccY = AccY / Magnitude * Ship.Acceleration * CurrentTime * Input.GetAxis("Vertical");
 
-            Ship.PosX += Ship.VelX * CurrentTime + AccX / 2.0f * CurrentTime * CurrentTime;
-            Ship.PosY += Ship.VelY * CurrentTime + AccY / 2.0f * CurrentTime * CurrentTime;
+            Ship.Self.PosX += Ship.Self.VelX * CurrentTime + AccX / 2.0f * CurrentTime * CurrentTime;
+            Ship.Self.PosY += Ship.Self.VelY * CurrentTime + AccY / 2.0f * CurrentTime * CurrentTime;
 
-            Ship.VelX += AccX * CurrentTime;
-            Ship.VelY += AccY * CurrentTime;
+            Ship.Self.VelX += AccX * CurrentTime;
+            Ship.Self.VelY += AccY * CurrentTime;
 
             // "Air resistance" effect
-            Ship.VelX *= 0.995f;
-            Ship.VelY *= 0.995f;
+            Ship.Self.VelX *= 0.995f;
+            Ship.Self.VelY *= 0.995f;
 
             // "Sailing" effect
-            Magnitude = (float)Math.Sqrt(Ship.VelX * Ship.VelX + Ship.VelY * Ship.VelY);
+            Magnitude = (float)Math.Sqrt(Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY);
 
-            Ship.VelX = (3.0f * Ship.VelX + (float)Math.Cos(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / 4.0f;
-            Ship.VelY = (3.0f * Ship.VelY + (float)Math.Sin(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / 4.0f;
+            Ship.Self.VelX = (3.0f * Ship.Self.VelX + (float)Math.Cos(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / 4.0f;
+            Ship.Self.VelY = (3.0f * Ship.Self.VelY + (float)Math.Sin(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / 4.0f;
 
             Renderer.shipColor.b = (float) Ship.Health / Ship.MaxHealth;
 

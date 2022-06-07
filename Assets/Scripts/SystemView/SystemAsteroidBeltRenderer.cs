@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace SystemView
 {
+    /*
     public class SystemAsteroidBeltRenderer : MonoBehaviour
     {
         public CameraController cameraController;
@@ -71,5 +72,5 @@ namespace SystemView
             or.LineWidth = belt.BeltWidth;
             or.UpdateRenderer(128);
         }
-    }
+    }*/
 }
