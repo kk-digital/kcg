@@ -13,14 +13,12 @@ namespace Vehicle
         public Vector2 Scale = Vector2.zero;
         public Vector2 TempScale = Vector2.zero;
 
-        public Vector2 Velocity;
-
+        public Vector2 angularVelocity = Vector2.zero;
         public float angularMass = 1.0f;
-        public float angularVelocity = 1.0f;
-        public float angularAcceleration = 1.0f;
-
+        public float angularAcceleration = 3.0f;
+        
         public float centerOfGravity = 1.0f;
-        public float centerOfRotation = 1.0f;
+        public Vector2 centerOfRotation = Vector2.one;
     }
 }
 

@@ -36,11 +36,12 @@ namespace Vehicle
                 position.TempPosition = position.Position;
 
                 // Accelerate the vehicle
-                position.Position += vehicle.vehiclePhysicsState2D.Velocity * Time.deltaTime;
+                position.Position += vehicle.vehiclePhysicsState2D.angularVelocity * Time.deltaTime;
 
                 // Update the position
                 vehicle.ReplaceVehiclePhysicsState2D(position.Position, position.TempPosition, position.Scale, position.TempScale, 
-                    position.Velocity);
+                    position.angularVelocity, vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
+                         vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
             }
         }
 
@@ -60,20 +61,23 @@ namespace Vehicle
                 if(positiveAxis)
                 {
                     vehicle.ReplaceVehiclePhysicsState2D(position.Position, position.TempPosition, position.Scale, position.TempScale,
-                        new Vector2(speed, 0.0f));
+                        new Vector2(speed, 0.0f), vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
+                         vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
                 }
                 else
                 {
                     vehicle.ReplaceVehiclePhysicsState2D(position.Position, position.TempPosition, position.Scale, position.TempScale,
-                        new Vector2(-speed, 0.0f));
+                        new Vector2(-speed, 0.0f), vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
+                         vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
                 }
 
                 // Add velocity to position
-                position.Position += vehicle.vehiclePhysicsState2D.Velocity * Time.deltaTime;
+                position.Position += vehicle.vehiclePhysicsState2D.angularVelocity * Time.deltaTime;
 
                 // Update the position
                 vehicle.ReplaceVehiclePhysicsState2D(position.Position, position.TempPosition, position.Scale, position.TempScale, 
-                    position.Velocity);
+                    position.angularVelocity, vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
+                         vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
             }
         }
     }

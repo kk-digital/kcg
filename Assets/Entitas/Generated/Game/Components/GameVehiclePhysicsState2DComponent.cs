@@ -11,25 +11,33 @@ public partial class GameEntity {
     public Vehicle.PhysicsState2DComponent vehiclePhysicsState2D { get { return (Vehicle.PhysicsState2DComponent)GetComponent(GameComponentsLookup.VehiclePhysicsState2D); } }
     public bool hasVehiclePhysicsState2D { get { return HasComponent(GameComponentsLookup.VehiclePhysicsState2D); } }
 
-    public void AddVehiclePhysicsState2D(UnityEngine.Vector2 newPosition, UnityEngine.Vector2 newTempPosition, UnityEngine.Vector2 newScale, UnityEngine.Vector2 newTempScale, UnityEngine.Vector2 newVelocity) {
+    public void AddVehiclePhysicsState2D(UnityEngine.Vector2 newPosition, UnityEngine.Vector2 newTempPosition, UnityEngine.Vector2 newScale, UnityEngine.Vector2 newTempScale, UnityEngine.Vector2 newAngularVelocity, float newAngularMass, float newAngularAcceleration, float newCenterOfGravity, UnityEngine.Vector2 newCenterOfRotation) {
         var index = GameComponentsLookup.VehiclePhysicsState2D;
         var component = (Vehicle.PhysicsState2DComponent)CreateComponent(index, typeof(Vehicle.PhysicsState2DComponent));
         component.Position = newPosition;
         component.TempPosition = newTempPosition;
         component.Scale = newScale;
         component.TempScale = newTempScale;
-        component.Velocity = newVelocity;
+        component.angularVelocity = newAngularVelocity;
+        component.angularMass = newAngularMass;
+        component.angularAcceleration = newAngularAcceleration;
+        component.centerOfGravity = newCenterOfGravity;
+        component.centerOfRotation = newCenterOfRotation;
         AddComponent(index, component);
     }
 
-    public void ReplaceVehiclePhysicsState2D(UnityEngine.Vector2 newPosition, UnityEngine.Vector2 newTempPosition, UnityEngine.Vector2 newScale, UnityEngine.Vector2 newTempScale, UnityEngine.Vector2 newVelocity) {
+    public void ReplaceVehiclePhysicsState2D(UnityEngine.Vector2 newPosition, UnityEngine.Vector2 newTempPosition, UnityEngine.Vector2 newScale, UnityEngine.Vector2 newTempScale, UnityEngine.Vector2 newAngularVelocity, float newAngularMass, float newAngularAcceleration, float newCenterOfGravity, UnityEngine.Vector2 newCenterOfRotation) {
         var index = GameComponentsLookup.VehiclePhysicsState2D;
         var component = (Vehicle.PhysicsState2DComponent)CreateComponent(index, typeof(Vehicle.PhysicsState2DComponent));
         component.Position = newPosition;
         component.TempPosition = newTempPosition;
         component.Scale = newScale;
         component.TempScale = newTempScale;
-        component.Velocity = newVelocity;
+        component.angularVelocity = newAngularVelocity;
+        component.angularMass = newAngularMass;
+        component.angularAcceleration = newAngularAcceleration;
+        component.centerOfGravity = newCenterOfGravity;
+        component.centerOfRotation = newCenterOfRotation;
         ReplaceComponent(index, component);
     }
 

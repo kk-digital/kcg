@@ -34,9 +34,6 @@ public class VehicleTest : MonoBehaviour
         // Draw Vehicle
         vehicleDrawSystem.Draw();
 
-        // Update Physics
-        vehiclePhysics.Process(contexts);
-
         // Update Collision Physics
         //vehicleDrawSystem.UpdateCollision();
     }
