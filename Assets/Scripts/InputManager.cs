@@ -1,5 +1,6 @@
 using UnityEngine;
 using Enums;
+using Entitas;
 
 public class InputManager : MonoBehaviour
 {
@@ -15,10 +16,15 @@ public class InputManager : MonoBehaviour
     private eInputDevice inputDevice;
 
     // Player State
-    private PlayerState playerState;
+    private PlayerState playerState = PlayerState.Vehicle;
 
     // Currently Active Key
     public Key activeKey;
+
+    // Note: This is temporarily
+    private Vehicle.ProcessVelocitySystem vehilcePhysics;
+    private Contexts contexts;
+    private GameEntity vehicleEntity;
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Awake.html
     void Awake()
@@ -28,6 +34,8 @@ public class InputManager : MonoBehaviour
         {
             SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
         }
+        vehilcePhysics = new Vehicle.ProcessVelocitySystem();
+        contexts = Contexts.sharedInstance;
     }
 
     // Event: On Key Pressed
@@ -58,7 +66,39 @@ public class InputManager : MonoBehaviour
         }
         else if(playerState == PlayerState.Vehicle)
         {
+            if(activeKey.keyName == KeyCode.A.ToString())
+            { 
+                // Get Vehicle Entites
+                IGroup<GameEntity> entities =
+                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+                foreach (var vehicle in entities)
+                {
+                    vehicleEntity = vehicle;
+                    // Get scale from component
+                    vehicle.ReplaceVehiclePhysicsState2D(vehicle.vehiclePhysicsState2D.Position, vehicle.vehiclePhysicsState2D.TempPosition, new Vector2(-vehicle.vehiclePhysicsState2D.Scale.x, vehicle.vehiclePhysicsState2D.Scale.y), vehicle.vehiclePhysicsState2D.Scale, vehicle.vehiclePhysicsState2D.angularVelocity, vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
+                         vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
+                }
 
+                float velocity = Mathf.SmoothDamp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, 1.0f, ref vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, vehicleEntity.vehiclePhysicsState2D.angularAcceleration);
+                vehilcePhysics.ProcessMovementX(velocity, false, contexts);
+            }
+
+            if (activeKey.keyName == KeyCode.D.ToString())
+            {
+                // Get Vehicle Entites
+                IGroup<GameEntity> entities =
+                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+                foreach (var vehicle in entities)
+                {
+                    vehicleEntity = vehicle;
+                    // Get scale from component
+                    vehicle.ReplaceVehiclePhysicsState2D(vehicle.vehiclePhysicsState2D.Position, vehicle.vehiclePhysicsState2D.TempPosition, new Vector2(vehicle.vehiclePhysicsState2D.Scale.x, vehicle.vehiclePhysicsState2D.Scale.y), vehicle.vehiclePhysicsState2D.Scale, vehicle.vehiclePhysicsState2D.angularVelocity, vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
+                         vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
+                }
+
+                float velocity = Mathf.SmoothDamp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, 1.0f, ref vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, vehicleEntity.vehiclePhysicsState2D.angularAcceleration);
+                vehilcePhysics.ProcessMovementX(velocity, true, contexts);
+            }
         }
     }
 
@@ -71,7 +111,15 @@ public class InputManager : MonoBehaviour
         }
         else if(playerState == PlayerState.Vehicle)
         {
+            if (activeKey.keyName == KeyCode.A.ToString())
+            {
+                vehilcePhysics.ProcessMovementX(0.0f, false, contexts);
 
+            }
+            if (activeKey.keyName == KeyCode.D.ToString())
+            {
+                vehilcePhysics.ProcessMovementX(0.0f, true, contexts);
+            }
         }
     }
 

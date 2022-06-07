@@ -33,7 +33,7 @@ namespace Vehicle
 
         // Sprite to Render
         Texture2D vehicleSprite;
-        GameObject prefab;
+        public GameObject vehicle;
         GameObject prePrefab;
         bool Init = false;
         GameEntity vehicleDraw;
@@ -57,7 +57,7 @@ namespace Vehicle
         // Destructor
         ~DrawSystem()
         {
-            UnityEngine.Object.Destroy(prefab);
+            UnityEngine.Object.Destroy(vehicle);
         }
 
         // Initializing image and component
@@ -79,6 +79,7 @@ namespace Vehicle
 
             // Blit
             int imageSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(_spriteID, 0, 0, SpriteAtlas.AtlasType.Vehicle);
+
             // Calculating Bytes
             byte[] imageBytes = new byte[_width * _height * 4];
 
@@ -89,29 +90,27 @@ namespace Vehicle
             vehicleSprite = CreateTextureFromRGBA(imageBytes, _width, _height);
 
             // Creating Prefab
-            prefab = CreateParticlePrefab(prefabPos.x, prefabPos.y, 0.5f, 0.5f, vehicleSprite);
+            vehicle = CreateParticlePrefab(prefabPos.x, prefabPos.y, 0.5f, 0.5f, vehicleSprite);
 
             // Add Vehicle ID
-            vehicleDraw.AddVehicleID(0);
+            vehicleDraw.AddVehicleID(vehicle.transform.parent.childCount + 1);
 
             // Add Vehicle Sprite Component
             vehicleDraw.AddVehicleSprite2D(_spriteID, _filePath, new Vector2(GetWidth(), GetHeight()), new Vector2Int(GetWidth(), GetHeight()),
-                Material, prefab.GetComponent<Mesh>());
+                Material, vehicle.GetComponent<Mesh>());
 
-            // Add Vehicle Velocity Component
-            vehicleDraw.AddVehicleVelocity(Vector2.zero);
-
-            // Add Vehicle Position Component
-            vehicleDraw.AddVehiclePosition2D(Vector2.zero, Vector2.zero);
+            // Add Vehicle Physics State 2D Component
+            vehicleDraw.AddVehiclePhysicsState2D(Vector2.zero, Vector2.zero, Vector2.one, Vector2.one,
+                Vector2.zero, 1.0f, 3.0f, 1.0f, Vector2.zero);
 
             // Physics Init
-            boxColliderComponent = new BoxColliderComponent(new Vector2(0.5f, 0.5f));
+            //boxColliderComponent = new BoxColliderComponent(new Vector2(0.5f, 0.5f));
 
             // Collider Component Init
-            vehicleDraw.AddVehicleCollider(false, false, false, false);
+            // vehicleDraw.AddVehicleCollider(false, false, false, false);
 
             // Init Map Loader
-            mapLoader = GameObject.Find("TilesTest").GetComponent<PlanetTileMap.Unity.MapLoaderTestScript>();
+            //mapLoader = GameObject.Find("TilesTest").GetComponent<PlanetTileMap.Unity.MapLoaderTestScript>();
 
             // Initialization done
             Init = true;
@@ -124,15 +123,27 @@ namespace Vehicle
             {
                 // Add vehilce enitites
                 IGroup<GameEntity> entities =
-                _contexts.game.GetGroup(GameMatcher.VehiclePosition2D);
-                foreach (var gameEntity in entities)
+                _contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+                foreach (var physicsState in entities)
                 {
-                    // Get position
-                    var pos = gameEntity.vehiclePosition2D;
-                    prePrefab = prefab;
+                    // Set position from entity to a local variable
+                    var pos = physicsState.vehiclePhysicsState2D;
+
+                    // Set scale from entity to a local variable
+                    var scale = physicsState.vehiclePhysicsState2D;
+
+                    // Set scale values
+                    vehicle.transform.localScale = scale.Scale;
+                    _transform.localScale = scale.Scale;
+
+                    // Instantinate the vehicle
+                    prePrefab = vehicle;
+
+                    // Destroy old one
                     UnityEngine.Object.Destroy(prePrefab);
+
                     // Draw car at the position component
-                    prefab = CreateParticlePrefab(pos.Position.x, pos.Position.y, 0.5f, 0.5f, vehicleSprite);
+                    vehicle = CreateParticlePrefab(pos.Position.x, pos.Position.y, 0.5f, 0.5f, vehicleSprite);
                 }
             }
         }
@@ -145,7 +156,6 @@ namespace Vehicle
                 // Update Collider Component
                 vehicleDraw.ReplaceVehicleCollider(boxColliderComponent.IsCollidingLeft(ref mapLoader.TileMap, _transform.transform.position), boxColliderComponent.IsCollidingRight(ref mapLoader.TileMap, _transform.transform.position),
                     boxColliderComponent.IsCollidingTop(ref mapLoader.TileMap, _transform.transform.position), boxColliderComponent.IsCollidingBottom(ref mapLoader.TileMap, _transform.transform.position));
-
             }
         }
 
@@ -254,15 +264,7 @@ namespace Vehicle
                 H = h;
             }
         }
-        private static R CalcVisibleRect()
-        {
-            var cam = Camera.main;
-            var pos = cam.transform.position;
-            var height = 2f * cam.orthographicSize;
-            var width = height * cam.aspect;
-            var visibleRect = new R(pos.x - width / 2, pos.y - height / 2, width, height);
-            return visibleRect;
-        }
+
         private Texture2D CreateTextureFromRGBA(byte[] rgba, int w, int h)
         {
 

@@ -46,11 +46,10 @@ public static class GameComponentsLookup {
     public const int srcecsGameParticleParticleSpawnPosition = 35;
     public const int VehicleCollider = 36;
     public const int VehicleID = 37;
-    public const int VehiclePosition2D = 38;
+    public const int VehiclePhysicsState2D = 38;
     public const int VehicleSprite2D = 39;
-    public const int VehicleVelocity = 40;
 
-    public const int TotalComponents = 41;
+    public const int TotalComponents = 40;
 
     public static readonly string[] componentNames = {
         "AgentID",
@@ -91,9 +90,8 @@ public static class GameComponentsLookup {
         "srcecsGameParticleParticleSpawnPosition",
         "VehicleCollider",
         "VehicleID",
-        "VehiclePosition2D",
-        "VehicleSprite2D",
-        "VehicleVelocity"
+        "VehiclePhysicsState2D",
+        "VehicleSprite2D"
     };
 
     public static readonly System.Type[] componentTypes = {
@@ -135,8 +133,7 @@ public static class GameComponentsLookup {
         typeof(src.ecs.Game.Particle.ParticleSpawn.PositionComponent),
         typeof(Vehicle.ColliderComponent),
         typeof(Vehicle.IDComponent),
-        typeof(Vehicle.Position2DComponent),
-        typeof(Vehicle.Sprite2DComponent),
-        typeof(Vehicle.VelocityComponent)
+        typeof(Vehicle.PhysicsState2DComponent),
+        typeof(Vehicle.Sprite2DComponent)
     };
 }

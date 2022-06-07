@@ -240,8 +240,6 @@ namespace Projectile
             mesh.SetUVs(0, uvs);
             mesh.SetTriangles(triangles, 0);
 
-            go.transform.position = new Vector3(0, 2.2f, 0);
-            go.transform.localScale = new Vector3(5.84772444f, 3.20090008f, 3.20090008f);
             return go;
         }
         
