@@ -22,7 +22,7 @@ namespace Planet.TileMap
                 for(int j = MapSize.y - 1; j >= 0; j--)
                 {
                     ref var tile = ref tileMap.GetTileRef(i, j, Enums.Tile.MapLayerType.Front);
-                    if (tile.PropertiesId != -1)
+                    if (tile.Type != -1)
                     {
                         Data[i] = j;
                         break;

@@ -3,10 +3,10 @@
     /// <summary> Contains info about tile, include all layers </summary>
     public struct Model
     {
-        public static readonly Model EmptyTile = new() {PropertiesId = -1, SpriteId = -1};
+        public static readonly Model EmptyTile = new() {Type = -1, SpriteId = -1};
         
         // Contains the TileProperties Ids for every layer
-        public int TileType;
+        public int Type;
         public int SpriteId;
         //Health
         public byte Durability;

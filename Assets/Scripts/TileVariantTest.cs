@@ -88,35 +88,35 @@ namespace Planet.Unity
                     {
                         if (j % 2 == 0 && i == mapSize.x / 2)
                         {
-                            frontTile.TileType = 10;
+                            frontTile.Type = 10;
                         }
                         else
                         {
-                            frontTile.TileType = 9;
+                            frontTile.Type = 9;
                         }
                     }
                     else
                     {
                         if (j % 3 == 0 && i == mapSize.x / 2 + 1)
                         {
-                            frontTile.TileType = 9;
+                            frontTile.Type = 9;
                         }
                         else
                         {
-                            frontTile.TileType = 10;
+                            frontTile.Type = 10;
                         }
                     }
 
 
                     if (i % 10 == 0)
                     {
-                        oreTile.TileType = 8;
+                        oreTile.Type = 8;
                     }
 
                     if ((j > 1 && j < 6) || (j > (8 + i)))
                     {
-                       frontTile.TileType = -1; 
-                       oreTile.TileType = -1;
+                       frontTile.Type = -1; 
+                       oreTile.Type = -1;
                     }
 
                     

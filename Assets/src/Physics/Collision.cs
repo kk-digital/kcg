@@ -6,7 +6,7 @@ namespace Physics
     public static class BoxCollision
     {
 
-        public static bool IsCollidingBottom(PlanetTileMap.PlanetTileMap tileMap, Vector2 position,
+        public static bool IsCollidingBottom(Planet.TileMap.Model tileMap, Vector2 position,
                                                             Vector2 size)
         {
             Vector2Int bottomLeft = new Vector2Int((int)position.x, (int)position.y);
@@ -18,33 +18,33 @@ namespace Physics
             {
                 if (x >= 0 && x < tileMap.MapSize.x && 
                    y >= 0 && y < tileMap.MapSize.y)
-                   {
-                        ref TileProperties.PlanetTile tile = ref tileMap.GetTileRef(x, y, PlanetTileMap.Layer.Front);
-                        if (tile.TileType >= 0)
-                        {
-                            return true;
-                        }
-                   }
+                {
+                    ref var tile = ref tileMap.GetTileRef(x, y, Enums.Tile.MapLayerType.Front);
+                    if (tile.Type >= 0)
+                    {
+                        return true;
+                    }
+                }
             }
             return false;
         }
 
 
-        public static bool IsCollidingTop(PlanetTileMap.PlanetTileMap tileMap, Vector2 position,
+        public static bool IsCollidingTop(Planet.TileMap.Model tileMap, Vector2 position,
                                                             Vector2 size)
         {
-            Vector2Int TopLeft = new Vector2Int((int)position.x, (int)(position.y + size.y));
-            Vector2Int TopRight = new Vector2Int((int)(position.x + size.x), (int)(position.y + size.y));
+            var topLeft = new Vector2Int((int)position.x, (int)(position.y + size.y));
+            var topRight = new Vector2Int((int)(position.x + size.x), (int)(position.y + size.y));
 
 
-            int y = TopLeft.y;
-            for(int x = TopLeft.x; x <= TopRight.x; x++)
+            int y = topLeft.y;
+            for(int x = topLeft.x; x <= topRight.x; x++)
             {
-                if (x >= 0 && x < tileMap.Size.x && 
-                   y >= 0 && y < tileMap.Size.y)
+                if (x >= 0 && x < tileMap.MapSize.x && 
+                   y >= 0 && y < tileMap.MapSize.y)
                    {
-                        ref TileProperties.PlanetTile tile = ref tileMap.GetTileRef(x, y, PlanetTileMap.Layer.Front);
-                        if (tile.TileType >= 0)
+                        ref var tile = ref tileMap.GetTileRef(x, y, Enums.Tile.MapLayerType.Front);
+                        if (tile.Type >= 0)
                         {
                             return true;
                         }

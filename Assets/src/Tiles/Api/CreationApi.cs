@@ -61,7 +61,7 @@ namespace Tile
             PropertiesArray = new TileType[1024];
             for(int i = 0; i < PropertiesArray.Length; i++)
             {
-                PropertiesArray[i] = new TileType("", "", 0, TileDrawProperties.TileDrawPropertyNormal, 0,
+                PropertiesArray[i] = new TileType("", "", 0, Enums.Tile.DrawType.Normal, 0,
                                 PlanetTileCollisionType.TileCollisionTypeSolid, 100, false);
             }
             CurrentTileIndex = -1;

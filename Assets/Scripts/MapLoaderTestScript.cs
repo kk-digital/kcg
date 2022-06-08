@@ -136,18 +136,18 @@ namespace Planet.Unity
                     Tile.Model frontTile = Tile.Model.EmptyTile;
                     Tile.Model oreTile = Tile.Model.EmptyTile;
 
-                    frontTile.TileType = 9;
+                    frontTile.Type = 9;
 
 
                     if (i % 10 == 0)
                     {
-                        oreTile.TileType = 8;
+                        oreTile.Type = 8;
                     }
 
                     if ((j > 1 && j < 6) || (j > (8 + i)))
                     {
-                       frontTile.TileType = -1; 
-                       oreTile.TileType = -1;
+                       frontTile.Type = -1; 
+                       oreTile.Type = -1;
                     }
 
                     

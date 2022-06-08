@@ -61,7 +61,7 @@ namespace Planet.TileMap
         {
             ref Tile.Model tile = ref GetTileRef(x, y, planetLayer);
 
-            tile.PropertiesId = -1;
+            tile.Type = -1;
 
             for(int i = x - 1; i <= x + 1; i++)
             {
@@ -89,10 +89,10 @@ namespace Planet.TileMap
             
             ref Tile.Model tile = ref GetTileRef(x, y, planetLayer);
              
-            if (tile.TileType >= 0)
+            if (tile.Type >= 0)
             {
                 Tile.TileType properties = 
-                                GameState.CreationApi.GetTileProperties(tile.TileType);
+                                GameState.CreationApi.GetTileProperties(tile.Type);
                 if (properties.AutoMapping)
                 {
                     // we have 4 neighbors per tile
@@ -108,29 +108,29 @@ namespace Planet.TileMap
                     if (x + 1 < MapSize.x)
                     {
                         ref Tile.Model neighborTile = ref GetTileRef(x + 1, y, planetLayer);
-                        neighbors[(int)Enums.Tile.Neighbor.Right] = neighborTile.TileType;
+                        neighbors[(int)Enums.Tile.Neighbor.Right] = neighborTile.Type;
                     }
 
                     if (x - 1 >= 0)
                     {
                         ref Tile.Model neighborTile = ref GetTileRef(x - 1, y, planetLayer);
-                        neighbors[(int)Enums.Tile.Neighbor.Left] = neighborTile.TileType;
+                        neighbors[(int)Enums.Tile.Neighbor.Left] = neighborTile.Type;
                     }
 
                     if (y + 1 < MapSize.y)
                     {
                         ref Tile.Model neighborTile = ref GetTileRef(x, y + 1, planetLayer);
-                        neighbors[(int)Enums.Tile.Neighbor.Up] = neighborTile.TileType;
+                        neighbors[(int)Enums.Tile.Neighbor.Up] = neighborTile.Type;
                     }
 
                     if (y - 1 >= 0)
                     {
                         ref Tile.Model neighborTile = ref GetTileRef(x, y - 1, planetLayer);
-                        neighbors[(int)Enums.Tile.Neighbor.Down] = neighborTile.TileType;
+                        neighbors[(int)Enums.Tile.Neighbor.Down] = neighborTile.Type;
                     }
 
 
-                    Enums.Tile.Position tilePosition = tile.GetTilePosition(neighbors, tile.TileType);
+                    Enums.Tile.Position tilePosition = tile.GetTilePosition(neighbors, tile.Type);
 
                     // the sprite ids are next to each other in the sprite atlas
                     // we jus thave to know which one to draw based on the offset
