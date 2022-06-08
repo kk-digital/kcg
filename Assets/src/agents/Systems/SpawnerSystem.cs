@@ -1,6 +1,6 @@
-using SpriteAtlas;
 using UnityEngine;
 using System.Collections.Generic;
+using Enums;
 
 namespace Agent
 {
@@ -23,11 +23,11 @@ namespace Agent
             
             var spritePath = "Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png";
             var pngSize = new Vector2Int(32, 48);
-            var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath, pngSize.x, pngSize.y);
-            var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, SpriteAtlas.AtlasType.Agent);
-            byte[] spriteData = new byte[32 * 48 * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, SpriteAtlas.AtlasType.Agent);
-            var Texture = Utility.TextureUtils.CreateTextureFromRGBA(spriteData, 32, 48);
+            var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath);
+            var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, AtlasType.Agent);
+            byte[] spriteData = new byte[pngSize.x * pngSize.y * 4];
+            GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, AtlasType.Agent);
+            var texture = Utility.TextureUtils.CreateTextureFromRGBA(spriteData, pngSize.x, pngSize.y);
             var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
 
             entity.isAgentPlayer = true;
@@ -38,7 +38,7 @@ namespace Agent
 
             Vector2 box2dCollider = new Vector2(1.0f, 1.5f);
 
-            entity.AddAgentSprite2D(Texture, spriteSize);
+            entity.AddAgentSprite2D(texture, spriteSize);
             entity.AddAgentPosition2D(new Vector2(3f, 2f), newPreviousValue: default);
             entity.AddComponentsBox2DCollider(box2dCollider);
             entity.AddAgentMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);

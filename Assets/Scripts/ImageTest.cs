@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using Enums;
-using TileProperties;
+using Tile;
 using System;
 //MonoBehaviors should be in Asset/Script folder?
 namespace ImageLoader

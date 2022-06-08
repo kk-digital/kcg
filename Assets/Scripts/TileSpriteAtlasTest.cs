@@ -1,12 +1,10 @@
-using System;
 using UnityEngine;
 using System.Collections.Generic;
-using TileProperties;
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-namespace PlanetTileMap.Unity
+namespace Planet.Unity
 {
     //Note: TileMap should be mostly controlled by GameManager
 
@@ -59,13 +57,13 @@ namespace PlanetTileMap.Unity
         public void LoadSprites()
         {
             int MetalSlabsTileSheet = 
-                        GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png");
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png");
             int StoneBulkheads = 
-                        GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tile_wallbase\\Tiles_stone_bulkheads.png");
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tile_wallbase\\Tiles_stone_bulkheads.png");
             int TilesMoon = 
-                        GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png");
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png");
             int OreTileSheet = 
-            GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
 
 
             GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(MetalSlabsTileSheet, 0, 0, 0);
@@ -77,7 +75,7 @@ namespace PlanetTileMap.Unity
         // drawing the sprite atlas
         void DrawSpriteAtlas()
         {
-            ref TileSpriteAtlas.TileSpriteAtlas atlas = ref GameState.TileSpriteAtlasManager.GetSpriteAtlas(0);
+            ref Sprites.Atlas atlas = ref GameState.TileSpriteAtlasManager.GetSpriteAtlas(0);
             Render.Sprite sprite = new Render.Sprite();
             sprite.Texture = atlas.Texture;
             sprite.TextureCoords = new Vector4(0, 0, 1, 1);

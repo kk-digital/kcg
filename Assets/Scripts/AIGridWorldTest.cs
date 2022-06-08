@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections;
-using TileProperties;
+using Tile;
 using UnityEngine;
 using AI;
 

@@ -4,11 +4,10 @@
 public class GameState
 {
     public static readonly Contexts EntitasContext;
-    public static readonly TileSpriteAtlas.TileSpriteAtlasManager TileSpriteAtlasManager;
-    public static readonly SpriteAtlas.SpriteAtlasManager SpriteAtlasManager;
-    public static readonly TileProperties.TileCreationApi TileCreationApi;
-    public static readonly TileSpriteLoader.TileSpriteLoader TileSpriteLoader;
-    public static readonly SpriteLoader.SpriteLoader SpriteLoader;
+    public static readonly Tile.SpriteAtlasManager TileSpriteAtlasManager;
+    public static readonly Sprites.AtlasManager SpriteAtlasManager;
+    public static readonly Tile.CreationApi CreationApi;
+    public static readonly Sprites.Loader SpriteLoader;
     public static readonly ImageLoader.FileLoadingManager FileLoadingManager;
     public static readonly ECSInput.ProcessSystem ProcessSystem;
     public static readonly Agent.SpawnerSystem SpawnerSystem;
@@ -19,11 +18,10 @@ public class GameState
     static GameState()
     {
         EntitasContext = Contexts.sharedInstance;
-        TileSpriteAtlasManager = new TileSpriteAtlas.TileSpriteAtlasManager();
-        SpriteAtlasManager = new SpriteAtlas.SpriteAtlasManager();
-        TileCreationApi = new TileProperties.TileCreationApi();
-        TileSpriteLoader = new TileSpriteLoader.TileSpriteLoader();
-        SpriteLoader = new SpriteLoader.SpriteLoader();
+        TileSpriteAtlasManager = new Tile.SpriteAtlasManager();
+        SpriteAtlasManager = new Sprites.AtlasManager();
+        CreationApi = new Tile.CreationApi();
+        SpriteLoader = new Sprites.Loader();
         FileLoadingManager = new ImageLoader.FileLoadingManager();
         ProcessSystem = new ECSInput.ProcessSystem(EntitasContext);
         SpawnerSystem = new Agent.SpawnerSystem(EntitasContext);

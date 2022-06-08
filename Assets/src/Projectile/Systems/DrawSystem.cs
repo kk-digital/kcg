@@ -41,8 +41,7 @@ namespace Projectile
         GameObject prePrefab;
 
         // Physics
-        BoxColliderComponent boxColliderComponent;
-        PlanetTileMap.Unity.MapLoaderTestScript mapLoader;
+        Planet.Unity.MapLoaderTestScript mapLoader;
 
         // Projectile Properties
         public ProjectileType _projectileType = ProjectileType.Invalid;
@@ -84,15 +83,15 @@ namespace Projectile
             projectileEntity = _contexts.game.CreateEntity();
 
             // Get Image Sprite ID
-            int _spriteID = GameState.SpriteLoader.GetSpriteSheetID(_filePath, _width, _height);
+            int _spriteID = GameState.SpriteLoader.GetSpriteSheetID(_filePath);
 
             // Blit
-            int imageSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(_spriteID, 0, 0, SpriteAtlas.AtlasType.Particle);
+            int imageSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(_spriteID, 0, 0, AtlasType.Particle);
             // Calculating Bytes
             byte[] imageBytes = new byte[_width * _height * 4];
 
             // Get Sprite Bytes
-            GameState.SpriteAtlasManager.GetSpriteBytes(imageSpriteIndex, imageBytes, SpriteAtlas.AtlasType.Particle);
+            GameState.SpriteAtlasManager.GetSpriteBytes(imageSpriteIndex, imageBytes, AtlasType.Particle);
 
             // Creating Texture
             projectileSprite = CreateTextureFromRGBA(imageBytes, _width, _height);
@@ -115,15 +114,12 @@ namespace Projectile
 
             // Add Projectile Component
             projectileEntity.AddProjectileType(GetProjectileType(), GetProjectileDrawType());
-
-            // Physics Init
-            boxColliderComponent = new BoxColliderComponent(new Vector2(0.5f, 0.5f));
+            
 
             // Collider Component Init
-            projectileEntity.AddProjectileCollider(false, false, false, false);
 
             // Init Map Loader
-            mapLoader = GameObject.Find("TilesTest").GetComponent<PlanetTileMap.Unity.MapLoaderTestScript>();
+            mapLoader = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>();
 
             // Initialization done
             Init = true;
@@ -154,9 +150,6 @@ namespace Projectile
         {
             if (Init)
             {
-                // Update Collider Component
-                projectileEntity.ReplaceProjectileCollider(boxColliderComponent.IsCollidingLeft(ref mapLoader.TileMap, _transform.transform.position), boxColliderComponent.IsCollidingRight(ref mapLoader.TileMap, _transform.transform.position),
-                    boxColliderComponent.IsCollidingTop(ref mapLoader.TileMap, _transform.transform.position), boxColliderComponent.IsCollidingBottom(ref mapLoader.TileMap, _transform.transform.position));
 
             }
         }

@@ -1,5 +1,6 @@
 using Entitas;
 using System.Collections.Generic;
+using Enums;
 using UnityEngine;
 
 namespace Vehicle
@@ -39,8 +40,7 @@ namespace Vehicle
         GameEntity vehicleDraw;
 
         // Physics
-        BoxColliderComponent boxColliderComponent;
-        PlanetTileMap.Unity.MapLoaderTestScript mapLoader;
+        Planet.Unity.MapLoaderTestScript mapLoader;
 
         // Static Constructor
         static DrawSystem()
@@ -75,16 +75,16 @@ namespace Vehicle
             vehicleDraw = _contexts.game.CreateEntity();
 
             // Get Image Sprite ID
-            int _spriteID = GameState.SpriteLoader.GetSpriteSheetID(_filePath, _width, _height);
+            int _spriteID = GameState.SpriteLoader.GetSpriteSheetID(_filePath);
 
             // Blit
-            int imageSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(_spriteID, 0, 0, SpriteAtlas.AtlasType.Vehicle);
+            int imageSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(_spriteID, 0, 0, AtlasType.Vehicle);
 
             // Calculating Bytes
             byte[] imageBytes = new byte[_width * _height * 4];
 
             // Get Sprite Bytes
-            GameState.SpriteAtlasManager.GetSpriteBytes(imageSpriteIndex, imageBytes, SpriteAtlas.AtlasType.Vehicle);
+            GameState.SpriteAtlasManager.GetSpriteBytes(imageSpriteIndex, imageBytes, AtlasType.Vehicle);
 
             // Creating Texture
             vehicleSprite = CreateTextureFromRGBA(imageBytes, _width, _height);
@@ -154,8 +154,6 @@ namespace Vehicle
             if (Init)
             {
                 // Update Collider Component
-                vehicleDraw.ReplaceVehicleCollider(boxColliderComponent.IsCollidingLeft(ref mapLoader.TileMap, _transform.transform.position), boxColliderComponent.IsCollidingRight(ref mapLoader.TileMap, _transform.transform.position),
-                    boxColliderComponent.IsCollidingTop(ref mapLoader.TileMap, _transform.transform.position), boxColliderComponent.IsCollidingBottom(ref mapLoader.TileMap, _transform.transform.position));
             }
         }
 

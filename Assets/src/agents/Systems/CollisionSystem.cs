@@ -11,7 +11,7 @@ namespace Agent
             EntitasContext = entitasContext;
         }
 
-        public void Update(PlanetTileMap.PlanetTileMap tileMap)
+        public void Update(Planet.TileMap.Model tileMap)
         {
             float deltaTime = Time.deltaTime;
             var entities = EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.ComponentsBox2DCollider,
