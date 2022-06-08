@@ -28,15 +28,7 @@ namespace Planet.TileMap
         }
 
         #region TileApi
-
-        public int GetTileIndex(int x, int y)
-        {
-            var chunkX = x & 0x0f;
-            var chunkY = (y & 0x0f) << 4;
-
-            return chunkX + chunkY;
-        }
-
+        
         public ref Tile.Model GetTileRef(int x, int y, Enums.Tile.MapLayerType planetLayer)
         {
             ref var chunk = ref Chunks.GetChunkRef(x, y);
@@ -45,7 +37,7 @@ namespace Planet.TileMap
                 throw new IndexOutOfRangeException();
             }
             
-            var tileIndex = GetTileIndex(x, y);
+            var tileIndex = Chunk.GetTileIndex(x, y);
             return ref chunk.Tiles[(int)planetLayer][tileIndex];
         }
         public void SetTile(int x, int y, Tile.Model tile, Enums.Tile.MapLayerType planetLayer)
@@ -54,7 +46,7 @@ namespace Planet.TileMap
             if (chunk.Type == Enums.Tile.MapChunkType.Error) return;
             
             chunk.Seq++; // Updating tile, increment seq
-            var tileIndex = GetTileIndex(x, y);
+            var tileIndex = Chunk.GetTileIndex(x, y);
             chunk.Tiles[(int)planetLayer][tileIndex] = tile;
             chunk.Type = Enums.Tile.MapChunkType.Explored;
         }
