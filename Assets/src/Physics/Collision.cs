@@ -16,8 +16,8 @@ namespace Physics
             int y = bottomLeft.y;
             for(int x = bottomLeft.x; x <= bottomRight.x; x++)
             {
-                if (x >= 0 && x < tileMap.Size.x && 
-                   y >= 0 && y < tileMap.Size.y)
+                if (x >= 0 && x < tileMap.MapSize.x && 
+                   y >= 0 && y < tileMap.MapSize.y)
                    {
                         ref TileProperties.PlanetTile tile = ref tileMap.GetTileRef(x, y, PlanetTileMap.Layer.Front);
                         if (tile.TileType >= 0)

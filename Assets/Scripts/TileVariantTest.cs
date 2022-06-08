@@ -33,7 +33,7 @@ namespace Planet.Unity
                 int y = (int)worldPosition.y;
                 Debug.Log(x + " " + y);
                 TileMap.RemoveTile(x, y, PlanetLayer.Front);
-                TileMap.BuildLayerTexture(PlanetLayer.Front);
+                TileMap.Layers.BuildLayerTexture(ref TileMap, PlanetLayer.Front);
                 
             }
 
@@ -43,8 +43,8 @@ namespace Planet.Unity
                 else
                     DestroyImmediate(mr.gameObject);
 
-            TileMap.DrawLayer(PlanetLayer.Front, Instantiate(Material), transform, 10);
-            TileMap.DrawLayer(PlanetLayer.Ore, Instantiate(Material), transform, 11);
+            TileMap.Layers.DrawLayer(PlanetLayer.Front, Instantiate(Material), transform, 10);
+            TileMap.Layers.DrawLayer(PlanetLayer.Ore, Instantiate(Material), transform, 11);
         }
 
         // create the sprite atlas for testing purposes
@@ -125,13 +125,13 @@ namespace Planet.Unity
                 }
             }
 
-            TileMap.UpdateTopTilesMap();
+            TileMap.HeightMap.UpdateTopTilesMap(ref TileMap);
 
-            TileMap.UpdateAllTilePositions(PlanetLayer.Front);
-            TileMap.UpdateAllTilePositions(PlanetLayer.Ore);
+            TileMap.UpdateTileMapPositions(PlanetLayer.Front);
+            TileMap.UpdateTileMapPositions(PlanetLayer.Ore);
 
-            TileMap.BuildLayerTexture(PlanetLayer.Front);
-            TileMap.BuildLayerTexture(PlanetLayer.Ore);
+            TileMap.Layers.BuildLayerTexture(ref TileMap, PlanetLayer.Front);
+            TileMap.Layers.BuildLayerTexture(ref TileMap, PlanetLayer.Ore);
         }
         
     }

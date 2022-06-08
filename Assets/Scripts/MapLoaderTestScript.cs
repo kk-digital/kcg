@@ -81,7 +81,7 @@ namespace Planet.Unity
                 int y = (int)worldPosition.y;
                 Debug.Log(x + " " + y);
                 TileMap.RemoveTile(x, y, PlanetLayer.Front);
-                TileMap.BuildLayerTexture(PlanetLayer.Front);
+                TileMap.Layers.BuildLayerTexture(ref TileMap, PlanetLayer.Front);
                 
             }
 
@@ -94,8 +94,8 @@ namespace Planet.Unity
             ProcessSystems.Update();
             MovableSystem.Update();
             CollisionSystem.Update(TileMap);
-            TileMap.DrawLayer(PlanetLayer.Front, Instantiate(Material), transform, 10);
-            TileMap.DrawLayer(PlanetLayer.Ore, Instantiate(Material), transform, 11);
+            TileMap.Layers.DrawLayer(PlanetLayer.Front, Instantiate(Material), transform, 10);
+            TileMap.Layers.DrawLayer(PlanetLayer.Ore, Instantiate(Material), transform, 11);
             DrawSystem.Draw(Instantiate(Material), transform, 12);
         }
 
@@ -156,11 +156,11 @@ namespace Planet.Unity
                 }
             }
 
-            TileMap.UpdateTopTilesMap();
-            TileMap.UpdateAllTilePositions(PlanetLayer.Front);
-            TileMap.UpdateAllTilePositions(PlanetLayer.Ore);
-            TileMap.BuildLayerTexture(PlanetLayer.Front);
-            TileMap.BuildLayerTexture(PlanetLayer.Ore);
+            TileMap.HeightMap.UpdateTopTilesMap(ref TileMap);
+            TileMap.UpdateTileMapPositions(PlanetLayer.Front);
+            TileMap.UpdateTileMapPositions(PlanetLayer.Ore);
+            TileMap.Layers.BuildLayerTexture(ref TileMap, PlanetLayer.Front);
+            TileMap.Layers.BuildLayerTexture(ref TileMap, PlanetLayer.Ore);
         }
         
         
