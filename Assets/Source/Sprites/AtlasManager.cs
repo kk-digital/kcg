@@ -35,9 +35,9 @@ namespace Sprites
         }
         
 
-        public Render.Sprite GetSprite(int id, AtlasType type)
+        public Model GetSprite(int id, AtlasType type)
         {
-            Render.Sprite sprite = new Render.Sprite();
+            Model sprite = new Model();
             ref Atlas atlas = ref GetSpriteAtlas(type);
 
             sprite.Texture = atlas.Texture;
@@ -220,7 +220,7 @@ namespace Sprites
                 }
             }
 
-            atlas.Texture = Utility.TextureUtils.CreateTextureFromRGBA(atlas.Data, atlas.Width, atlas.Height);
+            atlas.Texture = Utility.Texture.CreateTextureFromRGBA(atlas.Data, atlas.Width, atlas.Height);
             
             return index;
         }

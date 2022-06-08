@@ -42,9 +42,9 @@ namespace Tile
             return atlas.Texture; 
         }
 
-        public Render.Sprite GetSprite(int id)
+        public Sprites.Model GetSprite(int id)
         {
-            Render.Sprite sprite = new Render.Sprite();
+            var sprite = new Sprites.Model();
             ref Sprites.Atlas atlas = ref GetSpriteAtlas(0);
 
             sprite.Texture = atlas.Texture;
@@ -116,7 +116,7 @@ namespace Tile
             // todo: upload texture to open gl
 
             count++;
-            atlas.Texture = Utility.TextureUtils.CreateTextureFromRGBA(atlas.Data, atlas.Width * 32, atlas.Height * 32);
+            atlas.Texture = Utility.Texture.CreateTextureFromRGBA(atlas.Data, atlas.Width * 32, atlas.Height * 32);
             
             return count - 1;
         }
@@ -157,7 +157,7 @@ namespace Tile
             // todo: upload texture to open gl
 
             count++;
-            atlas.Texture = Utility.TextureUtils.CreateTextureFromRGBA(atlas.Data, atlas.Width * 32, atlas.Height * 32);
+            atlas.Texture = Utility.Texture.CreateTextureFromRGBA(atlas.Data, atlas.Width * 32, atlas.Height * 32);
             
             return count - 1;
         }
@@ -198,7 +198,7 @@ namespace Tile
             // todo: upload texture to open gl
 
             count++;
-            atlas.Texture = Utility.TextureUtils.CreateTextureFromRGBA(atlas.Data, atlas.Width * 32, atlas.Height * 32);
+            atlas.Texture = Utility.Texture.CreateTextureFromRGBA(atlas.Data, atlas.Width * 32, atlas.Height * 32);
             
 
             return count - 1;

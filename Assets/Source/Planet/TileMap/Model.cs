@@ -93,7 +93,7 @@ namespace Planet.TileMap
              
             if (tile.Type >= 0)
             {
-                Tile.TileType properties = 
+                Tile.Type properties = 
                                 GameState.CreationApi.GetTileProperties(tile.Type);
                 if (properties.AutoMapping)
                 {

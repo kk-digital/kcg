@@ -4,11 +4,11 @@ using System.Collections.Generic;
 namespace Utility
 {
 
-    internal static class RenderUtils
+    internal static class Render
     {
 
         public static void DrawSprite(float x, float y, float w, float h, 
-                Render.Sprite sprite, Material material, Transform transform, int drawOrder = 0)
+            Sprites.Model sprite, Material material, Transform transform, int drawOrder = 0)
         {
             var tex = sprite.Texture;
             var mat = material;

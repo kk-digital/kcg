@@ -51,33 +51,33 @@ namespace Tile
         // Start is called before the first frame update
 
         private int CurrentTileIndex;
-        private TileType[] PropertiesArray;
+        private Type[] PropertiesArray;
 
         private  Dictionary<string, int> NameToID;
 
         public CreationApi()
         {
             NameToID = new Dictionary<string, int>();
-            PropertiesArray = new TileType[1024];
+            PropertiesArray = new Type[1024];
             for(int i = 0; i < PropertiesArray.Length; i++)
             {
-                PropertiesArray[i] = new TileType("", "", 0, Enums.Tile.DrawType.Normal, 0,
+                PropertiesArray[i] = new Type("", "", 0, Enums.Tile.DrawType.Normal, 0,
                     Enums.Tile.CollisionType.Solid, 100, false);
             }
             CurrentTileIndex = -1;
         }
 
-        public TileType GetTileProperties(int TileId)
+        public Type GetTileProperties(int TileId)
         {
             if (TileId >= 0 && TileId < PropertiesArray.Length)
             {
                 return PropertiesArray[TileId];
             }
 
-            return new TileType();
+            return new Type();
         }
 
-        public TileType GetTileProperties(string name)
+        public Type GetTileProperties(string name)
         {
             int value;
             bool exists = NameToID.TryGetValue(name, out value);
@@ -86,7 +86,7 @@ namespace Tile
                 return GetTileProperties(value);
             }
 
-            return new TileType();
+            return new Type();
         }
 
         public void CreateTile(int tileId)
@@ -99,7 +99,7 @@ namespace Tile
             CurrentTileIndex = tileId;
             if (CurrentTileIndex != -1)
             {
-                PropertiesArray[CurrentTileIndex].TileId = CurrentTileIndex;
+                PropertiesArray[CurrentTileIndex].ID = CurrentTileIndex;
             }
         }
 
@@ -248,7 +248,7 @@ namespace Tile
             CurrentTileIndex = -1;
         }
 
-        public TileType GetTile(int x, int y)
+        public Type GetTile(int x, int y)
         {
             // 0, 0 = 0
             // 32, 0 = 1

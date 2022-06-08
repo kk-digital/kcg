@@ -27,7 +27,7 @@ namespace Agent
             var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, AtlasType.Agent);
             byte[] spriteData = new byte[pngSize.x * pngSize.y * 4];
             GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, AtlasType.Agent);
-            var texture = Utility.TextureUtils.CreateTextureFromRGBA(spriteData, pngSize.x, pngSize.y);
+            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, pngSize.x, pngSize.y);
             var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
 
             entity.isAgentPlayer = true;

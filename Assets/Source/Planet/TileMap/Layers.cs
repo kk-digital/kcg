@@ -13,9 +13,9 @@ namespace Planet.TileMap
         
         public void DrawLayer(Enums.Tile.MapLayerType planetLayer, Material material, Transform transform, int DrawOrder)
         {
-            var sprite = new Render.Sprite(LayerTextures[(int) planetLayer]);
+            var sprite = new Sprites.Model(LayerTextures[(int) planetLayer]);
 
-            Utility.RenderUtils.DrawSprite(0, 0, 1.0f * MapSize.x, 1.0f * MapSize.y, sprite, material, transform, DrawOrder);
+            Utility.Render.DrawSprite(0, 0, 1.0f * MapSize.x, 1.0f * MapSize.y, sprite, material, transform, DrawOrder);
         }
         
         public void BuildLayerTexture(ref Model tileMap, Enums.Tile.MapLayerType planetLayer)
@@ -59,7 +59,7 @@ namespace Planet.TileMap
                 }
             }
             
-            LayerTextures[(int)planetLayer] = Utility.TextureUtils.CreateTextureFromRGBA(data, MapSize.x * 32, MapSize.y * 32);
+            LayerTextures[(int)planetLayer] = Utility.Texture.CreateTextureFromRGBA(data, MapSize.x * 32, MapSize.y * 32);
         }
     }
 }

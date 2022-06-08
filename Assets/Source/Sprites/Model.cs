@@ -1,14 +1,13 @@
-using Enums;
 using UnityEngine;
 
-namespace Render
+namespace Sprites
 {
-    public struct Sprite
+    public struct Model
     {
         public Texture2D Texture;
         public Vector4 TextureCoords;
 
-        public Sprite(Texture2D texture)
+        public Model(Texture2D texture)
         {
             Texture = texture;
             TextureCoords = new Vector4(0, 0, 1, -1);

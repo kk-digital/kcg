@@ -4,7 +4,7 @@ namespace Utility
 {
        // we use this helper function to generate a unity Texture2D
         // from pixels
-        internal static class TextureUtils
+        internal static class Texture
         {
             public static Texture2D CreateTextureFromRGBA(byte[] rgba, int w, int h)
             {

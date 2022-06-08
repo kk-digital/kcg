@@ -3,11 +3,12 @@ using System;
 
 namespace Tile
 {
-    public struct TileType
+    public struct Type
     {
+        public int ID;
         public string Name; //later use string pool
         public string Description;
-        public int TileId;
+
         public bool AutoMapping;
         
         public Enums.Tile.DrawType TileDrawType; //enum, hint for how tile should be drawn
@@ -38,7 +39,7 @@ namespace Tile
 
         public bool IsSolid => TileCollisionType == Enums.Tile.CollisionType.Solid;
 
-        private TileType(string name, string description, int baseSpriteId) : this()
+        private Type(string name, string description, int baseSpriteId) : this()
         {
             Name = name;
             Description = description;
@@ -47,14 +48,14 @@ namespace Tile
 
         }
 
-        private TileType(string name, string description, int baseSpriteId,
+        private Type(string name, string description, int baseSpriteId,
             Enums.Tile.DrawType tileDrawType, int spriteId) : this(name, description, baseSpriteId)
         {
             TileDrawType = tileDrawType;
 
         }
 
-        public TileType(string name, string description, int baseSpriteId,
+        public Type(string name, string description, int baseSpriteId,
             Enums.Tile.DrawType tileDrawType, int spriteId,
             Enums.Tile.CollisionType tileCollisionType, byte durability,
              bool isExplosive = false)

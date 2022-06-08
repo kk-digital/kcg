@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Utility
 {
 
-    public static class MathUtils
+    public static class Math
     {
 
         public static float LengthSquared(Vector2 vector)

@@ -76,19 +76,18 @@ namespace Planet.Unity
         void DrawSpriteAtlas()
         {
             ref Sprites.Atlas atlas = ref GameState.TileSpriteAtlasManager.GetSpriteAtlas(0);
-            Render.Sprite sprite = new Render.Sprite();
+            Sprites.Model sprite = new Sprites.Model();
             sprite.Texture = atlas.Texture;
             sprite.TextureCoords = new Vector4(0, 0, 1, 1);
-            Utility.RenderUtils.DrawSprite(-3, -1, 
+            Utility.Render.DrawSprite(-3, -1, 
                   atlas.Width, atlas.Height, sprite, Instantiate(Material), transform);
         }
 
         void DrawSprite(float x, float y, float w, float h, int spriteId)
         {
-            Render.Sprite sprite = 
-                GameState.TileSpriteAtlasManager.GetSprite(spriteId);
+            var sprite = GameState.TileSpriteAtlasManager.GetSprite(spriteId);
 
-            Utility.RenderUtils.DrawSprite(x, y, w, h, sprite, Instantiate(Material), transform);
+            Utility.Render.DrawSprite(x, y, w, h, sprite, Instantiate(Material), transform);
         }
 
         public struct R
