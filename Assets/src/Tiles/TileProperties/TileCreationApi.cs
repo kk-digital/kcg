@@ -51,33 +51,33 @@ namespace TileProperties
         // Start is called before the first frame update
 
         private int CurrentTileIndex;
-        private TilePropertiesData[] PropertiesArray;
+        private TileType[] PropertiesArray;
 
         private  Dictionary<string, int> NameToID;
 
         public TileCreationApi()
         {
             NameToID = new Dictionary<string, int>();
-            PropertiesArray = new TilePropertiesData[1024];
+            PropertiesArray = new TileType[1024];
             for(int i = 0; i < PropertiesArray.Length; i++)
             {
-                PropertiesArray[i] = new TilePropertiesData("", "", 0, TileDrawProperties.TileDrawPropertyNormal, 0,
+                PropertiesArray[i] = new TileType("", "", 0, TileDrawProperties.TileDrawPropertyNormal, 0,
                                 PlanetTileCollisionType.TileCollisionTypeSolid, 100, false);
             }
             CurrentTileIndex = -1;
         }
 
-        public TilePropertiesData GetTileProperties(int TileId)
+        public TileType GetTileProperties(int TileId)
         {
             if (TileId >= 0 && TileId < PropertiesArray.Length)
             {
                 return PropertiesArray[TileId];
             }
 
-            return new TilePropertiesData();
+            return new TileType();
         }
 
-        public TilePropertiesData GetTileProperties(string name)
+        public TileType GetTileProperties(string name)
         {
             int value;
             bool exists = NameToID.TryGetValue(name, out value);
@@ -86,7 +86,7 @@ namespace TileProperties
                 return GetTileProperties(value);
             }
 
-            return new TilePropertiesData();
+            return new TileType();
         }
 
         public void CreateTile(int TileId)
@@ -248,7 +248,7 @@ namespace TileProperties
             CurrentTileIndex = -1;
         }
 
-        public TilePropertiesData GetTile(int x, int y)
+        public TileType GetTile(int x, int y)
         {
             // 0, 0 = 0
             // 32, 0 = 1

@@ -3,7 +3,7 @@ using System;
 
 namespace TileProperties
 {
-    public struct TilePropertiesData
+    public struct TileType
     {
         public string Name; //later use string pool
         public string Description;
@@ -44,7 +44,7 @@ namespace TileProperties
             }
         }
 
-        private TilePropertiesData(string name, string description, int baseSpriteId) : this()
+        private TileType(string name, string description, int baseSpriteId) : this()
         {
             Name = name;
             Description = description;
@@ -53,14 +53,14 @@ namespace TileProperties
 
         }
 
-        private TilePropertiesData(string name, string description, int baseSpriteId,
+        private TileType(string name, string description, int baseSpriteId,
             TileDrawProperties tileDrawType, int spriteId) : this(name, description, baseSpriteId)
         {
             TileDrawType = tileDrawType;
 
         }
 
-        public TilePropertiesData(string name, string description, int baseSpriteId,
+        public TileType(string name, string description, int baseSpriteId,
             TileDrawProperties tileDrawType, int spriteId,
             PlanetTileCollisionType tileCollisionType, byte durability,
              bool isExplosive = false)

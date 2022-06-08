@@ -28,7 +28,13 @@ namespace Agent
                 movable.Velocity.y <= 0.0f)
                 {
                     entity.ReplaceAgentPosition2D(new Vector2(pos.Value.x, pos.PreviousValue.y), pos.PreviousValue);
-                    entity.ReplaceAgentMovable(movable.Speed, movable.Velocity, new Vector2(movable.Acceleration.x, 0.0f), movable.AccelerationTime);
+                    entity.ReplaceAgentMovable(movable.Speed, new Vector2(movable.Velocity.x, 0.0f), new Vector2(movable.Acceleration.x, 0.0f), movable.AccelerationTime);
+                }
+                else if (Physics.BoxCollision.IsCollidingTop(tileMap, pos.Value, boxComponent.Size) &&
+                movable.Velocity.y >= 0.0f)
+                {
+                    entity.ReplaceAgentPosition2D(new Vector2(pos.Value.x, pos.PreviousValue.y), pos.PreviousValue);
+                    entity.ReplaceAgentMovable(movable.Speed, new Vector2(movable.Velocity.x, 0.0f), new Vector2(movable.Acceleration.x, 0.0f), movable.AccelerationTime);
                 }
             }
         }
