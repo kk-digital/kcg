@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Enums;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -68,18 +67,18 @@ namespace Planet.Unity
             // we can blit the same sprite
             // but its only for testing purpose
             // we should remove that in the future
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(SomeObjectTileSheet, 0, 0, AtlasType.Generic);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, AtlasType.Generic);;
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, AtlasType.Generic);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(SomeObjectTileSheet, 0, 0, AtlasType.Generic);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, AtlasType.Generic);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, AtlasType.Generic);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(SomeObjectTileSheet, 0, 0, Enums.AtlasType.Generic);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, Enums.AtlasType.Generic);;
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, Enums.AtlasType.Generic);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(SomeObjectTileSheet, 0, 0, Enums.AtlasType.Generic);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, Enums.AtlasType.Generic);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(PlayerTileSheet, 0, 0, Enums.AtlasType.Generic);
         }
 
         // drawing the sprite atlas
         void DrawSpriteAtlas()
         {
-            ref Sprites.Atlas atlas = ref GameState.SpriteAtlasManager.GetSpriteAtlas(AtlasType.Generic);
+            ref Sprites.Atlas atlas = ref GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Generic);
             Sprites.Model sprite = new Sprites.Model
             {
                 Texture = atlas.Texture,
@@ -90,7 +89,7 @@ namespace Planet.Unity
 
         void DrawSprite(float x, float y, float w, float h, int spriteId)
         {
-            var sprite = GameState.SpriteAtlasManager.GetSprite(spriteId, AtlasType.Generic);
+            var sprite = GameState.SpriteAtlasManager.GetSprite(spriteId, Enums.AtlasType.Generic);
 
             Utility.Render.DrawSprite(x, y, w, h, sprite, Instantiate(Material), transform);
         }

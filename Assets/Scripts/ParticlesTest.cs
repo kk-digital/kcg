@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Enums;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -75,17 +74,17 @@ namespace Planet.Unity
             int ventTileSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Objects\\vent1.png");
 
 
-            int pipeSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(pipeTileSheet, 0, 0, AtlasType.Particle);
+            int pipeSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(pipeTileSheet, 0, 0, Enums.AtlasType.Particle);
             byte[] pipeBytes = new byte[16 * 16 * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(pipeSpriteIndex, pipeBytes, AtlasType.Particle);
+            GameState.SpriteAtlasManager.GetSpriteBytes(pipeSpriteIndex, pipeBytes, Enums.AtlasType.Particle);
 
-            int oreSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(oreTileSheet, 0, 0, AtlasType.Particle);
+            int oreSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(oreTileSheet, 0, 0, Enums.AtlasType.Particle);
             byte[] oreBytes = new byte[16 * 16 * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(oreSpriteIndex, oreBytes, AtlasType.Particle);
+            GameState.SpriteAtlasManager.GetSpriteBytes(oreSpriteIndex, oreBytes, Enums.AtlasType.Particle);
 
-            int ventSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(ventTileSheet, 0, 0, AtlasType.Particle);
+            int ventSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(ventTileSheet, 0, 0, Enums.AtlasType.Particle);
             byte[] ventBytes = new byte[16 * 16 * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(ventSpriteIndex, ventBytes, AtlasType.Particle);
+            GameState.SpriteAtlasManager.GetSpriteBytes(ventSpriteIndex, ventBytes, Enums.AtlasType.Particle);
 
             PipeSprite = CreateTextureFromRGBA(pipeBytes, 16, 16);
             OreSprite = CreateTextureFromRGBA(oreBytes, 16, 16);

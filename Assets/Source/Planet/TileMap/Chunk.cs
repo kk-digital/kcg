@@ -1,5 +1,4 @@
 using System.Linq;
-using Enums.Tile;
 using UnityEngine;
 
 namespace Planet.TileMap
@@ -8,15 +7,15 @@ namespace Planet.TileMap
     {
         // readonly means const(in runtime) after initialization
         public static readonly Vector2Int Size = new(16, 16);
-        public MapChunkType Type;
+        public Enums.Tile.MapChunkType Type;
         public Tile.Model[][] Tiles;
         
         public int Seq;
 
-        public Chunk(MapChunkType type) : this()
+        public Chunk(Enums.Tile.MapChunkType type) : this()
         {
             Seq = 0;
-            Type = MapChunkType.Explored;
+            Type = Enums.Tile.MapChunkType.Explored;
             Tiles = new Tile.Model[Layers.Count][];
 
             for (int i = 0; i < Layers.Count; i++)

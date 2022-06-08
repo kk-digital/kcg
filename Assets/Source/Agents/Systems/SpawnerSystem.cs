@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Enums;
 
 namespace Agent
 {
@@ -24,9 +23,9 @@ namespace Agent
             var spritePath = "Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png";
             var pngSize = new Vector2Int(32, 48);
             var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath);
-            var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, AtlasType.Agent);
+            var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
             byte[] spriteData = new byte[pngSize.x * pngSize.y * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, AtlasType.Agent);
+            GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, Enums.AtlasType.Agent);
             var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, pngSize.x, pngSize.y);
             var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
 
@@ -48,10 +47,10 @@ namespace Agent
         
         private GameObject BuildGameObject(int spriteID, Material material, Vector2Int spriteSize, Vector2 box2dCollider)
         {
-            var atlasIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, AtlasType.Agent);
+            var atlasIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
             
             byte[] spriteBytes = new byte[spriteSize.x * spriteSize.y * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(atlasIndex, spriteBytes, AtlasType.Agent);
+            GameState.SpriteAtlasManager.GetSpriteBytes(atlasIndex, spriteBytes, Enums.AtlasType.Agent);
             var mat = UnityEngine.Object.Instantiate(material);
             var tex = CreateTextureFromRGBA(spriteBytes, spriteSize.x, spriteSize.y);
             mat.SetTexture("_MainTex", tex);

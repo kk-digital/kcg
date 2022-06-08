@@ -1,5 +1,4 @@
 using System;
-using Enums;
 using UnityEngine;
 
 namespace Sprites
@@ -10,7 +9,7 @@ namespace Sprites
 
         public AtlasManager()
         {
-            AtlasArray = new Atlas[Enum.GetNames(typeof(AtlasType)).Length - 1];
+            AtlasArray = new Atlas[Enum.GetNames(typeof(Enums.AtlasType)).Length - 1];
 
             for (int i = 0; i < AtlasArray.Length; i++)
             {
@@ -29,13 +28,13 @@ namespace Sprites
             }
         }
 
-        public ref Atlas GetSpriteAtlas(AtlasType type)
+        public ref Atlas GetSpriteAtlas(Enums.AtlasType type)
         {
             return ref AtlasArray[(int)type - 1];
         }
         
 
-        public Model GetSprite(int id, AtlasType type)
+        public Model GetSprite(int id, Enums.AtlasType type)
         {
             Model sprite = new Model();
             ref Atlas atlas = ref GetSpriteAtlas(type);
@@ -59,7 +58,7 @@ namespace Sprites
 
         // use the id to find the Sprite coordinates in the list
         // and return the sprite RGBA8 that correspond
-        public void GetSpriteBytes(int id, byte[] data, AtlasType type)
+        public void GetSpriteBytes(int id, byte[] data, Enums.AtlasType type)
         {
             ref Atlas atlas = ref GetSpriteAtlas(type);
             if (id >= 0 && id < atlas.Rectangles.Length)
@@ -99,7 +98,7 @@ namespace Sprites
 
         // generic blit function used to add a sprite 
         // to the sprite atlas
-        public int CopySpriteToAtlas(int spriteSheetID, int row, int column, AtlasType type)
+        public int CopySpriteToAtlas(int spriteSheetID, int row, int column, Enums.AtlasType type)
         {
             ref Atlas atlas = ref GetSpriteAtlas(type);
             int oldSize = atlas.Rectangles.Length;

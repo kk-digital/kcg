@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using Enums;
 
 /* 
     GLSL CUBE RENDERING TEST SCRIPT
@@ -15,7 +13,7 @@ class GLTestCube : MonoBehaviour
         //Check if SceneManager even exists
         if (SceneManager.Instance != null)
         {
-            SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+            SceneManager.Instance.Register(this, Enums.SceneObjectType.SceneObjectTypeUtilityScript);
         }
     }
 

@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Enums.Tile;
 using UnityEngine;
 
 namespace Planet.TileMap
@@ -10,8 +9,8 @@ namespace Planet.TileMap
         public Vector2Int MapSize;
 
         public Chunk[] Data;
-        private Chunk errorChunk = new(MapChunkType.Error);
-        private Chunk emptyChunk = new(MapChunkType.Empty);
+        private Chunk errorChunk = new(Enums.Tile.MapChunkType.Error);
+        private Chunk emptyChunk = new(Enums.Tile.MapChunkType.Empty);
 
         public ChunkList(Vector2Int mapSize)
         {
@@ -20,7 +19,7 @@ namespace Planet.TileMap
             var tileCount = mapSize.x * mapSize.y;
             var chunkCount = (tileCount + (tileCount & 0x0f)) >> 4;
             
-            Data = Enumerable.Repeat(new Chunk(MapChunkType.Empty), chunkCount).ToArray();
+            Data = Enumerable.Repeat(new Chunk(Enums.Tile.MapChunkType.Empty), chunkCount).ToArray();
         }
         
         private int AddChunk(int x, int y)
@@ -30,7 +29,7 @@ namespace Planet.TileMap
             // I feel like resizing by 1 each time is not very efficient... Change it later?
             Array.Resize(ref Data, chunkCount + 1);
 
-            Data[chunkCount] = new Chunk(MapChunkType.Empty);
+            Data[chunkCount] = new Chunk(Enums.Tile.MapChunkType.Empty);
             
             // Return Chunk Last Index
             return chunkCount;

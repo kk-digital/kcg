@@ -1,5 +1,4 @@
 ﻿using System;
-using Enums.Tile;
 using UnityEngine;
 
 namespace Planet.TileMap
@@ -57,7 +56,7 @@ namespace Planet.TileMap
             chunk.Seq++; // Updating tile, increment seq
             var tileIndex = GetTileIndex(x, y);
             chunk.Tiles[(int)planetLayer][tileIndex] = tile;
-            chunk.Type = MapChunkType.Explored;
+            chunk.Type = Enums.Tile.MapChunkType.Explored;
         }
         public void RemoveTile(int x, int y, Enums.Tile.MapLayerType planetLayer)
         {

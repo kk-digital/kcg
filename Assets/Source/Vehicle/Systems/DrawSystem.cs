@@ -1,6 +1,5 @@
 using Entitas;
 using System.Collections.Generic;
-using Enums;
 using UnityEngine;
 
 namespace Vehicle
@@ -78,13 +77,13 @@ namespace Vehicle
             int _spriteID = GameState.SpriteLoader.GetSpriteSheetID(_filePath);
 
             // Blit
-            int imageSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(_spriteID, 0, 0, AtlasType.Vehicle);
+            int imageSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(_spriteID, 0, 0, Enums.AtlasType.Vehicle);
 
             // Calculating Bytes
             byte[] imageBytes = new byte[_width * _height * 4];
 
             // Get Sprite Bytes
-            GameState.SpriteAtlasManager.GetSpriteBytes(imageSpriteIndex, imageBytes, AtlasType.Vehicle);
+            GameState.SpriteAtlasManager.GetSpriteBytes(imageSpriteIndex, imageBytes, Enums.AtlasType.Vehicle);
 
             // Creating Texture
             vehicleSprite = CreateTextureFromRGBA(imageBytes, _width, _height);

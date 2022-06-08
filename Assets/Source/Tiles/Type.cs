@@ -1,7 +1,4 @@
-﻿using Enums;
-using System;
-
-namespace Tile
+﻿namespace Tile
 {
     public struct Type
     {

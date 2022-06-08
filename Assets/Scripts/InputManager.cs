@@ -1,5 +1,4 @@
 using UnityEngine;
-using Enums;
 using Entitas;
 
 public class InputManager : MonoBehaviour
@@ -8,15 +7,15 @@ public class InputManager : MonoBehaviour
     public struct Key
     {
         public KeyCode keyCode;
-        public eKeyEvent keyEvent;
+        public Enums.eKeyEvent keyEvent;
         public string keyName;
     }
 
     // Input Device
-    private eInputDevice inputDevice;
+    private Enums.eInputDevice inputDevice;
 
     // Player State
-    private PlayerState playerState = PlayerState.Vehicle;
+    private Enums.PlayerState playerState = Enums.PlayerState.Vehicle;
 
     // Currently Active Key
     public Key activeKey;
@@ -33,7 +32,7 @@ public class InputManager : MonoBehaviour
         //Check if Scene has SceneManager setup
         if (SceneManager.Instance != null)
         {
-            SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+            SceneManager.Instance.Register(this, Enums.SceneObjectType.SceneObjectTypeUtilityScript);
         }
 
         // Set Vehicle Physics
@@ -48,7 +47,7 @@ public class InputManager : MonoBehaviour
 
     public void Controls()
     {
-        if (playerState == PlayerState.Pedestrian)
+        if (playerState == Enums.PlayerState.Pedestrian)
         {
             // Decrease zoom with -
             if (Input.GetKey(KeyCode.KeypadMinus))
@@ -70,7 +69,7 @@ public class InputManager : MonoBehaviour
                 pixelCam.adjustCameraFOV();
             }
         }
-        else if (playerState == PlayerState.Vehicle)
+        else if (playerState == Enums.PlayerState.Vehicle)
         {
             if (Input.GetKey(KeyCode.A))
             {
@@ -229,24 +228,24 @@ public class InputManager : MonoBehaviour
     }
 
     // Detecting Input device from input actions
-    private eInputDevice DetectInputDevice()
+    private Enums.eInputDevice DetectInputDevice()
     {
         // If any mouse or keyboard key detected, set input device to keyboard+mouse
         if(Event.current.isKey ||
             Event.current.isMouse)
         {
-            return eInputDevice.KeyboardMouse;
+            return Enums.eInputDevice.KeyboardMouse;
         }
 
         // If any mouse hover event detected, set input device to keyboard+mouse
         if (Input.GetAxis("Mouse X") != 0.0f ||
             Input.GetAxis("Mouse Y") != 0.0f)
         {
-            return eInputDevice.KeyboardMouse;
+            return Enums.eInputDevice.KeyboardMouse;
         }
 
         // Else, return none device.
-        return eInputDevice.Invalid;
+        return Enums.eInputDevice.Invalid;
     }
 }
 

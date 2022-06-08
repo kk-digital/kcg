@@ -1,15 +1,11 @@
 using BigGustave; //SHOULD NOT IMPORT
 
-using Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TiledCS;
 
-
-using Tile;
-using Planet;
 
 //Note:
 //TMX files are created by map editor "Tiled"

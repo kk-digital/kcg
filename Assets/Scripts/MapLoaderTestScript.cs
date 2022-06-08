@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Enums;
 
 #if UNITY_EDITOR
 using UnityEditor;

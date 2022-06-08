@@ -1,6 +1,4 @@
 using UnityEngine;
-using Enums;
-using Tile;
 
 using SystemView;
 
@@ -22,7 +20,7 @@ public class GameLoop : MonoBehaviour
         //check if SceneManager even exists
         if (SceneManager.Instance != null)
         {
-            SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+            SceneManager.Instance.Register(this, Enums.SceneObjectType.SceneObjectTypeUtilityScript);
         }
 
         Application.targetFrameRate = FPS; // Cap at 60 FPS

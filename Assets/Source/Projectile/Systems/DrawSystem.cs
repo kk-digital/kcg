@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Entitas;
-using Enums;
 
 namespace Projectile
 {
@@ -44,8 +42,8 @@ namespace Projectile
         Planet.Unity.MapLoaderTestScript mapLoader;
 
         // Projectile Properties
-        public ProjectileType _projectileType = ProjectileType.Invalid;
-        public ProjectileDrawType _projectileDrawType = ProjectileDrawType.Invalid;
+        public Enums.ProjectileType _projectileType = Enums.ProjectileType.Invalid;
+        public Enums.ProjectileDrawType _projectileDrawType = Enums.ProjectileDrawType.Invalid;
 
         // Static Constructor
         static DrawSystem()
@@ -66,8 +64,8 @@ namespace Projectile
         }
 
         // Initializing image and component
-        public void Initialize(Contexts contexts, string filePath, int width, int height, Transform transform, Material mat, ProjectileType projectileType,
-            ProjectileDrawType projectileDrawType)
+        public void Initialize(Contexts contexts, string filePath, int width, int height, Transform transform, Material mat, Enums.ProjectileType projectileType,
+            Enums.ProjectileDrawType projectileDrawType)
         {
             // Set local's to references
             _contexts = contexts;
@@ -86,12 +84,12 @@ namespace Projectile
             int _spriteID = GameState.SpriteLoader.GetSpriteSheetID(_filePath);
 
             // Blit
-            int imageSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(_spriteID, 0, 0, AtlasType.Particle);
+            int imageSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(_spriteID, 0, 0, Enums.AtlasType.Particle);
             // Calculating Bytes
             byte[] imageBytes = new byte[_width * _height * 4];
 
             // Get Sprite Bytes
-            GameState.SpriteAtlasManager.GetSpriteBytes(imageSpriteIndex, imageBytes, AtlasType.Particle);
+            GameState.SpriteAtlasManager.GetSpriteBytes(imageSpriteIndex, imageBytes, Enums.AtlasType.Particle);
 
             // Creating Texture
             projectileSprite = CreateTextureFromRGBA(imageBytes, _width, _height);
@@ -173,12 +171,12 @@ namespace Projectile
         }
 
         // Get Projectile Properties
-        public ProjectileType GetProjectileType()
+        public Enums.ProjectileType GetProjectileType()
         {
             return _projectileType;
         }
 
-        public ProjectileDrawType GetProjectileDrawType()
+        public Enums.ProjectileDrawType GetProjectileDrawType()
         {
             return _projectileDrawType;
         }
