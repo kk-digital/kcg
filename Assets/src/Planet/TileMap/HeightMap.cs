@@ -21,7 +21,7 @@ namespace Planet.TileMap
                 Data[i] = 0;
                 for(int j = MapSize.y - 1; j >= 0; j--)
                 {
-                    ref var tile = ref tileMap.GetTileRef(i, j, PlanetLayer.Front);
+                    ref var tile = ref tileMap.GetTileRef(i, j, Enums.Tile.MapLayerType.Front);
                     if (tile.PropertiesId != -1)
                     {
                         Data[i] = j;

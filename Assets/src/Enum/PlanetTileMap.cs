@@ -36,10 +36,4 @@ namespace Enums
         TileCollisionTypeAir, //no collision, no blocking
         //TileCollisionTypeLiquid,
     }
-
-    public enum PlanetWrapBehavior : byte
-    {
-        WrapAround = 0,
-        NoWrapAround
-    }
 }

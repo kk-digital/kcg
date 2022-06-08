@@ -1,5 +1,4 @@
 ﻿using System;
-using Enums;
 using UnityEngine;
 
 namespace Planet.TileMap
@@ -8,39 +7,76 @@ namespace Planet.TileMap
     {
         // public static const PlanetTile AirTile = new PlanetTile(); - PlanetTile cannot be const in c#?
         public static readonly Tile.Model AirTile = new();
-
-        public Tile.Model[][] Tiles;
+        
         public Vector2Int MapSize;
         public ChunkList Chunks;
         public Layers Layers;
         public HeightMap HeightMap;
 
-        public Model(Vector2Int size)
+        public Model(Vector2Int mapSize)
         {
-            var layersCount = Enum.GetNames(typeof(PlanetLayer)).Length;
+            MapSize = mapSize;
 
-            MapSize.x = size.x;
-            MapSize.y = size.y;
+            Chunks = new ChunkList(mapSize);
 
-            Chunks.Size.x = MapSize.x >> 4;
-            Chunks.Size.y = MapSize.y >> 4;
-            Chunks.Data = new Chunk[Chunks.Size.x * Chunks.Size.y];
-
-            Tiles = new Tile.Model[layersCount][];
-            for(int layerIndex = 0; layerIndex < layersCount; layerIndex++)
-            {
-                Tiles[layerIndex] = new Tile.Model[MapSize.x * MapSize.y];
-            }
-            
             HeightMap = new HeightMap(MapSize);
             Layers = new Layers
             {
-                LayerTextures = new Texture2D[layersCount],
-                MapSize = size
+                LayerTextures = new Texture2D[Layers.Count],
+                MapSize = mapSize
             };
         }
 
-        public void UpdateTilesOnPosition(int x, int y, PlanetLayer planetLayer)
+        #region TileApi
+
+        public int GetTileIndex(int x, int y)
+        {
+            var chunkX = x & 0x0f;
+            var chunkY = (y & 0x0f) << 4;
+
+            return chunkX + chunkY;
+        }
+
+        public ref Tile.Model GetTileRef(int x, int y, Enums.Tile.MapLayerType planetLayer)
+        {
+            ref var chunk = ref Chunks.GetChunkRef(x, y);
+            if (chunk.Type == Enums.Tile.MapChunkType.Error)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            
+            var tileIndex = GetTileIndex(x, y);
+            return ref chunk.Tiles[(int)planetLayer][tileIndex];
+        }
+        public void SetTile(int x, int y, Tile.Model tile, Enums.Tile.MapLayerType planetLayer)
+        {
+            var chunk = Chunks.GetChunkRef(x, y);
+            if (chunk.Type == Enums.Tile.MapChunkType.Error) return;
+            
+            chunk.Seq++; // Updating tile, increment seq
+            var tileIndex = GetTileIndex(x, y);
+            chunk.Tiles[(int)planetLayer][tileIndex] = tile;
+        }
+        public void RemoveTile(int x, int y, Enums.Tile.MapLayerType planetLayer)
+        {
+            ref Tile.Model tile = ref GetTileRef(x, y, planetLayer);
+
+            tile.PropertiesId = -1;
+
+            for(int i = x - 1; i <= x + 1; i++)
+            {
+                for(int j = y - 1; j <= y + 1; j++)
+                {
+                    UpdateTilesOnPosition(i, j, planetLayer);
+                }
+            }
+        }
+
+        #endregion
+
+        #region TilePositionUpdater
+
+        public void UpdateTilesOnPosition(int x, int y, Enums.Tile.MapLayerType planetLayer)
         {
             // standard sheet mapping
             // every tile has a constant offset
@@ -49,17 +85,8 @@ namespace Planet.TileMap
             // example: 15 is (3,3)
             //           8 is (0,2)
             //           1 is (1,0)
-            int[] TilePositionToTileSet = new int[]
-            {
-                 15, 12, 14, 13, 3, 0, 2, 1, 11, 8, 10, 9, 7, 4, 6, 5
-            };
+            int[] tilePositionToTileSet = {15, 12, 14, 13, 3, 0, 2, 1, 11, 8, 10, 9, 7, 4, 6, 5};
             
-
-            if (x < 0 || y < 0 | x >= MapSize.x || y >= MapSize.y)
-            {
-                return;
-            }
-
             ref Tile.Model tile = ref GetTileRef(x, y, planetLayer);
              
             if (tile.TileType >= 0)
@@ -107,7 +134,7 @@ namespace Planet.TileMap
 
                     // the sprite ids are next to each other in the sprite atlas
                     // we jus thave to know which one to draw based on the offset
-                    tile.SpriteId = properties.BaseSpriteId + TilePositionToTileSet[(int)tilePosition];
+                    tile.SpriteId = properties.BaseSpriteId + tilePositionToTileSet[(int)tilePosition];
                 }
                 else
                 {
@@ -119,7 +146,7 @@ namespace Planet.TileMap
                 tile.SpriteId = -1;
             }
         }
-        public void UpdateTileMapPositions(PlanetLayer planetLayer)
+        public void UpdateTileMapPositions(Enums.Tile.MapLayerType planetLayer)
         {
             for(int y = 0; y < MapSize.y; y++)
             {
@@ -129,44 +156,7 @@ namespace Planet.TileMap
                 }
             }
         }
-        
 
-        public void RemoveTile(int x, int y, PlanetLayer planetLayer)
-        {
-            if (x < 0 || y < 0 | x >= MapSize.x || y >= MapSize.y)
-            {
-                return;
-            }
-
-            ref Tile.Model tile = ref GetTileRef(x, y, planetLayer);
-
-            tile.TileType = -1;
-
-            for(int i = x - 1; i <= x + 1; i++)
-            {
-                for(int j = y - 1; j <= y + 1; j++)
-                {
-                    UpdateTilesOnPosition(i, j, planetLayer);
-                }
-            }
-        }
-        public ref Tile.Model GetTileRef(int x, int y, PlanetLayer planetLayer)
-        {
-            ref Chunk chunk = ref Chunks.GetChunkRef(x, y);
-
-            return ref Tiles[(int)planetLayer][x + y * MapSize.x];
-        }
-
-        public Tile.Model GetTile(int x, int y, PlanetLayer planetLayer)
-        {
-            return GetTileRef(x, y, planetLayer);
-        }
-
-        public void SetTile(int x, int y, Tile.Model tile, PlanetLayer planetLayer)
-        {
-            ref Chunk chunk = ref Chunks.GetChunkRef(x, y);
-            chunk.Seq++; // Updating tile, increment seq
-            Tiles[(int)planetLayer][x + y * MapSize.x] = tile;
-        }
+        #endregion
     }
 }

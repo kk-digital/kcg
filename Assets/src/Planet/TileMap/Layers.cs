@@ -1,4 +1,4 @@
-using System.Drawing;
+using System;
 using Enums;
 using UnityEngine;
 
@@ -6,22 +6,22 @@ namespace Planet.TileMap
 {
     public struct Layers
     {
+        public static readonly int Count = Enum.GetNames(typeof(Enums.Tile.MapLayerType)).Length;
+        
         public Vector2Int MapSize;
         public Texture2D[] LayerTextures;
         
-        public void DrawLayer(PlanetLayer planetLayer, Material material, Transform transform, int DrawOrder)
+        public void DrawLayer(Enums.Tile.MapLayerType planetLayer, Material material, Transform transform, int DrawOrder)
         {
-            Render.Sprite sprite = new Render.Sprite();
-            sprite.Texture = LayerTextures[(int)planetLayer];
-            sprite.TextureCoords = new Vector4(0, 0, 1, -1);
+            var sprite = new Render.Sprite(LayerTextures[(int) planetLayer]);
 
             Utility.RenderUtils.DrawSprite(0, 0, 1.0f * MapSize.x, 1.0f * MapSize.y, sprite, material, transform, DrawOrder);
         }
         
-        public void BuildLayerTexture(ref Model tileMap, PlanetLayer planetLayer)
+        public void BuildLayerTexture(ref Model tileMap, Enums.Tile.MapLayerType planetLayer)
         {
-            byte[] Bytes = new byte[32 * 32 * 4];
-            byte[] Data = new byte[MapSize.x * MapSize.y * 32 * 32 * 4];
+            byte[] bytes = new byte[32 * 32 * 4];
+            byte[] data = new byte[MapSize.x * MapSize.y * 32 * 32 * 4];
 
             for(int y = 0; y < MapSize.y; y++)
             {
@@ -34,7 +34,7 @@ namespace Planet.TileMap
                     if (spriteId >= 0)
                     {
                         
-                        GameState.TileSpriteAtlasManager.GetSpriteBytes(spriteId, Bytes);
+                        GameState.TileSpriteAtlasManager.GetSpriteBytes(spriteId, bytes);
 
                         int tileX = (x * 32);
                         int tileY = (y * 32);
@@ -45,21 +45,21 @@ namespace Planet.TileMap
                             {
                                 int index = 4 * (((i + tileX)) + ((j + tileY)) * (MapSize.x * 32));
                                 int bytesIndex = 4 * (i + (32 - j - 1) * 32);
-                                Data[index] = 
-                                    Bytes[bytesIndex];
-                                Data[index + 1] = 
-                                    Bytes[bytesIndex + 1];
-                                Data[index + 2] = 
-                                    Bytes[bytesIndex + 2];
-                                Data[index + 3] = 
-                                    Bytes[bytesIndex + 3];
+                                data[index] = 
+                                    bytes[bytesIndex];
+                                data[index + 1] = 
+                                    bytes[bytesIndex + 1];
+                                data[index + 2] = 
+                                    bytes[bytesIndex + 2];
+                                data[index + 3] = 
+                                    bytes[bytesIndex + 3];
                             }
                         }
                     }
                 }
             }
             
-            LayerTextures[(int)planetLayer] = Utility.TextureUtils.CreateTextureFromRGBA(Data, MapSize.x * 32, MapSize.y * 32);
+            LayerTextures[(int)planetLayer] = Utility.TextureUtils.CreateTextureFromRGBA(data, MapSize.x * 32, MapSize.y * 32);
         }
     }
 }

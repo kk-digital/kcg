@@ -80,8 +80,8 @@ namespace Planet.Unity
                 int x = (int)worldPosition.x;
                 int y = (int)worldPosition.y;
                 Debug.Log(x + " " + y);
-                TileMap.RemoveTile(x, y, PlanetLayer.Front);
-                TileMap.Layers.BuildLayerTexture(ref TileMap, PlanetLayer.Front);
+                TileMap.RemoveTile(x, y, Enums.Tile.MapLayerType.Front);
+                TileMap.Layers.BuildLayerTexture(ref TileMap, Enums.Tile.MapLayerType.Front);
                 
             }
 
@@ -94,32 +94,32 @@ namespace Planet.Unity
             ProcessSystems.Update();
             MovableSystem.Update();
             CollisionSystem.Update(TileMap);
-            TileMap.Layers.DrawLayer(PlanetLayer.Front, Instantiate(Material), transform, 10);
-            TileMap.Layers.DrawLayer(PlanetLayer.Ore, Instantiate(Material), transform, 11);
+            TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Front, Instantiate(Material), transform, 10);
+            TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Ore, Instantiate(Material), transform, 11);
             DrawSystem.Draw(Instantiate(Material), transform, 12);
         }
 
 
         public void CreateDefaultTiles()
         {
-            int MetalSlabsTileSheet = 
+            int metalSlabsTileSheet = 
                         GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png");
-            int StoneBulkheads = 
+            int stoneBulkheads = 
                         GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tile_wallbase\\Tiles_stone_bulkheads.png");
-            int TilesMoon = 
+            int tilesMoon = 
                         GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png");
-            int OreTileSheet = 
+            int oreTileSheet = 
             GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
 
 
             GameState.CreationApi.CreateTile(8);
             GameState.CreationApi.SetTileName("ore_1");
-            GameState.CreationApi.SetTileTexture16(OreTileSheet, 0, 0);
+            GameState.CreationApi.SetTileTexture16(oreTileSheet, 0, 0);
             GameState.CreationApi.EndTile();
 
             GameState.CreationApi.CreateTile(9);
             GameState.CreationApi.SetTileName("glass");
-            GameState.CreationApi.SetTileSpriteSheet16(TilesMoon, 11, 10);
+            GameState.CreationApi.SetTileSpriteSheet16(tilesMoon, 11, 10);
             GameState.CreationApi.EndTile();
 
 
@@ -133,8 +133,8 @@ namespace Planet.Unity
             {
                 for(int i = 0; i < mapSize.x; i++)
                 {
-                    Tile.Model frontTile = Tile.Model.EmptyTile();
-                    Tile.Model oreTile = Tile.Model.EmptyTile();
+                    Tile.Model frontTile = Tile.Model.EmptyTile;
+                    Tile.Model oreTile = Tile.Model.EmptyTile;
 
                     frontTile.TileType = 9;
 
@@ -151,16 +151,16 @@ namespace Planet.Unity
                     }
 
                     
-                    TileMap.SetTile(i, j, frontTile, PlanetLayer.Front);
-                    TileMap.SetTile(i, j, oreTile, PlanetLayer.Ore);
+                    TileMap.SetTile(i, j, frontTile, Enums.Tile.MapLayerType.Front);
+                    TileMap.SetTile(i, j, oreTile, Enums.Tile.MapLayerType.Ore);
                 }
             }
 
             TileMap.HeightMap.UpdateTopTilesMap(ref TileMap);
-            TileMap.UpdateTileMapPositions(PlanetLayer.Front);
-            TileMap.UpdateTileMapPositions(PlanetLayer.Ore);
-            TileMap.Layers.BuildLayerTexture(ref TileMap, PlanetLayer.Front);
-            TileMap.Layers.BuildLayerTexture(ref TileMap, PlanetLayer.Ore);
+            TileMap.UpdateTileMapPositions(Enums.Tile.MapLayerType.Front);
+            TileMap.UpdateTileMapPositions(Enums.Tile.MapLayerType.Ore);
+            TileMap.Layers.BuildLayerTexture(ref TileMap, Enums.Tile.MapLayerType.Front);
+            TileMap.Layers.BuildLayerTexture(ref TileMap, Enums.Tile.MapLayerType.Ore);
         }
         
         

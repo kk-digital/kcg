@@ -1,18 +1,32 @@
+using Enums.Tile;
+using UnityEngine;
+
 namespace Planet.TileMap
 {
     public class Chunk
     {
-        // Makes sorting function much easier and faster
-        // This is the index of this chunk in the ChunkIndexList
-        public int ChunkIndexListID;
+        // readonly means const(in runtime) after initialization
+        public static readonly Vector2Int Size = new(16, 16);
+        public MapChunkType Type;
         public Tile.Model[][] Tiles;
-
-        public int Usage; // Used for sorting chunks by usage
+        
         public int Seq;
-
+        
         public Chunk()
         {
             Seq = 0;
+            Type = MapChunkType.Explored;
+            Tiles = new Tile.Model[Layers.Count][];
+
+            for (int i = 0; i < Layers.Count; i++)
+            {
+                Tiles[i] = new Tile.Model[Size.x * Size.y];
+            }
+        }
+
+        public Chunk(MapChunkType type) : this()
+        {
+            Type = type;
         }
     }
 }

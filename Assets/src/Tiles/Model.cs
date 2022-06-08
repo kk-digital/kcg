@@ -3,23 +3,14 @@
     /// <summary> Contains info about tile, include all layers </summary>
     public struct Model
     {
+        public static readonly Model EmptyTile = new() {PropertiesId = -1, SpriteId = -1};
+        
         // Contains the TileProperties Ids for every layer
         public int TileType;
-
         public int SpriteId;
-
         //Health
         public byte Durability;
 
-        public static Model EmptyTile()
-        {
-            Model tile = new Model();
-         
-            tile.TileType = -1;
-
-            return model;
-        }
-        
         // TODO: Refactor
         public int CheckTile(int[] neighbors, int rules, int tileId)
         {
@@ -40,14 +31,8 @@
                 if ((rules & neighborBit[i]) == neighborBit[i])
                 {
                     // if this neighbor does not match return -1 immediately
-                    if (neighbors[i] != tileId)
-                    {
-                        return -1;
-                    }
-                    else 
-                    {
-                        match++;
-                    }
+                    if (neighbors[i] != tileId) return -1;
+                    match++;
                 }
             }
 

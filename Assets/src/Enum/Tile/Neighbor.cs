@@ -1,6 +1,5 @@
 namespace Enums.Tile
 {
-
     public enum Neighbor
     {
         Right = 0,

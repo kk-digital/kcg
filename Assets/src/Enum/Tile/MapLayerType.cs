@@ -1,6 +1,6 @@
-namespace Enums
+namespace Enums.Tile
 {
-    public enum PlanetLayer
+    public enum MapLayerType
     {
         Error = 0,
         Back = 1,
