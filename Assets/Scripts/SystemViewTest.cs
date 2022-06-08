@@ -43,7 +43,7 @@ namespace SystemView
 
             State = gl.CurrentSystemState;
 
-            State.Star.Mass = 5000000.0f;
+            State.Star.Mass = 5000000000.0f;
             State.Star.PosX = (float)rnd.NextDouble() * 8.0f - 4.0f;
             State.Star.PosY = (float)rnd.NextDouble() * 8.0f - 4.0f;
 
@@ -59,13 +59,15 @@ namespace SystemView
 
                 Planet.Descriptor.CentralBody = State.Star;
 
-                Planet.Descriptor.SemiMinorAxis = 3.0f + (i + 1) * (i + 1);
-                Planet.Descriptor.SemiMajorAxis = Planet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() / (i + 2);
+                Planet.Descriptor.SemiMinorAxis = 30.0f + (i + 1) * (i + 1) * 10;
+                Planet.Descriptor.SemiMajorAxis = Planet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * (i + 5);
 
                 Planet.Descriptor.Rotation    = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
                 Planet.Descriptor.MeanAnomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
                 Planet.Descriptor.Compute();
+
+                Planet.Descriptor.Self.Mass = 100000000;
 
                 ObjectInfo<SystemPlanetRenderer> PlanetInfo = new();
 
@@ -125,15 +127,15 @@ namespace SystemView
                 //Planet.Descriptor.SemiMinorAxis = InnerAsteroidBeltDescriptor.SemiMajorAxis + (i + 3) * (i + 3);
                 //Planet.Descriptor.SemiMajorAxis = Planet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * i / 2.0f;
 
-                Planet.Descriptor.SemiMinorAxis = State.Planets[InnerPlanets - 1].Descriptor.SemiMajorAxis + (i + 3) * (i + 3);
-                Planet.Descriptor.SemiMajorAxis = Planet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * i / 2.0f;
+                Planet.Descriptor.SemiMinorAxis = State.Planets[InnerPlanets - 1].Descriptor.SemiMajorAxis + (i + 3) * (i + 3) * 10;
+                Planet.Descriptor.SemiMajorAxis = Planet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * i / 20.0f;
 
                 Planet.Descriptor.Rotation      = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
                 Planet.Descriptor.MeanAnomaly   = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
                 Planet.Descriptor.Compute();
 
-                Planet.Descriptor.Self.Mass = 100000;
+                Planet.Descriptor.Self.Mass = 100000000;
 
                 ObjectInfo<SystemPlanetRenderer> PlanetInfo = new();
 
@@ -150,12 +152,12 @@ namespace SystemView
                 {
                     SystemPlanet Moon = new SystemPlanet();
 
-                    Moon.Descriptor.Self.Mass = 20000;
+                    Moon.Descriptor.Self.Mass = 20000000;
 
                     Moon.Descriptor.CentralBody = Planet.Descriptor.Self;
 
-                    Moon.Descriptor.SemiMinorAxis = (float)rnd.NextDouble() * (j + 1) + 0.5f;
-                    Moon.Descriptor.SemiMajorAxis = Moon.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * 0.2f;
+                    Moon.Descriptor.SemiMinorAxis = (float)rnd.NextDouble() * (j + 1) + 5.0f;
+                    Moon.Descriptor.SemiMajorAxis = Moon.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * 2.0f;
 
                     Moon.Descriptor.Rotation      = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
                     Moon.Descriptor.MeanAnomaly   = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
@@ -231,6 +233,14 @@ namespace SystemView
                             SystemShipRenderer ShipRenderer = ShipObject.AddComponent<SystemShipRenderer>();
                             ShipRenderer.ship = Ship;
                         }
+
+            foreach (SystemPlanet Planet in State.Planets)
+            {
+                State.Bodies.Add(Planet.Descriptor.Self);
+            }
+            State.Bodies.Add(State.Star);
+
+            State.Player = gameObject.AddComponent<PlayerShip>();
         }
 
         void Update()
@@ -263,7 +273,7 @@ namespace SystemView
             {
                 if (!s.PathPlanned && !s.Reached)
                     s.PathPlanned = s.Descriptor.PlanPath(s.Destination, 0.1f);
-                else if (!s.Reached && s.Descriptor.GetDistanceFrom(s.Destination) < 1.0f)
+                else if (!s.Reached && s.Descriptor.GetDistanceFrom(s.Destination) < 5.0f)
                 {
                     s.Descriptor.Copy(s.Destination);
                     s.PathPlanned = false;
@@ -272,6 +282,50 @@ namespace SystemView
 
                 s.Descriptor.UpdatePosition(CurrentMillis);
             }
+
+            float GravVelX = 0.0f;
+            float GravVelY = 0.0f;
+
+            float GravPosX = 0.0f;
+            float GravPosY = 0.0f;
+
+            foreach (SystemViewBody Body in State.Bodies)
+            {
+                float dx = Body.PosX - State.Player.Ship.Self.PosX;
+                float dy = Body.PosY - State.Player.Ship.Self.PosY;
+
+                float d2 = dx * dx + dy * dy;
+                float d = (float)Math.Sqrt(d2);
+
+                float g = 6.67408E-11f * Body.Mass / d2;
+
+                GravVelX += g * CurrentMillis * dx / d;
+                GravVelY += g * CurrentMillis * dy / d;
+
+                GravPosX += g * g * CurrentMillis * dx * 0.5f / d;
+                GravPosY += g * g * CurrentMillis * dy * 0.5f / d;
+            }
+
+            /* todo: fix
+            float ShipMagnitude = (float)Math.Sqrt(State.Player.Ship.Self.VelX * State.Player.Ship.Self.VelX + State.Player.Ship.Self.VelY * State.Player.Ship.Self.VelY);
+            float GravMagnitude = (float)Math.Sqrt(GravVelX * GravVelX + GravVelY * GravVelY);
+
+            if (GravMagnitude != 0.0f && GravMagnitude + ShipMagnitude != 0.0f && GravMagnitude != float.NaN && ShipMagnitude != float.NaN)
+            {
+                float GravRotation = 0.0f;
+
+                if (GravVelY > 0.0f) GravRotation = -(float)Math.Acos(GravVelX / GravMagnitude);
+                else                 GravRotation =  (float)Math.Acos(GravVelX / GravMagnitude);
+            
+                State.Player.Ship.Rotation  = GravMagnitude * GravRotation + State.Player.Ship.Rotation * ShipMagnitude;
+                State.Player.Ship.Rotation /= GravMagnitude + 1.0f;
+            }*/
+
+            State.Player.Ship.Self.VelX += GravVelX;
+            State.Player.Ship.Self.VelY += GravVelY;
+
+            State.Player.Ship.Self.PosX += GravPosX;
+            State.Player.Ship.Self.PosY += GravPosY;
 
             CurrentCycle++;
         }

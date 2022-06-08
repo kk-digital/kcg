@@ -14,14 +14,20 @@ namespace SystemView
 
         public float LastTime;
 
-        public float rotation = 0.0f;
-
         public float RotationSpeedModifier = 2.0f;
 
         public bool Reverse = false;
 
+        public bool RenderOrbit = true;
+
+        public SystemState State;
+
         private void Start()
         {
+            GameLoop gl = GetComponent<GameLoop>();
+
+            State = gl.CurrentSystemState;
+
             LastTime = Time.time * 1000.0f;
 
             Ship = new SystemShip();
@@ -32,6 +38,8 @@ namespace SystemView
             Ship.Self.PosX = 10.0f;
             Ship.Self.PosY = 10.0f;
             Ship.Acceleration = 250.0f;
+
+            Ship.Self.Mass = 1.0f;
 
             Renderer = Object.AddComponent<SystemShipRenderer>();
             Renderer.ship = Ship;
@@ -86,21 +94,50 @@ namespace SystemView
             Ship.Self.VelY += AccY * CurrentTime;
 
             // "Air resistance" effect
-            Ship.Self.VelX *= 0.995f;
-            Ship.Self.VelY *= 0.995f;
+            // Ship.Self.VelX *= 0.9999995f;
+            // Ship.Self.VelY *= 0.9999995f;
 
             // "Sailing" effect
             Magnitude = (float)Math.Sqrt(Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY);
 
-            Ship.Self.VelX = (3.0f * Ship.Self.VelX + (float)Math.Cos(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / 4.0f;
-            Ship.Self.VelY = (3.0f * Ship.Self.VelY + (float)Math.Sin(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / 4.0f;
+            Ship.Self.VelX = (49.0f * Ship.Self.VelX + (float)Math.Cos(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / 50.0f;
+            Ship.Self.VelY = (49.0f * Ship.Self.VelY + (float)Math.Sin(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / 50.0f;
 
             Renderer.shipColor.b = (float) Ship.Health / Ship.MaxHealth;
 
             Ship.Weapons[0].Cooldown -= (int)(CurrentTime * 1000.0f);
             if (Ship.Weapons[0].Cooldown < 0) Ship.Weapons[0].Cooldown = 0;
 
+            if (RenderOrbit)
+            {
+                if (Ship.Descriptor.CentralBody == null)
+                    Ship.Descriptor.CentralBody = State.Star;
+
+                SystemViewBody StrongestGravityBody = null;
+                float g = 0.0f;
+
+                foreach (SystemViewBody Body in State.Bodies)
+                {
+                    float dx = Body.PosX - State.Player.Ship.Self.PosX;
+                    float dy = Body.PosY - State.Player.Ship.Self.PosY;
+
+                    float d2 = dx * dx + dy * dy;
+                    float d = (float)Math.Sqrt(d2);
+
+                    float curg = 6.67408E-11f * Body.Mass / d2;
+
+                    if (curg > g)
+                    {
+                        g = curg;
+                        StrongestGravityBody = Body;
+                    }
+                }
+
+                if (StrongestGravityBody != null)
+                    Ship.Descriptor.ChangeFrameOfReference(StrongestGravityBody);
+            }
+
             if (Input.GetKey("space")) Ship.Weapons[0].Fire();
         }
-    }
+    }   
 }
