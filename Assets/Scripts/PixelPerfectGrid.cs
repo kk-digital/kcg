@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Enums;
 
 /*
 GRID CONTROL SCRIPT TO TEST PIXEL PERFECT CAMERA AND PIXEL SNAP
@@ -39,7 +36,7 @@ public class PixelPerfectGrid : MonoBehaviour
     {
         if (SceneManager.Instance != null)
         {
-            SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+            SceneManager.Instance.Register(this, Enums.SceneObjectType.SceneObjectTypeUtilityScript);
         }
     }
     

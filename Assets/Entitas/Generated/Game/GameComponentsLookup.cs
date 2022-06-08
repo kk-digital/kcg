@@ -35,18 +35,16 @@ public static class GameComponentsLookup {
     public const int ParticleEmitterState = 24;
     public const int ParticlePosition2D = 25;
     public const int ParticleState = 26;
-    public const int ProjectileCollider = 27;
-    public const int ProjectileID = 28;
-    public const int ProjectilePosition2D = 29;
-    public const int ProjectileSprite2D = 30;
-    public const int ProjectileType = 31;
-    public const int ProjectileVelocity = 32;
-    public const int VehicleCollider = 33;
-    public const int VehicleID = 34;
-    public const int VehiclePhysicsState2D = 35;
-    public const int VehicleSprite2D = 36;
+    public const int ProjectileID = 27;
+    public const int ProjectilePosition2D = 28;
+    public const int ProjectileSprite2D = 29;
+    public const int ProjectileType = 30;
+    public const int ProjectileVelocity = 31;
+    public const int VehicleID = 32;
+    public const int VehiclePhysicsState2D = 33;
+    public const int VehicleSprite2D = 34;
 
-    public const int TotalComponents = 37;
+    public const int TotalComponents = 35;
 
     public static readonly string[] componentNames = {
         "AgentID",
@@ -76,13 +74,11 @@ public static class GameComponentsLookup {
         "ParticleEmitterState",
         "ParticlePosition2D",
         "ParticleState",
-        "ProjectileCollider",
         "ProjectileID",
         "ProjectilePosition2D",
         "ProjectileSprite2D",
         "ProjectileType",
         "ProjectileVelocity",
-        "VehicleCollider",
         "VehicleID",
         "VehiclePhysicsState2D",
         "VehicleSprite2D"
@@ -116,13 +112,11 @@ public static class GameComponentsLookup {
         typeof(Particle.EmitterStateComponent),
         typeof(Particle.Position2DComponent),
         typeof(Particle.StateComponent),
-        typeof(Projectile.ColliderComponent),
         typeof(Projectile.IDComponent),
         typeof(Projectile.Position2DComponent),
         typeof(Projectile.Sprite2DComponent),
         typeof(Projectile.TypeComponent),
         typeof(Projectile.VelocityComponent),
-        typeof(Vehicle.ColliderComponent),
         typeof(Vehicle.IDComponent),
         typeof(Vehicle.PhysicsState2DComponent),
         typeof(Vehicle.Sprite2DComponent)

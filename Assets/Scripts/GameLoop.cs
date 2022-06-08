@@ -1,6 +1,4 @@
 using UnityEngine;
-using Enums;
-using TileProperties;
 
 using SystemView;
 
@@ -11,7 +9,6 @@ public class GameLoop : MonoBehaviour
     private Agent.List agents;
     
     private const int FPS = 60;
-    public TilePropertiesManager TilePropertiesManager;
 
     // Method for setting everything up, for like init GameManager for example
 
@@ -23,7 +20,7 @@ public class GameLoop : MonoBehaviour
         //check if SceneManager even exists
         if (SceneManager.Instance != null)
         {
-            SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+            SceneManager.Instance.Register(this, Enums.SceneObjectType.SceneObjectTypeUtilityScript);
         }
 
         Application.targetFrameRate = FPS; // Cap at 60 FPS

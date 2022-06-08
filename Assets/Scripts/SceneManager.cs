@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Enums;
 
 
 
@@ -8,9 +7,9 @@ using Enums;
 public class SceneManagerObject
 {
     public MonoBehaviour obj { get; set; }
-    public SceneObjectType type { get; set; }
+    public Enums.SceneObjectType type { get; set; }
 
-    public SceneManagerObject(MonoBehaviour o, SceneObjectType typ)
+    public SceneManagerObject(MonoBehaviour o, Enums.SceneObjectType typ)
     {
         obj = o;
         type = typ;
@@ -38,7 +37,7 @@ class SceneManager : MonoBehaviour
 
 
     //add object to the list
-    public int Register(MonoBehaviour obj, SceneObjectType type)
+    public int Register(MonoBehaviour obj, Enums.SceneObjectType type)
     {
         SceneManagerObject newObject = new SceneManagerObject(obj, type);
         SceneObjects.Add(newObject);

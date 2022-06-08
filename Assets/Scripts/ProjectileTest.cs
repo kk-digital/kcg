@@ -1,5 +1,4 @@
 using UnityEngine;
-using Enums;
 
 public class ProjectileTest : MonoBehaviour
 {
@@ -28,7 +27,7 @@ public class ProjectileTest : MonoBehaviour
 
         // Loading Image
         projectileDrawSystem.Initialize(contexts, "Assets\\StreamingAssets\\assets\\luis\\grenades\\Grenades4.png", 16, 16, transform, Material,
-            ProjectileType.Grenade, ProjectileDrawType.Standard);
+            Enums.ProjectileType.Grenade, Enums.ProjectileDrawType.Standard);
     }
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
