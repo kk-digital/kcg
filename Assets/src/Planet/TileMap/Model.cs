@@ -1,101 +1,59 @@
-﻿//using Entitas;
-using System;
+﻿using System;
 using Enums;
 using UnityEngine;
 
 namespace Planet.TileMap
 {
-    public struct TopTilesMap
-    {
-        public int[] Data;
-
-        // more attributes if needed
-
-        public int Width
-        {
-            get
-            {
-                return Data.Length;
-            }
-        }
-
-        public TopTilesMap(int width)
-        {
-            Data = new int[width];
-        }
-    }
-
     public class Model
     {
-
-        public struct ChunkBehaviour
-        {
-            public Vector2Int Size;
-
-            public Chunk[] List;
-            public int[] IndexList; // 0 = error, 1 = empty, 2 = unexplored (TODO)
-
-            public int Next;
-
-            public Chunk Error; // todo: fill this with error tiles
-            public Chunk Empty;
-        }
-        
+       
         // public static const PlanetTile AirTile = new PlanetTile(); - PlanetTile cannot be const in c#?
         public static readonly Tile.Model AirTile = new();
 
         public Tile.Model[][] Tiles;
         public Vector2Int Size;
-        public ChunkBehaviour Chunk;
-        public TopTilesMap TopTilesMap;
-        public PlanetWrapBehavior WrapBehavior;
-
-        int LayersCount;
-
-        public Vector2Int NaturalLayerChunkSize;
-        public Vector2Int NaturalLayerSize;
-
-        public Vector2Int ChunkSize;
-        public NaturalLayerChunk[] NaturalLayerChunkList;
-        public int[] OreMap;
+        public ChunkList Chunks;
+        public HeightMap HeightMap;
 
         public Texture2D[] LayerTextures;
 
         public Model(Vector2Int size)
         {
-            LayersCount = Enum.GetNames(typeof(PlanetLayer)).Length;
-
-            NaturalLayerChunkSize = new Vector2Int(16, 16);
-            ChunkSize = new Vector2Int(16, 16);
+            var layersCount = Enum.GetNames(typeof(PlanetLayer)).Length;
 
             Size.x = size.x;
             Size.y = size.y;
 
-            Chunk.Size.x = Size.x >> 4;
-            Chunk.Size.y = Size.y >> 4;
+            Chunks.Size.x = Size.x >> 4;
+            Chunks.Size.y = Size.y >> 4;
+            Chunks.Data = new Chunk[Chunks.Size.x * Chunks.Size.y];
 
-            Tiles = new Tile.Model[LayersCount][];
-            for(int layerIndex = 0; layerIndex < LayersCount; layerIndex++)
+            Tiles = new Tile.Model[layersCount][];
+            for(int layerIndex = 0; layerIndex < layersCount; layerIndex++)
             {
                 Tiles[layerIndex] = new Tile.Model[Size.x * Size.y];
             }
-             
-
-            WrapBehavior = PlanetWrapBehavior.NoWrapAround; // Set to WrapAround manually if needed
-
-            Chunk.Next = 0;
-
-            Chunk.IndexList = new int[Chunk.Size.x * Chunk.Size.y];
-            Chunk.List = new Chunk[Chunk.Size.x * Chunk.Size.y];
-
-            TopTilesMap = new TopTilesMap(Size.x);
-            OreMap = new int[Size.x * Size.y];
-            NaturalLayerSize = new Vector2Int(Size.x / NaturalLayerChunkSize.x + 1, Size.y / NaturalLayerChunkSize.y + 1);
-            NaturalLayerChunkList = new NaturalLayerChunk[NaturalLayerSize.x * NaturalLayerSize.y];
-            LayerTextures = new Texture2D[LayersCount];
-
-            for (int i = 0; i < Chunk.IndexList.Length; i++)
-                Chunk.IndexList[i] = 2;
+            
+            HeightMap = new HeightMap(Size.x);
+            LayerTextures = new Texture2D[layersCount];
+        }
+        
+        //TODO: Implement
+        public void UpdateTopTilesMap()
+        {
+            for(int i = 0; i < Chunks.Size.x; i++)
+            {
+                HeightMap.Data[i] = 0;
+                for(int j = Chunks.Size.y - 1; j >= 0; j--)
+                {
+                    ref Tile.Model tile = ref GetTileRef(i, j, PlanetLayer.Front);
+                    if (tile.PropertiesId != -1)
+                    {
+                        HeightMap.Data[i] = j;
+                        break;
+                    }
+                }
+            }
         }
 
         public void BuildLayerTexture(PlanetLayer planetLayer)
@@ -222,10 +180,6 @@ namespace Planet.TileMap
             {
                 tile.SpriteId = -1;
             }
-            
-
-
-
         }
 
         public void UpdateAllTilePositions(PlanetLayer planetLayer)
@@ -235,25 +189,6 @@ namespace Planet.TileMap
                 for(int x = 0; x < Size.x; x++)
                 {
                     UpdateTilePositions(x, y, planetLayer);
-                }
-            }
-        }
-        
-
-
-        public void UpdateTopTilesMap()
-        {
-            for(int i = 0; i < Size.x; i++)
-            {
-                TopTilesMap.Data[i] = 0;
-                for(int j = Size.y - 1; j >= 0; j--)
-                {
-                    ref Tile.Model tile = ref GetTileRef(i, j, PlanetLayer.Front);
-                    if (tile.TileType != -1)
-                    {
-                        TopTilesMap.Data[i] = j;
-                        break;
-                    }
                 }
             }
         }
@@ -288,98 +223,9 @@ namespace Planet.TileMap
                 }
             }
         }
-
-        public ref NaturalLayerChunk GetNaturalLayerChunk(int x, int y)
-        {
-            int index = x / NaturalLayerChunkSize.x + (y / NaturalLayerChunkSize.y) * NaturalLayerSize.x;
-
-            return ref NaturalLayerChunkList[index];
-        }
-
-        // Is this really the only way to inline a function in c#?
-       // [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private int GetChunkIndex(int x, int y)
-        {
-            if (WrapBehavior == PlanetWrapBehavior.WrapAround) x %= Size.x;
-
-            return Chunk.IndexList[(x >> 4) * Chunk.Size.y + (y >> 4)];
-        }
-
-        private int AddChunk(Chunk chunk, int x, int y)
-        {
-            // I feel like resizing by 1 each time is not very efficient... Change it later?
-            Array.Resize(ref Chunk.List, Chunk.Next + 1);
-
-            if (WrapBehavior == PlanetWrapBehavior.WrapAround) x %= Size.x;
-            chunk.ChunkIndexListID = (x >> 4) * Chunk.Size.y + (y >> 4);
-
-            Chunk.IndexList[chunk.ChunkIndexListID] = Chunk.Next + 3;
-            Chunk.List[Chunk.Next] = chunk;
-            Chunk.Next++;
-            return Chunk.Next + 2;
-        }
-
-        public Chunk GetChunk(int x, int y)
-        {
-            int chunkIndex = GetChunkIndex(x, y);
-            switch (chunkIndex)
-            {
-                case 0: return Chunk.Error;
-                case 1: return Chunk.Empty;
-                case 2: return Chunk.Empty; // UNEXPLORED
-            }
-
-            Chunk.List[chunkIndex - 3].Usage++;
-            return Chunk.List[chunkIndex - 3];
-        }
-
-        public ref Chunk GetChunkRef(int x, int y)
-        {
-            int chunkIndex = GetChunkIndex(x, y);
-
-            switch (chunkIndex)
-            {
-                case 0:
-                    throw new IndexOutOfRangeException();
-                // We are getting a reference here, most likely to edit the chunk / add a tile, so we can't just return an empty chunk
-                // Instead, we will just create a new chunk
-                case < 3:
-                    chunkIndex = AddChunk(new Chunk(), x, y);
-                    break;
-            }
-
-            Chunk.List[chunkIndex - 3].Usage++;
-            return ref Chunk.List[chunkIndex - 3];
-        }
-
-        public void SetChunk(int x, int y, Tile.Model[][,] tiles)
-        {
-            int chunkIndex = GetChunkIndex(x, y);
-            switch (chunkIndex)
-            {
-                case 0:
-                    return;
-                case < 3:
-                    chunkIndex = AddChunk(new Chunk(), x, y);
-                    break;
-            }
-
-            Chunk.List[chunkIndex - 3].Seq++;
-
-            int beginX = (int)(x / ChunkSize.x) * ChunkSize.x;
-            int beginY = (int)(y / ChunkSize.y) * ChunkSize.y;
-
-        
-            for(int layerIndex = 0; layerIndex < LayersCount; layerIndex++)
-            {
-                for (int i = 0; i < 16; i++)
-                    for (int j = 0; j < 16; j++)
-                        Tiles[layerIndex][(i + beginX) + (j + beginY) * Size.x] = tiles[layerIndex][i, j];
-            }
-        }
         public ref Tile.Model GetTileRef(int x, int y, PlanetLayer planetLayer)
         {
-            ref Chunk chunk = ref GetChunkRef(x, y);
+            ref Chunk chunk = ref Chunks.GetChunkRef(x, y);
 
             chunk.Seq++; // We are getting a reference to the tile, so we are probably modifying the tile, hence increment seq
 
@@ -393,85 +239,12 @@ namespace Planet.TileMap
 
         public void SetTile(int x, int y, Tile.Model tile, PlanetLayer planetLayer)
         {
-            ref Chunk chunk = ref GetChunkRef(x, y);
+            ref Chunk chunk = ref Chunks.GetChunkRef(x, y);
             chunk.Seq++; // Updating tile, increment seq
             Tiles[(int)planetLayer][x + y * Size.x] = tile;
         }
-
-
-        // Sort chunks by most used using quick sort
-
-        private void swap(int index1, int index2)
-        {
-            // Swap chunks
-            (Chunk.List[index1], Chunk.List[index2]) = (Chunk.List[index2], Chunk.List[index1]);
-
-            // Then update chunk index list - This is what storing the Position inside the chunk is most useful for
-            Chunk.IndexList[Chunk.List[index1].ChunkIndexListID] = index1 + 3;
-            Chunk.IndexList[Chunk.List[index2].ChunkIndexListID] = index2 + 3;
-        }
-
-        private int partition(int start, int end)
-        {
-            // Use negative of the usage to have the list sorted from most used to least used without having to reverse afterwards
-            int p = -Chunk.List[start].Usage;
-
-            int count = 0;
-            for (int k = start + 1; k <= end; k++)
-                if (-Chunk.List[k].Usage <= p)
-                    count++;
-
-            int pi = start + count;
-            swap(pi, start);
-
-            int i = start, j = end;
-
-            while (i < pi && j > pi)
-            {
-                while (-Chunk.List[i].Usage <= p) i++;
-                while (-Chunk.List[j].Usage > p) j--;
-
-                if (i < pi && j > pi)
-                    swap(i++, j--);
-            }
-
-            return pi;
-        }
-
-        private void quickSort(int start, int end)
-        {
-            if (start >= end) return;
-
-            int p = partition(start, end);
-            quickSort(start, p - 1);
-            quickSort(p + 1, end);
-        }
-
-        public void SortChunks()
-        {
-            // Sort chunks from most used to least used
-            if (Chunk.List == null || Chunk.List.Length == 0) return;
-
-            quickSort(0, Chunk.Next - 1);
-        }
-    
-
-        //Take in PlanetTileMap, and map a horizonal line
-    public void GenerateFlatPlanet()
-        {
-            //default size = X...
-
-            //make a single line horizonally across planet
-            //from left to right
-
-            //int TileId = GetTileId("default-tile")
-           //for x = 0 to x = Planet.Size.X
-           //Planet.SetTile(TileId, x, 10)
-
-
-        }
-
-         public static int CheckTile(int[] neighbors, int rules, int tileId)
+        
+        public static int CheckTile(int[] neighbors, int rules, int tileId)
          {
              // 16 different values can be stored
              // using only 4 bits for the

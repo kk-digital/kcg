@@ -4,7 +4,8 @@ namespace Planet.TileMap
     {
         // Makes sorting function much easier and faster
         // This is the index of this chunk in the ChunkIndexList
-        public int ChunkIndexListID; 
+        public int ChunkIndexListID;
+        public Tile.Model[][] Tiles;
 
         public int Usage; // Used for sorting chunks by usage
         public int Seq;
@@ -13,11 +14,5 @@ namespace Planet.TileMap
         {
             Seq = 0;
         }
-    }
-
-    public struct NaturalLayerChunk
-    {
-        int Property;
-        // chunk properties
     }
 }
