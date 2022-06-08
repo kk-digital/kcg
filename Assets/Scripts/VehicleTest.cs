@@ -5,7 +5,7 @@ public class VehicleTest : MonoBehaviour
 {
     // Vehilce Draw System
     Vehicle.DrawSystem vehicleDrawSystem;
-    Vehicle.ProcessVelocitySystem vehiclePhysics;
+    public Vehicle.ProcessVelocitySystem vehiclePhysics;
 
     // Entitas's Contexts
     Contexts contexts;
@@ -13,6 +13,8 @@ public class VehicleTest : MonoBehaviour
     // Rendering Material
     [SerializeField]
     Material Material;
+
+    public bool canUpdateGravity = true;
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
     private void Start()
@@ -36,5 +38,7 @@ public class VehicleTest : MonoBehaviour
 
         // Update Collision Physics
         //vehicleDrawSystem.UpdateCollision();
+        if(canUpdateGravity)
+            vehiclePhysics.UpdateGravity(contexts);
     }
 }

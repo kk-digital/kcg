@@ -23,6 +23,7 @@ public class InputManager : MonoBehaviour
 
     // Note: This is temporarily
     private Vehicle.ProcessVelocitySystem vehilcePhysics;
+    private VehicleTest vehicleTest;
     private Contexts contexts;
     private GameEntity vehicleEntity;
 
@@ -34,40 +35,45 @@ public class InputManager : MonoBehaviour
         {
             SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
         }
+
+        // Set Vehicle Physics
         vehilcePhysics = new Vehicle.ProcessVelocitySystem();
+
+        // Set Vehicle Test Obj
+        vehicleTest = GameObject.Find("VehicleTest").GetComponent<VehicleTest>();
+
+        // Set Contexts obj
         contexts = Contexts.sharedInstance;
     }
 
-    // Event: On Key Pressed
-    private void OnKeyPressed()
+    public void Controls()
     {
-        if(playerState == PlayerState.Pedestrian)
+        if (playerState == PlayerState.Pedestrian)
         {
             // Decrease zoom with -
-            if (activeKey.keyName == KeyCode.KeypadMinus.ToString())
+            if (Input.GetKey(KeyCode.KeypadMinus))
             {
                 PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
-                if(pixelCam.targetCameraHalfWidth < 15.0f)
+                if (pixelCam.targetCameraHalfWidth < 15.0f)
                     pixelCam.targetCameraHalfWidth += 1.0f;
                 // Update Zoomed ortho pixel perfect calculation
                 pixelCam.adjustCameraFOV();
             }
 
             // Increase Zoom with +
-            if (activeKey.keyName == KeyCode.KeypadPlus.ToString())
+            if (Input.GetKey(KeyCode.KeypadPlus))
             {
                 PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
-                if(pixelCam.targetCameraHalfWidth > 1.5f)
+                if (pixelCam.targetCameraHalfWidth > 1.5f)
                     pixelCam.targetCameraHalfWidth -= 1.0f;
                 // Update Zoomed ortho pixel perfect calculation
                 pixelCam.adjustCameraFOV();
             }
-
         }
-        else if(playerState == PlayerState.Vehicle)
+        else if (playerState == PlayerState.Vehicle)
         {
-            if(activeKey.keyName == KeyCode.A.ToString())
-            { 
+            if (Input.GetKey(KeyCode.A))
+            {
                 // Get Vehicle Entites
                 IGroup<GameEntity> entities =
                 contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
@@ -79,11 +85,23 @@ public class InputManager : MonoBehaviour
                          vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
                 }
 
-                float velocity = Mathf.SmoothDamp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, 1.0f, ref vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, vehicleEntity.vehiclePhysicsState2D.angularAcceleration);
-                vehilcePhysics.ProcessMovementX(velocity, false, contexts);
+                float velocity = Mathf.SmoothDamp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, -1.0f, ref vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, vehicleEntity.vehiclePhysicsState2D.angularAcceleration);
+
+                vehilcePhysics.ProcessMovement(new Vector2(velocity, vehicleEntity.vehiclePhysicsState2D.angularVelocity.y), contexts);
+            }
+            else if(Input.GetKeyUp(KeyCode.A))
+            {
+                // Get Vehicle Entites
+                IGroup<GameEntity> entities =
+                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+                foreach (var vehicle in entities)
+                {
+                    vehicleEntity = vehicle;
+                    vehilcePhysics.StopMovement(new Vector2(0.0f, vehicleEntity.vehiclePhysicsState2D.angularVelocity.y), contexts);
+                }
             }
 
-            if (activeKey.keyName == KeyCode.D.ToString())
+            if (Input.GetKey(KeyCode.D))
             {
                 // Get Vehicle Entites
                 IGroup<GameEntity> entities =
@@ -97,34 +115,75 @@ public class InputManager : MonoBehaviour
                 }
 
                 float velocity = Mathf.SmoothDamp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, 1.0f, ref vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, vehicleEntity.vehiclePhysicsState2D.angularAcceleration);
-                vehilcePhysics.ProcessMovementX(velocity, true, contexts);
+
+                vehilcePhysics.ProcessMovement(new Vector2(velocity, vehicleEntity.vehiclePhysicsState2D.angularVelocity.y), contexts);
             }
-        }
-    }
-
-    // Event: On Key Released
-    private void OnKeyReleased()
-    {
-        if(playerState == PlayerState.Pedestrian)
-        {
-
-        }
-        else if(playerState == PlayerState.Vehicle)
-        {
-            if (activeKey.keyName == KeyCode.A.ToString())
+            else if (Input.GetKeyUp(KeyCode.D))
             {
-                vehilcePhysics.ProcessMovementX(0.0f, false, contexts);
-
+                // Get Vehicle Entites
+                IGroup<GameEntity> entities =
+                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+                foreach (var vehicle in entities)
+                {
+                    vehicleEntity = vehicle;
+                    vehilcePhysics.StopMovement(new Vector2(0.0f, vehicleEntity.vehiclePhysicsState2D.angularVelocity.y), contexts);
+                }
             }
-            if (activeKey.keyName == KeyCode.D.ToString())
+
+            if (Input.GetKey(KeyCode.W))
             {
-                vehilcePhysics.ProcessMovementX(0.0f, true, contexts);
+                vehicleTest.canUpdateGravity = false;
+                // Get Vehicle Entites
+                IGroup<GameEntity> entities =
+                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+                foreach (var vehicle in entities)
+                {
+                    vehicleEntity = vehicle;
+                }
+
+                float velocity = Mathf.SmoothDamp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.y, 1.0f, ref vehicleEntity.vehiclePhysicsState2D.angularVelocity.y, vehicleEntity.vehiclePhysicsState2D.angularAcceleration);
+                vehilcePhysics.ProcessMovement(new Vector2(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, velocity), contexts);
+            }
+            else if (Input.GetKeyUp(KeyCode.W))
+            {
+                vehicleTest.canUpdateGravity = true;
+                // Get Vehicle Entites
+                IGroup<GameEntity> entities =
+                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+                foreach (var vehicle in entities)
+                {
+                    vehicleEntity = vehicle;
+                    vehilcePhysics.StopMovement(new Vector2(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, 0.0f), contexts);
+                }
+            }
+
+            if (Input.GetKey(KeyCode.S))
+            {
+                // Get Vehicle Entites
+                IGroup<GameEntity> entities =
+                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+                foreach (var vehicle in entities)
+                {
+                    vehicleEntity = vehicle;
+                }
+
+                float velocity = Mathf.SmoothDamp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.y, -1.0f, ref vehicleEntity.vehiclePhysicsState2D.angularVelocity.y, vehicleEntity.vehiclePhysicsState2D.angularAcceleration);
+
+                vehilcePhysics.ProcessMovement(new Vector2(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, velocity), contexts);
+            }
+            else if (Input.GetKeyUp(KeyCode.S))
+            {
+                // Get Vehicle Entites
+                IGroup<GameEntity> entities =
+                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+                foreach (var vehicle in entities)
+                {
+                    vehicleEntity = vehicle;
+                    vehilcePhysics.StopMovement(new Vector2(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, 0.0f), contexts);
+                }
             }
         }
-    }
 
-    public void MouseInputs()
-    {
         if (Input.mouseScrollDelta.y > 0)
         {
             PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
@@ -144,10 +203,12 @@ public class InputManager : MonoBehaviour
     }
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html
-    private void FixedUpdate()
+    private void Update()
     {
         // Detect Key Call
-        DetectKey();
+        //DetectKey();
+
+        Controls();
     }
 
     // Returns if referenced key pressed or not
@@ -158,36 +219,6 @@ public class InputManager : MonoBehaviour
             return true;
         }
         return false;
-    }
-
-    // Detect which key player pressing
-    private void DetectKey()
-    {
-        // Check input device is empty
-        if (inputDevice == eInputDevice.Invalid)
-            return;
-
-        // Getting active keycode from unity system.enum
-        foreach (KeyCode vKey in System.Enum.GetValues(typeof(KeyCode)))
-        {
-            // Assign active key to local activeKey and key event to local key event
-            if (Input.GetKey(vKey))
-            {
-                activeKey.keyCode = vKey;
-                activeKey.keyName = vKey.ToString();
-                activeKey.keyEvent = eKeyEvent.Press;
-                OnKeyPressed();
-            }
-            else if (Input.GetKeyUp(vKey))
-            {
-                activeKey.keyEvent = eKeyEvent.Release;
-                OnKeyReleased();
-                activeKey.keyName = "";
-                activeKey.keyCode = KeyCode.None;
-            }
-        }
-
-        MouseInputs();
     }
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnGUI.html
