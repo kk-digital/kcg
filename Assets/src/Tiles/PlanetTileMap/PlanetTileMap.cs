@@ -167,10 +167,10 @@ namespace PlanetTileMap
 
             ref PlanetTile tile = ref GetTileRef(x, y, layer);
              
-            if (tile.PropertiesId >= 0)
+            if (tile.TileType >= 0)
             {
-                TileProperties.TilePropertiesData properties = 
-                                GameState.TileCreationApi.GetTileProperties(tile.PropertiesId);
+                TileProperties.TileType properties = 
+                                GameState.TileCreationApi.GetTileProperties(tile.TileType);
                 if (properties.AutoMapping)
                 {
                     // we have 4 neighbors per tile
@@ -186,29 +186,29 @@ namespace PlanetTileMap
                     if (x + 1 < Size.x)
                     {
                         ref PlanetTile neighborTile = ref GetTileRef(x + 1, y, layer);
-                        neighbors[(int)Neighbor.Right] = neighborTile.PropertiesId;
+                        neighbors[(int)Neighbor.Right] = neighborTile.TileType;
                     }
 
                     if (x - 1 >= 0)
                     {
                         ref PlanetTile neighborTile = ref GetTileRef(x - 1, y, layer);
-                        neighbors[(int)Neighbor.Left] = neighborTile.PropertiesId;
+                        neighbors[(int)Neighbor.Left] = neighborTile.TileType;
                     }
 
                     if (y + 1 < Size.y)
                     {
                         ref PlanetTile neighborTile = ref GetTileRef(x, y + 1, layer);
-                        neighbors[(int)Neighbor.Up] = neighborTile.PropertiesId;
+                        neighbors[(int)Neighbor.Up] = neighborTile.TileType;
                     }
 
                     if (y - 1 >= 0)
                     {
                         ref PlanetTile neighborTile = ref GetTileRef(x, y - 1, layer);
-                        neighbors[(int)Neighbor.Down] = neighborTile.PropertiesId;
+                        neighbors[(int)Neighbor.Down] = neighborTile.TileType;
                     }
 
 
-                    TilePosition position = GetTilePosition(neighbors, tile.PropertiesId);
+                    TilePosition position = GetTilePosition(neighbors, tile.TileType);
 
                     // the sprite ids are next to each other in the sprite atlas
                     // we jus thave to know which one to draw based on the offset
@@ -250,7 +250,7 @@ namespace PlanetTileMap
                 for(int j = Size.y - 1; j >= 0; j--)
                 {
                     ref PlanetTile tile = ref GetTileRef(i, j, Layer.Front);
-                    if (tile.PropertiesId != -1)
+                    if (tile.TileType != -1)
                     {
                         TopTilesMap.Data[i] = j;
                         break;
@@ -279,7 +279,7 @@ namespace PlanetTileMap
 
             ref PlanetTile tile = ref GetTileRef(x, y, layer);
 
-            tile.PropertiesId = -1;
+            tile.TileType = -1;
 
             for(int i = x - 1; i <= x + 1; i++)
             {

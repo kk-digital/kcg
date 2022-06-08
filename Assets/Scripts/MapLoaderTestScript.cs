@@ -137,28 +137,18 @@ namespace PlanetTileMap.Unity
                     PlanetTile frontTile = PlanetTile.EmptyTile();
                     PlanetTile oreTile = PlanetTile.EmptyTile();
 
-                    frontTile.PropertiesId = 9;
+                    frontTile.TileType = 9;
 
 
                     if (i % 10 == 0)
                     {
-                        //tile.FrontTilePropertiesId = 7;
-                        oreTile.PropertiesId = 8;
-                    }
-                    if (j % 2 == 0)
-                    {
-                       // tile.FrontTilePropertiesId = 2;
-                    }
-                    if (j % 3 == 0)
-                    {
-                       // tile.FrontTilePropertiesId = 9;
-
+                        oreTile.TileType = 8;
                     }
 
                     if ((j > 1 && j < 6) || (j > (8 + i)))
                     {
-                       frontTile.PropertiesId = -1; 
-                       oreTile.PropertiesId = -1;
+                       frontTile.TileType = -1; 
+                       oreTile.TileType = -1;
                     }
 
                     

@@ -67,7 +67,7 @@ namespace Projectile
             for (int y = bounds.BottomTile; y <= bounds.TopTile; y++)
             {
                 var tile = map.GetTile(bounds.LeftTile, y, Layer.Front);
-                int tilePropertiesIndex = tile.PropertiesId;
+                int tilePropertiesIndex = tile.TileType;
 
                 if (tilePropertiesIndex >= 0)
                 {
@@ -86,7 +86,7 @@ namespace Projectile
             for (int y = bounds.BottomTile; y <= bounds.TopTile; y++)
             {
                 var tile = map.GetTile(bounds.RightTile, y, Layer.Front);
-                int tilePropertiesIndex = tile.PropertiesId;
+                int tilePropertiesIndex = tile.TileType;
 
                 if (tilePropertiesIndex >= 0)
                 {
@@ -105,7 +105,7 @@ namespace Projectile
             for (int x = bounds.LeftTile; x <= bounds.RightTile; x++)
             {
                 var tile = map.GetTile(x, bounds.TopTile, Layer.Front);
-                int tilePropertiesIndex = tile.PropertiesId;
+                int tilePropertiesIndex = tile.TileType;
 
                 if (tilePropertiesIndex >= 0)
                 {
@@ -124,7 +124,7 @@ namespace Projectile
             for (int x = bounds.LeftTile; x <= bounds.RightTile; x++)
             {
                 var tile = map.GetTile(x, bounds.BottomTile, Layer.Front);
-                int tilePropertiesIndex = tile.PropertiesId;
+                int tilePropertiesIndex = tile.TileType;
 
                 if (tilePropertiesIndex >= 0)
                 {

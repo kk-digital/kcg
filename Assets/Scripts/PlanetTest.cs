@@ -1,20 +1,18 @@
 using UnityEngine;
 using TileProperties;
-
+using PlanetTileMap;
 using System.Collections.Generic;
 
-namespace PlanetTileMap.Unity
+namespace Unity
 {
-    class TileVariantTest : MonoBehaviour
+    class PlanetTest : MonoBehaviour
     {
         [SerializeField] Material Material;
 
-
-        Contexts EntitasContext = Contexts.sharedInstance;
-        PlanetTileMap TileMap;
+        PlanetTileMap.PlanetTileMap TileMap;
 
         static bool Init = false;
-        
+  
 
         public void Start()
         {
@@ -33,7 +31,6 @@ namespace PlanetTileMap.Unity
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 int x = (int)worldPosition.x;
                 int y = (int)worldPosition.y;
-                Debug.Log(x + " " + y);
                 TileMap.RemoveTile(x, y, Layer.Front);
                 TileMap.BuildLayerTexture(Layer.Front);
                 
@@ -45,8 +42,12 @@ namespace PlanetTileMap.Unity
                 else
                     DestroyImmediate(mr.gameObject);
 
+            GameState.ProcessSystem.Update();
+            GameState.MovableSystem.Update();
+            GameState.CollisionSystem.Update(TileMap);
             TileMap.DrawLayer(Layer.Front, Instantiate(Material), transform, 10);
             TileMap.DrawLayer(Layer.Ore, Instantiate(Material), transform, 11);
+            GameState.DrawSystem.Draw(Instantiate(Material), transform, 12);
         }
 
         // create the sprite atlas for testing purposes
@@ -76,10 +77,22 @@ namespace PlanetTileMap.Unity
 
             // Generating the map
             Vector2Int mapSize = new Vector2Int(16, 16);
+            TileMap = new PlanetTileMap.PlanetTileMap(mapSize);
+            GenerateMap();
 
-            TileMap = new PlanetTileMap(mapSize);
 
-            for(int j = 0; j < mapSize.y; j++)
+            GameState.SpawnerSystem.SpawnPlayer(Material);
+        }
+
+
+
+
+        void GenerateMap()
+        {
+
+           Vector2Int mapSize = TileMap.Size;
+
+           for(int j = 0; j < mapSize.y; j++)
             {
                 for(int i = 0; i < mapSize.x; i++)
                 {
@@ -134,6 +147,7 @@ namespace PlanetTileMap.Unity
 
             TileMap.BuildLayerTexture(Layer.Front);
             TileMap.BuildLayerTexture(Layer.Ore);
+        
         }
         
     }

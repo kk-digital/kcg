@@ -2,14 +2,14 @@ namespace TileProperties
 {
     public class TilePropertiesManager
     {
-        public TilePropertiesData[] TileProperties;
+        public TileType[] TileProperties;
         
         // First of all, we initial core elements to avoid crashes. Because, if we initialize relatives before core, and because realtives uses core 
         public void InitStage1()
         {
             //This is where init goes
             //Instance = new TilePropertiesManager();
-            TileProperties ??= new TilePropertiesData[1];
+            TileProperties ??= new TileType[1];
         }
         
         // Once we initialize all core elemets, then we can initialize other parts that is use core elements when working
@@ -18,7 +18,7 @@ namespace TileProperties
 
         }
         
-        public TilePropertiesData GetTileProperty(int index) 
+        public TileType GetTileProperty(int index) 
         { 
             return TileProperties[index];
         }

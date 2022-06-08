@@ -4,7 +4,7 @@
     public struct PlanetTile
     {
         // Contains the TileProperties Ids for every layer
-        public int PropertiesId;
+        public int TileType;
 
         public int SpriteId;
 
@@ -15,7 +15,7 @@
         {
             PlanetTile tile = new PlanetTile();
          
-            tile.PropertiesId = -1;
+            tile.TileType = -1;
 
             tile.SpriteId = -1;
 
