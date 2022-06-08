@@ -14,7 +14,7 @@ namespace Tile
 
         public int BaseSpriteId;
 
-        public PlanetTileCollisionType TileCollisionType;
+        public Enums.Tile.CollisionType TileCollisionType;
         public bool IsExplosive;
 
         //note: ore is composited, others are just normal
@@ -31,18 +31,12 @@ namespace Tile
         {
             Durability = durability;
         }
-        public void SetCollisionType(PlanetTileCollisionType collisionType)
+        public void SetCollisionType(Enums.Tile.CollisionType collisionType)
         {
             TileCollisionType = collisionType;
         }
 
-        public bool IsSolid 
-        {
-            get
-            {
-                return TileCollisionType == PlanetTileCollisionType.TileCollisionTypeSolid;
-            }
-        }
+        public bool IsSolid => TileCollisionType == Enums.Tile.CollisionType.Solid;
 
         private TileType(string name, string description, int baseSpriteId) : this()
         {
@@ -62,7 +56,7 @@ namespace Tile
 
         public TileType(string name, string description, int baseSpriteId,
             Enums.Tile.DrawType tileDrawType, int spriteId,
-            PlanetTileCollisionType tileCollisionType, byte durability,
+            Enums.Tile.CollisionType tileCollisionType, byte durability,
              bool isExplosive = false)
             : this(name, description, baseSpriteId, tileDrawType, spriteId)
         {

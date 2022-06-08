@@ -1,9 +1,10 @@
+using System.Linq;
 using Enums.Tile;
 using UnityEngine;
 
 namespace Planet.TileMap
 {
-    public class Chunk
+    public struct Chunk
     {
         // readonly means const(in runtime) after initialization
         public static readonly Vector2Int Size = new(16, 16);
@@ -11,8 +12,8 @@ namespace Planet.TileMap
         public Tile.Model[][] Tiles;
         
         public int Seq;
-        
-        public Chunk()
+
+        public Chunk(MapChunkType type) : this()
         {
             Seq = 0;
             Type = MapChunkType.Explored;
@@ -20,13 +21,8 @@ namespace Planet.TileMap
 
             for (int i = 0; i < Layers.Count; i++)
             {
-                Tiles[i] = new Tile.Model[Size.x * Size.y];
+                Tiles[i] = Enumerable.Repeat(Tile.Model.EmptyTile, Size.x * Size.y).ToArray();
             }
-        }
-
-        public Chunk(MapChunkType type) : this()
-        {
-            Type = type;
         }
     }
 }

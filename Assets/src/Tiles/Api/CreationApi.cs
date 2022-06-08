@@ -62,7 +62,7 @@ namespace Tile
             for(int i = 0; i < PropertiesArray.Length; i++)
             {
                 PropertiesArray[i] = new TileType("", "", 0, Enums.Tile.DrawType.Normal, 0,
-                                PlanetTileCollisionType.TileCollisionTypeSolid, 100, false);
+                    Enums.Tile.CollisionType.Solid, 100, false);
             }
             CurrentTileIndex = -1;
         }
@@ -89,14 +89,14 @@ namespace Tile
             return new TileType();
         }
 
-        public void CreateTile(int TileId)
+        public void CreateTile(int tileId)
         {
-            while (TileId >= PropertiesArray.Length)
+            while (tileId >= PropertiesArray.Length)
             {
                 Array.Resize(ref PropertiesArray, PropertiesArray.Length * 2);
             }
 
-            CurrentTileIndex = TileId;
+            CurrentTileIndex = tileId;
             if (CurrentTileIndex != -1)
             {
                 PropertiesArray[CurrentTileIndex].TileId = CurrentTileIndex;
@@ -197,7 +197,7 @@ namespace Tile
             }
         }
 
-        public void SetTileCollisionType(PlanetTileCollisionType type)
+        public void SetTileCollisionType(Enums.Tile.CollisionType type)
         {
             if (CurrentTileIndex != -1)
             {

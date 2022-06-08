@@ -72,7 +72,17 @@ namespace Planet.Unity
 
         public void Update()
         {
-            
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                int x = (int)worldPosition.x;
+                int y = (int)worldPosition.y;
+                
+                var chunkIndex = TileMap.Chunks.GetChunkIndex(x, y);
+                var tileIndex = TileMap.GetTileIndex(x, y);
+                
+                Debug.Log($"{x} {y} ChunkIndex: {chunkIndex} TileIndex: {tileIndex}");
+            }
         
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {

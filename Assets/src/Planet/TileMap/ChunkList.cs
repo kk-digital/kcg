@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Enums.Tile;
 using UnityEngine;
 
@@ -19,7 +20,7 @@ namespace Planet.TileMap
             var tileCount = mapSize.x * mapSize.y;
             var chunkCount = (tileCount + (tileCount & 0x0f)) >> 4;
             
-            Data = new Chunk[chunkCount];
+            Data = Enumerable.Repeat(new Chunk(MapChunkType.Empty), chunkCount).ToArray();
         }
         
         private int AddChunk(int x, int y)
@@ -35,7 +36,7 @@ namespace Planet.TileMap
             return chunkCount;
         }
         
-        private int GetChunkIndex(int x, int y)
+        public int GetChunkIndex(int x, int y)
         {
             int chunkMulti = Chunk.Size.x * Chunk.Size.y;
             

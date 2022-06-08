@@ -50,24 +50,24 @@ namespace Planet.Unity
         // create the sprite atlas for testing purposes
         public void Initialize()
         {
-            int TilesMoon = 
+            int tilesMoon = 
                         GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png");
-            int OreTileSheet = 
+            int oreTileSheet = 
             GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
             
             GameState.CreationApi.CreateTile(8);
             GameState.CreationApi.SetTileName("ore_1");
-            GameState.CreationApi.SetTileTexture16(OreTileSheet, 0, 0);
+            GameState.CreationApi.SetTileTexture16(oreTileSheet, 0, 0);
             GameState.CreationApi.EndTile();
 
             GameState.CreationApi.CreateTile(9);
             GameState.CreationApi.SetTileName("glass");
-            GameState.CreationApi.SetTileSpriteSheet16(TilesMoon, 11, 10);
+            GameState.CreationApi.SetTileSpriteSheet16(tilesMoon, 11, 10);
             GameState.CreationApi.EndTile();
 
             GameState.CreationApi.CreateTile(10);
             GameState.CreationApi.SetTileName("moon");
-            GameState.CreationApi.SetTileSpriteSheet16(TilesMoon, 0, 0);
+            GameState.CreationApi.SetTileSpriteSheet16(tilesMoon, 0, 0);
             GameState.CreationApi.EndTile();
 
 
