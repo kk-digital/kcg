@@ -3,13 +3,13 @@ using TileProperties;
 using PlanetTileMap;
 using System.Collections.Generic;
 
-namespace Planet.Unity
+namespace Unity
 {
     class PlanetTest : MonoBehaviour
     {
         [SerializeField] Material Material;
 
-        Planet Planet;
+        PlanetTileMap.PlanetTileMap TileMap;
 
         static bool Init = false;
   
@@ -31,8 +31,8 @@ namespace Planet.Unity
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 int x = (int)worldPosition.x;
                 int y = (int)worldPosition.y;
-                Planet.TileMap.RemoveTile(x, y, Layer.Front);
-                Planet.TileMap.BuildLayerTexture(Layer.Front);
+                TileMap.RemoveTile(x, y, Layer.Front);
+                TileMap.BuildLayerTexture(Layer.Front);
                 
             }
 
@@ -44,9 +44,9 @@ namespace Planet.Unity
 
             GameState.ProcessSystem.Update();
             GameState.MovableSystem.Update();
-            GameState.CollisionSystem.Update(Planet.TileMap);
-            Planet.TileMap.DrawLayer(Layer.Front, Instantiate(Material), transform, 10);
-            Planet.TileMap.DrawLayer(Layer.Ore, Instantiate(Material), transform, 11);
+            GameState.CollisionSystem.Update(TileMap);
+            TileMap.DrawLayer(Layer.Front, Instantiate(Material), transform, 10);
+            TileMap.DrawLayer(Layer.Ore, Instantiate(Material), transform, 11);
             GameState.DrawSystem.Draw(Instantiate(Material), transform, 12);
         }
 
@@ -77,7 +77,7 @@ namespace Planet.Unity
 
             // Generating the map
             Vector2Int mapSize = new Vector2Int(16, 16);
-            Planet = new Planet(mapSize);
+            TileMap = new PlanetTileMap.PlanetTileMap(mapSize);
             GenerateMap();
 
 
@@ -89,7 +89,6 @@ namespace Planet.Unity
 
         void GenerateMap()
         {
-            PlanetTileMap.PlanetTileMap TileMap = Planet.TileMap;
 
            Vector2Int mapSize = TileMap.Size;
 
