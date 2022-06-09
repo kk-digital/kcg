@@ -33,7 +33,7 @@ namespace Agent
                 var width = entity.agentSprite2D.Size.x;
                 var height = entity.agentSprite2D.Size.y;
 
-                Utility.Render.DrawSprite(x, y, width, height, sprite, material, transform, drawOrder);
+                Utility.Render.DrawSprite(x, y, width, height, sprite, material, transform, drawOrder++);
             }
         }
     }

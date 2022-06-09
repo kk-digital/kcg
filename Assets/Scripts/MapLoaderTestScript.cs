@@ -66,7 +66,7 @@ namespace Planet.Unity
             DrawSystem = new Agent.DrawSystem(EntitasContext);
             CollisionSystem = new Agent.CollisionSystem(EntitasContext);
 
-            SpawnerSystem.SpawnPlayer(Material);
+            SpawnerSystem.SpawnPlayer(Material, new Vector2(3.0f, 2.0f));
         }
 
         public void Update()
@@ -90,7 +90,7 @@ namespace Planet.Unity
                 int y = (int)worldPosition.y;
                 Debug.Log(x + " " + y);
                 TileMap.RemoveTile(x, y, Enums.Tile.MapLayerType.Front);
-                TileMap.Layers.BuildLayerTexture(ref TileMap, Enums.Tile.MapLayerType.Front);
+                TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
                 
             }
 
@@ -168,8 +168,8 @@ namespace Planet.Unity
             TileMap.HeightMap.UpdateTopTilesMap(ref TileMap);
             TileMap.UpdateTileMapPositions(Enums.Tile.MapLayerType.Front);
             TileMap.UpdateTileMapPositions(Enums.Tile.MapLayerType.Ore);
-            TileMap.Layers.BuildLayerTexture(ref TileMap, Enums.Tile.MapLayerType.Front);
-            TileMap.Layers.BuildLayerTexture(ref TileMap, Enums.Tile.MapLayerType.Ore);
+            TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
+            TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Ore);
         }
         
         

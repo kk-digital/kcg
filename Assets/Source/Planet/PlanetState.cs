@@ -1,38 +1,49 @@
 using System.Collections.Generic;
+using Agent;
+using Vehicle;
+using Projectile;
+using Entitas;
 using UnityEngine;
 
 namespace Planet
 {
-    public struct PlanetState
+    public class PlanetState
     {
         public int Index;
-
+        TimeState TimeState;
 
         public TileMap.Model TileMap;
-        public List < int > AgentIdList;
+        public AgentList AgentList;
+        public VehicleList VehicleList;
+        public ProjectileList ProjectileList;
         public List < int > ParticleIdList;
-        public List < int > ProjectileIdList;
-        public List < int > VehicleIdList;
         public List < int > ItemParticlesList;
 
 
-        public void Init(Vector2Int mapSize)
+        public PlanetState(UnityEngine.Vector2Int mapSize)
         {
             TileMap = new TileMap.Model(mapSize);
-            AgentIdList = new List<int>();
+            AgentList = new AgentList();
+            VehicleList = new VehicleList();
+            ProjectileList = new ProjectileList();
             ParticleIdList = new List<int>();
-            ProjectileIdList = new List<int>();
-            VehicleIdList = new List<int>();
         }
 
-        public void AddAgent()
+        public void AddPlayer(UnityEngine.Material material, Vector2 position)
         {
-
+            Entity entity = GameState.SpawnerSystem.SpawnPlayer(material, position);
+            AgentList.Add(entity);
         }
 
-        public void RemoveAgent()
+        public void AddAgent(UnityEngine.Material material, Vector2 position)
         {
+            Entity entity = GameState.SpawnerSystem.SpawnAgent(material, position);
+            AgentList.Add(entity);
+        }
 
+        public void RemoveAgent(AgentEntity entity)
+        {
+            AgentList.Remove(entity);
         }
 
         public void AddParticle()
@@ -47,7 +58,7 @@ namespace Planet
 
         public void AddProjectile()
         {
-
+            
         }
 
         public void RemoveProjectile()
@@ -55,7 +66,7 @@ namespace Planet
 
         }
 
-        public void AddVehicle()
+        public void AddVehicle(UnityEngine.Material material, Vector2 position)
         {
 
         }
@@ -63,6 +74,25 @@ namespace Planet
         public void RemoveVehicle()
         {
 
+        }
+
+        public void Update(float deltaTime)
+        {
+            float targetFps = 30.0f;
+            float frameTime = 1.0f / targetFps;
+
+            TimeState.Deficit += deltaTime;
+
+            while(TimeState.Deficit >= frameTime)
+            {
+                TimeState.Deficit -= frameTime;
+                // do a server/client tick right here
+                {
+                    TimeState.TickTime++;
+
+                }
+
+            }
         }
     }
 }

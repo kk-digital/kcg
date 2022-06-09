@@ -17,7 +17,7 @@ namespace Planet.TileMap
             Utility.Render.DrawSprite(0, 0, 1.0f * MapSize.x, 1.0f * MapSize.y, sprite, material, transform, DrawOrder);
         }
         
-        public void BuildLayerTexture(ref Model tileMap, Enums.Tile.MapLayerType planetLayer)
+        public void BuildLayerTexture(Model tileMap, Enums.Tile.MapLayerType planetLayer)
         {
             byte[] bytes = new byte[32 * 32 * 4];
             byte[] data = new byte[MapSize.x * MapSize.y * 32 * 32 * 4];
