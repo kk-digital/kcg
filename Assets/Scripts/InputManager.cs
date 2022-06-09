@@ -39,7 +39,7 @@ public class InputManager : MonoBehaviour
         vehilcePhysics = new Vehicle.ProcessVelocitySystem();
 
         // Set Vehicle Test Obj
-        //vehicleTest = GameObject.Find("VehicleTest").GetComponent<VehicleTest>();
+        vehicleTest = GameObject.Find("VehicleTest").GetComponent<VehicleTest>();
 
         // Set Contexts obj
         contexts = Contexts.sharedInstance;
@@ -79,12 +79,13 @@ public class InputManager : MonoBehaviour
                 foreach (var vehicle in entities)
                 {
                     vehicleEntity = vehicle;
+
                     // Get scale from component
                     vehicle.ReplaceVehiclePhysicsState2D(vehicle.vehiclePhysicsState2D.Position, vehicle.vehiclePhysicsState2D.TempPosition, new Vector2(-vehicle.vehiclePhysicsState2D.Scale.x, vehicle.vehiclePhysicsState2D.Scale.y), vehicle.vehiclePhysicsState2D.Scale, vehicle.vehiclePhysicsState2D.angularVelocity, vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
                          vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
                 }
 
-                float velocity = Mathf.SmoothDamp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, -1.0f, ref vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, vehicleEntity.vehiclePhysicsState2D.angularAcceleration);
+                float velocity = Mathf.Lerp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, -1.0f, vehicleEntity.vehiclePhysicsState2D.angularAcceleration * Time.deltaTime);
 
                 vehilcePhysics.ProcessMovement(new Vector2(velocity, vehicleEntity.vehiclePhysicsState2D.angularVelocity.y), contexts);
             }
@@ -96,7 +97,8 @@ public class InputManager : MonoBehaviour
                 foreach (var vehicle in entities)
                 {
                     vehicleEntity = vehicle;
-                    vehilcePhysics.StopMovement(new Vector2(0.0f, vehicleEntity.vehiclePhysicsState2D.angularVelocity.y), contexts);
+
+                    StartCoroutine(vehilcePhysics.Break(true, vehicleEntity.vehiclePhysicsState2D.angularVelocity, contexts));
                 }
             }
 
@@ -113,7 +115,7 @@ public class InputManager : MonoBehaviour
                          vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
                 }
 
-                float velocity = Mathf.SmoothDamp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, 1.0f, ref vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, vehicleEntity.vehiclePhysicsState2D.angularAcceleration);
+                float velocity = Mathf.Lerp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, 1.0f, vehicleEntity.vehiclePhysicsState2D.angularAcceleration * Time.deltaTime);
 
                 vehilcePhysics.ProcessMovement(new Vector2(velocity, vehicleEntity.vehiclePhysicsState2D.angularVelocity.y), contexts);
             }
@@ -125,7 +127,8 @@ public class InputManager : MonoBehaviour
                 foreach (var vehicle in entities)
                 {
                     vehicleEntity = vehicle;
-                    vehilcePhysics.StopMovement(new Vector2(0.0f, vehicleEntity.vehiclePhysicsState2D.angularVelocity.y), contexts);
+
+                    StartCoroutine(vehilcePhysics.Break(true, vehicleEntity.vehiclePhysicsState2D.angularVelocity, contexts));
                 }
             }
 
@@ -140,7 +143,7 @@ public class InputManager : MonoBehaviour
                     vehicleEntity = vehicle;
                 }
 
-                float velocity = Mathf.SmoothDamp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.y, 1.0f, ref vehicleEntity.vehiclePhysicsState2D.angularVelocity.y, vehicleEntity.vehiclePhysicsState2D.angularAcceleration);
+                float velocity = Mathf.Lerp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.y, 1.0f, vehicleEntity.vehiclePhysicsState2D.angularAcceleration * Time.deltaTime);
                 vehilcePhysics.ProcessMovement(new Vector2(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, velocity), contexts);
             }
             else if (Input.GetKeyUp(KeyCode.W))
@@ -152,12 +155,14 @@ public class InputManager : MonoBehaviour
                 foreach (var vehicle in entities)
                 {
                     vehicleEntity = vehicle;
-                    vehilcePhysics.StopMovement(new Vector2(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, 0.0f), contexts);
+
+                    StartCoroutine(vehilcePhysics.Break(false, vehicleEntity.vehiclePhysicsState2D.angularVelocity, contexts));
                 }
             }
 
             if (Input.GetKey(KeyCode.S))
             {
+                vehicleTest.canUpdateGravity = false;
                 // Get Vehicle Entites
                 IGroup<GameEntity> entities =
                 contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
@@ -166,23 +171,25 @@ public class InputManager : MonoBehaviour
                     vehicleEntity = vehicle;
                 }
 
-                float velocity = Mathf.SmoothDamp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.y, -1.0f, ref vehicleEntity.vehiclePhysicsState2D.angularVelocity.y, vehicleEntity.vehiclePhysicsState2D.angularAcceleration);
+                float velocity = Mathf.Lerp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.y, -1.0f, vehicleEntity.vehiclePhysicsState2D.angularAcceleration * Time.deltaTime);
 
                 vehilcePhysics.ProcessMovement(new Vector2(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, velocity), contexts);
             }
             else if (Input.GetKeyUp(KeyCode.S))
             {
+                vehicleTest.canUpdateGravity = true;
                 // Get Vehicle Entites
                 IGroup<GameEntity> entities =
                 contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
                 foreach (var vehicle in entities)
                 {
                     vehicleEntity = vehicle;
-                    vehilcePhysics.StopMovement(new Vector2(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, 0.0f), contexts);
+
+                    StartCoroutine(vehilcePhysics.Break(false, vehicleEntity.vehiclePhysicsState2D.angularVelocity, contexts));
                 }
             }
         }
-
+        
         if (Input.mouseScrollDelta.y > 0)
         {
             PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();

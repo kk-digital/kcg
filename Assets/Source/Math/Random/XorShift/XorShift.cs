@@ -1,4 +1,4 @@
-namespace Utility {
+namespace KMath.Random {
     public struct XorShift {
         private ulong a;
 

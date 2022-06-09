@@ -1,5 +1,6 @@
 using UnityEngine;
 using Entitas;
+using System.Collections;
 
 namespace Vehicle
 {
@@ -106,10 +107,38 @@ namespace Vehicle
             }
         }
 
-        public void StopMovement(Vector2 newSpeed, Contexts contexts)
+        public IEnumerator Break(bool xAxis, Vector2 angularVelocity, Contexts contexts)
         {
-            // Update the component
-            // Get Vehicle Entites
+            
+            if(xAxis)
+            {
+                angularVelocity.x = Mathf.Lerp(angularVelocity.x, 0.0f, 0.3f * Time.deltaTime);
+
+                float elapsed = 0.0f;
+                float duration = 1.0f;
+                while (elapsed < duration)
+                {
+                    angularVelocity.x = Mathf.Lerp(angularVelocity.x, 0.0f, elapsed / duration);
+                    elapsed += Time.deltaTime;
+                    yield return null;
+                }
+                angularVelocity.x = 0.0f;
+            }
+            else
+            {
+                angularVelocity.y = Mathf.Lerp(angularVelocity.y, 0.0f, 0.3f * Time.deltaTime);
+
+                float elapsed = 0.0f;
+                float duration = 1.0f;
+                while (elapsed < duration)
+                {
+                    angularVelocity.y = Mathf.Lerp(angularVelocity.y, 0.0f, elapsed / duration);
+                    elapsed += Time.deltaTime;
+                    yield return null;
+                }
+                angularVelocity.y = 0.0f;
+            }
+
             IGroup<GameEntity> entities =
             contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
             foreach (var vehicle in entities)
@@ -120,9 +149,11 @@ namespace Vehicle
 
                 // Update the position
                 vehicle.ReplaceVehiclePhysicsState2D(position.Position, position.TempPosition, position.Scale, position.TempScale,
-                    newSpeed, vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
+                    angularVelocity, vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
                          vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
             }
+
+            yield return null;
         }
     }
 }
