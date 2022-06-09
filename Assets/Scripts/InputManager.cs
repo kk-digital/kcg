@@ -39,7 +39,7 @@ public class InputManager : MonoBehaviour
         vehilcePhysics = new Vehicle.ProcessVelocitySystem();
 
         // Set Vehicle Test Obj
-        //vehicleTest = GameObject.Find("VehicleTest").GetComponent<VehicleTest>();
+        vehicleTest = GameObject.Find("VehicleTest").GetComponent<VehicleTest>();
 
         // Set Contexts obj
         contexts = Contexts.sharedInstance;
