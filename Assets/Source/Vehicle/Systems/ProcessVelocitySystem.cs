@@ -92,7 +92,7 @@ namespace Vehicle
 
                 // Update the position
                 vehicle.ReplaceVehiclePhysicsState2D(position.Position, position.TempPosition, position.Scale, position.TempScale,
-                    new Vector2(vehicle.vehiclePhysicsState2D.angularVelocity.x, (vehicle.vehiclePhysicsState2D.angularVelocity.y - 1.5f) * Time.deltaTime), vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
+                    new Vector2(vehicle.vehiclePhysicsState2D.angularVelocity.x, (vehicle.vehiclePhysicsState2D.angularVelocity.y - vehicle.vehiclePhysicsState2D.centerOfGravity) * Time.deltaTime), vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
                          vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
 
                 // Add velocity to position
@@ -109,36 +109,6 @@ namespace Vehicle
 
         public IEnumerator Break(bool xAxis, Vector2 angularVelocity, Contexts contexts)
         {
-            
-            if(xAxis)
-            {
-                angularVelocity.x = Mathf.Lerp(angularVelocity.x, 0.0f, 0.3f * Time.deltaTime);
-
-                float elapsed = 0.0f;
-                float duration = 1.0f;
-                while (elapsed < duration)
-                {
-                    angularVelocity.x = Mathf.Lerp(angularVelocity.x, 0.0f, elapsed / duration);
-                    elapsed += Time.deltaTime;
-                    yield return null;
-                }
-                angularVelocity.x = 0.0f;
-            }
-            else
-            {
-                angularVelocity.y = Mathf.Lerp(angularVelocity.y, 0.0f, 0.3f * Time.deltaTime);
-
-                float elapsed = 0.0f;
-                float duration = 1.0f;
-                while (elapsed < duration)
-                {
-                    angularVelocity.y = Mathf.Lerp(angularVelocity.y, 0.0f, elapsed / duration);
-                    elapsed += Time.deltaTime;
-                    yield return null;
-                }
-                angularVelocity.y = 0.0f;
-            }
-
             IGroup<GameEntity> entities =
             contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
             foreach (var vehicle in entities)
@@ -146,11 +116,40 @@ namespace Vehicle
                 // Get position from component
                 var position = vehicle.vehiclePhysicsState2D;
                 position.TempPosition = position.Position;
+                float newVelo;
 
-                // Update the position
-                vehicle.ReplaceVehiclePhysicsState2D(position.Position, position.TempPosition, position.Scale, position.TempScale,
-                    angularVelocity, vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
-                         vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
+                if (xAxis)
+                {
+                    float elapsed = 0.0f;
+                    float duration = 1.0f;
+                    while (elapsed < duration)
+                    {
+                        newVelo = Mathf.Lerp(angularVelocity.x, 0.0f, elapsed / duration);
+                        // Update the position
+                        vehicle.ReplaceVehiclePhysicsState2D(position.Position, position.TempPosition, position.Scale, position.TempScale,
+                            new Vector2(newVelo, position.angularVelocity.y), vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
+                                 vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
+                        elapsed += Time.deltaTime;
+                        yield return null;
+                    }
+                    angularVelocity.x = 0.0f;
+                }
+                else
+                {
+                    float elapsed = 0.0f;
+                    float duration = 1.0f;
+                    while (elapsed < duration)
+                    {
+                        newVelo = Mathf.Lerp(angularVelocity.y, 0.0f, elapsed / duration);
+                        // Update the position
+                        vehicle.ReplaceVehiclePhysicsState2D(position.Position, position.TempPosition, position.Scale, position.TempScale,
+                            new Vector2(position.angularVelocity.x, newVelo), vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
+                                 vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
+                        elapsed += Time.deltaTime;
+                        yield return null;
+                    }
+                    angularVelocity.y = 0.0f;
+                }
             }
 
             yield return null;
