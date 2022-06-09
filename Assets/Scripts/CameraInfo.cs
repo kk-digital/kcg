@@ -1,5 +1,4 @@
 using UnityEngine;
-using Enums;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -44,7 +43,7 @@ public class CameraInfo : MonoBehaviour
         //Check if Scene has SceneManager setup
         if (SceneManager.Instance != null)
         {
-            SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+            SceneManager.Instance.Register(this, Enums.SceneObjectType.SceneObjectTypeUtilityScript);
         }
     }
 

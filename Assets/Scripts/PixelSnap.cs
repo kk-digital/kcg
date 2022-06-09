@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using Enums;
 
 //NEED SPRITE RENDERER COMPONENT TO WORK
 [ExecuteInEditMode]
@@ -20,7 +18,7 @@ public class PixelSnap : MonoBehaviour
     {
         if (SceneManager.Instance != null)
         {
-            SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+            SceneManager.Instance.Register(this, Enums.SceneObjectType.SceneObjectTypeUtilityScript);
         }
     }
 

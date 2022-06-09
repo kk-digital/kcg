@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using TileProperties;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using AI;
 

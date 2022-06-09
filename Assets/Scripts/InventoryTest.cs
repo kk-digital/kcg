@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using Entitas;
 using UnityEngine;
 using UnityEngine.UI;
-using Enums;
 
 public class InventoryTest : MonoBehaviour
 {
@@ -51,14 +49,14 @@ public class InventoryTest : MonoBehaviour
         // Test not stackable items.
         for (uint i = 0; i < 10; i++)
         {
-            CreateItemsEntity("Gun", inventoryID, ItemType.Gun, GunSpriteID);
+            CreateItemsEntity("Gun", inventoryID, Enums.ItemType.Gun, GunSpriteID);
         }
 
         // Testing stackable items.
         for (uint i = 0; i < 1000; i++)
         {
-            CreateItemsEntity("Rock", inventoryID, ItemType.Rock, RockSpriteID);
-            CreateItemsEntity("RockDust", inventoryID, ItemType.RockDust, RockDustSpriteID);
+            CreateItemsEntity("Rock", inventoryID, Enums.ItemType.Rock, RockSpriteID);
+            CreateItemsEntity("RockDust", inventoryID, Enums.ItemType.RockDust, RockDustSpriteID);
         }
 
         CreateObjects(inventoryID);
@@ -118,20 +116,20 @@ public class InventoryTest : MonoBehaviour
         entity.AddInventorySlots(slots, selectedSlot);
     }
 
-    void CreateItemsEntity(string label, int inventoryID, ItemType itemType, int spriteID)
+    void CreateItemsEntity(string label, int inventoryID, Enums.ItemType itemType, int spriteID)
     {
         GameEntity entity = context.game.CreateEntity();
         const int maxStackCount = 99;
         switch (itemType)
         {
-            case ItemType.Gun:
+            case Enums.ItemType.Gun:
                 entity.AddItem(label, spriteID, itemType);
                 break;
-            case ItemType.Rock:
+            case Enums.ItemType.Rock:
                 entity.AddItem(label, spriteID, itemType);
                 entity.AddItemStack(1, maxStackCount);
                 break;
-            case ItemType.RockDust:
+            case Enums.ItemType.RockDust:
                 entity.AddItem(label, spriteID, itemType);
                 entity.AddItemStack(1, maxStackCount);
                 break;
