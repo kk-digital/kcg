@@ -90,6 +90,9 @@ namespace SystemView
             DebugLineRenderer1.useWorldSpace = DebugLineRenderer2.useWorldSpace = LaserLineRenderer.useWorldSpace = true;
 
             LastMillis = (int)(Time.time * 1000.0f);
+
+            LaserLineRenderer.startWidth = LaserLineRenderer.endWidth = 0.15f / Camera.scale;
+            LaserLineRenderer.startColor = LaserLineRenderer.endColor = LaserColor;
         }
 
         // Update is called once per frame
@@ -132,8 +135,7 @@ namespace SystemView
                 }
 
                 float RemainingTimeAsPercentage = (float)RemainingTime / (float)LaserDurationTime;
-                LaserLineRenderer.startWidth = RemainingTimeAsPercentage * 0.15f / Camera.scale;
-                LaserLineRenderer.endWidth   = RemainingTimeAsPercentage * 0.15f / Camera.scale;
+                LaserLineRenderer.startWidth = LaserLineRenderer.endWidth = RemainingTimeAsPercentage * 0.15f / Camera.scale;
                 LaserLineRenderer.startColor = new Color(LaserColor.r, LaserColor.g, LaserColor.b, LaserColor.a * RemainingTimeAsPercentage + 0.10f);
                 LaserLineRenderer.endColor   = new Color(LaserColor.r, LaserColor.g, LaserColor.b, LaserColor.a * RemainingTimeAsPercentage + 0.02f);
             }
