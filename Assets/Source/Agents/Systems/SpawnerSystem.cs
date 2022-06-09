@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Entitas;
 
 namespace Agent
 {
@@ -14,7 +15,7 @@ namespace Agent
             EntitasContext = entitasContext;
         }
 
-        public GameEntity SpawnPlayer(Material material)
+        public Entity SpawnPlayer(Material material, Vector2 position)
         {
             var entity = EntitasContext.game.CreateEntity();
 
@@ -38,9 +39,34 @@ namespace Agent
             Vector2 box2dCollider = new Vector2(1.0f, 1.5f);
 
             entity.AddAgentSprite2D(texture, spriteSize);
-            entity.AddAgentPosition2D(new Vector2(3f, 2f), newPreviousValue: default);
+            entity.AddAgentPosition2D(position, newPreviousValue: default);
             entity.AddComponentsBox2DCollider(box2dCollider);
             entity.AddAgentMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
+
+            return entity;
+        }
+
+        public Entity SpawnAgent(Material material, Vector2 position)
+        {
+            var entity = EntitasContext.game.CreateEntity();
+
+            playerID++;
+            
+            var spritePath = "Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png";
+            var pngSize = new Vector2Int(32, 48);
+            var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath);
+            var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
+            byte[] spriteData = new byte[pngSize.x * pngSize.y * 4];
+            GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, Enums.AtlasType.Agent);
+            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, pngSize.x, pngSize.y);
+            var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
+            
+            entity.AddAgentID(playerID);
+
+            Vector2 box2dCollider = new Vector2(1.0f, 1.5f);
+
+            entity.AddAgentSprite2D(texture, spriteSize);
+            entity.AddAgentPosition2D(position, newPreviousValue: default);
 
             return entity;
         }

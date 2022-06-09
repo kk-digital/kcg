@@ -27,7 +27,14 @@ namespace Planet.TileMap
             };
         }
 
+        public void BuildLayerTexture(Enums.Tile.MapLayerType planetLayer)
+        {
+            Layers.BuildLayerTexture(this, planetLayer);
+        }
+
         #region TileApi
+
+    
         
         public ref Tile.Model GetTileRef(int x, int y, Enums.Tile.MapLayerType planetLayer)
         {

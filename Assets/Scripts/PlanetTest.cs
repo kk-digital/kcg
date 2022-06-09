@@ -1,15 +1,14 @@
 using UnityEngine;
-using TileProperties;
-using PlanetTileMap;
 using System.Collections.Generic;
+using Enums.Tile;
 
-namespace Unity
+namespace Planet.Unity
 {
     class PlanetTest : MonoBehaviour
     {
         [SerializeField] Material Material;
 
-        PlanetTileMap.PlanetTileMap TileMap;
+        Planet.PlanetState Planet;
 
         static bool Init = false;
   
@@ -26,13 +25,15 @@ namespace Unity
 
         public void Update()
         {
+            TileMap.Model TileMap = Planet.TileMap;
+
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 int x = (int)worldPosition.x;
                 int y = (int)worldPosition.y;
-                TileMap.RemoveTile(x, y, Layer.Front);
-                TileMap.BuildLayerTexture(Layer.Front);
+                TileMap.RemoveTile(x, y, MapLayerType.Front);
+                TileMap.BuildLayerTexture(MapLayerType.Front);
                 
             }
 
@@ -45,8 +46,9 @@ namespace Unity
             GameState.ProcessSystem.Update();
             GameState.MovableSystem.Update();
             GameState.CollisionSystem.Update(TileMap);
-            TileMap.DrawLayer(Layer.Front, Instantiate(Material), transform, 10);
-            TileMap.DrawLayer(Layer.Ore, Instantiate(Material), transform, 11);
+            
+            TileMap.Layers.DrawLayer(MapLayerType.Front, Instantiate(Material), transform, 10);
+            TileMap.Layers.DrawLayer(MapLayerType.Ore, Instantiate(Material), transform, 11);
             GameState.DrawSystem.Draw(Instantiate(Material), transform, 12);
         }
 
@@ -54,34 +56,35 @@ namespace Unity
         public void Initialize()
         {
             int TilesMoon = 
-                        GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png");
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png");
             int OreTileSheet = 
-            GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
             
-            GameState.TileCreationApi.CreateTile(8);
-            GameState.TileCreationApi.SetTileName("ore_1");
-            GameState.TileCreationApi.SetTileTexture16(OreTileSheet, 0, 0);
-            GameState.TileCreationApi.EndTile();
+            GameState.CreationApi.CreateTile(8);
+            GameState.CreationApi.SetTileName("ore_1");
+            GameState.CreationApi.SetTileTexture16(OreTileSheet, 0, 0);
+            GameState.CreationApi.EndTile();
 
-            GameState.TileCreationApi.CreateTile(9);
-            GameState.TileCreationApi.SetTileName("glass");
-            GameState.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 11, 10);
-            GameState.TileCreationApi.EndTile();
+            GameState.CreationApi.CreateTile(9);
+            GameState.CreationApi.SetTileName("glass");
+            GameState.CreationApi.SetTileSpriteSheet16(TilesMoon, 11, 10);
+            GameState.CreationApi.EndTile();
 
-            GameState.TileCreationApi.CreateTile(10);
-            GameState.TileCreationApi.SetTileName("moon");
-            GameState.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 0, 0);
-            GameState.TileCreationApi.EndTile();
+            GameState.CreationApi.CreateTile(10);
+            GameState.CreationApi.SetTileName("moon");
+            GameState.CreationApi.SetTileSpriteSheet16(TilesMoon, 0, 0);
+            GameState.CreationApi.EndTile();
 
 
 
             // Generating the map
             Vector2Int mapSize = new Vector2Int(16, 16);
-            TileMap = new PlanetTileMap.PlanetTileMap(mapSize);
+            Planet = new Planet.PlanetState(mapSize);
             GenerateMap();
 
 
-            GameState.SpawnerSystem.SpawnPlayer(Material);
+            Planet.AddPlayer(Instantiate(Material), new Vector2(3.0f, 3.0f));
+            Planet.AddAgent(Instantiate(Material), new Vector2(6.0f, 2.0f));
         }
 
 
@@ -89,64 +92,64 @@ namespace Unity
 
         void GenerateMap()
         {
+            TileMap.Model TileMap = Planet.TileMap;
 
-           Vector2Int mapSize = TileMap.Size;
+           Vector2Int mapSize = TileMap.MapSize;
 
            for(int j = 0; j < mapSize.y; j++)
             {
                 for(int i = 0; i < mapSize.x; i++)
                 {
-                    PlanetTile frontTile = PlanetTile.EmptyTile();
-                    PlanetTile oreTile = PlanetTile.EmptyTile();
+                    Tile.Model frontTile = Tile.Model.EmptyTile;
+                    Tile.Model oreTile = Tile.Model.EmptyTile;
 
                     if (i >= mapSize.x / 2)
                     {
                         if (j % 2 == 0 && i == mapSize.x / 2)
                         {
-                            frontTile.TileType = 10;
+                            frontTile.Type = 10;
                         }
                         else
                         {
-                            frontTile.TileType = 9;
+                            frontTile.Type = 9;
                         }
                     }
                     else
                     {
                         if (j % 3 == 0 && i == mapSize.x / 2 + 1)
                         {
-                            frontTile.TileType = 9;
+                            frontTile.Type = 9;
                         }
                         else
                         {
-                            frontTile.TileType = 10;
+                            frontTile.Type = 10;
                         }
                     }
 
 
                     if (i % 10 == 0)
                     {
-                        oreTile.TileType = 8;
+                        oreTile.Type = 8;
                     }
 
                     if ((j > 1 && j < 6) || (j > (8 + i)))
                     {
-                       frontTile.TileType = -1; 
-                       oreTile.TileType = -1;
+                       frontTile.Type = -1; 
+                       oreTile.Type = -1;
                     }
 
                     
-                    TileMap.SetTile(i, j, frontTile, Layer.Front);
-                    TileMap.SetTile(i, j, oreTile, Layer.Ore);
+                    TileMap.SetTile(i, j, frontTile, MapLayerType.Front);
+                    TileMap.SetTile(i, j, oreTile, MapLayerType.Ore);
                 }
             }
 
-            TileMap.UpdateTopTilesMap();
+            TileMap.HeightMap.UpdateTopTilesMap(ref TileMap);
 
-            TileMap.UpdateAllTilePositions(Layer.Front);
-            TileMap.UpdateAllTilePositions(Layer.Ore);
-
-            TileMap.BuildLayerTexture(Layer.Front);
-            TileMap.BuildLayerTexture(Layer.Ore);
+            TileMap.UpdateTileMapPositions(MapLayerType.Front);
+            TileMap.UpdateTileMapPositions(MapLayerType.Ore);
+            TileMap.BuildLayerTexture(MapLayerType.Front);
+            TileMap.BuildLayerTexture(MapLayerType.Ore);
         
         }
         
