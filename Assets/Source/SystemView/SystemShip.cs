@@ -7,16 +7,16 @@ namespace SystemView
     {
         public OrbitingObjectDescriptor Descriptor;
         public OrbitingObjectDescriptor Start, Destination;
+
         public bool PathPlanned = false;
-        public bool Reached = false;
+        public bool Reached     = false;
 
         public int Health, MaxHealth;
         public int Shield, MaxShield;
 
         public int ShieldRegenerationRate;
 
-        public float PosX, PosY;
-        public float VelX, VelY;
+        public SystemViewBody Self;
 
         public float Acceleration;
 
@@ -28,18 +28,9 @@ namespace SystemView
 
         public SystemShip()
         {
-            Descriptor = new OrbitingObjectDescriptor();
-            Weapons = new List<ShipWeapon>();
-        }
-
-        public void UpdatePosition(float dt)
-        {
-            Descriptor.RotationalPosition += dt / Descriptor.GetDistanceFromCenter() / Descriptor.GetDistanceFromCenter();
-
-            float[] Pos = Descriptor.GetPosition();
-
-            PosX = Pos[0];
-            PosY = Pos[1];
+            Self       = new SystemViewBody();
+            Descriptor = new OrbitingObjectDescriptor(Self);
+            Weapons    = new List<ShipWeapon>();
         }
 
         public void Destroy()

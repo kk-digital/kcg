@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace SystemView
 {
+    /*
     public class SystemAsteroidBeltRenderer : MonoBehaviour
     {
         public CameraController cameraController;
@@ -18,7 +19,6 @@ namespace SystemView
         public Color orbitColor = new Color(1.0f, 1.0f, 1.0f, 0.5f);
         public Color asteroidColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 
-        // Start is called before the first frame update
         void Start()
         {
             cameraController = GameObject.Find("Main Camera").GetComponent<CameraController>();
@@ -28,7 +28,6 @@ namespace SystemView
             or.descriptor = belt.CentralDescriptor;
         }
 
-        // LateUpdate is called once per frame
         void LateUpdate()
         {
             if (cameraController.scale > 2.0f)
@@ -52,7 +51,7 @@ namespace SystemView
 
                 for (int i = 0; i < belt.Asteroids.Count; i++)
                 {
-                    float[] pos = belt.Descriptor[belt.Asteroids[i].Layer].GetPositionAt(belt.Asteroids[i].RotationalPosition);
+                    float[] pos = belt.Descriptor[belt.Asteroids[i].Layer].GetPositionAt(belt.Asteroids[i].RotationalPosition + belt.RotationalPos[belt.Asteroids[i].Layer]);
 
                     GameObjects[i].transform.position = new Vector3(pos[0], pos[1], -0.1f);
                     GameObjects[i].transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
@@ -73,5 +72,5 @@ namespace SystemView
             or.LineWidth = belt.BeltWidth;
             or.UpdateRenderer(128);
         }
-    }
+    }*/
 }

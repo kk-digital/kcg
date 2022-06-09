@@ -6,7 +6,7 @@ namespace SystemView
 {
     public class SystemStarRenderer : MonoBehaviour
     {
-        public SystemStar Star;
+        public SystemViewBody Star;
 
         public SpriteRenderer sr;
 

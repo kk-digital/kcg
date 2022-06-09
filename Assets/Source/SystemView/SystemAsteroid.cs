@@ -11,10 +11,5 @@ namespace SystemView
         {
 
         }
-
-        public void UpdatePosition(float dt)
-        {
-            RotationalPosition += dt;
-        }
     }
 }
