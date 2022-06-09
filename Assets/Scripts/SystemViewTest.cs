@@ -43,9 +43,9 @@ namespace SystemView
 
             State = gl.CurrentSystemState;
 
-            State.Star.Mass = 5000000000.0f;
-            State.Star.PosX = (float)rnd.NextDouble() * 8.0f - 4.0f;
-            State.Star.PosY = (float)rnd.NextDouble() * 8.0f - 4.0f;
+            State.Star.Mass = 50000000000000.0f;
+            State.Star.PosX = (float)rnd.NextDouble() * 8.0f - 64.0f;
+            State.Star.PosY = (float)rnd.NextDouble() * 8.0f -  4.0f;
 
             var StarObject = new GameObject();
             StarObject.name = "Star Renderer";
@@ -67,7 +67,7 @@ namespace SystemView
 
                 Planet.Descriptor.Compute();
 
-                Planet.Descriptor.Self.Mass = 100000000;
+                Planet.Descriptor.Self.Mass = 100000000000.0f;
 
                 ObjectInfo<SystemPlanetRenderer> PlanetInfo = new();
 
@@ -135,7 +135,7 @@ namespace SystemView
 
                 Planet.Descriptor.Compute();
 
-                Planet.Descriptor.Self.Mass = 100000000;
+                Planet.Descriptor.Self.Mass = 1000000000000;
 
                 ObjectInfo<SystemPlanetRenderer> PlanetInfo = new();
 
@@ -152,7 +152,7 @@ namespace SystemView
                 {
                     SystemPlanet Moon = new SystemPlanet();
 
-                    Moon.Descriptor.Self.Mass = 20000000;
+                    Moon.Descriptor.Self.Mass = 20000000000;
 
                     Moon.Descriptor.CentralBody = Planet.Descriptor.Self;
 
@@ -253,7 +253,7 @@ namespace SystemView
             {
                 //if (Planets[p].LastCycle == CurrentCycle) continue;
 
-                p.Descriptor.UpdatePosition(CurrentMillis);
+                p.Descriptor.UpdatePosition((float)CurrentMillis / 1000.0f);
                 //Planets[p].LastCycle = CurrentCycle;
 
                 //if (++UpdatesCompleted == UpdatesPerTick) return;
@@ -280,15 +280,13 @@ namespace SystemView
                     (s.Start, s.Destination) = (s.Destination, s.Start);
                 }
 
-                s.Descriptor.UpdatePosition(CurrentMillis);
+                s.Descriptor.UpdatePosition((float) CurrentMillis / 1000.0f);
             }
 
             float GravVelX = 0.0f;
             float GravVelY = 0.0f;
 
-            float GravPosX = 0.0f;
-            float GravPosY = 0.0f;
-
+            // this behaves weird when getting really close to central body --- float too inaccurate?
             foreach (SystemViewBody Body in State.Bodies)
             {
                 float dx = Body.PosX - State.Player.Ship.Self.PosX;
@@ -299,33 +297,19 @@ namespace SystemView
 
                 float g = 6.67408E-11f * Body.Mass / d2;
 
-                GravVelX += g * CurrentMillis * dx / d;
-                GravVelY += g * CurrentMillis * dy / d;
+                float Velocity = g * CurrentMillis / 1000.0f;
 
-                GravPosX += g * g * CurrentMillis * dx * 0.5f / d;
-                GravPosY += g * g * CurrentMillis * dy * 0.5f / d;
+                GravVelX += Velocity * dx / d;
+                GravVelY += Velocity * dy / d;
             }
 
-            /* todo: fix
-            float ShipMagnitude = (float)Math.Sqrt(State.Player.Ship.Self.VelX * State.Player.Ship.Self.VelX + State.Player.Ship.Self.VelY * State.Player.Ship.Self.VelY);
-            float GravMagnitude = (float)Math.Sqrt(GravVelX * GravVelX + GravVelY * GravVelY);
-
-            if (GravMagnitude != 0.0f && GravMagnitude + ShipMagnitude != 0.0f && GravMagnitude != float.NaN && ShipMagnitude != float.NaN)
-            {
-                float GravRotation = 0.0f;
-
-                if (GravVelY > 0.0f) GravRotation = -(float)Math.Acos(GravVelX / GravMagnitude);
-                else                 GravRotation =  (float)Math.Acos(GravVelX / GravMagnitude);
-            
-                State.Player.Ship.Rotation  = GravMagnitude * GravRotation + State.Player.Ship.Rotation * ShipMagnitude;
-                State.Player.Ship.Rotation /= GravMagnitude + 1.0f;
-            }*/
+            State.Player.GravitationalStrength = (float)Math.Sqrt(GravVelX * GravVelX + GravVelY * GravVelY) * 5000.0f / CurrentMillis;
 
             State.Player.Ship.Self.VelX += GravVelX;
             State.Player.Ship.Self.VelY += GravVelY;
 
-            State.Player.Ship.Self.PosX += GravPosX;
-            State.Player.Ship.Self.PosY += GravPosY;
+            State.Player.Ship.Self.PosX += GravVelX * CurrentMillis / 2000.0f;
+            State.Player.Ship.Self.PosY += GravVelY * CurrentMillis / 2000.0f;
 
             CurrentCycle++;
         }
