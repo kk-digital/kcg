@@ -36,41 +36,14 @@ public class AsmdefDebug
     // Compilation Total Time
     static double s_CompilationTotalTime;
 
-    // Editor Running Time
-    static double s_EditorRunningTime;
-
     // Static Constructor
     static AsmdefDebug()
     {
-        // Calling Update to measure Editor Running time
-        EditorApplication.update += Update;
-        // Assign Quit Function to quitting event
-        EditorApplication.quitting += Quit;
         // Get Assembly Compilation Data
         CompilationPipeline.assemblyCompilationStarted += CompilationPipelineOnAssemblyCompilationStarted;
         CompilationPipeline.assemblyCompilationFinished += CompilationPipelineOnAssemblyCompilationFinished;
         AssemblyReloadEvents.beforeAssemblyReload += AssemblyReloadEventsOnBeforeAssemblyReload;
         AssemblyReloadEvents.afterAssemblyReload += AssemblyReloadEventsOnAfterAssemblyReload;
-    }
-
-    // Editor Quit Event
-    static void Quit()
-    {
-        // Reset running time when close editor
-        PlayerPrefs.SetFloat("editor_running_time", 0);
-    }
-
-    // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
-    static void Update()
-    {
-        // Set editor running time to player prefs
-        s_EditorRunningTime = PlayerPrefs.GetFloat("editor_running_time");
-
-        // Counter
-        s_EditorRunningTime += Time.deltaTime;
-
-        // Save editor running time to a player prefs float
-        PlayerPrefs.SetFloat("editor_running_time", (float)s_EditorRunningTime);
     }
 
     // Calculate Assembly Start Times
@@ -111,13 +84,9 @@ public class AsmdefDebug
             var time = DateTime.UtcNow - date;
             var compilationTimes = EditorPrefs.GetString(AssemblyCompilationEventsEditorPref);
             var totalTimeSeconds = totalCompilationTimeSeconds + time.TotalSeconds;
-            float timeBetweenRunningCompilation = Mathf.Abs(PlayerPrefs.GetFloat("editor_running_time") - (float)totalTimeSeconds);
-            TimeSpan t = TimeSpan.FromSeconds(timeBetweenRunningCompilation);
             if (!string.IsNullOrEmpty(compilationTimes))
             {
-                Debug.Log($"Editor Running Time: {PlayerPrefs.GetFloat("editor_running_time"):F2} seconds\n");
-                string EditorRuntime = String.Format("Editor Running Time: {0:D2} h : {1:D2} m : {2:D2} s : {3:D3} ms", t.Hours, t.Minutes, t.Seconds, t.Milliseconds);
-                Debug.Log(EditorRuntime);
+                Debug.Log($"Editor Game Loading Time: {totalTimeSeconds:F2} seconds\n");
                 Debug.Log($"Compilation Report: {totalTimeSeconds:F2} seconds\n" + compilationTimes + "Assembly Reload Time: " + time.TotalSeconds + "s\n");
             }
         }
