@@ -8,22 +8,22 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public Item.Position2D itemPosition2D { get { return (Item.Position2D)GetComponent(GameComponentsLookup.ItemPosition2D); } }
+    public Item.Position2DComponent itemPosition2D { get { return (Item.Position2DComponent)GetComponent(GameComponentsLookup.ItemPosition2D); } }
     public bool hasItemPosition2D { get { return HasComponent(GameComponentsLookup.ItemPosition2D); } }
 
-    public void AddItemPosition2D(float newPosX, float newPosY) {
+    public void AddItemPosition2D(UnityEngine.Vector2 newValue, UnityEngine.Vector2 newPreviousValue) {
         var index = GameComponentsLookup.ItemPosition2D;
-        var component = (Item.Position2D)CreateComponent(index, typeof(Item.Position2D));
-        component.PosX = newPosX;
-        component.PosY = newPosY;
+        var component = (Item.Position2DComponent)CreateComponent(index, typeof(Item.Position2DComponent));
+        component.Value = newValue;
+        component.PreviousValue = newPreviousValue;
         AddComponent(index, component);
     }
 
-    public void ReplaceItemPosition2D(float newPosX, float newPosY) {
+    public void ReplaceItemPosition2D(UnityEngine.Vector2 newValue, UnityEngine.Vector2 newPreviousValue) {
         var index = GameComponentsLookup.ItemPosition2D;
-        var component = (Item.Position2D)CreateComponent(index, typeof(Item.Position2D));
-        component.PosX = newPosX;
-        component.PosY = newPosY;
+        var component = (Item.Position2DComponent)CreateComponent(index, typeof(Item.Position2DComponent));
+        component.Value = newValue;
+        component.PreviousValue = newPreviousValue;
         ReplaceComponent(index, component);
     }
 
