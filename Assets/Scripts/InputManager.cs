@@ -15,7 +15,7 @@ public class InputManager : MonoBehaviour
     private Enums.eInputDevice inputDevice;
 
     // Player State
-    private Enums.PlayerState playerState = Enums.PlayerState.Vehicle;
+    private Enums.PlayerState playerState = Enums.PlayerState.Pedestrian;
 
     // Currently Active Key
     public Key activeKey;
@@ -39,7 +39,7 @@ public class InputManager : MonoBehaviour
         vehilcePhysics = new Vehicle.ProcessVelocitySystem();
 
         // Set Vehicle Test Obj
-        vehicleTest = GameObject.Find("VehicleTest").GetComponent<VehicleTest>();
+        //vehicleTest = GameObject.Find("VehicleTest").GetComponent<VehicleTest>();
 
         // Set Contexts obj
         contexts = Contexts.sharedInstance;
@@ -65,6 +65,23 @@ public class InputManager : MonoBehaviour
                 PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
                 if (pixelCam.targetCameraHalfWidth > 1.5f)
                     pixelCam.targetCameraHalfWidth -= 1.0f;
+                // Update Zoomed ortho pixel perfect calculation
+                pixelCam.adjustCameraFOV();
+            }
+
+            if (Input.mouseScrollDelta.y > 0)
+            {
+                PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
+                if (pixelCam.targetCameraHalfWidth > 1.5f)
+                    pixelCam.targetCameraHalfWidth -= 1.0f;
+                // Update Zoomed ortho pixel perfect calculation
+                pixelCam.adjustCameraFOV();
+            }
+            else if (Input.mouseScrollDelta.y < -0.5f)
+            {
+                PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
+                if (pixelCam.targetCameraHalfWidth < 15.0f)
+                    pixelCam.targetCameraHalfWidth += 1.0f;
                 // Update Zoomed ortho pixel perfect calculation
                 pixelCam.adjustCameraFOV();
             }
@@ -189,7 +206,7 @@ public class InputManager : MonoBehaviour
                 }
             }
         }
-        
+
         if (Input.mouseScrollDelta.y > 0)
         {
             PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
