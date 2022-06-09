@@ -20,6 +20,8 @@ namespace SystemView
 
         public bool RenderOrbit = true;
 
+        public float GravitationalStrength = 0.0f;
+
         public SystemState State;
 
         private void Start()
@@ -35,8 +37,8 @@ namespace SystemView
             Object = new GameObject();
             Object.name = "Player ship";
 
-            Ship.Self.PosX = 10.0f;
-            Ship.Self.PosY = 10.0f;
+            Ship.Self.PosX = 0.0f;
+            Ship.Self.PosY = 0.0f;
             Ship.Acceleration = 250.0f;
 
             Ship.Self.Mass = 1.0f;
@@ -93,15 +95,26 @@ namespace SystemView
             Ship.Self.VelX += AccX * CurrentTime;
             Ship.Self.VelY += AccY * CurrentTime;
 
-            // "Air resistance" effect
-            // Ship.Self.VelX *= 0.9999995f;
-            // Ship.Self.VelY *= 0.9999995f;
+            // "Sailing" and "air resistance" effects are dampened the closer the player is to a massive object
+            // This is to make gravity and slingshotting more realistic and easier for the player to use.
 
-            // "Sailing" effect
-            Magnitude = (float)Math.Sqrt(Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY);
+            if (GravitationalStrength < 1.0f)
+            {
+                float GravitationalFactor = 1.0f / (1.0f - GravitationalStrength);
 
-            Ship.Self.VelX = (49.0f * Ship.Self.VelX + (float)Math.Cos(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / 50.0f;
-            Ship.Self.VelY = (49.0f * Ship.Self.VelY + (float)Math.Sin(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / 50.0f;
+                // "Air resistance" effect
+                Ship.Self.VelX *= 1.0f - 1.0f / (GravitationalFactor + 1000.0f);
+                Ship.Self.VelY *= 1.0f - 1.0f / (GravitationalFactor + 1000.0f);
+
+                // "Sailing" effect
+                if (Input.GetAxis("Horizontal") != 0.0f)
+                {
+                    Magnitude = (float)Math.Sqrt(Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY);
+
+                    Ship.Self.VelX = ((5.0f + GravitationalFactor) * Ship.Self.VelX + (float)Math.Cos(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / (6.0f + GravitationalFactor);
+                    Ship.Self.VelY = ((5.0f + GravitationalFactor) * Ship.Self.VelY + (float)Math.Sin(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / (6.0f + GravitationalFactor);
+                }
+            }
 
             Renderer.shipColor.b = (float) Ship.Health / Ship.MaxHealth;
 
@@ -122,7 +135,6 @@ namespace SystemView
                     float dy = Body.PosY - State.Player.Ship.Self.PosY;
 
                     float d2 = dx * dx + dy * dy;
-                    float d = (float)Math.Sqrt(d2);
 
                     float curg = 6.67408E-11f * Body.Mass / d2;
 
@@ -135,6 +147,11 @@ namespace SystemView
 
                 if (StrongestGravityBody != null)
                     Ship.Descriptor.ChangeFrameOfReference(StrongestGravityBody);
+
+                if (Ship.Descriptor.Eccentricity <= 1.0f)
+                    Ship.PathPlanned = true;
+                else
+                    Ship.PathPlanned = false;
             }
 
             if (Input.GetKey("space")) Ship.Weapons[0].Fire();
