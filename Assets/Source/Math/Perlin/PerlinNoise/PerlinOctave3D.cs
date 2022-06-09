@@ -1,7 +1,8 @@
-using PRNG;
+using KMath.Random;
 using System;
 
-namespace PerlinNoise {
+namespace KMath.PerlinNoise
+{
     public class PerlinOctave3D {
         private int runs;
 
@@ -58,7 +59,7 @@ namespace PerlinNoise {
         public void set_param(float persistence, bool change_seed = true, ulong new_seed = 0) {
             if(runs == 0) {
                 if(change_seed) {
-                    Random rng = new Random();
+                    System.Random rng = new System.Random();
                     Mt19937.seed_twister(new_seed != 0 ? new_seed : ((ulong)rng.Next() << 32 | (ulong)rng.Next()));
                 }
                 for(int i = 0; i < octaves; i++)

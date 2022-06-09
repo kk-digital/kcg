@@ -1,7 +1,8 @@
-using PRNG;
+using KMath.Random;
 using System;
 
-namespace PerlinNoise {
+namespace KMath.PerlinNoise
+{
     public class PerlinField3D {
         public  byte[] ga;
         public float[] grad;

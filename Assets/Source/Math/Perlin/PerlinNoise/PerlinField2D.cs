@@ -1,7 +1,7 @@
-using PRNG;
+using KMath.Random;
 using System;
 
-namespace PerlinNoise {
+namespace KMath.PerlinNoise {
     public class PerlinField2D {
         static public int[] primes =  {
              2,  3,  5,  7, 11,

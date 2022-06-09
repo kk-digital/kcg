@@ -3,7 +3,7 @@
     
 using System;
 
-namespace PRNG {
+namespace KMath.Random {
     class Mt19937 {
         public const int N = 624;
         public const int M = 397;
