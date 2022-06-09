@@ -98,7 +98,7 @@ public class InputManager : MonoBehaviour
                 {
                     vehicleEntity = vehicle;
 
-                    StartCoroutine(vehilcePhysics.Break(false, vehicleEntity.vehiclePhysicsState2D.angularVelocity, contexts));
+                    StartCoroutine(vehilcePhysics.Break(true, vehicleEntity.vehiclePhysicsState2D.angularVelocity, contexts));
                 }
             }
 

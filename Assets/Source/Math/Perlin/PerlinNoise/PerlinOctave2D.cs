@@ -1,7 +1,8 @@
-using PRNG;
+using KMath.Random;
 using System;
 
-namespace PerlinNoise {
+namespace KMath.PerlinNoise
+{
     public class PerlinOctave2D {
         public int octaves;
         public PerlinField2D[] octave_array;
@@ -14,10 +15,10 @@ namespace PerlinNoise {
         private int map_dim_y;
 
         private int runs;
-        private Random rng;
+        private System.Random rng;
 
         private void _init(int _octaves, int _map_dim_x, int _map_dim_y, bool change_seed = true, ulong new_seed = 0) {
-            rng = new Random();
+            rng = new System.Random();
             runs = 0;
             cache = null;
             cache_persistence = 0.0f;
