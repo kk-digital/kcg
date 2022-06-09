@@ -1,12 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
-using TileProperties;
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-namespace PlanetTileMap.Unity
+namespace Planet.Unity
 {
     //Note: TileMap should be mostly controlled by GameManager
 
@@ -27,7 +26,7 @@ namespace PlanetTileMap.Unity
         List<Vector2> uvs = new();
         List<Vector3> verticies = new();
         
-        PlanetTileMap TileMap;
+        public TileMap.Model TileMap;
 
         int SortingOrder = 0;
 
@@ -35,134 +34,142 @@ namespace PlanetTileMap.Unity
         int PlayerSprite2ID;
         const float TileSize = 1.0f;
 
+        Contexts EntitasContext = Contexts.sharedInstance;
+
         readonly Vector2 MapOffset = new(-3.0f, 4.0f);
 
         static bool InitTiles;
+
+
+        ECSInput.ProcessSystem ProcessSystems;
+        Agent.SpawnerSystem SpawnerSystem;
+        Agent.MovableSystem MovableSystem;
+        Agent.DrawSystem DrawSystem;
+        Agent.CollisionSystem CollisionSystem;
 
         public void Start()
         {
             if (!InitTiles)
             {
+                InitializeSystems();
                 CreateDefaultTiles();
-                
+
                 InitTiles = true;
             }
         }   
 
+        void InitializeSystems()
+        {
+            ProcessSystems = new ECSInput.ProcessSystem(EntitasContext);
+            SpawnerSystem = new Agent.SpawnerSystem(EntitasContext);
+            MovableSystem = new Agent.MovableSystem(EntitasContext);
+            DrawSystem = new Agent.DrawSystem(EntitasContext);
+            CollisionSystem = new Agent.CollisionSystem(EntitasContext);
+
+            SpawnerSystem.SpawnPlayer(Material, new Vector2(3.0f, 2.0f));
+        }
+
         public void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                int x = (int)worldPosition.x;
+                int y = (int)worldPosition.y;
+                
+                var chunkIndex = TileMap.Chunks.GetChunkIndex(x, y);
+                var tileIndex = Planet.TileMap.Chunk.GetTileIndex(x, y);
+                
+                Debug.Log($"{x} {y} ChunkIndex: {chunkIndex} TileIndex: {tileIndex}");
+            }
+        
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                int x = (int)worldPosition.x;
+                int y = (int)worldPosition.y;
+                Debug.Log(x + " " + y);
+                TileMap.RemoveTile(x, y, Enums.Tile.MapLayerType.Front);
+                TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
+                
+            }
+
             foreach(var mr in GetComponentsInChildren<MeshRenderer>())
                 if (Application.isPlaying)
                     Destroy(mr.gameObject);
                 else
                     DestroyImmediate(mr.gameObject);
 
-            TileMap.DrawLayer(Layer.Front, Instantiate(Material), transform, 10);
-            TileMap.DrawLayer(Layer.Ore, Instantiate(Material), transform, 11);
+            ProcessSystems.Update();
+            MovableSystem.Update();
+            CollisionSystem.Update(TileMap);
+            TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Front, Instantiate(Material), transform, 10);
+            TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Ore, Instantiate(Material), transform, 11);
+            DrawSystem.Draw(Instantiate(Material), transform, 12);
         }
 
 
         public void CreateDefaultTiles()
         {
-            int MetalSlabsTileSheet = 
-                        GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png");
-            int StoneBulkheads = 
-                        GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tile_wallbase\\Tiles_stone_bulkheads.png");
-            int TilesMoon = 
-                        GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png");
-            int OreTileSheet = 
-            GameState.TileSpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
+            int metalSlabsTileSheet = 
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png");
+            int stoneBulkheads = 
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tile_wallbase\\Tiles_stone_bulkheads.png");
+            int tilesMoon = 
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png");
+            int oreTileSheet = 
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
 
-            // creating the tiles
-            GameState.TileCreationApi.CreateTile(0);
-            GameState.TileCreationApi.SetTileName("slab1");
-            GameState.TileCreationApi.SetTileTexture16(MetalSlabsTileSheet, 0, 0);
-            GameState.TileCreationApi.EndTile();
 
-            GameState.TileCreationApi.CreateTile(1);
-            GameState.TileCreationApi.SetTileName("slab2");
-            GameState.TileCreationApi.SetTileTexture16(MetalSlabsTileSheet, 1, 0);
-            GameState.TileCreationApi.EndTile();
+            GameState.CreationApi.CreateTile(8);
+            GameState.CreationApi.SetTileName("ore_1");
+            GameState.CreationApi.SetTileTexture16(oreTileSheet, 0, 0);
+            GameState.CreationApi.EndTile();
 
-            GameState.TileCreationApi.CreateTile(2);
-            GameState.TileCreationApi.SetTileName("slab3");
-            GameState.TileCreationApi.SetTileTexture16(MetalSlabsTileSheet, 4, 0);
-            GameState.TileCreationApi.EndTile();
-
-            GameState.TileCreationApi.CreateTile(3);
-            GameState.TileCreationApi.SetTileName("slab4");
-            GameState.TileCreationApi.SetTileTexture16(MetalSlabsTileSheet, 5, 0);
-            GameState.TileCreationApi.EndTile();
-
-            GameState.TileCreationApi.CreateTile(4);
-            GameState.TileCreationApi.SetTileName("tile5");
-            GameState.TileCreationApi.SetTileTexture16(StoneBulkheads, 5, 1);
-            GameState.TileCreationApi.EndTile();
-
-            GameState.TileCreationApi.CreateTile(5);
-            GameState.TileCreationApi.SetTileName("tile6");
-            GameState.TileCreationApi.SetTileTexture16(StoneBulkheads, 4, 1);
-            GameState.TileCreationApi.EndTile();
-
-            GameState.TileCreationApi.CreateTile(6);
-            GameState.TileCreationApi.SetTileName("tile7");
-            GameState.TileCreationApi.SetTileTexture16(StoneBulkheads, 7, 1);
-            GameState.TileCreationApi.EndTile();
-
-            GameState.TileCreationApi.CreateTile(7);
-            GameState.TileCreationApi.SetTileName("tile_moon_1");
-            GameState.TileCreationApi.SetTileTexture(TilesMoon, 0, 0);
-            GameState.TileCreationApi.EndTile();
-
-            GameState.TileCreationApi.CreateTile(8);
-            GameState.TileCreationApi.SetTileName("ore_1");
-            GameState.TileCreationApi.SetTileTexture16(OreTileSheet, 0, 0);
-            GameState.TileCreationApi.EndTile();
+            GameState.CreationApi.CreateTile(9);
+            GameState.CreationApi.SetTileName("glass");
+            GameState.CreationApi.SetTileSpriteSheet16(tilesMoon, 11, 10);
+            GameState.CreationApi.EndTile();
 
 
 
             // Generating the map
             Vector2Int mapSize = new Vector2Int(16, 16);
 
-            TileMap = new PlanetTileMap(mapSize);
+            TileMap = new TileMap.Model(mapSize);
 
             for(int j = 0; j < mapSize.y; j++)
             {
                 for(int i = 0; i < mapSize.x; i++)
                 {
-                    PlanetTile tile = PlanetTile.EmptyTile();
-                    tile.FrontTilePropertiesId = 0;
+                    Tile.Model frontTile = Tile.Model.EmptyTile;
+                    Tile.Model oreTile = Tile.Model.EmptyTile;
+
+                    frontTile.Type = 9;
 
 
                     if (i % 10 == 0)
                     {
-                        tile.FrontTilePropertiesId = 7;
-                        tile.OreTilePropertiesId = 8;
-                    }
-                    if (j % 2 == 0)
-                    {
-                        tile.FrontTilePropertiesId = 2;
-                    }
-                    if (j % 3 == 0)
-                    {
-                        tile.FrontTilePropertiesId = 1;
-
+                        oreTile.Type = 8;
                     }
 
                     if ((j > 1 && j < 6) || (j > (8 + i)))
                     {
-                       tile.FrontTilePropertiesId = -1; 
-                       tile.OreTilePropertiesId = -1;
+                       frontTile.Type = -1; 
+                       oreTile.Type = -1;
                     }
 
                     
-                    TileMap.SetTile(i, j, tile);
+                    TileMap.SetTile(i, j, frontTile, Enums.Tile.MapLayerType.Front);
+                    TileMap.SetTile(i, j, oreTile, Enums.Tile.MapLayerType.Ore);
                 }
             }
 
-            TileMap.UpdateTopTilesMap();
-            TileMap.BuildLayerTexture(Layer.Front);
-            TileMap.BuildLayerTexture(Layer.Ore);
+            TileMap.HeightMap.UpdateTopTilesMap(ref TileMap);
+            TileMap.UpdateTileMapPositions(Enums.Tile.MapLayerType.Front);
+            TileMap.UpdateTileMapPositions(Enums.Tile.MapLayerType.Ore);
+            TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
+            TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Ore);
         }
         
         
