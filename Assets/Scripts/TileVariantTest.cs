@@ -5,10 +5,8 @@ namespace Planet.Unity
     class TileVariantTest : MonoBehaviour
     {
         [SerializeField] Material Material;
-
-
-        Contexts EntitasContext = Contexts.sharedInstance;
-        TileMap.Model TileMap;
+        
+        Planet.TileMap TileMap;
 
         static bool Init = false;
         
@@ -54,34 +52,34 @@ namespace Planet.Unity
             int oreTileSheet = 
             GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
             
-            GameState.CreationApi.CreateTile(8);
-            GameState.CreationApi.SetTileName("ore_1");
-            GameState.CreationApi.SetTileTexture16(oreTileSheet, 0, 0);
-            GameState.CreationApi.EndTile();
+            GameState.TileCreationApi.CreateTile(8);
+            GameState.TileCreationApi.SetTileName("ore_1");
+            GameState.TileCreationApi.SetTileTexture16(oreTileSheet, 0, 0);
+            GameState.TileCreationApi.EndTile();
 
-            GameState.CreationApi.CreateTile(9);
-            GameState.CreationApi.SetTileName("glass");
-            GameState.CreationApi.SetTileSpriteSheet16(tilesMoon, 11, 10);
-            GameState.CreationApi.EndTile();
+            GameState.TileCreationApi.CreateTile(9);
+            GameState.TileCreationApi.SetTileName("glass");
+            GameState.TileCreationApi.SetTileSpriteSheet16(tilesMoon, 11, 10);
+            GameState.TileCreationApi.EndTile();
 
-            GameState.CreationApi.CreateTile(10);
-            GameState.CreationApi.SetTileName("moon");
-            GameState.CreationApi.SetTileSpriteSheet16(tilesMoon, 0, 0);
-            GameState.CreationApi.EndTile();
+            GameState.TileCreationApi.CreateTile(10);
+            GameState.TileCreationApi.SetTileName("moon");
+            GameState.TileCreationApi.SetTileSpriteSheet16(tilesMoon, 0, 0);
+            GameState.TileCreationApi.EndTile();
 
 
 
             // Generating the map
             Vector2Int mapSize = new Vector2Int(16, 16);
 
-            TileMap = new TileMap.Model(mapSize);
+            TileMap = new Planet.TileMap(mapSize);
 
             for(int j = 0; j < mapSize.y; j++)
             {
                 for(int i = 0; i < mapSize.x; i++)
                 {
-                    Tile.Model frontTile = Tile.Model.EmptyTile;
-                    Tile.Model oreTile = Tile.Model.EmptyTile;
+                    Tile.Tile frontTile = Tile.Tile.EmptyTile;
+                    Tile.Tile oreTile = Tile.Tile.EmptyTile;
 
                     if (i >= mapSize.x / 2)
                     {

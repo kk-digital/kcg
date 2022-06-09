@@ -11,16 +11,13 @@ namespace AI
         private static PlannerSystem instance;
         public static PlannerSystem Instance => instance ??= new PlannerSystem();
 
-        public Contexts context;
-
         public void Initialize()
-        { 
-            context = Contexts.sharedInstance;
+        {
         }
 
         public void Update() // Todo: This should not be running every frame.
         {
-            var group = context.game.GetGroup(GameMatcher.AIAgentPlanner);
+            var group = Contexts.sharedInstance.game.GetGroup(GameMatcher.AIAgentPlanner);
             foreach (GameEntity entity in group)
             {
                 // Get action.
@@ -40,7 +37,7 @@ namespace AI
         private void MakePlan(GameEntity entity, GoapState GoalState)
         {
             // Get List of all possible Actions.
-            GameEntity[] Actions = context.game.GetGroup(GameMatcher.AIAction).GetEntities();
+            GameEntity[] Actions = Contexts.sharedInstance.game.GetGroup(GameMatcher.AIAction).GetEntities();
 
             GoapAStar goapAStar = new GoapAStar();
             if (!goapAStar.CreateActionPath(GoalState, entity.aIAgentPlanner.CurrentWorldState, Actions, entity.aIAgentPlanner.ActionIDs))
@@ -53,10 +50,10 @@ namespace AI
             if (Goals.Count == 0)
                 return null;
 
-            GameEntity NextGoalEntity = context.game.GetEntityWithAIGoal(Goals[0]); ;
+            GameEntity NextGoalEntity = Contexts.sharedInstance.game.GetEntityWithAIGoal(Goals[0]); ;
             foreach (int GoalID in Goals)
             {
-                GameEntity GoalEntity = context.game.GetEntityWithAIGoal(GoalID);
+                GameEntity GoalEntity = Contexts.sharedInstance.game.GetEntityWithAIGoal(GoalID);
                 if (NextGoalEntity.aIGoal.Priority < GoalEntity.aIGoal.Priority)
                 {
                     NextGoalEntity = GoalEntity;

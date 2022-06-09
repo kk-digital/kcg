@@ -1,13 +1,19 @@
-﻿namespace Tile
+﻿using Physics;
+using UnityEngine;
+
+namespace Tile
 {
     /// <summary> Contains info about tile, include all layers </summary>
-    public struct Model
+    public struct Tile
     {
-        public static readonly Model EmptyTile = new() {Type = -1, SpriteId = -1};
+        public static readonly Tile EmptyTile = new() {Type = -1, SpriteId = -1};
+        public static readonly Vector2Int Size = new Vector2Int(1, 1);
         
         // Contains the TileProperties Ids for every layer
         public int Type;
         public int SpriteId;
+
+        public Box2DBorders BoxBorders;
         //Health
         public byte Durability;
 

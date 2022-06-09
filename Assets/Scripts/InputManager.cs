@@ -23,7 +23,6 @@ public class InputManager : MonoBehaviour
     // Note: This is temporarily
     private Vehicle.ProcessVelocitySystem vehilcePhysics;
     private VehicleTest vehicleTest;
-    private Contexts contexts;
     private GameEntity vehicleEntity;
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Awake.html
@@ -40,9 +39,6 @@ public class InputManager : MonoBehaviour
 
         // Set Vehicle Test Obj
         //vehicleTest = GameObject.Find("VehicleTest").GetComponent<VehicleTest>();
-
-        // Set Contexts obj
-        contexts = Contexts.sharedInstance;
     }
 
     public void Controls()
@@ -92,7 +88,7 @@ public class InputManager : MonoBehaviour
             {
                 // Get Vehicle Entites
                 IGroup<GameEntity> entities =
-                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+                    Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
                 foreach (var vehicle in entities)
                 {
                     vehicleEntity = vehicle;
@@ -104,18 +100,18 @@ public class InputManager : MonoBehaviour
 
                 float velocity = Mathf.Lerp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, -1.0f, vehicleEntity.vehiclePhysicsState2D.angularAcceleration * Time.deltaTime);
 
-                vehilcePhysics.ProcessMovement(new Vector2(velocity, vehicleEntity.vehiclePhysicsState2D.angularVelocity.y), contexts);
+                vehilcePhysics.ProcessMovement(new Vector2(velocity, vehicleEntity.vehiclePhysicsState2D.angularVelocity.y), Contexts.sharedInstance);
             }
             else if(Input.GetKeyUp(KeyCode.A))
             {
                 // Get Vehicle Entites
                 IGroup<GameEntity> entities =
-                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+                    Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
                 foreach (var vehicle in entities)
                 {
                     vehicleEntity = vehicle;
 
-                    StartCoroutine(vehilcePhysics.Break(true, vehicleEntity.vehiclePhysicsState2D.angularVelocity, contexts));
+                    StartCoroutine(vehilcePhysics.Break(true, vehicleEntity.vehiclePhysicsState2D.angularVelocity, Contexts.sharedInstance));
                 }
             }
 
@@ -123,7 +119,7 @@ public class InputManager : MonoBehaviour
             {
                 // Get Vehicle Entites
                 IGroup<GameEntity> entities =
-                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+                    Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
                 foreach (var vehicle in entities)
                 {
                     vehicleEntity = vehicle;
@@ -134,18 +130,18 @@ public class InputManager : MonoBehaviour
 
                 float velocity = Mathf.Lerp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, 1.0f, vehicleEntity.vehiclePhysicsState2D.angularAcceleration * Time.deltaTime);
 
-                vehilcePhysics.ProcessMovement(new Vector2(velocity, vehicleEntity.vehiclePhysicsState2D.angularVelocity.y), contexts);
+                vehilcePhysics.ProcessMovement(new Vector2(velocity, vehicleEntity.vehiclePhysicsState2D.angularVelocity.y), Contexts.sharedInstance);
             }
             else if (Input.GetKeyUp(KeyCode.D))
             {
                 // Get Vehicle Entites
                 IGroup<GameEntity> entities =
-                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+                    Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
                 foreach (var vehicle in entities)
                 {
                     vehicleEntity = vehicle;
 
-                    StartCoroutine(vehilcePhysics.Break(true, vehicleEntity.vehiclePhysicsState2D.angularVelocity, contexts));
+                    StartCoroutine(vehilcePhysics.Break(true, vehicleEntity.vehiclePhysicsState2D.angularVelocity, Contexts.sharedInstance));
                 }
             }
 
@@ -154,26 +150,26 @@ public class InputManager : MonoBehaviour
                 vehicleTest.canUpdateGravity = false;
                 // Get Vehicle Entites
                 IGroup<GameEntity> entities =
-                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+                    Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
                 foreach (var vehicle in entities)
                 {
                     vehicleEntity = vehicle;
                 }
 
                 float velocity = Mathf.Lerp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.y, 1.0f, vehicleEntity.vehiclePhysicsState2D.angularAcceleration * Time.deltaTime);
-                vehilcePhysics.ProcessMovement(new Vector2(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, velocity), contexts);
+                vehilcePhysics.ProcessMovement(new Vector2(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, velocity), Contexts.sharedInstance);
             }
             else if (Input.GetKeyUp(KeyCode.W))
             {
                 vehicleTest.canUpdateGravity = true;
                 // Get Vehicle Entites
                 IGroup<GameEntity> entities =
-                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+                    Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
                 foreach (var vehicle in entities)
                 {
                     vehicleEntity = vehicle;
 
-                    StartCoroutine(vehilcePhysics.Break(false, vehicleEntity.vehiclePhysicsState2D.angularVelocity, contexts));
+                    StartCoroutine(vehilcePhysics.Break(false, vehicleEntity.vehiclePhysicsState2D.angularVelocity, Contexts.sharedInstance));
                 }
             }
 
@@ -182,7 +178,7 @@ public class InputManager : MonoBehaviour
                 vehicleTest.canUpdateGravity = false;
                 // Get Vehicle Entites
                 IGroup<GameEntity> entities =
-                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+                    Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
                 foreach (var vehicle in entities)
                 {
                     vehicleEntity = vehicle;
@@ -190,19 +186,19 @@ public class InputManager : MonoBehaviour
 
                 float velocity = Mathf.Lerp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.y, -1.0f, vehicleEntity.vehiclePhysicsState2D.angularAcceleration * Time.deltaTime);
 
-                vehilcePhysics.ProcessMovement(new Vector2(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, velocity), contexts);
+                vehilcePhysics.ProcessMovement(new Vector2(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, velocity), Contexts.sharedInstance);
             }
             else if (Input.GetKeyUp(KeyCode.S))
             {
                 vehicleTest.canUpdateGravity = true;
                 // Get Vehicle Entites
                 IGroup<GameEntity> entities =
-                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+                    Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
                 foreach (var vehicle in entities)
                 {
                     vehicleEntity = vehicle;
 
-                    StartCoroutine(vehilcePhysics.Break(false, vehicleEntity.vehiclePhysicsState2D.angularVelocity, contexts));
+                    StartCoroutine(vehilcePhysics.Break(false, vehicleEntity.vehiclePhysicsState2D.angularVelocity, Contexts.sharedInstance));
                 }
             }
         }

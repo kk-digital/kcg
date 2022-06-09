@@ -3,30 +3,43 @@
 /// </summary>
 public class GameState
 {
-    public static readonly Contexts EntitasContext;
+    #region Tile
+
     public static readonly Tile.SpriteAtlasManager TileSpriteAtlasManager;
+    public static readonly Tile.CreationApi TileCreationApi;
+
+    #endregion
+    
+    #region Sprites
+
     public static readonly Sprites.AtlasManager SpriteAtlasManager;
-    public static readonly Tile.CreationApi CreationApi;
     public static readonly Sprites.Loader SpriteLoader;
-    public static readonly ImageLoader.FileLoadingManager FileLoadingManager;
-    public static readonly ECSInput.ProcessSystem ProcessSystem;
+
+    #endregion
+
+    #region Agent
+
     public static readonly Agent.SpawnerSystem SpawnerSystem;
     public static readonly Agent.MovableSystem MovableSystem;
     public static readonly Agent.DrawSystem DrawSystem;
-    public static readonly Agent.CollisionSystem CollisionSystem;
+    public static readonly Agent.ProcessCollisionSystem ProcessCollisionSystem;
+
+    #endregion
+
+    public static readonly ImageLoader.FileLoadingManager FileLoadingManager;
+    public static readonly ECSInput.ProcessSystem ProcessSystem;
 
     static GameState()
     {
-        EntitasContext = Contexts.sharedInstance;
         TileSpriteAtlasManager = new Tile.SpriteAtlasManager();
         SpriteAtlasManager = new Sprites.AtlasManager();
-        CreationApi = new Tile.CreationApi();
+        TileCreationApi = new Tile.CreationApi();
         SpriteLoader = new Sprites.Loader();
         FileLoadingManager = new ImageLoader.FileLoadingManager();
-        ProcessSystem = new ECSInput.ProcessSystem(EntitasContext);
-        SpawnerSystem = new Agent.SpawnerSystem(EntitasContext);
-        MovableSystem = new Agent.MovableSystem(EntitasContext);
-        DrawSystem = new Agent.DrawSystem(EntitasContext);
-        CollisionSystem = new Agent.CollisionSystem(EntitasContext);
+        ProcessSystem = new ECSInput.ProcessSystem();
+        SpawnerSystem = new Agent.SpawnerSystem();
+        MovableSystem = new Agent.MovableSystem();
+        DrawSystem = new Agent.DrawSystem();
+        ProcessCollisionSystem = new Agent.ProcessCollisionSystem();
     }
 }

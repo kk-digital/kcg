@@ -5,18 +5,10 @@ namespace Agent
 {
     public class MovableSystem
     {
-        Contexts EntitasContext;
-
-        public MovableSystem(Contexts entitasContext)
-        {
-            EntitasContext = entitasContext;
-        }
-
-
         public void Update()
         {
             float deltaTime = Time.deltaTime;
-            var AgentsWithVelocity = EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentMovable, GameMatcher.AgentPosition2D));
+            var AgentsWithVelocity = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentMovable, GameMatcher.AgentPosition2D));
             foreach (var entity in AgentsWithVelocity)
             {
 

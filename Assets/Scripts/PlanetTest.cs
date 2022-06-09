@@ -25,7 +25,7 @@ namespace Planet.Unity
 
         public void Update()
         {
-            TileMap.Model TileMap = Planet.TileMap;
+            Planet.TileMap TileMap = Planet.TileMap;
 
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
@@ -45,7 +45,7 @@ namespace Planet.Unity
 
             GameState.ProcessSystem.Update();
             GameState.MovableSystem.Update();
-            GameState.CollisionSystem.Update(TileMap);
+            GameState.ProcessCollisionSystem.Update(TileMap);
             
             TileMap.Layers.DrawLayer(MapLayerType.Front, Instantiate(Material), transform, 10);
             TileMap.Layers.DrawLayer(MapLayerType.Ore, Instantiate(Material), transform, 11);
@@ -60,20 +60,20 @@ namespace Planet.Unity
             int OreTileSheet = 
             GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
             
-            GameState.CreationApi.CreateTile(8);
-            GameState.CreationApi.SetTileName("ore_1");
-            GameState.CreationApi.SetTileTexture16(OreTileSheet, 0, 0);
-            GameState.CreationApi.EndTile();
+            GameState.TileCreationApi.CreateTile(8);
+            GameState.TileCreationApi.SetTileName("ore_1");
+            GameState.TileCreationApi.SetTileTexture16(OreTileSheet, 0, 0);
+            GameState.TileCreationApi.EndTile();
 
-            GameState.CreationApi.CreateTile(9);
-            GameState.CreationApi.SetTileName("glass");
-            GameState.CreationApi.SetTileSpriteSheet16(TilesMoon, 11, 10);
-            GameState.CreationApi.EndTile();
+            GameState.TileCreationApi.CreateTile(9);
+            GameState.TileCreationApi.SetTileName("glass");
+            GameState.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 11, 10);
+            GameState.TileCreationApi.EndTile();
 
-            GameState.CreationApi.CreateTile(10);
-            GameState.CreationApi.SetTileName("moon");
-            GameState.CreationApi.SetTileSpriteSheet16(TilesMoon, 0, 0);
-            GameState.CreationApi.EndTile();
+            GameState.TileCreationApi.CreateTile(10);
+            GameState.TileCreationApi.SetTileName("moon");
+            GameState.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 0, 0);
+            GameState.TileCreationApi.EndTile();
 
 
 
@@ -92,7 +92,7 @@ namespace Planet.Unity
 
         void GenerateMap()
         {
-            TileMap.Model TileMap = Planet.TileMap;
+            Planet.TileMap TileMap = Planet.TileMap;
 
            Vector2Int mapSize = TileMap.MapSize;
 
@@ -100,8 +100,8 @@ namespace Planet.Unity
             {
                 for(int i = 0; i < mapSize.x; i++)
                 {
-                    Tile.Model frontTile = Tile.Model.EmptyTile;
-                    Tile.Model oreTile = Tile.Model.EmptyTile;
+                    Tile.Tile frontTile = Tile.Tile.EmptyTile;
+                    Tile.Tile oreTile = Tile.Tile.EmptyTile;
 
                     if (i >= mapSize.x / 2)
                     {

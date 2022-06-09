@@ -9,11 +9,6 @@ namespace Projectile
         //Singleton
         public static readonly DrawSystem Instance;
 
-        public readonly GameContext GameContext;
-
-        // Entitas Context
-        public Contexts _contexts;
-
         // Streaming Asset File Path
         public string _filePath;
 
@@ -51,12 +46,6 @@ namespace Projectile
             Instance = new DrawSystem();
         }
 
-        // Constructor
-        public DrawSystem()
-        {
-            GameContext = Contexts.sharedInstance.game;
-        }
-
         // Destructor
         ~DrawSystem()
         {
@@ -68,7 +57,6 @@ namespace Projectile
             Enums.ProjectileDrawType projectileDrawType)
         {
             // Set local's to references
-            _contexts = contexts;
             _filePath = filePath;
             _width = width;
             _height = height;
@@ -78,7 +66,7 @@ namespace Projectile
             _projectileDrawType = projectileDrawType;
 
             // Create Entity
-            projectileEntity = _contexts.game.CreateEntity();
+            projectileEntity = Contexts.sharedInstance.game.CreateEntity();
 
             // Get Image Sprite ID
             int _spriteID = GameState.SpriteLoader.GetSpriteSheetID(_filePath);
@@ -130,7 +118,7 @@ namespace Projectile
             {
                 // Get Projectile entites
                 IGroup<GameEntity> entities =
-                _contexts.game.GetGroup(GameMatcher.ProjectilePosition2D);
+                    Contexts.sharedInstance.game.GetGroup(GameMatcher.ProjectilePosition2D);
                 foreach (var gameEntity in entities)
                 {
                     // Get Projectile Position Component
@@ -155,7 +143,7 @@ namespace Projectile
         // Get Context Object
         public Contexts GetContexts()
         {
-            return _contexts;
+            return Contexts.sharedInstance;
         }
 
         // Get Width

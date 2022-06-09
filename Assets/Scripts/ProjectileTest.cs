@@ -5,9 +5,7 @@ public class ProjectileTest : MonoBehaviour
     // Projectile Draw System
     Projectile.DrawSystem projectileDrawSystem;
     Projectile.ProcessVelocitySystem processVelocitySystem;
-
-    // Entitas's Contexts
-    Contexts contexts;
+    
 
     // Rendering Material
     [SerializeField]
@@ -16,8 +14,6 @@ public class ProjectileTest : MonoBehaviour
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
     void Start()
     {
-        // Assign Contexts
-        contexts = Contexts.sharedInstance;
 
         // Initialize Projectile Draw System
         projectileDrawSystem = new Projectile.DrawSystem();
@@ -26,7 +22,7 @@ public class ProjectileTest : MonoBehaviour
         processVelocitySystem = new Projectile.ProcessVelocitySystem();
 
         // Loading Image
-        projectileDrawSystem.Initialize(contexts, "Assets\\StreamingAssets\\assets\\luis\\grenades\\Grenades4.png", 16, 16, transform, Material,
+        projectileDrawSystem.Initialize(Contexts.sharedInstance, "Assets\\StreamingAssets\\assets\\luis\\grenades\\Grenades4.png", 16, 16, transform, Material,
             Enums.ProjectileType.Grenade, Enums.ProjectileDrawType.Standard);
     }
 
@@ -37,6 +33,6 @@ public class ProjectileTest : MonoBehaviour
         projectileDrawSystem.Draw();
 
         // Process Physics
-        processVelocitySystem.Process(contexts);
+        processVelocitySystem.Process(Contexts.sharedInstance);
     }
 }

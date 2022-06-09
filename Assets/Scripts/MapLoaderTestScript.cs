@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
+using Physics;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -26,7 +28,7 @@ namespace Planet.Unity
         List<Vector2> uvs = new();
         List<Vector3> verticies = new();
         
-        public TileMap.Model TileMap;
+        public Planet.TileMap TileMap;
 
         int SortingOrder = 0;
 
@@ -34,18 +36,16 @@ namespace Planet.Unity
         int PlayerSprite2ID;
         const float TileSize = 1.0f;
 
-        Contexts EntitasContext = Contexts.sharedInstance;
-
         readonly Vector2 MapOffset = new(-3.0f, 4.0f);
 
         static bool InitTiles;
 
 
-        ECSInput.ProcessSystem ProcessSystems;
-        Agent.SpawnerSystem SpawnerSystem;
-        Agent.MovableSystem MovableSystem;
-        Agent.DrawSystem DrawSystem;
-        Agent.CollisionSystem CollisionSystem;
+        ECSInput.ProcessSystem InputProcessSystems;
+        Agent.SpawnerSystem AgentSpawnerSystem;
+        Agent.MovableSystem AgentMovableSystem;
+        Agent.DrawSystem AgentDrawSystem;
+        Agent.ProcessCollisionSystem AgentProcessCollisionSystem;
 
         public void Start()
         {
@@ -60,13 +60,13 @@ namespace Planet.Unity
 
         void InitializeSystems()
         {
-            ProcessSystems = new ECSInput.ProcessSystem(EntitasContext);
-            SpawnerSystem = new Agent.SpawnerSystem(EntitasContext);
-            MovableSystem = new Agent.MovableSystem(EntitasContext);
-            DrawSystem = new Agent.DrawSystem(EntitasContext);
-            CollisionSystem = new Agent.CollisionSystem(EntitasContext);
+            InputProcessSystems = new ECSInput.ProcessSystem();
+            AgentSpawnerSystem = new Agent.SpawnerSystem();
+            AgentMovableSystem = new Agent.MovableSystem();
+            AgentDrawSystem = new Agent.DrawSystem();
+            AgentProcessCollisionSystem = new Agent.ProcessCollisionSystem();
 
-            SpawnerSystem.SpawnPlayer(Material, new Vector2(3.0f, 2.0f));
+            AgentSpawnerSystem.SpawnPlayer(Material, new Vector2(3.0f, 2.0f));
         }
 
         public void Update()
@@ -78,7 +78,7 @@ namespace Planet.Unity
                 int y = (int)worldPosition.y;
                 
                 var chunkIndex = TileMap.Chunks.GetChunkIndex(x, y);
-                var tileIndex = Planet.TileMap.Chunk.GetTileIndex(x, y);
+                var tileIndex = Planet.Chunk.GetTileIndex(x, y);
                 
                 Debug.Log($"{x} {y} ChunkIndex: {chunkIndex} TileIndex: {tileIndex}");
             }
@@ -100,12 +100,12 @@ namespace Planet.Unity
                 else
                     DestroyImmediate(mr.gameObject);
 
-            ProcessSystems.Update();
-            MovableSystem.Update();
-            CollisionSystem.Update(TileMap);
+            InputProcessSystems.Update();
+            AgentMovableSystem.Update();
+            AgentProcessCollisionSystem.Update(TileMap);
             TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Front, Instantiate(Material), transform, 10);
             TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Ore, Instantiate(Material), transform, 11);
-            DrawSystem.Draw(Instantiate(Material), transform, 12);
+            AgentDrawSystem.Draw(Instantiate(Material), transform, 12);
         }
 
 
@@ -121,29 +121,29 @@ namespace Planet.Unity
             GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
 
 
-            GameState.CreationApi.CreateTile(8);
-            GameState.CreationApi.SetTileName("ore_1");
-            GameState.CreationApi.SetTileTexture16(oreTileSheet, 0, 0);
-            GameState.CreationApi.EndTile();
+            GameState.TileCreationApi.CreateTile(8);
+            GameState.TileCreationApi.SetTileName("ore_1");
+            GameState.TileCreationApi.SetTileTexture16(oreTileSheet, 0, 0);
+            GameState.TileCreationApi.EndTile();
 
-            GameState.CreationApi.CreateTile(9);
-            GameState.CreationApi.SetTileName("glass");
-            GameState.CreationApi.SetTileSpriteSheet16(tilesMoon, 11, 10);
-            GameState.CreationApi.EndTile();
+            GameState.TileCreationApi.CreateTile(9);
+            GameState.TileCreationApi.SetTileName("glass");
+            GameState.TileCreationApi.SetTileSpriteSheet16(tilesMoon, 11, 10);
+            GameState.TileCreationApi.EndTile();
 
 
 
             // Generating the map
             Vector2Int mapSize = new Vector2Int(16, 16);
 
-            TileMap = new TileMap.Model(mapSize);
+            TileMap = new Planet.TileMap(mapSize);
 
             for(int j = 0; j < mapSize.y; j++)
             {
                 for(int i = 0; i < mapSize.x; i++)
                 {
-                    Tile.Model frontTile = Tile.Model.EmptyTile;
-                    Tile.Model oreTile = Tile.Model.EmptyTile;
+                    Tile.Tile frontTile = Tile.Tile.EmptyTile;
+                    Tile.Tile oreTile = Tile.Tile.EmptyTile;
 
                     frontTile.Type = 9;
 
@@ -172,58 +172,25 @@ namespace Planet.Unity
             TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Ore);
         }
         
-        
-
-        public struct R
+#if UNITY_EDITOR
+        public void OnDrawGizmos()
         {
-            public float X;
-            public float Y;
-            public float W;
-            public float H;
+            if (!Application.isPlaying) return;
+            
+            var group = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsBox2DCollider));
 
-            public R(float x, float y, float w, float h)
+            Gizmos.color = Color.green;
+            
+            foreach (var entity in group)
             {
-                X = x;
-                Y = y;
-                W = w;
-                H = h;
+                var pos = entity.agentPosition2D;
+                var boxCollider = entity.physicsBox2DCollider;
+                var boxBorders = boxCollider.CreateEntityBoxBorders(pos.Value);
+                
+                Gizmos.DrawWireCube(boxBorders.Center, new Vector3(boxCollider.Size.x, boxCollider.Size.y, 0.0f));
             }
         }
-        private static R CalcVisibleRect()
-        {
-            var cam = Camera.main;
-            var pos = cam.transform.position;
-            var height = 2f * cam.orthographicSize;
-            var width = height * cam.aspect;
-            var visibleRect = new R(pos.x - width / 2, pos.y - height / 2, width, height);
-            return visibleRect;
-        }
-
-        private Texture2D CreateTextureFromRGBA(byte[] rgba, int w, int h)
-        {
-
-            var res = new Texture2D(w, h, TextureFormat.RGBA32, false)
-            {
-                filterMode = FilterMode.Point
-            };
-
-            var pixels = new Color32[w * h];
-            for (int x = 0 ; x < w; x++)
-            for (int y = 0 ; y < h; y++)
-            { 
-                int index = (x + y * w) * 4;
-                var r = rgba[index];
-                var g = rgba[index + 1];
-                var b = rgba[index + 2];
-                var a = rgba[index + 3];
-
-                pixels[x + y * w] = new Color32((byte)r, (byte)g, (byte)b, (byte)a);
-            }
-            res.SetPixels32(pixels);
-            res.Apply();
-
-            return res;
-        }
+#endif
 
     }
 }

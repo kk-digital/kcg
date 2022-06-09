@@ -9,11 +9,6 @@ namespace Vehicle
         //Singleton
         public static readonly DrawSystem Instance;
 
-        public readonly GameContext GameContext;
-
-        // Entitas Context
-        public Contexts _contexts;
-
         // Streaming Asset File Path
         public string _filePath;
 
@@ -48,10 +43,6 @@ namespace Vehicle
         }
 
         // Constructor, variables setup
-        public DrawSystem()
-        {
-            GameContext = Contexts.sharedInstance.game;
-        }
 
         // Destructor
         ~DrawSystem()
@@ -63,7 +54,6 @@ namespace Vehicle
         public void Initialize(Contexts contexts, string filePath, int width, int height, Transform transform, Material mat)
         {
             // Set local's to references
-            _contexts = contexts;
             _filePath = filePath;
             _width = width;
             _height = height;
@@ -71,7 +61,7 @@ namespace Vehicle
             Material = mat;
 
             // Create Entity
-            vehicleDraw = _contexts.game.CreateEntity();
+            vehicleDraw = Contexts.sharedInstance.game.CreateEntity();
 
             // Get Image Sprite ID
             int _spriteID = GameState.SpriteLoader.GetSpriteSheetID(_filePath);
@@ -122,7 +112,7 @@ namespace Vehicle
             {
                 // Add vehilce enitites
                 IGroup<GameEntity> entities =
-                _contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+                    Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
                 foreach (var physicsState in entities)
                 {
                     // Set position from entity to a local variable
@@ -155,13 +145,7 @@ namespace Vehicle
                 // Update Collider Component
             }
         }
-
-        // Get Contexts Object
-        public Contexts GetContexts()
-        {
-            return _contexts;
-        }
-
+        
         // Get Width
         public int GetWidth()
         {

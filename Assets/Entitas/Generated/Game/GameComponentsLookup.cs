@@ -19,22 +19,22 @@ public static class GameComponentsLookup {
     public const int AIAnimationAction = 8;
     public const int AIGoal = 9;
     public const int AIMoveToAction = 10;
-    public const int ComponentsBox2DCollider = 11;
-    public const int ECSInput = 12;
-    public const int ECSInputXY = 13;
-    public const int Inventory = 14;
-    public const int InventoryID = 15;
-    public const int InventorySize = 16;
-    public const int InventorySlots = 17;
-    public const int ItemAttachedInventory = 18;
-    public const int Item = 19;
-    public const int ItemMove = 20;
-    public const int ItemPosition2D = 21;
-    public const int ItemStack = 22;
-    public const int ParticleEmitter2dPosition = 23;
-    public const int ParticleEmitterState = 24;
-    public const int ParticlePosition2D = 25;
-    public const int ParticleState = 26;
+    public const int ECSInput = 11;
+    public const int ECSInputXY = 12;
+    public const int Inventory = 13;
+    public const int InventoryID = 14;
+    public const int InventorySize = 15;
+    public const int InventorySlots = 16;
+    public const int ItemAttachedInventory = 17;
+    public const int Item = 18;
+    public const int ItemMove = 19;
+    public const int ItemPosition2D = 20;
+    public const int ItemStack = 21;
+    public const int ParticleEmitter2dPosition = 22;
+    public const int ParticleEmitterState = 23;
+    public const int ParticlePosition2D = 24;
+    public const int ParticleState = 25;
+    public const int PhysicsBox2DCollider = 26;
     public const int ProjectileID = 27;
     public const int ProjectilePosition2D = 28;
     public const int ProjectileSprite2D = 29;
@@ -58,7 +58,6 @@ public static class GameComponentsLookup {
         "AIAnimationAction",
         "AIGoal",
         "AIMoveToAction",
-        "ComponentsBox2DCollider",
         "ECSInput",
         "ECSInputXY",
         "Inventory",
@@ -74,6 +73,7 @@ public static class GameComponentsLookup {
         "ParticleEmitterState",
         "ParticlePosition2D",
         "ParticleState",
+        "PhysicsBox2DCollider",
         "ProjectileID",
         "ProjectilePosition2D",
         "ProjectileSprite2D",
@@ -96,7 +96,6 @@ public static class GameComponentsLookup {
         typeof(AI.AnimationActionComponent),
         typeof(AI.GoalComponent),
         typeof(AI.MoveToActionComponent),
-        typeof(Components.Box2DCollider),
         typeof(ECSInput.Component),
         typeof(ECSInput.XYComponent),
         typeof(Inventory.Component),
@@ -112,6 +111,7 @@ public static class GameComponentsLookup {
         typeof(Particle.EmitterStateComponent),
         typeof(Particle.Position2DComponent),
         typeof(Particle.StateComponent),
+        typeof(Physics.Box2DColliderComponent),
         typeof(Projectile.IDComponent),
         typeof(Projectile.Position2DComponent),
         typeof(Projectile.Sprite2DComponent),

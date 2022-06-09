@@ -1,23 +1,17 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Entitas;
+using Physics;
 
 namespace Agent
 {
     public class SpawnerSystem
     {
-        public Contexts EntitasContext;
-
         private static int playerID;
-
-        public SpawnerSystem(Contexts entitasContext)
-        {
-            EntitasContext = entitasContext;
-        }
 
         public Entity SpawnPlayer(Material material, Vector2 position)
         {
-            var entity = EntitasContext.game.CreateEntity();
+            var entity = Contexts.sharedInstance.game.CreateEntity();
 
             playerID++;
             
@@ -36,11 +30,9 @@ namespace Agent
             
             entity.AddAgentID(playerID);
 
-            Vector2 box2dCollider = new Vector2(1.0f, 1.5f);
-
             entity.AddAgentSprite2D(texture, spriteSize);
             entity.AddAgentPosition2D(position, newPreviousValue: default);
-            entity.AddComponentsBox2DCollider(box2dCollider);
+            entity.AddPhysicsBox2DCollider(spriteSize);
             entity.AddAgentMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
 
             return entity;
@@ -48,7 +40,7 @@ namespace Agent
 
         public Entity SpawnAgent(Material material, Vector2 position)
         {
-            var entity = EntitasContext.game.CreateEntity();
+            var entity = Contexts.sharedInstance.game.CreateEntity();
 
             playerID++;
             
