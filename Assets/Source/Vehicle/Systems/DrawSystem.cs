@@ -100,7 +100,7 @@ namespace Vehicle
 
             // Add Vehicle Physics State 2D Component
             vehicleDraw.AddVehiclePhysicsState2D(Vector2.zero, Vector2.zero, Vector2.one, Vector2.one,
-                Vector2.zero, 1.0f, 1.0f, 0.0f, Vector2.zero);
+                Vector2.zero, 1.0f, 1.0f, 1.5f, Vector2.zero);
 
             // Physics Init
             //boxColliderComponent = new BoxColliderComponent(new Vector2(0.5f, 0.5f));
