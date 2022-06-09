@@ -29,7 +29,7 @@ public class VehicleTest : MonoBehaviour
         // Loading Image
         vehicleDrawSystem.Initialize(contexts, "Assets\\StreamingAssets\\assets\\luis\\vehicles\\Jet_chassis.png", 144, 96, transform, Material);
     }
-
+    
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
     private void Update()
     {

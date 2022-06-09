@@ -111,11 +111,13 @@ public class AsmdefDebug
             var time = DateTime.UtcNow - date;
             var compilationTimes = EditorPrefs.GetString(AssemblyCompilationEventsEditorPref);
             var totalTimeSeconds = totalCompilationTimeSeconds + time.TotalSeconds;
-            var timeBetweenRunningCompilation = Mathf.Abs(PlayerPrefs.GetFloat("editor_running_time") - (float)totalTimeSeconds);
+            float timeBetweenRunningCompilation = Mathf.Abs(PlayerPrefs.GetFloat("editor_running_time") - (float)totalTimeSeconds);
+            TimeSpan t = TimeSpan.FromSeconds(timeBetweenRunningCompilation);
             if (!string.IsNullOrEmpty(compilationTimes))
             {
                 Debug.Log($"Editor Running Time: {PlayerPrefs.GetFloat("editor_running_time"):F2} seconds\n");
-                Debug.Log($"Time Between Running and Compilation Time: { timeBetweenRunningCompilation:F2} seconds\n");
+                string EditorRuntime = String.Format("Editor Running Time: {0:D2} h : {1:D2} m : {2:D2} s : {3:D3} ms", t.Hours, t.Minutes, t.Seconds, t.Milliseconds);
+                Debug.Log(EditorRuntime);
                 Debug.Log($"Compilation Report: {totalTimeSeconds:F2} seconds\n" + compilationTimes + "Assembly Reload Time: " + time.TotalSeconds + "s\n");
             }
         }
