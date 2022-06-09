@@ -9,7 +9,7 @@ namespace Physics
             if (velocity.x >= 0.0f) return false;
             
             int x = borders.Left;
-            for(int y = borders.Down; y < borders.Up; y++)
+            for(int y = borders.Down; y <= borders.Up; y++)
             {
                 var edgePosition = new Vector2(x, y);
                 if (tileMap.BoxBorders.Intersects(edgePosition))
@@ -29,7 +29,7 @@ namespace Physics
             if (velocity.x <= 0.0f) return false;
             
             int x = borders.Right;
-            for(int y = borders.Down; y < borders.Up; y++)
+            for(int y = borders.Down; y <= borders.Up; y++)
             {
                 var edgePosition = new Vector2(x, y);
                 if (tileMap.BoxBorders.Intersects(edgePosition))
