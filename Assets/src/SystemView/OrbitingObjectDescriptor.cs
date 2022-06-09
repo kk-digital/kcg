@@ -1,4 +1,5 @@
 ﻿using System;
+// using UnityEngine; // For DebugOut
 
 namespace SystemView
 {
@@ -102,14 +103,14 @@ namespace SystemView
             Self.VelY                      = Descriptor.Self.VelY;
             HeliocentricDistance           = Descriptor.HeliocentricDistance;
 
-            StandardGravitationalParameter = GravitationalConstant * (Self.Mass + CentralBody.Mass);
+            StandardGravitationalParameter = GravitationalConstant * CentralBody.Mass;
         }
 
         public void Compute()
         {
-            // μ = G(m1+m2)
+            // μ = GM
 
-            StandardGravitationalParameter = GravitationalConstant * (Self.Mass + CentralBody.Mass);
+            StandardGravitationalParameter = GravitationalConstant * CentralBody.Mass;
 
             //        μ
             // n = √ --
@@ -455,48 +456,42 @@ namespace SystemView
             Self.VelY            = Vel[1];
         }
 
-        /*
-        public void DebugOut()
+        /*public void DebugOut()
         {
             Debug.Log("Orbiting object debug log: ");
             Debug.Log("a: " + SemiMajorAxis + " b: " + SemiMinorAxis + " ω: " + Rotation + " P: " + OrbitalPeriod + " μ: " + StandardGravitationalParameter + " ε: " + Eccentricity + " D: " + EccentricDistance);
             Debug.Log("n: " + MeanMotion + " M: " + MeanAnomaly + " E: " + EccentricAnomaly + " ν: " + TrueAnomaly);
             Debug.Log("x: " + Self.PosX + " y: " + Self.PosX + " vx: " + Self.VelX + " vy: " + Self.VelY);
-        }
-        */
+        }*/
 
         public void ChangeFrameOfReference(SystemViewBody NewFrameOfReference)
         {
-            // Unrotated positions
             float PosX = Self.PosX - CentralBody.PosX;
             float PosY = Self.PosY - CentralBody.PosY;
 
-            float rotsin = (float)Math.Sin(Rotation);
-            float rotcos = (float)Math.Cos(Rotation);
-
-            (PosX, PosY) = ((PosX + rotsin * PosY) / rotcos,
-                            (PosY - rotsin * PosX) / rotcos);
+            float VelX = Self.VelX - CentralBody.VelX;
+            float VelY = Self.VelY - CentralBody.VelY;
 
             CentralBody = NewFrameOfReference;
 
-            // μ = G(m1+m2)
+            // μ = GM
 
-            StandardGravitationalParameter = GravitationalConstant * (Self.Mass + CentralBody.Mass);
+            StandardGravitationalParameter = GravitationalConstant * CentralBody.Mass;
 
             // h = r x v   =>   h = x * v  - y * v
             //                           y        x
 
-            float AngularMomentum = Self.PosX * Self.VelY - Self.PosY * Self.VelX;
+            float AngularMomentum = PosX * VelY - PosY * VelX;
 
-            //                     v  * h        v  * h
-            //     v x h    r       y        x    x        y
-            // e = ----- - --- = ( ------ - ---, ------ - --- )
-            //       μ     |r|        μ     |r|     μ     |r|
+            //                     v  * h          v  * h
+            //     v x h    r       y        x      x        y
+            // e = ----- - --- = ( ------ - ---, - ------ - --- )
+            //       μ     |r|        μ     |r|       μ     |r|
 
-            float PosMagnitude = (float)Math.Sqrt(Self.PosX * Self.PosX + Self.PosY * Self.PosY);
+            float PosMagnitude = (float)Math.Sqrt(PosX * PosX + PosY * PosY);
 
-            EccentricityVector[0] = (Self.VelY * AngularMomentum / StandardGravitationalParameter) - Self.PosX / PosMagnitude;
-            EccentricityVector[1] = (Self.VelX * AngularMomentum / StandardGravitationalParameter) - Self.PosY / PosMagnitude;
+            EccentricityVector[0] =  (VelY * AngularMomentum / StandardGravitationalParameter) - PosX / PosMagnitude;
+            EccentricityVector[1] = -(VelX * AngularMomentum / StandardGravitationalParameter) - PosY / PosMagnitude;
 
             // ε = |e|
 
@@ -508,9 +503,9 @@ namespace SystemView
 
             SemiMajorAxis = AngularMomentum * AngularMomentum / (StandardGravitationalParameter * (1.0f - Eccentricity * Eccentricity));
 
-            //               b²
-            // ε = √ (1.0f - --)   =>   b = √ (a² * (1 - ε²))
-            //               a²
+            //            b²
+            // ε = √ (1 - -)   =>    b = √ ((1 - ε²) * a²)
+            //            a²
 
             SemiMinorAxis = (float)Math.Sqrt(SemiMajorAxis * SemiMajorAxis * (1.0f - Eccentricity * Eccentricity));
 
@@ -521,29 +516,6 @@ namespace SystemView
             //            x
 
             Rotation = (float)Math.Atan(EccentricityVector[1] / EccentricityVector[0]);
-
-            //                                      r            r
-            // →          cos(ν)                     x            y
-            // r = r  * ( sin(ν) )   =>   ν = acos( -- ) = asin( -- )
-            //      c       0                       r            r
-            //                                       c            c
-
-            float dx = Self.PosX - CentralBody.PosX;
-            float dy = Self.PosY - CentralBody.PosY;
-
-            float Radius = (float)Math.Sqrt(dx * dx + dy * dy);
-
-            TrueAnomaly = (float)Math.Acos(PosX / Radius);
-
-            //          x                  x
-            // cos(E) = -   =>   E = acos( - )
-            //          a                  a
-
-            EccentricAnomaly = (float)Math.Acos(Self.PosX / SemiMajorAxis);
-
-            // M = E - ε sin(E)
-
-            MeanAnomaly = EccentricAnomaly - Eccentricity * (float)Math.Sin(EccentricAnomaly);
 
             //        μ
             // n = √ --
@@ -556,6 +528,37 @@ namespace SystemView
             //      n
 
             OrbitalPeriod = 2.0f * 3.1415926f / MeanMotion;
+
+            Periapsis = GetDistanceFromCenterAt(0.0f);
+            Apoapsis = GetDistanceFromCenterAt(3.1415926f);
+
+            EccentricDistance = SemiMajorAxis - Periapsis;
+
+            // -- this is wrong -- //
+
+            //                                      r            r
+            // →          cos(ν)                     x            y
+            // r = r  * ( sin(ν) )   =>   ν = acos( -- ) = asin( -- )
+            //      c       0                       r            r
+            //                                       c            c
+
+            float Radius = (float)Math.Sqrt(PosX * PosX + PosY * PosY);
+
+            TrueAnomaly = (float)Math.Acos(PosX / Radius);
+
+            //          x                  x
+            // cos(E) = -   =>   E = acos( - )
+            //          a                  a
+
+            EccentricAnomaly = (float)Math.Acos(PosX / SemiMajorAxis);
+
+            // M = E - ε sin(E)
+
+            MeanAnomaly = EccentricAnomaly - Eccentricity * (float)Math.Sin(EccentricAnomaly);
+
+            if (EccentricityVector[0] < 0.0f) Rotation += 3.1415926f;
+
+            // DebugOut();
         }
     }
 }
