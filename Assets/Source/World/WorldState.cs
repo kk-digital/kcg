@@ -7,6 +7,7 @@ namespace World
 {
     public struct WorldState
     {
-        SystemPlanet[] systemPlanets;
+        int planetId;
+        // PlanetList planets;
     }
 }
