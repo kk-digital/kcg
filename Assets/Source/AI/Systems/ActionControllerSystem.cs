@@ -11,13 +11,6 @@ namespace AI
         private static PlannerSystem instance;
         public static PlannerSystem Instance => instance ??= new PlannerSystem();
 
-        public Contexts context;
-
-        public void Initialize()
-        {
-            context = Contexts.sharedInstance;
-        }
-
         public void EmmitActions()
         { 
         
@@ -25,7 +18,7 @@ namespace AI
 
         public void Update()
         {
-            var group = context.game.GetGroup(GameMatcher.AIAgentPlanner);
+            var group = Contexts.sharedInstance.game.GetGroup(GameMatcher.AIAgentPlanner);
 
             foreach (GameEntity entity in group)
             {
@@ -46,7 +39,7 @@ namespace AI
             {
                 ActionInfo actionInfo = ActorEntity.aIAgentPlanner.ActiveActionIDs[i];
 
-                GameEntity ActionEntity = context.game.GetEntityWithAIAction(actionInfo.ActionID);
+                GameEntity ActionEntity = Contexts.sharedInstance.game.GetEntityWithAIAction(actionInfo.ActionID);
 
                 DateTime CurrentTime = DateTime.Now;
 

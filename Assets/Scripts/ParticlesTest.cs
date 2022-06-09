@@ -29,8 +29,7 @@ namespace Planet.Unity
         Texture2D OreSprite;
 
         Texture2D VentSprite;
-
-        Contexts EntitasContext = Contexts.sharedInstance;
+        
         Particle.UpdateSystem ParticleUpdateSystem;
         Particle.EmitterUpdateSystem ParticleEmitterUpdateSystem;
 
@@ -61,8 +60,8 @@ namespace Planet.Unity
         public void Initialize()
         {
             
-            ParticleUpdateSystem = new Particle.UpdateSystem(EntitasContext);
-            ParticleEmitterUpdateSystem = new Particle.EmitterUpdateSystem(EntitasContext);
+            ParticleUpdateSystem = new Particle.UpdateSystem();
+            ParticleEmitterUpdateSystem = new Particle.EmitterUpdateSystem();
 
             // we load the sprite sheets here
             int pipeTileSheet = 
@@ -189,7 +188,7 @@ namespace Planet.Unity
             float animationSpeed, float duration, bool loop, int particleCount, 
             float timeBetweenEmissions, GameObject prefab)
         {
-            var e = EntitasContext.game.CreateEntity();
+            var e = Contexts.sharedInstance.game.CreateEntity();
             var gameObject = UnityEngine.Object.Instantiate(emitterPrefab);
             gameObject.transform.position = new Vector3(position.x, position.y, 0.0f);
                 

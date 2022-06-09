@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Planet.TileMap
+namespace Planet
 {
     public struct HeightMap
     {
@@ -13,7 +13,7 @@ namespace Planet.TileMap
             Data = new int[mapSize.x];
         }
         
-        public void UpdateTopTilesMap(ref Model tileMap)
+        public void UpdateTopTilesMap(ref TileMap tileMap)
         {
             for(int i = 0; i < MapSize.x; i++)
             {

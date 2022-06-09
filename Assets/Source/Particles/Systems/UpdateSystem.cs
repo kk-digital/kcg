@@ -7,18 +7,12 @@ namespace Particle
      public class UpdateSystem
     {
         List<GameEntity> ToDestroy = new List<GameEntity>();
-        Contexts EntitasContext;
-        public UpdateSystem(Contexts entitasContext)
-        {
-            EntitasContext = entitasContext;
-        }
-
         public void Execute()
         {
             ToDestroy.Clear();
 
             float deltaTime = Time.deltaTime;
-            IGroup<GameEntity> entities = EntitasContext.game.GetGroup(GameMatcher.ParticleState);
+            IGroup<GameEntity> entities = Contexts.sharedInstance.game.GetGroup(GameMatcher.ParticleState);
             foreach (var gameEntity in entities)
             {
                 var state = gameEntity.particleState;

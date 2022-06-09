@@ -5,21 +5,13 @@ namespace Agent
 {
     public class DrawSystem
     {
-
-        Contexts EntitasContext;
-        
         List<int> triangles = new();
         List<Vector2> uvs = new();
         List<Vector3> verticies = new();
-
-        public DrawSystem(Contexts entitasContext)
-        {
-            EntitasContext = entitasContext;
-        }
-
+        
         public void Draw(Material material, Transform transform, int drawOrder)
         {
-            var AgentsWithSprite = EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentSprite2D));
+            var AgentsWithSprite = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentSprite2D));
             foreach (var entity in AgentsWithSprite)
             {
                 var sprite = new Sprites.Model

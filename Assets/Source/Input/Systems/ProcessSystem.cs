@@ -4,16 +4,9 @@ namespace ECSInput
 {
     public class ProcessSystem
     {
-        Contexts EntitasContext;
-        
-        public ProcessSystem(Contexts entitasContext)
-        {
-            EntitasContext = entitasContext;
-        }
-
         public void Update()
         {
-            var AgentsWithXY = EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.ECSInput, GameMatcher.ECSInputXY));
+            var AgentsWithXY = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.ECSInput, GameMatcher.ECSInputXY));
 
             bool jump = Input.GetKeyDown(KeyCode.UpArrow);
             float x = 0.0f;

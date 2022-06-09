@@ -1,14 +1,14 @@
 using System.Linq;
 using UnityEngine;
 
-namespace Planet.TileMap
+namespace Planet
 {
     public struct Chunk
     {
         // readonly means const(in runtime) after initialization
         public static readonly Vector2Int Size = new(16, 16);
         public Enums.Tile.MapChunkType Type;
-        public Tile.Model[][] Tiles;
+        public Tile.Tile[][] Tiles;
         
         public int Seq;
 
@@ -16,11 +16,11 @@ namespace Planet.TileMap
         {
             Seq = 0;
             Type = Enums.Tile.MapChunkType.Explored;
-            Tiles = new Tile.Model[Layers.Count][];
+            Tiles = new Tile.Tile[Layers.Count][];
 
             for (int i = 0; i < Layers.Count; i++)
             {
-                Tiles[i] = Enumerable.Repeat(Tile.Model.EmptyTile, Size.x * Size.y).ToArray();
+                Tiles[i] = Enumerable.Repeat(Tile.Tile.EmptyTile, Size.x * Size.y).ToArray();
             }
         }
         

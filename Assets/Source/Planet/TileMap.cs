@@ -1,23 +1,24 @@
 ﻿using System;
+using Physics;
 using UnityEngine;
 
-namespace Planet.TileMap
+namespace Planet
 {
-    public class Model
+    public class TileMap
     {
-        // public static const PlanetTile AirTile = new PlanetTile(); - PlanetTile cannot be const in c#?
-        public static readonly Tile.Model AirTile = new();
-        
         public Vector2Int MapSize;
+        public Box2DBorders BoxBorders;
         public ChunkList Chunks;
         public Layers Layers;
         public HeightMap HeightMap;
 
-        public Model(Vector2Int mapSize)
+        public TileMap(Vector2Int mapSize)
         {
             MapSize = mapSize;
 
             Chunks = new ChunkList(mapSize);
+
+            BoxBorders = Vector2.zero.CreateBoxBorders(mapSize);
 
             HeightMap = new HeightMap(MapSize);
             Layers = new Layers
@@ -36,7 +37,7 @@ namespace Planet.TileMap
 
     
         
-        public ref Tile.Model GetTileRef(int x, int y, Enums.Tile.MapLayerType planetLayer)
+        public ref Tile.Tile GetTileRef(int x, int y, Enums.Tile.MapLayerType planetLayer)
         {
             ref var chunk = ref Chunks.GetChunkRef(x, y);
             if (chunk.Type == Enums.Tile.MapChunkType.Error)
@@ -47,19 +48,20 @@ namespace Planet.TileMap
             var tileIndex = Chunk.GetTileIndex(x, y);
             return ref chunk.Tiles[(int)planetLayer][tileIndex];
         }
-        public void SetTile(int x, int y, Tile.Model tile, Enums.Tile.MapLayerType planetLayer)
+        public void SetTile(int x, int y, Tile.Tile tile, Enums.Tile.MapLayerType planetLayer)
         {
             var chunk = Chunks.GetChunkRef(x, y);
             if (chunk.Type == Enums.Tile.MapChunkType.Error) return;
             
             chunk.Seq++; // Updating tile, increment seq
             var tileIndex = Chunk.GetTileIndex(x, y);
+            tile.BoxBorders = new Vector2(x, y).CreateBoxBorders(Tile.Tile.Size);
             chunk.Tiles[(int)planetLayer][tileIndex] = tile;
             chunk.Type = Enums.Tile.MapChunkType.Explored;
         }
         public void RemoveTile(int x, int y, Enums.Tile.MapLayerType planetLayer)
         {
-            ref Tile.Model tile = ref GetTileRef(x, y, planetLayer);
+            ref Tile.Tile tile = ref GetTileRef(x, y, planetLayer);
 
             tile.Type = -1;
 
@@ -87,12 +89,11 @@ namespace Planet.TileMap
             //           1 is (1,0)
             int[] tilePositionToTileSet = {15, 12, 14, 13, 3, 0, 2, 1, 11, 8, 10, 9, 7, 4, 6, 5};
             
-            ref Tile.Model tile = ref GetTileRef(x, y, planetLayer);
+            ref Tile.Tile tile = ref GetTileRef(x, y, planetLayer);
              
             if (tile.Type >= 0)
             {
-                Tile.Type properties = 
-                                GameState.CreationApi.GetTileProperties(tile.Type);
+                Tile.Type properties = GameState.TileCreationApi.GetTileProperties(tile.Type);
                 if (properties.AutoMapping)
                 {
                     // we have 4 neighbors per tile
@@ -107,25 +108,25 @@ namespace Planet.TileMap
 
                     if (x + 1 < MapSize.x)
                     {
-                        ref Tile.Model neighborTile = ref GetTileRef(x + 1, y, planetLayer);
+                        ref Tile.Tile neighborTile = ref GetTileRef(x + 1, y, planetLayer);
                         neighbors[(int)Enums.Tile.Neighbor.Right] = neighborTile.Type;
                     }
 
                     if (x - 1 >= 0)
                     {
-                        ref Tile.Model neighborTile = ref GetTileRef(x - 1, y, planetLayer);
+                        ref Tile.Tile neighborTile = ref GetTileRef(x - 1, y, planetLayer);
                         neighbors[(int)Enums.Tile.Neighbor.Left] = neighborTile.Type;
                     }
 
                     if (y + 1 < MapSize.y)
                     {
-                        ref Tile.Model neighborTile = ref GetTileRef(x, y + 1, planetLayer);
+                        ref Tile.Tile neighborTile = ref GetTileRef(x, y + 1, planetLayer);
                         neighbors[(int)Enums.Tile.Neighbor.Up] = neighborTile.Type;
                     }
 
                     if (y - 1 >= 0)
                     {
-                        ref Tile.Model neighborTile = ref GetTileRef(x, y - 1, planetLayer);
+                        ref Tile.Tile neighborTile = ref GetTileRef(x, y - 1, planetLayer);
                         neighbors[(int)Enums.Tile.Neighbor.Down] = neighborTile.Type;
                     }
 

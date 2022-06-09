@@ -22,8 +22,6 @@ public class AIGridWorldTest : MonoBehaviour
 
     static bool Init = false;
 
-    Contexts context;
-    
     GameEntity agent;
 
     // Systems.
@@ -36,7 +34,6 @@ public class AIGridWorldTest : MonoBehaviour
 
     public void Start()
     {
-        context = Contexts.sharedInstance;
         planner = new PlannerSystem();
         ActionController = new ActionControllerSystem();
 
@@ -45,9 +42,6 @@ public class AIGridWorldTest : MonoBehaviour
             Initialize();
             Init = true;
         }
-
-        planner.Initialize();
-        ActionController.Initialize();
     }
 
     private bool IsValidPosition(Vector2Int pos)
@@ -118,13 +112,13 @@ public class AIGridWorldTest : MonoBehaviour
         GoapState GoalState = new GoapState(new Dictionary<string, object>());
         GoalState.states.Add("pos", GoalPos);
         int GoalID = 0;
-        GameEntity Goal = context.game.CreateEntity();
+        GameEntity Goal = Contexts.sharedInstance.game.CreateEntity();
         Goal.AddAIGoal(GoalID, GoalState, 1);
 
         GoapState initialWorldState = new GoapState(new Dictionary<string, object>());
         initialWorldState.states.Add("pos", CurrentAgentPos);
 
-        agent = context.game.CreateEntity();
+        agent = Contexts.sharedInstance.game.CreateEntity();
         agent.AddAgentPositionDiscrete2D(CurrentAgentPos);
         agent.AddAIAgentPlanner(0, new Queue<int>(), new List<ActionInfo>(), new List<int>() { GoalID }, initialWorldState);
 
@@ -162,7 +156,7 @@ public class AIGridWorldTest : MonoBehaviour
                         GoapState Effects = new GoapState(new Dictionary<string, object>());
                         Effects.states.Add("pos", effect);
 
-                        GameEntity entityAction = context.game.CreateEntity();
+                        GameEntity entityAction = Contexts.sharedInstance.game.CreateEntity();
                         ActionID++;
                         int DurationTime = 200; // Miliseconds
                         entityAction.AddAIAction(ActionID, PreConditions, Effects, DurationTime, 1);

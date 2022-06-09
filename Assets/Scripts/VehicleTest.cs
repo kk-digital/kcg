@@ -7,9 +7,6 @@ public class VehicleTest : MonoBehaviour
     Vehicle.DrawSystem vehicleDrawSystem;
     public Vehicle.ProcessVelocitySystem vehiclePhysics;
 
-    // Entitas's Contexts
-    Contexts contexts;
-
     // Rendering Material
     [SerializeField]
     Material Material;
@@ -19,15 +16,13 @@ public class VehicleTest : MonoBehaviour
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
     private void Start()
     {
-        // Assign Contexts
-        contexts = Contexts.sharedInstance;
 
         // Initialize Vehicle Draw System
         vehicleDrawSystem = new Vehicle.DrawSystem();
         vehiclePhysics = new Vehicle.ProcessVelocitySystem();
 
         // Loading Image
-        vehicleDrawSystem.Initialize(contexts, "Assets\\StreamingAssets\\assets\\luis\\vehicles\\Jet_chassis.png", 144, 96, transform, Material);
+        vehicleDrawSystem.Initialize(Contexts.sharedInstance, "Assets\\StreamingAssets\\assets\\luis\\vehicles\\Jet_chassis.png", 144, 96, transform, Material);
     }
     
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
@@ -39,6 +34,6 @@ public class VehicleTest : MonoBehaviour
         // Update Collision Physics
         //vehicleDrawSystem.UpdateCollision();
         if(canUpdateGravity)
-            vehiclePhysics.UpdateGravity(contexts);
+            vehiclePhysics.UpdateGravity(Contexts.sharedInstance);
     }
 }

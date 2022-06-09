@@ -12,7 +12,7 @@ namespace Planet
         public int Index;
         TimeState TimeState;
 
-        public TileMap.Model TileMap;
+        public Planet.TileMap TileMap;
         public AgentList AgentList;
         public VehicleList VehicleList;
         public ProjectileList ProjectileList;
@@ -22,7 +22,7 @@ namespace Planet
 
         public PlanetState(UnityEngine.Vector2Int mapSize)
         {
-            TileMap = new TileMap.Model(mapSize);
+            TileMap = new Planet.TileMap(mapSize);
             AgentList = new AgentList();
             VehicleList = new VehicleList();
             ProjectileList = new ProjectileList();

@@ -4,16 +4,9 @@ namespace Inventory
 {
     public class ManagerSystem
     {
-        public Contexts _contexts;
-
-        public ManagerSystem(Contexts contexts)
-        {
-            _contexts = contexts;
-        }
-
         public void AddItem(GameEntity entity, int inventoryID)
         {
-            var group = _contexts.game.GetEntitiesWithItemAttachedInventory(inventoryID); // Todo: Use multiple Entity Index. To narrow down the search with item type.
+            var group = Contexts.sharedInstance.game.GetEntitiesWithItemAttachedInventory(inventoryID); // Todo: Use multiple Entity Index. To narrow down the search with item type.
 
             // Check if there any not full stack of this item in the inventory.
             if (entity.hasItemStack)
@@ -33,7 +26,7 @@ namespace Inventory
                 }
             }
 
-            var inventory = _contexts.game.GetEntityWithInventoryID(inventoryID);
+            var inventory = Contexts.sharedInstance.game.GetEntityWithInventoryID(inventoryID);
             int fistEmptySlot = GetFirstEmptySlot(inventory.inventorySlots.Values);
             entity.AddItemAttachedInventory(inventoryID, fistEmptySlot);
             inventory.inventorySlots.Values.Set(fistEmptySlot, true);
@@ -41,7 +34,7 @@ namespace Inventory
 
         public void RemoveItem(GameEntity entity, int slot)
         {
-            var gameEntity = _contexts.game.GetEntityWithInventoryID(entity.itemAttachedInventory.InventoryID);
+            var gameEntity = Contexts.sharedInstance.game.GetEntityWithInventoryID(entity.itemAttachedInventory.InventoryID);
             gameEntity.inventorySlots.Values.Set(slot, false);
             entity.RemoveItemAttachedInventory();
         }

@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class InventoryTest : MonoBehaviour
 {
     GameObject parentObject;
-    Contexts context;
     SpriteLoaderTest SpriteLoader = new();
     List<Sprite> Sprites = new();
     Inventory.ManagerSystem inventoryManagerSystem;
@@ -19,8 +18,7 @@ public class InventoryTest : MonoBehaviour
 
     public void Start()
     {
-        context = Contexts.sharedInstance;
-        inventoryManagerSystem = new Inventory.ManagerSystem(context);
+        inventoryManagerSystem = new Inventory.ManagerSystem();
         parentObject = GameObject.Find("Canvas/InventoryView/Viewport/Content");
         LoadSprites();
 
@@ -91,7 +89,7 @@ public class InventoryTest : MonoBehaviour
     void CreateSlots(int inventoryID)
     {
         // To do: Change size of grid to match width and height of inventory.
-        var entity = context.game.GetEntityWithInventoryID(inventoryID);
+        var entity = Contexts.sharedInstance.game.GetEntityWithInventoryID(inventoryID);
 
         int size = entity.inventorySize.Width * entity.inventorySize.Height;
         for (int i = 0; i < size; i++)
@@ -103,7 +101,7 @@ public class InventoryTest : MonoBehaviour
 
     void CreateInventoryEntity(int inventoryID)
     {
-        var entity = context.game.CreateEntity();
+        var entity = Contexts.sharedInstance.game.CreateEntity();
         const int height = 8;
         const int width = 8;
         const int selectedSlot = 0;
@@ -118,7 +116,7 @@ public class InventoryTest : MonoBehaviour
 
     void CreateItemsEntity(string label, int inventoryID, Enums.ItemType itemType, int spriteID)
     {
-        GameEntity entity = context.game.CreateEntity();
+        GameEntity entity = Contexts.sharedInstance.game.CreateEntity();
         const int maxStackCount = 99;
         switch (itemType)
         {
@@ -144,7 +142,7 @@ public class InventoryTest : MonoBehaviour
     // TODO: use DrawSprite and PixelPerfectGrid?.
     void CreateObjects(int inventoryID)
     {
-        var group = context.game.GetEntitiesWithItemAttachedInventory(inventoryID);
+        var group = Contexts.sharedInstance.game.GetEntitiesWithItemAttachedInventory(inventoryID);
         foreach (GameEntity entity in group)
         {
         
@@ -162,7 +160,7 @@ public class InventoryTest : MonoBehaviour
 
     void DrawItemsIcons()
     {
-        var group = context.game.GetEntitiesWithItemAttachedInventory(0);
+        var group = Contexts.sharedInstance.game.GetEntitiesWithItemAttachedInventory(0);
         foreach (var item in group)
         { 
             

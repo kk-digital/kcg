@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-namespace Planet.TileMap
+namespace Planet
 {
     public class ChunkList
     {
