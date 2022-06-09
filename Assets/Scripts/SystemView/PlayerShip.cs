@@ -78,16 +78,20 @@ namespace SystemView
 
             Ship.Rotation -= Input.GetAxis("Horizontal") * CurrentTime * RotationSpeedModifier;
 
-            if (Input.GetAxis("Vertical") > 0.0f && Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY < 0.1f) Reverse = false;
-            if (Input.GetAxis("Vertical") < 0.0f && Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY < 0.1f) Reverse = true;
+            float Movement = Input.GetAxis("Vertical");
+            if (Movement == 0.0f && Input.GetKey("w")) Movement =  1.0f;
+            if (Movement == 0.0f && Input.GetKey("s")) Movement = -1.0f;
+
+            if (Movement > 0.0f && Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY < 0.1f) Reverse = false;
+            if (Movement < 0.0f && Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY < 0.1f) Reverse = true;
 
             float AccX = (float)Math.Cos(Ship.Rotation);
             float AccY = (float)Math.Sin(Ship.Rotation);
 
             float Magnitude = (float)Math.Sqrt(AccX * AccX + AccY * AccY);
 
-            AccX = AccX / Magnitude * Ship.Acceleration * CurrentTime * Input.GetAxis("Vertical");
-            AccY = AccY / Magnitude * Ship.Acceleration * CurrentTime * Input.GetAxis("Vertical");
+            AccX = AccX / Magnitude * Ship.Acceleration * CurrentTime * Movement;
+            AccY = AccY / Magnitude * Ship.Acceleration * CurrentTime * Movement;
 
             Ship.Self.PosX += Ship.Self.VelX * CurrentTime + AccX / 2.0f * CurrentTime * CurrentTime;
             Ship.Self.PosY += Ship.Self.VelY * CurrentTime + AccY / 2.0f * CurrentTime * CurrentTime;
