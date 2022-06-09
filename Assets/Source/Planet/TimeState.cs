@@ -4,8 +4,8 @@ namespace Planet
 {
     public struct TimeState
     {
-        UInt32 TickTime;
+        public UInt32 TickTime;
 
-        float Deficit;
+        public float Deficit;
     }
 }
