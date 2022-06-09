@@ -28,7 +28,7 @@ namespace Agent
                     entity.ReplaceAgentMovable(movable.Speed, new Vector2(movable.Velocity.x, 0.0f), new Vector2(movable.Acceleration.x, 0.0f), movable.AccelerationTime);
                 }
                 
-                if (entityBoxBorders.IsCollidingLeft(tileMap, movable.Velocity))
+                /*if (entityBoxBorders.IsCollidingLeft(tileMap, movable.Velocity))
                 {
                     entity.ReplaceAgentPosition2D(new Vector2(pos.PreviousValue.x, pos.Value.y), pos.PreviousValue);
                     entity.ReplaceAgentMovable(movable.Speed, new Vector2(movable.Velocity.x, 0.0f), new Vector2(movable.Acceleration.x, 0.0f), movable.AccelerationTime);
@@ -37,7 +37,7 @@ namespace Agent
                 {
                     entity.ReplaceAgentPosition2D(new Vector2(pos.PreviousValue.x, pos.Value.y), pos.PreviousValue);
                     entity.ReplaceAgentMovable(movable.Speed, new Vector2(movable.Velocity.x, 0.0f), new Vector2(movable.Acceleration.x, 0.0f), movable.AccelerationTime);
-                }
+                }*/
             }
         }
     }

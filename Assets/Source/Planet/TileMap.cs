@@ -18,7 +18,7 @@ namespace Planet
 
             Chunks = new ChunkList(mapSize);
 
-            BoxBorders = Vector2.zero.CreateBoxBorders(mapSize);
+            BoxBorders = Vector2.zero.CreateBoxBorders(mapSize * 16);
 
             HeightMap = new HeightMap(MapSize);
             Layers = new Layers

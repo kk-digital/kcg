@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
+using Physics;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -170,58 +172,25 @@ namespace Planet.Unity
             TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Ore);
         }
         
-        
-
-        public struct R
+#if UNITY_EDITOR
+        public void OnDrawGizmos()
         {
-            public float X;
-            public float Y;
-            public float W;
-            public float H;
+            if (!Application.isPlaying) return;
+            
+            var group = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsBox2DCollider));
 
-            public R(float x, float y, float w, float h)
+            Gizmos.color = Color.green;
+            
+            foreach (var entity in group)
             {
-                X = x;
-                Y = y;
-                W = w;
-                H = h;
+                var pos = entity.agentPosition2D;
+                var boxCollider = entity.physicsBox2DCollider;
+                var boxBorders = boxCollider.CreateEntityBoxBorders(pos.Value);
+                
+                Gizmos.DrawWireCube(boxBorders.Center, new Vector3(boxCollider.Size.x, boxCollider.Size.y, 0.0f));
             }
         }
-        private static R CalcVisibleRect()
-        {
-            var cam = Camera.main;
-            var pos = cam.transform.position;
-            var height = 2f * cam.orthographicSize;
-            var width = height * cam.aspect;
-            var visibleRect = new R(pos.x - width / 2, pos.y - height / 2, width, height);
-            return visibleRect;
-        }
-
-        private Texture2D CreateTextureFromRGBA(byte[] rgba, int w, int h)
-        {
-
-            var res = new Texture2D(w, h, TextureFormat.RGBA32, false)
-            {
-                filterMode = FilterMode.Point
-            };
-
-            var pixels = new Color32[w * h];
-            for (int x = 0 ; x < w; x++)
-            for (int y = 0 ; y < h; y++)
-            { 
-                int index = (x + y * w) * 4;
-                var r = rgba[index];
-                var g = rgba[index + 1];
-                var b = rgba[index + 2];
-                var a = rgba[index + 3];
-
-                pixels[x + y * w] = new Color32((byte)r, (byte)g, (byte)b, (byte)a);
-            }
-            res.SetPixels32(pixels);
-            res.Apply();
-
-            return res;
-        }
+#endif
 
     }
 }
