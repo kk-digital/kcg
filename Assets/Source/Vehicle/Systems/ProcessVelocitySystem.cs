@@ -24,28 +24,6 @@ namespace Vehicle
             gameContext = Contexts.sharedInstance.game;
         }
 
-        // Move Function
-        public void Process(Contexts contexts)
-        {
-            // Get Vehicle Entites
-            IGroup<GameEntity> entities =
-            contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
-            foreach (var vehicle in entities)
-            {
-                // Get position from component
-                var position = vehicle.vehiclePhysicsState2D;
-                position.TempPosition = position.Position;
-
-                // Accelerate the vehicle
-                position.Position += vehicle.vehiclePhysicsState2D.angularVelocity * Time.deltaTime;
-
-                // Update the position
-                vehicle.ReplaceVehiclePhysicsState2D(position.Position, position.TempPosition, position.Scale, position.TempScale, 
-                    position.angularVelocity, vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
-                         vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
-            }
-        }
-
         public void ProcessMovement(Vector2 newSpeed, Contexts contexts)
         {
             // Get Vehicle Entites

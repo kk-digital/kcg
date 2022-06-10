@@ -31,18 +31,13 @@ namespace Vehicle
         public GameObject vehicle;
         GameObject prePrefab;
         bool Init = false;
-        GameEntity vehicleDraw;
-
-        // Physics
-        Planet.Unity.MapLoaderTestScript mapLoader;
+        GameEntity vehicleEntity;
 
         // Static Constructor
         static DrawSystem()
         {
             Instance = new DrawSystem();
         }
-
-        // Constructor, variables setup
 
         // Destructor
         ~DrawSystem()
@@ -61,7 +56,7 @@ namespace Vehicle
             Material = mat;
 
             // Create Entity
-            vehicleDraw = Contexts.sharedInstance.game.CreateEntity();
+            vehicleEntity = Contexts.sharedInstance.game.CreateEntity();
 
             // Get Image Sprite ID
             int _spriteID = GameState.SpriteLoader.GetSpriteSheetID(_filePath);
@@ -82,24 +77,18 @@ namespace Vehicle
             vehicle = CreateParticlePrefab(prefabPos.x, prefabPos.y, 0.5f, 0.5f, vehicleSprite);
 
             // Add Vehicle ID
-            vehicleDraw.AddVehicleID(vehicle.transform.parent.childCount + 1);
+            vehicleEntity.AddVehicleID(vehicle.transform.parent.childCount + 1);
 
             // Add Vehicle Sprite Component
-            vehicleDraw.AddVehicleSprite2D(_spriteID, _filePath, new Vector2(GetWidth(), GetHeight()), new Vector2Int(GetWidth(), GetHeight()),
+            vehicleEntity.AddVehicleSprite2D(_spriteID, _filePath, new Vector2(GetWidth(), GetHeight()), new Vector2Int(GetWidth(), GetHeight()),
                 Material, vehicle.GetComponent<Mesh>());
 
             // Add Vehicle Physics State 2D Component
-            vehicleDraw.AddVehiclePhysicsState2D(Vector2.zero, Vector2.zero, Vector2.one, Vector2.one,
+            vehicleEntity.AddVehiclePhysicsState2D(Vector2.zero, Vector2.zero, Vector2.one, Vector2.one,
                 Vector2.zero, 1.0f, 1.0f, 1.5f, Vector2.zero);
 
             // Physics Init
-            //boxColliderComponent = new BoxColliderComponent(new Vector2(0.5f, 0.5f));
-
-            // Collider Component Init
-            // vehicleDraw.AddVehicleCollider(false, false, false, false);
-
-            // Init Map Loader
-            //mapLoader = GameObject.Find("TilesTest").GetComponent<PlanetTileMap.Unity.MapLoaderTestScript>();
+            vehicleEntity.AddPhysicsBox2DCollider(new Vector2(0.5f, 0.5f));
 
             // Initialization done
             Init = true;
@@ -137,15 +126,6 @@ namespace Vehicle
             }
         }
 
-        // Update Physics 
-        public void UpdateCollision()
-        {
-            if (Init)
-            {
-                // Update Collider Component
-            }
-        }
-        
         // Get Width
         public int GetWidth()
         {
