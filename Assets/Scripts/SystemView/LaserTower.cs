@@ -63,6 +63,7 @@ namespace SystemView
             Damage = 600;
             ShieldDamageMultiplier = 3.0f;
             HullDamageMultiplier = 0.4f;
+            ShieldPenetration = 0.02f;
 
             sr = gameObject.AddComponent<SpriteRenderer>();
             sr.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
@@ -256,7 +257,7 @@ namespace SystemView
 
             if (Target.Shield < 0)
             {
-                HullDamage += (float)Target.Shield / ShieldDamageMultiplier * HullDamageMultiplier;
+                HullDamage -= (float)Target.Shield / ShieldDamageMultiplier * HullDamageMultiplier;
                 Target.Shield = 0;
             }
 
