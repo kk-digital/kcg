@@ -87,7 +87,8 @@ namespace Agent
             entity.AddAgentSprite2D(texture, spriteSize);
             entity.AddAgentPosition2D(position, newPreviousValue: default);
             entity.AddAgentMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
-            entity.isAgentEnemy = true;
+            entity.AddAgentEnemy(0, 4.0f);
+            entity.AddAgentStats(100.0f, 0.8f);
 
             return entity;
         }
