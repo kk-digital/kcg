@@ -155,6 +155,8 @@ namespace SystemView
 
             foreach (SystemEnemy Enemy in Enemies)
             {
+                Enemy.Ship.Rotation = Enemy.Ship.Descriptor.TrueAnomaly + Enemy.Ship.Descriptor.Rotation + 3.1415926f * 0.5f;
+
                 foreach (ShipWeapon Weapon in Enemy.Ship.Weapons)
                 {
                     Weapon.TryFiringAt(Player.Ship, CurrentMillis);
