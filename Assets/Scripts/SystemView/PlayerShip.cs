@@ -141,8 +141,11 @@ namespace SystemView
 
             Renderer.shipColor.b = (float) Ship.Health / Ship.MaxHealth;
 
-            Ship.Weapons[0].Cooldown -= (int)(CurrentTime * 1000.0f);
-            if (Ship.Weapons[0].Cooldown < 0) Ship.Weapons[0].Cooldown = 0;
+            foreach (ShipWeapon Weapon in Ship.Weapons)
+            {
+                Weapon.Cooldown -= (int)(CurrentTime * 1000.0f);
+                if (Weapon.Cooldown < 0) Weapon.Cooldown = 0;
+            }
 
             if (RenderOrbit)
             {
@@ -177,7 +180,9 @@ namespace SystemView
                     Ship.PathPlanned = false;
             }
 
-            if (Input.GetKey("space")) Ship.Weapons[0].Fire();
+            if (Input.GetKey("space"))
+                foreach (ShipWeapon Weapon in Ship.Weapons)
+                    Weapon.Fire();
         }
     }   
 }
