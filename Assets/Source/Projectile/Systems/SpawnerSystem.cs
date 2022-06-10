@@ -1,20 +1,23 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Entitas;
+using Enums;
 
-namespace Vehicle
+namespace Projectile
 {
     public class SpawnerSystem
     {
-        private static int vehiceID;
+        // Projectile ID
+        private static int projectileID;
 
-        public Entity SpawnVehicle(string spritePath, int witdh, int height, Material material, Vector2 position)
+        public Entity SpawnProjectile(string spritePath, int witdh, int height, Material material, Vector2 position, 
+            ProjectileType projectileType, ProjectileDrawType projectileDrawType)
         {
             // Create Entity
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
             // Increase ID per object statically
-            vehiceID++;
+            projectileID++;
 
             // Set Png Size
             var pngSize = new Vector2Int(witdh, height);
@@ -38,17 +41,17 @@ namespace Vehicle
             var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
 
             // Add ID Component
-            entity.AddVehicleID(vehiceID);
+            entity.AddProjectileID(projectileID);
 
             // Add Sprite Component
-            entity.AddVehicleSprite2D(texture, spriteSize);
+            entity.AddProjectileSprite2D(texture, spriteSize);
 
             // Add Physics State 2D Component
-            entity.AddVehiclePhysicsState2D(position, position, Vector2.one, Vector2.one,
-                Vector2.zero, 1.0f, 1.0f, 1.5f, Vector2.zero);
+            entity.AddProjectilePhysicsState2D(position, position, Vector2.zero, 1.0f, 1.0f, 1.5f,
+                Vector2.zero);
 
-            // Add Physics Box Collider Component
-            entity.AddPhysicsBox2DCollider(spriteSize, Vector2.zero);
+            // Add Projectile Type
+            entity.AddProjectileType(projectileType, projectileDrawType);
 
             // Return projectile entity
             return entity;
@@ -64,7 +67,7 @@ namespace Vehicle
             var tex = CreateTextureFromRGBA(spriteBytes, spriteSize.x, spriteSize.y);
             mat.SetTexture("_MainTex", tex);
 
-            return InstantiateGameObject("Vehicle", 0, mat, box2dCollider);
+            return InstantiateGameObject("Projectile", 0, mat, box2dCollider);
         }
 
         private Texture2D CreateTextureFromRGBA(byte[] rgba, int w, int h)
