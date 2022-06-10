@@ -39,6 +39,10 @@ namespace SystemView
         public LineRenderer LaserLineRenderer;
         public Color LaserColor = new Color(0.2f, 0.8f, 0.3f, 0.7f);
 
+        public float LaserChargingDuration;
+        public float LaserDuration;
+        public float LaserWidth;
+
         public SystemState State;
 
         public SystemShip Target;
@@ -53,16 +57,19 @@ namespace SystemView
             PosX = (float)rand.NextDouble() * 50.0f - 25.0f;
             PosY = (float)rand.NextDouble() * 50.0f - 25.0f;
 
-            AngularVelocity = 1.0f;
+            AngularVelocity = 0.4f;
             Rotation = 0.0f;
             LastRotation = 0.0f;
-            FOV = 3.1415926f / 4.0f;
-            Range = 15.0f;
+            FOV = 3.1415926f / 6.0f;
+            Range = 20.0f;
+            LaserWidth = 0.6f;
+            LaserChargingDuration = 0.125f;
+            LaserDuration = 0.3f;
 
-            FiringRate = 800;
-            Damage = 600;
+            FiringRate = 3250;
+            Damage = 3000;
             ShieldDamageMultiplier = 3.0f;
-            HullDamageMultiplier = 0.4f;
+            HullDamageMultiplier = 0.2f;
             ShieldPenetration = 0.02f;
 
             sr = gameObject.AddComponent<SpriteRenderer>();
@@ -123,22 +130,26 @@ namespace SystemView
             int CurrentMillis = (int)(Time.time * 1000.0f) - LastMillis;
             LastMillis = (int)(Time.time * 1000.0f);
 
-            int LaserDurationTime = FiringRate / 4;
+            int ChargingTime = (int)(FiringRate * LaserDuration * LaserChargingDuration);
+            int LaserDurationTime = (int)(FiringRate * LaserDuration * (1.0f - LaserChargingDuration));
+            int RemainingChargingTime = Cooldown - (FiringRate - ChargingTime);
             int RemainingTime = Cooldown - (FiringRate - LaserDurationTime);
             if (RemainingTime > 0)
             {
-                if (Target != null)
+                if (RemainingChargingTime > 0)
                 {
-                    Vector3[] vertices = new Vector3[2];
-                    vertices[0] = new Vector3(PosX, PosY, 0.0f);
-                    vertices[1] = new Vector3(Target.Self.PosX, Target.Self.PosY, 0.0f);
-                    LaserLineRenderer.SetPositions(vertices);
+                    float RemainingTimeAsPercentage = 1.0f - (float)RemainingChargingTime / (float)LaserDurationTime;
+                    LaserLineRenderer.startWidth = LaserLineRenderer.endWidth = LaserWidth * RemainingTimeAsPercentage / Camera.scale;
+                    LaserLineRenderer.startColor = new Color(LaserColor.r, LaserColor.g, LaserColor.b, LaserColor.a * RemainingTimeAsPercentage + 0.10f);
+                    LaserLineRenderer.endColor   = new Color(LaserColor.r, LaserColor.g, LaserColor.b, LaserColor.a * RemainingTimeAsPercentage + 0.02f);
                 }
-
-                float RemainingTimeAsPercentage = (float)RemainingTime / (float)LaserDurationTime;
-                LaserLineRenderer.startWidth = LaserLineRenderer.endWidth = RemainingTimeAsPercentage * 0.15f / Camera.scale;
-                LaserLineRenderer.startColor = new Color(LaserColor.r, LaserColor.g, LaserColor.b, LaserColor.a * RemainingTimeAsPercentage + 0.10f);
-                LaserLineRenderer.endColor   = new Color(LaserColor.r, LaserColor.g, LaserColor.b, LaserColor.a * RemainingTimeAsPercentage + 0.02f);
+                else
+                { 
+                    float RemainingTimeAsPercentage = (float)RemainingTime / (float)LaserDurationTime;
+                    LaserLineRenderer.startWidth = LaserLineRenderer.endWidth = RemainingTimeAsPercentage * LaserWidth / Camera.scale;
+                    LaserLineRenderer.startColor = new Color(LaserColor.r, LaserColor.g, LaserColor.b, LaserColor.a * RemainingTimeAsPercentage + 0.10f);
+                    LaserLineRenderer.endColor   = new Color(LaserColor.r, LaserColor.g, LaserColor.b, LaserColor.a * RemainingTimeAsPercentage + 0.02f);
+                }
             }
 
             Cooldown -= CurrentMillis;
