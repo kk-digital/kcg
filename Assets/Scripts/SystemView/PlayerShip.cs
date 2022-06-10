@@ -22,6 +22,7 @@ namespace SystemView
 
         public float GravitationalStrength = 0.0f;
 
+        public float TimeScale = 1.0f;
         public float DragFactor = 10000.0f;
         public float SailingFactor = 20.0f;
 
@@ -76,6 +77,8 @@ namespace SystemView
             float CurrentTime = Time.time - LastTime;
 
             if (CurrentTime == 0.0f) return;
+
+            CurrentTime *= TimeScale;
 
             LastTime = Time.time;
 
