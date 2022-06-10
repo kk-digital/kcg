@@ -30,7 +30,7 @@ namespace Vehicle
         }
 
 
-        public VehicleEntity Add(Entity entity)
+        public VehicleEntity Add(GameEntity entity)
         {
             // if we dont have enough space we expand
             // the capacity

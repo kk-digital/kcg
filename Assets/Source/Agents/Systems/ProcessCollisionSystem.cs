@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using Physics;
 
@@ -14,7 +15,7 @@ namespace Agent
             foreach (var entity in entities)
             {
                 var pos = entity.agentPosition2D;
-                var entityBoxBorders = entity.physicsBox2DCollider.CreateEntityBoxBorders(new Vector2(pos.PreviousValue.x, pos.Value.y));
+                var entityBoxBorders = entity.physicsBox2DCollider.CreateEntityBoxBorders(new Vector2(pos.PreviousValue.x, pos.Value.y) + entity.physicsBox2DCollider.Offset);
                 var movable = entity.agentMovable;
                 
                 if (entityBoxBorders.IsCollidingBottom(tileMap, movable.Velocity))
@@ -29,7 +30,7 @@ namespace Agent
                 }
                 
                 pos = entity.agentPosition2D;
-                entityBoxBorders = entity.physicsBox2DCollider.CreateEntityBoxBorders(new Vector2(pos.Value.x, pos.PreviousValue.y));
+                entityBoxBorders = entity.physicsBox2DCollider.CreateEntityBoxBorders(new Vector2(pos.Value.x, pos.PreviousValue.y) + entity.physicsBox2DCollider.Offset);
                 movable = entity.agentMovable;
                 
                 if (entityBoxBorders.IsCollidingLeft(tileMap, movable.Velocity))
@@ -46,4 +47,3 @@ namespace Agent
         }
     }
 }
-

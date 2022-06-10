@@ -26,6 +26,17 @@ namespace Planet.Unity
         public void Update()
         {
             Planet.TileMap TileMap = Planet.TileMap;
+            Material material = Material;
+
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                int x = (int)worldPosition.x;
+                int y = (int)worldPosition.y;
+                Planet.PlaceTile(x, y, 10, MapLayerType.Front);
+                TileMap.BuildLayerTexture(MapLayerType.Front);
+                
+            }
 
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
@@ -37,19 +48,25 @@ namespace Planet.Unity
                 
             }
 
-            foreach(var mr in GetComponentsInChildren<MeshRenderer>())
-                if (Application.isPlaying)
-                    Destroy(mr.gameObject);
-                else
-                    DestroyImmediate(mr.gameObject);
 
-            GameState.ProcessSystem.Update();
-            GameState.MovableSystem.Update();
-            GameState.ProcessCollisionSystem.Update(TileMap);
-            
-            TileMap.Layers.DrawLayer(MapLayerType.Front, Instantiate(Material), transform, 10);
-            TileMap.Layers.DrawLayer(MapLayerType.Ore, Instantiate(Material), transform, 11);
-            GameState.DrawSystem.Draw(Instantiate(Material), transform, 12);
+
+                
+            // unity rendering stuff
+            // will be removed layer
+            foreach(var mr in GetComponentsInChildren<MeshRenderer>())
+            {
+                if (Application.isPlaying)
+                {
+                    Destroy(mr.gameObject);
+                }
+                else
+                {
+                    DestroyImmediate(mr.gameObject);
+                }
+            }
+
+            Planet.Update(Time.deltaTime, Material, transform);
+
         }
 
         // create the sprite atlas for testing purposes
@@ -84,7 +101,9 @@ namespace Planet.Unity
 
 
             Planet.AddPlayer(Instantiate(Material), new Vector2(3.0f, 3.0f));
-            Planet.AddAgent(Instantiate(Material), new Vector2(6.0f, 2.0f));
+            Planet.AddAgent(Instantiate(Material), new Vector2(6.0f, 3.0f));
+            Planet.AddAgent(Instantiate(Material), new Vector2(1.0f, 4.0f));
+            Planet.AddEnemy(Instantiate(Material), new Vector2(8.0f, 5.0f));
         }
 
 

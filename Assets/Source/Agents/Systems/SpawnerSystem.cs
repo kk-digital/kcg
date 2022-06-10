@@ -9,7 +9,7 @@ namespace Agent
     {
         private static int playerID;
 
-        public Entity SpawnPlayer(Material material, Vector2 position)
+        public GameEntity SpawnPlayer(Material material, Vector2 position)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
@@ -32,13 +32,14 @@ namespace Agent
 
             entity.AddAgentSprite2D(texture, spriteSize);
             entity.AddAgentPosition2D(position, newPreviousValue: default);
-            entity.AddPhysicsBox2DCollider(spriteSize);
+            Vector2 box2dCollider = new Vector2(0.5f, 1.5f);
+            entity.AddPhysicsBox2DCollider(box2dCollider, new Vector2(0.25f, 0.0f));
             entity.AddAgentMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
 
             return entity;
         }
 
-        public Entity SpawnAgent(Material material, Vector2 position)
+        public GameEntity SpawnAgent(Material material, Vector2 position)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
@@ -55,10 +56,38 @@ namespace Agent
 
             entity.AddAgentID(playerID);
 
-            Vector2 box2dCollider = new Vector2(1.0f, 1.5f);
-
+            Vector2 box2dCollider = new Vector2(0.5f, 1.5f);
+            entity.AddPhysicsBox2DCollider(box2dCollider, new Vector2(0.25f, 0.0f));
             entity.AddAgentSprite2D(texture, spriteSize);
             entity.AddAgentPosition2D(position, newPreviousValue: default);
+            entity.AddAgentMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
+
+            return entity;
+        }
+
+        public GameEntity SpawnEnemy(Material material, Vector2 position)
+        {
+            var entity = Contexts.sharedInstance.game.CreateEntity();
+
+            playerID++;
+            
+            var spritePath = "Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png";
+            var pngSize = new Vector2Int(32, 48);
+            var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath);
+            var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
+            byte[] spriteData = new byte[pngSize.x * pngSize.y * 4];
+            GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, Enums.AtlasType.Agent);
+            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, pngSize.x, pngSize.y);
+            var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
+            
+            entity.AddAgentID(playerID);
+
+            Vector2 box2dCollider = new Vector2(0.5f, 1.5f);
+            entity.AddPhysicsBox2DCollider(box2dCollider, new Vector2(0.25f, 0.0f));
+            entity.AddAgentSprite2D(texture, spriteSize);
+            entity.AddAgentPosition2D(position, newPreviousValue: default);
+            entity.AddAgentMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
+            entity.isAgentEnemy = true;
 
             return entity;
         }
