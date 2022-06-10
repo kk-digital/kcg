@@ -18,7 +18,7 @@ namespace SystemView
     {
         public SystemState State;
 
-        private int LastTime;
+        private float LastTime;
 
         public Dictionary<SystemPlanet,       ObjectInfo<SystemPlanetRenderer>>       Planets   = new();
         public Dictionary<SystemPlanet,       ObjectInfo<SystemPlanetRenderer>>       Moons     = new();
@@ -36,30 +36,33 @@ namespace SystemView
 
         private int CurrentCycle = 0;
 
-        public  float SunMass          = 50000000000000.0f;
-        public  float PlanetMass       =   100000000000.0f;
-        public  float MoonMass         =    20000000000.0f;
+        public  float SunMass          = 50000000000000000.0f;
+        public  float PlanetMass       =   100000000000000.0f;
+        public  float MoonMass         =    20000000000000.0f;
 
-        public  float TimeScale        =              1.0f;
+        public  float TimeScale        =                 1.0f;
+        
+        public  float Acceleration     =               250.0f;
+        public  float DragFactor       =             10000.0f;
+        public  float SailingFactor    =                20.0f;
 
-        public  float DragFactor       =          10000.0f;
-        public  float SailingFactor    =             20.0f;
-
-        private float CachedSunMass    = 50000000000000.0f;
-        private float CachedPlanetMass =   100000000000.0f;
-        private float CachedMoonMass   =    20000000000.0f;
+        private float CachedSunMass    = 50000000000000000.0f;
+        private float CachedPlanetMass =   100000000000000.0f;
+        private float CachedMoonMass   =    20000000000000.0f;
+        
+        public  float SystemScale      =                25.0f;
 
         private void Start()
         {
-            LastTime = (int)(Time.time * 1000.0f);
+            LastTime = Time.time;
             
             GameLoop gl = GetComponent<GameLoop>();
 
             State = gl.CurrentSystemState;
 
             State.Star.Mass = SunMass;
-            State.Star.PosX = (float)rnd.NextDouble() * 8.0f - 64.0f;
-            State.Star.PosY = (float)rnd.NextDouble() * 8.0f -  4.0f;
+            State.Star.PosX = ((float)rnd.NextDouble() * 8.0f - 64.0f) * SystemScale;
+            State.Star.PosY = ((float)rnd.NextDouble() * 8.0f -  4.0f) * SystemScale;
 
             var StarObject = new GameObject();
             StarObject.name = "Star Renderer";
@@ -73,8 +76,8 @@ namespace SystemView
 
                 Planet.Descriptor.CentralBody = State.Star;
 
-                Planet.Descriptor.SemiMinorAxis = 30.0f + (i + 1) * (i + 1) * 10;
-                Planet.Descriptor.SemiMajorAxis = Planet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * (i + 5);
+                Planet.Descriptor.SemiMinorAxis = (30.0f + (i + 1) * (i + 1) * 10) * SystemScale;
+                Planet.Descriptor.SemiMajorAxis = Planet.Descriptor.SemiMinorAxis + ((float)rnd.NextDouble() * (i + 5) * SystemScale);
 
                 Planet.Descriptor.Rotation    = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
                 Planet.Descriptor.MeanAnomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
@@ -141,8 +144,8 @@ namespace SystemView
                 //Planet.Descriptor.SemiMinorAxis = InnerAsteroidBeltDescriptor.SemiMajorAxis + (i + 3) * (i + 3);
                 //Planet.Descriptor.SemiMajorAxis = Planet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * i / 2.0f;
 
-                Planet.Descriptor.SemiMinorAxis = State.Planets[InnerPlanets - 1].Descriptor.SemiMajorAxis + (i + 3) * (i + 3) * 10;
-                Planet.Descriptor.SemiMajorAxis = Planet.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * i / 20.0f;
+                Planet.Descriptor.SemiMinorAxis = State.Planets[InnerPlanets - 1].Descriptor.SemiMajorAxis + ((i + 3) * (i + 3) * 10 * SystemScale);
+                Planet.Descriptor.SemiMajorAxis = Planet.Descriptor.SemiMinorAxis + ((float)rnd.NextDouble() * i / 20.0f) * SystemScale;
 
                 Planet.Descriptor.Rotation      = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
                 Planet.Descriptor.MeanAnomaly   = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
@@ -170,8 +173,8 @@ namespace SystemView
 
                     Moon.Descriptor.CentralBody = Planet.Descriptor.Self;
 
-                    Moon.Descriptor.SemiMinorAxis = (float)rnd.NextDouble() * (j + 1) + 5.0f;
-                    Moon.Descriptor.SemiMajorAxis = Moon.Descriptor.SemiMinorAxis + (float)rnd.NextDouble() * 2.0f;
+                    Moon.Descriptor.SemiMinorAxis = ((float)rnd.NextDouble() * (j + 1) + 5.0f) * SystemScale;
+                    Moon.Descriptor.SemiMajorAxis = Moon.Descriptor.SemiMinorAxis + ((float)rnd.NextDouble() * 2.0f) * SystemScale;
 
                     Moon.Descriptor.Rotation      = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
                     Moon.Descriptor.MeanAnomaly   = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
@@ -260,8 +263,8 @@ namespace SystemView
 
         void Update()
         {
-            int CurrentMillis = (int)(Time.time * 1000) - LastTime;
-            LastTime = (int)(Time.time * 1000);
+            float CurrentTime = (Time.time - LastTime) * TimeScale;
+            LastTime = Time.time;
             int UpdatesCompleted = 0;
 
             if (CachedSunMass != SunMass)
@@ -308,7 +311,7 @@ namespace SystemView
             {
                 //if (Planets[p].LastCycle == CurrentCycle) continue;
 
-                p.Descriptor.UpdatePosition((float)CurrentMillis / 1000.0f);
+                p.Descriptor.UpdatePosition(CurrentTime);
                 //Planets[p].LastCycle = CurrentCycle;
 
                 //if (++UpdatesCompleted == UpdatesPerTick) return;
@@ -335,7 +338,7 @@ namespace SystemView
                     (s.Start, s.Destination) = (s.Destination, s.Start);
                 }
 
-                s.Descriptor.UpdatePosition((float) CurrentMillis / 1000.0f);
+                s.Descriptor.UpdatePosition(CurrentTime);
             }
 
             float GravVelX = 0.0f;
@@ -352,24 +355,28 @@ namespace SystemView
 
                 float g = 6.67408E-11f * Body.Mass / d2;
 
-                float Velocity = g * CurrentMillis / 1000.0f;
+                float Velocity = g * CurrentTime;
 
                 GravVelX += Velocity * dx / d;
                 GravVelY += Velocity * dy / d;
             }
 
-            State.Player.GravitationalStrength = (float)Math.Sqrt(GravVelX * GravVelX + GravVelY * GravVelY) * 5000.0f / CurrentMillis;
+            State.Player.GravitationalStrength = (float)Math.Sqrt(GravVelX * GravVelX + GravVelY * GravVelY) * 5.0f / CurrentTime;
 
-            State.Player.Ship.Self.VelX += GravVelX;
-            State.Player.Ship.Self.VelY += GravVelY;
+            State.Player.Ship.Self.VelX   += GravVelX;
+            State.Player.Ship.Self.VelY   += GravVelY;
 
-            State.Player.Ship.Self.PosX += GravVelX * CurrentMillis / 2000.0f;
-            State.Player.Ship.Self.PosY += GravVelY * CurrentMillis / 2000.0f;
+            // For some reason this messes stuff up?!
 
-            State.Player.DragFactor      = DragFactor;
-            State.Player.SailingFactor   = SailingFactor;
+            //State.Player.Ship.Self.PosX   += GravVelX * CurrentTime * 0.5f;
+            //State.Player.Ship.Self.PosY   += GravVelY * CurrentTime * 0.5f;
 
-        CurrentCycle++;
+            State.Player.Ship.Acceleration = Acceleration;
+            State.Player.DragFactor        = DragFactor;
+            State.Player.SailingFactor     = SailingFactor;
+            State.Player.TimeScale         = TimeScale;
+
+            CurrentCycle++;
         }
     }
 }
