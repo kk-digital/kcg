@@ -22,30 +22,35 @@ public static class GameComponentsLookup {
     public const int AIMoveToAction = 11;
     public const int ECSInput = 12;
     public const int ECSInputXY = 13;
-    public const int Inventory = 14;
-    public const int InventoryID = 15;
-    public const int InventorySize = 16;
-    public const int InventorySlots = 17;
-    public const int ItemAttachedInventory = 18;
-    public const int Item = 19;
-    public const int ItemMove = 20;
-    public const int ItemPosition2D = 21;
-    public const int ItemStack = 22;
-    public const int ParticleEmitter2dPosition = 23;
-    public const int ParticleEmitterState = 24;
-    public const int ParticlePosition2D = 25;
-    public const int ParticleState = 26;
-    public const int PhysicsBox2DCollider = 27;
-    public const int ProjectileID = 28;
-    public const int ProjectilePosition2D = 29;
-    public const int ProjectileSprite2D = 30;
-    public const int ProjectileType = 31;
-    public const int ProjectileVelocity = 32;
-    public const int VehicleID = 33;
-    public const int VehiclePhysicsState2D = 34;
-    public const int VehicleSprite2D = 35;
+    public const int InventoryID = 14;
+    public const int InventorySize = 15;
+    public const int InventorySlots = 16;
+    public const int ItemAttachedInventory = 17;
+    public const int ItemAttributeEquipament = 18;
+    public const int ItemAttributePlaceable = 19;
+    public const int ItemAttributeSprite = 20;
+    public const int ItemAttributeStackable = 21;
+    public const int ItemAttributesBasic = 22;
+    public const int ItemID = 23;
+    public const int ItemLabel = 24;
+    public const int ItemMovable = 25;
+    public const int ItemPosition2D = 26;
+    public const int ItemStack = 27;
+    public const int ParticleEmitter2dPosition = 28;
+    public const int ParticleEmitterState = 29;
+    public const int ParticlePosition2D = 30;
+    public const int ParticleState = 31;
+    public const int PhysicsBox2DCollider = 32;
+    public const int ProjectileID = 33;
+    public const int ProjectilePosition2D = 34;
+    public const int ProjectileSprite2D = 35;
+    public const int ProjectileType = 36;
+    public const int ProjectileVelocity = 37;
+    public const int VehicleID = 38;
+    public const int VehiclePhysicsState2D = 39;
+    public const int VehicleSprite2D = 40;
 
-    public const int TotalComponents = 36;
+    public const int TotalComponents = 41;
 
     public static readonly string[] componentNames = {
         "AgentEnemy",
@@ -62,13 +67,18 @@ public static class GameComponentsLookup {
         "AIMoveToAction",
         "ECSInput",
         "ECSInputXY",
-        "Inventory",
         "InventoryID",
         "InventorySize",
         "InventorySlots",
         "ItemAttachedInventory",
-        "Item",
-        "ItemMove",
+        "ItemAttributeEquipament",
+        "ItemAttributePlaceable",
+        "ItemAttributeSprite",
+        "ItemAttributeStackable",
+        "ItemAttributesBasic",
+        "ItemID",
+        "ItemLabel",
+        "ItemMovable",
         "ItemPosition2D",
         "ItemStack",
         "ParticleEmitter2dPosition",
@@ -101,14 +111,19 @@ public static class GameComponentsLookup {
         typeof(AI.MoveToActionComponent),
         typeof(ECSInput.Component),
         typeof(ECSInput.XYComponent),
-        typeof(Inventory.Component),
         typeof(Inventory.IDComponent),
         typeof(Inventory.SizeComponent),
         typeof(Inventory.SlotsComponent),
         typeof(Item.AttachedInventoryComponent),
-        typeof(Item.Component),
-        typeof(Item.MoveComponent),
-        typeof(Item.Position2D),
+        typeof(Item.Attribute.EquipamentComponent),
+        typeof(Item.Attribute.PlaceableComponent),
+        typeof(Item.Attribute.SpriteComponent),
+        typeof(Item.Attribute.StackableComponent),
+        typeof(Item.Attributes.BasicComponent),
+        typeof(Item.IDComponent),
+        typeof(Item.LabelComponent),
+        typeof(Item.MovableComponent),
+        typeof(Item.Position2DComponent),
         typeof(Item.StackComponent),
         typeof(Particle.Emitter2dPositionComponent),
         typeof(Particle.EmitterStateComponent),

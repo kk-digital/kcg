@@ -22,6 +22,8 @@ public class AIGridWorldTest : MonoBehaviour
 
     static bool Init = false;
 
+    Contexts context;
+    
     GameEntity agent;
 
     // Systems.
@@ -34,6 +36,7 @@ public class AIGridWorldTest : MonoBehaviour
 
     public void Start()
     {
+        context = Contexts.sharedInstance;
         planner = new PlannerSystem();
         ActionController = new ActionControllerSystem();
 
@@ -42,6 +45,9 @@ public class AIGridWorldTest : MonoBehaviour
             Initialize();
             Init = true;
         }
+
+        planner.Initialize();
+        //ActionController.Initialize();
     }
 
     private bool IsValidPosition(Vector2Int pos)
@@ -112,14 +118,14 @@ public class AIGridWorldTest : MonoBehaviour
         GoapState GoalState = new GoapState(new Dictionary<string, object>());
         GoalState.states.Add("pos", GoalPos);
         int GoalID = 0;
-        GameEntity Goal = Contexts.sharedInstance.game.CreateEntity();
+        GameEntity Goal = context.game.CreateEntity();
         Goal.AddAIGoal(GoalID, GoalState, 1);
 
         GoapState initialWorldState = new GoapState(new Dictionary<string, object>());
         initialWorldState.states.Add("pos", CurrentAgentPos);
 
-        agent = Contexts.sharedInstance.game.CreateEntity();
-        agent.AddAgentPositionDiscrete2D(CurrentAgentPos);
+        agent = context.game.CreateEntity();
+        agent.AddAgentPositionDiscrete2D(CurrentAgentPos, Vector2Int.zero);
         agent.AddAIAgentPlanner(0, new Queue<int>(), new List<ActionInfo>(), new List<int>() { GoalID }, initialWorldState);
 
         int numRows = map.GetLength(0);
@@ -156,7 +162,7 @@ public class AIGridWorldTest : MonoBehaviour
                         GoapState Effects = new GoapState(new Dictionary<string, object>());
                         Effects.states.Add("pos", effect);
 
-                        GameEntity entityAction = Contexts.sharedInstance.game.CreateEntity();
+                        GameEntity entityAction = context.game.CreateEntity();
                         ActionID++;
                         int DurationTime = 200; // Miliseconds
                         entityAction.AddAIAction(ActionID, PreConditions, Effects, DurationTime, 1);
@@ -264,33 +270,5 @@ public class AIGridWorldTest : MonoBehaviour
         mr.sortingOrder = sortingOrder;
 
         return mesh;
-    }
-
-    // we use this helper function to generate a unity Texture2D
-    // from pixels
-    private Texture2D CreateTextureFromRGBA(byte[] rgba, int w, int h)
-    {
-
-        var res = new Texture2D(w, h, TextureFormat.RGBA32, false)
-        {
-            filterMode = FilterMode.Point
-        };
-
-        var pixels = new Color32[w * h];
-        for (int x = 0; x < w; x++)
-            for (int y = 0; y < h; y++)
-            {
-                int index = (x + y * w) * 4;
-                var r = rgba[index];
-                var g = rgba[index + 1];
-                var b = rgba[index + 2];
-                var a = rgba[index + 3];
-
-                pixels[x + y * w] = new Color32((byte)r, (byte)g, (byte)b, (byte)a);
-            }
-        res.SetPixels32(pixels);
-        res.Apply();
-
-        return res;
     }
 }

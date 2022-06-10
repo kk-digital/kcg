@@ -49,7 +49,7 @@ namespace AI
 
                     // Todo: Create state class with get method.
                     if (Effects.states.ContainsKey("pos"))
-                        ActorEntity.ReplaceAgentPositionDiscrete2D((Vector2Int)ActionEntity.aIAction.Effects.states["pos"]);
+                        ActorEntity.ReplaceAgentPositionDiscrete2D((Vector2Int)ActionEntity.aIAction.Effects.states["pos"], Vector2Int.zero);
                     else
                         Debug.Log("There is no key called pos.");
 

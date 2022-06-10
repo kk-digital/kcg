@@ -14,7 +14,7 @@ namespace Agent
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
             playerID++;
-            
+
             var spritePath = "Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png";
             var pngSize = new Vector2Int(32, 48);
             var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath);
@@ -27,7 +27,7 @@ namespace Agent
             entity.isAgentPlayer = true;
             entity.isECSInput = true;
             entity.AddECSInputXY(new Vector2(0, 0), false);
-            
+
             entity.AddAgentID(playerID);
 
             entity.AddAgentSprite2D(texture, spriteSize);
@@ -44,7 +44,7 @@ namespace Agent
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
             playerID++;
-            
+
             var spritePath = "Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png";
             var pngSize = new Vector2Int(32, 48);
             var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath);
@@ -53,7 +53,7 @@ namespace Agent
             GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, Enums.AtlasType.Agent);
             var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, pngSize.x, pngSize.y);
             var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
-            
+
             entity.AddAgentID(playerID);
 
             Vector2 box2dCollider = new Vector2(0.5f, 1.5f);
@@ -91,11 +91,11 @@ namespace Agent
 
             return entity;
         }
-        
+
         private GameObject BuildGameObject(int spriteID, Material material, Vector2Int spriteSize, Vector2 box2dCollider)
         {
             var atlasIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
-            
+
             byte[] spriteBytes = new byte[spriteSize.x * spriteSize.y * 4];
             GameState.SpriteAtlasManager.GetSpriteBytes(atlasIndex, spriteBytes, Enums.AtlasType.Agent);
             var mat = UnityEngine.Object.Instantiate(material);
@@ -104,7 +104,7 @@ namespace Agent
 
             return InstantiateGameObject("Agent", 0, mat, box2dCollider);
         }
-        
+
         private Texture2D CreateTextureFromRGBA(byte[] rgba, int w, int h)
         {
 
@@ -133,7 +133,7 @@ namespace Agent
 
             return res;
         }
-        
+
         private GameObject InstantiateGameObject(string name, int sortingOrder, Material material, Vector2 size)
         {
             var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
@@ -160,7 +160,7 @@ namespace Agent
             var p1 = new Vector3((width), (height), 0);
             var p2 = p0; p2.y = p1.y;
             var p3 = p1; p3.y = p0.y;
-                
+
             verticies.Add(p0);
             verticies.Add(p1);
             verticies.Add(p2);
@@ -188,7 +188,7 @@ namespace Agent
             uvs.Add(uv1);
             uvs.Add(uv2);
             uvs.Add(uv3);
-    
+
 
             mesh.SetVertices(verticies);
             mesh.SetUVs(0, uvs);
