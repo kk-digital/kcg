@@ -26,16 +26,28 @@ namespace Planet
             ProjectileList = new ProjectileList();
         }
 
-        public void AddPlayer(UnityEngine.Material material, Vector2 position)
+        public AgentEntity AddPlayer(UnityEngine.Material material, Vector2 position)
         {
             GameEntity entity = GameState.SpawnerSystem.SpawnPlayer(material, position);
-            AgentList.Add(entity);
+            AgentEntity newEntity = AgentList.Add(entity);
+
+            return newEntity;
         }
 
-        public void AddAgent(UnityEngine.Material material, Vector2 position)
+        public AgentEntity AddAgent(UnityEngine.Material material, Vector2 position)
         {
             GameEntity entity = GameState.SpawnerSystem.SpawnAgent(material, position);
-            AgentList.Add(entity);
+            AgentEntity newEntity = AgentList.Add(entity);
+
+            return newEntity;
+        }
+
+        public AgentEntity AddEnemy(UnityEngine.Material material, Vector2 position)
+        {
+            GameEntity entity = GameState.SpawnerSystem.SpawnEnemy(material, position);
+            AgentEntity newEntity = AgentList.Add(entity);
+
+            return newEntity;
         }
 
         public void RemoveAgent(AgentEntity entity)
@@ -84,7 +96,7 @@ namespace Planet
 
 
         // updates the entities, must call the systems and so on ..
-        public void Update(float deltaTime)
+        public void Update(float deltaTime, Material material, Transform transform)
         {
             float targetFps = 30.0f;
             float frameTime = 1.0f / targetFps;
@@ -99,16 +111,37 @@ namespace Planet
                     TimeState.TickTime++;
 
 
+
+
+
                     for(int index = 0; index < ProjectileList.Capacity; index++)
                     {
                         ref ProjectileEntity projectile = ref ProjectileList.List[index];
-
-                        var position = projectile.Entity.projectilePosition2D;
+                        if (projectile.IsInitialized)
+                        {
+                            var position = projectile.Entity.projectilePosition2D;
+                        }
                     }
+
 
                 }
 
             }
+
+
+            
+
+            GameState.ProcessSystem.Update();
+            GameState.MovableSystem.Update();
+            GameState.ProcessCollisionSystem.Update(TileMap);
+            GameState.EnemyAiSystem.Update();
+            
+            TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Front, Object.Instantiate(material), transform, 10);
+            TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Ore, Object.Instantiate(material), transform, 11);
+            GameState.DrawSystem.Draw(Object.Instantiate(material), transform, 12);
+
+
+           
         }
     }
 }

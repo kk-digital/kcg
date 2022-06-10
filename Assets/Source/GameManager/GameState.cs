@@ -23,6 +23,7 @@ public class GameState
     public static readonly Agent.MovableSystem MovableSystem;
     public static readonly Agent.DrawSystem DrawSystem;
     public static readonly Agent.ProcessCollisionSystem ProcessCollisionSystem;
+    public static readonly Agent.EnemyAiSystem EnemyAiSystem;
 
     #endregion
 
@@ -41,5 +42,6 @@ public class GameState
         MovableSystem = new Agent.MovableSystem();
         DrawSystem = new Agent.DrawSystem();
         ProcessCollisionSystem = new Agent.ProcessCollisionSystem();
+        EnemyAiSystem = new Agent.EnemyAiSystem();
     }
 }
