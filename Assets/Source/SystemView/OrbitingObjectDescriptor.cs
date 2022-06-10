@@ -534,8 +534,6 @@ namespace SystemView
 
             EccentricDistance = SemiMajorAxis - Periapsis;
 
-            // -- this is wrong -- //
-
             //                                      r            r
             // →          cos(ν)                     x            y
             // r = r  * ( sin(ν) )   =>   ν = acos( -- ) = asin( -- )
@@ -544,13 +542,13 @@ namespace SystemView
 
             float Radius = (float)Math.Sqrt(PosX * PosX + PosY * PosY);
 
-            TrueAnomaly = (float)Math.Acos(PosX / Radius);
+            TrueAnomaly = (float)Math.Acos(PosX / Radius) - Rotation;
 
             //          x                  x
             // cos(E) = -   =>   E = acos( - )
             //          a                  a
 
-            EccentricAnomaly = (float)Math.Acos(PosX / SemiMajorAxis);
+            EccentricAnomaly = (float)Math.Acos(PosX / SemiMajorAxis) - Rotation;
 
             // M = E - ε sin(E)
 
