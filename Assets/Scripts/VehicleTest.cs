@@ -1,5 +1,6 @@
 using UnityEngine;
 using Entitas;
+using Physics;
 
 public class VehicleTest : MonoBehaviour
 {
@@ -49,7 +50,7 @@ public class VehicleTest : MonoBehaviour
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
     private void Update()
     {
-
+        // Clear last frame
         foreach (var mr in GetComponentsInChildren<MeshRenderer>())
             if (Application.isPlaying)
                 Destroy(mr.gameObject);
@@ -68,4 +69,25 @@ public class VehicleTest : MonoBehaviour
         vehicleDrawSystem.Draw(Instantiate(Material), transform, 12);
 
     }
+
+    // Draw Gizmos of collider (works only in editor mode)
+#if UNITY_EDITOR
+    public void OnDrawGizmos()
+    {
+        if (!Application.isPlaying) return;
+
+        var group = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.VehiclePhysicsState2D));
+
+        Gizmos.color = Color.green;
+
+        foreach (var entity in group)
+        {
+            var pos = entity.vehiclePhysicsState2D;
+            var boxCollider = entity.physicsBox2DCollider;
+            var boxBorders = boxCollider.CreateEntityBoxBorders(pos.Position);
+
+            Gizmos.DrawWireCube(boxBorders.Center, new Vector3(boxCollider.Size.x, boxCollider.Size.y, 0.0f));
+        }
+    }
+#endif
 }

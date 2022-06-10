@@ -29,7 +29,7 @@ namespace Vehicle
             entity.AddVehiclePhysicsState2D(position, position, Vector2.one, Vector2.one, 
                 Vector2.zero, 1.0f, 1.0f, 1.5f, Vector2.zero);
 
-            entity.AddPhysicsBox2DCollider(spriteSize);
+            entity.AddPhysicsBox2DCollider(spriteSize, Vector2.zero);
 
             return entity;
         }
