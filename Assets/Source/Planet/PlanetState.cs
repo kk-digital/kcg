@@ -16,8 +16,6 @@ namespace Planet
         public AgentList AgentList;
         public VehicleList VehicleList;
         public ProjectileList ProjectileList;
-        public List < int > ParticleIdList;
-        public List < int > ItemParticlesList;
 
 
         public PlanetState(UnityEngine.Vector2Int mapSize)
@@ -26,18 +24,17 @@ namespace Planet
             AgentList = new AgentList();
             VehicleList = new VehicleList();
             ProjectileList = new ProjectileList();
-            ParticleIdList = new List<int>();
         }
 
         public void AddPlayer(UnityEngine.Material material, Vector2 position)
         {
-            Entity entity = GameState.SpawnerSystem.SpawnPlayer(material, position);
+            GameEntity entity = GameState.SpawnerSystem.SpawnPlayer(material, position);
             AgentList.Add(entity);
         }
 
         public void AddAgent(UnityEngine.Material material, Vector2 position)
         {
-            Entity entity = GameState.SpawnerSystem.SpawnAgent(material, position);
+            GameEntity entity = GameState.SpawnerSystem.SpawnAgent(material, position);
             AgentList.Add(entity);
         }
 
@@ -76,6 +73,17 @@ namespace Planet
 
         }
 
+        // used to place a tile into the tile map
+        // x, y is the position in the tile map
+        public void PlaceTile(int x, int y, int tileType, Enums.Tile.MapLayerType layer)
+        {
+            Tile.Tile tile = Tile.Tile.EmptyTile;
+            tile.Type = tileType;
+            TileMap.PlaceTile(x, y, tile, layer);
+        }
+
+
+        // updates the entities, must call the systems and so on ..
         public void Update(float deltaTime)
         {
             float targetFps = 30.0f;
@@ -89,6 +97,14 @@ namespace Planet
                 // do a server/client tick right here
                 {
                     TimeState.TickTime++;
+
+
+                    for(int index = 0; index < ProjectileList.Capacity; index++)
+                    {
+                        ref ProjectileEntity projectile = ref ProjectileList.List[index];
+
+                        var position = projectile.Entity.projectilePosition2D;
+                    }
 
                 }
 

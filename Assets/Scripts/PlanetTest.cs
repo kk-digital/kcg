@@ -27,6 +27,16 @@ namespace Planet.Unity
         {
             Planet.TileMap TileMap = Planet.TileMap;
 
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                int x = (int)worldPosition.x;
+                int y = (int)worldPosition.y;
+                Planet.PlaceTile(x, y, 10, MapLayerType.Front);
+                TileMap.BuildLayerTexture(MapLayerType.Front);
+                
+            }
+
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -84,7 +94,8 @@ namespace Planet.Unity
 
 
             Planet.AddPlayer(Instantiate(Material), new Vector2(3.0f, 3.0f));
-            Planet.AddAgent(Instantiate(Material), new Vector2(6.0f, 2.0f));
+            Planet.AddAgent(Instantiate(Material), new Vector2(6.0f, 3.0f));
+            Planet.AddAgent(Instantiate(Material), new Vector2(1.0f, 4.0f));
         }
 
 

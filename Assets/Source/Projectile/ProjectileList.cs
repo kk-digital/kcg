@@ -30,7 +30,7 @@ namespace Projectile
         }
 
 
-        public ProjectileEntity Add(Entity entity)
+        public ProjectileEntity Add(GameEntity entity)
         {
             // if we dont have enough space we expand
             // the capacity

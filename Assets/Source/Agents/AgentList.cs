@@ -30,7 +30,7 @@ namespace Agent
         }
 
 
-        public AgentEntity Add(Entity entity)
+        public AgentEntity Add(GameEntity entity)
         {
             // if we dont have enough space we expand
             // the capacity
