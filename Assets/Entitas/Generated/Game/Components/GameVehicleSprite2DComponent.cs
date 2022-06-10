@@ -11,27 +11,19 @@ public partial class GameEntity {
     public Vehicle.Sprite2DComponent vehicleSprite2D { get { return (Vehicle.Sprite2DComponent)GetComponent(GameComponentsLookup.VehicleSprite2D); } }
     public bool hasVehicleSprite2D { get { return HasComponent(GameComponentsLookup.VehicleSprite2D); } }
 
-    public void AddVehicleSprite2D(int newSpriteID, string newSpritePath, UnityEngine.Vector2 newSize, UnityEngine.Vector2Int newPngSize, UnityEngine.Material newMaterial, UnityEngine.Mesh newMesh) {
+    public void AddVehicleSprite2D(UnityEngine.Texture2D newTexture, UnityEngine.Vector2 newSize) {
         var index = GameComponentsLookup.VehicleSprite2D;
         var component = (Vehicle.Sprite2DComponent)CreateComponent(index, typeof(Vehicle.Sprite2DComponent));
-        component.SpriteID = newSpriteID;
-        component.SpritePath = newSpritePath;
+        component.Texture = newTexture;
         component.Size = newSize;
-        component.PngSize = newPngSize;
-        component.Material = newMaterial;
-        component.Mesh = newMesh;
         AddComponent(index, component);
     }
 
-    public void ReplaceVehicleSprite2D(int newSpriteID, string newSpritePath, UnityEngine.Vector2 newSize, UnityEngine.Vector2Int newPngSize, UnityEngine.Material newMaterial, UnityEngine.Mesh newMesh) {
+    public void ReplaceVehicleSprite2D(UnityEngine.Texture2D newTexture, UnityEngine.Vector2 newSize) {
         var index = GameComponentsLookup.VehicleSprite2D;
         var component = (Vehicle.Sprite2DComponent)CreateComponent(index, typeof(Vehicle.Sprite2DComponent));
-        component.SpriteID = newSpriteID;
-        component.SpritePath = newSpritePath;
+        component.Texture = newTexture;
         component.Size = newSize;
-        component.PngSize = newPngSize;
-        component.Material = newMaterial;
-        component.Mesh = newMesh;
         ReplaceComponent(index, component);
     }
 
