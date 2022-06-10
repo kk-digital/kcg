@@ -1,11 +1,11 @@
-﻿using Entitas;
+﻿using System;
+using Entitas;
 using UnityEngine;
 
 namespace Item
 {
-    public class StackComponent : IComponent // Make item Stackable.
+    public struct StackComponent : IComponent
     {
-        public int StackCount;
-        public int MaxStackSize;
+        public int Count; // Number of Component in the stack.
     }
 }

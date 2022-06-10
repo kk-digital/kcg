@@ -8,18 +8,18 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    static readonly Inventory.Component inventoryComponent = new Inventory.Component();
+    static readonly Item.Attribute.EquipamentComponent itemAttributeEquipamentComponent = new Item.Attribute.EquipamentComponent();
 
-    public bool isInventory {
-        get { return HasComponent(GameComponentsLookup.Inventory); }
+    public bool isItemAttributeEquipament {
+        get { return HasComponent(GameComponentsLookup.ItemAttributeEquipament); }
         set {
-            if (value != isInventory) {
-                var index = GameComponentsLookup.Inventory;
+            if (value != isItemAttributeEquipament) {
+                var index = GameComponentsLookup.ItemAttributeEquipament;
                 if (value) {
                     var componentPool = GetComponentPool(index);
                     var component = componentPool.Count > 0
                             ? componentPool.Pop()
-                            : inventoryComponent;
+                            : itemAttributeEquipamentComponent;
 
                     AddComponent(index, component);
                 } else {
@@ -40,17 +40,17 @@ public partial class GameEntity {
 //------------------------------------------------------------------------------
 public sealed partial class GameMatcher {
 
-    static Entitas.IMatcher<GameEntity> _matcherInventory;
+    static Entitas.IMatcher<GameEntity> _matcherItemAttributeEquipament;
 
-    public static Entitas.IMatcher<GameEntity> Inventory {
+    public static Entitas.IMatcher<GameEntity> ItemAttributeEquipament {
         get {
-            if (_matcherInventory == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.Inventory);
+            if (_matcherItemAttributeEquipament == null) {
+                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.ItemAttributeEquipament);
                 matcher.componentNames = GameComponentsLookup.componentNames;
-                _matcherInventory = matcher;
+                _matcherItemAttributeEquipament = matcher;
             }
 
-            return _matcherInventory;
+            return _matcherItemAttributeEquipament;
         }
     }
 }
