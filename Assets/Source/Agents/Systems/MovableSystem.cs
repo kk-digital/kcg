@@ -14,15 +14,8 @@ namespace Agent
 
                 var pos = entity.agentPosition2D;
                 var movable = entity.agentMovable;
-                var input = entity.eCSInputXY;
 
-                movable.Acceleration = input.Value * entity.agentMovable.Speed * 50.0f;
                 movable.Acceleration.y -= 400.0f * deltaTime;
-                if (input.Jump)
-                {
-                    movable.Acceleration.y += 100.0f;
-                    movable.Velocity.y = 5.0f;
-                }
 
                 if (movable.Acceleration.y <= -30.0f)
                 {

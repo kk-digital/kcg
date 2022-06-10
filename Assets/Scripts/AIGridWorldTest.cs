@@ -47,7 +47,7 @@ public class AIGridWorldTest : MonoBehaviour
         }
 
         planner.Initialize();
-        ActionController.Initialize();
+        //ActionController.Initialize();
     }
 
     private bool IsValidPosition(Vector2Int pos)

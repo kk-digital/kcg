@@ -7,6 +7,6 @@ namespace Agent
     {
         public int Index;
         public bool IsInitialized;
-        public Entity Entity;
+        public GameEntity Entity;
     }
 }
