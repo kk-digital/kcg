@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour
             transform.position += Vector3.up    * Input.GetAxis("Mouse Y") * -0.28f / scale;
         }
 
-        scale += Input.GetAxis("Mouse ScrollWheel") * 0.3f * scale;
+        scale += Input.GetAxis("Mouse ScrollWheel") * 0.5f * scale;
         GetComponent<Camera>().orthographicSize = 20.0f / scale;
     }
 }
