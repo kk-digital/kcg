@@ -18,14 +18,15 @@ namespace SystemView
     {
         public SystemState State;
 
-        public int LastTime;
+        private int LastTime;
 
         public Dictionary<SystemPlanet,       ObjectInfo<SystemPlanetRenderer>>       Planets   = new();
+        public Dictionary<SystemPlanet,       ObjectInfo<SystemPlanetRenderer>>       Moons     = new();
         //public Dictionary<SystemAsteroidBelt, ObjectInfo<SystemAsteroidBeltRenderer>> Asteroids = new();
         public Dictionary<SystemShip,         ObjectInfo<SystemShipRenderer>>         Ships     = new();
         public Dictionary<SpaceStation,       ObjectInfo<SpaceStationRenderer>>       Stations  = new();
 
-        public const int UpdatesPerTick = 64;
+        //public const int UpdatesPerTick = 64;
 
         public System.Random rnd = new System.Random();
 
@@ -33,7 +34,20 @@ namespace SystemView
         public const int OuterPlanets    = 6;
         public const int FarOrbitPlanets = 2;
 
-        public int CurrentCycle = 0;
+        private int CurrentCycle = 0;
+
+        public  float SunMass          = 50000000000000.0f;
+        public  float PlanetMass       =   100000000000.0f;
+        public  float MoonMass         =    20000000000.0f;
+
+        public  float TimeScale        =              1.0f;
+
+        public  float DragFactor       =          10000.0f;
+        public  float SailingFactor    =             20.0f;
+
+        private float CachedSunMass    = 50000000000000.0f;
+        private float CachedPlanetMass =   100000000000.0f;
+        private float CachedMoonMass   =    20000000000.0f;
 
         private void Start()
         {
@@ -43,7 +57,7 @@ namespace SystemView
 
             State = gl.CurrentSystemState;
 
-            State.Star.Mass = 50000000000000.0f;
+            State.Star.Mass = SunMass;
             State.Star.PosX = (float)rnd.NextDouble() * 8.0f - 64.0f;
             State.Star.PosY = (float)rnd.NextDouble() * 8.0f -  4.0f;
 
@@ -67,7 +81,7 @@ namespace SystemView
 
                 Planet.Descriptor.Compute();
 
-                Planet.Descriptor.Self.Mass = 100000000000.0f;
+                Planet.Descriptor.Self.Mass = PlanetMass;
 
                 ObjectInfo<SystemPlanetRenderer> PlanetInfo = new();
 
@@ -135,7 +149,7 @@ namespace SystemView
 
                 Planet.Descriptor.Compute();
 
-                Planet.Descriptor.Self.Mass = 1000000000000;
+                Planet.Descriptor.Self.Mass = PlanetMass;
 
                 ObjectInfo<SystemPlanetRenderer> PlanetInfo = new();
 
@@ -152,7 +166,7 @@ namespace SystemView
                 {
                     SystemPlanet Moon = new SystemPlanet();
 
-                    Moon.Descriptor.Self.Mass = 20000000000;
+                    Moon.Descriptor.Self.Mass = MoonMass;
 
                     Moon.Descriptor.CentralBody = Planet.Descriptor.Self;
 
@@ -174,6 +188,7 @@ namespace SystemView
                     MoonInfo.Renderer = MoonInfo.Object.AddComponent<SystemPlanetRenderer>();
                     MoonInfo.Renderer.planet = Moon;
 
+                    Moons.Add(Moon, MoonInfo);
                 }
             }
 
@@ -249,6 +264,46 @@ namespace SystemView
             LastTime = (int)(Time.time * 1000);
             int UpdatesCompleted = 0;
 
+            if (CachedSunMass != SunMass)
+            {
+                State.Star.Mass = CachedSunMass = SunMass;
+
+                for (int i = 0; i < Planets.Count; i++)
+                {
+                    Planets.ElementAt(i).Key.Descriptor.Compute();
+                }
+
+                foreach (SystemShip Ship in State.Ships)
+                {
+                    Ship.Descriptor.Compute();
+                }
+            }
+
+            if (CachedPlanetMass != PlanetMass)
+            {
+                CachedPlanetMass = PlanetMass;
+
+                for (int i = 0; i < Planets.Count; i++)
+                {
+                    Planets.ElementAt(i).Key.Descriptor.Self.Mass = PlanetMass;
+                }
+
+                for (int i = 0; i < Moons.Count; i++)
+                {
+                    Moons.ElementAt(i).Key.Descriptor.Compute();
+                }
+            }
+
+            if (CachedMoonMass != MoonMass)
+            {
+                CachedPlanetMass = MoonMass;
+
+                for (int i = 0; i < Moons.Count; i++)
+                {
+                    Moons.ElementAt(i).Key.Descriptor.Self.Mass = MoonMass;
+                }
+            }
+
             foreach (SystemPlanet p in State.Planets)
             {
                 //if (Planets[p].LastCycle == CurrentCycle) continue;
@@ -311,7 +366,10 @@ namespace SystemView
             State.Player.Ship.Self.PosX += GravVelX * CurrentMillis / 2000.0f;
             State.Player.Ship.Self.PosY += GravVelY * CurrentMillis / 2000.0f;
 
-            CurrentCycle++;
+            State.Player.DragFactor      = DragFactor;
+            State.Player.SailingFactor   = SailingFactor;
+
+        CurrentCycle++;
         }
     }
 }

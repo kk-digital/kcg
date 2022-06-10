@@ -22,6 +22,9 @@ namespace SystemView
 
         public float GravitationalStrength = 0.0f;
 
+        public float DragFactor = 10000.0f;
+        public float SailingFactor = 20.0f;
+
         public SystemState State;
 
         private void Start()
@@ -92,7 +95,7 @@ namespace SystemView
 
             AccX = AccX / Magnitude * Ship.Acceleration * CurrentTime * Movement;
             AccY = AccY / Magnitude * Ship.Acceleration * CurrentTime * Movement;
-
+            
             Ship.Self.PosX += Ship.Self.VelX * CurrentTime + AccX / 2.0f * CurrentTime * CurrentTime;
             Ship.Self.PosY += Ship.Self.VelY * CurrentTime + AccY / 2.0f * CurrentTime * CurrentTime;
 
@@ -107,16 +110,16 @@ namespace SystemView
                 float GravitationalFactor = 1.0f / (1.0f - GravitationalStrength);
 
                 // "Air resistance" effect
-                Ship.Self.VelX *= 1.0f - 1.0f / (GravitationalFactor + 1000.0f);
-                Ship.Self.VelY *= 1.0f - 1.0f / (GravitationalFactor + 1000.0f);
+                Ship.Self.VelX *= 1.0f - 1.0f / (GravitationalFactor + DragFactor);
+                Ship.Self.VelY *= 1.0f - 1.0f / (GravitationalFactor + DragFactor);
 
                 // "Sailing" effect
                 if (Input.GetAxis("Horizontal") != 0.0f)
                 {
                     Magnitude = (float)Math.Sqrt(Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY);
 
-                    Ship.Self.VelX = ((5.0f + GravitationalFactor) * Ship.Self.VelX + (float)Math.Cos(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / (6.0f + GravitationalFactor);
-                    Ship.Self.VelY = ((5.0f + GravitationalFactor) * Ship.Self.VelY + (float)Math.Sin(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / (6.0f + GravitationalFactor);
+                    Ship.Self.VelX = ((SailingFactor + GravitationalFactor) * Ship.Self.VelX + (float)Math.Cos(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / (1.0f + SailingFactor + GravitationalFactor);
+                    Ship.Self.VelY = ((SailingFactor + GravitationalFactor) * Ship.Self.VelY + (float)Math.Sin(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / (1.0f + SailingFactor + GravitationalFactor);
                 }
             }
 
