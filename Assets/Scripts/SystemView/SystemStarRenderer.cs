@@ -33,5 +33,10 @@ namespace SystemView
 
             sr.color = color;
         }
+
+        void OnDestroy()
+        {
+            GameObject.Destroy(sr);
+        }
     }
 }

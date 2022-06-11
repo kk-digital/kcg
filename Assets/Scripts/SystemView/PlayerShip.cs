@@ -184,5 +184,11 @@ namespace SystemView
                 foreach (ShipWeapon Weapon in Ship.Weapons)
                     Weapon.Fire();
         }
+
+        void OnDestroy()
+        {
+            GameObject.Destroy(Renderer);
+            GameObject.Destroy(Object);
+        }
     }   
 }

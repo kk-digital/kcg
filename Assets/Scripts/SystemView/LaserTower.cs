@@ -31,6 +31,10 @@ namespace SystemView
         public SpriteRenderer sr;
         public CameraController Camera;
 
+        private GameObject DebugLineObject1;
+        private GameObject DebugLineObject2;
+        private GameObject LaserLineObject;
+
         private LineRenderer DebugLineRenderer1;
         private LineRenderer DebugLineRenderer2;
 
@@ -77,9 +81,13 @@ namespace SystemView
 
             Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
-            DebugLineRenderer1 = (new GameObject()).AddComponent<LineRenderer>();
-            DebugLineRenderer2 = (new GameObject()).AddComponent<LineRenderer>();
-            LaserLineRenderer  = (new GameObject()).AddComponent<LineRenderer>();
+            DebugLineObject1   = new GameObject();
+            DebugLineObject2   = new GameObject();
+            LaserLineObject    = new GameObject();
+
+            DebugLineRenderer1 = DebugLineObject1.AddComponent<LineRenderer>();
+            DebugLineRenderer2 = DebugLineObject2.AddComponent<LineRenderer>();
+            LaserLineRenderer  = LaserLineObject.AddComponent<LineRenderer>();
 
             Shader shader = Shader.Find("Hidden/Internal-Colored");
             Material mat = new Material(shader);
@@ -283,6 +291,16 @@ namespace SystemView
             Cooldown = FiringRate;
 
             return true;
+        }
+
+        void OnDestroy()
+        {
+            GameObject.Destroy(DebugLineRenderer1);
+            GameObject.Destroy(DebugLineRenderer2);
+            GameObject.Destroy(LaserLineRenderer);
+            GameObject.Destroy(DebugLineObject1);
+            GameObject.Destroy(DebugLineObject2);
+            GameObject.Destroy(LaserLineObject);
         }
     }
 }

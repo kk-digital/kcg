@@ -44,5 +44,11 @@ namespace SystemView
 
             or.UpdateRenderer(128);
         }
+
+        void OnDestroy()
+        {
+            GameObject.Destroy(sr);
+            GameObject.Destroy(or);
+        }
     }
 }

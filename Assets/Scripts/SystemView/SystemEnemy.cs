@@ -81,5 +81,11 @@ namespace SystemView
 
             Renderer.shipColor.r = (float) Ship.Health / Ship.MaxHealth;
         }
+
+        void OnDestroy()
+        {
+            GameObject.Destroy(Renderer);
+            GameObject.Destroy(Object);
+        }
     }
 }

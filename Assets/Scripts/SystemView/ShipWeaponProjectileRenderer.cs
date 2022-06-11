@@ -37,5 +37,10 @@ namespace SystemView
             sr.transform.localScale = new Vector3(Scale / Camera.scale, Scale / Camera.scale, 1.0f);
             sr.color = Projectile.ProjectileColor;
         }
+
+        void OnDestroy()
+        {
+            GameObject.Destroy(sr);
+        }
     }
 }
