@@ -55,21 +55,21 @@ namespace SystemView
 
         public  CameraController Camera;
 
-        public void setInnerPlanets(float f)    { InnerPlanets    = (int)f; }
-        public void setOuterPlanets(float f)    { OuterPlanets    = (int)f; }
-        public void setFarOrbitPlanets(float f) { FarOrbitPlanets = (int)f; }
+        public void setInnerPlanets(float f)    { InnerPlanets    =        (int)f; }
+        public void setOuterPlanets(float f)    { OuterPlanets    =        (int)f; }
+        public void setFarOrbitPlanets(float f) { FarOrbitPlanets =        (int)f; }
 
-        public void setSystemScale(float f)     { SystemScale     =      f; }
+        public void setSystemScale(float f)     { SystemScale     =             f; }
 
-        public void setSunMass(float f)         { SunMass         =      f; }
-        public void setPlanetMass(float f)      { PlanetMass      =      f; }
-        public void setMoonMass(float f)        { MoonMass        =      f; }
+        public void setSunMass(float f)         { SunMass         =             f; }
+        public void setPlanetMass(float f)      { PlanetMass      =             f; }
+        public void setMoonMass(float f)        { MoonMass        =             f; }
 
-        public void setTimeScale(float f)       { TimeScale       =      f; }
+        public void setTimeScale(float f)       { TimeScale       =             f; }
 
-        public void setAcceleration(float f)    { Acceleration    =      f; }
-        public void setDragFactor(float f)      { DragFactor      =      f; }
-        public void setSailingFactor(float f)   { SailingFactor   =      f; }
+        public void setAcceleration(float f)    { Acceleration    =             f; }
+        public void setDragFactor(float f)      { DragFactor      = 100000.0f - f; }
+        public void setSailingFactor(float f)   { SailingFactor   =   1000.0f - f; }
 
         private void Start()
         {
