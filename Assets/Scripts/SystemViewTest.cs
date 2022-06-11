@@ -53,6 +53,7 @@ namespace SystemView
 
         private int   CurrentCycle     =                    0;
 
+        public  CameraController Camera;
 
         public void setInnerPlanets(float f)    { InnerPlanets    = (int)f; }
         public void setOuterPlanets(float f)    { OuterPlanets    = (int)f; }
@@ -83,6 +84,13 @@ namespace SystemView
 
             SystemStarRenderer starRenderer = StarObject.AddComponent<SystemStarRenderer>();
             starRenderer.Star = State.Star;
+
+            Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
+        }
+
+        public void CenterCamera()
+        {
+            Camera.setPosition(-State.Player.Ship.Self.PosX, -State.Player.Ship.Self.PosY, 0.25f / SystemScale);
         }
 
         public void RegenerateSystem()

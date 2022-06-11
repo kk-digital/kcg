@@ -18,4 +18,11 @@ public class CameraController : MonoBehaviour
         scale += Input.GetAxis("Mouse ScrollWheel") * 0.5f * scale;
         GetComponent<Camera>().orthographicSize = 20.0f / scale;
     }
+
+    public void setPosition(float x, float y, float s)
+    {
+        scale = s;
+        transform.position = new Vector3(x, y, -10);
+        GetComponent<Camera>().orthographicSize = 20.0f / scale;
+    }
 }
