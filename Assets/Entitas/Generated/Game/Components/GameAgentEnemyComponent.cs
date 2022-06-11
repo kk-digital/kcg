@@ -8,25 +8,27 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    static readonly Agent.EnemyComponent agentEnemyComponent = new Agent.EnemyComponent();
+    public Agent.EnemyComponent agentEnemy { get { return (Agent.EnemyComponent)GetComponent(GameComponentsLookup.AgentEnemy); } }
+    public bool hasAgentEnemy { get { return HasComponent(GameComponentsLookup.AgentEnemy); } }
 
-    public bool isAgentEnemy {
-        get { return HasComponent(GameComponentsLookup.AgentEnemy); }
-        set {
-            if (value != isAgentEnemy) {
-                var index = GameComponentsLookup.AgentEnemy;
-                if (value) {
-                    var componentPool = GetComponentPool(index);
-                    var component = componentPool.Count > 0
-                            ? componentPool.Pop()
-                            : agentEnemyComponent;
+    public void AddAgentEnemy(int newBehaviour, float newDetectionRadius) {
+        var index = GameComponentsLookup.AgentEnemy;
+        var component = (Agent.EnemyComponent)CreateComponent(index, typeof(Agent.EnemyComponent));
+        component.Behaviour = newBehaviour;
+        component.DetectionRadius = newDetectionRadius;
+        AddComponent(index, component);
+    }
 
-                    AddComponent(index, component);
-                } else {
-                    RemoveComponent(index);
-                }
-            }
-        }
+    public void ReplaceAgentEnemy(int newBehaviour, float newDetectionRadius) {
+        var index = GameComponentsLookup.AgentEnemy;
+        var component = (Agent.EnemyComponent)CreateComponent(index, typeof(Agent.EnemyComponent));
+        component.Behaviour = newBehaviour;
+        component.DetectionRadius = newDetectionRadius;
+        ReplaceComponent(index, component);
+    }
+
+    public void RemoveAgentEnemy() {
+        RemoveComponent(GameComponentsLookup.AgentEnemy);
     }
 }
 
