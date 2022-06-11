@@ -65,24 +65,24 @@ namespace Planet
 
         }
 
-        public void AddProjectile()
+        public ProjectileEntity AddProjectile(UnityEngine.Material material, Vector2 position)
         {
-            
+            return new ProjectileEntity();
         }
 
-        public void RemoveProjectile()
+        public void RemoveProjectile(ProjectileEntity entity)
         {
-
+            ProjectileList.Remove(entity);
         }
 
-        public void AddVehicle(UnityEngine.Material material, Vector2 position)
+        public VehicleEntity AddVehicle(UnityEngine.Material material, Vector2 position)
         {
-
+            return new VehicleEntity();
         }
 
-        public void RemoveVehicle()
+        public void RemoveVehicle(VehicleEntity entity)
         {
-
+            VehicleList.Remove(entity);
         }
 
         // used to place a tile into the tile map
