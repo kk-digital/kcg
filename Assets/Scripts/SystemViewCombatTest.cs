@@ -26,6 +26,21 @@ namespace SystemView
 
         public Dropdown EnemySelectorMenu;
 
+        public Slider   SemiMajorAxisSlider;
+        public Slider   SemiMinorAxisSlider;
+        public Slider   RotationSlider;
+        public Slider   MaxHealthSlider;
+        public Slider   MaxShieldSlider;
+        public Slider   ShieldRegenerationSlider;
+        public Slider   WeaponCooldownSlider;
+        public Slider   WeaponRangeSlider;
+        public Slider   WeaponDamageSlider;
+        public Slider   ShieldPenetrationSlider;
+        public Slider   ProjectileVelocitySlider;
+
+        public Button   UpdateEnemyButton;
+        public Button   DeleteEnemyButton;
+
         void Start()
         {
             LastTime = (int)(Time.time * 1000.0f);
@@ -67,6 +82,18 @@ namespace SystemView
                 State.LaserTowers.Add(PendingLasers[0]);
                 PendingLasers[0].State = State;
                 PendingLasers.RemoveAt(0);
+            }
+
+            if (SelectedEnemy != null && !Enemies.Contains(SelectedEnemy))
+            {
+                SelectEnemy(0);
+            }
+
+            if (SelectedEnemy != null)
+            {
+                if (SemiMajorAxisSlider.value < SemiMinorAxisSlider.value)
+                    SemiMajorAxisSlider.value = SemiMinorAxisSlider.value;
+                SemiMajorAxisSlider.minValue = SemiMinorAxisSlider.value;
             }
 
             int CurrentMillis = (int)(Time.time * 1000) - LastTime;
@@ -268,13 +295,89 @@ namespace SystemView
 
         public void SelectEnemy(int i)
         {
-            if (i == 0)
+            if (i == 0 || i > Enemies.Count)
             {
-                SelectedEnemy = null;
+                SelectedEnemy                         = null;
+
+                SemiMajorAxisSlider.interactable      = false;
+                SemiMinorAxisSlider.interactable      = false;
+                RotationSlider.interactable           = false;
+                MaxHealthSlider.interactable          = false;
+                MaxShieldSlider.interactable          = false;
+                ShieldRegenerationSlider.interactable = false;
+                WeaponCooldownSlider.interactable     = false;
+                WeaponRangeSlider.interactable        = false;
+                WeaponDamageSlider.interactable       = false;
+                ShieldPenetrationSlider.interactable  = false;
+                ProjectileVelocitySlider.interactable = false;
+
+                UpdateEnemyButton.interactable        = false;
+                DeleteEnemyButton.interactable        = false;
             }
-            else
+            else if (i <= Enemies.Count && SelectedEnemy != Enemies.ElementAt(i - 1))
             {
-                SelectedEnemy = Enemies.ElementAt(i - 1);
+                SelectedEnemy                         = Enemies.ElementAt(i - 1);
+
+                SemiMajorAxisSlider.interactable      = true;
+                SemiMinorAxisSlider.interactable      = true;
+                RotationSlider.interactable           = true;
+                MaxHealthSlider.interactable          = true;
+                MaxShieldSlider.interactable          = true;
+                ShieldRegenerationSlider.interactable = true;
+                WeaponCooldownSlider.interactable     = true;
+                WeaponRangeSlider.interactable        = true;
+                WeaponDamageSlider.interactable       = true;
+                ShieldPenetrationSlider.interactable  = true;
+                ProjectileVelocitySlider.interactable = true;
+
+                UpdateEnemyButton.interactable        = true;
+                DeleteEnemyButton.interactable        = true;
+
+                SemiMajorAxisSlider.value             = SelectedEnemy.Ship.Descriptor.SemiMajorAxis;
+                SemiMinorAxisSlider.value             = SelectedEnemy.Ship.Descriptor.SemiMinorAxis;
+                RotationSlider.value                  = SelectedEnemy.Ship.Descriptor.Rotation;
+                MaxHealthSlider.value                 = SelectedEnemy.Ship.MaxHealth;
+                MaxShieldSlider.value                 = SelectedEnemy.Ship.MaxShield;
+                ShieldRegenerationSlider.value        = SelectedEnemy.Ship.ShieldRegenerationRate;
+                WeaponCooldownSlider.value            = SelectedEnemy.Ship.Weapons[0].AttackSpeed;
+                WeaponRangeSlider.value               = SelectedEnemy.Ship.Weapons[0].Range;
+                WeaponDamageSlider.value              = SelectedEnemy.Ship.Weapons[0].Damage;
+                ShieldPenetrationSlider.value         = SelectedEnemy.Ship.Weapons[0].ShieldPenetration;
+                ProjectileVelocitySlider.value        = SelectedEnemy.Ship.Weapons[0].ProjectileVelocity;
+            }
+        }
+
+        public void UpdateEnemy()
+        {
+            if (SelectedEnemy != null && Enemies.Contains(SelectedEnemy))
+            {
+                SelectedEnemy.Ship.Descriptor.SemiMajorAxis      =      SemiMajorAxisSlider.value;
+                SelectedEnemy.Ship.Descriptor.SemiMinorAxis      =      SemiMinorAxisSlider.value;
+                SelectedEnemy.Ship.Descriptor.Rotation           =      RotationSlider.value;
+                SelectedEnemy.Ship.MaxHealth                     = (int)MaxHealthSlider.value;
+                SelectedEnemy.Ship.MaxShield                     = (int)MaxShieldSlider.value;
+                SelectedEnemy.Ship.ShieldRegenerationRate        = (int)ShieldRegenerationSlider.value;
+                SelectedEnemy.Ship.Weapons[0].AttackSpeed        = (int)WeaponCooldownSlider.value;
+                SelectedEnemy.Ship.Weapons[0].Range              =      WeaponRangeSlider.value;
+                SelectedEnemy.Ship.Weapons[0].Damage             = (int)WeaponDamageSlider.value;
+                SelectedEnemy.Ship.Weapons[0].ShieldPenetration  =      ShieldPenetrationSlider.value;
+                SelectedEnemy.Ship.Weapons[0].ProjectileVelocity =      ProjectileVelocitySlider.value;
+
+                if (SelectedEnemy.Ship.Health > SelectedEnemy.Ship.MaxHealth)
+                    SelectedEnemy.Ship.Health = SelectedEnemy.Ship.MaxHealth;
+
+                SelectedEnemy.Ship.Descriptor.Compute();
+            }
+        }
+
+        public void DeleteEnemy()
+        {
+            if (SelectedEnemy != null && Enemies.Contains(SelectedEnemy))
+            {
+                State.Ships.Remove(SelectedEnemy.Ship);
+                Enemies.Remove(SelectedEnemy);
+                GameObject.Destroy(SelectedEnemy);
+                SelectEnemy(0);
             }
         }
     }
