@@ -253,6 +253,7 @@ namespace SystemView
                 ProjectileRenderers.Remove(Projectile);
             }
 
+            SelectEnemy(0);
             RespawnPlayer();
         }
 
