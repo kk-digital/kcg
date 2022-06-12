@@ -6,6 +6,9 @@ namespace Item
 {
     public struct StackComponent : IComponent
     {
-        public int Count; // Number of Component in the stack.
+        /// <summary>
+        /// Number of Component in the stack.
+        /// </summary>
+        public int Count;
     }
 }

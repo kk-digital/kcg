@@ -5,7 +5,7 @@ using Enums;
 
 namespace Item
 {
-    public sealed class IDComponent : IComponent
+    public struct IDComponent : IComponent
     {
         [PrimaryEntityIndex]
         public int              ID;

@@ -34,6 +34,20 @@ namespace ECSInput
                 }
 
                 entity.ReplaceAgentMovable(movable.Speed, movable.Velocity, movable.Acceleration, movable.AccelerationTime);
+
+            }
+
+            //  Open Inventory with Tab.
+            var PlayerWithInventory = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentInventory, GameMatcher.AgentPlayer));
+            foreach (var entity in PlayerWithInventory)
+            {
+                int inventoryID = entity.agentInventory.InventoryID;
+                GameEntity inventoryEntity = Contexts.sharedInstance.game.GetEntityWithInventoryID(inventoryID);
+
+                if (Input.GetKeyUp(KeyCode.Tab))
+                {
+                    inventoryEntity.isInventoryDrawable = !inventoryEntity.isInventoryDrawable;
+                }
             }
         }
     }

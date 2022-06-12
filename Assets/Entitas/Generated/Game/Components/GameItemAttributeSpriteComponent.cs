@@ -11,21 +11,17 @@ public partial class GameEntity {
     public Item.Attribute.SpriteComponent itemAttributeSprite { get { return (Item.Attribute.SpriteComponent)GetComponent(GameComponentsLookup.ItemAttributeSprite); } }
     public bool hasItemAttributeSprite { get { return HasComponent(GameComponentsLookup.ItemAttributeSprite); } }
 
-    public void AddItemAttributeSprite(UnityEngine.Texture2D newTexture, UnityEngine.Vector2 newSize, UnityEngine.Texture2D newTextureInventory) {
+    public void AddItemAttributeSprite(int newID) {
         var index = GameComponentsLookup.ItemAttributeSprite;
         var component = (Item.Attribute.SpriteComponent)CreateComponent(index, typeof(Item.Attribute.SpriteComponent));
-        component.Texture = newTexture;
-        component.Size = newSize;
-        component.TextureInventory = newTextureInventory;
+        component.ID = newID;
         AddComponent(index, component);
     }
 
-    public void ReplaceItemAttributeSprite(UnityEngine.Texture2D newTexture, UnityEngine.Vector2 newSize, UnityEngine.Texture2D newTextureInventory) {
+    public void ReplaceItemAttributeSprite(int newID) {
         var index = GameComponentsLookup.ItemAttributeSprite;
         var component = (Item.Attribute.SpriteComponent)CreateComponent(index, typeof(Item.Attribute.SpriteComponent));
-        component.Texture = newTexture;
-        component.Size = newSize;
-        component.TextureInventory = newTextureInventory;
+        component.ID = newID;
         ReplaceComponent(index, component);
     }
 

@@ -10,57 +10,64 @@ public static class GameComponentsLookup {
 
     public const int AgentEnemy = 0;
     public const int AgentID = 1;
-    public const int AgentMovable = 2;
-    public const int AgentPlayer = 3;
-    public const int AgentPosition2D = 4;
-    public const int AgentPositionDiscrete2D = 5;
-    public const int AgentSprite2D = 6;
-    public const int AgentStats = 7;
-    public const int AIAction = 8;
-    public const int AIAgentPlanner = 9;
-    public const int AIAnimationAction = 10;
-    public const int AIGoal = 11;
-    public const int AIMoveToAction = 12;
-    public const int ECSInput = 13;
-    public const int ECSInputXY = 14;
-    public const int InventoryID = 15;
-    public const int InventorySize = 16;
-    public const int InventorySlots = 17;
-    public const int ItemAttachedInventory = 18;
-    public const int ItemAttributeEquipament = 19;
-    public const int ItemAttributePlaceable = 20;
-    public const int ItemAttributeSprite = 21;
-    public const int ItemAttributeStackable = 22;
-    public const int ItemAttributesBasic = 23;
-    public const int ItemID = 24;
-    public const int ItemLabel = 25;
-    public const int ItemMovable = 26;
-    public const int ItemPosition2D = 27;
-    public const int ItemStack = 28;
-    public const int ParticleEmitter2dPosition = 29;
-    public const int ParticleEmitterState = 30;
-    public const int ParticlePosition2D = 31;
-    public const int ParticleState = 32;
-    public const int PhysicsBox2DCollider = 33;
-    public const int ProjectileID = 34;
-    public const int ProjectilePhysicsState2D = 35;
-    public const int ProjectileSprite2D = 36;
-    public const int ProjectileType = 37;
-    public const int VehicleID = 38;
-    public const int VehiclePhysicsState2D = 39;
-    public const int VehicleSprite2D = 40;
+    public const int AgentInventory = 2;
+    public const int AgentMovable = 3;
+    public const int AgentPlayer = 4;
+    public const int AgentPosition2D = 5;
+    public const int AgentPositionDiscrete2D = 6;
+    public const int AgentSprite2D = 7;
+    public const int AgentStats = 8;
+    public const int AgentToolBar = 9;
+    public const int AIAction = 10;
+    public const int AIAgentPlanner = 11;
+    public const int AIAnimationAction = 12;
+    public const int AIGoal = 13;
+    public const int AIMoveToAction = 14;
+    public const int ECSInput = 15;
+    public const int ECSInputXY = 16;
+    public const int InventoryDrawable = 17;
+    public const int InventoryID = 18;
+    public const int InventorySize = 19;
+    public const int InventorySlots = 20;
+    public const int InventoryToolBar = 21;
+    public const int ItemAttachedInventory = 22;
+    public const int ItemAttributeEquipament = 23;
+    public const int ItemAttributeInventorySprite = 24;
+    public const int ItemAttributePlaceable = 25;
+    public const int ItemAttributeSprite = 26;
+    public const int ItemAttributeStackable = 27;
+    public const int ItemAttributesBasic = 28;
+    public const int ItemID = 29;
+    public const int ItemLabel = 30;
+    public const int ItemMovable = 31;
+    public const int ItemPosition2D = 32;
+    public const int ItemStack = 33;
+    public const int ParticleEmitter2dPosition = 34;
+    public const int ParticleEmitterState = 35;
+    public const int ParticlePosition2D = 36;
+    public const int ParticleState = 37;
+    public const int PhysicsBox2DCollider = 38;
+    public const int ProjectileID = 39;
+    public const int ProjectilePhysicsState2D = 40;
+    public const int ProjectileSprite2D = 41;
+    public const int ProjectileType = 42;
+    public const int VehicleID = 43;
+    public const int VehiclePhysicsState2D = 44;
+    public const int VehicleSprite2D = 45;
 
-    public const int TotalComponents = 41;
+    public const int TotalComponents = 46;
 
     public static readonly string[] componentNames = {
         "AgentEnemy",
         "AgentID",
+        "AgentInventory",
         "AgentMovable",
         "AgentPlayer",
         "AgentPosition2D",
         "AgentPositionDiscrete2D",
         "AgentSprite2D",
         "AgentStats",
+        "AgentToolBar",
         "AIAction",
         "AIAgentPlanner",
         "AIAnimationAction",
@@ -68,11 +75,14 @@ public static class GameComponentsLookup {
         "AIMoveToAction",
         "ECSInput",
         "ECSInputXY",
+        "InventoryDrawable",
         "InventoryID",
         "InventorySize",
         "InventorySlots",
+        "InventoryToolBar",
         "ItemAttachedInventory",
         "ItemAttributeEquipament",
+        "ItemAttributeInventorySprite",
         "ItemAttributePlaceable",
         "ItemAttributeSprite",
         "ItemAttributeStackable",
@@ -99,12 +109,14 @@ public static class GameComponentsLookup {
     public static readonly System.Type[] componentTypes = {
         typeof(Agent.EnemyComponent),
         typeof(Agent.IDComponent),
+        typeof(Agent.InventoryComponent),
         typeof(Agent.MovableComponent),
         typeof(Agent.PlayerComponent),
         typeof(Agent.Position2DComponent),
         typeof(Agent.PositionDiscrete2DComponent),
         typeof(Agent.Sprite2DComponent),
         typeof(Agent.StatsComponent),
+        typeof(Agent.ToolBarComponent),
         typeof(AI.ActionComponent),
         typeof(AI.AgentPlannerComponent),
         typeof(AI.AnimationActionComponent),
@@ -112,11 +124,14 @@ public static class GameComponentsLookup {
         typeof(AI.MoveToActionComponent),
         typeof(ECSInput.Component),
         typeof(ECSInput.XYComponent),
+        typeof(Inventory.DrawableComponent),
         typeof(Inventory.IDComponent),
         typeof(Inventory.SizeComponent),
         typeof(Inventory.SlotsComponent),
+        typeof(Inventory.ToolBarComponent),
         typeof(Item.AttachedInventoryComponent),
         typeof(Item.Attribute.EquipamentComponent),
+        typeof(Item.Attribute.InventorySpriteComponent),
         typeof(Item.Attribute.PlaceableComponent),
         typeof(Item.Attribute.SpriteComponent),
         typeof(Item.Attribute.StackableComponent),

@@ -1,6 +1,15 @@
 ﻿using Entitas;
 using UnityEngine;
 
+/*
+    How To use it:
+        Item.CreationApi.Instance.CreateItem(Item Type, Item Type Name);
+        Item.CreationApi.Instance.SetTexture(SpriteSheetID);
+        Item.CreationApi.Instance.SetInventoryTexture(SpriteSheetID);
+        Item.CreationApi.Instance.MakeStackable(Max number of items in a stack.);
+        Item.CreationApi.Instance.EndItem();
+*/
+
 namespace Item
 {
     public class CreationApi
@@ -24,16 +33,41 @@ namespace Item
                 return;
         }
 
-        public void SetTexture(int spriteSheetId, int row, int column)
+        public void SetTexture(string spritePath)
         {
             if (ItemType == null)
                 return;
+
+            int spriteSheetID = GameState.SpriteLoader.GetSpriteSheetID(spritePath);
+            int spriteAtlasID = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteSheetID, 0, 0, Enums.AtlasType.Particle);
         }
 
-        public void SetInventoryTexture(int spriteSheetId, int row, int column)
+        public void SetTexture(int spriteSheetID)
         {
             if (ItemType == null)
                 return;
+
+            int spriteAtlasID = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteSheetID, 0, 0, Enums.AtlasType.Particle);
+        }
+
+        public void SetInventoryTexture(string spritePath)
+        {
+            if (ItemType == null)
+                return;
+
+            int spriteSheetID = GameState.SpriteLoader.GetSpriteSheetID(spritePath);
+            int spriteAtlasID = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteSheetID, 0, 0, Enums.AtlasType.Particle);
+
+            ItemType.AddItemAttributeInventorySprite(spriteAtlasID);
+        }
+
+        public void SetInventoryTexture(int spriteSheetID)
+        {
+            if (ItemType == null)
+                return;
+
+            int spriteAtlasID = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteSheetID, 0, 0, Enums.AtlasType.Particle);
+            ItemType.AddItemAttributeInventorySprite(spriteAtlasID);
 
         }
 
@@ -63,7 +97,7 @@ namespace Item
 
         public void EndItem()
         {
-            // Todo: Check if ItemType is valid.
+            // Todo: Check if ItemType is valid in debug mode.
             ItemType = null;
         }
     }

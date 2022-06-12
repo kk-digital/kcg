@@ -54,6 +54,37 @@ namespace Utility
             mesh.SetTriangles(triangles, 0);
         }
 
+        public static void DrawQuadColor(float x, float y, float w, float h,
+            Color color, Material material, Transform transform, int drawOrder = 0)
+        {
+            var mat = material;
+            mat.color = color;
+            var mesh = CreateMesh(transform, "ColorQuad", drawOrder, mat);
+
+            List<int> triangles = new List<int>();
+            List<Vector2> uvs = new List<Vector2>();
+            List<Vector3> verticies = new List<Vector3>();
+
+            var p0 = new Vector3(x, y, 0);
+            var p1 = new Vector3((x + w), (y + h), 0);
+            var p2 = p0; p2.y = p1.y;
+            var p3 = p1; p3.y = p0.y;
+
+            verticies.Add(p0);
+            verticies.Add(p1);
+            verticies.Add(p2);
+            verticies.Add(p3);
+
+            triangles.Add(0);
+            triangles.Add(2);
+            triangles.Add(1);
+            triangles.Add(0);
+            triangles.Add(1);
+            triangles.Add(3);
+
+            mesh.SetVertices(verticies);
+            mesh.SetTriangles(triangles, 0);
+        }
 
         private static Mesh CreateMesh(Transform parent, string name, int sortingOrder, Material material)
         {
