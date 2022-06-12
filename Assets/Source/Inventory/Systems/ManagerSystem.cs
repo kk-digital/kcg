@@ -11,6 +11,18 @@ namespace Inventory
             EntitasContext = entitasContext;
         }
 
+        public void OpenInventory(int inventoryID)
+        {
+            var inventoryEntity = EntitasContext.game.GetEntityWithInventoryID(inventoryID);
+            inventoryEntity.isInventoryDrawable = true;
+        }
+
+        public void CloseInventory(int inventoryID)
+        {
+            var inventoryEntity = EntitasContext.game.GetEntityWithInventoryID(inventoryID);
+            inventoryEntity.isInventoryDrawable = false;
+        }
+
         public void AddItem(GameEntity entity, int inventoryID)
         {
             var EntityAttribute = EntitasContext.game.GetEntityWithItemAttributesBasic(entity.itemID.ItemType);
@@ -47,7 +59,7 @@ namespace Inventory
                     
                     if (NewEntityCount + EntityITCount <= EntityAttribute.itemAttributeStackable.MaxStackSize)
                     {
-                        entity.ReplaceItemStack(NewEntityCount + EntityITCount);
+                        entityIT.ReplaceItemStack(NewEntityCount + EntityITCount);
                         entity.Destroy();
                         return;
                     }

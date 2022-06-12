@@ -3,11 +3,10 @@ using Entitas;
 
 namespace Inventory
 {
-    public class SlotsComponent : IComponent
+    public struct SlotsComponent : IComponent
     {
-        // Used to fast searching fist empty slot. Should has the size of width * Heigh.
         /// <summary>
-        /// Current Slots
+        /// Current Slots(inventory.Width * inventory.Heigh)
         /// </summary>
         public BitArray Values; // Todo: Implement faster bitfield implementation.
         /// <summary>

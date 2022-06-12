@@ -95,7 +95,7 @@ public partial class Contexts {
         game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
             InventoryID,
             game.GetGroup(GameMatcher.InventoryID),
-            (e, c) => ((Inventory.IDComponent)c).InventoryID));
+            (e, c) => ((Inventory.IDComponent)c).ID));
 
         game.AddEntityIndex(new Entitas.EntityIndex<GameEntity, int>(
             ItemAttachedInventory,
@@ -147,8 +147,8 @@ public static class ContextsExtensions {
         return ((Entitas.PrimaryEntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.AIGoal)).GetEntity(GoalID);
     }
 
-    public static GameEntity GetEntityWithInventoryID(this GameContext context, int InventoryID) {
-        return ((Entitas.PrimaryEntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.InventoryID)).GetEntity(InventoryID);
+    public static GameEntity GetEntityWithInventoryID(this GameContext context, int ID) {
+        return ((Entitas.PrimaryEntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.InventoryID)).GetEntity(ID);
     }
 
     public static System.Collections.Generic.HashSet<GameEntity> GetEntitiesWithItemAttachedInventory(this GameContext context, int InventoryID) {

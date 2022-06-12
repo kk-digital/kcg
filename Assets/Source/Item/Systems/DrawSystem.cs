@@ -18,14 +18,11 @@ namespace Item
             var ItemAttributesWithSprite = EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.ItemAttributeSprite));
             foreach (var ItemTypeEntity in ItemAttributesWithSprite)
             {
-                var sprite = new Sprites.Model
-                {
-                    Texture = ItemTypeEntity.itemAttributeSprite.Texture,
-                    TextureCoords = new Vector4(0, 0, 1, 1)
-                };
+                int SpriteID = ItemTypeEntity.itemAttributeSprite.ID;
+                Sprites.Model sprite = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle);
 
-                float width = ItemTypeEntity.itemAttributeSprite.Size.x;
-                float height = ItemTypeEntity.itemAttributeSprite.Size.y;
+                float width = sprite.Texture.width / 32.0f;
+                float height = sprite.Texture.height / 32.0f;
 
                 // Draw all items with same sprite.
                 var ItemsOfType = EntitasContext.game.GetEntitiesWithItemIDItemType(ItemTypeEntity.itemAttributesBasic.ItemType);

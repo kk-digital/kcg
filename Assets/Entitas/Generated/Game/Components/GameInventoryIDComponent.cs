@@ -11,17 +11,17 @@ public partial class GameEntity {
     public Inventory.IDComponent inventoryID { get { return (Inventory.IDComponent)GetComponent(GameComponentsLookup.InventoryID); } }
     public bool hasInventoryID { get { return HasComponent(GameComponentsLookup.InventoryID); } }
 
-    public void AddInventoryID(int newInventoryID) {
+    public void AddInventoryID(int newID) {
         var index = GameComponentsLookup.InventoryID;
         var component = (Inventory.IDComponent)CreateComponent(index, typeof(Inventory.IDComponent));
-        component.InventoryID = newInventoryID;
+        component.ID = newID;
         AddComponent(index, component);
     }
 
-    public void ReplaceInventoryID(int newInventoryID) {
+    public void ReplaceInventoryID(int newID) {
         var index = GameComponentsLookup.InventoryID;
         var component = (Inventory.IDComponent)CreateComponent(index, typeof(Inventory.IDComponent));
-        component.InventoryID = newInventoryID;
+        component.ID = newID;
         ReplaceComponent(index, component);
     }
 

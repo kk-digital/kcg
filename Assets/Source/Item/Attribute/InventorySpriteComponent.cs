@@ -3,8 +3,9 @@ using UnityEngine;
 
 namespace Item.Attribute
 {
-    public struct SpriteComponent : IComponent
+    public struct InventorySpriteComponent : IComponent
     {
         public int ID;
     }
 }
+
