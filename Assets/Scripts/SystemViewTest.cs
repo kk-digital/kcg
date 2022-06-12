@@ -72,10 +72,6 @@ namespace SystemView
 
         private void Start()
         {
-            GameLoop gl = GetComponent<GameLoop>();
-
-            State = gl.CurrentSystemState;
-
             RegenerateSystem();
 
             var StarObject = new GameObject();

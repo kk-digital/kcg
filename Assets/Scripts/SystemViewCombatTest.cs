@@ -45,10 +45,6 @@ namespace SystemView
         {
             LastTime = (int)(Time.time * 1000.0f);
 
-            GameLoop gl = GetComponent<GameLoop>();
-
-            State = gl.CurrentSystemState;
-
             State.Star.Mass = 5000000.0f;
             State.Star.PosX = -5.0f;
             State.Star.PosY = 0.0f;

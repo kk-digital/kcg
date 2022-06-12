@@ -25,8 +25,6 @@ public class GameLoop : MonoBehaviour
 
         Application.targetFrameRate = FPS; // Cap at 60 FPS
 
-        CurrentSystemState = new SystemState();
-
         //Agent.SpawnerSystem.Instance.SpawnPlayer(material);
        // agents = new Agent.List();
     }
