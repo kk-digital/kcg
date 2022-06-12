@@ -8,12 +8,12 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public Agent.MovableComponent agentMovable { get { return (Agent.MovableComponent)GetComponent(GameComponentsLookup.AgentMovable); } }
-    public bool hasAgentMovable { get { return HasComponent(GameComponentsLookup.AgentMovable); } }
+    public Physics.MovableComponent physicsMovable { get { return (Physics.MovableComponent)GetComponent(GameComponentsLookup.PhysicsMovable); } }
+    public bool hasPhysicsMovable { get { return HasComponent(GameComponentsLookup.PhysicsMovable); } }
 
-    public void AddAgentMovable(float newSpeed, UnityEngine.Vector2 newVelocity, UnityEngine.Vector2 newAcceleration, float newAccelerationTime) {
-        var index = GameComponentsLookup.AgentMovable;
-        var component = (Agent.MovableComponent)CreateComponent(index, typeof(Agent.MovableComponent));
+    public void AddPhysicsMovable(float newSpeed, UnityEngine.Vector2 newVelocity, UnityEngine.Vector2 newAcceleration, float newAccelerationTime) {
+        var index = GameComponentsLookup.PhysicsMovable;
+        var component = (Physics.MovableComponent)CreateComponent(index, typeof(Physics.MovableComponent));
         component.Speed = newSpeed;
         component.Velocity = newVelocity;
         component.Acceleration = newAcceleration;
@@ -21,9 +21,9 @@ public partial class GameEntity {
         AddComponent(index, component);
     }
 
-    public void ReplaceAgentMovable(float newSpeed, UnityEngine.Vector2 newVelocity, UnityEngine.Vector2 newAcceleration, float newAccelerationTime) {
-        var index = GameComponentsLookup.AgentMovable;
-        var component = (Agent.MovableComponent)CreateComponent(index, typeof(Agent.MovableComponent));
+    public void ReplacePhysicsMovable(float newSpeed, UnityEngine.Vector2 newVelocity, UnityEngine.Vector2 newAcceleration, float newAccelerationTime) {
+        var index = GameComponentsLookup.PhysicsMovable;
+        var component = (Physics.MovableComponent)CreateComponent(index, typeof(Physics.MovableComponent));
         component.Speed = newSpeed;
         component.Velocity = newVelocity;
         component.Acceleration = newAcceleration;
@@ -31,8 +31,8 @@ public partial class GameEntity {
         ReplaceComponent(index, component);
     }
 
-    public void RemoveAgentMovable() {
-        RemoveComponent(GameComponentsLookup.AgentMovable);
+    public void RemovePhysicsMovable() {
+        RemoveComponent(GameComponentsLookup.PhysicsMovable);
     }
 }
 
@@ -46,17 +46,17 @@ public partial class GameEntity {
 //------------------------------------------------------------------------------
 public sealed partial class GameMatcher {
 
-    static Entitas.IMatcher<GameEntity> _matcherAgentMovable;
+    static Entitas.IMatcher<GameEntity> _matcherPhysicsMovable;
 
-    public static Entitas.IMatcher<GameEntity> AgentMovable {
+    public static Entitas.IMatcher<GameEntity> PhysicsMovable {
         get {
-            if (_matcherAgentMovable == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.AgentMovable);
+            if (_matcherPhysicsMovable == null) {
+                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.PhysicsMovable);
                 matcher.componentNames = GameComponentsLookup.componentNames;
-                _matcherAgentMovable = matcher;
+                _matcherPhysicsMovable = matcher;
             }
 
-            return _matcherAgentMovable;
+            return _matcherPhysicsMovable;
         }
     }
 }

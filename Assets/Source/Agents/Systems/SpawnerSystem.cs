@@ -31,10 +31,15 @@ namespace Agent
             entity.AddAgentID(playerID);
 
             entity.AddAgentSprite2D(texture, spriteSize);
-            entity.AddAgentPosition2D(position, newPreviousValue: default);
+            entity.AddPhysicsPosition2D(position, newPreviousValue: default);
             Vector2 box2dCollider = new Vector2(0.5f, 1.5f);
             entity.AddPhysicsBox2DCollider(box2dCollider, new Vector2(0.25f, 0.0f));
-            entity.AddAgentMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
+            entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
+            
+            // Add Inventory and toolbar.
+            var attacher = Inventory.InventoryAttacher.Instance;
+            attacher.AttachInventoryToAgent(6, 5, playerID);
+            attacher.AttachToolBarToPlayer(10, playerID);
 
             return entity;
         }
@@ -59,8 +64,8 @@ namespace Agent
             Vector2 box2dCollider = new Vector2(0.5f, 1.5f);
             entity.AddPhysicsBox2DCollider(box2dCollider, new Vector2(0.25f, 0.0f));
             entity.AddAgentSprite2D(texture, spriteSize);
-            entity.AddAgentPosition2D(position, newPreviousValue: default);
-            entity.AddAgentMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
+            entity.AddPhysicsPosition2D(position, newPreviousValue: default);
+            entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
 
             return entity;
         }
@@ -85,8 +90,8 @@ namespace Agent
             Vector2 box2dCollider = new Vector2(0.5f, 1.5f);
             entity.AddPhysicsBox2DCollider(box2dCollider, new Vector2(0.25f, 0.0f));
             entity.AddAgentSprite2D(texture, spriteSize);
-            entity.AddAgentPosition2D(position, newPreviousValue: default);
-            entity.AddAgentMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
+            entity.AddPhysicsPosition2D(position, newPreviousValue: default);
+            entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
             entity.AddAgentEnemy(0, 4.0f);
             entity.AddAgentStats(100.0f, 0.8f);
 

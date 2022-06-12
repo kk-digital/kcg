@@ -20,8 +20,8 @@ namespace Agent
                     TextureCoords = new Vector4(0, 0, 1, 1)
                 };
 
-                var x = entity.agentPosition2D.Value.x;
-                var y = entity.agentPosition2D.Value.y;
+                var x = entity.physicsPosition2D.Value.x;
+                var y = entity.physicsPosition2D.Value.y;
                 var width = entity.agentSprite2D.Size.x;
                 var height = entity.agentSprite2D.Size.y;
 

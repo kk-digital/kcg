@@ -1,5 +1,6 @@
 ﻿using Entitas;
 using UnityEngine;
+using System;
 
 /*
     How To use it:
@@ -24,13 +25,20 @@ namespace Item
         public void CreateItem(Enums.ItemType itemType, string name)
         {
             ItemType = EntitasContext.game.CreateEntity();
-            ItemType.AddItemAttributesBasic(itemType, name);
+            ItemType.AddItemAttributes(itemType, name);
         }
 
         public void SetName(string name)
         {
             if (ItemType == null)
                 return;
+            var Attributes = ItemType.itemAttributes;
+            ItemType.ReplaceItemAttributes(Attributes.ItemType, name);
+        }
+
+        public void SetSize(Vector2 size)
+        {
+            ItemType.AddItemAttributeSize(size);
         }
 
         public void SetTexture(string spritePath)
@@ -39,7 +47,7 @@ namespace Item
                 return;
 
             int spriteSheetID = GameState.SpriteLoader.GetSpriteSheetID(spritePath);
-            int spriteAtlasID = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteSheetID, 0, 0, Enums.AtlasType.Particle);
+            SetTexture(spriteSheetID);
         }
 
         public void SetTexture(int spriteSheetID)
@@ -48,6 +56,7 @@ namespace Item
                 return;
 
             int spriteAtlasID = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteSheetID, 0, 0, Enums.AtlasType.Particle);
+            ItemType.AddItemAttributeSprite(spriteAtlasID);
         }
 
         public void SetInventoryTexture(string spritePath)
@@ -56,9 +65,7 @@ namespace Item
                 return;
 
             int spriteSheetID = GameState.SpriteLoader.GetSpriteSheetID(spritePath);
-            int spriteAtlasID = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteSheetID, 0, 0, Enums.AtlasType.Particle);
-
-            ItemType.AddItemAttributeInventorySprite(spriteAtlasID);
+            SetInventoryTexture(spriteSheetID);
         }
 
         public void SetInventoryTexture(int spriteSheetID)
@@ -71,7 +78,12 @@ namespace Item
 
         }
 
-        public void MakeStackable(int maxStackCount)
+        public void SetAction(int actionID)
+        {
+            ItemType.AddItemAttributeAction(actionID);
+        }
+
+        public void SetStackable(int maxStackCount)
         {
             if (ItemType == null)
                 return;
@@ -79,7 +91,7 @@ namespace Item
             ItemType.AddItemAttributeStackable(maxStackCount);
         }
 
-        public void MakePlaceable()
+        public void SetPlaceable()
         {
             if (ItemType == null)
                 return;
@@ -87,7 +99,7 @@ namespace Item
             ItemType.isItemAttributePlaceable = true;
         }
 
-        public void MakeEquipament()
+        public void SetEquipament()
         {
             if (ItemType == null)
                 return;

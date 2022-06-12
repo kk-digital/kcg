@@ -21,18 +21,17 @@ namespace Item
                 int SpriteID = ItemTypeEntity.itemAttributeSprite.ID;
                 Sprites.Model sprite = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle);
 
-                float width = sprite.Texture.width / 32.0f;
-                float height = sprite.Texture.height / 32.0f;
-
                 // Draw all items with same sprite.
-                var ItemsOfType = EntitasContext.game.GetEntitiesWithItemIDItemType(ItemTypeEntity.itemAttributesBasic.ItemType);
+                var ItemsOfType = EntitasContext.game.GetEntitiesWithItemIDItemType(ItemTypeEntity.itemAttributes.ItemType);
                 foreach (var entity in ItemsOfType)
                 {
-                    if (entity.hasAgentPosition2D == false) // Test if Item is Drawable.
+                    if (entity.hasPhysicsPosition2D == false || ItemTypeEntity.hasItemAttributeSize == false) // Test if Item is Drawable.
                         continue;
-                    float x = entity.itemPosition2D.Value.x;
-                    float y = entity.itemPosition2D.Value.y;
-                    Utility.Render.DrawSprite(x, y, width, height, sprite, material, transform, drawOrder);
+                    float x = entity.physicsPosition2D.Value.x;
+                    float y = entity.physicsPosition2D.Value.y;
+                    float w = ItemTypeEntity.itemAttributeSize.Size.x;
+                    float h = ItemTypeEntity.itemAttributeSize.Size.y;
+                    Utility.Render.DrawSprite(x, y, w, h, sprite, Object.Instantiate(material), transform, drawOrder);
                 }
 
             }

@@ -24,7 +24,7 @@ namespace ECSInput
                 entity.ReplaceECSInputXY(new Vector2(x, 0.0f), jump);
 
                 var input = entity.eCSInputXY;
-                var movable = entity.agentMovable;
+                var movable = entity.physicsMovable;
 
                 movable.Acceleration = input.Value * movable.Speed * 50.0f;
                 if (jump)
@@ -33,7 +33,7 @@ namespace ECSInput
                     movable.Velocity.y = 5.0f;
                 }
 
-                entity.ReplaceAgentMovable(movable.Speed, movable.Velocity, movable.Acceleration, movable.AccelerationTime);
+                entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration, movable.AccelerationTime);
 
             }
 
@@ -44,9 +44,59 @@ namespace ECSInput
                 int inventoryID = entity.agentInventory.InventoryID;
                 GameEntity inventoryEntity = Contexts.sharedInstance.game.GetEntityWithInventoryID(inventoryID);
 
-                if (Input.GetKeyUp(KeyCode.Tab))
+                if (Input.GetKeyDown(KeyCode.Tab))
                 {
                     inventoryEntity.isInventoryDrawable = !inventoryEntity.isInventoryDrawable;
+                }
+            }
+
+            // Change Item Selection with nums.
+            var PlayerWithToolBar = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentPlayer, GameMatcher.AgentToolBar));
+            foreach (var entity in PlayerWithInventory)
+            {
+                int inventoryID = entity.agentToolBar.ToolBarID;
+                GameEntity inventoryEntity = Contexts.sharedInstance.game.GetEntityWithInventoryID(inventoryID);
+                var SlotComponent = inventoryEntity.inventorySlots;
+
+                if (Input.GetKeyDown(KeyCode.Alpha1))
+                {
+                    inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 0);
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha2))
+                {
+                    inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 1);
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha3))
+                {
+                    inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 2);
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha4))
+                {
+                    inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 3);
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha5))
+                {
+                    inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 4);
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha6))
+                {
+                    inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 5);
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha7))
+                {
+                    inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 6);
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha8))
+                {
+                    inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 7);
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha9))
+                {
+                    inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 8);
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha0))
+                {
+                    inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 9);
                 }
             }
         }

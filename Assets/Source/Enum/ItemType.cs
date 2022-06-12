@@ -4,6 +4,7 @@
     {
         Gun,
         Rock,
-        RockDust
+        RockDust,
+        Ore
     }
 }

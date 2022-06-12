@@ -43,9 +43,9 @@ namespace Planet.Unity
 
         ECSInput.ProcessSystem InputProcessSystems;
         Agent.SpawnerSystem AgentSpawnerSystem;
-        Agent.MovableSystem AgentMovableSystem;
+        Physics.MovableSystem PhysicsMovableSystem;
         Agent.DrawSystem AgentDrawSystem;
-        Agent.ProcessCollisionSystem AgentProcessCollisionSystem;
+        Physics.ProcessCollisionSystem AgentProcessCollisionSystem;
 
         public void Start()
         {
@@ -62,9 +62,9 @@ namespace Planet.Unity
         {
             InputProcessSystems = new ECSInput.ProcessSystem();
             AgentSpawnerSystem = new Agent.SpawnerSystem();
-            AgentMovableSystem = new Agent.MovableSystem();
+            PhysicsMovableSystem = new Physics.MovableSystem();
             AgentDrawSystem = new Agent.DrawSystem();
-            AgentProcessCollisionSystem = new Agent.ProcessCollisionSystem();
+            AgentProcessCollisionSystem = new Physics.ProcessCollisionSystem();
 
             AgentSpawnerSystem.SpawnPlayer(Material, new Vector2(3.0f, 2.0f));
         }
@@ -101,7 +101,7 @@ namespace Planet.Unity
                     DestroyImmediate(mr.gameObject);
 
             InputProcessSystems.Update();
-            AgentMovableSystem.Update();
+            PhysicsMovableSystem.Update();
             AgentProcessCollisionSystem.Update(TileMap);
             TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Front, Instantiate(Material), transform, 10);
             TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Ore, Instantiate(Material), transform, 11);
@@ -183,7 +183,7 @@ namespace Planet.Unity
             
             foreach (var entity in group)
             {
-                var pos = entity.agentPosition2D;
+                var pos = entity.physicsPosition2D;
                 var boxCollider = entity.physicsBox2DCollider;
                 var boxBorders = boxCollider.CreateEntityBoxBorders(pos.Value);
                 

@@ -1,7 +1,7 @@
-﻿using Entitas;
+using Entitas;
 using UnityEngine;
 
-namespace Item
+namespace Physics
 {
     public static class MovableExtenstion
     {
@@ -21,3 +21,4 @@ namespace Item
         public float AccelerationTime;
     }
 }
+
