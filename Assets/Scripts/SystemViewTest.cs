@@ -460,7 +460,7 @@ namespace SystemView
                 GravVelY += Velocity * dy / d;
             }
 
-            State.Player.GravitationalStrength = (float)Math.Sqrt(GravVelX * GravVelX + GravVelY * GravVelY) * 5.0f / CurrentTime;
+            State.Player.GravitationalStrength = (float)Math.Sqrt(GravVelX * GravVelX + GravVelY * GravVelY) * 0.4f / CurrentTime;
 
             State.Player.Ship.Self.VelX   += GravVelX;
             State.Player.Ship.Self.VelY   += GravVelY;
