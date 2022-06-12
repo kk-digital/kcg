@@ -1,20 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Entitas;
+using UnityEngine;
 
 namespace Projectile
 {
     public struct Sprite2DComponent : IComponent
     {
-        public int SpriteID;
-        public string SpritePath;
-
+        public Texture2D Texture;
         public Vector2 Size;
-        public Vector2Int PngSize;
-
-        public Material Material;
-        public Mesh Mesh;
     }
 }
-

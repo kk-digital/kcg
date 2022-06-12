@@ -28,18 +28,19 @@ namespace Projectile
         {
             // Get Projectile Entites
             IGroup<GameEntity> entities =
-            contexts.game.GetGroup(GameMatcher.ProjectilePosition2D);
+            contexts.game.GetGroup(GameMatcher.ProjectilePhysicsState2D);
             foreach (var projectile in entities)
             {
                 // Get position from component
-                var position = projectile.projectilePosition2D;
+                var position = projectile.projectilePhysicsState2D;
                 position.TempPosition = position.Position;
 
                 // Accelerate the vehicle
-                position.Position += projectile.projectileVelocity.Value * Time.deltaTime;
+                position.Position += projectile.projectilePhysicsState2D.angularVelocity * Time.deltaTime;
 
                 // Update the position
-                projectile.ReplaceProjectilePosition2D(position.Position, position.TempPosition);
+                projectile.ReplaceProjectilePhysicsState2D(position.Position, position.TempPosition, position.angularVelocity, position.angularMass, 
+                    position.angularAcceleration, position.centerOfGravity, position.centerOfRotation);
             }
         }
     }

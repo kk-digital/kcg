@@ -119,7 +119,7 @@ namespace Planet
                         ref ProjectileEntity projectile = ref ProjectileList.List[index];
                         if (projectile.IsInitialized)
                         {
-                            var position = projectile.Entity.projectilePosition2D;
+                            var position = projectile.Entity.projectilePhysicsState2D;
                         }
                     }
 

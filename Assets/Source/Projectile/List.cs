@@ -8,7 +8,7 @@ namespace Projectile
 
         public IGroup<GameEntity> ProjectilesWithSprite;
         public IGroup<GameEntity> ProjectilesWithInput;
-        public IGroup<GameEntity> ProjectilesWithVelocity;
+        public IGroup<GameEntity> ProjectilesWithPhysics;
 
         // List of projectiles
         public List()
@@ -16,7 +16,7 @@ namespace Projectile
             gameContext = Contexts.sharedInstance.game;
             ProjectilesWithSprite = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.ProjectileID, GameMatcher.ProjectileSprite2D));
             ProjectilesWithInput = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.ProjectileID, GameMatcher.ECSInput));
-            ProjectilesWithVelocity = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.ProjectileID, GameMatcher.ProjectileVelocity, GameMatcher.ProjectilePosition2D));
+            ProjectilesWithPhysics = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.ProjectileID, GameMatcher.ProjectilePhysicsState2D, GameMatcher.ProjectilePhysicsState2D));
         }
     }
 }
