@@ -22,6 +22,10 @@ namespace SystemView
 
         public float GravitationalStrength = 0.0f;
 
+        public float TimeScale = 1.0f;
+        public float DragFactor = 10000.0f;
+        public float SailingFactor = 20.0f;
+
         public SystemState State;
 
         private void Start()
@@ -51,21 +55,34 @@ namespace SystemView
             Ship.Health = Ship.MaxHealth = 25000;
             Ship.Shield = Ship.MaxShield = 50000;
 
-            Ship.ShieldRegenerationRate = 2;
+            Ship.ShieldRegenerationRate = 3;
+
+            ShipWeapon Cannon = new ShipWeapon();
+
+            Cannon.ProjectileColor = new Color(0.7f, 0.9f, 1.0f, 1.0f);
+
+            Cannon.Range = 45.0f;
+            Cannon.ShieldPenetration = 0.2f;
+            Cannon.ProjectileVelocity = 50.0f;
+            Cannon.Damage = 6000;
+            Cannon.AttackSpeed = 2500;
+            Cannon.Cooldown = 0;
+            Cannon.Self = Ship;
 
             ShipWeapon Weapon = new ShipWeapon();
 
             Weapon.ProjectileColor = Color.white;
 
-            Weapon.Range = 15.0f;
+            Weapon.Range = 20.0f;
             Weapon.ShieldPenetration = 0.1f;
             Weapon.ProjectileVelocity = 8.0f;
-            Weapon.Damage = 400;
-            Weapon.AttackSpeed = 30;
+            Weapon.Damage = 200;
+            Weapon.AttackSpeed = 50;
             Weapon.Cooldown = 0;
             Weapon.Self = Ship;
 
             Ship.Weapons.Add(Weapon);
+            Ship.Weapons.Add(Cannon);
         }
 
         private void Update()
@@ -73,6 +90,8 @@ namespace SystemView
             float CurrentTime = Time.time - LastTime;
 
             if (CurrentTime == 0.0f) return;
+
+            CurrentTime *= TimeScale;
 
             LastTime = Time.time;
 
@@ -92,7 +111,7 @@ namespace SystemView
 
             AccX = AccX / Magnitude * Ship.Acceleration * CurrentTime * Movement;
             AccY = AccY / Magnitude * Ship.Acceleration * CurrentTime * Movement;
-
+            
             Ship.Self.PosX += Ship.Self.VelX * CurrentTime + AccX / 2.0f * CurrentTime * CurrentTime;
             Ship.Self.PosY += Ship.Self.VelY * CurrentTime + AccY / 2.0f * CurrentTime * CurrentTime;
 
@@ -107,23 +126,26 @@ namespace SystemView
                 float GravitationalFactor = 1.0f / (1.0f - GravitationalStrength);
 
                 // "Air resistance" effect
-                Ship.Self.VelX *= 1.0f - 1.0f / (GravitationalFactor + 1000.0f);
-                Ship.Self.VelY *= 1.0f - 1.0f / (GravitationalFactor + 1000.0f);
+                Ship.Self.VelX *= 1.0f - 1.0f / (GravitationalFactor + DragFactor);
+                Ship.Self.VelY *= 1.0f - 1.0f / (GravitationalFactor + DragFactor);
 
                 // "Sailing" effect
                 if (Input.GetAxis("Horizontal") != 0.0f)
                 {
                     Magnitude = (float)Math.Sqrt(Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY);
 
-                    Ship.Self.VelX = ((5.0f + GravitationalFactor) * Ship.Self.VelX + (float)Math.Cos(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / (6.0f + GravitationalFactor);
-                    Ship.Self.VelY = ((5.0f + GravitationalFactor) * Ship.Self.VelY + (float)Math.Sin(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / (6.0f + GravitationalFactor);
+                    Ship.Self.VelX = ((SailingFactor + GravitationalFactor) * Ship.Self.VelX + (float)Math.Cos(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / (1.0f + SailingFactor + GravitationalFactor);
+                    Ship.Self.VelY = ((SailingFactor + GravitationalFactor) * Ship.Self.VelY + (float)Math.Sin(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / (1.0f + SailingFactor + GravitationalFactor);
                 }
             }
 
             Renderer.shipColor.b = (float) Ship.Health / Ship.MaxHealth;
 
-            Ship.Weapons[0].Cooldown -= (int)(CurrentTime * 1000.0f);
-            if (Ship.Weapons[0].Cooldown < 0) Ship.Weapons[0].Cooldown = 0;
+            foreach (ShipWeapon Weapon in Ship.Weapons)
+            {
+                Weapon.Cooldown -= (int)(CurrentTime * 1000.0f);
+                if (Weapon.Cooldown < 0) Weapon.Cooldown = 0;
+            }
 
             if (RenderOrbit)
             {
@@ -158,7 +180,15 @@ namespace SystemView
                     Ship.PathPlanned = false;
             }
 
-            if (Input.GetKey("space")) Ship.Weapons[0].Fire();
+            if (Input.GetKey("space"))
+                foreach (ShipWeapon Weapon in Ship.Weapons)
+                    Weapon.Fire();
+        }
+
+        void OnDestroy()
+        {
+            GameObject.Destroy(Renderer);
+            GameObject.Destroy(Object);
         }
     }   
 }

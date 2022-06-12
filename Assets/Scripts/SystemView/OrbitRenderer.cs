@@ -100,5 +100,10 @@ namespace SystemView
         {
 
         }
+
+        void OnDestroy()
+        {
+            GameObject.Destroy(linerenderer);
+        }
     }
 }

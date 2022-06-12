@@ -45,5 +45,11 @@ namespace SystemView
 
             OrbitRender.UpdateRenderer(128);
         }
+
+        void OnDestroy()
+        {
+            GameObject.Destroy(StationRenderer);
+            GameObject.Destroy(OrbitRender);
+        }
     }
 }

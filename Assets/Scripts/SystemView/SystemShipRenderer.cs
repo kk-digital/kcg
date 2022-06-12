@@ -22,6 +22,7 @@ namespace SystemView
         public float width = 1.0f;
 
         public GameObject ShieldObject;
+        public GameObject DirectionObject;
 
         public CameraController Camera;
 
@@ -58,7 +59,7 @@ namespace SystemView
             mat.SetInt("_ZWrite", 0);
             mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
 
-            GameObject DirectionObject = new GameObject();
+            DirectionObject = new GameObject();
             DirectionObject.name = "Ship direction renderer";
 
             DirectionRenderer = DirectionObject.AddComponent<LineRenderer>();
@@ -107,6 +108,16 @@ namespace SystemView
             else OrbitRender.descriptor = ship.Descriptor;
 
             OrbitRender.UpdateRenderer(128);
+        }
+
+        void OnDestroy()
+        {
+            GameObject.Destroy(ShipRender);
+            GameObject.Destroy(ShieldRender);
+            GameObject.Destroy(OrbitRender);
+            GameObject.Destroy(DirectionRenderer);
+            GameObject.Destroy(ShieldObject);
+            GameObject.Destroy(DirectionObject);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,8 @@ namespace SystemView
 
         public CameraController Camera;
 
+        public float Scale;
+
         void Start()
         {
             sr = gameObject.AddComponent<SpriteRenderer>();
@@ -21,16 +24,23 @@ namespace SystemView
 
             Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
+            Scale = (float)Math.Log(Projectile.Damage * 0.3f) * 0.6f;
+
             sr.transform.position = new Vector3(Projectile.Body.PosX, Projectile.Body.PosY, -0.06f);
-            sr.transform.localScale = new Vector3(2.0f / Camera.scale, 2.0f / Camera.scale, 1.0f);
+            sr.transform.localScale = new Vector3(Scale / Camera.scale, Scale / Camera.scale, 1.0f);
             sr.color = Projectile.ProjectileColor;
         }
 
         void Update()
         {
             sr.transform.position = new Vector3(Projectile.Body.PosX, Projectile.Body.PosY, -0.06f);
-            sr.transform.localScale = new Vector3(2.0f / Camera.scale, 2.0f / Camera.scale, 1.0f);
+            sr.transform.localScale = new Vector3(Scale / Camera.scale, Scale / Camera.scale, 1.0f);
             sr.color = Projectile.ProjectileColor;
+        }
+
+        void OnDestroy()
+        {
+            GameObject.Destroy(sr);
         }
     }
 }

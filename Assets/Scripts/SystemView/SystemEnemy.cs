@@ -61,11 +61,11 @@ namespace SystemView
 
             Weapon.ProjectileColor = Color.white;
 
-            Weapon.Range = 15.0f;
+            Weapon.Range = 20.0f;
             Weapon.ShieldPenetration = 0.1f;
             Weapon.ProjectileVelocity = 5.0f;
-            Weapon.Damage = 4000;
-            Weapon.AttackSpeed = 400;
+            Weapon.Damage = 250;
+            Weapon.AttackSpeed = 40;
             Weapon.Cooldown = 0;
             Weapon.Self = Ship;
 
@@ -80,6 +80,12 @@ namespace SystemView
             Ship.Descriptor.UpdatePosition(CurrentMillis);
 
             Renderer.shipColor.r = (float) Ship.Health / Ship.MaxHealth;
+        }
+
+        void OnDestroy()
+        {
+            GameObject.Destroy(Renderer);
+            GameObject.Destroy(Object);
         }
     }
 }

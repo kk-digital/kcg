@@ -29,9 +29,14 @@ namespace SystemView
         void Update()
         {
             sr.transform.position = new Vector3(Star.PosX, Star.PosY, -0.1f);
-            sr.transform.localScale = new Vector3(5.0f / Camera.scale, 5.0f / Camera.scale, 1.0f);
+            sr.transform.localScale = new Vector3(10.0f / Camera.scale, 10.0f / Camera.scale, 1.0f);
 
             sr.color = color;
+        }
+
+        void OnDestroy()
+        {
+            GameObject.Destroy(sr);
         }
     }
 }
