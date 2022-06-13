@@ -64,7 +64,8 @@ public partial class Contexts {
     public const string AIGoal = "AIGoal";
     public const string InventoryID = "InventoryID";
     public const string ItemAttachedInventory = "ItemAttachedInventory";
-    public const string ItemAttributesBasic = "ItemAttributesBasic";
+    public const string ItemAttributeAction = "ItemAttributeAction";
+    public const string ItemAttributes = "ItemAttributes";
     public const string ItemIDID = "ItemIDID";
     public const string ItemIDItemType = "ItemIDItemType";
     public const string ProjectileID = "ProjectileID";
@@ -102,10 +103,15 @@ public partial class Contexts {
             game.GetGroup(GameMatcher.ItemAttachedInventory),
             (e, c) => ((Item.AttachedInventoryComponent)c).InventoryID));
 
+        game.AddEntityIndex(new Entitas.EntityIndex<GameEntity, int>(
+            ItemAttributeAction,
+            game.GetGroup(GameMatcher.ItemAttributeAction),
+            (e, c) => ((Item.Attribute.ActionComponent)c).ActionID));
+
         game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, Enums.ItemType>(
-            ItemAttributesBasic,
-            game.GetGroup(GameMatcher.ItemAttributesBasic),
-            (e, c) => ((Item.Attributes.BasicComponent)c).ItemType));
+            ItemAttributes,
+            game.GetGroup(GameMatcher.ItemAttributes),
+            (e, c) => ((Item.Attributes.Component)c).ItemType));
 
         game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
             ItemIDID,
@@ -155,8 +161,12 @@ public static class ContextsExtensions {
         return ((Entitas.EntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.ItemAttachedInventory)).GetEntities(InventoryID);
     }
 
-    public static GameEntity GetEntityWithItemAttributesBasic(this GameContext context, Enums.ItemType ItemType) {
-        return ((Entitas.PrimaryEntityIndex<GameEntity, Enums.ItemType>)context.GetEntityIndex(Contexts.ItemAttributesBasic)).GetEntity(ItemType);
+    public static System.Collections.Generic.HashSet<GameEntity> GetEntitiesWithItemAttributeAction(this GameContext context, int ActionID) {
+        return ((Entitas.EntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.ItemAttributeAction)).GetEntities(ActionID);
+    }
+
+    public static GameEntity GetEntityWithItemAttributes(this GameContext context, Enums.ItemType ItemType) {
+        return ((Entitas.PrimaryEntityIndex<GameEntity, Enums.ItemType>)context.GetEntityIndex(Contexts.ItemAttributes)).GetEntity(ItemType);
     }
 
     public static GameEntity GetEntityWithItemIDID(this GameContext context, int ID) {

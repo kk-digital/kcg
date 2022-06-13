@@ -11,6 +11,11 @@ namespace Inventory
             EntitasContext = entitasContext;
         }
 
+        public ManagerSystem()
+        {
+            EntitasContext = Contexts.sharedInstance;
+        }
+
         public void OpenInventory(int inventoryID)
         {
             var inventoryEntity = EntitasContext.game.GetEntityWithInventoryID(inventoryID);
@@ -25,7 +30,7 @@ namespace Inventory
 
         public void AddItem(GameEntity entity, int inventoryID)
         {
-            var EntityAttribute = EntitasContext.game.GetEntityWithItemAttributesBasic(entity.itemID.ItemType);
+            var EntityAttribute = EntitasContext.game.GetEntityWithItemAttributes(entity.itemID.ItemType);
 
             // If stackable check if there are any available stack in the inventory.
             if (EntityAttribute.hasItemAttributeStackable)
@@ -79,12 +84,15 @@ namespace Inventory
             entity.RemoveItemAttachedInventory();
         }
         
-        public void ChangeSlot()
+        public void ChangeSlot(int inventoryID, int newSelectedSlot)
         {
-            // TODO: Allow user change slot in which item is alocatted.
+            GameEntity inventoryEntity = Contexts.sharedInstance.game.GetEntityWithInventoryID(inventoryID);
+            var SlotComponent = inventoryEntity.inventorySlots;
+
+            inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, newSelectedSlot);
         }
 
-        // TODO: Item selection and event Handling. 
+        // TODO: Use events to update selected slots, pick ups, drops and etc. 
         public void Update()
         {
         }

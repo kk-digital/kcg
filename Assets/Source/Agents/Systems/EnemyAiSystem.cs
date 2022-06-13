@@ -19,9 +19,9 @@ namespace Agent
                 
                 foreach (var entity in entities)
                 {
-                    var targetPos = closestPlayer.agentPosition2D;
-                    var pos = entity.agentPosition2D;
-                    var movable = entity.agentMovable;
+                    var targetPos = closestPlayer.physicsPosition2D;
+                    var pos = entity.physicsPosition2D;
+                    var movable = entity.physicsMovable;
 
                     Vector2 direction = targetPos.Value - pos.Value;
 
@@ -45,13 +45,13 @@ namespace Agent
                             movable.Velocity.y = 5.0f;
                         }
 
-                        entity.ReplaceAgentMovable(movable.Speed, movable.Velocity, movable.Acceleration, movable.AccelerationTime);
+                        entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration, movable.AccelerationTime);
                     }
                     else
                     {
                         //Idle
                         movable.Acceleration = new Vector2();
-                        entity.ReplaceAgentMovable(movable.Speed, movable.Velocity, movable.Acceleration, movable.AccelerationTime);
+                        entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration, movable.AccelerationTime);
                     }
 
 

@@ -4,7 +4,7 @@ using Enums;
 
 namespace Item.Attributes
 {
-    public struct BasicComponent : IComponent
+    public struct Component : IComponent
     {
         [PrimaryEntityIndex]
         public ItemType     ItemType;

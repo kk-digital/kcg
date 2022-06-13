@@ -16,12 +16,16 @@ namespace Item
             EntitasContext = entitasContext;
         }
 
-        public GameEntity SpawnItem(ItemType itemType)
+        public GameEntity SpawnItem(ItemType itemType, Vector2 position)
         {
+            var entityAttribute = EntitasContext.game.GetEntityWithItemAttributes(itemType);
+            Vector2 size = entityAttribute.itemAttributeSize.Size;
+
             var entity = EntitasContext.game.CreateEntity();
             entity.AddItemID(ItemID, itemType);
-            entity.AddItemPosition2D(Vector2.zero, Vector2.zero);
-            entity.AddItemMovable(0f, Vector2.zero, Vector2.zero, 0f);
+            entity.AddPhysicsPosition2D(position, position);
+            entity.AddPhysicsBox2DCollider(size, Vector2.zero);
+            entity.AddPhysicsMovable(0f, Vector2.zero, Vector2.zero, 0f);
 
             ItemID++;
             return entity;

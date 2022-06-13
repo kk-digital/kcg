@@ -1,7 +1,7 @@
 using Entitas;
 using UnityEngine;
 
-namespace Agent
+namespace Physics
 {
     public struct Position2DComponent : IComponent
     {

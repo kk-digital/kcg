@@ -1,19 +1,19 @@
 using System;
 using UnityEngine;
 
-namespace Agent
+namespace Physics
 {
     public class MovableSystem
     {
         public void Update()
         {
             float deltaTime = Time.deltaTime;
-            var AgentsWithVelocity = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentMovable, GameMatcher.AgentPosition2D));
-            foreach (var entity in AgentsWithVelocity)
+            var EntitiesWithVelocity = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsMovable, GameMatcher.PhysicsPosition2D));
+            foreach (var entity in EntitiesWithVelocity)
             {
 
-                var pos = entity.agentPosition2D;
-                var movable = entity.agentMovable;
+                var pos = entity.physicsPosition2D;
+                var movable = entity.physicsMovable;
 
                 movable.Acceleration.y -= 400.0f * deltaTime;
 
@@ -44,10 +44,8 @@ namespace Agent
 
                 Vector2 newPosition = pos.Value + displacement;
 
-                entity.ReplaceAgentMovable(entity.agentMovable.Speed, newVelocity, movable.Acceleration, entity.agentMovable.AccelerationTime);
-                entity.ReplaceAgentPosition2D(newPosition, pos.Value);
-
-
+                entity.ReplacePhysicsMovable(entity.physicsMovable.Speed, newVelocity, movable.Acceleration, entity.physicsMovable.AccelerationTime);
+                entity.ReplacePhysicsPosition2D(newPosition, pos.Value);
             }
         }
     }

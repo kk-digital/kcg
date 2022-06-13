@@ -20,11 +20,19 @@ public class GameState
     #region Agent
 
     public static readonly Agent.SpawnerSystem SpawnerSystem;
-    public static readonly Agent.MovableSystem MovableSystem;
     public static readonly Agent.DrawSystem DrawSystem;
-    public static readonly Agent.ProcessCollisionSystem ProcessCollisionSystem;
     public static readonly Agent.EnemyAiSystem EnemyAiSystem;
 
+    #endregion
+
+    #region
+    public static readonly Physics.MovableSystem MovableSystem;
+    public static readonly Physics.ProcessCollisionSystem ProcessCollisionSystem;
+    #endregion
+
+    #region Inventory
+    public static readonly Inventory.ManagerSystem InventoryManagerSystem;
+    public static readonly Inventory.DrawSystem InventoryDrawSystem;
     #endregion
 
     public static readonly ImageLoader.FileLoadingManager FileLoadingManager;
@@ -39,9 +47,11 @@ public class GameState
         FileLoadingManager = new ImageLoader.FileLoadingManager();
         ProcessSystem = new ECSInput.ProcessSystem();
         SpawnerSystem = new Agent.SpawnerSystem();
-        MovableSystem = new Agent.MovableSystem();
+        MovableSystem = new Physics.MovableSystem();
         DrawSystem = new Agent.DrawSystem();
-        ProcessCollisionSystem = new Agent.ProcessCollisionSystem();
+        InventoryDrawSystem = new Inventory.DrawSystem();
+        InventoryManagerSystem = new Inventory.ManagerSystem();
+        ProcessCollisionSystem = new Physics.ProcessCollisionSystem();
         EnemyAiSystem = new Agent.EnemyAiSystem();
     }
 }
