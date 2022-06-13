@@ -41,15 +41,6 @@ namespace Item
             ItemType.AddItemAttributeSize(size);
         }
 
-        public void SetTexture(string spritePath)
-        {
-            if (ItemType == null)
-                return;
-
-            int spriteSheetID = GameState.SpriteLoader.GetSpriteSheetID(spritePath);
-            SetTexture(spriteSheetID);
-        }
-
         public void SetTexture(int spriteSheetID)
         {
             if (ItemType == null)
@@ -59,14 +50,6 @@ namespace Item
             ItemType.AddItemAttributeSprite(spriteAtlasID);
         }
 
-        public void SetInventoryTexture(string spritePath)
-        {
-            if (ItemType == null)
-                return;
-
-            int spriteSheetID = GameState.SpriteLoader.GetSpriteSheetID(spritePath);
-            SetInventoryTexture(spriteSheetID);
-        }
 
         public void SetInventoryTexture(int spriteSheetID)
         {

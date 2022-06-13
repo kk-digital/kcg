@@ -3,19 +3,19 @@ using UnityEngine;
 
 namespace Sprites
 {
-    public class AtlasManager
+    public class SpriteAtlasManager
     {
-        private Atlas[] AtlasArray;
+        private SpriteAtlas[] AtlasArray;
 
-        public AtlasManager()
+        public SpriteAtlasManager()
         {
-            AtlasArray = new Atlas[Enum.GetNames(typeof(Enums.AtlasType)).Length - 1];
+            AtlasArray = new SpriteAtlas[Enum.GetNames(typeof(Enums.AtlasType)).Length - 1];
 
             for (int i = 0; i < AtlasArray.Length; i++)
             {
-                Atlas atlas = new Atlas();
-                atlas.Width = 128;
-                atlas.Height = 128;
+                SpriteAtlas atlas = new SpriteAtlas();
+                atlas.Width = 256;
+                atlas.Height = 256;
                 atlas.Data = new byte[4 * atlas.Width * atlas.Height]; // 4 * 32 * 32 = 4096
                 atlas.Rectangles = new RectpackSharp.PackingRectangle[0];
 
@@ -28,16 +28,16 @@ namespace Sprites
             }
         }
 
-        public ref Atlas GetSpriteAtlas(Enums.AtlasType type)
+        public ref SpriteAtlas GetSpriteAtlas(Enums.AtlasType type)
         {
             return ref AtlasArray[(int)type - 1];
         }
         
 
-        public Model GetSprite(int id, Enums.AtlasType type)
+        public Sprite GetSprite(int id, Enums.AtlasType type)
         {
-            Model sprite = new Model();
-            ref Atlas atlas = ref GetSpriteAtlas(type);
+            Sprite sprite = new Sprite();
+            ref SpriteAtlas atlas = ref GetSpriteAtlas(type);
 
             sprite.Texture = atlas.Texture;
 
@@ -60,7 +60,7 @@ namespace Sprites
         // and return the sprite RGBA8 that correspond
         public void GetSpriteBytes(int id, byte[] data, Enums.AtlasType type)
         {
-            ref Atlas atlas = ref GetSpriteAtlas(type);
+            ref SpriteAtlas atlas = ref GetSpriteAtlas(type);
             if (id >= 0 && id < atlas.Rectangles.Length)
             {
                 // TODO: Refactor
@@ -100,9 +100,9 @@ namespace Sprites
         // to the sprite atlas
         public int CopySpriteToAtlas(int spriteSheetID, int row, int column, Enums.AtlasType type)
         {
-            ref Atlas atlas = ref GetSpriteAtlas(type);
+            ref SpriteAtlas atlas = ref GetSpriteAtlas(type);
             int oldSize = atlas.Rectangles.Length;
-            Sheet sheet = GameState.SpriteLoader.SpriteSheets[spriteSheetID];
+            SpriteSheet sheet = GameState.SpriteLoader.SpriteSheets[spriteSheetID];
 
             int index = atlas.Rectangles.Length;
 
@@ -135,7 +135,7 @@ namespace Sprites
             // we add the new sprite packing rectangle in the array
             atlas.Rectangles[index] = 
                  new RectpackSharp.PackingRectangle(0, 0, 
-                                    (uint)sheet.Width, (uint)sheet.Height, index);
+                                    (uint)sheet.SpriteWidth, (uint)sheet.SpriteHeight, index);
 
 
             // calling the retpackSharp library
@@ -199,9 +199,9 @@ namespace Sprites
             int xOffset = (int)rectangle.X;
             int yOffset = (int)rectangle.Y;
 
-            for (int y = 0; y < sheet.Height; y++)
+            for (int y = 0; y < sheet.SpriteHeight; y++)
             {
-                for (int x = 0; x < sheet.Width; x++)
+                for (int x = 0; x < sheet.SpriteWidth; x++)
                 {
                     int atlasIndex = 4 * ((yOffset + y)  * (atlas.Width) + (xOffset + x));
                     int sheetIndex = 4 * ((x + row * sheet.Width) + 

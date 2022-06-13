@@ -79,11 +79,11 @@ public class InventoryTest : MonoBehaviour
     private void Initialize()
     {
         int GunSpriteSheet =
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\gun-temp.png");
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\gun-temp.png", 44, 25);
         int RockSpriteSheet =
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1.png");
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1.png", 16, 16);
         int RockDustSpriteSheet =
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1_dust.png");
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1_dust.png", 16, 16);
 
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.Gun, "Gun");
         Item.CreationApi.Instance.SetTexture(GunSpriteSheet);
@@ -93,13 +93,13 @@ public class InventoryTest : MonoBehaviour
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.Rock, "Rock");
         Item.CreationApi.Instance.SetTexture(RockSpriteSheet);
         Item.CreationApi.Instance.SetInventoryTexture(RockSpriteSheet);
-        Item.CreationApi.Instance.MakeStackable(99);
+        Item.CreationApi.Instance.SetStackable(99);
         Item.CreationApi.Instance.EndItem();
 
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.RockDust, "RockDust");
         Item.CreationApi.Instance.SetTexture(RockDustSpriteSheet);
         Item.CreationApi.Instance.SetInventoryTexture(RockDustSpriteSheet);
-        Item.CreationApi.Instance.MakeStackable(99);
+        Item.CreationApi.Instance.SetStackable(99);
         Item.CreationApi.Instance.EndItem();
     }
 }

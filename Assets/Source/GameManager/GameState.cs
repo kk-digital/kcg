@@ -3,6 +3,9 @@
 /// </summary>
 public class GameState
 {
+
+
+    public static readonly Animation.AnimationManager AnimationManager;
     #region Tile
 
     public static readonly Tile.SpriteAtlasManager TileSpriteAtlasManager;
@@ -12,8 +15,8 @@ public class GameState
     
     #region Sprites
 
-    public static readonly Sprites.AtlasManager SpriteAtlasManager;
-    public static readonly Sprites.Loader SpriteLoader;
+    public static readonly Sprites.SpriteAtlasManager SpriteAtlasManager;
+    public static readonly Sprites.SpriteLoader SpriteLoader;
 
     #endregion
 
@@ -41,9 +44,9 @@ public class GameState
     static GameState()
     {
         TileSpriteAtlasManager = new Tile.SpriteAtlasManager();
-        SpriteAtlasManager = new Sprites.AtlasManager();
+        SpriteAtlasManager = new Sprites.SpriteAtlasManager();
         TileCreationApi = new Tile.CreationApi();
-        SpriteLoader = new Sprites.Loader();
+        SpriteLoader = new Sprites.SpriteLoader();
         FileLoadingManager = new ImageLoader.FileLoadingManager();
         ProcessSystem = new ECSInput.ProcessSystem();
         SpawnerSystem = new Agent.SpawnerSystem();
@@ -53,5 +56,6 @@ public class GameState
         InventoryManagerSystem = new Inventory.ManagerSystem();
         ProcessCollisionSystem = new Physics.ProcessCollisionSystem();
         EnemyAiSystem = new Agent.EnemyAiSystem();
+        AnimationManager = new Animation.AnimationManager();
     }
 }

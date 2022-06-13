@@ -34,7 +34,7 @@ namespace Planet.Unity
             Material material = Material;
 
             // unity rendering stuff
-            // will be removed layer
+            // will be removed later
             foreach (var mr in GetComponentsInChildren<MeshRenderer>())
             {
                 if (Application.isPlaying)
@@ -55,9 +55,14 @@ namespace Planet.Unity
         public void Initialize()
         {
             int TilesMoon =
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png");
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png", 16, 16);
             int OreTileSheet =
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
+
+            int CharacterSpriteSheet = 
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png", 32, 48);
+
+            int CharacterSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(CharacterSpriteSheet, 0, 0, Enums.AtlasType.Agent);
 
             GameState.TileCreationApi.CreateTile(8);
             GameState.TileCreationApi.SetTileName("ore_1");
@@ -75,9 +80,9 @@ namespace Planet.Unity
             GameState.TileCreationApi.EndTile();
 
             int GunSpriteSheet =
-                GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\gun-temp.png");
+                GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\gun-temp.png", 44, 25);
             int OreSpriteSheet =
-                GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
+                GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
 
             Item.CreationApi.Instance.CreateItem(Enums.ItemType.Gun, "Gun");
             Item.CreationApi.Instance.SetTexture(GunSpriteSheet);
@@ -89,7 +94,7 @@ namespace Planet.Unity
             Item.CreationApi.Instance.SetTexture(OreSpriteSheet);
             Item.CreationApi.Instance.SetInventoryTexture(OreSpriteSheet);
             Item.CreationApi.Instance.SetSize(new Vector2(0.5f, 0.5f));
-            Item.CreationApi.Instance.MakeStackable(99);
+            Item.CreationApi.Instance.SetStackable(99);
             Item.CreationApi.Instance.EndItem();
 
             // Generating the map
@@ -97,7 +102,7 @@ namespace Planet.Unity
             Planet = new Planet.PlanetState(mapSize);
             GenerateMap();
 
-            Planet.AddPlayer(Instantiate(Material), new Vector2(3.0f, 3.0f));
+            Planet.AddPlayer(Instantiate(Material),CharacterSpriteId, 32, 48, new Vector2(3.0f, 3.0f));
 
             SpawnerSystem.SpawnItem(Enums.ItemType.Gun, new Vector2(3.0f, 3.0f));
             SpawnerSystem.SpawnItem(Enums.ItemType.Ore, new Vector2(6.0f, 3.0f));

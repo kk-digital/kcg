@@ -9,20 +9,16 @@ namespace Agent
     {
         private static int playerID;
 
-        public GameEntity SpawnPlayer(Material material, Vector2 position)
+        public GameEntity SpawnPlayer(Material material, int spriteId, int width, int height, Vector2 position)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
             playerID++;
 
-            var spritePath = "Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png";
-            var pngSize = new Vector2Int(32, 48);
-            var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath);
-            var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
-            byte[] spriteData = new byte[pngSize.x * pngSize.y * 4];
+            byte[] spriteData = new byte[width * height * 4];
             GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, Enums.AtlasType.Agent);
-            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, pngSize.x, pngSize.y);
-            var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
+            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, width, height);
+            var spriteSize = new Vector2(width / 32f, height / 32f);
 
             entity.isAgentPlayer = true;
             entity.isECSInput = true;
@@ -44,20 +40,16 @@ namespace Agent
             return entity;
         }
 
-        public GameEntity SpawnAgent(Material material, Vector2 position)
+        public GameEntity SpawnAgent(Material material, int spriteId, int width, int height, Vector2 position)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
             playerID++;
 
-            var spritePath = "Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png";
-            var pngSize = new Vector2Int(32, 48);
-            var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath);
-            var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
-            byte[] spriteData = new byte[pngSize.x * pngSize.y * 4];
+            byte[] spriteData = new byte[width * height * 4];
             GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, Enums.AtlasType.Agent);
-            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, pngSize.x, pngSize.y);
-            var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
+            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, width, height);
+            var spriteSize = new Vector2(width / 32f, height / 32f);
 
             entity.AddAgentID(playerID);
 
@@ -70,20 +62,16 @@ namespace Agent
             return entity;
         }
 
-        public GameEntity SpawnEnemy(Material material, Vector2 position)
+        public GameEntity SpawnEnemy(Material material, int spriteId, int width, int height, Vector2 position)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
             playerID++;
             
-            var spritePath = "Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png";
-            var pngSize = new Vector2Int(32, 48);
-            var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath);
-            var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
-            byte[] spriteData = new byte[pngSize.x * pngSize.y * 4];
+            byte[] spriteData = new byte[width * height * 4];
             GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, Enums.AtlasType.Agent);
-            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, pngSize.x, pngSize.y);
-            var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
+            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, width, height);
+            var spriteSize = new Vector2(width / 32f, height / 32f);
             
             entity.AddAgentID(playerID);
 

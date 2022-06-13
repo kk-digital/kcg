@@ -128,7 +128,7 @@ namespace Inventory
                 GameEntity itemAttributeEntity = EntitasContext.game.GetEntityWithItemAttributes(itemEntity.itemID.ItemType);
                 int SpriteID = itemAttributeEntity.itemAttributeInventorySprite.ID;
 
-                Sprites.Model sprite = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle);
+                Sprites.Sprite sprite = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle);
 
                 float spriteSize = slotSize * 0.8f;
 

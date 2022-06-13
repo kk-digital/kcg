@@ -19,7 +19,7 @@ namespace Item
             foreach (var ItemTypeEntity in ItemAttributesWithSprite)
             {
                 int SpriteID = ItemTypeEntity.itemAttributeSprite.ID;
-                Sprites.Model sprite = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle);
+                Sprites.Sprite sprite = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle);
 
                 // Draw all items with same sprite.
                 var ItemsOfType = EntitasContext.game.GetEntitiesWithItemIDItemType(ItemTypeEntity.itemAttributes.ItemType);

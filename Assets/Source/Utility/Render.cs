@@ -8,7 +8,7 @@ namespace Utility
     {
 
         public static void DrawSprite(float x, float y, float w, float h, 
-            Sprites.Model sprite, Material material, Transform transform, int drawOrder = 0)
+            Sprites.Sprite sprite, Material material, Transform transform, int drawOrder = 0)
         {
             var tex = sprite.Texture;
             var mat = material;

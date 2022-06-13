@@ -14,7 +14,7 @@ namespace Agent
             var AgentsWithSprite = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentSprite2D));
             foreach (var entity in AgentsWithSprite)
             {
-                var sprite = new Sprites.Model
+                var sprite = new Sprites.Sprite
                 {
                     Texture = entity.agentSprite2D.Texture,
                     TextureCoords = new Vector4(0, 0, 1, 1)

@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 namespace Sprites
 {
-    public class Loader
+    public class SpriteLoader
     {
-        public Sheet[] SpriteSheets;
+        public SpriteSheet[] SpriteSheets;
         public Dictionary<string, int> SpriteSheetID;
 
-        public Loader()
+        public SpriteLoader()
         {
-            SpriteSheets = new Sheet[0];
+            SpriteSheets = new SpriteSheet[0];
             SpriteSheetID = new Dictionary<string, int>();
         }
 
@@ -25,7 +25,7 @@ namespace Sprites
         
         }
 
-        public int GetSpriteSheetID(string filename)
+        public int GetSpriteSheetID(string filename, int spriteWidth, int spriteHeight)
         {
 
             if (SpriteSheetID.ContainsKey(filename))
@@ -33,10 +33,10 @@ namespace Sprites
                 return SpriteSheetID[filename];
             }
 
-            return LoadImageFile(filename);
+            return LoadImageFile(filename, spriteWidth, spriteHeight);
         }
 
-        private int LoadImageFile(string filename)
+        private int LoadImageFile(string filename, int spriteWidth, int spriteHeight)
         {
             int imageCount = SpriteSheets.Length + 1;
 
@@ -45,10 +45,12 @@ namespace Sprites
             SpriteSheetID.Add(filename, imageCount - 1);
 
             var data = Png.Open(filename);
-            Sheet sheet = new Sheet();
-            sheet.id = imageCount - 1;
+            SpriteSheet sheet = new SpriteSheet();
+            sheet.Index = imageCount - 1;
             sheet.Width = data.Header.Width;
             sheet.Height = data.Header.Height;
+            sheet.SpriteWidth = spriteWidth;
+            sheet.SpriteHeight = spriteHeight;
 
             sheet.Data = new byte[4 * data.Header.Width * data.Header.Height];
 
@@ -70,7 +72,7 @@ namespace Sprites
             return imageCount - 1;
         }
 
-        public ref Sheet GetSpriteSheet(int id)
+        public ref SpriteSheet GetSpriteSheet(int id)
         {
             return ref SpriteSheets[id];
         }

@@ -5,6 +5,8 @@
         Gun,
         Rock,
         RockDust,
-        Ore
+        Ore,
+        PlacementTool,
+        RemoveTileTool,
     }
 }
