@@ -22,9 +22,9 @@ namespace Agent
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
             entity.AddAgentSprite2D(spriteId, spriteSize);
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
-            Vector2 box2dCollider = new Vector2(0.5f, 1.5f);
-            entity.AddPhysicsBox2DCollider(box2dCollider, new Vector2(0.25f, 0.0f));
-            entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
+            Vec2f box2dCollider = new Vec2f(0.5f, 1.5f);
+            entity.AddPhysicsBox2DCollider(box2dCollider, new Vec2f(0.25f, 0.0f));
+            entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.zero, newAcceleration: Vec2f.zero, newAccelerationTime: 2f);
             
             // Add Inventory and toolbar.
             var attacher = Inventory.InventoryAttacher.Instance;
@@ -43,30 +43,31 @@ namespace Agent
 
             entity.AddAgentID(AgentId);
 
-            Vector2 box2dCollider = new Vector2(0.5f, 1.5f);
-            entity.AddPhysicsBox2DCollider(box2dCollider, new Vector2(0.25f, 0.0f));
+            Vector2 box2dCollider = new Vec2f(0.5f, 1.5f);
+            entity.AddPhysicsBox2DCollider(box2dCollider, new Vec2f(0.25f, 0.0f));
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
             entity.AddAgentSprite2D(spriteId, spriteSize);
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
-            entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
+            entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.zero, newAcceleration: Vec2f.zero, newAccelerationTime: 2f);
+
             return entity;
         }
 
-        public GameEntity SpawnEnemy(Material material, int spriteId, int width, int height, Vector2 position,
+        public GameEntity SpawnEnemy(Material material, int spriteId, int width, int height, Vec2f position,
         int AgentId, int startingAnimation)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
             
-            var spriteSize = new Vector2(width / 32f, height / 32f);
+            var spriteSize = new Vec2f(width / 32f, height / 32f);
             
             entity.AddAgentID(AgentId);
 
-            Vector2 box2dCollider = new Vector2(0.5f, 1.5f);
-            entity.AddPhysicsBox2DCollider(box2dCollider, new Vector2(0.25f, 0.0f));
+            Vector2 box2dCollider = new Vec2f(0.5f, 1.5f);
+            entity.AddPhysicsBox2DCollider(box2dCollider, new Vec2f(0.25f, 0.0f));
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
             entity.AddAgentSprite2D(spriteId, spriteSize);
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
-            entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
+            entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.zero, newAcceleration: Vec2f.zero, newAccelerationTime: 2f);
             entity.AddAgentEnemy(0, 4.0f);
             entity.AddAgentStats(100.0f, 0.8f);
 

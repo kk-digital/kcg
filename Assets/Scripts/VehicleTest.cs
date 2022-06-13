@@ -1,5 +1,6 @@
 using UnityEngine;
 using Entitas;
+using KMath;
 using Physics;
 
 public class VehicleTest : MonoBehaviour
@@ -44,7 +45,7 @@ public class VehicleTest : MonoBehaviour
         int image = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\vehicles\\Speeder_chassis.png", 128, 96);
 
         // Loading Image
-        vehicleSpawnerSystem.SpawnVehicle(Material, image, 128, 96, new Vector2(-5.0f, 0));
+        vehicleSpawnerSystem.SpawnVehicle(Material, image, 128, 96, new Vec2f(-5.0f, 0));
 
         // Initialize Planet Tile Map
         tileMap = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().TileMap;
@@ -210,9 +211,10 @@ public class VehicleTest : MonoBehaviour
         {
             var pos = entity.vehiclePhysicsState2D;
             var boxCollider = entity.physicsBox2DCollider;
-            var boxBorders = boxCollider.CreateEntityBoxBorders(pos.Position);
+            var boxBorders = Box.Create(pos.Position + boxCollider.Offset, boxCollider.Size);
+            var center = new UnityEngine.Vector3(boxBorders.Center.X, boxBorders.Center.Y, 0.0f);
 
-            Gizmos.DrawWireCube(boxBorders.Center, new Vector3(boxCollider.Size.x, boxCollider.Size.y, 0.0f));
+            Gizmos.DrawWireCube(center, new Vector3(boxCollider.Size.X, boxCollider.Size.Y, 0.0f));
         }
     }
 #endif

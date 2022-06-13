@@ -68,7 +68,7 @@ namespace Planet
         // placing a tile should update the tile sprite type 
         public void PlaceTile(int x, int y, Tile.Tile tile, Enums.Tile.MapLayerType planetLayer)
         {
-            if (x >= 0 && x < MapSize.x && y >= 0 && y < MapSize.y)
+            if (x >= 0 && x < MapSize.X && y >= 0 && y < MapSize.Y)
             {
                 SetTile(x, y, tile, planetLayer);
 
@@ -103,7 +103,7 @@ namespace Planet
 
         public void UpdateTilesOnPosition(int x, int y, Enums.Tile.MapLayerType planetLayer)
         {
-            if (x >= 0 && x < MapSize.x && y >= 0 && y < MapSize.y)
+            if (x >= 0 && x < MapSize.X && y >= 0 && y < MapSize.Y)
             {
                 // standard sheet mapping
                 // every tile has a constant offset
@@ -131,7 +131,7 @@ namespace Planet
                             neighbors[i] = -1;
                         }
 
-                        if (x + 1 < MapSize.x)
+                        if (x + 1 < MapSize.X)
                         {
                             ref Tile.Tile neighborTile = ref GetTileRef(x + 1, y, planetLayer);
                             neighbors[(int)Enums.Tile.Neighbor.Right] = neighborTile.Type;
@@ -143,7 +143,7 @@ namespace Planet
                             neighbors[(int)Enums.Tile.Neighbor.Left] = neighborTile.Type;
                         }
 
-                        if (y + 1 < MapSize.y)
+                        if (y + 1 < MapSize.Y)
                         {
                             ref Tile.Tile neighborTile = ref GetTileRef(x, y + 1, planetLayer);
                             neighbors[(int)Enums.Tile.Neighbor.Up] = neighborTile.Type;

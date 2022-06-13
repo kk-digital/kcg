@@ -16,7 +16,7 @@ namespace Physics
                 var pos = entity.physicsPosition2D;
                 var movable = entity.physicsMovable;
 
-                movable.Acceleration.y -= 400.0f * deltaTime;
+                movable.Acceleration.Y -= 400.0f * deltaTime;
 
                 if (movable.Acceleration.Y <= -30.0f)
                 {

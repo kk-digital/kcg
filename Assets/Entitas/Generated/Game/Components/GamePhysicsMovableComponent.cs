@@ -11,7 +11,7 @@ public partial class GameEntity {
     public Physics.MovableComponent physicsMovable { get { return (Physics.MovableComponent)GetComponent(GameComponentsLookup.PhysicsMovable); } }
     public bool hasPhysicsMovable { get { return HasComponent(GameComponentsLookup.PhysicsMovable); } }
 
-    public void AddPhysicsMovable(float newSpeed, UnityEngine.Vector2 newVelocity, UnityEngine.Vector2 newAcceleration, float newAccelerationTime) {
+    public void AddPhysicsMovable(float newSpeed, KMath.Vec2f newVelocity, KMath.Vec2f newAcceleration, float newAccelerationTime) {
         var index = GameComponentsLookup.PhysicsMovable;
         var component = (Physics.MovableComponent)CreateComponent(index, typeof(Physics.MovableComponent));
         component.Speed = newSpeed;
@@ -21,7 +21,7 @@ public partial class GameEntity {
         AddComponent(index, component);
     }
 
-    public void ReplacePhysicsMovable(float newSpeed, UnityEngine.Vector2 newVelocity, UnityEngine.Vector2 newAcceleration, float newAccelerationTime) {
+    public void ReplacePhysicsMovable(float newSpeed, KMath.Vec2f newVelocity, KMath.Vec2f newAcceleration, float newAccelerationTime) {
         var index = GameComponentsLookup.PhysicsMovable;
         var component = (Physics.MovableComponent)CreateComponent(index, typeof(Physics.MovableComponent));
         component.Speed = newSpeed;

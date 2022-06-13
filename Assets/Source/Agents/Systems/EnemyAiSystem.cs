@@ -24,7 +24,7 @@ namespace Agent
                     var pos = entity.physicsPosition2D;
                     var movable = entity.physicsMovable;
 
-                    Vector2 direction = targetPos.Value - pos.Value;
+                    Vec2f direction = targetPos.Value - pos.Value;
 
                     float Len = direction.magnitude;
                     direction.y = 0;
@@ -51,8 +51,8 @@ namespace Agent
                         movable.Acceleration = direction * movable.Speed * 25.0f;
                         if (jump)
                         {
-                            movable.Acceleration.y += 100.0f;
-                            movable.Velocity.y = 5.0f;
+                            movable.Acceleration.Y += 100.0f;
+                            movable.Velocity.Y = 5.0f;
                         }
 
                         entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration, movable.AccelerationTime);
@@ -60,7 +60,7 @@ namespace Agent
                     else
                     {
                         //Idle
-                        movable.Acceleration = new Vector2();
+                        movable.Acceleration = new Vec2f();
                         entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration, movable.AccelerationTime);
                     }
 

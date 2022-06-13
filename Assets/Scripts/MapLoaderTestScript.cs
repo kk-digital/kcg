@@ -192,7 +192,7 @@ namespace Planet.Unity
             {
                 var pos = entity.physicsPosition2D;
                 var boxCollider = entity.physicsBox2DCollider;
-                var boxBorders = Box.Create(pos.Value, boxCollider.Size);
+                var boxBorders = Box.Create(pos.Value + boxCollider.Offset, boxCollider.Size);
                 var center = new UnityEngine.Vector3(boxBorders.Center.X, boxBorders.Center.Y, 0.0f);
                 
                 Gizmos.DrawWireCube(center, new Vector3(boxCollider.Size.X, boxCollider.Size.Y, 0.0f));

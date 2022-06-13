@@ -8,6 +8,7 @@ namespace KMath
     public struct Vec2f
     {
         private static readonly Vec2f zeroVector = new(0f, 0f);
+        private static readonly Vec2f oneVector = new(1f, 1f);
         
         public float X;
         public float Y;
@@ -56,6 +57,14 @@ namespace KMath
         public static Vec2f zero
         {
             [MethodImpl((MethodImplOptions) 256)] get => zeroVector;
+        }
+        
+        /// <summary>
+        ///   <para>Shorthand for writing Vector2(1, 1).</para>
+        /// </summary>
+        public static Vec2f one
+        {
+            [MethodImpl((MethodImplOptions) 256)] get => Vec2f.oneVector;
         }
 
         #endregion

@@ -56,7 +56,7 @@ namespace Planet
         }
 
         public AgentEntity AddEnemy(UnityEngine.Material material, int spriteId, 
-                        int width, int height, Vector2 position, int startingAnimation)
+                        int width, int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.SpawnerSystem.SpawnEnemy(material, spriteId, width, height, position,
