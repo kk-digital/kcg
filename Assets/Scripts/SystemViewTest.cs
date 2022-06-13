@@ -33,12 +33,14 @@ namespace SystemView
         public  int   InnerPlanets     =                    4;
         public  int   OuterPlanets     =                    6;
         public  int   FarOrbitPlanets  =                    2;
+        public  int   SpaceStations    =                   15;
 
         public  float SystemScale      =                25.0f;
 
         public  float SunMass          = 50000000000000000.0f;
         public  float PlanetMass       =   100000000000000.0f;
         public  float MoonMass         =    20000000000000.0f;
+        public  float StationMass      =        1000000000.0f;
 
         public  float TimeScale        =                 1.0f;
         
@@ -124,6 +126,15 @@ namespace SystemView
             }
 
             State.Planets.Clear();
+
+            while (Stations.Count > 0)
+            {
+                GameObject.Destroy(Stations.ElementAt(0).Value.Renderer);
+                GameObject.Destroy(Stations.ElementAt(0).Value.Object);
+                Stations.Remove(Stations.ElementAt(0).Key);
+            }
+
+            State.Stations.Clear();
 
             if (State.Player != null)
             {
@@ -324,6 +335,34 @@ namespace SystemView
                 Planets.Add(Planet, PlanetInfo);
             }
 
+            for (int i = 0; i < SpaceStations; i++)
+            {
+                SpaceStation Station = new();
+
+                Station.Descriptor.CentralBody   = State.Star;
+
+                Station.Descriptor.SemiMinorAxis = ((float)rnd.NextDouble() * State.Planets[InnerPlanets + OuterPlanets - 1].Descriptor.SemiMajorAxis + 4.0f);
+                Station.Descriptor.SemiMajorAxis =  (float)rnd.NextDouble() * SystemScale + Station.Descriptor.SemiMinorAxis;
+
+                Station.Descriptor.Rotation      =  (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Station.Descriptor.MeanAnomaly   =  (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+
+                Station.Descriptor.Compute();
+
+                Station.Descriptor.Self.Mass = StationMass;
+
+                ObjectInfo<SpaceStationRenderer> StationInfo = new();
+
+                StationInfo.Object = new();
+                StationInfo.Object.name = "Space station renderer #" + i;
+
+                StationInfo.Renderer = StationInfo.Object.AddComponent<SpaceStationRenderer>();
+                StationInfo.Renderer.Station = Station;
+
+                State.Stations.Add(Station);
+                Stations.Add(Station, StationInfo);
+            }
+
             for (int i = 0; i < State.Planets.Count; i++)
                 if (State.Planets[i].Descriptor.CentralBody == State.Star)
                     for (int j = 0; j < State.Planets.Count; j++)
@@ -422,6 +461,11 @@ namespace SystemView
                 //if (++UpdatesCompleted == UpdatesPerTick) return;
             }*/
 
+            foreach (SpaceStation s in State.Stations)
+            {
+                s.Descriptor.UpdatePosition(CurrentTime);
+            }
+
             foreach (SystemShip s in State.Ships)
             {
                 if (!s.PathPlanned && !s.Reached)
@@ -439,7 +483,7 @@ namespace SystemView
             float GravVelX = 0.0f;
             float GravVelY = 0.0f;
 
-            // this behaves weird when getting really close to central body --- float too inaccurate?
+            // this behaves weird when getting really close to central body --- is float too inaccurate?
             foreach (SystemViewBody Body in State.Bodies)
             {
                 float dx = Body.PosX - State.Player.Ship.Self.PosX;
