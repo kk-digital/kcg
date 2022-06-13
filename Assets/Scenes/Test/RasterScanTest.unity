@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 386189420}
   - component: {fileID: 386189421}
   m_Layer: 0
-  m_Name: Bresenham
+  m_Name: RasterScan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e841dd4ccc312fc4896094cf89962729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CollisionBlock: {fileID: 2657950471160532488, guid: e37199a6f2fda644f8f48a25c727f0e8, type: 3}
 --- !u!1 &901828317
 GameObject:
   m_ObjectHideFlags: 0
