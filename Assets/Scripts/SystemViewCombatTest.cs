@@ -276,18 +276,14 @@ namespace SystemView
             }
 
             EnemySelectorMenu.AddOptions(Options);
+            EnemySelectorMenu.value = 0;
 
-            bool found = false;
             for (int i = 0; i < Enemies.Count; i++)
                 if (Enemies[i] == SelectedEnemy)
                 {
-                    found = true;
                     EnemySelectorMenu.value = i + 1;
                     break;
                 }
-
-            if (!found)
-                EnemySelectorMenu.value = 0;
         }
 
         public void SelectEnemy(int i)
