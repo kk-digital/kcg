@@ -135,8 +135,10 @@ namespace SystemView
             GameObject.Destroy(ShieldRender);
             GameObject.Destroy(OrbitRender);
             GameObject.Destroy(DirectionRenderer);
+            GameObject.Destroy(VelocityRenderer);
             GameObject.Destroy(ShieldObject);
             GameObject.Destroy(DirectionObject);
+            GameObject.Destroy(VelocityObject);
         }
     }
 }
