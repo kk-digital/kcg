@@ -24,7 +24,7 @@ namespace SystemView
 
         public float TimeScale = 1.0f;
         public float DragFactor = 10000.0f;
-        public float SailingFactor = 20.0f;
+        public float SailingFactor = 200.0f;
 
         public SystemState State;
 
@@ -130,13 +130,10 @@ namespace SystemView
                 Ship.Self.VelY *= 1.0f - 1.0f / (GravitationalFactor + DragFactor);
 
                 // "Sailing" effect
-                if (Input.GetAxis("Horizontal") != 0.0f)
-                {
-                    Magnitude = (float)Math.Sqrt(Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY);
+                Magnitude = (float)Math.Sqrt(Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY);
 
-                    Ship.Self.VelX = ((SailingFactor + GravitationalFactor) * Ship.Self.VelX + (float)Math.Cos(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / (1.0f + SailingFactor + GravitationalFactor);
-                    Ship.Self.VelY = ((SailingFactor + GravitationalFactor) * Ship.Self.VelY + (float)Math.Sin(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / (1.0f + SailingFactor + GravitationalFactor);
-                }
+                Ship.Self.VelX = ((SailingFactor + GravitationalFactor) * Ship.Self.VelX + (float)Math.Cos(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / (1.0f + SailingFactor + GravitationalFactor);
+                Ship.Self.VelY = ((SailingFactor + GravitationalFactor) * Ship.Self.VelY + (float)Math.Sin(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / (1.0f + SailingFactor + GravitationalFactor);
             }
 
             Renderer.shipColor.b = (float) Ship.Health / Ship.MaxHealth;

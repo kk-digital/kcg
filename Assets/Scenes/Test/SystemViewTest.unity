@@ -1706,7 +1706,7 @@ MonoBehaviour:
   TimeScale: 1
   Acceleration: 250
   DragFactor: 10000
-  SailingFactor: 20
+  SailingFactor: 200
   Camera: {fileID: 0}
 --- !u!4 &451157159
 Transform:
@@ -6229,7 +6229,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1000
   m_WholeNumbers: 1
-  m_Value: 980
+  m_Value: 800
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
