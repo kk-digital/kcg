@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.CompilerServices;
-using UnityEngine;
 
 namespace KMath
 {
@@ -70,7 +69,7 @@ namespace KMath
         #endregion
 
         #region Methods
-
+        
         /// <summary>
         ///   <para>Dot Product of two vectors.</para>
         /// </summary>
@@ -116,7 +115,7 @@ namespace KMath
         ///   <para>The perpendicular direction.</para>
         /// </returns>
         [MethodImpl((MethodImplOptions) 256)]
-        public static Vec2f Perpendicular(Vec2f inDirection) => new Vec2f(-inDirection.Y, inDirection.X);
+        public static Vec2f Perpendicular(Vec2f inDirection) => new(-inDirection.Y, inDirection.X);
 
         #endregion
 

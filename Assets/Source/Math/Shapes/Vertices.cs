@@ -2,30 +2,17 @@ using Enums;
 
 namespace KMath
 {
-    public static class VerticesExt
-    {
-        public static Vertices CreateVertices(this ref Box box)
-        {
-            var vertices = new Vertices
-            {
-                Type = VerticesType.Box,
-                List = new Vec2f[4]
-            };
-
-            vertices.List[0] = box.BottomLeft;
-            vertices.List[1] = box.BottomRight;
-            vertices.List[2] = box.TopLeft;
-            vertices.List[3] = box.TopRight;
-
-            return vertices;
-        }
-    }
-    
     public struct Vertices
     {
         public VerticesType Type;
 
         public Vec2f[] List;
+
+        public Vertices(int count, VerticesType type)
+        {
+            List = new Vec2f[count];
+            Type = type;
+        }
 
         public static Vec2f[] GetAxes(Vec2f[] vertices)
         {

@@ -18,12 +18,6 @@ namespace KMath
             Y = y;
         }
 
-        public static explicit operator Vec2f(Vec2i obj)
-        {
-            Vec2f output = new Vec2f(obj.X, obj.Y);
-            return output;
-        }
-        
         #region Properties
 
         /// <summary>
@@ -55,9 +49,9 @@ namespace KMath
         #region Operators
         
         [MethodImpl((MethodImplOptions) 256)]
-        public static explicit operator Vec2i(Vec2f obj)
+        public static explicit operator Vec2f(Vec2i obj)
         {
-            Vec2i output = new Vec2i((int)obj.X, (int)obj.Y);
+            var output = new Vec2f(obj.X, obj.Y);
             return output;
         }
 

@@ -8,10 +8,25 @@ namespace Physics
         public void Update(Planet.TileMap tileMap)
         {
             float deltaTime = Time.deltaTime;
-            var entities = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsBox2DCollider, GameMatcher.PhysicsPosition2D));
+            var entitiesWithBox = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsBox2DCollider, GameMatcher.PhysicsPosition2D));
+            var entitiesWithCircle = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsCircle2DCollider, GameMatcher.PhysicsPosition2D));
 
+            foreach (var entity in entitiesWithCircle)
+            {
+                var pos = entity.physicsPosition2D;
+                var radius = entity.physicsCircle2DCollider.Radius;
+                var movable = entity.physicsMovable;
 
-            foreach (var entity in entities)
+                var circle = Circle.Create(pos.PreviousValue, radius);
+
+                if (circle.IsColliding(tileMap, pos.Value))
+                {
+                    entity.ReplacePhysicsPosition2D(new Vec2f(pos.PreviousValue.Y, pos.PreviousValue.Y), pos.PreviousValue);
+                    entity.ReplacePhysicsMovable(movable.Speed, new Vec2f(0.0f, 0.0f), new Vec2f(0.0f, 0.0f), movable.AccelerationTime);
+                }
+            }
+
+            foreach (var entity in entitiesWithBox)
             {
                 var pos = entity.physicsPosition2D;
                 var entityBoxBorders = Box.Create(new Vec2f(pos.PreviousValue.X, pos.Value.Y) + entity.physicsBox2DCollider.Offset, entity.physicsBox2DCollider.Size);

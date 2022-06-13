@@ -1,3 +1,5 @@
+using Enums;
+
 namespace KMath
 {
     public static class BoxExt
@@ -12,19 +14,30 @@ namespace KMath
     public struct Box
     {
         public Vec2f Center;
-        
-        public Vec2f BottomLeft, BottomRight;
-        public Vec2f TopLeft, TopRight;
+
+        public Vec2f BottomLeft => Vertices.List[0];
+        public Vec2f BottomRight => Vertices.List[1];
+        public Vec2f TopLeft => Vertices.List[2];
+        public Vec2f TopRight => Vertices.List[3];
 
         public int Left, Right;
         public int Up, Down;
+
+        public Vertices Vertices;
         
         public static Box Create(Vec2f position, Vec2f size)
         {
+            var vertices = new Vertices(4, VerticesType.Box);
+            
             var bottomLeft = position;
             var bottomRight = new Vec2f(bottomLeft.X + size.X, bottomLeft.Y);
             var topLeft = new Vec2f(bottomLeft.X, bottomLeft.Y + size.Y);
             var topRight = new Vec2f(bottomLeft.X + size.X, bottomLeft.Y + size.Y);
+
+            vertices.List[0] = bottomLeft;
+            vertices.List[1] = bottomRight;
+            vertices.List[2] = topLeft;
+            vertices.List[3] = topRight;
 
             var left = bottomLeft.X < 0 ? (int)bottomLeft.X - 1 : (int)bottomLeft.X;
             var right = bottomRight.X < 0 ? (int)bottomRight.X - 1 : (int)bottomRight.X;
@@ -37,9 +50,6 @@ namespace KMath
             return new Box
             {
                 Center = center,
-                
-                BottomLeft = bottomLeft, BottomRight = bottomRight,
-                TopLeft = topLeft, TopRight = topRight,
 
                 Left = left, Right = right,
                 Up = up, Down = down

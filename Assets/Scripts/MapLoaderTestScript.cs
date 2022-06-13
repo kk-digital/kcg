@@ -73,7 +73,7 @@ namespace Planet.Unity
             AgentDrawSystem = new Agent.DrawSystem();
             AgentProcessCollisionSystem = new Physics.ProcessCollisionSystem();
 
-            AgentSpawnerSystem.SpawnPlayer(Material, CharacterSpriteId, 32, 48, new Vector2(3.0f, 2.0f), 0, 0);
+            AgentSpawnerSystem.SpawnPlayer(Material, CharacterSpriteId, 32, 48, new Vec2f(3.0f, 2.0f), 0, 0);
         }
 
         public void Update()
@@ -183,12 +183,15 @@ namespace Planet.Unity
         public void OnDrawGizmos()
         {
             if (!Application.isPlaying) return;
+            
+            var entitiesWithBox = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsBox2DCollider));
+            var entitiesWithCircle = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsCircle2DCollider));
 
             var group = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsBox2DCollider));
            
             Gizmos.color = Color.green;
-
-            foreach (var entity in group)
+            
+            foreach (var entity in entitiesWithBox)
             {
                 var pos = entity.physicsPosition2D;
                 var boxCollider = entity.physicsBox2DCollider;
@@ -196,6 +199,15 @@ namespace Planet.Unity
                 var center = new UnityEngine.Vector3(boxBorders.Center.X, boxBorders.Center.Y, 0.0f);
                 
                 Gizmos.DrawWireCube(center, new Vector3(boxCollider.Size.X, boxCollider.Size.Y, 0.0f));
+            }
+            
+            foreach (var entity in entitiesWithCircle)
+            {
+                var pos = entity.physicsPosition2D;
+                var circleCollider = Circle.Create(pos.Value, entity.physicsCircle2DCollider.Radius);
+                var center = new UnityEngine.Vector3(circleCollider.Center.X, circleCollider.Center.Y, 0.0f);
+                
+                Gizmos.DrawWireSphere(center, circleCollider.Radius);
             }
         }
 #endif
