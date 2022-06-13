@@ -20,7 +20,7 @@ namespace Vehicle
             var pngSize = new Vector2Int(witdh, height);
 
             // Set Sprite ID from Sheet ID
-            var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath);
+            var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath, pngSize.x, pngSize.y);
 
             // Set Sprite ID from Sprite Atlas
             var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);

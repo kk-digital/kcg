@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Sprites
 {
-    public struct Atlas
+    public struct SpriteAtlas
     {
         public int AtlasID;
         public int GLTextureID;

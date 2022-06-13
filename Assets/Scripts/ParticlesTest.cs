@@ -65,12 +65,12 @@ namespace Planet.Unity
 
             // we load the sprite sheets here
             int pipeTileSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\sprite\\item\\admin_icon_pipesim.png");
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\sprite\\item\\admin_icon_pipesim.png", 16, 16);
 
             int oreTileSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
 
-            int ventTileSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Objects\\vent1.png");
+            int ventTileSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Objects\\vent1.png", 16, 16);
 
 
             int pipeSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(pipeTileSheet, 0, 0, Enums.AtlasType.Particle);

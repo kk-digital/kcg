@@ -12,9 +12,11 @@ namespace Agent
         public void Draw(Material material, Transform transform, int drawOrder)
         {
             var AgentsWithSprite = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentSprite2D));
+
+            int idx = 0;
             foreach (var entity in AgentsWithSprite)
             {
-                var sprite = new Sprites.Model
+                var sprite = new Sprites.Sprite
                 {
                     Texture = entity.agentSprite2D.Texture,
                     TextureCoords = new Vector4(0, 0, 1, 1)
@@ -25,7 +27,7 @@ namespace Agent
                 var width = entity.agentSprite2D.Size.x;
                 var height = entity.agentSprite2D.Size.y;
 
-                Utility.Render.DrawSprite(x, y, width, height, sprite, material, transform, drawOrder++);
+                Utility.Render.DrawSprite(x, y, width, height, sprite, Material.Instantiate(material), transform, drawOrder++);
             }
         }
     }

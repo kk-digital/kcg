@@ -9,20 +9,16 @@ namespace Agent
     {
         private static int playerID;
 
-        public GameEntity SpawnPlayer(Material material, Vector2 position)
+        public GameEntity SpawnPlayer(Material material, int spriteId, int width, int height, Vector2 position)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
             playerID++;
 
-            var spritePath = "Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png";
-            var pngSize = new Vector2Int(32, 48);
-            var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath);
-            var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
-            byte[] spriteData = new byte[pngSize.x * pngSize.y * 4];
+            byte[] spriteData = new byte[width * height * 4];
             GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, Enums.AtlasType.Agent);
-            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, pngSize.x, pngSize.y);
-            var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
+            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, width, height);
+            var spriteSize = new Vector2(width / 32f, height / 32f);
 
             entity.isAgentPlayer = true;
             entity.isECSInput = true;
@@ -44,20 +40,16 @@ namespace Agent
             return entity;
         }
 
-        public GameEntity SpawnAgent(Material material, Vector2 position)
+        public GameEntity SpawnAgent(Material material, int spriteId, int width, int height, Vector2 position)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
             playerID++;
 
-            var spritePath = "Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png";
-            var pngSize = new Vector2Int(32, 48);
-            var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath);
-            var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
-            byte[] spriteData = new byte[pngSize.x * pngSize.y * 4];
+            byte[] spriteData = new byte[width * height * 4];
             GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, Enums.AtlasType.Agent);
-            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, pngSize.x, pngSize.y);
-            var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
+            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, width, height);
+            var spriteSize = new Vector2(width / 32f, height / 32f);
 
             entity.AddAgentID(playerID);
 
@@ -66,24 +58,19 @@ namespace Agent
             entity.AddAgentSprite2D(texture, spriteSize);
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
             entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
-
             return entity;
         }
 
-        public GameEntity SpawnEnemy(Material material, Vector2 position)
+        public GameEntity SpawnEnemy(Material material, int spriteId, int width, int height, Vector2 position)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
             playerID++;
             
-            var spritePath = "Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png";
-            var pngSize = new Vector2Int(32, 48);
-            var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath);
-            var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
-            byte[] spriteData = new byte[pngSize.x * pngSize.y * 4];
+            byte[] spriteData = new byte[width * height * 4];
             GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, Enums.AtlasType.Agent);
-            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, pngSize.x, pngSize.y);
-            var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
+            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, width, height);
+            var spriteSize = new Vector2(width / 32f, height / 32f);
             
             entity.AddAgentID(playerID);
 
@@ -105,39 +92,10 @@ namespace Agent
             byte[] spriteBytes = new byte[spriteSize.x * spriteSize.y * 4];
             GameState.SpriteAtlasManager.GetSpriteBytes(atlasIndex, spriteBytes, Enums.AtlasType.Agent);
             var mat = UnityEngine.Object.Instantiate(material);
-            var tex = CreateTextureFromRGBA(spriteBytes, spriteSize.x, spriteSize.y);
+            var tex = Utility.Texture.CreateTextureFromRGBA(spriteBytes, spriteSize.x, spriteSize.y);
             mat.SetTexture("_MainTex", tex);
 
             return InstantiateGameObject("Agent", 0, mat, box2dCollider);
-        }
-
-        private Texture2D CreateTextureFromRGBA(byte[] rgba, int w, int h)
-        {
-
-            var res = new Texture2D(w, h, TextureFormat.RGBA32, false)
-            {
-                filterMode = FilterMode.Point
-            };
-
-            var pixels = new Color32[w * h];
-            for (int x = 0; x < w; x++)
-            {
-                for (int y = 0; y < h; y++)
-                {
-                    int index = (x + y * w) * 4;
-                    var r = rgba[index];
-                    var g = rgba[index + 1];
-                    var b = rgba[index + 2];
-                    var a = rgba[index + 3];
-
-                    pixels[x + y * w] = new Color32(r, g, b, a);
-                }
-            }
-
-            res.SetPixels32(pixels);
-            res.Apply();
-
-            return res;
         }
 
         private GameObject InstantiateGameObject(string name, int sortingOrder, Material material, Vector2 size)

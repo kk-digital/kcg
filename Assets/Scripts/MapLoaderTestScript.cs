@@ -60,13 +60,19 @@ namespace Planet.Unity
 
         void InitializeSystems()
         {
+            int CharacterSpriteSheet = 
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png", 32, 48);
+
+            int CharacterSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(CharacterSpriteSheet, 0, 0, Enums.AtlasType.Agent);
+
+
             InputProcessSystems = new ECSInput.ProcessSystem();
             AgentSpawnerSystem = new Agent.SpawnerSystem();
             PhysicsMovableSystem = new Physics.MovableSystem();
             AgentDrawSystem = new Agent.DrawSystem();
             AgentProcessCollisionSystem = new Physics.ProcessCollisionSystem();
 
-            AgentSpawnerSystem.SpawnPlayer(Material, new Vector2(3.0f, 2.0f));
+            AgentSpawnerSystem.SpawnPlayer(Material, CharacterSpriteId, 32, 48, new Vector2(3.0f, 2.0f));
         }
 
         public void Update()
@@ -112,13 +118,13 @@ namespace Planet.Unity
         public void CreateDefaultTiles()
         {
             int metalSlabsTileSheet = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png");
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png", 16, 16);
             int stoneBulkheads = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tile_wallbase\\Tiles_stone_bulkheads.png");
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tile_wallbase\\Tiles_stone_bulkheads.png", 16, 16);
             int tilesMoon = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png");
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png", 16, 16);
             int oreTileSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
 
 
             GameState.TileCreationApi.CreateTile(8);

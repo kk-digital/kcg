@@ -12,7 +12,7 @@ namespace Planet
         
         public void DrawLayer(Enums.Tile.MapLayerType planetLayer, Material material, Transform transform, int DrawOrder)
         {
-            var sprite = new Sprites.Model(LayerTextures[(int) planetLayer]);
+            var sprite = new Sprites.Sprite(LayerTextures[(int) planetLayer]);
 
             Utility.Render.DrawSprite(0, 0, 1.0f * MapSize.x, 1.0f * MapSize.y, sprite, material, transform, DrawOrder);
         }

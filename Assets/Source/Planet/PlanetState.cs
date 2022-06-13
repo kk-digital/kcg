@@ -26,25 +26,26 @@ namespace Planet
             ProjectileList = new ProjectileList();
         }
 
-        public AgentEntity AddPlayer(UnityEngine.Material material, Vector2 position)
+        public AgentEntity AddPlayer(UnityEngine.Material material, int spriteId, 
+                                int width, int height, Vector2 position)
         {
-            GameEntity entity = GameState.SpawnerSystem.SpawnPlayer(material, position);
+            GameEntity entity = GameState.SpawnerSystem.SpawnPlayer(material, spriteId, width, height, position);
             AgentEntity newEntity = AgentList.Add(entity);
 
             return newEntity;
         }
 
-        public AgentEntity AddAgent(UnityEngine.Material material, Vector2 position)
+        public AgentEntity AddAgent(UnityEngine.Material material, int spriteId, int width, int height, Vector2 position)
         {
-            GameEntity entity = GameState.SpawnerSystem.SpawnAgent(material, position);
+            GameEntity entity = GameState.SpawnerSystem.SpawnAgent(material, spriteId, width, height, position);
             AgentEntity newEntity = AgentList.Add(entity);
 
             return newEntity;
         }
 
-        public AgentEntity AddEnemy(UnityEngine.Material material, Vector2 position)
+        public AgentEntity AddEnemy(UnityEngine.Material material, int spriteId, int width, int height, Vector2 position)
         {
-            GameEntity entity = GameState.SpawnerSystem.SpawnEnemy(material, position);
+            GameEntity entity = GameState.SpawnerSystem.SpawnEnemy(material, spriteId, width, height, position);
             AgentEntity newEntity = AgentList.Add(entity);
 
             return newEntity;
@@ -142,7 +143,7 @@ namespace Planet
             GameState.DrawSystem.Draw(Object.Instantiate(material), transform, 12);
 
             #region Gui drawing systems
-            GameState.InventoryDrawSystem.Draw(material, transform, 1000);
+            //GameState.InventoryDrawSystem.Draw(material, transform, 1000);
             #endregion
         }
     }

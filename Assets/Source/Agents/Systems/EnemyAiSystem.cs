@@ -26,17 +26,22 @@ namespace Agent
                     Vector2 direction = targetPos.Value - pos.Value;
 
                     float Len = direction.magnitude;
+                    direction.y = 0;
+                    direction.Normalize();
+
                     if (entity.hasAgentStats && Len <= 0.6f)
                     {
+                        Vector2 oppositeDirection = new Vector2(-direction.x, -direction.y);
                         var stats = entity.agentStats;
                         entity.ReplaceAgentStats(stats.Health - 1.0f, stats.AttackCooldown);
+
+                        // knockback 
+                        movable.Acceleration.x += 800.0f * oppositeDirection.x;
+                        movable.Velocity.x = 20.0f * oppositeDirection.x;
                     }
 
                     if (Len <= entity.agentEnemy.DetectionRadius && Len >= 0.5f)
                     {
-                        direction.y = 0;
-                        direction.Normalize();
-
                         bool jump = Math.Abs(movable.Acceleration.x) <= 0.01f;
                         movable.Acceleration = direction * movable.Speed * 25.0f;
                         if (jump)

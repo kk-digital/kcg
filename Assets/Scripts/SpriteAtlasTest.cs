@@ -58,9 +58,9 @@ namespace Planet.Unity
         {
             // we load the sprite sheets here
             int SomeObjectTileSheet = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Objects\\algaeTank1.png");
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Objects\\algaeTank1.png", 32, 64);
             int PlayerTileSheet = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png");
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png", 32, 48);
 
 
             // bit the sprites into the sprite atlas
@@ -78,8 +78,8 @@ namespace Planet.Unity
         // drawing the sprite atlas
         void DrawSpriteAtlas()
         {
-            ref Sprites.Atlas atlas = ref GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Generic);
-            Sprites.Model sprite = new Sprites.Model
+            ref Sprites.SpriteAtlas atlas = ref GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Generic);
+            Sprites.Sprite sprite = new Sprites.Sprite
             {
                 Texture = atlas.Texture,
                 TextureCoords = new Vector4(0, 0, 1, 1)

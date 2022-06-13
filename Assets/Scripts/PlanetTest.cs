@@ -9,7 +9,10 @@ namespace Planet.Unity
         [SerializeField] Material Material;
 
         Planet.PlanetState Planet;
-
+        Inventory.ManagerSystem inventoryManagerSystem;
+        Item.SpawnerSystem      itemSpawnSystem;
+        Inventory.DrawSystem    inventoryDrawSystem;
+        Contexts EntitasContext;
         static bool Init = false;
   
 
@@ -65,18 +68,49 @@ namespace Planet.Unity
                 }
             }
 
+            inventoryDrawSystem.Draw(Material, transform, 1000);
             Planet.Update(Time.deltaTime, Material, transform);
+            //DrawSpriteAtlas();
 
+        }
+
+        void DrawSpriteAtlas()
+        {
+            ref Sprites.SpriteAtlas atlas = ref GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Agent);
+            Sprites.Sprite sprite = new Sprites.Sprite
+            {
+                Texture = atlas.Texture,
+                TextureCoords = new Vector4(0, 0, 1, 1)
+            };
+            Utility.Render.DrawSprite(-3, -1, atlas.Width / 32.0f, atlas.Height / 32.0f, sprite, Instantiate(Material), transform);
         }
 
         // create the sprite atlas for testing purposes
         public void Initialize()
         {
+            EntitasContext = Contexts.sharedInstance;
+
             int TilesMoon = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png");
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png", 16, 16);
             int OreTileSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
-            
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
+            int GunSpriteSheet =
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\gun-temp.png", 44, 25);
+
+            int RockSpriteSheet =
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1.png", 16, 16);
+            int RockDustSpriteSheet =
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1_dust.png", 16, 16);
+
+            int SlimeSpriteSheet = 
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
+
+            int CharacterSpriteSheet = 
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png", 32, 48);
+
+            int SlimeSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 0, 0, Enums.AtlasType.Agent);
+            int CharacterSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(CharacterSpriteSheet, 0, 0, Enums.AtlasType.Agent);
+
             GameState.TileCreationApi.CreateTile(8);
             GameState.TileCreationApi.SetTileName("ore_1");
             GameState.TileCreationApi.SetTileTexture16(OreTileSheet, 0, 0);
@@ -100,10 +134,61 @@ namespace Planet.Unity
             GenerateMap();
 
 
-            Planet.AddPlayer(Instantiate(Material), new Vector2(3.0f, 3.0f));
-            Planet.AddAgent(Instantiate(Material), new Vector2(6.0f, 3.0f));
-            Planet.AddAgent(Instantiate(Material), new Vector2(1.0f, 4.0f));
-            Planet.AddEnemy(Instantiate(Material), new Vector2(8.0f, 5.0f));
+            var Player = Planet.AddPlayer(Instantiate(Material), CharacterSpriteId, 32, 48, new Vector2(3.0f, 3.0f));
+            int PlayerID = Player.Entity.agentID.ID;
+
+            Planet.AddAgent(Instantiate(Material), CharacterSpriteId, 32, 48, new Vector2(6.0f, 3.0f));
+            Planet.AddEnemy(Instantiate(Material), SlimeSpriteId, 32, 32, new Vector2(8.0f, 5.0f));
+            Planet.AddAgent(Instantiate(Material), CharacterSpriteId, 32, 48, new Vector2(1.0f, 4.0f));
+            
+
+
+            inventoryManagerSystem = new Inventory.ManagerSystem(EntitasContext);
+            itemSpawnSystem = new Item.SpawnerSystem(EntitasContext);
+            inventoryDrawSystem = new Inventory.DrawSystem(EntitasContext);
+            var inventoryAttacher = Inventory.InventoryAttacher.Instance;
+
+            Item.CreationApi.Instance.CreateItem(Enums.ItemType.Gun, "Gun");
+            Item.CreationApi.Instance.SetTexture(GunSpriteSheet);
+            Item.CreationApi.Instance.SetInventoryTexture(GunSpriteSheet);
+            Item.CreationApi.Instance.SetSize(new Vector2(0.5f, 0.5f));
+            Item.CreationApi.Instance.EndItem();
+
+            Item.CreationApi.Instance.CreateItem(Enums.ItemType.Ore, "Ore");
+            Item.CreationApi.Instance.SetTexture(OreTileSheet);
+            Item.CreationApi.Instance.SetInventoryTexture(OreTileSheet);
+            Item.CreationApi.Instance.SetSize(new Vector2(0.5f, 0.5f));
+            Item.CreationApi.Instance.SetStackable(99);
+            Item.CreationApi.Instance.EndItem();
+
+            Item.CreationApi.Instance.CreateItem(Enums.ItemType.PlacementTool, "PlacementTool");
+            Item.CreationApi.Instance.SetTexture(RockSpriteSheet);
+            Item.CreationApi.Instance.SetInventoryTexture(RockSpriteSheet);
+            Item.CreationApi.Instance.SetSize(new Vector2(0.5f, 0.5f));
+            Item.CreationApi.Instance.EndItem();
+
+            Item.CreationApi.Instance.CreateItem(Enums.ItemType.RemoveTileTool, "RemoveTileTool");
+            Item.CreationApi.Instance.SetTexture(RockDustSpriteSheet);
+            Item.CreationApi.Instance.SetInventoryTexture(RockDustSpriteSheet);
+            Item.CreationApi.Instance.SetSize(new Vector2(0.5f, 0.5f));
+            Item.CreationApi.Instance.EndItem();
+
+
+            int inventoryID = Player.Entity.agentInventory.InventoryID;
+            int toolBarID = Player.Entity.agentToolBar.ToolBarID;
+
+            GameEntity gun = itemSpawnSystem.SpawnIventoryItem(Enums.ItemType.Gun);
+            GameEntity ore = itemSpawnSystem.SpawnIventoryItem(Enums.ItemType.Ore);
+            GameEntity placementTool = itemSpawnSystem.SpawnIventoryItem(Enums.ItemType.PlacementTool);
+            GameEntity removeTileTool = itemSpawnSystem.SpawnIventoryItem(Enums.ItemType.RemoveTileTool);
+
+            inventoryManagerSystem.AddItem(gun, toolBarID);
+            inventoryManagerSystem.AddItem(ore, toolBarID);
+            inventoryManagerSystem.AddItem(placementTool, toolBarID);
+            inventoryManagerSystem.AddItem(removeTileTool, toolBarID);
+
+            itemSpawnSystem.SpawnItem(Enums.ItemType.Gun, new Vector2(6.0f, 3.0f));
+            itemSpawnSystem.SpawnItem(Enums.ItemType.Ore, new Vector2(3.0f, 3.0f));
         }
 
 

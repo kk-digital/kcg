@@ -14,7 +14,7 @@ namespace Projectile
             var VehiclesWithSprite = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.ProjectileSprite2D));
             foreach (var entity in VehiclesWithSprite)
             {
-                var sprite = new Sprites.Model
+                var sprite = new Sprites.Sprite
                 {
                     Texture = entity.projectileSprite2D.Texture,
                     TextureCoords = new Vector4(0, 0, 1, 1)
