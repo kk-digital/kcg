@@ -58,7 +58,6 @@ namespace Agent
             entity.AddAgentSprite2D(texture, spriteSize);
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
             entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
-
             return entity;
         }
 
@@ -93,39 +92,10 @@ namespace Agent
             byte[] spriteBytes = new byte[spriteSize.x * spriteSize.y * 4];
             GameState.SpriteAtlasManager.GetSpriteBytes(atlasIndex, spriteBytes, Enums.AtlasType.Agent);
             var mat = UnityEngine.Object.Instantiate(material);
-            var tex = CreateTextureFromRGBA(spriteBytes, spriteSize.x, spriteSize.y);
+            var tex = Utility.Texture.CreateTextureFromRGBA(spriteBytes, spriteSize.x, spriteSize.y);
             mat.SetTexture("_MainTex", tex);
 
             return InstantiateGameObject("Agent", 0, mat, box2dCollider);
-        }
-
-        private Texture2D CreateTextureFromRGBA(byte[] rgba, int w, int h)
-        {
-
-            var res = new Texture2D(w, h, TextureFormat.RGBA32, false)
-            {
-                filterMode = FilterMode.Point
-            };
-
-            var pixels = new Color32[w * h];
-            for (int x = 0; x < w; x++)
-            {
-                for (int y = 0; y < h; y++)
-                {
-                    int index = (x + y * w) * 4;
-                    var r = rgba[index];
-                    var g = rgba[index + 1];
-                    var b = rgba[index + 2];
-                    var a = rgba[index + 3];
-
-                    pixels[x + y * w] = new Color32(r, g, b, a);
-                }
-            }
-
-            res.SetPixels32(pixels);
-            res.Apply();
-
-            return res;
         }
 
         private GameObject InstantiateGameObject(string name, int sortingOrder, Material material, Vector2 size)

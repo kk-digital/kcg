@@ -134,7 +134,7 @@ namespace Planet.Unity
             GenerateMap();
 
 
-            var Player = Planet.AddPlayer(Instantiate(Material), CharacterSpriteSheet, 32, 48, new Vector2(3.0f, 3.0f));
+            var Player = Planet.AddPlayer(Instantiate(Material), CharacterSpriteId, 32, 48, new Vector2(3.0f, 3.0f));
             int PlayerID = Player.Entity.agentID.ID;
 
             Planet.AddAgent(Instantiate(Material), CharacterSpriteId, 32, 48, new Vector2(6.0f, 3.0f));
