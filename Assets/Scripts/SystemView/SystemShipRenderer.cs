@@ -13,16 +13,19 @@ namespace SystemView
         public SpriteRenderer ShieldRender;
         public OrbitRenderer OrbitRender;
         public LineRenderer DirectionRenderer;
+        public LineRenderer VelocityRenderer;
 
         public Color orbitColor     = new Color(1.0f, 0.7f, 0.5f, 1.0f);
         public Color shieldColor    = new Color(0.4f, 0.7f, 1.0f, 0.5f);
         public Color directionColor = new Color(1.0f, 0.7f, 0.5f, 0.4f);
+        public Color velocityColor  = new Color(1.0f, 1.0f, 1.0f, 0.2f);
         public Color shipColor      = Color.white;
 
         public float width = 1.0f;
 
         public GameObject ShieldObject;
         public GameObject DirectionObject;
+        public GameObject VelocityObject;
 
         public CameraController Camera;
 
@@ -62,9 +65,16 @@ namespace SystemView
             DirectionObject = new GameObject();
             DirectionObject.name = "Ship direction renderer";
 
+            VelocityObject = new GameObject();
+            VelocityObject.name = "Ship velocity renderer";
+
             DirectionRenderer = DirectionObject.AddComponent<LineRenderer>();
             DirectionRenderer.material = mat;
             DirectionRenderer.useWorldSpace = true;
+
+            VelocityRenderer = VelocityObject.AddComponent<LineRenderer>();
+            VelocityRenderer.material = mat;
+            VelocityRenderer.useWorldSpace = true;
         }
 
         // Update is called once per frame
@@ -89,7 +99,8 @@ namespace SystemView
             else
                 ShieldRender.color = new Color(shieldColor.r, shieldColor.g, shieldColor.b, shieldColor.a * ship.Shield / ship.MaxShield);
 
-            if (ship.Weapons.Count > 0 && ship.Self.VelX * ship.Self.VelX + ship.Self.VelY * ship.Self.VelY > 0.0f)
+            float v = (float)Math.Sqrt(ship.Self.VelX * ship.Self.VelX + ship.Self.VelY * ship.Self.VelY);
+            if (ship.Weapons.Count > 0 && v > 0.0f)
             {
                 Vector3[] vertices = new Vector3[2];
                 vertices[0] = new Vector3(ship.Self.PosX, ship.Self.PosY, -0.075f);
@@ -98,10 +109,18 @@ namespace SystemView
                 DirectionRenderer.positionCount = 2;
                 DirectionRenderer.startColor = DirectionRenderer.endColor = directionColor;
                 DirectionRenderer.startWidth = DirectionRenderer.endWidth = 0.2f / Camera.scale;
+
+                Vector3[] vertices2 = new Vector3[2];
+                vertices2[0] = new Vector3(ship.Self.PosX, ship.Self.PosY, -0.075f);
+                vertices2[1] = new Vector3(ship.Self.PosX + ship.Self.VelX / v * 10.0f / Camera.scale, ship.Self.PosY + ship.Self.VelY / v * 10.0f / Camera.scale, -0.075f);
+                VelocityRenderer.SetPositions(vertices2);
+                VelocityRenderer.positionCount = 2;
+                VelocityRenderer.startColor = VelocityRenderer.endColor = velocityColor;
+                VelocityRenderer.startWidth = VelocityRenderer.endWidth = 0.2f / Camera.scale;
             }
             else
             {
-                DirectionRenderer.positionCount = 0;
+                DirectionRenderer.positionCount = VelocityRenderer.positionCount = 0;
             }
 
             if (!ship.PathPlanned) OrbitRender.descriptor = null;
