@@ -124,14 +124,21 @@ namespace SystemView
                 float GravitationalFactor = 1.0f / (1.0f - GravitationalStrength);
 
                 // "Air resistance" effect
-                Ship.Self.VelX *= 1.0f - 1.0f / (GravitationalFactor + DragFactor);
-                Ship.Self.VelY *= 1.0f - 1.0f / (GravitationalFactor + DragFactor);
+                float DragX = Ship.Self.VelX * -CurrentTime / (GravitationalFactor + DragFactor);
+                float DragY = Ship.Self.VelY * -CurrentTime / (GravitationalFactor + DragFactor);
+
+                Ship.Self.VelX *= 1.0f + DragX;
+                Ship.Self.VelY *= 1.0f + DragY;
 
                 // "Sailing" effect
-                Magnitude = (float)Math.Sqrt(Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY);
+                float EffectiveAccX = AccX + DragX;
+                float EffectiveAccY = AccY + DragY;
+                
+                float SpeedMagnitude = (float)Math.Sqrt(Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY);
+                float AccMagnitude   = (float)Math.Sqrt(EffectiveAccX * EffectiveAccX + EffectiveAccY * EffectiveAccY);
 
-                Ship.Self.VelX = ((SailingFactor + GravitationalFactor) * Ship.Self.VelX + (float)Math.Cos(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / (1.0f + SailingFactor + GravitationalFactor);
-                Ship.Self.VelY = ((SailingFactor + GravitationalFactor) * Ship.Self.VelY + (float)Math.Sin(Ship.Rotation) * Magnitude * (Reverse ? -1.0f : 1.0f)) / (1.0f + SailingFactor + GravitationalFactor);
+                Ship.Self.VelX = ((SailingFactor + GravitationalFactor) * Ship.Self.VelX + (float)Math.Cos(Ship.Rotation) * SpeedMagnitude) / (1.0f + SailingFactor + GravitationalFactor);
+                Ship.Self.VelY = ((SailingFactor + GravitationalFactor) * Ship.Self.VelY + (float)Math.Sin(Ship.Rotation) * SpeedMagnitude) / (1.0f + SailingFactor + GravitationalFactor);
             }
 
             Renderer.shipColor.b = (float) Ship.Health / Ship.MaxHealth;
