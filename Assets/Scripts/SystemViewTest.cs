@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -71,6 +72,9 @@ namespace SystemView
         public void setAcceleration(float f)    { Acceleration    =             f; }
         public void setDragFactor(float f)      { DragFactor      = 100000.0f - f; }
         public void setSailingFactor(float f)   { SailingFactor   =   1000.0f - f; }
+
+        public Dropdown DockingTargetSelector;
+        private SpaceStation DockingTarget;
 
         private void Start()
         {
@@ -335,6 +339,12 @@ namespace SystemView
                 Planets.Add(Planet, PlanetInfo);
             }
 
+            foreach (SystemPlanet Planet in State.Planets)
+            {
+                State.Bodies.Add(Planet.Descriptor.Self);
+            }
+            State.Bodies.Add(State.Star);
+
             for (int i = 0; i < SpaceStations; i++)
             {
                 SpaceStation Station = new();
@@ -385,12 +395,6 @@ namespace SystemView
 
                             Ships.Add(Ship, ShipInfo);
                         }
-
-            foreach (SystemPlanet Planet in State.Planets)
-            {
-                State.Bodies.Add(Planet.Descriptor.Self);
-            }
-            State.Bodies.Add(State.Star);
 
             State.Player = gameObject.AddComponent<PlayerShip>();
         }
@@ -515,7 +519,56 @@ namespace SystemView
             State.Player.SailingFactor     = SailingFactor;
             State.Player.TimeScale         = TimeScale;
 
+            UpdateDropdownMenu();
+
             CurrentCycle++;
+        }
+
+        private void UpdateDropdownMenu()
+        {
+            DockingTargetSelector.ClearOptions();
+
+            List<string> Options = new();
+
+            if (Stations.Count == 0)
+            {
+                Options.Add("-- No stations --");
+
+                DockingTargetSelector.interactable = false;
+            }
+            else
+            {
+                Options.Add("-- Select a station --");
+
+                for (int i = 0; i < Stations.Count;)
+                    Options.Add("Station " + ++i);
+
+                DockingTargetSelector.interactable = true;
+            }
+
+            DockingTargetSelector.AddOptions(Options);
+
+            DockingTargetSelector.value = 0;
+
+            for (int i = 0; i < Stations.Count; i++)
+                if (Stations.ElementAt(i).Key == DockingTarget)
+                {
+                    DockingTargetSelector.value = i + 1;
+                    break;
+                }
+        }
+
+        public void SelectDockingTarget(int i)
+        {
+            if (i == 0 || i > Stations.Count)
+            {
+                DockingTarget = null;
+                State.Player.Ship.DisengageDockingAutopilot();
+            }
+            else
+            {
+                State.Player.Ship.EngageDockingAutopilot(DockingTarget = Stations.ElementAt(i - 1).Key);
+            }
         }
     }
 }
