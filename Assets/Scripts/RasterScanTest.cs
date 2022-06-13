@@ -2,26 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using KMath;
+using Planet;
 
 public class RasterScanTest : MonoBehaviour
 {
+    Planet.TileMap testTiles;
+
     // Start Point
     Cell start = new Cell
     {
-        x = -2,
-        y = 3
+        x = -1,
+        y = 13
     };
 
     // End Point
     Cell end = new Cell
     {
-        x = 5,
-        y = -3
+        x = 8,
+        y = 6
     };
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
     void Start()
     {
+        // Assign Test Tiles
+        testTiles = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().TileMap;
         // Log raster start and end point
         Debug.Log($"Raster Line from ({start.x}, {start.y}) to ({end.x}, {end.y}) :");
 
@@ -29,6 +34,8 @@ public class RasterScanTest : MonoBehaviour
         foreach (var cell in start.LineTo(end))
         {
             Debug.Log($"({cell.x},{cell.y})");
+            testTiles.RemoveTile(cell.x, cell.y, Enums.Tile.MapLayerType.Front);
+            testTiles.Layers.BuildLayerTexture(testTiles, Enums.Tile.MapLayerType.Front);
         }
     }
 
