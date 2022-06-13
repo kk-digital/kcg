@@ -36,7 +36,7 @@ namespace SystemView
             float[] Position = Station.Descriptor.GetPosition();
 
             StationRenderer.transform.position = new Vector3(Position[0], Position[1], -0.1f);
-            StationRenderer.transform.localScale = new Vector3(7.5f / Camera.scale, 7.5f / Camera.scale, 1.0f);
+            StationRenderer.transform.localScale = new Vector3(12.5f / Camera.scale, 12.5f / Camera.scale, 1.0f);
 
             StationRenderer.color = stationColor;
             OrbitRender.color = orbitColor;
