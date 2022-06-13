@@ -89,7 +89,7 @@ namespace Planet.Unity
             Item.CreationApi.Instance.SetTexture(OreSpriteSheet);
             Item.CreationApi.Instance.SetInventoryTexture(OreSpriteSheet);
             Item.CreationApi.Instance.SetSize(new Vector2(0.5f, 0.5f));
-            Item.CreationApi.Instance.MakeStackable(99);
+            Item.CreationApi.Instance.SetStackable(99);
             Item.CreationApi.Instance.EndItem();
 
             // Generating the map

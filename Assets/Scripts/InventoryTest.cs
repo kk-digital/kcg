@@ -65,6 +65,7 @@ public class InventoryTest : MonoBehaviour
 
     public void Update()
     {
+        //Debug.Log("WHAAAATTT : " + testing.ToString());
         //remove all children MeshRenderer
         foreach (var mr in GetComponentsInChildren<MeshRenderer>())
             if (Application.isPlaying)
@@ -74,6 +75,7 @@ public class InventoryTest : MonoBehaviour
 
         inputProcessSystem.Update();
         inventoryDrawSystem.Draw(material, transform, 0);
+
     }
 
     private void Initialize()
@@ -93,13 +95,13 @@ public class InventoryTest : MonoBehaviour
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.Rock, "Rock");
         Item.CreationApi.Instance.SetTexture(RockSpriteSheet);
         Item.CreationApi.Instance.SetInventoryTexture(RockSpriteSheet);
-        Item.CreationApi.Instance.MakeStackable(99);
+        Item.CreationApi.Instance.SetStackable(99);
         Item.CreationApi.Instance.EndItem();
 
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.RockDust, "RockDust");
         Item.CreationApi.Instance.SetTexture(RockDustSpriteSheet);
         Item.CreationApi.Instance.SetInventoryTexture(RockDustSpriteSheet);
-        Item.CreationApi.Instance.MakeStackable(99);
+        Item.CreationApi.Instance.SetStackable(99);
         Item.CreationApi.Instance.EndItem();
     }
 }
