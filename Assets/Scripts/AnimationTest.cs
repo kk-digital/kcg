@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Enums.Tile;
+using KMath;
 
 namespace Planet.Unity
 {
@@ -144,13 +145,13 @@ namespace Planet.Unity
 
 
             // Generating the map
-            Vector2Int mapSize = new Vector2Int(16, 16);
+            Vec2i mapSize = new Vec2i(16, 16);
             Planet = new Planet.PlanetState(mapSize);
             GenerateMap();
 
-            Planet.AddAgent(Instantiate(Material), 0, 16, 16, new Vector2(6.0f, 3.0f), particleAnimation);
-            Planet.AddAgent(Instantiate(Material), 0, 32, 32, new Vector2(2.0f, 3.0f), slimeIdle);
-            Planet.AddAgent(Instantiate(Material), 0, 32, 32, new Vector2(4.0f, 3.0f), slimeJump);
+            Planet.AddAgent(Instantiate(Material), 0, 16, 16, new Vec2f(6.0f, 3.0f), particleAnimation);
+            Planet.AddAgent(Instantiate(Material), 0, 32, 32, new Vec2f(2.0f, 3.0f), slimeIdle);
+            Planet.AddAgent(Instantiate(Material), 0, 32, 32, new Vec2f(4.0f, 3.0f), slimeJump);
         }
 
 
@@ -160,18 +161,18 @@ namespace Planet.Unity
         {
             Planet.TileMap TileMap = Planet.TileMap;
 
-           Vector2Int mapSize = TileMap.MapSize;
+            Vec2i mapSize = TileMap.MapSize;
 
-           for(int j = 0; j < mapSize.y; j++)
+           for(int j = 0; j < mapSize.Y; j++)
             {
-                for(int i = 0; i < mapSize.x; i++)
+                for(int i = 0; i < mapSize.X; i++)
                 {
                     Tile.Tile frontTile = Tile.Tile.EmptyTile;
                     Tile.Tile oreTile = Tile.Tile.EmptyTile;
 
-                    if (i >= mapSize.x / 2)
+                    if (i >= mapSize.X / 2)
                     {
-                        if (j % 2 == 0 && i == mapSize.x / 2)
+                        if (j % 2 == 0 && i == mapSize.X / 2)
                         {
                             frontTile.Type = 10;
                         }
@@ -182,7 +183,7 @@ namespace Planet.Unity
                     }
                     else
                     {
-                        if (j % 3 == 0 && i == mapSize.x / 2 + 1)
+                        if (j % 3 == 0 && i == mapSize.X / 2 + 1)
                         {
                             frontTile.Type = 9;
                         }

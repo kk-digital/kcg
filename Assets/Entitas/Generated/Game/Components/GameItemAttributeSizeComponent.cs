@@ -11,14 +11,14 @@ public partial class GameEntity {
     public Item.Attribute.SizeComponent itemAttributeSize { get { return (Item.Attribute.SizeComponent)GetComponent(GameComponentsLookup.ItemAttributeSize); } }
     public bool hasItemAttributeSize { get { return HasComponent(GameComponentsLookup.ItemAttributeSize); } }
 
-    public void AddItemAttributeSize(UnityEngine.Vector2 newSize) {
+    public void AddItemAttributeSize(KMath.Vec2f newSize) {
         var index = GameComponentsLookup.ItemAttributeSize;
         var component = (Item.Attribute.SizeComponent)CreateComponent(index, typeof(Item.Attribute.SizeComponent));
         component.Size = newSize;
         AddComponent(index, component);
     }
 
-    public void ReplaceItemAttributeSize(UnityEngine.Vector2 newSize) {
+    public void ReplaceItemAttributeSize(KMath.Vec2f newSize) {
         var index = GameComponentsLookup.ItemAttributeSize;
         var component = (Item.Attribute.SizeComponent)CreateComponent(index, typeof(Item.Attribute.SizeComponent));
         component.Size = newSize;

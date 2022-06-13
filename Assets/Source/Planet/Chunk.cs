@@ -1,4 +1,5 @@
 using System.Linq;
+using KMath;
 using UnityEngine;
 
 namespace Planet
@@ -6,7 +7,7 @@ namespace Planet
     public struct Chunk
     {
         // readonly means const(in runtime) after initialization
-        public static readonly Vector2Int Size = new(16, 16);
+        public static readonly Vec2i Size = new(16, 16);
         public Enums.Tile.MapChunkType Type;
         
         public int Seq;

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Physics;
 
 #if UNITY_EDITOR
+using KMath;
 using UnityEditor;
 #endif
 
@@ -72,7 +73,7 @@ namespace Planet.Unity
             AgentDrawSystem = new Agent.AgentDrawSystem();
             AgentProcessCollisionSystem = new Physics.ProcessCollisionSystem();
 
-            AgentSpawnerSystem.SpawnPlayer(Material, CharacterSpriteId, 32, 48, new Vector2(3.0f, 2.0f), 0, 0);
+            AgentSpawnerSystem.SpawnPlayer(Material, CharacterSpriteId, 32, 48, new Vec2f(3.0f, 2.0f), 0, 0);
         }
 
         public void Update()
@@ -152,13 +153,13 @@ namespace Planet.Unity
 
 
             // Generating the map
-            Vector2Int mapSize = new Vector2Int(16, 16);
+            Vec2i mapSize = new Vec2i(16, 16);
 
             TileMap = new Planet.TileMap(mapSize);
 
-            for(int j = 0; j < mapSize.y; j++)
+            for(int j = 0; j < mapSize.Y; j++)
             {
-                for(int i = 0; i < mapSize.x; i++)
+                for(int i = 0; i < mapSize.X; i++)
                 {
                     Tile.Tile frontTile = Tile.Tile.EmptyTile;
                     Tile.Tile oreTile = Tile.Tile.EmptyTile;
@@ -189,25 +190,5 @@ namespace Planet.Unity
             //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
             //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Ore);
         }
-
-#if UNITY_EDITOR
-        public void OnDrawGizmos()
-        {
-            if (!Application.isPlaying) return;
-
-            var group = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsBox2DCollider));
-           
-            Gizmos.color = Color.green;
-
-            foreach (var entity in group)
-            {
-                var pos = entity.physicsPosition2D;
-                var boxCollider = entity.physicsBox2DCollider;
-                var boxBorders = boxCollider.CreateEntityBoxBorders(pos.Value);
-
-                Gizmos.DrawWireCube(boxBorders.Center, new Vector3(boxCollider.Size.x, boxCollider.Size.y, 0.0f));
-            }
-        }
-#endif
     }
 }

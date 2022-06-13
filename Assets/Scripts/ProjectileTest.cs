@@ -104,7 +104,7 @@ public class ProjectileTest : MonoBehaviour
             Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentPlayer);
             foreach (var entity in entities)
             {
-                startPos = new Vector2(entity.physicsPosition2D.Value.y, entity.physicsPosition2D.Value.y);
+                startPos = new Vector2(entity.physicsPosition2D.Value.Y, entity.physicsPosition2D.Value.Y);
             }
 
             IGroup<GameEntity> Pentities =
@@ -192,7 +192,7 @@ public class ProjectileTest : MonoBehaviour
             var boxBorders = boxCollider.CreateEntityBoxBorders(pos.Position); 
 
             // Drawing the gizmo
-            Gizmos.DrawWireCube(boxBorders.Center, new Vector3(boxCollider.Size.x, boxCollider.Size.y, 0.0f));
+            Gizmos.DrawWireCube(boxBorders.Center, new Vector3(boxCollider.Size.X, boxCollider.Size.Y, 0.0f));
         }
     }
 #endif
