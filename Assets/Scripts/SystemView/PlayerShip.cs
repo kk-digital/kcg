@@ -43,7 +43,7 @@ namespace SystemView
 
             Ship.Self.PosX = 0.0f;
             Ship.Self.PosY = 0.0f;
-            Ship.Acceleration = 250.0f;
+            Ship.Acceleration = 5.0f;
 
             Ship.Self.Mass = 1.0f;
 
@@ -104,19 +104,17 @@ namespace SystemView
             if (Movement > 0.0f && Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY < 0.1f) Reverse = false;
             if (Movement < 0.0f && Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY < 0.1f) Reverse = true;
 
-            float AccX = (float)Math.Cos(Ship.Rotation);
-            float AccY = (float)Math.Sin(Ship.Rotation);
+            float AccX = (float)Math.Cos(Ship.Rotation) * Ship.Acceleration;
+            float AccY = (float)Math.Sin(Ship.Rotation) * Ship.Acceleration;
 
-            float Magnitude = (float)Math.Sqrt(AccX * AccX + AccY * AccY);
-
-            AccX = AccX / Magnitude * Ship.Acceleration * CurrentTime * Movement;
-            AccY = AccY / Magnitude * Ship.Acceleration * CurrentTime * Movement;
+            AccX *= CurrentTime * Movement;
+            AccY *= CurrentTime * Movement;
             
-            Ship.Self.PosX += Ship.Self.VelX * CurrentTime + AccX / 2.0f * CurrentTime * CurrentTime;
-            Ship.Self.PosY += Ship.Self.VelY * CurrentTime + AccY / 2.0f * CurrentTime * CurrentTime;
+            Ship.Self.PosX += Ship.Self.VelX * CurrentTime + AccX / 2.0f * CurrentTime;
+            Ship.Self.PosY += Ship.Self.VelY * CurrentTime + AccY / 2.0f * CurrentTime;
 
-            Ship.Self.VelX += AccX * CurrentTime;
-            Ship.Self.VelY += AccY * CurrentTime;
+            Ship.Self.VelX += AccX;
+            Ship.Self.VelY += AccY;
 
             // "Sailing" and "air resistance" effects are dampened the closer the player is to a massive object
             // This is to make gravity and slingshotting more realistic and easier for the player to use.
