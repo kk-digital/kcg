@@ -56,7 +56,7 @@ namespace SystemView
                 g = (float)Math.Sqrt(gx * gx + gy * gy);
 
                 GravityText.text = "  Gravity: " + String.Format("{0:0.00}", g) + " m/s²";
-                OrbitalPeriodText.text = "Orbital period: " + String.Format("{0:0.00}", State.Player.Ship.Descriptor.OrbitalPeriod) + " s  ";
+                OrbitalPeriodText.text = "Orbital period: " + (float.IsNaN(State.Player.Ship.Descriptor.OrbitalPeriod) ? " not orbiting  " : (String.Format("{0:0.00}", State.Player.Ship.Descriptor.OrbitalPeriod) + " s  "));
 
                 HealthText.text = "  Health: " + State.Player.Ship.Health + " / " + State.Player.Ship.MaxHealth;
                 ShieldText.text = "Shield: " + State.Player.Ship.Shield + " / " + State.Player.Ship.MaxShield + "  ";
