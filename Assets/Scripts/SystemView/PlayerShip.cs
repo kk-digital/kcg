@@ -95,6 +95,8 @@ namespace SystemView
 
             LastTime = Time.time;
 
+            if (Ship.DockingAutopilotLoop(CurrentTime)) return;
+
             Ship.Rotation -= Input.GetAxis("Horizontal") * CurrentTime * RotationSpeedModifier;
 
             float Movement = Input.GetAxis("Vertical");
