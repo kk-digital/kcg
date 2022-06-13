@@ -47,6 +47,8 @@ namespace Planet.Unity
                 }
             }
 
+            //foreach (var mr in GetComponentsInChildren<MeshRenderer>())
+
             Planet.Update(Time.deltaTime, Material, transform);
             DrawSystem.Draw(Material, transform, 14);
         }
