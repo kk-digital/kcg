@@ -65,6 +65,7 @@ public class InventoryTest : MonoBehaviour
 
     public void Update()
     {
+        //Debug.Log("WHAAAATTT : " + testing.ToString());
         //remove all children MeshRenderer
         foreach (var mr in GetComponentsInChildren<MeshRenderer>())
             if (Application.isPlaying)
@@ -74,6 +75,7 @@ public class InventoryTest : MonoBehaviour
 
         inputProcessSystem.Update();
         inventoryDrawSystem.Draw(material, transform, 0);
+
     }
 
     private void Initialize()
