@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Physics;
 
 #if UNITY_EDITOR
+using KMath;
 using UnityEditor;
 #endif
 
@@ -140,13 +141,13 @@ namespace Planet.Unity
 
 
             // Generating the map
-            Vector2Int mapSize = new Vector2Int(16, 16);
+            Vec2i mapSize = new Vec2i(16, 16);
 
             TileMap = new Planet.TileMap(mapSize);
 
-            for(int j = 0; j < mapSize.y; j++)
+            for(int j = 0; j < mapSize.Y; j++)
             {
-                for(int i = 0; i < mapSize.x; i++)
+                for(int i = 0; i < mapSize.X; i++)
                 {
                     Tile.Tile frontTile = Tile.Tile.EmptyTile;
                     Tile.Tile oreTile = Tile.Tile.EmptyTile;
@@ -191,9 +192,10 @@ namespace Planet.Unity
             {
                 var pos = entity.physicsPosition2D;
                 var boxCollider = entity.physicsBox2DCollider;
-                var boxBorders = boxCollider.CreateEntityBoxBorders(pos.Value);
-
-                Gizmos.DrawWireCube(boxBorders.Center, new Vector3(boxCollider.Size.x, boxCollider.Size.y, 0.0f));
+                var boxBorders = Box.Create(pos.Value, boxCollider.Size);
+                var center = new UnityEngine.Vector3(boxBorders.Center.X, boxBorders.Center.Y, 0.0f);
+                
+                Gizmos.DrawWireCube(center, new Vector3(boxCollider.Size.X, boxCollider.Size.Y, 0.0f));
             }
         }
 #endif

@@ -29,12 +29,10 @@ namespace Agent
                     TextureCoords = new Vector4(0, 0, 1, 1)
                 };
 
-
-
-                var x = entity.physicsPosition2D.Value.x;
-                var y = entity.physicsPosition2D.Value.y;
-                var width = entity.agentSprite2D.Size.x;
-                var height = entity.agentSprite2D.Size.y;
+                var x = entity.agentPosition2D.Value.X;
+                var y = entity.agentPosition2D.Value.Y;
+                var width = entity.agentSprite2D.Size.X;
+                var height = entity.agentSprite2D.Size.Y;
 
                 Utility.Render.DrawSprite(x, y, width, height, sprite, Material.Instantiate(material), transform, drawOrder++);
             }

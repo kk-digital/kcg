@@ -7,15 +7,15 @@ namespace KMath
     // Vector 3D Floating-Point
     public struct Vec3f
     {
-        public float x;
-        public float y;
-        public float z;
+        float X;
+        float Y;
+        float Z;
 
         public Vec3f(float x, float y, float z)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+            X = x;
+            Y = y;
+            Z = z;
         }
 
         public static Vec3f operator+(Vec3f a, Vec3f b)

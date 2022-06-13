@@ -1,4 +1,5 @@
 ﻿using System;
+using KMath;
 using Physics;
 using UnityEngine;
 
@@ -6,19 +7,19 @@ namespace Planet
 {
     public class TileMap
     {
-        public Vector2Int MapSize;
-        public Box2DBorders BoxBorders;
+        public Vec2i MapSize;
+        public Box Borders;
         public ChunkList Chunks;
         public Layers Layers;
         public HeightMap HeightMap;
 
-        public TileMap(Vector2Int mapSize)
+        public TileMap(Vec2i mapSize)
         {
             MapSize = mapSize;
 
             Chunks = new ChunkList(mapSize);
-
-            BoxBorders = Vector2.zero.CreateBoxBorders(mapSize * 16);
+            
+            Borders = Box.Create(Vec2f.zero, (Vec2f)mapSize * 16);
 
             HeightMap = new HeightMap(MapSize);
             Layers = new Layers
@@ -161,6 +162,7 @@ namespace Planet
                         // we jus thave to know which one to draw based on the offset
                         tile.SpriteId = properties.BaseSpriteId + tilePositionToTileSet[(int)tilePosition];
                     }
+
                     else
                     {
                         tile.SpriteId = properties.BaseSpriteId;
@@ -174,9 +176,9 @@ namespace Planet
         }
         public void UpdateTileMapPositions(Enums.Tile.MapLayerType planetLayer)
         {
-            for(int y = 0; y < MapSize.y; y++)
+            for(int y = 0; y < MapSize.Y; y++)
             {
-                for(int x = 0; x < MapSize.x; x++)
+                for(int x = 0; x < MapSize.X; x++)
                 {
                     UpdateTilesOnPosition(x, y, planetLayer);
                 }

@@ -1,4 +1,5 @@
 using Entitas;
+using KMath;
 using UnityEngine;
 
 namespace Agent

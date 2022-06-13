@@ -1,13 +1,13 @@
-using UnityEngine;
 using System.Collections.Generic;
 using Entitas;
-using Physics;
+using KMath;
+using UnityEngine;
 
 namespace Agent
 {
     public class SpawnerSystem
     {
-        public GameEntity SpawnPlayer(Material material, int spriteId, int width, int height, Vector2 position,
+        public GameEntity SpawnPlayer(Material material, int spriteId, int width, int height, Vec2f position,
         int AgentId, int startingAnimation)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
@@ -16,7 +16,7 @@ namespace Agent
 
             entity.isAgentPlayer = true;
             entity.isECSInput = true;
-            entity.AddECSInputXY(new Vector2(0, 0), false);
+            entity.AddECSInputXY(new Vec2f(0, 0), false);
 
             entity.AddAgentID(AgentId);
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
@@ -34,7 +34,7 @@ namespace Agent
             return entity;
         }
 
-        public GameEntity SpawnAgent(Material material, int spriteId, int width, int height, Vector2 position,
+        public GameEntity SpawnAgent(Material material, int spriteId, int width, int height, Vec2f position,
         int AgentId, int startingAnimation)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();

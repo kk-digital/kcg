@@ -270,17 +270,17 @@ namespace Planet.Unity
             KMath.Random.Mt19937.init_genrand((ulong)System.DateTime.Now.Ticks);
             Planet.TileMap TileMap = Planet.TileMap;
 
-           Vector2Int mapSize = TileMap.MapSize;
+            Vec2i mapSize = TileMap.MapSize;
 
-           for(int j = 0; j < mapSize.y; j++)
+           for(int j = 0; j < mapSize.Y; j++)
             {
-                for(int i = 0; i < mapSize.x; i++)
+                for(int i = 0; i < mapSize.X; i++)
                 {
                     Tile.Tile frontTile = Tile.Tile.EmptyTile;
 
-                    if (i >= mapSize.x / 2)
+                    if (i >= mapSize.X / 2)
                     {
-                        if (j % 2 == 0 && i == mapSize.x / 2)
+                        if (j % 2 == 0 && i == mapSize.X / 2)
                         {
                             frontTile.Type = 10;
                         }
@@ -291,7 +291,7 @@ namespace Planet.Unity
                     }
                     else
                     {
-                        if (j % 3 == 0 && i == mapSize.x / 2 + 1)
+                        if (j % 3 == 0 && i == mapSize.X / 2 + 1)
                         {
                             frontTile.Type = 9;
                         }
