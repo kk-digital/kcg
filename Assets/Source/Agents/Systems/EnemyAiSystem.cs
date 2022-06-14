@@ -38,11 +38,11 @@ namespace Agent
                         entity.ReplaceAgentStats(stats.Health - damage, stats.AttackCooldown);
 
                         // spawns a debug floating text for damage 
-                        planetState.AddFloatingText("" + damage, 0.5f, new Vec2f(oppositeDirection.x * 0.05f, oppositeDirection.y * 0.05f), new Vec2f(pos.Value.x, pos.Value.y + 0.35f));
+                        planetState.AddFloatingText("" + damage, 0.5f, new Vec2f(oppositeDirection.x * 0.05f, oppositeDirection.y * 0.05f), new Vec2f(pos.Value.X, pos.Value.Y + 0.35f));
 
                         // knockback test
-                        movable.Acceleration.x += 800.0f * oppositeDirection.x;
-                        movable.Velocity.x = 20.0f * oppositeDirection.x;
+                        movable.Acceleration.X += 800.0f * oppositeDirection.x;
+                        movable.Velocity.X = 20.0f * oppositeDirection.x;
                     }
 
                     if (Len <= entity.agentEnemy.DetectionRadius && Len >= 0.5f)
