@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Entitas;
 
-namespace Vehicle
+namespace FloatingText
 {
-    public class VehicleList
+    public class FloatingTextList
     {
         
         // array for storing entities
-        public VehicleEntity[] List;
+        public FloatingTextEntity[] List;
 
         public int Size;
         // used for tracking down an available 
@@ -24,13 +24,13 @@ namespace Vehicle
             }
         }
 
-        public VehicleList()
+        public FloatingTextList()
         {
-            List = new VehicleEntity[1024];
+            List = new FloatingTextEntity[1024];
         }
 
 
-        public ref VehicleEntity Add()
+        public ref FloatingTextEntity Add()
         {
             // if we dont have enough space we expand
             // the capacity
@@ -45,7 +45,7 @@ namespace Vehicle
             int Found = -1;
             for(int index = LastFreeIndex; index < Capacity; index++)
             {
-                ref VehicleEntity thisEntity = ref List[index];
+                ref FloatingTextEntity thisEntity = ref List[index];
 
                 if (!thisEntity.IsInitialized)
                 {
@@ -57,7 +57,7 @@ namespace Vehicle
             {
                 for(int index = 0; index < LastFreeIndex; index++)
                 {
-                    ref VehicleEntity thisEntity = ref List[index];
+                    ref FloatingTextEntity thisEntity = ref List[index];
 
                     if (!thisEntity.IsInitialized)
                     {
@@ -72,7 +72,7 @@ namespace Vehicle
 
 
             // creating the Entity and initializing it
-            VehicleEntity NewEntity = new VehicleEntity();
+            FloatingTextEntity NewEntity = new FloatingTextEntity();
             NewEntity.Index = Found;
             NewEntity.IsInitialized = true;
 
@@ -83,9 +83,15 @@ namespace Vehicle
         }
 
 
+        public ref FloatingTextEntity Get(int Index)
+        {
+            return ref List[Index];
+        }
+
+
         // to remove an entity we just 
         // set the IsInitialized field to false
-        public void Remove(VehicleEntity entity)
+        public void Remove(FloatingTextEntity entity)
         {
             entity.IsInitialized = false;
             Size--;

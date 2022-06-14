@@ -38,11 +38,19 @@ public class GameState
     public static readonly Inventory.DrawSystem InventoryDrawSystem;
     #endregion
 
+    #region FloatingText
+    public static readonly FloatingText.UpdateSystem FloatingTextUpdateSystem;
+    public static readonly FloatingText.SpawnerSystem FloatingTextSpawnerSystem;
+    public static readonly FloatingText.DrawSystem FloatingTextDrawSystem;
+    #endregion
+
     public static readonly ImageLoader.FileLoadingManager FileLoadingManager;
     public static readonly ECSInput.ProcessSystem ProcessSystem;
 
     static GameState()
     {
+        Contexts entitasContext = Contexts.sharedInstance;
+
         TileSpriteAtlasManager = new Tile.SpriteAtlasManager();
         SpriteAtlasManager = new Sprites.SpriteAtlasManager();
         TileCreationApi = new Tile.CreationApi();
@@ -57,5 +65,8 @@ public class GameState
         ProcessCollisionSystem = new Physics.ProcessCollisionSystem();
         EnemyAiSystem = new Agent.EnemyAiSystem();
         AnimationManager = new Animation.AnimationManager();
+        FloatingTextUpdateSystem = new FloatingText.UpdateSystem();
+        FloatingTextSpawnerSystem = new FloatingText.SpawnerSystem(entitasContext);
+        FloatingTextDrawSystem = new FloatingText.DrawSystem();
     }
 }

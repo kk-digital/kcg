@@ -30,7 +30,7 @@ namespace Projectile
         }
 
 
-        public ProjectileEntity Add(GameEntity entity)
+        public ref ProjectileEntity Add()
         {
             // if we dont have enough space we expand
             // the capacity
@@ -75,12 +75,11 @@ namespace Projectile
             ProjectileEntity NewEntity = new ProjectileEntity();
             NewEntity.Index = Found;
             NewEntity.IsInitialized = true;
-            NewEntity.Entity = entity;
 
             List[Found] = NewEntity;
             Size++;
 
-             return NewEntity;
+             return ref List[Found];
         }
 
 

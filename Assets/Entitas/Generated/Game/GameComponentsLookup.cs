@@ -23,40 +23,43 @@ public static class GameComponentsLookup {
     public const int AIMoveToAction = 12;
     public const int ECSInput = 13;
     public const int ECSInputXY = 14;
-    public const int InventoryDrawable = 15;
-    public const int InventoryID = 16;
-    public const int InventorySize = 17;
-    public const int InventorySlots = 18;
-    public const int InventoryToolBar = 19;
-    public const int ItemAttachedInventory = 20;
-    public const int ItemAttributeAction = 21;
-    public const int ItemAttributeConsumable = 22;
-    public const int ItemAttributeEquipament = 23;
-    public const int ItemAttributeInventorySprite = 24;
-    public const int ItemAttributePlaceable = 25;
-    public const int ItemAttributeSize = 26;
-    public const int ItemAttributeSprite = 27;
-    public const int ItemAttributeStackable = 28;
-    public const int ItemAttributes = 29;
-    public const int ItemID = 30;
-    public const int ItemLabel = 31;
-    public const int ItemStack = 32;
-    public const int ParticleEmitter2dPosition = 33;
-    public const int ParticleEmitterState = 34;
-    public const int ParticlePosition2D = 35;
-    public const int ParticleState = 36;
-    public const int PhysicsBox2DCollider = 37;
-    public const int PhysicsMovable = 38;
-    public const int PhysicsPosition2D = 39;
-    public const int ProjectileID = 40;
-    public const int ProjectilePhysicsState2D = 41;
-    public const int ProjectileSprite2D = 42;
-    public const int ProjectileType = 43;
-    public const int VehicleID = 44;
-    public const int VehiclePhysicsState2D = 45;
-    public const int VehicleSprite2D = 46;
+    public const int FloatingTextID = 15;
+    public const int FloatingTextMovable = 16;
+    public const int FloatingTextState = 17;
+    public const int InventoryDrawable = 18;
+    public const int InventoryID = 19;
+    public const int InventorySize = 20;
+    public const int InventorySlots = 21;
+    public const int InventoryToolBar = 22;
+    public const int ItemAttachedInventory = 23;
+    public const int ItemAttributeAction = 24;
+    public const int ItemAttributeConsumable = 25;
+    public const int ItemAttributeEquipament = 26;
+    public const int ItemAttributeInventorySprite = 27;
+    public const int ItemAttributePlaceable = 28;
+    public const int ItemAttributeSize = 29;
+    public const int ItemAttributeSprite = 30;
+    public const int ItemAttributeStackable = 31;
+    public const int ItemAttributes = 32;
+    public const int ItemID = 33;
+    public const int ItemLabel = 34;
+    public const int ItemStack = 35;
+    public const int ParticleEmitter2dPosition = 36;
+    public const int ParticleEmitterState = 37;
+    public const int ParticlePosition2D = 38;
+    public const int ParticleState = 39;
+    public const int PhysicsBox2DCollider = 40;
+    public const int PhysicsMovable = 41;
+    public const int PhysicsPosition2D = 42;
+    public const int ProjectileID = 43;
+    public const int ProjectilePhysicsState2D = 44;
+    public const int ProjectileSprite2D = 45;
+    public const int ProjectileType = 46;
+    public const int VehicleID = 47;
+    public const int VehiclePhysicsState2D = 48;
+    public const int VehicleSprite2D = 49;
 
-    public const int TotalComponents = 47;
+    public const int TotalComponents = 50;
 
     public static readonly string[] componentNames = {
         "AgentEnemy",
@@ -74,6 +77,9 @@ public static class GameComponentsLookup {
         "AIMoveToAction",
         "ECSInput",
         "ECSInputXY",
+        "FloatingTextID",
+        "FloatingTextMovable",
+        "FloatingTextState",
         "InventoryDrawable",
         "InventoryID",
         "InventorySize",
@@ -124,6 +130,9 @@ public static class GameComponentsLookup {
         typeof(AI.MoveToActionComponent),
         typeof(ECSInput.Component),
         typeof(ECSInput.XYComponent),
+        typeof(FloatingText.IDComponent),
+        typeof(FloatingText.MovableComponent),
+        typeof(FloatingText.StateComponent),
         typeof(Inventory.DrawableComponent),
         typeof(Inventory.IDComponent),
         typeof(Inventory.SizeComponent),
