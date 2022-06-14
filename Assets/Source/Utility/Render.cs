@@ -59,10 +59,9 @@ namespace Utility
         {
             var mat = material;
             mat.color = color;
-            var mesh = CreateMesh(transform, "ColorQuad", drawOrder, mat);
+            var mesh = CreateMesh(transform, "colorQuad", drawOrder, mat);
 
             List<int> triangles = new List<int>();
-            List<Vector2> uvs = new List<Vector2>();
             List<Vector3> verticies = new List<Vector3>();
 
             var p0 = new Vector3(x, y, 0);
@@ -86,6 +85,15 @@ namespace Utility
             mesh.SetTriangles(triangles, 0);
         }
 
+        public static void DrawString(float x, float y, float characterSize, string label, int fontSize, Color color, Transform parent, int sortOrder)
+        {
+            var textMesh = CreateText(parent, new Vector2(x, y), "text", sortOrder);
+            textMesh.text = label; 
+            textMesh.characterSize = characterSize;
+            textMesh.fontSize = fontSize;
+            textMesh.color = color;
+        }
+
         private static Mesh CreateMesh(Transform parent, string name, int sortingOrder, Material material)
         {
             var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
@@ -104,5 +112,24 @@ namespace Utility
 
             return mesh;
         }
+
+        private static TextMesh CreateText(Transform parent, Vector2 pos, string name, int sortingOrder)
+        {
+            var go = new GameObject(name, typeof(TextMesh), typeof(MeshRenderer));
+            go.transform.SetParent(parent);
+            go.GetComponent<Transform>().position = pos;
+
+            var textMesh = go.GetComponent<TextMesh>();
+            textMesh.anchor = TextAnchor.LowerLeft;
+            Font ArialFont = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+            textMesh.font = ArialFont;
+
+            var mr = go.GetComponent<MeshRenderer>();
+            mr.sharedMaterial = ArialFont.material;
+            mr.sortingOrder = sortingOrder;
+
+            return textMesh;
+        }
+
     }
 }

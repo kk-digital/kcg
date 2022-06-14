@@ -124,6 +124,18 @@ namespace Inventory
                 float slotX = x + i * tileSize;
                 float slotY = y + j * tileSize;
 
+                // Draw Count if stackable.
+                if (itemEntity.hasItemStack)
+                {
+                    int fontSize = 50;
+                    
+                    // these Change with Camera size. Find better soluiton. AutoSize? MeshPro?
+                    float characterSize = 0.05f * Camera.main.pixelWidth / 1024.0f;
+                    float posOffset = 0.04f;
+                    
+                    Utility.Render.DrawString(slotX + posOffset, slotY + posOffset, characterSize, itemEntity.itemStack.Count.ToString(), fontSize, Color.white, transform, drawOrder + 4);
+                }
+
                 // Draw sprites.
                 GameEntity itemAttributeEntity = EntitasContext.game.GetEntityWithItemAttributes(itemEntity.itemID.ItemType);
                 int SpriteID = itemAttributeEntity.itemAttributeInventorySprite.ID;
@@ -131,8 +143,9 @@ namespace Inventory
                 Sprites.Sprite sprite = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle);
 
                 float spriteSize = slotSize * 0.8f;
-
-                Utility.Render.DrawSprite(slotX + (tileSize - spriteSize) / 2.0f, slotY + (tileSize - spriteSize) / 2.0f, spriteSize, spriteSize, sprite, Object.Instantiate(material), transform, drawOrder + 3);
+                slotX = slotX + (tileSize - spriteSize) / 2.0f;
+                slotY = slotY + (tileSize - spriteSize) / 2.0f;
+                Utility.Render.DrawSprite(slotX, slotY, spriteSize, spriteSize, sprite, Object.Instantiate(material), transform, drawOrder + 3);
             }
         }
     }

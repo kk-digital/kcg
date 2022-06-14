@@ -165,7 +165,7 @@ public class AIGridWorldTest : MonoBehaviour
                         GameEntity entityAction = context.game.CreateEntity();
                         ActionID++;
                         int DurationTime = 200; // Miliseconds
-                        entityAction.AddAIAction(ActionID, PreConditions, Effects, DurationTime, 1);
+                        entityAction.AddAIAction(ActionID, PreConditions, Effects, DurationTime, 1, 0, Enums.ActionState.None);
                     }
                 }
             }
