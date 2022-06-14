@@ -45,7 +45,7 @@ namespace Physics
 
                 Vec2f newPosition = pos.Value + displacement;
 
-                entity.ReplacePhysicsMovable(entity.physicsMovable.Speed, newVelocity, movable.Acceleration, entity.physicsMovable.AccelerationTime);
+                entity.ReplacePhysicsMovable(entity.physicsMovable.Speed, newVelocity, movable.Acceleration);
                 entity.ReplacePhysicsPosition2D(newPosition, pos.Value);
             }
         }

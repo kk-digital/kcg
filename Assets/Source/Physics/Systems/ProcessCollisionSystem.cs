@@ -1,3 +1,4 @@
+using Enums;
 using KMath;
 using UnityEngine;
 
@@ -17,12 +18,34 @@ namespace Physics
                 var radius = entity.physicsCircle2DCollider.Radius;
                 var movable = entity.physicsMovable;
 
-                var circle = Circle.Create(pos.PreviousValue, radius);
+                var circle = Circle.Create(pos.PreviousValue, radius, entity.agentSprite2D.Size);
 
-                if (circle.IsColliding(tileMap, pos.Value))
+                var intersectionPoint = circle.GetTileIntersectionPoint(tileMap, pos.Value);
+
+                if (intersectionPoint.IsCollided)
                 {
-                    entity.ReplacePhysicsPosition2D(new Vec2f(pos.PreviousValue.Y, pos.PreviousValue.Y), pos.PreviousValue);
-                    entity.ReplacePhysicsMovable(movable.Speed, new Vec2f(0.0f, 0.0f), new Vec2f(0.0f, 0.0f), movable.AccelerationTime);
+                    if (intersectionPoint.Side is CircleQuarter.Right or CircleQuarter.Left)
+                    {
+                        entity.ReplacePhysicsPosition2D(new Vec2f(pos.PreviousValue.X, pos.Value.Y), pos.PreviousValue);
+                        entity.ReplacePhysicsMovable(movable.Speed, new Vec2f(0.0f, movable.Velocity.Y), new Vec2f(0.0f, movable.Acceleration.Y));
+                    }
+                    if (intersectionPoint.Side is CircleQuarter.Top or CircleQuarter.Bottom)
+                    {
+                        entity.ReplacePhysicsPosition2D(new Vec2f(pos.Value.X, pos.PreviousValue.Y), pos.PreviousValue);
+                        entity.ReplacePhysicsMovable(movable.Speed, new Vec2f(movable.Velocity.Y, 0.0f), new Vec2f(movable.Acceleration.X, 0.0f));
+                    }
+                    
+                    if (intersectionPoint.Side is CircleQuarter.TopRight)
+                    {
+                        entity.ReplacePhysicsPosition2D(new Vec2f(pos.PreviousValue.X, pos.Value.Y), pos.PreviousValue);
+                        entity.ReplacePhysicsMovable(movable.Speed, new Vec2f(0.0f, movable.Velocity.Y), new Vec2f(0.0f, movable.Acceleration.Y));
+                    }
+                    if (intersectionPoint.Side is CircleQuarter.Top or CircleQuarter.Bottom)
+                    {
+                        entity.ReplacePhysicsPosition2D(new Vec2f(pos.Value.X, pos.PreviousValue.Y), pos.PreviousValue);
+                        entity.ReplacePhysicsMovable(movable.Speed, new Vec2f(movable.Velocity.Y, 0.0f), new Vec2f(movable.Acceleration.X, 0.0f));
+                    }
+
                 }
             }
 
@@ -35,12 +58,12 @@ namespace Physics
                 if (entityBoxBorders.IsCollidingBottom(tileMap, movable.Velocity))
                 {
                     entity.ReplacePhysicsPosition2D(new Vec2f(pos.Value.X, pos.PreviousValue.Y), pos.PreviousValue);
-                    entity.ReplacePhysicsMovable(movable.Speed, new Vec2f(movable.Velocity.X, 0.0f), new Vec2f(movable.Acceleration.X, 0.0f), movable.AccelerationTime);
+                    entity.ReplacePhysicsMovable(movable.Speed, new Vec2f(movable.Velocity.X, 0.0f), new Vec2f(movable.Acceleration.X, 0.0f));
                 }
                 else if (entityBoxBorders.IsCollidingTop(tileMap, movable.Velocity))
                 {
                     entity.ReplacePhysicsPosition2D(new Vec2f(pos.Value.X, pos.PreviousValue.Y), pos.PreviousValue);
-                    entity.ReplacePhysicsMovable(movable.Speed, new Vec2f(movable.Velocity.X, 0.0f), new Vec2f(movable.Acceleration.X, 0.0f), movable.AccelerationTime);
+                    entity.ReplacePhysicsMovable(movable.Speed, new Vec2f(movable.Velocity.X, 0.0f), new Vec2f(movable.Acceleration.X, 0.0f));
                 }
                 
                 pos = entity.physicsPosition2D;
@@ -50,12 +73,12 @@ namespace Physics
                 if (entityBoxBorders.IsCollidingLeft(tileMap, movable.Velocity))
                 {
                     entity.ReplacePhysicsPosition2D(new Vec2f(pos.PreviousValue.X, pos.Value.Y), pos.PreviousValue);
-                    entity.ReplacePhysicsMovable(movable.Speed, new Vec2f(0.0f, movable.Velocity.Y), new Vec2f(0.0f, movable.Acceleration.Y), movable.AccelerationTime);
+                    entity.ReplacePhysicsMovable(movable.Speed, new Vec2f(0.0f, movable.Velocity.Y), new Vec2f(0.0f, movable.Acceleration.Y));
                 }
                 else if (entityBoxBorders.IsCollidingRight(tileMap, movable.Velocity))
                 {
                     entity.ReplacePhysicsPosition2D(new Vec2f(pos.PreviousValue.X, pos.Value.Y), pos.PreviousValue);
-                    entity.ReplacePhysicsMovable(movable.Speed, new Vec2f(0.0f, movable.Velocity.Y), new Vec2f(0.0f, movable.Acceleration.Y), movable.AccelerationTime);
+                    entity.ReplacePhysicsMovable(movable.Speed, new Vec2f(0.0f, movable.Velocity.Y), new Vec2f(0.0f, movable.Acceleration.Y));
                 }
             }
         }

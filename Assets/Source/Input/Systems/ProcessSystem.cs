@@ -34,7 +34,7 @@ namespace ECSInput
                     movable.Velocity.Y = 5.0f;
                 }
 
-                entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration, movable.AccelerationTime);
+                entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration);
 
             }
 

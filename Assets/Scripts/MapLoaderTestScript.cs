@@ -204,7 +204,7 @@ namespace Planet.Unity
             foreach (var entity in entitiesWithCircle)
             {
                 var pos = entity.physicsPosition2D;
-                var circleCollider = Circle.Create(pos.Value, entity.physicsCircle2DCollider.Radius);
+                var circleCollider = Circle.Create(pos.Value, entity.physicsCircle2DCollider.Radius, entity.agentSprite2D.Size);
                 var center = new UnityEngine.Vector3(circleCollider.Center.X, circleCollider.Center.Y, 0.0f);
                 
                 Gizmos.DrawWireSphere(center, circleCollider.Radius);

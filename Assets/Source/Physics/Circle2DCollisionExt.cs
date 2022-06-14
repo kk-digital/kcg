@@ -1,27 +1,36 @@
 using KMath;
+using UnityEngine;
+using Utility;
 
 namespace Physics
 {
     public static class Circle2DCollisionExt
     {
-        public static bool IsColliding(this Circle circle, Planet.TileMap tileMap, Vec2f newPos)
+        public static CircleIntersectionPoint GetTileIntersectionPoint(this Circle circle, Planet.TileMap tileMap, Vec2f newPos)
         {
-            var pointOnEdge = circle.PointOnEdge(newPos);
-            var tilePos = (Vec2i) pointOnEdge;
-            var tilePosF = (Vec2f) tilePos;
-            
+            var pointOnEdge = circle.GetPointOnEdge(newPos);
+            var quarterPositions = circle.GetQuarterPositions(pointOnEdge);
 
-            if (tileMap.Borders.Intersects(tilePosF))
+            Debug.DrawLine(new Vector3(pointOnEdge.X, pointOnEdge.Y, 0.0f),
+                new Vector3(pointOnEdge.X + 0.1f, pointOnEdge.Y, 0.0f), Color.red);
+            Debug.DrawLine(new Vector3(pointOnEdge.X + 0.1f, pointOnEdge.Y, 0.0f),
+                new Vector3(pointOnEdge.X + 0.1f, pointOnEdge.Y + 0.1f, 0.0f), Color.red);
+
+            var tiles = tileMap.GetTiles(quarterPositions, Enums.Tile.MapLayerType.Front);
+
+            foreach (var tile in tiles)
             {
-                ref var tile = ref tileMap.GetTileRef(tilePos.X, tilePos.Y, Enums.Tile.MapLayerType.Front);
-                
-                if (tile.Type >= 0)
+                var intersectionPoint = tile.Borders.GetIntersectionPointAt(circle);
+                if (intersectionPoint.IsCollided)
                 {
-                    return tile.Borders.Intersects(tilePosF);
+                    return intersectionPoint;
                 }
             }
 
-            return false;
+            return new CircleIntersectionPoint
+            {
+                IsCollided = false
+            };
         }
     }
 }

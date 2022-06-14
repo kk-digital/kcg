@@ -26,7 +26,7 @@ namespace Item
             entity.AddItemID(ItemID, itemType);
             entity.AddPhysicsPosition2D(position, Vec2f.zero);
             entity.AddPhysicsBox2DCollider(size, Vec2f.zero);
-            entity.AddPhysicsMovable(0f, Vec2f.zero, Vec2f.zero, 0f);
+            entity.AddPhysicsMovable(0f, Vec2f.zero, Vec2f.zero);
 
             ItemID++;
             return entity;

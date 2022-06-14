@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using KMath;
 using Physics;
 using UnityEngine;
@@ -55,6 +56,22 @@ namespace Planet
             return ref Layers.Tiles[(int)planetLayer][x + y * MapSize.x];
         }
 
+        public Tile.Tile[] GetTiles(Vec2i[] positions, Enums.Tile.MapLayerType planetLayer)
+        {
+            var tiles = new List<Tile.Tile>(positions.Length);
+            
+            foreach (var position in positions)
+            {
+                ref var tile = ref GetTileRef(position.X, position.Y, planetLayer);
+                if (tile.Type >= 0)
+                {
+                    tiles.Add(tile);
+                }
+            }
+
+            return tiles.ToArray();
+        }
+        
         public void SetTile(int x, int y, Tile.Tile tile, Enums.Tile.MapLayerType planetLayer)
         {
             if (x >= 0 && x < MapSize.x &&

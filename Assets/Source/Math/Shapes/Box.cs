@@ -1,4 +1,6 @@
 using Enums;
+using Utility;
+using Math = System.Math;
 
 namespace KMath
 {
@@ -8,6 +10,32 @@ namespace KMath
         {
             return position.X >= box.Left && position.X <= box.Right &&
                    position.Y >= box.Down && position.Y <= box.Up;
+        }
+
+        public static CircleIntersectionPoint GetIntersectionPointAt(this Box box, Circle circle)
+        {
+            var nearestX = Math.Max(box.BottomLeft.X, Math.Min(circle.Center.X, box.BottomRight.X));
+            var nearestY = Math.Max(box.BottomLeft.Y, Math.Min(circle.Center.Y, box.TopRight.Y));
+
+            var deltaX = circle.Center.X - nearestX;
+            var deltaY = circle.Center.Y - nearestY;
+
+            var difference = new Vec2f(deltaX, deltaY) - circle.Center;
+            var quarterType = Circle.GetQuarterType(difference);
+
+            return deltaX * deltaX + deltaY * deltaY < circle.Radius * circle.Radius
+                ? new CircleIntersectionPoint
+                {
+                    Value = new Vec2f(deltaX, deltaY),
+                    IsCollided = true,
+                    Side = quarterType
+                }
+                : new CircleIntersectionPoint
+                {
+                    Value = new Vec2f(deltaX, deltaY),
+                    IsCollided = false,
+                    Side = CircleQuarter.Error
+                };
         }
     }
     
@@ -52,7 +80,9 @@ namespace KMath
                 Center = center,
 
                 Left = left, Right = right,
-                Up = up, Down = down
+                Up = up, Down = down,
+                
+                Vertices = vertices
             };
         }
     }
