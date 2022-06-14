@@ -212,9 +212,9 @@ namespace SystemView
 
         public float GetTrueAnomaly(float EccentricAnomaly)
         {
-            //              1 + e     E
+            //              1 + ε     E
             // ν = 2 atan(√ ----- tan(-))
-            //              1 - e     2
+            //              1 - ε     2
 
             return 2.0f * (float)Math.Atan(Math.Sqrt((1.0f + Eccentricity) / (1.0f - Eccentricity)) * Math.Tan(EccentricAnomaly / 2.0f));
         }
@@ -249,9 +249,9 @@ namespace SystemView
 
         public float GetDistanceFromCenterAt(float True)
         {
-            //           1 - e²
+            //           1 - ε²
             // r = a --------------
-            //       1 + e * cos(ν)
+            //       1 + ε * cos(ν)
 
             return SemiMajorAxis * (1 - Eccentricity * Eccentricity) / (1 + Eccentricity * (float)Math.Cos(True));
         }
@@ -415,7 +415,7 @@ namespace SystemView
         public float[] GetVelocityAt(float Radius, float E)
         {
             // →   √ (μa)        -sin(E)
-            // v = ------ ( √(1 - e²) cos(E) )
+            // v = ------ ( √(1 - ε²) cos(E) )
             //       rc             0
 
             float Factor = (float)Math.Sqrt(StandardGravitationalParameter * SemiMajorAxis) / Radius;
@@ -533,6 +533,8 @@ namespace SystemView
             Apoapsis = GetDistanceFromCenterAt(3.1415926f);
 
             EccentricDistance = SemiMajorAxis - Periapsis;
+            
+            if (EccentricityVector[0] < 0.0f) Rotation += 3.1415926f;
 
             //                                      r            r
             // →          cos(ν)                     x            y
@@ -544,19 +546,20 @@ namespace SystemView
 
             TrueAnomaly = (float)Math.Acos(PosX / Radius) - Rotation;
 
-            //          x                  x
-            // cos(E) = -   =>   E = acos( - )
-            //          a                  a
+            //                                                1 + ε             ν
+            //              1 + ε     E                      √----- (1 - ε) tan(-)
+            // ν = 2 atan(√ ----- tan(-))   =>   ε = 2 atan(  1 - ε             2  )
+            //              1 - ε     2                      --------------------- 
+            //                                                       1 + ε
 
-            EccentricAnomaly = (float)Math.Acos(PosX / SemiMajorAxis) - Rotation;
+            float OnePlusEcc = 1 + Eccentricity;
+            float OneMinusEcc = 1 - Eccentricity;
+
+            EccentricAnomaly = 2.0f * (float)Math.Atan((Math.Sqrt(OnePlusEcc / OneMinusEcc) * OneMinusEcc * Math.Tan(TrueAnomaly / 2)) / OnePlusEcc);
 
             // M = E - ε sin(E)
 
             MeanAnomaly = EccentricAnomaly - Eccentricity * (float)Math.Sin(EccentricAnomaly);
-
-            if (EccentricityVector[0] < 0.0f) Rotation += 3.1415926f;
-
-            // DebugOut();
         }
     }
 }
