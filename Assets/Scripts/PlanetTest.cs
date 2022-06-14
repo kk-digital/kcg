@@ -187,26 +187,26 @@ namespace Planet.Unity
             Item.CreationApi.Instance.CreateItem(Enums.ItemType.Gun, "Gun");
             Item.CreationApi.Instance.SetTexture(GunSpriteSheet);
             Item.CreationApi.Instance.SetInventoryTexture(GunSpriteSheet);
-            Item.CreationApi.Instance.SetSize(new Vector2(0.5f, 0.5f));
+            Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
             Item.CreationApi.Instance.EndItem();
 
             Item.CreationApi.Instance.CreateItem(Enums.ItemType.Ore, "Ore");
             Item.CreationApi.Instance.SetTexture(OreTileSheet);
             Item.CreationApi.Instance.SetInventoryTexture(OreTileSheet);
-            Item.CreationApi.Instance.SetSize(new Vector2(0.5f, 0.5f));
+            Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
             Item.CreationApi.Instance.SetStackable(99);
             Item.CreationApi.Instance.EndItem();
 
             Item.CreationApi.Instance.CreateItem(Enums.ItemType.PlacementTool, "PlacementTool");
             Item.CreationApi.Instance.SetTexture(RockSpriteSheet);
             Item.CreationApi.Instance.SetInventoryTexture(RockSpriteSheet);
-            Item.CreationApi.Instance.SetSize(new Vector2(0.5f, 0.5f));
+            Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
             Item.CreationApi.Instance.EndItem();
 
             Item.CreationApi.Instance.CreateItem(Enums.ItemType.RemoveTileTool, "RemoveTileTool");
             Item.CreationApi.Instance.SetTexture(RockDustSpriteSheet);
             Item.CreationApi.Instance.SetInventoryTexture(RockDustSpriteSheet);
-            Item.CreationApi.Instance.SetSize(new Vector2(0.5f, 0.5f));
+            Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
             Item.CreationApi.Instance.EndItem();
 
             // Generating the map

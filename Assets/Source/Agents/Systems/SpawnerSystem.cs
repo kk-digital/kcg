@@ -12,7 +12,7 @@ namespace Agent
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
-            var spriteSize = new Vector2(width / 32f, height / 32f);
+            var spriteSize = new Vec2f(width / 32f, height / 32f);
 
             entity.isAgentPlayer = true;
             entity.isECSInput = true;
@@ -39,7 +39,7 @@ namespace Agent
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
-            var spriteSize = new Vector2(width / 32f, height / 32f);
+            var spriteSize = new Vec2f(width / 32f, height / 32f);
 
             entity.AddAgentID(AgentId);
 
