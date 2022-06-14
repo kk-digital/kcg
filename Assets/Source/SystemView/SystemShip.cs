@@ -157,7 +157,6 @@ namespace SystemView
 
                 case AutopilotStage.PLANNING_TRAJECTORY:
                     Descriptor.UpdatePosition(CurrentTime);
-                    Descriptor.Print = true;
                     if (Descriptor.PlanPath(dockingAutopilotTarget.Descriptor, AcceptedDeviation)) autopilotStage = AutopilotStage.TRANSITIONING;
                     break;
 
