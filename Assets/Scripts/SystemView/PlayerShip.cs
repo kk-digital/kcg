@@ -14,8 +14,6 @@ namespace SystemView
 
         public float LastTime;
 
-        public float RotationSpeedModifier = 2.0f;
-
         public bool Reverse = false;
 
         public bool RenderOrbit = true;
@@ -25,6 +23,7 @@ namespace SystemView
         public float TimeScale = 1.0f;
         public float DragFactor = 10000.0f;
         public float SailingFactor = 200.0f;
+        public float SystemScale = 1.0f;
 
         public SystemState State;
 
@@ -95,9 +94,9 @@ namespace SystemView
 
             LastTime = Time.time;
 
-            if (Ship.DockingAutopilotLoop(CurrentTime)) return;
+            if (Ship.DockingAutopilotLoop(CurrentTime, 0.1f * SystemScale)) return;
 
-            Ship.Rotation -= Input.GetAxis("Horizontal") * CurrentTime * RotationSpeedModifier;
+            Ship.Rotation -= Input.GetAxis("Horizontal") * CurrentTime * Ship.RotationSpeedModifier;
 
             float Movement = Input.GetAxis("Vertical");
             if (Movement == 0.0f && Input.GetKey("w")) Movement =  1.0f;

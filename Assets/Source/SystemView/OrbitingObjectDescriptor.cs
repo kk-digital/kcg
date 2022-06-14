@@ -420,6 +420,17 @@ namespace SystemView
             return false;
         }
 
+        public float[] ForceEncounter(OrbitingObjectDescriptor Destination, float Acceleration)
+        {
+            float[] RequiredVelocityChange = new float[2];
+
+            OrbitingObjectDescriptor NewOrbit = new OrbitingObjectDescriptor(this);
+
+            // todo: this function
+
+            return RequiredVelocityChange; 
+        }
+
         public float[] GetVelocityAt(float Radius, float E)
         {
             // →   √ (μa)        -sin(E)

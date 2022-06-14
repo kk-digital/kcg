@@ -397,6 +397,7 @@ namespace SystemView
                         }
 
             State.Player = gameObject.AddComponent<PlayerShip>();
+            State.Player.SystemScale = SystemScale;
         }
 
         void Update()
@@ -473,8 +474,8 @@ namespace SystemView
             foreach (SystemShip s in State.Ships)
             {
                 if (!s.PathPlanned && !s.Reached)
-                    s.PathPlanned = s.Descriptor.PlanPath(s.Destination, 0.1f);
-                else if (!s.Reached && s.Descriptor.GetDistanceFrom(s.Destination) < 5.0f)
+                    s.PathPlanned = s.Descriptor.PlanPath(s.Destination, 0.1f * SystemScale);
+                else if (!s.Reached && s.Descriptor.GetDistanceFrom(s.Destination) < SystemScale)
                 {
                     s.Descriptor.Copy(s.Destination);
                     s.PathPlanned = false;
@@ -565,10 +566,8 @@ namespace SystemView
                 DockingTarget = null;
                 State.Player.Ship.DisengageDockingAutopilot();
             }
-            else
-            {
+            else if (DockingTarget != Stations.ElementAt(i - 1).Key)
                 State.Player.Ship.EngageDockingAutopilot(DockingTarget = Stations.ElementAt(i - 1).Key);
-            }
         }
     }
 }

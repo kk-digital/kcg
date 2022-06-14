@@ -90,7 +90,7 @@ namespace SystemView
 
             ShieldRender.transform.Rotate(new Vector3(0.0f, 0.0f, (ship.Rotation - LastRotation) * 180.0f / 3.1415926f));
 
-            LastRotation = ship.Rotation;
+            LastRotation       = ship.Rotation;
             ShipRender.color   = shipColor;
             OrbitRender.color  = orbitColor;
 
