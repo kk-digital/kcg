@@ -58,6 +58,14 @@ namespace SystemView
             Self               = Body;
         }
 
+        public OrbitingObjectDescriptor(OrbitingObjectDescriptor Descriptor)
+        {
+            EccentricityVector = new float[2];
+            Self               = new();
+
+            Copy(Descriptor);
+        }
+
         public OrbitingObjectDescriptor(OrbitingObjectDescriptor Descriptor, SystemViewBody Body)
         {
             EccentricityVector = new float[2];
@@ -96,12 +104,12 @@ namespace SystemView
             EccentricDistance              = Descriptor.EccentricDistance;
             Periapsis                      = Descriptor.Periapsis;
             Apoapsis                       = Descriptor.Apoapsis;
+            HeliocentricDistance           = Descriptor.HeliocentricDistance;
 
             Self.PosX                      = Descriptor.Self.PosX;
             Self.PosY                      = Descriptor.Self.PosY;
             Self.VelX                      = Descriptor.Self.VelX;
             Self.VelY                      = Descriptor.Self.VelY;
-            HeliocentricDistance           = Descriptor.HeliocentricDistance;
 
             StandardGravitationalParameter = GravitationalConstant * CentralBody.Mass;
         }
@@ -339,7 +347,7 @@ namespace SystemView
         public bool PlanPath(OrbitingObjectDescriptor Destination, float AcceptableDeviation)
         {
             // Make a copy of the current state in case we cannot establish an orbit from our current position
-            OrbitingObjectDescriptor Start = new OrbitingObjectDescriptor(this, Self);
+            OrbitingObjectDescriptor Start = new OrbitingObjectDescriptor(this);
             float[] StartPos = GetPosition();
 
             // Turn orbit so that our rotational position is 0
@@ -384,7 +392,7 @@ namespace SystemView
             // Compute all other values
             Compute();
 
-            float TimeToEncounter          = OrbitalPeriod / 2.0f;
+            float TimeToEncounter          = OrbitalPeriod * 0.5f;
             float TargetRotationalMovement = (TimeToEncounter / Destination.OrbitalPeriod) * 2.0f * 3.1415926f;
 
             float True = Destination.GetTrueAnomaly(Destination.GetEccentricAnomalyAt(Destination.MeanAnomaly + TargetRotationalMovement));
@@ -454,6 +462,12 @@ namespace SystemView
             Self.PosY            = Pos[1];
             Self.VelX            = Vel[0];
             Self.VelY            = Vel[1];
+
+            if    (MeanAnomaly      < 0.0f)              MeanAnomaly      += 2.0f * 3.1415926f;
+            while (MeanAnomaly      > 2.0f * 3.1415926f) MeanAnomaly      -= 2.0f * 3.1415926f;
+
+            if    (EccentricAnomaly < 0.0f)              EccentricAnomaly += 2.0f * 3.1415926f;
+            if    (TrueAnomaly      < 0.0f)              TrueAnomaly      += 2.0f * 3.1415926f;
         }
 
         /*public void DebugOut()
@@ -542,9 +556,7 @@ namespace SystemView
             //      c       0                       r            r
             //                                       c            c
 
-            float Radius = (float)Math.Sqrt(PosX * PosX + PosY * PosY);
-
-            TrueAnomaly = (float)Math.Acos(PosX / Radius) - Rotation;
+            TrueAnomaly = (float)Math.Atan2(PosY, PosX) - Rotation;
 
             //                                                1 + ε             ν
             //              1 + ε     E                      √----- (1 - ε) tan(-)
@@ -560,6 +572,10 @@ namespace SystemView
             // M = E - ε sin(E)
 
             MeanAnomaly = EccentricAnomaly - Eccentricity * (float)Math.Sin(EccentricAnomaly);
+
+            if (MeanAnomaly      < 0.0f) MeanAnomaly      += 2.0f * 3.1415926f;
+            if (EccentricAnomaly < 0.0f) EccentricAnomaly += 2.0f * 3.1415926f;
+            if (TrueAnomaly      < 0.0f) TrueAnomaly      += 2.0f * 3.1415926f;
         }
     }
 }
