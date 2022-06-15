@@ -71,9 +71,6 @@ namespace Planet.Unity
 
             inventoryDrawSystem.Draw(Material, transform, 1000);
             Planet.Update(Time.deltaTime, Material, transform);
-            
-            /*Utility.Render.DrawString(0, 0, 1.0f, "label", 12, new Color(255, 255, 255, 255),
-             transform, 10000);*/
         }
 
         void DrawSpriteAtlas()
@@ -135,6 +132,28 @@ namespace Planet.Unity
             GameState.TileCreationApi.EndTile();
 
 
+            GameState.AnimationManager.CreateAnimation(0);
+            GameState.AnimationManager.SetName("character-move-left");
+            GameState.AnimationManager.SetTimePerFrame(0.15f);
+            GameState.AnimationManager.SetBaseSpriteID(0);
+            GameState.AnimationManager.SetFrameCount(1);
+            GameState.AnimationManager.EndAnimation();
+
+            GameState.AnimationManager.CreateAnimation(1);
+            GameState.AnimationManager.SetName("character-move-right");
+            GameState.AnimationManager.SetTimePerFrame(0.15f);
+            GameState.AnimationManager.SetBaseSpriteID(0);
+            GameState.AnimationManager.SetFrameCount(1);
+            GameState.AnimationManager.EndAnimation();
+
+            GameState.AnimationManager.CreateAnimation(2);
+            GameState.AnimationManager.SetName("slime-move-left");
+            GameState.AnimationManager.SetTimePerFrame(0.15f);
+            GameState.AnimationManager.SetBaseSpriteID(0);
+            GameState.AnimationManager.SetFrameCount(4);
+            GameState.AnimationManager.EndAnimation();
+
+
 
             // Generating the map
             Vector2Int mapSize = new Vector2Int(16, 16);
@@ -142,7 +161,7 @@ namespace Planet.Unity
             GenerateMap();
 
 
-            var Player = Planet.AddPlayer(Instantiate(Material), CharacterSpriteId, 32, 48, new Vector2(3.0f, 3.0f));
+            var Player = Planet.AddPlayer(Instantiate(Material), CharacterSpriteId, 32, 48, new Vector2(3.0f, 3.0f), 0);
             int PlayerID = Player.Entity.agentID.ID;
 
             Planet.AddAgent(Instantiate(Material), CharacterSpriteId, 32, 48, new Vector2(6.0f, 3.0f));

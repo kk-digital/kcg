@@ -8,7 +8,7 @@ namespace Agent
     public class SpawnerSystem
     {
         public GameEntity SpawnPlayer(Material material, int spriteId, int width, int height, Vector2 position,
-        int AgentId)
+        int AgentId, int startingAnimation)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
@@ -22,7 +22,7 @@ namespace Agent
             entity.AddECSInputXY(new Vector2(0, 0), false);
 
             entity.AddAgentID(AgentId);
-
+            entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
             entity.AddAgentSprite2D(texture, spriteSize);
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
             Vector2 box2dCollider = new Vector2(0.5f, 1.5f);

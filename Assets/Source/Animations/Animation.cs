@@ -9,7 +9,6 @@ namespace Animation
 
         public float CurrentTime;
         public int CurrentFrame;
-        public int BaseSpriteId;
 
 
 
@@ -25,7 +24,8 @@ namespace Animation
 
         public int GetSpriteId()
         {
-            return BaseSpriteId + CurrentFrame;
+            AnimationProperties animationType = GameState.AnimationManager.Get(Type);
+            return animationType.BaseSpriteId + CurrentFrame;
         }
     }
 }

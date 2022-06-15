@@ -4,8 +4,11 @@
 public class GameState
 {
 
-
+    #region Atinmation
     public static readonly Animation.AnimationManager AnimationManager;
+    public static readonly Animation.UpdateSystem AnimationUpdateSystem;
+    #endregion
+    
     #region Tile
 
     public static readonly Tile.SpriteAtlasManager TileSpriteAtlasManager;
@@ -68,5 +71,6 @@ public class GameState
         FloatingTextUpdateSystem = new FloatingText.UpdateSystem();
         FloatingTextSpawnerSystem = new FloatingText.SpawnerSystem(entitasContext);
         FloatingTextDrawSystem = new FloatingText.DrawSystem();
+        AnimationUpdateSystem = new Animation.UpdateSystem();
     }
 }
