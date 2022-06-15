@@ -5,7 +5,7 @@ namespace Agent
 {
     public struct Sprite2DComponent : IComponent
     {
-        public Texture2D Texture;
+        public int SpriteId;
         public Vector2 Size;
     }
 }

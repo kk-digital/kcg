@@ -113,7 +113,11 @@ namespace Planet.Unity
             int CharacterSpriteSheet = 
             GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png", 32, 48);
 
-            int SlimeSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 0, 0, Enums.AtlasType.Agent);
+            int SlimeMoveLeftBaseSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 0, 0, Enums.AtlasType.Agent);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 1, 0, Enums.AtlasType.Agent);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 2, 0, Enums.AtlasType.Agent);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 3, 0, Enums.AtlasType.Agent);
+
             int CharacterSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(CharacterSpriteSheet, 0, 0, Enums.AtlasType.Agent);
 
             GameState.TileCreationApi.CreateTile(8);
@@ -135,21 +139,21 @@ namespace Planet.Unity
             GameState.AnimationManager.CreateAnimation(0);
             GameState.AnimationManager.SetName("character-move-left");
             GameState.AnimationManager.SetTimePerFrame(0.15f);
-            GameState.AnimationManager.SetBaseSpriteID(0);
+            GameState.AnimationManager.SetBaseSpriteID(CharacterSpriteId);
             GameState.AnimationManager.SetFrameCount(1);
             GameState.AnimationManager.EndAnimation();
 
             GameState.AnimationManager.CreateAnimation(1);
             GameState.AnimationManager.SetName("character-move-right");
             GameState.AnimationManager.SetTimePerFrame(0.15f);
-            GameState.AnimationManager.SetBaseSpriteID(0);
+            GameState.AnimationManager.SetBaseSpriteID(CharacterSpriteId);
             GameState.AnimationManager.SetFrameCount(1);
             GameState.AnimationManager.EndAnimation();
 
             GameState.AnimationManager.CreateAnimation(2);
             GameState.AnimationManager.SetName("slime-move-left");
-            GameState.AnimationManager.SetTimePerFrame(0.15f);
-            GameState.AnimationManager.SetBaseSpriteID(0);
+            GameState.AnimationManager.SetTimePerFrame(0.35f);
+            GameState.AnimationManager.SetBaseSpriteID(SlimeMoveLeftBaseSpriteId);
             GameState.AnimationManager.SetFrameCount(4);
             GameState.AnimationManager.EndAnimation();
 
@@ -164,9 +168,9 @@ namespace Planet.Unity
             var Player = Planet.AddPlayer(Instantiate(Material), CharacterSpriteId, 32, 48, new Vector2(3.0f, 3.0f), 0);
             int PlayerID = Player.Entity.agentID.ID;
 
-            Planet.AddAgent(Instantiate(Material), CharacterSpriteId, 32, 48, new Vector2(6.0f, 3.0f));
-            Planet.AddEnemy(Instantiate(Material), SlimeSpriteId, 32, 32, new Vector2(8.0f, 5.0f));
-            Planet.AddAgent(Instantiate(Material), CharacterSpriteId, 32, 48, new Vector2(1.0f, 4.0f));
+            Planet.AddAgent(Instantiate(Material), CharacterSpriteId, 32, 48, new Vector2(6.0f, 3.0f), 0);
+            Planet.AddEnemy(Instantiate(Material), CharacterSpriteId, 32, 32, new Vector2(8.0f, 5.0f), 2);
+            Planet.AddAgent(Instantiate(Material), CharacterSpriteId, 32, 48, new Vector2(1.0f, 4.0f), 0);
 
             var inventoryAttacher = Inventory.InventoryAttacher.Instance;
 

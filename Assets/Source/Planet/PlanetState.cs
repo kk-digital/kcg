@@ -42,22 +42,24 @@ namespace Planet
             return newEntity;
         }
 
-        public AgentEntity AddAgent(UnityEngine.Material material, int spriteId, int width, int height, Vector2 position)
+        public AgentEntity AddAgent(UnityEngine.Material material, int spriteId, int width,
+                     int height, Vector2 position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.SpawnerSystem.SpawnAgent(material, spriteId, width, height, position,
-                                                                    newEntity.Index);
+                                                                    newEntity.Index, startingAnimation);
             newEntity.Entity = entity;
             
 
             return newEntity;
         }
 
-        public AgentEntity AddEnemy(UnityEngine.Material material, int spriteId, int width, int height, Vector2 position)
+        public AgentEntity AddEnemy(UnityEngine.Material material, int spriteId, 
+                        int width, int height, Vector2 position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.SpawnerSystem.SpawnEnemy(material, spriteId, width, height, position,
-            newEntity.Index);
+            newEntity.Index, startingAnimation);
 
             newEntity.Entity = entity;
             

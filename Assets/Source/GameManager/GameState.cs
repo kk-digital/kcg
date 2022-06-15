@@ -3,6 +3,7 @@
 /// </summary>
 public class GameState
 {
+    public static readonly Sprites.UnityImage2DCache UnityImage2DCache;
 
     #region Atinmation
     public static readonly Animation.AnimationManager AnimationManager;
@@ -72,5 +73,6 @@ public class GameState
         FloatingTextSpawnerSystem = new FloatingText.SpawnerSystem(entitasContext);
         FloatingTextDrawSystem = new FloatingText.DrawSystem();
         AnimationUpdateSystem = new Animation.UpdateSystem();
+        UnityImage2DCache = new Sprites.UnityImage2DCache();
     }
 }

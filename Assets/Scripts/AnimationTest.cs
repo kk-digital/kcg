@@ -88,14 +88,29 @@ namespace Planet.Unity
             int RockDustSpriteSheet =
             GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1_dust.png", 16, 16);
 
+            int DustSpriteSheet = 
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\particles\\dust1.png", 16, 16);
             int SlimeSpriteSheet = 
             GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
 
-            int CharacterSpriteSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png", 32, 48);
+    
+            int DustBaseSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 0, 0, Enums.AtlasType.Agent);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 1, 0, Enums.AtlasType.Agent);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 2, 0, Enums.AtlasType.Agent);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 3, 0, Enums.AtlasType.Agent);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 4, 0, Enums.AtlasType.Agent);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 5, 0, Enums.AtlasType.Agent);
 
-            int SlimeSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 0, 0, Enums.AtlasType.Agent);
-            int CharacterSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(CharacterSpriteSheet, 0, 0, Enums.AtlasType.Agent);
+            int SlimeIdleBaseSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 0, 0, Enums.AtlasType.Agent);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 1, 0, Enums.AtlasType.Agent);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 2, 0, Enums.AtlasType.Agent);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 3, 0, Enums.AtlasType.Agent);
+
+            int SlimeJumpBaseSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 0, 2, Enums.AtlasType.Agent);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 1, 2, Enums.AtlasType.Agent);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 0, 3, Enums.AtlasType.Agent);
+            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 1, 3, Enums.AtlasType.Agent);
+
 
             GameState.TileCreationApi.CreateTile(8);
             GameState.TileCreationApi.SetTileName("ore_1");
@@ -112,25 +127,28 @@ namespace Planet.Unity
             GameState.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 0, 0);
             GameState.TileCreationApi.EndTile();
 
+            int particleAnimation = 0;
+            int slimeIdle = 1;
+            int slimeJump = 2;
 
-            GameState.AnimationManager.CreateAnimation(0);
-            GameState.AnimationManager.SetName("character-move-left");
+            GameState.AnimationManager.CreateAnimation(particleAnimation);
+            GameState.AnimationManager.SetName("particle");
             GameState.AnimationManager.SetTimePerFrame(0.15f);
-            GameState.AnimationManager.SetBaseSpriteID(0);
-            GameState.AnimationManager.SetFrameCount(1);
+            GameState.AnimationManager.SetBaseSpriteID(DustBaseSpriteId);
+            GameState.AnimationManager.SetFrameCount(6);
             GameState.AnimationManager.EndAnimation();
 
-            GameState.AnimationManager.CreateAnimation(1);
-            GameState.AnimationManager.SetName("character-move-right");
-            GameState.AnimationManager.SetTimePerFrame(0.15f);
-            GameState.AnimationManager.SetBaseSpriteID(0);
-            GameState.AnimationManager.SetFrameCount(1);
+            GameState.AnimationManager.CreateAnimation(slimeIdle);
+            GameState.AnimationManager.SetName("slime-idle");
+            GameState.AnimationManager.SetTimePerFrame(0.35f);
+            GameState.AnimationManager.SetBaseSpriteID(SlimeIdleBaseSpriteId);
+            GameState.AnimationManager.SetFrameCount(4);
             GameState.AnimationManager.EndAnimation();
 
-            GameState.AnimationManager.CreateAnimation(2);
-            GameState.AnimationManager.SetName("slime-move-left");
-            GameState.AnimationManager.SetTimePerFrame(0.15f);
-            GameState.AnimationManager.SetBaseSpriteID(0);
+            GameState.AnimationManager.CreateAnimation(slimeJump);
+            GameState.AnimationManager.SetName("slime-jump");
+            GameState.AnimationManager.SetTimePerFrame(0.35f);
+            GameState.AnimationManager.SetBaseSpriteID(SlimeJumpBaseSpriteId);
             GameState.AnimationManager.SetFrameCount(4);
             GameState.AnimationManager.EndAnimation();
 
@@ -141,13 +159,9 @@ namespace Planet.Unity
             Planet = new Planet.PlanetState(mapSize);
             GenerateMap();
 
-
-            var Player = Planet.AddPlayer(Instantiate(Material), CharacterSpriteId, 32, 48, new Vector2(3.0f, 3.0f), 0);
-            int PlayerID = Player.Entity.agentID.ID;
-
-            Planet.AddAgent(Instantiate(Material), CharacterSpriteId, 32, 48, new Vector2(6.0f, 3.0f));
-            Planet.AddEnemy(Instantiate(Material), SlimeSpriteId, 32, 32, new Vector2(8.0f, 5.0f));
-            Planet.AddAgent(Instantiate(Material), CharacterSpriteId, 32, 48, new Vector2(1.0f, 4.0f));
+            Planet.AddAgent(Instantiate(Material), 0, 16, 16, new Vector2(6.0f, 3.0f), particleAnimation);
+            Planet.AddAgent(Instantiate(Material), 0, 32, 32, new Vector2(2.0f, 3.0f), slimeIdle);
+            Planet.AddAgent(Instantiate(Material), 0, 32, 32, new Vector2(4.0f, 3.0f), slimeJump);
         }
 
 

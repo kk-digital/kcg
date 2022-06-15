@@ -12,9 +12,6 @@ namespace Agent
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
-            byte[] spriteData = new byte[width * height * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, Enums.AtlasType.Agent);
-            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, width, height);
             var spriteSize = new Vector2(width / 32f, height / 32f);
 
             entity.isAgentPlayer = true;
@@ -23,7 +20,7 @@ namespace Agent
 
             entity.AddAgentID(AgentId);
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
-            entity.AddAgentSprite2D(texture, spriteSize);
+            entity.AddAgentSprite2D(spriteId, spriteSize);
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
             Vector2 box2dCollider = new Vector2(0.5f, 1.5f);
             entity.AddPhysicsBox2DCollider(box2dCollider, new Vector2(0.25f, 0.0f));
@@ -38,40 +35,36 @@ namespace Agent
         }
 
         public GameEntity SpawnAgent(Material material, int spriteId, int width, int height, Vector2 position,
-        int AgentId)
+        int AgentId, int startingAnimation)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
-            byte[] spriteData = new byte[width * height * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, Enums.AtlasType.Agent);
-            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, width, height);
             var spriteSize = new Vector2(width / 32f, height / 32f);
 
             entity.AddAgentID(AgentId);
 
             Vector2 box2dCollider = new Vector2(0.5f, 1.5f);
             entity.AddPhysicsBox2DCollider(box2dCollider, new Vector2(0.25f, 0.0f));
-            entity.AddAgentSprite2D(texture, spriteSize);
+            entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
+            entity.AddAgentSprite2D(spriteId, spriteSize);
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
             entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
             return entity;
         }
 
         public GameEntity SpawnEnemy(Material material, int spriteId, int width, int height, Vector2 position,
-        int AgentId)
+        int AgentId, int startingAnimation)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
             
-            byte[] spriteData = new byte[width * height * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, Enums.AtlasType.Agent);
-            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, width, height);
             var spriteSize = new Vector2(width / 32f, height / 32f);
             
             entity.AddAgentID(AgentId);
 
             Vector2 box2dCollider = new Vector2(0.5f, 1.5f);
             entity.AddPhysicsBox2DCollider(box2dCollider, new Vector2(0.25f, 0.0f));
-            entity.AddAgentSprite2D(texture, spriteSize);
+            entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
+            entity.AddAgentSprite2D(spriteId, spriteSize);
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
             entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vector2.zero, newAcceleration: Vector2.zero, newAccelerationTime: 2f);
             entity.AddAgentEnemy(0, 4.0f);
