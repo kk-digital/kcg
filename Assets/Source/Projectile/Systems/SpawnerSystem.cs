@@ -10,7 +10,7 @@ namespace Projectile
         // Projectile ID
         private static int projectileID;
 
-        public Entity SpawnProjectile(string spritePath, int witdh, int height, Material material, Vector2 position, 
+        public Entity SpawnProjectile(Material material, int spriteID, int witdh, int height, Vector2 position, 
             ProjectileType projectileType, ProjectileDrawType projectileDrawType)
         {
             // Create Entity
@@ -21,9 +21,6 @@ namespace Projectile
 
             // Set Png Size
             var pngSize = new Vector2Int(witdh, height);
-
-            // Set Sprite ID from Sheet ID
-            var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath, pngSize.x, pngSize.y);
 
             // Set Sprite ID from Sprite Atlas
             var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);

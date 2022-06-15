@@ -27,8 +27,11 @@ public class ProjectileTest : MonoBehaviour
         // Initialize Projectile Spawner System
         projectileSpawnerSystem = new Projectile.SpawnerSystem();
 
+        // Initialize Image
+        int image = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\grenades\\Grenades4.png", 16, 16);
+
         // Loading Image
-        projectileSpawnerSystem.SpawnProjectile("Assets\\StreamingAssets\\assets\\luis\\grenades\\Grenades4.png", 16, 16, Material, Vector2.zero, 
+        projectileSpawnerSystem.SpawnProjectile(Material, image, 16, 16, Vector2.zero, 
             ProjectileType.Grenade, ProjectileDrawType.Standard);
     }
 

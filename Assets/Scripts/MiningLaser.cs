@@ -108,13 +108,20 @@ public class MiningLaser : MonoBehaviour
         // Get Sheet ID
         int laserSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\lasergun-temp.png", 195, 79);
 
+        // Create Item
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.Gun, "LaserItem");
+
+        // Set texture of item
         Item.CreationApi.Instance.SetTexture(laserSpriteSheet);
+
+        // Create Inventory texture
         Item.CreationApi.Instance.SetInventoryTexture(laserSpriteSheet);
+
         // Create Size Component
         Item.CreationApi.Instance.SetSize(new Vector2(1.0f, 0.5f));
-        Item.CreationApi.Instance.EndItem();
 
+        // End of the item
+        Item.CreationApi.Instance.EndItem();
     }
 
     private void InitializeLaser()
