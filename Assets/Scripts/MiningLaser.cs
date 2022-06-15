@@ -26,6 +26,9 @@ public class MiningLaser : MonoBehaviour
     private bool Init;
     private Vector2 laserPosition;
 
+    // Laser Properties
+    private float destroyDelay = 0.5f;
+
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
     void Start()
     {
@@ -121,7 +124,7 @@ public class MiningLaser : MonoBehaviour
                     ref var tile = ref tileMap.GetTileRef(cell.x, cell.y, Enums.Tile.MapLayerType.Front);
                     if (tile.Type >= 0)
                     {
-                        tileMap.RemoveTile(cell.x, cell.y, Enums.Tile.MapLayerType.Front);
+                        StartCoroutine(RemoveTile(cell.x, cell.y));
                         tileMap.BuildLayerTexture(Enums.Tile.MapLayerType.Front);
                     }
 
@@ -129,5 +132,13 @@ public class MiningLaser : MonoBehaviour
                 }
             }
         }
+    }
+
+
+    IEnumerator RemoveTile(int x, int y)
+    {
+        yield return new WaitForSeconds(destroyDelay);
+        tileMap.RemoveTile(x, y, Enums.Tile.MapLayerType.Front);
+        tileMap.BuildLayerTexture(Enums.Tile.MapLayerType.Front);
     }
 }
