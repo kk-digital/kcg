@@ -17,6 +17,14 @@ namespace Utility
             Debug.DrawLine(topRight, topLeft, Color.red);
             Debug.DrawLine(topLeft, bottomLeft, Color.red);
         }
+
+        public static void DrawPoint(this Vec2f point)
+        {
+            Debug.DrawLine(new Vector3(point.X, point.Y, 0.0f),
+                new Vector3(point.X + 0.1f, point.Y, 0.0f), Color.red);
+            Debug.DrawLine(new Vector3(point.X + 0.1f, point.Y, 0.0f),
+                new Vector3(point.X + 0.1f, point.Y + 0.1f, 0.0f), Color.red);
+        }
     }
 }
 

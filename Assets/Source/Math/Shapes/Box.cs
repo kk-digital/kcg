@@ -12,7 +12,7 @@ namespace KMath
                    position.Y >= box.Down && position.Y <= box.Up;
         }
 
-        public static CircleIntersectionPoint GetIntersectionPointAt(this Box box, Circle circle)
+        public static CircleQuarter IntersectsAt(this Box box, Circle circle)
         {
             var nearestX = Math.Max(box.BottomLeft.X, Math.Min(circle.Center.X, box.BottomRight.X));
             var nearestY = Math.Max(box.BottomLeft.Y, Math.Min(circle.Center.Y, box.TopRight.Y));
@@ -20,22 +20,17 @@ namespace KMath
             var deltaX = circle.Center.X - nearestX;
             var deltaY = circle.Center.Y - nearestY;
 
-            var difference = new Vec2f(deltaX, deltaY) - circle.Center;
+            var difference = new Vec2f(-deltaX, -deltaY);
             var quarterType = Circle.GetQuarterType(difference);
 
-            return deltaX * deltaX + deltaY * deltaY < circle.Radius * circle.Radius
-                ? new CircleIntersectionPoint
-                {
-                    Value = new Vec2f(deltaX, deltaY),
-                    IsCollided = true,
-                    Side = quarterType
-                }
-                : new CircleIntersectionPoint
-                {
-                    Value = new Vec2f(deltaX, deltaY),
-                    IsCollided = false,
-                    Side = CircleQuarter.Error
-                };
+            var intersects = deltaX * deltaX + deltaY * deltaY <= circle.Radius * circle.Radius;
+
+            if (intersects)
+            {
+                box.DrawBox();
+            }
+
+            return intersects ? quarterType : CircleQuarter.Error;
         }
     }
     

@@ -1,5 +1,6 @@
 using System.Linq;
 using Enums;
+using Utility;
 
 namespace KMath
 {
@@ -28,61 +29,75 @@ namespace KMath
 
         public Vec2i[] GetQuarterPositions(Vec2f pointOnEdge)
         {
-            var difference = pointOnEdge - Center;
-            var quarter = GetQuarterType(difference);
-
-            return quarter switch
-            {
-                CircleQuarter.Top or CircleQuarter.Left or CircleQuarter.Right or CircleQuarter.Bottom => new[]
-                {
-                    (Vec2i) pointOnEdge
-                },
-                /*CircleQuarter.TopRight => GetTopRightQuarter(),
-                CircleQuarter.TopLeft => GetTopLeftQuarter(),
-                CircleQuarter.BottomRight => GetBottomRightQuarter(),
-                CircleQuarter.BottomLeft => GetBottomLeftQuarter(),*/
-                _ => GetBottomLeftQuarter().Union(GetTopLeftQuarter()).Union(GetBottomRightQuarter()).Union(GetBottomLeftQuarter()).ToArray()
-            };
+            return GetBottomLeftQuarter().Union(GetTopLeftQuarter()).Union(GetBottomRightQuarter())
+                .Union(GetTopRightQuarter()).ToArray();
         }        
         
         public static CircleQuarter GetQuarterType(Vec2f pointOnCircle)
         {
             pointOnCircle.Normalize();
 
-            if (pointOnCircle.X == 0)
+            var type = CircleQuarter.Error;
+
+            if (pointOnCircle.X == 0f)
             {
-                if (pointOnCircle.Y > 0) return CircleQuarter.Top;
-                if (pointOnCircle.Y < 0) return CircleQuarter.Bottom;
+                switch (pointOnCircle.Y)
+                {
+                    case > 0f:
+                        Flag.Set(ref type, CircleQuarter.Top);
+                        break;
+                    case < 0f:
+                        Flag.Set(ref type, CircleQuarter.Bottom);
+                        break;
+                }
+            }
+            else if (pointOnCircle.Y == 0f)
+            {
+                switch (pointOnCircle.X)
+                {
+                    case > 0f:
+                        Flag.Set(ref type, CircleQuarter.Right);
+                        break;
+                    case < 0f:
+                        Flag.Set(ref type, CircleQuarter.Left);
+                        break;
+                }
             }
 
-            if (pointOnCircle.Y == 0)
+            switch (pointOnCircle.X)
             {
-                if (pointOnCircle.X > 0) return CircleQuarter.Left;
-                if (pointOnCircle.X < 0) return CircleQuarter.Right;
-            }
+                case > 0:
+                    switch (pointOnCircle.Y)
+                    {
+                        case > 0f:
+                            Flag.Set(ref type, CircleQuarter.RightTop);
+                            Flag.UnsetFlag(ref type, CircleQuarter.Right | CircleQuarter.Top);
+                            break;
+                        case < 0f:
+                            Flag.Set(ref type, CircleQuarter.RightBottom);
+                            Flag.UnsetFlag(ref type, CircleQuarter.Right | CircleQuarter.Bottom);
+                            break;
+                    }
 
+                    break;
+                case < 0:
+                    switch (pointOnCircle.Y)
+                    {
+                        case > 0f:
+                            Flag.Set(ref type, CircleQuarter.LeftTop);
+                            Flag.UnsetFlag(ref type, CircleQuarter.Left | CircleQuarter.Top);
+                            break;
+                        case < 0f:
+                            Flag.Set(ref type, CircleQuarter.LeftBottom);
+                            Flag.UnsetFlag(ref type, CircleQuarter.Left | CircleQuarter.Bottom);
+                            break;
+                    }
 
-            if (pointOnCircle.X > 0 && pointOnCircle.Y > 0)
-            {
-                return CircleQuarter.TopRight;
+                    break;
             }
             
-            if (pointOnCircle.X > 0 && pointOnCircle.Y < 0)
-            {
-                return CircleQuarter.BottomRight;
-            }
 
-            if (pointOnCircle.X < 0 && pointOnCircle.Y > 0)
-            {
-                return CircleQuarter.TopLeft;
-            }
-            
-            if (pointOnCircle.X < 0 && pointOnCircle.Y < 0)
-            {
-                return CircleQuarter.BottomLeft;
-            }
-
-            return CircleQuarter.Error;
+            return type;
         }
         
         public Vec2i[] GetTopLeftQuarter()

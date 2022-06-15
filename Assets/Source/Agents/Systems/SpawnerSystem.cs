@@ -23,7 +23,7 @@ namespace Agent
             entity.AddAgentSprite2D(spriteId, spriteSize);
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
             Vec2f colliderSize = new Vec2f(spriteSize.X - 0.5f, spriteSize.Y);
-            entity.AddPhysicsCircle2DCollider(1f);
+            entity.AddPhysicsCircle2DCollider(0.8f);
             entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.zero, newAcceleration: Vec2f.zero);
             
             // Add Inventory and toolbar.

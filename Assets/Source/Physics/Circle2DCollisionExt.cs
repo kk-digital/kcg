@@ -1,36 +1,36 @@
+using Enums;
 using KMath;
-using UnityEngine;
 using Utility;
 
 namespace Physics
 {
     public static class Circle2DCollisionExt
     {
-        public static CircleIntersectionPoint GetTileIntersectionPoint(this Circle circle, Planet.TileMap tileMap, Vec2f newPos)
+        public static CircleQuarter GetTileCollisionQuarters(this Circle circle, Circle newCircle, Planet.TileMap tileMap)
         {
-            var pointOnEdge = circle.GetPointOnEdge(newPos);
-            var quarterPositions = circle.GetQuarterPositions(pointOnEdge);
-
-            Debug.DrawLine(new Vector3(pointOnEdge.X, pointOnEdge.Y, 0.0f),
-                new Vector3(pointOnEdge.X + 0.1f, pointOnEdge.Y, 0.0f), Color.red);
-            Debug.DrawLine(new Vector3(pointOnEdge.X + 0.1f, pointOnEdge.Y, 0.0f),
-                new Vector3(pointOnEdge.X + 0.1f, pointOnEdge.Y + 0.1f, 0.0f), Color.red);
+            var pointOnEdge = circle.GetPointOnEdge(newCircle.BottomLeft);
+            var quarterPositions = newCircle.GetQuarterPositions(pointOnEdge);
 
             var tiles = tileMap.GetTiles(quarterPositions, Enums.Tile.MapLayerType.Front);
 
+            if (tiles == null)
+            {
+                return CircleQuarter.Error;
+            }
+
+            var quarters = CircleQuarter.Error;
+
+            int test = 0;
+
             foreach (var tile in tiles)
             {
-                var intersectionPoint = tile.Borders.GetIntersectionPointAt(circle);
-                if (intersectionPoint.IsCollided)
+                if (Flag.Set(ref quarters, tile.Borders.IntersectsAt(newCircle)))
                 {
-                    return intersectionPoint;
+                    test++;
                 }
             }
 
-            return new CircleIntersectionPoint
-            {
-                IsCollided = false
-            };
+            return quarters;
         }
     }
 }
