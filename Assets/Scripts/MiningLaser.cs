@@ -21,8 +21,8 @@ public class MiningLaser : MonoBehaviour
     private Vector2 laserPosition;
 
     // Laser Properties
-    private float destroyDelay = 0.5f;
     private bool isHeld = false;
+    public Vector2 offset = Vector2.zero;
 
     // Item Draw System
     Item.DrawSystem DrawSystem;
@@ -184,8 +184,8 @@ public class MiningLaser : MonoBehaviour
                 // Create new start and end position based on mouse position
                 Cell start = new Cell
                 {
-                    x = (int)laserPosition.x,
-                    y = (int)laserPosition.y
+                    x = (int)laserPosition.x + (int)offset.x,
+                    y = (int)laserPosition.y + (int)offset.y
                 };
 
                 Cell end = new Cell
@@ -202,7 +202,7 @@ public class MiningLaser : MonoBehaviour
                     ref var tile = ref tileMap.GetTileRef(cell.x, cell.y, Enums.Tile.MapLayerType.Front);
                     if (tile.Type >= 0)
                     {
-                        StartCoroutine(RemoveTile(cell.x, cell.y));
+                        tileMap.RemoveTile(cell.x, cell.y, Enums.Tile.MapLayerType.Front);
                         tileMap.BuildLayerTexture(Enums.Tile.MapLayerType.Front);
                     }
 
@@ -210,12 +210,5 @@ public class MiningLaser : MonoBehaviour
                 }
             }
         }
-    }
-
-    IEnumerator RemoveTile(int x, int y)
-    {
-        yield return new WaitForSeconds(destroyDelay);
-        tileMap.RemoveTile(x, y, Enums.Tile.MapLayerType.Front);
-        tileMap.BuildLayerTexture(Enums.Tile.MapLayerType.Front);
     }
 }
