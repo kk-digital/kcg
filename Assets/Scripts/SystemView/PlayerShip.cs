@@ -28,6 +28,9 @@ namespace SystemView
 
         public SystemState State;
 
+        public List<LineRenderer> LaserLineRenderers;
+        public List<GameObject>   LaserLineObjects;
+
         private void Start()
         {
             Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
@@ -221,9 +224,44 @@ namespace SystemView
                     Ship.PathPlanned = false;
             }
 
-            if (Input.GetKey("space"))
-                foreach (ShipWeapon Weapon in Ship.Weapons)
-                    Weapon.Fire(Ship.Self.PosX + (float)Math.Cos(Ship.Rotation), Ship.Self.PosY + (float)Math.Sin(Ship.Rotation));
+            if (!MouseSteering)
+            {
+                if (Input.GetKey("space"))
+                {
+                    foreach (ShipWeapon Weapon in Ship.Weapons)
+                    {
+                        float x = Ship.Self.PosX + (float)Math.Cos(Ship.Rotation) * Weapon.Range;
+                        float y = Ship.Self.PosY + (float)Math.Sin(Ship.Rotation) * Weapon.Range;
+
+                        if ((Weapon.flags & WeaponFlags.WEAPON_LASER) != 0)
+                        {
+
+                        }
+                        else Weapon.Fire(x, y);
+                    }
+                }
+
+                Camera.DisableDragging = false;
+            }
+            else
+            {
+                if (Input.GetKey("space") || Input.GetMouseButton(0))
+                {
+
+                    Vector3 MousePosition = Camera.GetAbsPos(Input.mousePosition);
+
+                    foreach (ShipWeapon Weapon in Ship.Weapons)
+                    {
+                        if ((Weapon.flags & WeaponFlags.WEAPON_LASER) != 0)
+                        {
+
+                        }
+                        else Weapon.Fire(MousePosition.x, MousePosition.y);
+                    }
+                }
+
+                Camera.DisableDragging = true;
+            }
         }
 
         void OnDestroy()

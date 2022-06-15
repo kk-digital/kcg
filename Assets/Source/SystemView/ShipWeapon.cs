@@ -132,11 +132,6 @@ namespace SystemView
 
                 ProjectilesFired.Add(Projectile);
             }
-            
-            if ((flags & WeaponFlags.WEAPON_LASER) != 0)
-            {
-
-            }
         }
     }
 }
