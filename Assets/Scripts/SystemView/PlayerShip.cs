@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,8 +13,6 @@ namespace SystemView
         public SystemShipRenderer Renderer;
 
         public float LastTime;
-
-        public bool Reverse = false;
 
         public bool RenderOrbit = true;
 
@@ -107,9 +105,16 @@ namespace SystemView
 
             if (Input.GetKeyDown("tab")) MouseSteering = !MouseSteering;
 
-            if (!MouseSteering) Ship.Rotation -= Input.GetAxis("Horizontal") * CurrentTime * Ship.RotationSpeedModifier;
+            float HorizontalMovement = 0.0f;
+
+            if (!MouseSteering)
+            {
+                if (Input.GetKey("left ctrl")) HorizontalMovement = Input.GetAxis("Horizontal");
+                else Ship.Rotation -= Input.GetAxis("Horizontal") * CurrentTime * Ship.RotationSpeedModifier;
+            }
             else
             {
+                HorizontalMovement = -Input.GetAxis("Horizontal");
                 Vector3 RelPos = Camera.GetRelPos(new Vector3(Ship.Self.PosX, Ship.Self.PosY, 0.0f));
 
                 float dx = Input.mousePosition.x - RelPos.x;
@@ -128,15 +133,22 @@ namespace SystemView
             if (Movement == 0.0f && Input.GetKey("w")) Movement =  1.0f;
             if (Movement == 0.0f && Input.GetKey("s")) Movement = -1.0f;
 
-            if (Movement > 0.0f && Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY < 0.1f) Reverse = false;
-            if (Movement < 0.0f && Ship.Self.VelX * Ship.Self.VelX + Ship.Self.VelY * Ship.Self.VelY < 0.1f) Reverse = true;
+            float AccX = (float)Math.Cos(Ship.Rotation) * Movement - (float)Math.Sin(Ship.Rotation) * HorizontalMovement;
+            float AccY = (float)Math.Sin(Ship.Rotation) * Movement + (float)Math.Cos(Ship.Rotation) * HorizontalMovement;
 
-            float AccX = (float)Math.Cos(Ship.Rotation) * Ship.Acceleration;
-            float AccY = (float)Math.Sin(Ship.Rotation) * Ship.Acceleration;
-
-            AccX *= CurrentTime * Movement;
-            AccY *= CurrentTime * Movement;
+            AccX *= CurrentTime * Ship.Acceleration;
+            AccY *= CurrentTime * Ship.Acceleration;
             
+            if (HorizontalMovement != 0.0f && Movement != 0.0f)
+            {
+                                                 //  1
+                const float rsqrt2 = 0.7071068f; // ---
+                                                 // √ 2
+
+                AccX *= rsqrt2;
+                AccY *= rsqrt2;
+            }
+
             Ship.Self.PosX += Ship.Self.VelX * CurrentTime + AccX / 2.0f * CurrentTime;
             Ship.Self.PosY += Ship.Self.VelY * CurrentTime + AccY / 2.0f * CurrentTime;
 
