@@ -4,6 +4,16 @@ using UnityEngine; // For color
 
 namespace SystemView
 {
+    public enum WeaponFlags               // Useful for storing many of a weapon's properties on one single byte
+    {
+        WEAPON_PROJECTILE = 2 >> 0,
+        WEAPON_LASER      = 2 >> 1,
+        WEAPON_BROADSIDE  = 2 >> 2,
+        WEAPON_TURRET     = 2 >> 3,
+        WEAPON_POSX       = 2 >> 4,       // Left  = flags & WEAPON_POSX, right = ~flags & WEAPON_POSX
+        WEAPON_POSY       = 2 >> 5        // front = flags & WEAPON_POSY, back  = ~flags & WEAPON_POSY
+    }
+
     public class ShipWeapon
     {
         public SystemShip Self;
@@ -14,6 +24,9 @@ namespace SystemView
 
         public float ShieldPenetration;
 
+        public float ShieldDamageMultiplier;
+        public float HullDamageMultiplier;
+
         public float ProjectileVelocity;
 
         public int Damage;
@@ -22,6 +35,8 @@ namespace SystemView
         public int Cooldown;    // in milliseconds
 
         public List<ShipWeaponProjectile> ProjectilesFired = new List<ShipWeaponProjectile>();
+
+        public WeaponFlags flags;
 
         // todo update this later
         public bool TryFiringAt(SystemShip Target, int CurrentTime)
@@ -57,12 +72,15 @@ namespace SystemView
                 Projectile.Body.VelY = (Target.Self.PosY - Self.Self.PosY) / d * ProjectileVelocity;
             //}
 
-            Projectile.TimeElapsed = 0.0f;
-            Projectile.LifeSpan = Range / ProjectileVelocity;
+            Projectile.TimeElapsed            = 0.0f;
+            Projectile.LifeSpan               = Range / ProjectileVelocity;
 
-            Projectile.ProjectileColor = ProjectileColor;
+            Projectile.ProjectileColor        = ProjectileColor;
 
-            Projectile.ShieldPenetration = ShieldPenetration;
+            Projectile.ShieldPenetration      = ShieldPenetration;
+
+            Projectile.ShieldDamageMultiplier = ShieldDamageMultiplier;
+            Projectile.HullDamageMultiplier   = HullDamageMultiplier;
 
             Projectile.Damage = Damage;
 
@@ -71,36 +89,54 @@ namespace SystemView
             return true;
         }
 
-        public void Fire()
+        public void Fire(float x, float y)
         {
             if (Cooldown > 0) return;
 
             Cooldown = AttackSpeed;
 
-            ShipWeaponProjectile Projectile = new ShipWeaponProjectile();
+            // if (flags & WeaponFlags.WEAPON_PROJECTILE)     // don't you hate it when languages don't accept ints or enums in ifs?...
+            if ((flags & WeaponFlags.WEAPON_PROJECTILE) != 0) // like do I really need that != 0 and those brackets?...
+            {
+                ShipWeaponProjectile Projectile = new ShipWeaponProjectile();
 
-            Projectile.Self = Self;
-            Projectile.Weapon = this;
+                Projectile.Self = Self;
+                Projectile.Weapon = this;
 
-            Projectile.Body.PosX = Self.Self.PosX;
-            Projectile.Body.PosY = Self.Self.PosY;
+                Projectile.Body.PosX = Self.Self.PosX;
+                Projectile.Body.PosY = Self.Self.PosY;
 
-            float cos = (float)Math.Cos(Self.Rotation);
-            float sin = (float)Math.Sin(Self.Rotation);
+                float dx = x - Self.Self.PosX;
+                float dy = y - Self.Self.PosY;
 
-            Projectile.Body.VelX = cos * (float)Math.Sqrt(ProjectileVelocity * ProjectileVelocity - sin * sin) + Self.Self.VelX;
-            Projectile.Body.VelY = sin * (float)Math.Sqrt(ProjectileVelocity * ProjectileVelocity - cos * cos) + Self.Self.VelY;
+                float d = (float)Math.Sqrt(dx * dx + dy * dy);
 
-            Projectile.TimeElapsed = 0.0f;
-            Projectile.LifeSpan = Range / ProjectileVelocity;
+                float angle = (float)Math.Acos(dx / d);
 
-            Projectile.ProjectileColor = ProjectileColor;
+                if (dy < 0.0f) angle = 2.0f * 3.1415926f - angle;
 
-            Projectile.ShieldPenetration = ShieldPenetration;
+                float cos = (float)Math.Cos(angle);
+                float sin = (float)Math.Sin(angle);
 
-            Projectile.Damage = Damage;
+                Projectile.Body.VelX = cos * (float)Math.Sqrt(ProjectileVelocity * ProjectileVelocity - sin * sin) + Self.Self.VelX;
+                Projectile.Body.VelY = sin * (float)Math.Sqrt(ProjectileVelocity * ProjectileVelocity - cos * cos) + Self.Self.VelY;
 
-            ProjectilesFired.Add(Projectile);
+                Projectile.TimeElapsed = 0.0f;
+                Projectile.LifeSpan = Range / ProjectileVelocity;
+
+                Projectile.ProjectileColor = ProjectileColor;
+
+                Projectile.ShieldPenetration = ShieldPenetration;
+
+                Projectile.Damage = Damage;
+
+                ProjectilesFired.Add(Projectile);
+            }
+            
+            if ((flags & WeaponFlags.WEAPON_LASER) != 0)
+            {
+
+            }
         }
     }
 }

@@ -73,6 +73,8 @@ namespace SystemView
             Cannon.Cooldown = 0;
             Cannon.Self = Ship;
 
+            Cannon.flags = WeaponFlags.WEAPON_PROJECTILE;
+
             ShipWeapon Weapon = new ShipWeapon();
 
             Weapon.ProjectileColor = Color.white;
@@ -84,6 +86,8 @@ namespace SystemView
             Weapon.AttackSpeed = 50;
             Weapon.Cooldown = 0;
             Weapon.Self = Ship;
+
+            Weapon.flags = WeaponFlags.WEAPON_PROJECTILE;
 
             Ship.Weapons.Add(Weapon);
             Ship.Weapons.Add(Cannon);
@@ -207,7 +211,7 @@ namespace SystemView
 
             if (Input.GetKey("space"))
                 foreach (ShipWeapon Weapon in Ship.Weapons)
-                    Weapon.Fire();
+                    Weapon.Fire(Ship.Self.PosX + (float)Math.Cos(Ship.Rotation), Ship.Self.PosY + (float)Math.Sin(Ship.Rotation));
         }
 
         void OnDestroy()

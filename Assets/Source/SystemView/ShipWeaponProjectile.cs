@@ -20,6 +20,9 @@ namespace SystemView
 
         public float ShieldPenetration;
 
+        public float ShieldDamageMultiplier;
+        public float HullDamageMultiplier;
+
         public int Damage;
 
         public ShipWeaponProjectile()
