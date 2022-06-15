@@ -25,10 +25,15 @@ namespace SystemView
         public float SailingFactor = 200.0f;
         public float SystemScale = 1.0f;
 
+        public bool  MouseSteering = false;
+        public CameraController Camera;
+
         public SystemState State;
 
         private void Start()
         {
+            Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
+
             GameLoop gl = GetComponent<GameLoop>();
 
             State = gl.CurrentSystemState;
@@ -96,7 +101,24 @@ namespace SystemView
 
             if (Ship.DockingAutopilotLoop(CurrentTime, 0.1f * SystemScale)) return;
 
-            Ship.Rotation -= Input.GetAxis("Horizontal") * CurrentTime * Ship.RotationSpeedModifier;
+            if (Input.GetKeyDown("tab")) MouseSteering = !MouseSteering;
+
+            if (!MouseSteering) Ship.Rotation -= Input.GetAxis("Horizontal") * CurrentTime * Ship.RotationSpeedModifier;
+            else
+            {
+                Vector3 RelPos = Camera.GetRelPos(new Vector3(Ship.Self.PosX, Ship.Self.PosY, 0.0f));
+
+                float dx = Input.mousePosition.x - RelPos.x;
+                float dy = Input.mousePosition.y - RelPos.y;
+
+                float d  = (float)Math.Sqrt(dx * dx + dy * dy);
+
+                float angle = (float)Math.Acos(dx / d);
+
+                if (dy < 0.0f) angle = 2.0f * 3.1415926f - angle;
+
+                Ship.RotateTo(angle, CurrentTime);
+            }
 
             float Movement = Input.GetAxis("Vertical");
             if (Movement == 0.0f && Input.GetKey("w")) Movement =  1.0f;

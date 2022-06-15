@@ -143,7 +143,7 @@ namespace SystemView
 
         public bool DockingAutopilotLoop(float CurrentTime, float AcceptedDeviation)
         {
-            Debug.Log(autopilotStage);
+            if (autopilotStage != AutopilotStage.DISENGAGED) Debug.Log(autopilotStage);
 
             switch (autopilotStage)
             {

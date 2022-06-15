@@ -25,4 +25,14 @@ public class CameraController : MonoBehaviour
         transform.position = new Vector3(x, y, -10);
         GetComponent<Camera>().orthographicSize = 20.0f / scale;
     }
+
+    public Vector3 GetRelPos(Vector3 Absolute)
+    {
+        return GetComponent<Camera>().WorldToScreenPoint(Absolute);
+    }
+
+    public Vector3 GetAbsPos(Vector3 Relative)
+    {
+        return GetComponent<Camera>().ScreenToWorldPoint(Relative);
+    }
 }
