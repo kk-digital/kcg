@@ -10,5 +10,6 @@ namespace Animation
         public string Name;
         public float TimePerFrame;
         public int FrameCount;
+        public int BaseSpriteId;
     }
 }

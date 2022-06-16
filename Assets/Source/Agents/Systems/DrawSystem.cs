@@ -16,11 +16,20 @@ namespace Agent
             int idx = 0;
             foreach (var entity in AgentsWithSprite)
             {
+                int spriteId = entity.agentSprite2D.SpriteId;
+
+                if (entity.hasAnimationState)
+                {
+                    var animation = entity.animationState;
+                    spriteId = animation.State.GetSpriteId();
+                }
                 var sprite = new Sprites.Sprite
                 {
-                    Texture = entity.agentSprite2D.Texture,
+                    Texture = GameState.UnityImage2DCache.Get(spriteId, Enums.AtlasType.Agent),
                     TextureCoords = new Vector4(0, 0, 1, 1)
                 };
+
+
 
                 var x = entity.physicsPosition2D.Value.x;
                 var y = entity.physicsPosition2D.Value.y;

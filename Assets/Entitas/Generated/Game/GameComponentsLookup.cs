@@ -21,45 +21,46 @@ public static class GameComponentsLookup {
     public const int AIAnimationAction = 10;
     public const int AIGoal = 11;
     public const int AIMoveToAction = 12;
-    public const int ECSInput = 13;
-    public const int ECSInputXY = 14;
-    public const int FloatingTextID = 15;
-    public const int FloatingTextMovable = 16;
-    public const int FloatingTextState = 17;
-    public const int InventoryDrawable = 18;
-    public const int InventoryID = 19;
-    public const int InventorySize = 20;
-    public const int InventorySlots = 21;
-    public const int InventoryToolBar = 22;
-    public const int ItemAttachedInventory = 23;
-    public const int ItemAttributeAction = 24;
-    public const int ItemAttributeConsumable = 25;
-    public const int ItemAttributeEquipament = 26;
-    public const int ItemAttributeInventorySprite = 27;
-    public const int ItemAttributePlaceable = 28;
-    public const int ItemAttributeSize = 29;
-    public const int ItemAttributeSprite = 30;
-    public const int ItemAttributeStackable = 31;
-    public const int ItemAttributes = 32;
-    public const int ItemID = 33;
-    public const int ItemLabel = 34;
-    public const int ItemStack = 35;
-    public const int ParticleEmitter2dPosition = 36;
-    public const int ParticleEmitterState = 37;
-    public const int ParticlePosition2D = 38;
-    public const int ParticleState = 39;
-    public const int PhysicsBox2DCollider = 40;
-    public const int PhysicsMovable = 41;
-    public const int PhysicsPosition2D = 42;
-    public const int ProjectileID = 43;
-    public const int ProjectilePhysicsState2D = 44;
-    public const int ProjectileSprite2D = 45;
-    public const int ProjectileType = 46;
-    public const int VehicleID = 47;
-    public const int VehiclePhysicsState2D = 48;
-    public const int VehicleSprite2D = 49;
+    public const int AnimationState = 13;
+    public const int ECSInput = 14;
+    public const int ECSInputXY = 15;
+    public const int FloatingTextID = 16;
+    public const int FloatingTextMovable = 17;
+    public const int FloatingTextState = 18;
+    public const int InventoryDrawable = 19;
+    public const int InventoryID = 20;
+    public const int InventorySize = 21;
+    public const int InventorySlots = 22;
+    public const int InventoryToolBar = 23;
+    public const int ItemAttachedInventory = 24;
+    public const int ItemAttributeAction = 25;
+    public const int ItemAttributeConsumable = 26;
+    public const int ItemAttributeEquipament = 27;
+    public const int ItemAttributeInventorySprite = 28;
+    public const int ItemAttributePlaceable = 29;
+    public const int ItemAttributeSize = 30;
+    public const int ItemAttributeSprite = 31;
+    public const int ItemAttributeStackable = 32;
+    public const int ItemAttributes = 33;
+    public const int ItemID = 34;
+    public const int ItemLabel = 35;
+    public const int ItemStack = 36;
+    public const int ParticleEmitter2dPosition = 37;
+    public const int ParticleEmitterState = 38;
+    public const int ParticlePosition2D = 39;
+    public const int ParticleState = 40;
+    public const int PhysicsBox2DCollider = 41;
+    public const int PhysicsMovable = 42;
+    public const int PhysicsPosition2D = 43;
+    public const int ProjectileID = 44;
+    public const int ProjectilePhysicsState2D = 45;
+    public const int ProjectileSprite2D = 46;
+    public const int ProjectileType = 47;
+    public const int VehicleID = 48;
+    public const int VehiclePhysicsState2D = 49;
+    public const int VehicleSprite2D = 50;
 
-    public const int TotalComponents = 50;
+    public const int TotalComponents = 51;
 
     public static readonly string[] componentNames = {
         "AgentEnemy",
@@ -75,6 +76,7 @@ public static class GameComponentsLookup {
         "AIAnimationAction",
         "AIGoal",
         "AIMoveToAction",
+        "AnimationState",
         "ECSInput",
         "ECSInputXY",
         "FloatingTextID",
@@ -128,6 +130,7 @@ public static class GameComponentsLookup {
         typeof(AI.AnimationActionComponent),
         typeof(AI.GoalComponent),
         typeof(AI.MoveToActionComponent),
+        typeof(Animation.StateComponent),
         typeof(ECSInput.Component),
         typeof(ECSInput.XYComponent),
         typeof(FloatingText.IDComponent),

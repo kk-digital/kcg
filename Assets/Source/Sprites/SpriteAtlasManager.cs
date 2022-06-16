@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using KMath;
 
 namespace Sprites
 {
@@ -56,6 +57,21 @@ namespace Sprites
             return sprite;
         }
 
+        public Vec2i GetSpriteDimensions(int id, Enums.AtlasType type)
+        {
+            ref SpriteAtlas atlas = ref GetSpriteAtlas(type);
+            if (id >= 0 && id < atlas.Rectangles.Length)
+            {
+                int recIndex = Array.FindIndex(atlas.Rectangles, packingRectangle => packingRectangle.Id == id);
+                
+                RectpackSharp.PackingRectangle rectangle = atlas.Rectangles[recIndex];
+
+                return new Vec2i((int)rectangle.Width, (int)rectangle.Height);
+            }
+
+            return new Vec2i();
+        }
+
         // use the id to find the Sprite coordinates in the list
         // and return the sprite RGBA8 that correspond
         public void GetSpriteBytes(int id, byte[] data, Enums.AtlasType type)
@@ -98,7 +114,7 @@ namespace Sprites
 
         // generic blit function used to add a sprite 
         // to the sprite atlas
-        public int CopySpriteToAtlas(int spriteSheetID, int row, int column, Enums.AtlasType type)
+        public int CopySpriteToAtlas(int spriteSheetID, int column, int row, Enums.AtlasType type)
         {
             ref SpriteAtlas atlas = ref GetSpriteAtlas(type);
             int oldSize = atlas.Rectangles.Length;
@@ -204,9 +220,10 @@ namespace Sprites
                 for (int x = 0; x < sheet.SpriteWidth; x++)
                 {
                     int atlasIndex = 4 * ((yOffset + y)  * (atlas.Width) + (xOffset + x));
-                    int sheetIndex = 4 * ((x + row * sheet.Width) + 
-                                    ((y + column * sheet.Height) * sheet.Width));
+                    int sheetIndex = 4 * ((x + column * sheet.SpriteWidth) + 
+                                    ((y + row * sheet.SpriteHeight) * sheet.Width));
 
+                    Debug.Log(sheet.Data.Length);
                     // RGBA8
                     atlas.Data[atlasIndex + 0] = 
                             sheet.Data[sheetIndex + 0];

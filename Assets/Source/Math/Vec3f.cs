@@ -17,6 +17,21 @@ namespace KMath
             this.y = y;
             this.z = z;
         }
+
+        public static Vec3f operator+(Vec3f a, Vec3f b)
+        {
+            return new Vec3f(a.x + b.x, a.y + b.y, a.z + b.z);
+        }
+
+        public static Vec3f operator-(Vec3f a, Vec3f b)
+        {
+            return new Vec3f(a.x - b.x, a.y - b.y, a.z - b.z);
+        }
+
+        public static Vec3f operator*(Vec3f a, Vec3f b)
+        {
+            return new Vec3f(a.x * b.x, a.y * b.y, a.z * b.z);
+        }
     }
 }
 

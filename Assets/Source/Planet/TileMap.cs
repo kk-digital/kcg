@@ -24,8 +24,20 @@ namespace Planet
             Layers = new Layers
             {
                 LayerTextures = new Texture2D[Layers.Count],
+                Tiles = new Tile.Tile[Layers.Count][],
                 MapSize = mapSize
             };
+
+            for(int layerIndex = 0; layerIndex < Layers.Count; layerIndex++)
+            {
+                int mapTileSize = mapSize.x * mapSize.y;
+                Tile.Tile[] layerTiles = new Tile.Tile[mapTileSize];
+                Layers.Tiles[layerIndex] = layerTiles;
+                for(int tileIndex = 0; tileIndex < mapTileSize; tileIndex++)
+                {
+                    layerTiles[tileIndex] = Tile.Tile.EmptyTile;
+                }
+            }
         }
 
         public void BuildLayerTexture(Enums.Tile.MapLayerType planetLayer)
@@ -39,25 +51,16 @@ namespace Planet
         
         public ref Tile.Tile GetTileRef(int x, int y, Enums.Tile.MapLayerType planetLayer)
         {
-            ref var chunk = ref Chunks.GetChunkRef(x, y);
-            if (chunk.Type == Enums.Tile.MapChunkType.Error)
-            {
-                throw new IndexOutOfRangeException();
-            }
-            
-            var tileIndex = Chunk.GetTileIndex(x, y);
-            return ref chunk.Tiles[(int)planetLayer][tileIndex];
+            return ref Layers.Tiles[(int)planetLayer][x + y * MapSize.x];
         }
+
         public void SetTile(int x, int y, Tile.Tile tile, Enums.Tile.MapLayerType planetLayer)
         {
-            var chunk = Chunks.GetChunkRef(x, y);
-            if (chunk.Type == Enums.Tile.MapChunkType.Error) return;
-            
-            chunk.Seq++; // Updating tile, increment seq
-            var tileIndex = Chunk.GetTileIndex(x, y);
-            tile.BoxBorders = new Vector2(x, y).CreateBoxBorders(Tile.Tile.Size);
-            chunk.Tiles[(int)planetLayer][tileIndex] = tile;
-            chunk.Type = Enums.Tile.MapChunkType.Explored;
+            if (x >= 0 && x < MapSize.x &&
+                        y >= 0 && y < MapSize.y)
+            {
+                Layers.Tiles[(int)planetLayer][x + y * MapSize.x] = tile;
+            }
         }
 
 
