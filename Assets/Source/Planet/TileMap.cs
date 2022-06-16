@@ -56,7 +56,11 @@ namespace Planet
 
         public void SetTile(int x, int y, Tile.Tile tile, Enums.Tile.MapLayerType planetLayer)
         {
-            Layers.Tiles[(int)planetLayer][x + y * MapSize.x] = tile;
+            if (x >= 0 && x < MapSize.x &&
+                        y >= 0 && y < MapSize.y)
+            {
+                Layers.Tiles[(int)planetLayer][x + y * MapSize.x] = tile;
+            }
         }
 
 

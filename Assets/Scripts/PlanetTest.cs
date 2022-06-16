@@ -83,7 +83,6 @@ namespace Planet.Unity
             Vector2 playerPosition = Player.Entity.physicsPosition2D.Value;
 
            // transform.position = new Vector3(playerPosition.x - 6.0f, playerPosition.y - 6.0f, -10.0f);
-            Debug.Log((int)(1.0f / Time.smoothDeltaTime));
         }
 
         void DrawSpriteAtlas()
@@ -312,7 +311,7 @@ namespace Planet.Unity
             for(int i = 0; i < TileMap.MapSize.x; i++)
             {
                 int move = ((int)KMath.Random.Mt19937.genrand_int32() % 3) - 1;
-                if (((int)KMath.Random.Mt19937.genrand_int32() % 10) <= 3)
+                if (((int)KMath.Random.Mt19937.genrand_int32() % 5) <= 3)
                 {
                     move = 0;
                 }
@@ -321,11 +320,34 @@ namespace Planet.Unity
                 {
                     carveHeight = TileMap.MapSize.y - 1;
                 }
+
                 for(int j = carveHeight; j < TileMap.MapSize.y && j < carveHeight + 4; j++)
                 {
                     TileMap.SetTile(i, j, Tile.Tile.EmptyTile, MapLayerType.Front);
                 }
             }
+
+            carveHeight = 5;
+
+            for(int i = TileMap.MapSize.x - 1; i >=0; i--)
+            {
+                int move = ((int)KMath.Random.Mt19937.genrand_int32() % 3) - 1;
+                if (((int)KMath.Random.Mt19937.genrand_int32() % 10) <= 3)
+                {
+                    move = 1;
+                }
+                carveHeight += move;
+                if (carveHeight >= TileMap.MapSize.y)
+                {
+                    carveHeight = TileMap.MapSize.y - 1;
+                }
+
+                for(int j = carveHeight; j < TileMap.MapSize.y && j < carveHeight + 4; j++)
+                {
+                    TileMap.SetTile(i, j, Tile.Tile.EmptyTile, MapLayerType.Front);
+                }
+            }
+
 
             GenerateOre();
 
