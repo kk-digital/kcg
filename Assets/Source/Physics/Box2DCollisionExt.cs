@@ -11,15 +11,20 @@ namespace Physics
             int x = borders.Left;
             for(int y = borders.Down; y <= borders.Up; y++)
             {
-                var edgePosition = new Vector2(x, y);
+                /*var edgePosition = new Vector2(x, y);
                 if (tileMap.BoxBorders.Intersects(edgePosition))
-                {
+                {*/
+                if (x >= 0 && x < tileMap.MapSize.x &&
+                   y >= 0 && y < tileMap.MapSize.y)
+                   {
                     ref var tile = ref tileMap.GetTileRef(x, y, Enums.Tile.MapLayerType.Front);
                     if (tile.Type >= 0)
                     {
-                        return tile.BoxBorders.Intersects(edgePosition);
+                        return true;
+                      //  return tile.BoxBorders.Intersects(edgePosition);
                     }
-                }
+                   }
+             //   }
             }
             return false;
         }
@@ -31,15 +36,20 @@ namespace Physics
             int x = borders.Right;
             for(int y = borders.Down; y <= borders.Up; y++)
             {
-                var edgePosition = new Vector2(x, y);
+               /* var edgePosition = new Vector2(x, y);
                 if (tileMap.BoxBorders.Intersects(edgePosition))
-                {
+                {*/
+                if (x >= 0 && x < tileMap.MapSize.x &&
+                   y >= 0 && y < tileMap.MapSize.y)
+                   {
                     ref var tile = ref tileMap.GetTileRef(x, y, Enums.Tile.MapLayerType.Front);
                     if (tile.Type >= 0)
                     {
-                        return tile.BoxBorders.Intersects(edgePosition);
+                        return true;
+                        //return tile.BoxBorders.Intersects(edgePosition);
                     }
-                }
+                   }
+               // }
             }
             return false;
         }
@@ -51,15 +61,19 @@ namespace Physics
             int y = borders.Down;
             for(int x = borders.Left; x <= borders.Right; x++)
             {
-                var edgePosition = new Vector2(x, y);
+                /*var edgePosition = new Vector2(x, y);
                 if (tileMap.BoxBorders.Intersects(edgePosition))
-                {
+                {*/
+                if (x >= 0 && x < tileMap.MapSize.x &&
+                   y >= 0 && y < tileMap.MapSize.y)
+                   {
                     ref var tile = ref tileMap.GetTileRef(x, y, Enums.Tile.MapLayerType.Front);
                     if (tile.Type >= 0)
                     {
-                        return tile.BoxBorders.Intersects(edgePosition);
+                        return true; //tile.BoxBorders.Intersects(edgePosition);
                     }
-                }
+                   }
+               // }
             }
             
             return false;
@@ -72,16 +86,21 @@ namespace Physics
             int y = borders.Up;
             for(int x = borders.Left; x <= borders.Right; x++)
             {
-                var edgePosition = new Vector2(x, y);
+                /*var edgePosition = new Vector2(x, y);
                 
                 if (tileMap.BoxBorders.Intersects(edgePosition))
-                {
+                {*/
+                if (x >= 0 && x < tileMap.MapSize.x &&
+                   y >= 0 && y < tileMap.MapSize.y)
+                   {
                     ref var tile = ref tileMap.GetTileRef(x, y, Enums.Tile.MapLayerType.Front);
                     if (tile.Type >= 0)
                     {
-                        return tile.BoxBorders.Intersects(edgePosition);
+                        return true;
+                       // return tile.BoxBorders.Intersects(edgePosition);
                     }
-                }
+                   }
+                //}
             }
             return false;
         }

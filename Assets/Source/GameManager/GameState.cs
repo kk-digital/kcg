@@ -42,6 +42,9 @@ public class GameState
     public static readonly Inventory.DrawSystem InventoryDrawSystem;
     #endregion
 
+    public static readonly Item.SpawnerSystem ItemSpawnSystem;
+    public static readonly Item.DrawSystem ItemDrawSystem;
+
     #region FloatingText
     public static readonly FloatingText.UpdateSystem FloatingTextUpdateSystem;
     public static readonly FloatingText.SpawnerSystem FloatingTextSpawnerSystem;
@@ -74,5 +77,8 @@ public class GameState
         FloatingTextDrawSystem = new FloatingText.DrawSystem();
         AnimationUpdateSystem = new Animation.UpdateSystem();
         UnityImage2DCache = new Sprites.UnityImage2DCache();
+        ItemSpawnSystem = new Item.SpawnerSystem(entitasContext);
+        ItemDrawSystem = new Item.DrawSystem(entitasContext);
+
     }
 }
