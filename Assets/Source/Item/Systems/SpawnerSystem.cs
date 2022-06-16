@@ -24,9 +24,9 @@ namespace Item
 
             var entity = EntitasContext.game.CreateEntity();
             entity.AddItemID(ItemID, itemType);
-            entity.AddPhysicsPosition2D(position, Vec2f.zero);
-            entity.AddPhysicsBox2DCollider(size, Vec2f.zero);
-            entity.AddPhysicsMovable(0f, Vec2f.zero, Vec2f.zero);
+            entity.AddPhysicsPosition2D(position, Vec2f.Zero);
+            entity.AddPhysicsBox2DCollider(size, Vec2f.Zero);
+            entity.AddPhysicsMovable(0f, Vec2f.Zero, Vec2f.Zero);
 
             ItemID++;
             return entity;

@@ -7,7 +7,7 @@ namespace Planet
     public class TileMap
     {
         public Vec2i MapSize;
-        public AABB Borders;
+        public AABB2D Borders;
         public ChunkList Chunks;
         public Layers Layers;
         public HeightMap HeightMap;
@@ -18,7 +18,7 @@ namespace Planet
 
             Chunks = new ChunkList(mapSize);
             
-            Borders = new AABB(Vec2f.zero, (Vec2f)mapSize * 16);
+            Borders = new AABB2D(Vec2f.Zero, (Vec2f)mapSize * 16);
 
             HeightMap = new HeightMap(MapSize);
             Layers = new Layers

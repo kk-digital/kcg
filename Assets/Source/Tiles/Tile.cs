@@ -12,7 +12,7 @@ namespace Tile
         public int Type;
         public int SpriteId;
 
-        public AABB Borders;
+        public AABB2D Borders;
 
         //public Verticies BoxBorders;
         //Health

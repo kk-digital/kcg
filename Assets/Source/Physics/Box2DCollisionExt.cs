@@ -4,7 +4,7 @@ namespace Physics
 {
     public static class Box2DCollisionExt
     {
-        public static bool IsCollidingLeft(this AABB borders, Planet.TileMap tileMap, Vec2f velocity)
+        public static bool IsCollidingLeft(this AABB2D borders, Planet.TileMap tileMap, Vec2f velocity)
         {
             if (velocity.X >= 0.0f) return false;
             
@@ -25,7 +25,7 @@ namespace Physics
             return false;
         }
 
-        public static bool IsCollidingRight(this AABB borders, Planet.TileMap tileMap, Vec2f velocity)
+        public static bool IsCollidingRight(this AABB2D borders, Planet.TileMap tileMap, Vec2f velocity)
         {
             if (velocity.X <= 0.0f) return false;
             
@@ -46,7 +46,7 @@ namespace Physics
             return false;
         }
         
-        public static bool IsCollidingBottom(this AABB borders, Planet.TileMap tileMap, Vec2f velocity)
+        public static bool IsCollidingBottom(this AABB2D borders, Planet.TileMap tileMap, Vec2f velocity)
         {
             if (velocity.Y >= 0.0f) return false;
             
@@ -68,7 +68,7 @@ namespace Physics
             return false;
         }
 
-        public static bool IsCollidingTop(this AABB borders, Planet.TileMap tileMap, Vec2f velocity)
+        public static bool IsCollidingTop(this AABB2D borders, Planet.TileMap tileMap, Vec2f velocity)
         {
             if (velocity.Y <= 0.0f) return false;
             

@@ -5,43 +5,15 @@ using Utility;
 
 namespace KMath
 {
-    public static class AABBExt
-    {
-        public static bool Intersects(this AABB aabb, Vec2f position)
-        {
-            return position.X >= aabb.Left && position.X <= aabb.Right &&
-                   position.Y >= aabb.Bottom && position.Y <= aabb.Top;
-        }
-
-        public static CircleQuarter IntersectsAt(this AABB aabb, Circle circle)
-        {
-            var nearestX = Math.Max(aabb.LeftBottom.X, Math.Min(circle.Center.X, aabb.RightBottom.X));
-            var nearestY = Math.Max(aabb.LeftBottom.Y, Math.Min(circle.Center.Y, aabb.RightTop.Y));
-
-            var deltaX = circle.Center.X - nearestX;
-            var deltaY = circle.Center.Y - nearestY;
-
-            var difference = new Vec2f(-deltaX, -deltaY);
-            var quarterType = Circle.GetQuarterType(difference);
-
-            var intersects = deltaX * deltaX + deltaY * deltaY <= circle.Radius * circle.Radius;
-
-            if (intersects)
-            {
-                aabb.DrawBox();
-            }
-
-            return intersects ? quarterType : CircleQuarter.Error;
-        }
-    }
-    
     /// <summary>
-    /// Axis-aligned Bounding Box
+    /// Axis-aligned Bounding Box 2D
     /// </summary>
-    public struct AABB
+    public struct AABB2D
     {
         public Vec2f Center;
         public Vec2f HalfSize;
+
+        #region CornerGetters
 
         public Vec2f LeftBottom
         {
@@ -77,11 +49,41 @@ namespace KMath
             [MethodImpl((MethodImplOptions) 256)] get => (int) LeftBottom.Y;
         }
 
-        public AABB(Vec2f position, Vec2f size)
+        #endregion
+        
+        public AABB2D(Vec2f position, Vec2f size)
         {
             HalfSize = size / 2f;
             Center = position + HalfSize;
         }
+
+        #region Intersection
+
+        public bool Intersects(Vec2f position)
+        {
+            return position.X >= Left && position.X <= Right &&
+                   position.Y >= Bottom && position.Y <= Top;
+        }
+        
+        public bool Intersects(AABB2D other)
+        {
+            if (Math.Abs(Center.X - other.Center.X) > HalfSize.X + other.HalfSize.X) return false;
+            if (Math.Abs(Center.Y - other.Center.Y) > HalfSize.Y + other.HalfSize.Y) return false;
+            return true;
+        }
+
+        public bool Intersects(Sphere2D sphere2D)
+        {
+            var nearestX = Math.Max(LeftBottom.X, Math.Min(sphere2D.Center.X, RightBottom.X));
+            var nearestY = Math.Max(LeftBottom.Y, Math.Min(sphere2D.Center.Y, RightTop.Y));
+
+            var deltaX = sphere2D.Center.X - nearestX;
+            var deltaY = sphere2D.Center.Y - nearestY;
+
+            return deltaX * deltaX + deltaY * deltaY <= sphere2D.Radius * sphere2D.Radius;
+        }
+
+        #endregion
     }
 }
 

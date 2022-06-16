@@ -22,9 +22,9 @@ namespace Agent
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
             entity.AddAgentSprite2D(spriteId, spriteSize);
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
-            Vec2f colliderSize = new Vec2f(spriteSize.X - 0.5f, spriteSize.Y);
+            var box = new AABB2D(position, new Vec2f(spriteSize.X - 0.5f, spriteSize.Y));
             entity.AddPhysicsCircle2DCollider(0.8f);
-            entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.zero, newAcceleration: Vec2f.zero);
+            entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.Zero, newAcceleration: Vec2f.Zero);
             
             // Add Inventory and toolbar.
             var attacher = Inventory.InventoryAttacher.Instance;
@@ -48,7 +48,7 @@ namespace Agent
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
             entity.AddAgentSprite2D(spriteId, spriteSize);
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
-            entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.zero, newAcceleration: Vec2f.zero);
+            entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.Zero, newAcceleration: Vec2f.Zero);
 
             return entity;
         }
@@ -67,7 +67,7 @@ namespace Agent
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
             entity.AddAgentSprite2D(spriteId, spriteSize);
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
-            entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.zero, newAcceleration: Vec2f.zero);
+            entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.Zero, newAcceleration: Vec2f.Zero);
             entity.AddAgentEnemy(0, 4.0f);
             entity.AddAgentStats(100.0f, 0.8f);
 

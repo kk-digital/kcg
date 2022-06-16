@@ -46,7 +46,7 @@ namespace Vehicle
                 Vec2f.zero);
 
             // Add Physics Box Collider Component
-            entity.AddPhysicsBox2DCollider(spriteSize, Vec2f.zero);
+            entity.AddPhysicsBox2DCollider(spriteSize, Vec2f.Zero);
 
             // Return projectile entity
             return entity;

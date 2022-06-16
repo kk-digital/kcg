@@ -6,8 +6,15 @@ namespace KMath
     // Vector 2D Floating-Point
     public struct Vec2f
     {
-        private static readonly Vec2f zeroVector = new(0f, 0f);
-        private static readonly Vec2f oneVector = new(1f, 1f);
+        /// <summary>
+        ///   <para>Shorthand for writing Vec2f(0, 0).</para>
+        /// </summary>
+        public static Vec2f Zero { [MethodImpl((MethodImplOptions) 256)] get; } = new(0f, 0f);
+
+        /// <summary>
+        ///   <para>Shorthand for writing Vector2(1, 1).</para>
+        /// </summary>
+        public static Vec2f One { [MethodImpl((MethodImplOptions) 256)] get; } = new(1f, 1f);
         
         public float X;
         public float Y;
@@ -24,7 +31,7 @@ namespace KMath
         /// <summary>
         ///   <para>Returns the squared length of this vector (Read Only).</para>
         /// </summary>
-        public float sqrMagnitude
+        public float SqrMagnitude
         {
             [MethodImpl((MethodImplOptions) 256)] get => (float) (X * (double) X + Y * (double) Y);
         }
@@ -32,7 +39,7 @@ namespace KMath
         /// <summary>
         ///   <para>Returns the length of this vector (Read Only).</para>
         /// </summary>
-        public float magnitude
+        public float Magnitude
         {
             [MethodImpl((MethodImplOptions) 256)] get => (float) Math.Sqrt(X * (double)X + Y * (double)Y);
         }
@@ -40,7 +47,7 @@ namespace KMath
         /// <summary>
         ///   <para>Returns this vector with a magnitude of 1 (Read Only).</para>
         /// </summary>
-        public Vec2f normalized
+        public Vec2f Normalized
         {
             [MethodImpl((MethodImplOptions) 256)] get
             {
@@ -48,22 +55,6 @@ namespace KMath
                 normalized.Normalize();
                 return normalized;
             }
-        }
-        
-        /// <summary>
-        ///   <para>Shorthand for writing Vec2f(0, 0).</para>
-        /// </summary>
-        public static Vec2f zero
-        {
-            [MethodImpl((MethodImplOptions) 256)] get => zeroVector;
-        }
-        
-        /// <summary>
-        ///   <para>Shorthand for writing Vector2(1, 1).</para>
-        /// </summary>
-        public static Vec2f one
-        {
-            [MethodImpl((MethodImplOptions) 256)] get => Vec2f.oneVector;
         }
 
         #endregion
@@ -84,11 +75,11 @@ namespace KMath
         [MethodImpl((MethodImplOptions) 256)]
         public void Normalize()
         {
-            var magnitude = this.magnitude;
+            var magnitude = this.Magnitude;
             if (magnitude > 9.99999974737875E-06)
                 this /= magnitude;
             else
-                this = zero;
+                this = Zero;
         }
 
         /// <summary>
@@ -101,8 +92,8 @@ namespace KMath
             // dot product
             var dp = Dot(this, other);
 
-            var projectionX = (dp / other.sqrMagnitude) * other.X;
-            var projectionY = (dp / other.sqrMagnitude) * other.Y;
+            var projectionX = (dp / other.SqrMagnitude) * other.X;
+            var projectionY = (dp / other.SqrMagnitude) * other.Y;
 
             return new Vec2f(projectionX, projectionY);
         }

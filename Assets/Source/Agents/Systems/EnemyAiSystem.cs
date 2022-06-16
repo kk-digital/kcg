@@ -26,7 +26,7 @@ namespace Agent
 
                     Vec2f direction = targetPos.Value - pos.Value;
 
-                    float Len = direction.magnitude;
+                    float Len = direction.Magnitude;
                     direction.Y = 0;
                     direction.Normalize();
 
