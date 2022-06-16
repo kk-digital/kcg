@@ -7,20 +7,18 @@ namespace Planet.Unity
 {
     class ItemTest : MonoBehaviour
     {
-        [SerializeField] Material Material;
+        [SerializeField] Material   Material;
 
-        Contexts EntitasContext;
-        Planet.PlanetState Planet;
-        Item.SpawnerSystem SpawnerSystem;
-        Item.DrawSystem DrawSystem; 
+        Contexts                    EntitasContext;
+        Planet.PlanetState          Planet;
+        Agent.AgentEntity           Player;
+        Action.DefaultActions       DefaultActions;
 
         static bool Init = false;
 
         public void Start()
         {
             EntitasContext = Contexts.sharedInstance;
-            SpawnerSystem = new Item.SpawnerSystem(EntitasContext);
-            DrawSystem = new Item.DrawSystem(EntitasContext);
 
             if (!Init)
             {
@@ -48,10 +46,18 @@ namespace Planet.Unity
                 }
             }
 
-            //foreach (var mr in GetComponentsInChildren<MeshRenderer>())
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity, (int)Enums.ActionType.PickUp);
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity, (int)Enums.ActionType.Drop);
+            }
 
             Planet.Update(Time.deltaTime, Material, transform);
-            DrawSystem.Draw(Material, transform, 14);
+            GameState.InventoryDrawSystem.Draw(Material, transform, 14);
         }
 
         // create the sprite atlas for testing purposes
@@ -103,17 +109,37 @@ namespace Planet.Unity
             Item.CreationApi.Instance.SetStackable(99);
             Item.CreationApi.Instance.EndItem();
 
+            GameState.AnimationManager.CreateAnimation(0);
+            GameState.AnimationManager.SetName("character-move-left");
+            GameState.AnimationManager.SetTimePerFrame(0.15f);
+            GameState.AnimationManager.SetBaseSpriteID(CharacterSpriteId);
+            GameState.AnimationManager.SetFrameCount(1);
+            GameState.AnimationManager.EndAnimation();
+
+            GameState.AnimationManager.CreateAnimation(1);
+            GameState.AnimationManager.SetName("character-move-right");
+            GameState.AnimationManager.SetTimePerFrame(0.15f);
+            GameState.AnimationManager.SetBaseSpriteID(CharacterSpriteId);
+            GameState.AnimationManager.SetFrameCount(1);
+            GameState.AnimationManager.EndAnimation();
+
+            // Intialize Actions
+            DefaultActions = new Action.DefaultActions();
+
             // Generating the map
             Vec2i mapSize = new Vec2i(16, 16);
             Planet = new Planet.PlanetState(mapSize);
             GenerateMap();
 
-            Planet.AddPlayer(Instantiate(Material),CharacterSpriteId, 32, 48, new Vec2f(3.0f, 3.0f), 0);
+            Player = Planet.AddPlayer(Instantiate(Material),CharacterSpriteId, 32, 48, new Vec2f(3.0f, 3.0f), 0);
+            Player.Entity.AddAgentActionScheduler(new List<int>(), new List<int>());
 
-            SpawnerSystem.SpawnItem(Enums.ItemType.Gun, new Vec2f(3.0f, 3.0f));
-            SpawnerSystem.SpawnItem(Enums.ItemType.Ore, new Vec2f(6.0f, 3.0f));
-            SpawnerSystem.SpawnIventoryItem(Enums.ItemType.Ore);
+            // Create Action            
+            GameState.ItemSpawnSystem.SpawnItem(Enums.ItemType.Gun, new Vec2f(3.0f, 3.0f));
+            GameState.ItemSpawnSystem.SpawnItem(Enums.ItemType.Ore, new Vec2f(6.0f, 3.0f));
+            GameState.ItemSpawnSystem.SpawnInventoryItem(Enums.ItemType.Ore);
         }
+
         void GenerateMap()
         {
             Planet.TileMap TileMap = Planet.TileMap;
@@ -175,6 +201,5 @@ namespace Planet.Unity
             //TileMap.BuildLayerTexture(MapLayerType.Front);
             //TileMap.BuildLayerTexture(MapLayerType.Ore);
         }
-
     }
 }

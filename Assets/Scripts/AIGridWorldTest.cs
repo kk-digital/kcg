@@ -29,17 +29,17 @@ public class AIGridWorldTest : MonoBehaviour
 
     // Systems.
     PlannerSystem           planner;
-    ActionControllerSystem  ActionController;
+    Action.ActionSchedulerSystem   actionScheduler;
 
     SquareType[,] map;
-    Vec2i CurrentAgentPos = new(3, 0);
-    Vec2i GoalPos = new(5, 7);
+    Vec2i currentAgentPos = new Vec2i(3, 0);
+    Vec2i goalPos = new Vec2i(5, 7);
 
     public void Start()
     {
         context = Contexts.sharedInstance;
         planner = new PlannerSystem();
-        ActionController = new ActionControllerSystem();
+        actionScheduler = new Action.ActionSchedulerSystem();
 
         if (!Init)
         {
@@ -74,11 +74,11 @@ public class AIGridWorldTest : MonoBehaviour
 
     private void UpdateBord()
     {
-        Vec2i NewPos = agent.agentPositionDiscrete2D.Value;
-        map[CurrentAgentPos.X, CurrentAgentPos.Y] = SquareType.AgentPathSquare;
+        Vec2i newPos = agent.agentPositionDiscrete2D.Value;
+        map[currentAgentPos.x, currentAgentPos.y] = SquareType.AgentPathSquare;
 
-        CurrentAgentPos = NewPos;
-        map[CurrentAgentPos.X, CurrentAgentPos.Y] = SquareType.AgentSquare;
+        currentAgentPos = newPos;
+        map[currentAgentPos.x, currentAgentPos.y] = SquareType.AgentSquare;
     }
 
     public void Update()
@@ -91,7 +91,7 @@ public class AIGridWorldTest : MonoBehaviour
                 DestroyImmediate(mr.gameObject);
 
         planner.Update();
-        ActionController.Update();
+        actionScheduler.Update(Time.deltaTime);
 
         UpdateBord();
         DrawBoard();
@@ -117,17 +117,18 @@ public class AIGridWorldTest : MonoBehaviour
     {
 
         GoapState GoalState = new GoapState(new Dictionary<string, object>());
-        GoalState.states.Add("pos", GoalPos);
+        GoalState.states.Add("pos", goalPos);
         int GoalID = 0;
         GameEntity Goal = context.game.CreateEntity();
         Goal.AddAIGoal(GoalID, GoalState, 1);
 
         GoapState initialWorldState = new GoapState(new Dictionary<string, object>());
-        initialWorldState.states.Add("pos", CurrentAgentPos);
+        initialWorldState.states.Add("pos", currentAgentPos);
 
         agent = context.game.CreateEntity();
-        agent.AddAgentPositionDiscrete2D(CurrentAgentPos, Vec2i.zero);
-        agent.AddAIAgentPlanner(0, new Queue<int>(), new List<ActionInfo>(), new List<int>() { GoalID }, initialWorldState);
+        agent.AddAgentPositionDiscrete2D(currentAgentPos, Vector2Int.zero);
+        agent.AddAgentActionScheduler(new List<int>(), new List<int>());
+        agent.AddAgentAIController(0, new Queue<int>(), new List<int>() { GoalID }, initialWorldState);
 
         int numRows = map.GetLength(0);
         int numColls = map.GetLength(1);
@@ -138,7 +139,6 @@ public class AIGridWorldTest : MonoBehaviour
             new Vector2Int(0, 1),
             new Vector2Int(0, -1) };
 
-        int ActionID = 0;
         for (int i = 0; i < numRows; i++)
         {
             for (int j = 0; j < numColls; j++)
@@ -151,22 +151,23 @@ public class AIGridWorldTest : MonoBehaviour
                     continue;
                 }
 
-                GoapState PreConditions = new GoapState(new Dictionary<string, object>());
-                PreConditions.states = new Dictionary<string, object>();
-                PreConditions.states.Add("pos", pos);
+                GoapState preCondition = new GoapState(new Dictionary<string, object>());
+                preCondition.states = new Dictionary<string, object>();
+                preCondition.states.Add("pos", pos);
 
                 for (int k = 0; k < 4; k++)
                 {
                     Vector2Int effect = pos + dir[k];
+                    float durationTime = 200f; // Miliseconds
                     if (IsValidPosition(effect))
                     {
-                        GoapState Effects = new GoapState(new Dictionary<string, object>());
-                        Effects.states.Add("pos", effect);
+                        GoapState effects = new GoapState(new Dictionary<string, object>());
+                        effects.states.Add("pos", effect);
 
-                        GameEntity entityAction = context.game.CreateEntity();
-                        ActionID++;
-                        int DurationTime = 200; // Miliseconds
-                        entityAction.AddAIAction(ActionID, PreConditions, Effects, DurationTime, 1, 0, Enums.ActionState.None);
+                        GameState.ActionManager.CreateAction();
+                        GameState.ActionManager.SetTime(durationTime);
+                        GameState.ActionManager.SetGoap(preCondition, effects, 1);
+                        GameState.ActionManager.EndAction();
                     }
                 }
             }
@@ -219,57 +220,6 @@ public class AIGridWorldTest : MonoBehaviour
                 Debug.Log("Not supported square type.");
                 break;
         }
-        Drawtile(posY, posX, cornerSize, cornerSize, color);
-    }
-
-    private void Drawtile (float x, float y, float w, float h, Color color)
-
-    {
-        var mat = Instantiate(Material);
-        mat.color = color;
-        var mesh = CreateMesh(transform, "abc", 0, mat);
-
-        triangles.Clear();
-        uvs.Clear();
-        verticies.Clear();
-
-        var p0 = new Vector3(x, y, 0);
-        var p1 = new Vector3((x + w), (y + h), 0);
-        var p2 = p0; p2.y = p1.y;
-        var p3 = p1; p3.y = p0.y;
-
-        verticies.Add(p0);
-        verticies.Add(p1);
-        verticies.Add(p2);
-        verticies.Add(p3);
-
-        triangles.Add(0);
-        triangles.Add(2);
-        triangles.Add(1);
-        triangles.Add(0);
-        triangles.Add(1);
-        triangles.Add(3);
-
-        mesh.SetVertices(verticies);
-        mesh.SetTriangles(triangles, 0);
-    }
-
-    private Mesh CreateMesh(Transform parent, string name, int sortingOrder, Material material)
-    {
-        var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
-        go.transform.SetParent(parent);
-
-        var mesh = new Mesh
-        {
-            indexFormat = UnityEngine.Rendering.IndexFormat.UInt32
-        };
-
-        var mf = go.GetComponent<MeshFilter>();
-        mf.sharedMesh = mesh;
-        var mr = go.GetComponent<MeshRenderer>();
-        mr.sharedMaterial = material;
-        mr.sortingOrder = sortingOrder;
-
-        return mesh;
+        Utility.Render.DrawQuadColor(posY, posX, cornerSize, cornerSize, color, Instantiate(Material), transform, 0);
     }
 }

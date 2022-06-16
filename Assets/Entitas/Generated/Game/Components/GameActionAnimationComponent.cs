@@ -8,18 +8,18 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    static readonly AI.AnimationActionComponent aIAnimationActionComponent = new AI.AnimationActionComponent();
+    static readonly Action.AnimationComponent actionAnimationComponent = new Action.AnimationComponent();
 
-    public bool isAIAnimationAction {
-        get { return HasComponent(GameComponentsLookup.AIAnimationAction); }
+    public bool isActionAnimation {
+        get { return HasComponent(GameComponentsLookup.ActionAnimation); }
         set {
-            if (value != isAIAnimationAction) {
-                var index = GameComponentsLookup.AIAnimationAction;
+            if (value != isActionAnimation) {
+                var index = GameComponentsLookup.ActionAnimation;
                 if (value) {
                     var componentPool = GetComponentPool(index);
                     var component = componentPool.Count > 0
                             ? componentPool.Pop()
-                            : aIAnimationActionComponent;
+                            : actionAnimationComponent;
 
                     AddComponent(index, component);
                 } else {
@@ -40,17 +40,17 @@ public partial class GameEntity {
 //------------------------------------------------------------------------------
 public sealed partial class GameMatcher {
 
-    static Entitas.IMatcher<GameEntity> _matcherAIAnimationAction;
+    static Entitas.IMatcher<GameEntity> _matcherActionAnimation;
 
-    public static Entitas.IMatcher<GameEntity> AIAnimationAction {
+    public static Entitas.IMatcher<GameEntity> ActionAnimation {
         get {
-            if (_matcherAIAnimationAction == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.AIAnimationAction);
+            if (_matcherActionAnimation == null) {
+                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.ActionAnimation);
                 matcher.componentNames = GameComponentsLookup.componentNames;
-                _matcherAIAnimationAction = matcher;
+                _matcherActionAnimation = matcher;
             }
 
-            return _matcherAIAnimationAction;
+            return _matcherActionAnimation;
         }
     }
 }

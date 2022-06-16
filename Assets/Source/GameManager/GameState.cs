@@ -9,7 +9,12 @@ public class GameState
     public static readonly Animation.AnimationManager AnimationManager;
     public static readonly Animation.UpdateSystem AnimationUpdateSystem;
     #endregion
-    
+
+    #region Action
+    public static readonly Action.ActionManager ActionManager;
+    public static readonly Action.ActionSchedulerSystem ActionSchedulerSystem;
+    #endregion
+
     #region Tile
 
     public static readonly Tile.TileAtlasManager TileSpriteAtlasManager;
@@ -38,12 +43,14 @@ public class GameState
     #endregion
 
     #region Inventory
-    public static readonly Inventory.ManagerSystem InventoryManagerSystem;
+    public static readonly Inventory.InventoryManager InventoryManager;
     public static readonly Inventory.DrawSystem InventoryDrawSystem;
     #endregion
 
+    #region Item
     public static readonly Item.SpawnerSystem ItemSpawnSystem;
     public static readonly Item.DrawSystem ItemDrawSystem;
+    #endregion
 
     #region FloatingText
     public static readonly FloatingText.UpdateSystem FloatingTextUpdateSystem;
@@ -68,7 +75,7 @@ public class GameState
         MovableSystem = new Physics.MovableSystem();
         AgentDrawSystem = new Agent.AgentDrawSystem();
         InventoryDrawSystem = new Inventory.DrawSystem();
-        InventoryManagerSystem = new Inventory.ManagerSystem();
+        InventoryManager = new Inventory.InventoryManager();
         ProcessCollisionSystem = new Physics.ProcessCollisionSystem();
         EnemyAiSystem = new Agent.EnemyAiSystem();
         AnimationManager = new Animation.AnimationManager();
@@ -79,6 +86,7 @@ public class GameState
         //UnityImage2DCache = new Sprites.UnityImage2DCache();
         ItemSpawnSystem = new Item.SpawnerSystem(entitasContext);
         ItemDrawSystem = new Item.DrawSystem(entitasContext);
-
+        ActionManager = new Action.ActionManager();
+        ActionSchedulerSystem = new Action.ActionSchedulerSystem();
     }
 }

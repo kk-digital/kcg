@@ -4,10 +4,11 @@ using Entitas;
 using Entitas.CodeGeneration.Attributes;
 using UnityEngine;
 
-namespace AI
+namespace Action
 {
-    public struct MoveToActionComponent : IComponent
+    public class IDComponent : IComponent
     {
-        public Vector2Int GoalPosition;
+        [PrimaryEntityIndex]
+        public int                  ID;
     }
 }

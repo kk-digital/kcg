@@ -2,6 +2,8 @@ using Entitas;
 
 namespace Agent
 {
-    public class PlayerComponent : IComponent { }
+    public class PlayerComponent : IComponent 
+    { 
+    }
 }
 

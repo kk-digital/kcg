@@ -41,12 +41,12 @@ public class RasterScanTest : MonoBehaviour
     private void Update()
     {
         // Shoot Line when pressed right-click
-        if(Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             // Get Player Entity
             IGroup<GameEntity> entities =
             Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentPlayer);
-            foreach(var player in entities)
+            foreach (var player in entities)
             {
                 // Get Players Position
                 playerPosition = player.physicsPosition2D.Value;

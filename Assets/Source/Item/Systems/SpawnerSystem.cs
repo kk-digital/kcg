@@ -32,7 +32,7 @@ namespace Item
             return entity;
         }
 
-        public GameEntity SpawnIventoryItem(ItemType itemType)
+        public GameEntity SpawnInventoryItem(ItemType itemType)
         {
             var entity = EntitasContext.game.CreateEntity();
             entity.AddItemID(ItemID, itemType);
