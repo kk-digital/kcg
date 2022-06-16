@@ -33,7 +33,7 @@ namespace SystemView
         // Update is called once per frame
         void Update()
         {
-            float[] Position = Station.Descriptor.GetPosition();
+            float[] Position = Station.Descriptor.get_position();
 
             StationRenderer.transform.position = new Vector3(Position[0], Position[1], -0.1f);
             StationRenderer.transform.localScale = new Vector3(12.5f / Camera.scale, 12.5f / Camera.scale, 1.0f);

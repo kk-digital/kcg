@@ -154,10 +154,10 @@ namespace SystemView
                 Planet.Descriptor.semiminoraxis = (30.0f + (i + 1) * (i + 1) * 10) * SystemScale;
                 Planet.Descriptor.semimajoraxis = Planet.Descriptor.semiminoraxis + ((float)rnd.NextDouble() * (i + 5) * SystemScale);
 
-                Planet.Descriptor.rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Planet.Descriptor.rotation     = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
                 Planet.Descriptor.mean_anomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
-                Planet.Descriptor.Compute();
+                Planet.Descriptor.compute();
 
                 Planet.Descriptor.self.mass = PlanetMass;
 
@@ -225,7 +225,7 @@ namespace SystemView
                 Planet.Descriptor.rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
                 Planet.Descriptor.mean_anomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
-                Planet.Descriptor.Compute();
+                Planet.Descriptor.compute();
 
                 Planet.Descriptor.self.mass = PlanetMass;
 
@@ -254,7 +254,7 @@ namespace SystemView
                     Moon.Descriptor.rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
                     Moon.Descriptor.mean_anomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
-                    Moon.Descriptor.Compute();
+                    Moon.Descriptor.compute();
 
                     State.Planets.Add(Moon);
 
@@ -323,7 +323,7 @@ namespace SystemView
                 Planet.Descriptor.rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
                 Planet.Descriptor.mean_anomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
-                Planet.Descriptor.Compute();
+                Planet.Descriptor.compute();
 
                 Planet.Descriptor.self.mass = PlanetMass;
 
@@ -357,7 +357,7 @@ namespace SystemView
                 Station.Descriptor.rotation      =  (float)rnd.NextDouble() * 2.0f * 3.1415926f;
                 Station.Descriptor.mean_anomaly   =  (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
-                Station.Descriptor.Compute();
+                Station.Descriptor.compute();
 
                 Station.Descriptor.self.mass = StationMass;
 
@@ -412,12 +412,12 @@ namespace SystemView
 
                 for (int i = 0; i < Planets.Count; i++)
                 {
-                    Planets.ElementAt(i).Key.Descriptor.Compute();
+                    Planets.ElementAt(i).Key.Descriptor.compute();
                 }
 
                 foreach (SystemShip ship in State.Ships)
                 {
-                    ship.Descriptor.Compute();
+                    ship.Descriptor.compute();
                 }
             }
 
@@ -432,7 +432,7 @@ namespace SystemView
 
                 for (int i = 0; i < Moons.Count; i++)
                 {
-                    Moons.ElementAt(i).Key.Descriptor.Compute();
+                    Moons.ElementAt(i).Key.Descriptor.compute();
                 }
             }
 
@@ -450,7 +450,7 @@ namespace SystemView
             {
                 //if (Planets[p].LastCycle == CurrentCycle) continue;
 
-                p.Descriptor.UpdatePosition(CurrentTime);
+                p.Descriptor.update_position(CurrentTime);
                 //Planets[p].LastCycle = CurrentCycle;
 
                 //if (++UpdatesCompleted == UpdatesPerTick) return;
@@ -468,21 +468,21 @@ namespace SystemView
 
             foreach (SpaceStation s in State.Stations)
             {
-                s.Descriptor.UpdatePosition(CurrentTime);
+                s.Descriptor.update_position(CurrentTime);
             }
 
             foreach (SystemShip s in State.Ships)
             {
                 if (!s.PathPlanned && !s.Reached)
-                    s.PathPlanned = s.Descriptor.PlanPath(s.Destination, 0.1f * SystemScale);
-                else if (!s.Reached && s.Descriptor.GetDistanceFrom(s.Destination) < SystemScale)
+                    s.PathPlanned = s.Descriptor.plan_path(s.Destination, 0.1f * SystemScale);
+                else if (!s.Reached && s.Descriptor.get_distance_from(s.Destination) < SystemScale)
                 {
-                    s.Descriptor.Copy(s.Destination);
+                    s.Descriptor.copy(s.Destination);
                     s.PathPlanned = false;
                     (s.Start, s.Destination) = (s.Destination, s.Start);
                 }
 
-                s.Descriptor.UpdatePosition(CurrentTime);
+                s.Descriptor.update_position(CurrentTime);
             }
 
             float GravVelX = 0.0f;

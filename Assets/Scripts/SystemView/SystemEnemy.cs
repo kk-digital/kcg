@@ -45,7 +45,7 @@ namespace SystemView
             Object = new GameObject();
             Object.name = "Enemy ship";
 
-            ship.Descriptor.Compute();
+            ship.Descriptor.compute();
 
             Renderer = Object.AddComponent<SystemShipRenderer>();
             Renderer.ship = ship;
@@ -77,7 +77,7 @@ namespace SystemView
             int CurrentMillis = (int)(Time.time * 1000) - LastTime;
             LastTime = (int)(Time.time * 1000);
 
-            ship.Descriptor.UpdatePosition(CurrentMillis);
+            ship.Descriptor.update_position(CurrentMillis);
 
             Renderer.shipColor.r = (float) ship.Health / ship.MaxHealth;
         }

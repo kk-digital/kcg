@@ -214,7 +214,7 @@ namespace SystemView
                 }
 
                 if (StrongestGravityBody != null)
-                    ship.Descriptor.ChangeFrameOfReference(StrongestGravityBody);
+                    ship.Descriptor.change_frame_of_reference(StrongestGravityBody);
 
                 if (ship.Descriptor.eccentricity <= 1.0f)
                     ship.PathPlanned = true;

@@ -359,7 +359,7 @@ namespace SystemView
                 if (SelectedEnemy.ship.Health > SelectedEnemy.ship.MaxHealth)
                     SelectedEnemy.ship.Health = SelectedEnemy.ship.MaxHealth;
 
-                SelectedEnemy.ship.Descriptor.Compute();
+                SelectedEnemy.ship.Descriptor.compute();
             }
         }
 

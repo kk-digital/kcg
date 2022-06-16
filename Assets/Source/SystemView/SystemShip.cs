@@ -98,7 +98,7 @@ namespace SystemView
         {
             if (Descriptor.central_body == null) return;
 
-            float[] Vel = Descriptor.GetVelocityAt(Descriptor.GetDistanceFromCenterAt(Tools.pi), Tools.pi);
+            float[] Vel = Descriptor.get_velocity_at(Descriptor.get_distance_from_center_at(Tools.pi), Tools.pi);
 
             float targetrotation = (float)Math.Acos(Vel[0] / Math.Sqrt(Vel[0] * Vel[0] + Vel[1] * Vel[1]));
             float VelocityDirection = (float)Math.Acos(self.velx / Math.Sqrt(self.velx * self.velx + self.vely * self.vely));
@@ -121,9 +121,9 @@ namespace SystemView
                     self.velx += AccX;
                     self.vely += AccY;
 
-                    Descriptor.ChangeFrameOfReference(Descriptor.central_body);
-                } else Descriptor.UpdatePosition(CurrentTime);
-            } else { RotateTo(targetrotation, CurrentTime); Descriptor.UpdatePosition(CurrentTime); }
+                    Descriptor.change_frame_of_reference(Descriptor.central_body);
+                } else Descriptor.update_position(CurrentTime);
+            } else { RotateTo(targetrotation, CurrentTime); Descriptor.update_position(CurrentTime); }
         }
 
         public void EngageDockingAutopilot(SpaceStation Station)
@@ -153,8 +153,8 @@ namespace SystemView
                     break;
 
                 case AutopilotStage.PLANNING_TRAJECTORY:
-                    Descriptor.UpdatePosition(CurrentTime);
-                    if (Descriptor.PlanPath(dockingAutopilotTarget.Descriptor, AcceptedDeviation)) autopilotStage = AutopilotStage.TRANSITIONING;
+                    Descriptor.update_position(CurrentTime);
+                    if (Descriptor.plan_path(dockingAutopilotTarget.Descriptor, AcceptedDeviation)) autopilotStage = AutopilotStage.TRANSITIONING;
                     break;
 
                 case AutopilotStage.TRANSITIONING:
@@ -162,20 +162,20 @@ namespace SystemView
                     break;
 
                 case AutopilotStage.IN_TRANSIT:
-                    Descriptor.UpdatePosition(CurrentTime);
+                    Descriptor.update_position(CurrentTime);
 
                     float dx = dockingAutopilotTarget.Self.posx - self.posx;
                     float dy = dockingAutopilotTarget.Self.posy - self.posy;
                     float d  = (float)Math.Sqrt(dx * dx + dy * dy);
 
                     float targetMeanAnomaly;
-                    if (Descriptor.GetDistanceFromCenter() > dockingAutopilotTarget.Descriptor.GetDistanceFromCenter()) targetMeanAnomaly =       0.0f;
+                    if (Descriptor.get_distance_from_center() > dockingAutopilotTarget.Descriptor.get_distance_from_center()) targetMeanAnomaly =       0.0f;
                     else                                                                                                targetMeanAnomaly = Tools.pi;
 
                     float eta = Descriptor.orbital_period * (targetMeanAnomaly - Descriptor.mean_anomaly) * 0.5f;
                     if (eta < 0.0f) eta *= -1;
 
-                    float[] vel = Descriptor.GetVelocityAt(Descriptor.GetDistanceFromCenterAt(targetMeanAnomaly), targetMeanAnomaly);
+                    float[] vel = Descriptor.get_velocity_at(Descriptor.get_distance_from_center_at(targetMeanAnomaly), targetMeanAnomaly);
 
                     float timeToSlowDown = (float)Math.Sqrt(vel[0] * vel[0] + vel[1] * vel[1]) / Acceleration;
 

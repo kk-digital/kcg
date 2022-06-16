@@ -34,7 +34,7 @@ namespace SystemView
         // LateUpdate is called once per frame
         void LateUpdate()
         {
-            float[] pos = planet.Descriptor.GetPosition();
+            float[] pos = planet.Descriptor.get_position();
 
             sr.transform.position = new Vector3(pos[0], pos[1], -0.1f);
             sr.transform.localScale = new Vector3(3.0f / Camera.scale, 3.0f / Camera.scale, 1.0f);

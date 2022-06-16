@@ -1,12 +1,10 @@
 ﻿using System;
 // using UnityEngine; // For DebugOut
 
-namespace SystemView
-{
+namespace SystemView {
     // Class that defines the behaviors of orbiting objects
     // Will be used to define orbiting parameters of planets, asteroids, ships, etc.
-    public class OrbitingObjectDescriptor
-    {
+    public class OrbitingObjectDescriptor {
         public float   semimajoraxis;                        // a                    Half of the major axis
         public float   semiminoraxis;                        // b                    Half of the minor axis
         public float   rotation;                             // ω                    Orbit's rotation across the Z-axis
@@ -28,30 +26,26 @@ namespace SystemView
         public SpaceObject central_body;
         public SpaceObject self;
 
-        public OrbitingObjectDescriptor(SpaceObject obj)
-        {
+        public OrbitingObjectDescriptor(SpaceObject obj) {
             eccentricity_vector = new float[2];
             self                = obj;
         }
 
-        public OrbitingObjectDescriptor(OrbitingObjectDescriptor descriptor)
-        {
+        public OrbitingObjectDescriptor(OrbitingObjectDescriptor descriptor) {
             eccentricity_vector = new float[2];
             self                = new();
 
-            Copy(descriptor);
+            copy(descriptor);
         }
 
-        public OrbitingObjectDescriptor(OrbitingObjectDescriptor descriptor, SpaceObject obj)
-        {
+        public OrbitingObjectDescriptor(OrbitingObjectDescriptor descriptor, SpaceObject obj) {
             eccentricity_vector = new float[2];
             self                = obj;
 
-            Copy(descriptor);
+            copy(descriptor);
         }
 
-        public OrbitingObjectDescriptor(SpaceObject obj, SpaceObject center, float a, float b, float w, float M)
-        {
+        public OrbitingObjectDescriptor(SpaceObject obj, SpaceObject center, float a, float b, float w, float M) {
             semimajoraxis = a;
             semiminoraxis = b;
             rotation      = w;
@@ -60,11 +54,10 @@ namespace SystemView
             central_body  = center;
             self          = obj;
 
-            Compute();
+            compute();
         }
 
-        public void Copy(OrbitingObjectDescriptor descriptor)
-        {
+        public void copy(OrbitingObjectDescriptor descriptor) {
             eccentricity_vector[0]           = descriptor.eccentricity_vector[0];
             eccentricity_vector[1]           = descriptor.eccentricity_vector[1];
             central_body                     = descriptor.central_body;
@@ -90,8 +83,7 @@ namespace SystemView
             standard_gravitational_parameter = Tools.gravitational_constant * central_body.mass;
         }
 
-        public void Compute()
-        {
+        public void compute() {
             // μ = GM
 
             standard_gravitational_parameter = Tools.gravitational_constant * central_body.mass;
@@ -108,12 +100,12 @@ namespace SystemView
             
             orbital_period         = Tools.twopi / mean_motion;
 
-            eccentric_anomaly      = GetEccentricAnomalyAt(mean_anomaly);
-            true_anomaly           = GetTrueAnomaly(eccentric_anomaly);
-            heliocentric_distance  = GetDistanceFromCenterAt(true_anomaly);
+            eccentric_anomaly      = get_eccentric_anomaly_at(mean_anomaly);
+            true_anomaly           = get_true_anomaly(eccentric_anomaly);
+            heliocentric_distance  = get_distance_from_center_at(true_anomaly);
 
-            float[] pos            = GetPositionAt(true_anomaly, heliocentric_distance);
-            float[] vel            = GetVelocityAt(heliocentric_distance, eccentric_anomaly);
+            float[] pos            = get_position_at(true_anomaly, heliocentric_distance);
+            float[] vel            = get_velocity_at(heliocentric_distance, eccentric_anomaly);
 
             self.posx              = pos[0];
             self.posy              = pos[1];
@@ -126,27 +118,26 @@ namespace SystemView
 
             eccentricity           = (float)Math.Sqrt(1.0f - (semiminoraxis * semiminoraxis) / (semimajoraxis * semimajoraxis));
 
-            periapsis              = GetDistanceFromCenterAt(0.0f);
-            apoapsis               = GetDistanceFromCenterAt(Tools.pi);
+            periapsis              = get_distance_from_center_at(0.0f);
+            apoapsis               = get_distance_from_center_at(Tools.pi);
 
             linear_eccentricity    = semimajoraxis - periapsis;
 
             // Eccentricity vector is a vector pointing from apoapsis to periapsis, with magnitude equal to the scalar eccentricity
 
-            float[] ApoapsisPos    = GetPositionAt(Tools.pi, apoapsis);
-            float[] PeriapsisPos   = GetPositionAt(0.0f,    periapsis);
+            float[] apoapsis_pos   = get_position_at(Tools.pi, apoapsis);
+            float[] periapsis_pos  = get_position_at(0.0f,    periapsis);
 
-            eccentricity_vector[0] = PeriapsisPos[0] - ApoapsisPos[0];
-            eccentricity_vector[1] = PeriapsisPos[1] - ApoapsisPos[1];
+            eccentricity_vector[0] = periapsis_pos[0] - apoapsis_pos[0];
+            eccentricity_vector[1] = periapsis_pos[1] - apoapsis_pos[1];
 
-            float Magnitude        = Tools.magnitude(eccentricity_vector);
+            float magnitude        = Tools.magnitude(eccentricity_vector);
 
-            eccentricity_vector[0] = eccentricity_vector[0] / Magnitude * eccentricity;
-            eccentricity_vector[1] = eccentricity_vector[1] / Magnitude * eccentricity;
+            eccentricity_vector[0] = eccentricity_vector[0] / magnitude * eccentricity;
+            eccentricity_vector[1] = eccentricity_vector[1] / magnitude * eccentricity;
         }
 
-        public float GetEccentricAnomalyAt(float Mean)
-        {
+        public float get_eccentric_anomaly_at(float mean) {
             // Eccentric anomaly is defined by Kepler's equation
 
             // M = E - ε sin(E)
@@ -167,50 +158,42 @@ namespace SystemView
             //  n+1    n      1 - ε cos(En)
 
 
-            while (Mean <        0.0f) Mean  = Tools.twopi + Mean;
-            while (Mean > Tools.twopi) Mean -= Tools.twopi;
+            while (mean <        0.0f) mean  = Tools.twopi + mean;
+            while (mean > Tools.twopi) mean -= Tools.twopi;
 
-            float Estimate    = Mean;
+                  float estimate =  mean;
+                  float result   =  0.0f;
+            const float delta    = 1E-5f;
 
-            float Result      = 0.0f;
+            do {
+                estimate = estimate - (estimate - eccentricity * (float)Math.Sin(estimate) - mean) / (1.0f - eccentricity * (float)Math.Cos(estimate));
 
-            const float Delta = 1E-5f;
+                while (estimate <        0.0f) estimate  = Tools.twopi + estimate;
+                while (estimate > Tools.twopi) estimate -= Tools.twopi;
 
-            do
-            {
-                Estimate      = Estimate - (Estimate - eccentricity * (float)Math.Sin(Estimate) - Mean) / (1.0f - eccentricity * (float)Math.Cos(Estimate));
+                result = estimate  - eccentricity * (float)Math.Sin(estimate);
+            } while (result - mean > delta || result - mean < -delta);
 
-                while (Estimate <        0.0f) Estimate  = Tools.twopi + Estimate;
-                while (Estimate > Tools.twopi) Estimate -= Tools.twopi;
-
-                Result        =  Estimate  - eccentricity * (float)Math.Sin(Estimate);
-            } while (Result - Mean > Delta || Result - Mean < -Delta);
-
-            return Estimate;
+            return estimate;
         }
 
-        public float GetEccentricAnomaly()
-        {
-            return GetEccentricAnomalyAt(mean_anomaly);
-        }
+        public float get_eccentric_anomaly() { return get_eccentric_anomaly_at(mean_anomaly); }
 
-        public float GetTrueAnomaly(float EccentricAnomaly)
-        {
+        public float get_true_anomaly(float eccentric) {
             //              1 + ε     E
             // ν = 2 atan(√ ----- tan(-))
             //              1 - ε     2
 
-            return 2.0f * (float)Math.Atan(Math.Sqrt((1.0f + eccentricity) / (1.0f - eccentricity)) * Math.Tan(EccentricAnomaly / 2.0f));
+            return 2.0f * (float)Math.Atan(Math.Sqrt((1.0f + eccentricity) / (1.0f - eccentricity)) * Math.Tan(eccentric / 2.0f));
         }
 
-        public float[] GetPositionAt(float True, float Radius)
-        {
+        public float[] get_position_at(float true_anom, float radius) {
             // →          cos(ν)
             // r = r  * ( sin(ν) )
             //      c       0
 
-            float posx = (float)Math.Cos(True) * Radius;
-            float posy = (float)Math.Sin(True) * Radius;
+            float posx = (float)Math.Cos(true_anom) * radius;
+            float posy = (float)Math.Sin(true_anom) * radius;
 
             // Rotate the position along the orbit's rotational offset
             
@@ -226,28 +209,24 @@ namespace SystemView
             return pos;
         }
 
-        public float[] GetPosition()
-        {
-            return GetPositionAt(true_anomaly, heliocentric_distance);
+        public float[] get_position() {
+            return get_position_at(true_anomaly, heliocentric_distance);
         }
 
-        public float GetDistanceFromCenterAt(float True)
-        {
+        public float get_distance_from_center_at(float true_anom) {
             //           1 - ε²
             // r = a --------------
             //       1 + ε * cos(ν)
 
-            return semimajoraxis * (1 - eccentricity * eccentricity) / (1 + eccentricity * (float)Math.Cos(True));
+            return semimajoraxis * (1 - eccentricity * eccentricity) / (1 + eccentricity * (float)Math.Cos(true_anom));
         }
 
-        public float GetDistanceFromCenter()
-        {
-            return GetDistanceFromCenterAt(GetTrueAnomaly(GetEccentricAnomalyAt(mean_anomaly)));
+        public float get_distance_from_center() {
+            return get_distance_from_center_at(get_true_anomaly(get_eccentric_anomaly_at(mean_anomaly)));
         }
 
         // this function is basically the reverse of the GetPositionAt function
-        public float GetRotationalPositionAt(float x, float y)
-        {
+        public float get_rotational_position_at(float x, float y) {
             float rotsin = (float)Math.Sin(rotation);
             float rotcos = (float)Math.Cos(rotation);
 
@@ -262,7 +241,7 @@ namespace SystemView
             return (float)Math.Asin(posy);
         }
 
-        public float[] GetIntersectionWith(float startx, float starty, float slope)
+        public float[] get_intersection_with(float startx, float starty, float slope)
         {
             // sine and cosine of the orbit's rotation
             // would be faster if C# had a function that calls x86's fsincos instruction (as it calculates both sin and cos in one single instruction)
@@ -270,8 +249,8 @@ namespace SystemView
             float rotcos = (float)Math.Cos(rotation);
 
             // Find both intersection points and return the farther one
-            float[] Intersection1 = new float[2];
-            float[] Intersection2 = new float[2];
+            float[] intersection1 = new float[2];
+            float[] intersection2 = new float[2];
 
             // Rotate slope to match rotation of orbit
             slope = (float)Math.Tan(Math.Atan(slope) - rotation);
@@ -287,11 +266,11 @@ namespace SystemView
             //                  a                    √ (a² * m² + b²)
 
             // Use fast inverse square root for faster speed
-            Intersection1[0] = semimajoraxis * semiminoraxis / (float)Math.Sqrt(semimajoraxis * semimajoraxis * slope * slope + semiminoraxis * semiminoraxis);
-            Intersection1[1] = slope * Intersection1[0];
+            intersection1[0] = semimajoraxis * semiminoraxis / (float)Math.Sqrt(semimajoraxis * semimajoraxis * slope * slope + semiminoraxis * semiminoraxis);
+            intersection1[1] = slope * intersection1[0];
  
-            Intersection2[0] = -Intersection1[0];
-            Intersection2[1] = -Intersection1[1];
+            intersection2[0] = -intersection1[0];
+            intersection2[1] = -intersection1[1];
  
             // Rotate points to match orbit's rotation
  
@@ -299,54 +278,51 @@ namespace SystemView
  
             // (2) y = sin(ω) * x_0 + cos(ω) * y_0 + cy
  
-            (Intersection1[0], Intersection1[1]) = (rotcos * Intersection1[0] - rotsin * Intersection1[1] + central_body.posx,
-                                                    rotsin * Intersection1[0] + rotcos * Intersection1[1] + central_body.posy);
-            (Intersection2[0], Intersection2[1]) = (rotcos * Intersection2[0] - rotsin * Intersection2[1] + central_body.posx,
-                                                    rotsin * Intersection2[0] + rotcos * Intersection2[1] + central_body.posy);
+            (intersection1[0], intersection1[1]) = (rotcos * intersection1[0] - rotsin * intersection1[1] + central_body.posx,
+                                                    rotsin * intersection1[0] + rotcos * intersection1[1] + central_body.posy);
+            (intersection2[0], intersection2[1]) = (rotcos * intersection2[0] - rotsin * intersection2[1] + central_body.posx,
+                                                    rotsin * intersection2[0] + rotcos * intersection2[1] + central_body.posy);
  
             // (1) d = √(𐤃x² + 𐤃y²)
  
-            float d1 = (float)Math.Sqrt((Intersection1[0] - startx) * (Intersection1[0] - startx) + (Intersection1[1] - starty) * (Intersection1[1] - starty));
-            float d2 = (float)Math.Sqrt((Intersection2[0] - startx) * (Intersection2[0] - startx) + (Intersection2[1] - starty) * (Intersection2[1] - starty));
+            float d1 = Tools.magnitude((intersection1[0] - startx), (intersection1[1] - starty));
+            float d2 = Tools.magnitude((intersection2[0] - startx), (intersection2[1] - starty));
 
-            return d1 > d2 ? Intersection1 : Intersection2;
+            return d1 > d2 ? intersection1 : intersection2;
         }
 
-        public float GetDistanceFrom(OrbitingObjectDescriptor Descriptor)
-        {
-            float[] Pos = GetPosition();
-            float[] TargetPos = Descriptor.GetPosition();
+        public float get_distance_from(OrbitingObjectDescriptor descriptor) {
+            float[] pos = get_position();
+            float[] target_pos = descriptor.get_position();
 
-            return (float)Math.Sqrt((Pos[0] - TargetPos[0]) * (Pos[0] - TargetPos[0]) + (Pos[1] - TargetPos[1]) * (Pos[1] - TargetPos[1]));
+            return Tools.magnitude((pos[0] - target_pos[0]), (pos[1] - target_pos[1]));
         }
 
-        public bool PlanPath(OrbitingObjectDescriptor Destination, float AcceptableDeviation)
-        {
+        public bool plan_path(OrbitingObjectDescriptor destination, float acceptable_deviation) {
             // Make a copy of the current state in case we cannot establish an orbit from our current position
-            OrbitingObjectDescriptor Start = new OrbitingObjectDescriptor(this);
-            float[] StartPos = GetPosition();
+            OrbitingObjectDescriptor start = new OrbitingObjectDescriptor(this);
+            float[] start_pos = get_position();
 
             // Turn orbit so that our rotational position is 0
-            rotation   += true_anomaly;
+            rotation    += true_anomaly;
             mean_anomaly = 0.0f;
 
             // Find intersection between planned orbit and destination orbit
-            float[] IntersectionAt    = Destination.GetIntersectionWith(StartPos[0], StartPos[1], (float)Math.Tan(rotation));
+            float[] intersetion_at     = destination.get_intersection_with(start_pos[0], start_pos[1], (float)Math.Tan(rotation));
 
             // Start altitude = current altitude of start object
-            float StartAltitude       = Start.GetDistanceFromCenter();
+            float start_altitude       = start.get_distance_from_center();
 
             // Destination altitude = altitude at intersection point
-            float DestinationAltitude = Destination.GetDistanceFromCenterAt(Destination.GetRotationalPositionAt(IntersectionAt[0], IntersectionAt[1]));
+            float destination_altitude = destination.get_distance_from_center_at(destination.get_rotational_position_at(intersetion_at[0], intersetion_at[1]));
 
             // Choose periapsis and apoapsis from start/destination altitude (lower value = periapsis, higher value = apoapsis)
-            periapsis = StartAltitude < DestinationAltitude ? StartAltitude : DestinationAltitude;
-            apoapsis  = StartAltitude > DestinationAltitude ? StartAltitude : DestinationAltitude;
+            periapsis = start_altitude < destination_altitude ? start_altitude : destination_altitude;
+            apoapsis  = start_altitude > destination_altitude ? start_altitude : destination_altitude;
 
             // Rotate orbit 180 degrees if we're going from high altitude to low
-            if (StartAltitude > DestinationAltitude)
-            {
-                rotation   += Tools.pi;
+            if (start_altitude > destination_altitude) {
+                rotation    += Tools.pi;
                 mean_anomaly = Tools.pi;
             }
 
@@ -366,13 +342,13 @@ namespace SystemView
             semiminoraxis = (float)Math.Sqrt(periapsis * (2 * semimajoraxis - periapsis));
 
             // Compute all other values
-            Compute();
+            compute();
 
-            float TimeToEncounter          = orbital_period * 0.5f;
-            float TargetRotationalMovement = (TimeToEncounter / Destination.orbital_period) * Tools.twopi;
+            float time_to_encounter          = orbital_period * 0.5f;
+            float target_rotational_movement = (time_to_encounter / destination.orbital_period) * Tools.twopi;
 
-            float True                   = Destination.GetTrueAnomaly(Destination.GetEccentricAnomalyAt(Destination.mean_anomaly + TargetRotationalMovement));
-            float[] TargetPosAtEncounter = Destination.GetPositionAt(True, Destination.GetDistanceFromCenterAt(True));
+            float true_anom                  = destination.get_true_anomaly(destination.get_eccentric_anomaly_at(destination.mean_anomaly + target_rotational_movement));
+            float[] target_pos_at_encounter  = destination.get_position_at(true_anom, destination.get_distance_from_center_at(true_anom));
 
             // Check whether apoapsis is close enough to where the target will be to ensure an encounter
             // 
@@ -382,41 +358,39 @@ namespace SystemView
             // 
             // Instead of calculating square root, just square the acceptable deviation instead. Much faster this way.
 
-            float dx = IntersectionAt[0] - TargetPosAtEncounter[0];
-            float dy = IntersectionAt[1] - TargetPosAtEncounter[1];
+            float dx = intersetion_at[0] - target_pos_at_encounter[0];
+            float dy = intersetion_at[1] - target_pos_at_encounter[1];
 
             dx *= dx;
             dy *= dy;
 
-            if (dx + dy < AcceptableDeviation * AcceptableDeviation)
-                return true;
+            if (dx + dy < acceptable_deviation * acceptable_deviation) return true;
 
-            Copy(Start);
+            copy(start);
 
             return false;
         }
 
-        public float[] ForceEncounter(OrbitingObjectDescriptor Destination, float Acceleration)
-        {
-            float[] RequiredVelocityChange = new float[2];
+        public float[] force_encounter(OrbitingObjectDescriptor destination, float acceleration) {
+            float[] required_velocity_change = new float[2];
 
-            OrbitingObjectDescriptor NewOrbit = new OrbitingObjectDescriptor(this);
+            OrbitingObjectDescriptor new_orbit = new OrbitingObjectDescriptor(this);
 
             // todo: this function
 
-            return RequiredVelocityChange; 
+            return required_velocity_change; 
         }
 
-        public float[] GetVelocityAt(float Radius, float E)
+        public float[] get_velocity_at(float radius, float E)
         {
             // →   √ (μa)        -sin(E)
             // v = ------ ( √(1 - ε²) cos(E) )
             //       rc             0
 
-            float Factor = (float)Math.Sqrt(standard_gravitational_parameter * semimajoraxis) / Radius;
+            float factor = (float)Math.Sqrt(standard_gravitational_parameter * semimajoraxis) / radius;
 
-            float SpeedX = -Factor * (float) Math.Sin(E);
-            float SpeedY =  Factor * (float)(Math.Sqrt(1 - eccentricity * eccentricity) * Math.Cos(E));
+            float speedx = -factor * (float) Math.Sin(E);
+            float speedy =  factor * (float)(Math.Sqrt(1 - eccentricity * eccentricity) * Math.Cos(E));
 
             // Rotate the velocity along the orbit's rotational offset
 
@@ -424,37 +398,36 @@ namespace SystemView
             float rotsin = (float)Math.Sin(rotation);
             float rotcos = (float)Math.Cos(rotation);
 
-            float[] Velocity = new float[2];
+            float[] velocity = new float[2];
 
-            Velocity[0] = rotcos * SpeedX - rotsin * SpeedY;
-            Velocity[1] = rotsin * SpeedX + rotcos * SpeedY;
+            velocity[0] = rotcos * speedx - rotsin * speedy;
+            velocity[1] = rotsin * speedx + rotcos * speedy;
 
-            return Velocity;
+            return velocity;
         }
 
-        public float[] GetVelocity()
-        {
-            return GetVelocityAt(heliocentric_distance, eccentric_anomaly);
+        public float[] get_velocity() {
+            return get_velocity_at(heliocentric_distance, eccentric_anomaly);
         }
 
-        public void UpdatePosition(float dt)
+        public void update_position(float dt)
         {
             mean_anomaly         += dt * mean_motion;
-            eccentric_anomaly     = GetEccentricAnomalyAt(mean_anomaly);
-            true_anomaly          = GetTrueAnomaly(eccentric_anomaly);
-            heliocentric_distance = GetDistanceFromCenterAt(true_anomaly);
-            float[] Pos          = GetPositionAt(true_anomaly, heliocentric_distance);
-            float[] Vel          = GetVelocityAt(heliocentric_distance, eccentric_anomaly);
-            self.posx            = Pos[0];
-            self.posy            = Pos[1];
-            self.velx            = Vel[0];
-            self.vely            = Vel[1];
+            eccentric_anomaly     = get_eccentric_anomaly_at(mean_anomaly);
+            true_anomaly          = get_true_anomaly(eccentric_anomaly);
+            heliocentric_distance = get_distance_from_center_at(true_anomaly);
+            float[] pos           = get_position_at(true_anomaly, heliocentric_distance);
+            float[] vel           = get_velocity_at(heliocentric_distance, eccentric_anomaly);
+            self.posx             = pos[0];
+            self.posy             = pos[1];
+            self.velx             = vel[0];
+            self.vely             = vel[1];
 
-            if    (mean_anomaly      < 0.0f)              mean_anomaly      += Tools.twopi;
+            if    (mean_anomaly      <        0.0f) mean_anomaly      += Tools.twopi;
             while (mean_anomaly      > Tools.twopi) mean_anomaly      -= Tools.twopi;
 
-            if    (eccentric_anomaly < 0.0f)              eccentric_anomaly += Tools.twopi;
-            if    (true_anomaly      < 0.0f)              true_anomaly      += Tools.twopi;
+            if    (eccentric_anomaly <        0.0f) eccentric_anomaly += Tools.twopi;
+            if    (true_anomaly      <        0.0f) true_anomaly      += Tools.twopi;
         }
 
         /*public void DebugOut()
@@ -465,15 +438,15 @@ namespace SystemView
             Debug.Log("x: " + Self.PosX + " y: " + Self.PosX + " vx: " + Self.VelX + " vy: " + Self.VelY);
         }*/
 
-        public void ChangeFrameOfReference(SpaceObject NewFrameOfReference)
+        public void change_frame_of_reference(SpaceObject new_frame_of_reference)
         {
-            float PosX = self.posx - central_body.posx;
-            float PosY = self.posy - central_body.posy;
+            float posx = self.posx - central_body.posx;
+            float posy = self.posy - central_body.posy;
 
-            float VelX = self.velx - central_body.velx;
-            float VelY = self.vely - central_body.vely;
+            float velx = self.velx - central_body.velx;
+            float vely = self.vely - central_body.vely;
 
-            central_body = NewFrameOfReference;
+            central_body = new_frame_of_reference;
 
             // μ = GM
 
@@ -482,27 +455,27 @@ namespace SystemView
             // h = r x v   =>   h = x * v  - y * v
             //                           y        x
 
-            float AngularMomentum = PosX * VelY - PosY * VelX;
+            float angular_momentum = posx * vely - posy * velx;
 
             //                     v  * h          v  * h
             //     v x h    r       y        x      x        y
             // e = ----- - --- = ( ------ - ---, - ------ - --- )
             //       μ     |r|        μ     |r|       μ     |r|
 
-            float PosMagnitude = (float)Math.Sqrt(PosX * PosX + PosY * PosY);
+            float pos_magnitude = (float)Math.Sqrt(posx * posx + posy * posy);
 
-            eccentricity_vector[0] =  (VelY * AngularMomentum / standard_gravitational_parameter) - PosX / PosMagnitude;
-            eccentricity_vector[1] = -(VelX * AngularMomentum / standard_gravitational_parameter) - PosY / PosMagnitude;
+            eccentricity_vector[0] =  (vely * angular_momentum / standard_gravitational_parameter) - posx / pos_magnitude;
+            eccentricity_vector[1] = -(velx * angular_momentum / standard_gravitational_parameter) - posy / pos_magnitude;
 
             // ε = |e|
 
-            eccentricity = (float)Math.Sqrt(eccentricity_vector[0] * eccentricity_vector[0] + eccentricity_vector[1] * eccentricity_vector[1]);
+            eccentricity = Tools.magnitude(eccentricity_vector);
 
             //         h²
             // a = ---------
             //     μ(1 - ε²)
 
-            semimajoraxis = AngularMomentum * AngularMomentum / (standard_gravitational_parameter * (1.0f - eccentricity * eccentricity));
+            semimajoraxis = angular_momentum * angular_momentum / (standard_gravitational_parameter * (1.0f - eccentricity * eccentricity));
 
             //            b²
             // ε = √ (1 - -)   =>    b = √ ((1 - ε²) * a²)
@@ -530,8 +503,8 @@ namespace SystemView
 
             orbital_period = Tools.twopi / mean_motion;
 
-            periapsis = GetDistanceFromCenterAt(0.0f);
-            apoapsis  = GetDistanceFromCenterAt(Tools.pi);
+            periapsis = get_distance_from_center_at(0.0f);
+            apoapsis  = get_distance_from_center_at(Tools.pi);
 
             linear_eccentricity = semimajoraxis - periapsis;
             
@@ -543,7 +516,7 @@ namespace SystemView
             //      c       0                       r            r
             //                                       c            c
 
-            true_anomaly = (float)Math.Atan2(PosY, PosX) - rotation;
+            true_anomaly = (float)Math.Atan2(posy, posx) - rotation;
 
             //                                                 1 + ε             ν
             //              1 + ε     E                      √ ----- (1 - ε) tan(-)
@@ -551,10 +524,10 @@ namespace SystemView
             //              1 - ε     2                      ---------------------- 
             //                                                        1 + ε
 
-            float OnePlusEcc  = 1 + eccentricity;
-            float OneMinusEcc = 1 - eccentricity;
+            float one_plus_ecc  = 1 + eccentricity;
+            float one_minus_ecc = 1 - eccentricity;
 
-            eccentric_anomaly = 2.0f * (float)Math.Atan((Math.Sqrt(OnePlusEcc / OneMinusEcc) * OneMinusEcc * Math.Tan(true_anomaly / 2)) / OnePlusEcc);
+            eccentric_anomaly = 2.0f * (float)Math.Atan((Math.Sqrt(one_plus_ecc / one_minus_ecc) * one_minus_ecc * Math.Tan(true_anomaly / 2)) / one_plus_ecc);
 
             // M = E - ε sin(E)
 
