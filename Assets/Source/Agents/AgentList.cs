@@ -30,7 +30,7 @@ namespace Agent
         }
 
 
-        public AgentEntity Add(GameEntity entity)
+        public ref AgentEntity Add()
         {
             // if we dont have enough space we expand
             // the capacity
@@ -75,12 +75,17 @@ namespace Agent
             AgentEntity NewEntity = new AgentEntity();
             NewEntity.Index = Found;
             NewEntity.IsInitialized = true;
-            NewEntity.Entity = entity;
 
             List[Found] = NewEntity;
             Size++;
 
-             return NewEntity;
+             return ref List[Found];
+        }
+
+
+        public ref AgentEntity Get(int Index)
+        {
+            return ref List[Index];
         }
 
 

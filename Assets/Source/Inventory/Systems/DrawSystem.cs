@@ -61,9 +61,6 @@ namespace Inventory
             x -= w / 2f;
             y -= h / 2f;
 
-            Debug.Log(Screen.width);
-            Debug.Log(Screen.height);
-
             // If is tool bar draw at the botton of the screen.
             if (inventoryEntity.isInventoryToolBar)
                 y = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0f, 0f)).y + tileSize / 2f;

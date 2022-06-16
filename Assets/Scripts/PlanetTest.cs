@@ -12,6 +12,7 @@ namespace Planet.Unity
         Inventory.ManagerSystem inventoryManagerSystem;
         Item.SpawnerSystem      itemSpawnSystem;
         Inventory.DrawSystem    inventoryDrawSystem;
+
         Contexts EntitasContext;
         static bool Init = false;
   
@@ -70,8 +71,9 @@ namespace Planet.Unity
 
             inventoryDrawSystem.Draw(Material, transform, 1000);
             Planet.Update(Time.deltaTime, Material, transform);
-            //DrawSpriteAtlas();
-
+            
+            /*Utility.Render.DrawString(0, 0, 1.0f, "label", 12, new Color(255, 255, 255, 255),
+             transform, 10000);*/
         }
 
         void DrawSpriteAtlas()
@@ -89,6 +91,12 @@ namespace Planet.Unity
         public void Initialize()
         {
             EntitasContext = Contexts.sharedInstance;
+        
+            inventoryManagerSystem = new Inventory.ManagerSystem(EntitasContext);
+            itemSpawnSystem = new Item.SpawnerSystem(EntitasContext);
+            inventoryDrawSystem = new Inventory.DrawSystem(EntitasContext);
+
+
 
             int TilesMoon = 
                         GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png", 16, 16);
@@ -140,12 +148,7 @@ namespace Planet.Unity
             Planet.AddAgent(Instantiate(Material), CharacterSpriteId, 32, 48, new Vector2(6.0f, 3.0f));
             Planet.AddEnemy(Instantiate(Material), SlimeSpriteId, 32, 32, new Vector2(8.0f, 5.0f));
             Planet.AddAgent(Instantiate(Material), CharacterSpriteId, 32, 48, new Vector2(1.0f, 4.0f));
-            
 
-
-            inventoryManagerSystem = new Inventory.ManagerSystem(EntitasContext);
-            itemSpawnSystem = new Item.SpawnerSystem(EntitasContext);
-            inventoryDrawSystem = new Inventory.DrawSystem(EntitasContext);
             var inventoryAttacher = Inventory.InventoryAttacher.Instance;
 
             Item.CreationApi.Instance.CreateItem(Enums.ItemType.Gun, "Gun");

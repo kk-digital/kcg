@@ -1,13 +1,14 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using KMath;
 
 namespace Agent
 {
     public class EnemyAiSystem
     {
         List <GameEntity> ToRemoveAgents = new List<GameEntity>();
-        public void Update()
+        public void Update(Planet.PlanetState planetState)
         {
             var players = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentPlayer));
             var entities = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentEnemy));
@@ -33,9 +34,13 @@ namespace Agent
                     {
                         Vector2 oppositeDirection = new Vector2(-direction.x, -direction.y);
                         var stats = entity.agentStats;
-                        entity.ReplaceAgentStats(stats.Health - 1.0f, stats.AttackCooldown);
+                        float damage = 20.0f;
+                        entity.ReplaceAgentStats(stats.Health - damage, stats.AttackCooldown);
 
-                        // knockback 
+                        // spawns a debug floating text for damage 
+                        planetState.AddFloatingText("" + damage, 0.5f, new Vec2f(oppositeDirection.x * 0.05f, oppositeDirection.y * 0.05f), new Vec2f(pos.Value.x, pos.Value.y + 0.35f));
+
+                        // knockback test
                         movable.Acceleration.x += 800.0f * oppositeDirection.x;
                         movable.Velocity.x = 20.0f * oppositeDirection.x;
                     }
@@ -69,7 +74,7 @@ namespace Agent
 
             foreach(var entity in ToRemoveAgents)
             {
-                entity.Destroy();
+                planetState.RemoveAgent(entity.agentID.ID);
             }
             ToRemoveAgents.Clear();
         }
