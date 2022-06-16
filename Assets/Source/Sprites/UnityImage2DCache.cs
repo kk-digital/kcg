@@ -31,11 +31,11 @@ namespace Sprites
         {
             if (!(Dictionary[(int)type].ContainsKey(spriteId)))
             {
-                Vec2i dimensions = GameState.SpriteAtlasManager.GetSpriteDimensions(spriteId, type);
+                Vec2i dimensions = Game.State.SpriteAtlasManager.GetSpriteDimensions(spriteId, type);
 
-                byte[] spriteData = new byte[dimensions.x * dimensions.y * 4];
-                GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, type);
-                var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, dimensions.x, dimensions.y);
+                byte[] spriteData = new byte[dimensions.X * dimensions.Y * 4];
+                Game.State.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, type);
+                var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, dimensions.X, dimensions.Y);
 
                 Dictionary[(int)type][spriteId] = texture;
             }

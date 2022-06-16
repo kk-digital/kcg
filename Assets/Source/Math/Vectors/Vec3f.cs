@@ -20,17 +20,17 @@ namespace KMath
 
         public static Vec3f operator+(Vec3f a, Vec3f b)
         {
-            return new Vec3f(a.x + b.x, a.y + b.y, a.z + b.z);
+            return new Vec3f(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
         }
 
         public static Vec3f operator-(Vec3f a, Vec3f b)
         {
-            return new Vec3f(a.x - b.x, a.y - b.y, a.z - b.z);
+            return new Vec3f(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
         }
 
         public static Vec3f operator*(Vec3f a, Vec3f b)
         {
-            return new Vec3f(a.x * b.x, a.y * b.y, a.z * b.z);
+            return new Vec3f(a.X * b.X, a.Y * b.Y, a.Z * b.Z);
         }
     }
 }

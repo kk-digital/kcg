@@ -36,7 +36,7 @@ namespace Planet
                                 int width, int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity gameEntity = GameState.SpawnerSystem.SpawnPlayer(material, spriteId, width, height, position, newEntity.Index, 
+            GameEntity gameEntity = Game.State.SpawnerSystem.SpawnPlayer(material, spriteId, width, height, position, newEntity.Index, 
                     startingAnimation);
             newEntity.Entity = gameEntity;
 
@@ -47,7 +47,7 @@ namespace Planet
                      int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity entity = GameState.SpawnerSystem.SpawnAgent(material, spriteId, width, height, position,
+            GameEntity entity = Game.State.SpawnerSystem.SpawnAgent(material, spriteId, width, height, position,
                                                                     newEntity.Index, startingAnimation);
             newEntity.Entity = entity;
             
@@ -59,7 +59,7 @@ namespace Planet
                         int width, int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity entity = GameState.SpawnerSystem.SpawnEnemy(material, spriteId, width, height, position,
+            GameEntity entity = Game.State.SpawnerSystem.SpawnEnemy(material, spriteId, width, height, position,
             newEntity.Index, startingAnimation);
 
             newEntity.Entity = entity;
@@ -168,13 +168,13 @@ namespace Planet
 
             
 
-            GameState.ProcessSystem.Update();
-            GameState.MovableSystem.Update();
-            GameState.ProcessCollisionSystem.Update(TileMap);
-            GameState.EnemyAiSystem.Update(this);
-            GameState.InventoryManagerSystem.Update();
-            GameState.FloatingTextUpdateSystem.Update(this, frameTime);
-            GameState.AnimationUpdateSystem.Update(frameTime);
+            Game.State.ProcessSystem.Update();
+            Game.State.MovableSystem.Update();
+            Game.State.ProcessCollisionSystem.Update(TileMap);
+            Game.State.EnemyAiSystem.Update(this);
+            Game.State.InventoryManagerSystem.Update();
+            Game.State.FloatingTextUpdateSystem.Update(this, frameTime);
+            Game.State.AnimationUpdateSystem.Update(frameTime);
             
             //TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Front, Object.Instantiate(material), transform, 10);
             //TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Ore, Object.Instantiate(material), transform, 11);

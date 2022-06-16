@@ -25,7 +25,7 @@ namespace Agent
                 }
                 var sprite = new Sprites.Sprite
                 {
-                    Texture = GameState.UnityImage2DCache.Get(spriteId, Enums.AtlasType.Agent),
+                    Texture = Game.State.UnityImage2DCache.Get(spriteId, Enums.AtlasType.Agent),
                     TextureCoords = new Vector4(0, 0, 1, 1)
                 };
 

@@ -44,13 +44,13 @@ public class SpawnEnemy : MonoBehaviour
         planetState = new Planet.PlanetState(tileMap.MapSize);
 
         // Enemy Sprite Sheet ID
-        int EnemySpriteSheetID = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
+        int EnemySpriteSheetID = Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
 
         // Slime Animation Slice Tiles
-        SlimeMoveLeftBaseSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 0, 0, Enums.AtlasType.Agent);
-        GameState.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 1, 0, Enums.AtlasType.Agent);
-        GameState.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 2, 0, Enums.AtlasType.Agent);
-        GameState.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 3, 0, Enums.AtlasType.Agent);
+        SlimeMoveLeftBaseSpriteId = Game.State.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 0, 0, Enums.AtlasType.Agent);
+        Game.State.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 1, 0, Enums.AtlasType.Agent);
+        Game.State.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 2, 0, Enums.AtlasType.Agent);
+        Game.State.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 3, 0, Enums.AtlasType.Agent);
 
         GameState.AnimationManager.CreateAnimation(1);
         GameState.AnimationManager.SetName("slime-move-left");
@@ -116,7 +116,7 @@ public class SpawnEnemy : MonoBehaviour
     private void InitializeItems()
     {
         // Get Sheet ID
-        int slimeSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
+        int slimeSpriteSheet = Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
 
         // Create Item
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.PlacementTool, "Slime");

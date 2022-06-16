@@ -24,16 +24,16 @@ namespace Vehicle
             var spriteId = Game.State.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
 
             // Set Sprite Data
-            byte[] spriteData = new byte[pngSize.x * pngSize.y * 4];
+            byte[] spriteData = new byte[pngSize.X * pngSize.Y * 4];
 
             // Get Sprite Bytes
             Game.State.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, Enums.AtlasType.Agent);
 
             // Set Texture
-            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, pngSize.x, pngSize.y);
+            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, pngSize.X, pngSize.Y);
 
             // Set Sprite Size
-            var spriteSize = new Vec2f(pngSize.x / 32f, pngSize.y / 32f);
+            var spriteSize = new Vec2f(pngSize.X / 32f, pngSize.Y / 32f);
 
             // Add ID Component
             entity.AddVehicleID(vehicleID);
@@ -42,8 +42,8 @@ namespace Vehicle
             entity.AddVehicleSprite2D(texture, spriteSize);
 
             // Add Physics State 2D Component
-            entity.AddVehiclePhysicsState2D(position, position, Vec2f.one, Vec2f.one, Vec2f.zero, 1.0f, 1.0f, 1.5f,
-                Vec2f.zero);
+            entity.AddVehiclePhysicsState2D(position, position, Vec2f.One, Vec2f.One, Vec2f.Zero, 1.0f, 1.0f, 1.5f,
+                Vec2f.Zero);
 
             // Add Physics Box Collider Component
             entity.AddPhysicsBox2DCollider(spriteSize, Vec2f.Zero);

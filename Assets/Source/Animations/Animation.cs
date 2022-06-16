@@ -25,7 +25,7 @@ namespace Animation
 
         public int GetSpriteId()
         {
-            AnimationProperties animationType = GameState.AnimationManager.Get(Type);
+            AnimationProperties animationType = Game.State.AnimationManager.Get(Type);
             return animationType.BaseSpriteId + CurrentFrame;
         }
     }

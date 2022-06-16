@@ -6,6 +6,7 @@ namespace Game
     public class State
     {
         public static readonly Animation.AnimationManager AnimationManager;
+        public static readonly Animation.UpdateSystem AnimationUpdateSystem;
 
         #region Tile
 
@@ -18,6 +19,7 @@ namespace Game
 
         public static readonly Sprites.SpriteAtlasManager SpriteAtlasManager;
         public static readonly Sprites.SpriteLoader SpriteLoader;
+        public static readonly Sprites.UnityImage2DCache UnityImage2DCache;
 
         #endregion
 
@@ -29,7 +31,7 @@ namespace Game
 
         #endregion
 
-        #region
+        #region Physics
 
         public static readonly Physics.MovableSystem MovableSystem;
         public static readonly Physics.ProcessCollisionSystem ProcessCollisionSystem;
@@ -50,9 +52,13 @@ namespace Game
         public static readonly FloatingText.DrawSystem FloatingTextDrawSystem;
 
         #endregion
+        
+        public static readonly Item.DrawSystem ItemDrawSystem;
+        public static readonly Item.SpawnerSystem ItemSpawnSystem;
 
         public static readonly FileLoadingManager FileLoadingManager;
         public static readonly ECSInput.ProcessSystem ProcessSystem;
+
 
         static State()
         {
@@ -75,6 +81,10 @@ namespace Game
             FloatingTextUpdateSystem = new FloatingText.UpdateSystem();
             FloatingTextSpawnerSystem = new FloatingText.SpawnerSystem(entitasContext);
             FloatingTextDrawSystem = new FloatingText.DrawSystem();
+            AnimationUpdateSystem = new Animation.UpdateSystem();
+            ItemDrawSystem = new Item.DrawSystem(entitasContext);
+            ItemSpawnSystem = new Item.SpawnerSystem(entitasContext);
+            UnityImage2DCache = new Sprites.UnityImage2DCache();
         }
     }
 }

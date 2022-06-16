@@ -22,7 +22,7 @@ public class MiningLaser : MonoBehaviour
 
     // Laser Properties
     private bool isHeld = false;
-    public Vector2 offset = Vector2.zero;
+    public Vec2f offset = Vec2f.Zero;
 
     // Item Draw System
     Item.DrawSystem DrawSystem;

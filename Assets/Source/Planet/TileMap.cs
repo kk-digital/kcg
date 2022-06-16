@@ -30,7 +30,7 @@ namespace Planet
 
             for(int layerIndex = 0; layerIndex < Layers.Count; layerIndex++)
             {
-                int mapTileSize = mapSize.x * mapSize.y;
+                int mapTileSize = mapSize.X * mapSize.Y;
                 Tile.Tile[] layerTiles = new Tile.Tile[mapTileSize];
                 Layers.Tiles[layerIndex] = layerTiles;
                 for(int tileIndex = 0; tileIndex < mapTileSize; tileIndex++)
@@ -51,7 +51,7 @@ namespace Planet
         
         public ref Tile.Tile GetTileRef(int x, int y, Enums.Tile.MapLayerType planetLayer)
         {
-            return ref Layers.Tiles[(int)planetLayer][x + y * MapSize.x];
+            return ref Layers.Tiles[(int)planetLayer][x + y * MapSize.X];
         }
 
         public Tile.Tile[] GetTiles(Vec2i[] positions, Enums.Tile.MapLayerType planetLayer)
@@ -83,10 +83,10 @@ namespace Planet
         
         public void SetTile(int x, int y, Tile.Tile tile, Enums.Tile.MapLayerType planetLayer)
         {
-            if (x >= 0 && x < MapSize.x &&
-                        y >= 0 && y < MapSize.y)
+            if (x >= 0 && x < MapSize.X &&
+                        y >= 0 && y < MapSize.Y)
             {
-                Layers.Tiles[(int)planetLayer][x + y * MapSize.x] = tile;
+                Layers.Tiles[(int)planetLayer][x + y * MapSize.X] = tile;
             }
         }
 
