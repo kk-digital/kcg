@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Entitas;
 
@@ -7,24 +5,6 @@ public class SpawnEnemy : MonoBehaviour
 {
     // ATLAS
     [SerializeField] Material Material;
-
-    // Input Process System
-    ECSInput.ProcessSystem InputProcessSystems;
-
-    // Agent Spawner System
-    Agent.SpawnerSystem AgentSpawnerSystem;
-
-    // Physics Movable System
-    Physics.MovableSystem PhysicsMovableSystem;
-
-    // Agent Draw System
-    Agent.DrawSystem AgentDrawSystem;
-
-    // Agent Enemy System
-    Agent.EnemyAiSystem AgentEnemySystem;
-
-    // Agent Process Collision System
-    Physics.ProcessCollisionSystem AgentProcessCollisionSystem;
 
     // Inventory Manager System
     Inventory.ManagerSystem inventoryManagerSystem;
@@ -47,11 +27,11 @@ public class SpawnEnemy : MonoBehaviour
     // Slime Sprite ID
     private int SlimeMoveLeftBaseSpriteId;
 
-    // Agent ID
-    private int agentID = 1;
-
     // Is held or not
     private bool isHeld;
+
+    // Planet State
+    Planet.PlanetState planetState;
 
     void Start()
     {
@@ -61,6 +41,8 @@ public class SpawnEnemy : MonoBehaviour
         // Find Tile Map
         tileMap = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().TileMap;
 
+        planetState = new Planet.PlanetState(tileMap.MapSize);
+
         // Enemy Sprite Sheet ID
         int EnemySpriteSheetID = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
 
@@ -69,24 +51,6 @@ public class SpawnEnemy : MonoBehaviour
         GameState.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 1, 0, Enums.AtlasType.Agent);
         GameState.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 2, 0, Enums.AtlasType.Agent);
         GameState.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 3, 0, Enums.AtlasType.Agent);
-
-        // Create Input Process System
-        InputProcessSystems = new ECSInput.ProcessSystem();
-
-        // Create Spawner System
-        AgentSpawnerSystem = new Agent.SpawnerSystem();
-
-        // Physics Movable System
-        PhysicsMovableSystem = new Physics.MovableSystem();
-
-        // Agent Draw System
-        AgentDrawSystem = new Agent.DrawSystem();
-
-        // Agent Process Collision System
-        AgentProcessCollisionSystem = new Physics.ProcessCollisionSystem();
-
-        // Agent Enemy System
-        AgentEnemySystem = new Agent.EnemyAiSystem();
 
         // Assign Contexts
         contexts = Contexts.sharedInstance;
@@ -135,9 +99,11 @@ public class SpawnEnemy : MonoBehaviour
         Init = true;
     }
 
+    // Spawn Enemy
     private void SpawnEnemySlime(Vector2 pos)
     {
-        AgentSpawnerSystem.SpawnEnemy(Material, SlimeMoveLeftBaseSpriteId, 32, 32, pos, agentID++);
+        // Add Enemy to Enemy list
+        planetState.AddEnemy(Material, SlimeMoveLeftBaseSpriteId, 32, 32, pos);
     }
 
     private void InitializeItems()
@@ -189,25 +155,22 @@ public class SpawnEnemy : MonoBehaviour
 
             // Delete the old one
             foreach (var mr in GetComponentsInChildren<MeshRenderer>())
+            {
                 if (Application.isPlaying)
+                {
                     Destroy(mr.gameObject);
+                }
                 else
+                {
                     DestroyImmediate(mr.gameObject);
+                }
+            }
 
-            // Upate Input Process System
-            InputProcessSystems.Update();
-
-            // Update Physics Movable Systems
-            PhysicsMovableSystem.Update();
-
-            // Update Process Collision System
-            AgentProcessCollisionSystem.Update(tileMap);
-
-            // Update Draw System
-            AgentDrawSystem.Draw(Instantiate(Material), transform, 17);
+            // Inventory Draw System
+            inventoryDrawSystem.Draw(Instantiate(Material), transform, 100);
 
             // Update Inventory Draw System
-            inventoryDrawSystem.Draw(Instantiate(Material), transform, 100);
+            planetState.Update(Time.deltaTime, Material, transform);
         }
 
     }

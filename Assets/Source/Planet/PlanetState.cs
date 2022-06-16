@@ -171,8 +171,8 @@ namespace Planet
             GameState.InventoryManagerSystem.Update();
             GameState.FloatingTextUpdateSystem.Update(this, frameTime);
             
-            TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Front, Object.Instantiate(material), transform, 10);
-            TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Ore, Object.Instantiate(material), transform, 11);
+            //TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Front, Object.Instantiate(material), transform, 10);
+            //TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Ore, Object.Instantiate(material), transform, 11);
             GameState.DrawSystem.Draw(Object.Instantiate(material), transform, 12);
             GameState.FloatingTextDrawSystem.Draw(transform, 10000);
 
