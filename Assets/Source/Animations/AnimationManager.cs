@@ -85,6 +85,12 @@ namespace Animation
             TypeArray[CurrentIndex].FrameCount = frameCount;
         }
 
+        public void SetBaseSpriteID(int baseSpriteId)
+        {
+            if (CurrentIndex == -1) return;
+
+            TypeArray[CurrentIndex].BaseSpriteId = baseSpriteId;
+        }
 
         public void EndAnimation()
         {

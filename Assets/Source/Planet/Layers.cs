@@ -9,6 +9,7 @@ namespace Planet
         
         public Vector2Int MapSize;
         public Texture2D[] LayerTextures;
+        public Tile.Tile[][] Tiles;
         
         public void DrawLayer(Enums.Tile.MapLayerType planetLayer, Material material, Transform transform, int DrawOrder)
         {
