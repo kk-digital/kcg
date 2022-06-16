@@ -49,24 +49,24 @@ namespace Planet.Unity
         public void Initialize()
         {
             int tilesMoon = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png", 16, 16);
+                        Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png", 16, 16);
             int oreTileSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
+            Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
             
-            GameState.TileCreationApi.CreateTile(8);
-            GameState.TileCreationApi.SetTileName("ore_1");
-            GameState.TileCreationApi.SetTileTexture16(oreTileSheet, 0, 0);
-            GameState.TileCreationApi.EndTile();
+            Game.State.TileCreationApi.CreateTile(8);
+            Game.State.TileCreationApi.SetTileName("ore_1");
+            Game.State.TileCreationApi.SetTileTexture16(oreTileSheet, 0, 0);
+            Game.State.TileCreationApi.EndTile();
 
-            GameState.TileCreationApi.CreateTile(9);
-            GameState.TileCreationApi.SetTileName("glass");
-            GameState.TileCreationApi.SetTileSpriteSheet16(tilesMoon, 11, 10);
-            GameState.TileCreationApi.EndTile();
+            Game.State.TileCreationApi.CreateTile(9);
+            Game.State.TileCreationApi.SetTileName("glass");
+            Game.State.TileCreationApi.SetTileSpriteSheet16(tilesMoon, 11, 10);
+            Game.State.TileCreationApi.EndTile();
 
-            GameState.TileCreationApi.CreateTile(10);
-            GameState.TileCreationApi.SetTileName("moon");
-            GameState.TileCreationApi.SetTileSpriteSheet16(tilesMoon, 0, 0);
-            GameState.TileCreationApi.EndTile();
+            Game.State.TileCreationApi.CreateTile(10);
+            Game.State.TileCreationApi.SetTileName("moon");
+            Game.State.TileCreationApi.SetTileSpriteSheet16(tilesMoon, 0, 0);
+            Game.State.TileCreationApi.EndTile();
 
 
 

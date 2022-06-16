@@ -196,26 +196,4 @@ public class VehicleTest : MonoBehaviour
             }
         }
     }
-
-    // Draw Gizmos of collider (works only in editor mode)
-#if UNITY_EDITOR
-    public void OnDrawGizmos()
-    {
-        if (!Application.isPlaying) return;
-
-        var group = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.VehiclePhysicsState2D));
-
-        Gizmos.color = Color.green;
-
-        foreach (var entity in group)
-        {
-            var pos = entity.vehiclePhysicsState2D;
-            var boxCollider = entity.physicsBox2DCollider;
-            var boxBorders = Box.Create(pos.Position + boxCollider.Offset, boxCollider.Size);
-            var center = new UnityEngine.Vector3(boxBorders.Center.X, boxBorders.Center.Y, 0.0f);
-
-            Gizmos.DrawWireCube(center, new Vector3(boxCollider.Size.X, boxCollider.Size.Y, 0.0f));
-        }
-    }
-#endif
 }

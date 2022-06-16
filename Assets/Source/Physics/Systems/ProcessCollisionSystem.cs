@@ -47,8 +47,8 @@ namespace Physics
                             {
                                 if (!quarters.HasFlag(CircleQuarter.Right) && !quarters.HasFlag(CircleQuarter.Left))
                                 {
-                                    accelerationProcess.Y = Math.MakePositive(movable.Acceleration.X);
-                                    velocityProcess.Y = Math.MakePositive(movable.Velocity.X);
+                                    accelerationProcess.Y = KMath.KMath.MakePositive(movable.Acceleration.X);
+                                    velocityProcess.Y = KMath.KMath.MakePositive(movable.Velocity.X);
                                     Flag.Set(ref directionType, CircleQuarter.Top);
                                 }
                             }
@@ -56,22 +56,22 @@ namespace Physics
                             {
                                 if (movable.Acceleration.Y < 0f && movable.Velocity.Y < 0f)
                                 {
-                                    accelerationProcess.Y = -Math.MakePositive(movable.Acceleration.X);
-                                    velocityProcess.Y = -Math.MakePositive(movable.Velocity.X);
+                                    accelerationProcess.Y = -KMath.KMath.MakePositive(movable.Acceleration.X);
+                                    velocityProcess.Y = -KMath.KMath.MakePositive(movable.Velocity.X);
                                     Flag.Set(ref directionType, CircleQuarter.Bottom);
                                 }
                                 else if (movable.Acceleration.Y > 0f && movable.Velocity.Y > 0f)
                                 {
                                     if (quarters.HasFlag(CircleQuarter.RightTop))
                                     {
-                                        accelerationProcess.X = -Math.MakePositive(movable.Acceleration.Y);
-                                        velocityProcess.X = -Math.MakePositive(movable.Velocity.Y);
+                                        accelerationProcess.X = -KMath.KMath.MakePositive(movable.Acceleration.Y);
+                                        velocityProcess.X = -KMath.KMath.MakePositive(movable.Velocity.Y);
                                         Flag.Set(ref directionType, CircleQuarter.Bottom);
                                     }
                                     else if (quarters.HasFlag(CircleQuarter.LeftTop))
                                     {
-                                        accelerationProcess.X = Math.MakePositive(movable.Acceleration.Y);
-                                        velocityProcess.X = Math.MakePositive(movable.Velocity.Y);
+                                        accelerationProcess.X = KMath.KMath.MakePositive(movable.Acceleration.Y);
+                                        velocityProcess.X = KMath.KMath.MakePositive(movable.Velocity.Y);
                                         Flag.Set(ref directionType, CircleQuarter.Bottom);
                                     }
                                 }
@@ -131,7 +131,7 @@ namespace Physics
             foreach (var entity in entitiesWithBox)
             {
                 var pos = entity.physicsPosition2D;
-                var entityBoxBorders = Box.Create(new Vec2f(pos.PreviousValue.X, pos.Value.Y) + entity.physicsBox2DCollider.Offset, entity.physicsBox2DCollider.Size);
+                var entityBoxBorders = new AABB(new Vec2f(pos.PreviousValue.X, pos.Value.Y) + entity.physicsBox2DCollider.Offset, entity.physicsBox2DCollider.Size);
                 var movable = entity.physicsMovable;
                 
                 if (entityBoxBorders.IsCollidingBottom(tileMap, movable.Velocity))
@@ -146,7 +146,7 @@ namespace Physics
                 }
                 
                 pos = entity.physicsPosition2D;
-                entityBoxBorders = Box.Create(new Vec2f(pos.Value.X, pos.PreviousValue.Y) + entity.physicsBox2DCollider.Offset, entity.physicsBox2DCollider.Size);
+                entityBoxBorders = new AABB(new Vec2f(pos.Value.X, pos.PreviousValue.Y) + entity.physicsBox2DCollider.Offset, entity.physicsBox2DCollider.Size);
                 movable = entity.physicsMovable;
                 
                 if (entityBoxBorders.IsCollidingLeft(tileMap, movable.Velocity))

@@ -47,7 +47,7 @@ namespace Item
             if (ItemType == null)
                 return;
 
-            int spriteAtlasID = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteSheetID, 0, 0, Enums.AtlasType.Particle);
+            int spriteAtlasID = Game.State.SpriteAtlasManager.CopySpriteToAtlas(spriteSheetID, 0, 0, Enums.AtlasType.Particle);
             ItemType.AddItemAttributeSprite(spriteAtlasID);
         }
 
@@ -57,7 +57,7 @@ namespace Item
             if (ItemType == null)
                 return;
 
-            int spriteAtlasID = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteSheetID, 0, 0, Enums.AtlasType.Particle);
+            int spriteAtlasID = Game.State.SpriteAtlasManager.CopySpriteToAtlas(spriteSheetID, 0, 0, Enums.AtlasType.Particle);
             ItemType.AddItemAttributeInventorySprite(spriteAtlasID);
 
         }

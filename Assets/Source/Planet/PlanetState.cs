@@ -78,7 +78,7 @@ namespace Planet
         public FloatingTextEntity AddFloatingText(string text, float timeToLive, Vec2f velocity, Vec2f position)
         {
             ref FloatingTextEntity newEntity = ref FloatingTextList.Add();
-            GameEntity entity = GameState.FloatingTextSpawnerSystem.SpawnFloatingText(text, timeToLive, velocity, position, newEntity.Index);
+            GameEntity entity = Game.State.FloatingTextSpawnerSystem.SpawnFloatingText(text, timeToLive, velocity, position, newEntity.Index);
 
             newEntity.Entity = entity;
 

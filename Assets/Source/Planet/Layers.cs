@@ -35,7 +35,7 @@ namespace Planet
                     if (spriteId >= 0)
                     {
                         
-                        GameState.TileSpriteAtlasManager.GetSpriteBytes(spriteId, bytes);
+                        Game.State.TileSpriteAtlasManager.GetSpriteBytes(spriteId, bytes);
 
                         int tileX = (x * 32);
                         int tileY = (y * 32);

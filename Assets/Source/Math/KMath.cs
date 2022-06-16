@@ -1,10 +1,10 @@
 using UnityEngine;
 
 
-namespace Utility
+namespace KMath
 {
 
-    public static class Math
+    public static class KMath
     {
         public static float LengthSquared(Vector2 vector)
         {

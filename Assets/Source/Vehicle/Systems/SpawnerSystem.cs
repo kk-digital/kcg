@@ -18,16 +18,16 @@ namespace Vehicle
             vehicleID++;
 
             // Set Png Size
-            var pngSize = new Vector2Int(width, height);
+            var pngSize = new Vec2i(width, height);
 
             // Set Sprite ID from Sprite Atlas
-            var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
+            var spriteId = Game.State.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
 
             // Set Sprite Data
             byte[] spriteData = new byte[pngSize.x * pngSize.y * 4];
 
             // Get Sprite Bytes
-            GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, Enums.AtlasType.Agent);
+            Game.State.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, Enums.AtlasType.Agent);
 
             // Set Texture
             var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, pngSize.x, pngSize.y);
@@ -54,10 +54,10 @@ namespace Vehicle
 
         private GameObject BuildGameObject(int spriteID, Material material, Vector2Int spriteSize, Vector2 box2dCollider)
         {
-            var atlasIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
+            var atlasIndex = Game.State.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
 
             byte[] spriteBytes = new byte[spriteSize.x * spriteSize.y * 4];
-            GameState.SpriteAtlasManager.GetSpriteBytes(atlasIndex, spriteBytes, Enums.AtlasType.Agent);
+            Game.State.SpriteAtlasManager.GetSpriteBytes(atlasIndex, spriteBytes, Enums.AtlasType.Agent);
             var mat = UnityEngine.Object.Instantiate(material);
             var tex = CreateTextureFromRGBA(spriteBytes, spriteSize.x, spriteSize.y);
             mat.SetTexture("_MainTex", tex);

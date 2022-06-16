@@ -5,12 +5,12 @@ namespace Utility
 {
     public static class DrawDebug
     {
-        public static void DrawBox(this Box box)
+        public static void DrawBox(this AABB aabb)
         {
-            var bottomLeft = new Vector3(box.BottomLeft.X, box.BottomLeft.Y, 0f);
-            var bottomRight = new Vector3(box.BottomRight.X, box.BottomRight.Y, 0f);
-            var topLeft = new Vector3(box.TopLeft.X, box.TopLeft.Y, 0f);
-            var topRight = new Vector3(box.TopRight.X, box.TopRight.Y, 0f);
+            var bottomLeft = new Vector3(aabb.LeftBottom.X, aabb.LeftBottom.Y, 0f);
+            var bottomRight = new Vector3(aabb.RightBottom.X, aabb.RightBottom.Y, 0f);
+            var topLeft = new Vector3(aabb.LeftTop.X, aabb.LeftTop.Y, 0f);
+            var topRight = new Vector3(aabb.RightTop.X, aabb.RightTop.Y, 0f);
             
             Debug.DrawLine(bottomLeft, bottomRight, Color.red);
             Debug.DrawLine(bottomRight, topRight, Color.red);

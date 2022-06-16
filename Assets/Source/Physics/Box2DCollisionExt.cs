@@ -4,12 +4,12 @@ namespace Physics
 {
     public static class Box2DCollisionExt
     {
-        public static bool IsCollidingLeft(this Box borders, Planet.TileMap tileMap, Vec2f velocity)
+        public static bool IsCollidingLeft(this AABB borders, Planet.TileMap tileMap, Vec2f velocity)
         {
             if (velocity.X >= 0.0f) return false;
             
             int x = borders.Left;
-            for(int y = borders.Down; y <= borders.Up; y++)
+            for(int y = borders.Bottom; y <= borders.Top; y++)
             {
                 var edgePosition = new Vec2f(x, y);
                 if (tileMap.Borders.Intersects(edgePosition))
@@ -25,12 +25,12 @@ namespace Physics
             return false;
         }
 
-        public static bool IsCollidingRight(this Box borders, Planet.TileMap tileMap, Vec2f velocity)
+        public static bool IsCollidingRight(this AABB borders, Planet.TileMap tileMap, Vec2f velocity)
         {
             if (velocity.X <= 0.0f) return false;
             
             int x = borders.Right;
-            for(int y = borders.Down; y <= borders.Up; y++)
+            for(int y = borders.Bottom; y <= borders.Top; y++)
             {
                 var edgePosition = new Vec2f(x, y);
                 if (tileMap.Borders.Intersects(edgePosition))
@@ -46,11 +46,11 @@ namespace Physics
             return false;
         }
         
-        public static bool IsCollidingBottom(this Box borders, Planet.TileMap tileMap, Vec2f velocity)
+        public static bool IsCollidingBottom(this AABB borders, Planet.TileMap tileMap, Vec2f velocity)
         {
             if (velocity.Y >= 0.0f) return false;
             
-            int y = borders.Down;
+            int y = borders.Bottom;
             for(int x = borders.Left; x <= borders.Right; x++)
             {
                 var edgePosition = new Vec2f(x, y);
@@ -68,11 +68,11 @@ namespace Physics
             return false;
         }
 
-        public static bool IsCollidingTop(this Box borders, Planet.TileMap tileMap, Vec2f velocity)
+        public static bool IsCollidingTop(this AABB borders, Planet.TileMap tileMap, Vec2f velocity)
         {
             if (velocity.Y <= 0.0f) return false;
             
-            int y = borders.Up;
+            int y = borders.Top;
             for(int x = borders.Left; x <= borders.Right; x++)
             {
                 var edgePosition = new Vec2f(x, y);

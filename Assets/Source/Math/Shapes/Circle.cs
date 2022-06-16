@@ -102,19 +102,19 @@ namespace KMath
         
         public Vec2i[] GetTopLeftQuarter()
         {
-            var box = Box.Create(Center - Radius, new Vec2f(Radius * 2, Radius * 2));
+            var box = new AABB(Center - Radius, new Vec2f(Radius * 2, Radius * 2));
 
             int xDifference = (int) TopMiddle.X - box.Left + 1;
-            int yDifference = box.Up - (int) RightMiddle.Y;
+            int yDifference = box.Top - (int) RightMiddle.Y;
 
             var positions = new Vec2i[xDifference + yDifference];
             var index = 0;
                 
             for (int x = box.Left; x <= (int)TopMiddle.X; x++, index++)
             {
-                positions[index] = new Vec2i(x, box.Up);
+                positions[index] = new Vec2i(x, box.Top);
             }
-            for (int y = (int)LeftMiddle.Y; y <= box.Up - 1; y++, index++)
+            for (int y = (int)LeftMiddle.Y; y <= box.Top - 1; y++, index++)
             {
                 positions[index] = new Vec2i(box.Left, y);
             }
@@ -123,19 +123,19 @@ namespace KMath
         }
         public Vec2i[] GetTopRightQuarter()
         {
-            var box = Box.Create(Center - Radius, new Vec2f(Radius * 2, Radius * 2));
+            var box = new AABB(Center - Radius, new Vec2f(Radius * 2, Radius * 2));
 
             int xDifference = box.Right - (int) TopMiddle.X + 1;
-            int yDifference = box.Up - (int) RightMiddle.Y;
+            int yDifference = box.Top - (int) RightMiddle.Y;
 
             var positions = new Vec2i[xDifference + yDifference];
             var index = 0;
                 
             for (int x = (int)TopMiddle.X; x <= box.Right; x++, index++)
             {
-                positions[index] = new Vec2i(x, box.Up);
+                positions[index] = new Vec2i(x, box.Top);
             }
-            for (int y = (int)RightMiddle.Y; y <= box.Up - 1; y++, index++)
+            for (int y = (int)RightMiddle.Y; y <= box.Top - 1; y++, index++)
             {
                 positions[index] = new Vec2i(box.Right, y);
             }
@@ -145,19 +145,19 @@ namespace KMath
 
         public Vec2i[] GetBottomLeftQuarter()
         {
-            var box = Box.Create(Center - Radius, new Vec2f(Radius * 2, Radius * 2));
+            var box = new AABB(Center - Radius, new Vec2f(Radius * 2, Radius * 2));
 
             int xDifference = (int) BottomMiddle.X - box.Left + 1;
-            int yDifference = (int) RightMiddle.Y - box.Down;
+            int yDifference = (int) RightMiddle.Y - box.Bottom;
 
             var positions = new Vec2i[xDifference + yDifference];
             var index = 0;
                 
             for (int x = box.Left; x <= (int)BottomMiddle.X; x++, index++)
             {
-                positions[index] = new Vec2i(x, box.Down);
+                positions[index] = new Vec2i(x, box.Bottom);
             }
-            for (int y = box.Down + 1; y <= (int)LeftMiddle.Y; y++, index++)
+            for (int y = box.Bottom + 1; y <= (int)LeftMiddle.Y; y++, index++)
             {
                 positions[index] = new Vec2i(box.Left, y);
             }
@@ -166,19 +166,19 @@ namespace KMath
         }
         public Vec2i[] GetBottomRightQuarter()
         {
-            var box = Box.Create(Center - Radius, new Vec2f(Radius * 2, Radius * 2));
+            var box = new AABB(Center - Radius, new Vec2f(Radius * 2, Radius * 2));
 
             int xDifference = box.Right - (int) BottomMiddle.X + 1;
-            int yDifference = (int) RightMiddle.Y - box.Down;
+            int yDifference = (int) RightMiddle.Y - box.Bottom;
 
             var positions = new Vec2i[xDifference + yDifference];
             var index = 0;
                 
             for (int x = (int)BottomMiddle.X; x <= box.Right; x++, index++)
             {
-                positions[index] = new Vec2i(x, box.Down);
+                positions[index] = new Vec2i(x, box.Bottom);
             }
-            for (int y = box.Down + 1; y <= (int)RightMiddle.Y; y++, index++)
+            for (int y = box.Bottom + 1; y <= (int)RightMiddle.Y; y++, index++)
             {
                 positions[index] = new Vec2i(box.Right, y);
             }
@@ -189,9 +189,9 @@ namespace KMath
         #endregion
 
 
-        public static Circle Create(Vec2f position, float radius, Vec2f size)
+        public static Circle Create(Vec2f position, float radius, Vec2f spriteSize)
         {
-            var center = new Vec2f((position.X + position.X + size.X) / 2f, (position.Y + position.Y + size.Y) / 2f);
+            var center = new Vec2f((position.X + position.X + spriteSize.X) / 2f, (position.Y + position.Y + spriteSize.Y) / 2f);
 
             return new Circle
             {

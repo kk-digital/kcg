@@ -7,7 +7,7 @@ namespace Planet
     public class TileMap
     {
         public Vec2i MapSize;
-        public Box Borders;
+        public AABB Borders;
         public ChunkList Chunks;
         public Layers Layers;
         public HeightMap HeightMap;
@@ -18,7 +18,7 @@ namespace Planet
 
             Chunks = new ChunkList(mapSize);
             
-            Borders = Box.Create(Vec2f.zero, (Vec2f)mapSize * 16);
+            Borders = new AABB(Vec2f.zero, (Vec2f)mapSize * 16);
 
             HeightMap = new HeightMap(MapSize);
             Layers = new Layers
@@ -144,7 +144,7 @@ namespace Planet
                 
                 if (tile.Type >= 0)
                 {
-                    Tile.Type properties = GameState.TileCreationApi.GetTileProperties(tile.Type);
+                    Tile.Type properties = Game.State.TileCreationApi.GetTileProperties(tile.Type);
                     if (properties.AutoMapping)
                     {
                         // we have 4 neighbors per tile
