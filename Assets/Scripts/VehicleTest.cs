@@ -40,8 +40,11 @@ public class VehicleTest : MonoBehaviour
         // Initialize Vehicle Collision System
         vehicleCollisionSystem = new Vehicle.ProcessCollisionSystem();
 
+        // Initialize Image
+        int image = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\vehicles\\Speeder_chassis.png", 128, 96);
+
         // Loading Image
-        vehicleSpawnerSystem.SpawnVehicle("Assets\\StreamingAssets\\assets\\luis\\vehicles\\Jet_chassis.png", 144, 96, Material, new Vector2(-5.0f, 0));
+        vehicleSpawnerSystem.SpawnVehicle(Material, image, 128, 96, new Vector2(-5.0f, 0));
 
         // Initialize Planet Tile Map
         tileMap = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().TileMap;
@@ -59,15 +62,138 @@ public class VehicleTest : MonoBehaviour
 
         // Update Gravity
         if (canUpdateGravity)
-            vehiclePhysics.UpdateGravity(Contexts.sharedInstance);
+          vehiclePhysics.UpdateGravity(Contexts.sharedInstance);
 
         // Update Collision Physics
         vehicleCollisionSystem.Update(tileMap);
 
-
         // Draw Vehicle
-        vehicleDrawSystem.Draw(Instantiate(Material), transform, 12);
+        vehicleDrawSystem.Draw(Instantiate(Material), transform, 17);
 
+        Controls();
+    }
+
+    private GameEntity vehicleEntity;
+
+    void Controls()
+    {
+        if (Input.GetKey(KeyCode.A))
+        {
+            // Get Vehicle Entites
+            IGroup<GameEntity> entities =
+                Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+            foreach (var vehicle in entities)
+            {
+                vehicleEntity = vehicle;
+
+                // Get scale from component
+                vehicle.ReplaceVehiclePhysicsState2D(vehicle.vehiclePhysicsState2D.Position, vehicle.vehiclePhysicsState2D.TempPosition, new Vector2(-vehicle.vehiclePhysicsState2D.Scale.x, vehicle.vehiclePhysicsState2D.Scale.y), vehicle.vehiclePhysicsState2D.Scale, vehicle.vehiclePhysicsState2D.angularVelocity, vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
+                     vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
+            }
+
+            float velocity = Mathf.Lerp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, -1.0f, vehicleEntity.vehiclePhysicsState2D.angularAcceleration * Time.deltaTime);
+
+            vehiclePhysics.ProcessMovement(new Vector2(velocity, vehicleEntity.vehiclePhysicsState2D.angularVelocity.y), Contexts.sharedInstance);
+        }
+        else if (Input.GetKeyUp(KeyCode.A))
+        {
+            // Get Vehicle Entites
+            IGroup<GameEntity> entities =
+                Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+            foreach (var vehicle in entities)
+            {
+                vehicleEntity = vehicle;
+
+                StartCoroutine(vehiclePhysics.Break(true, vehicleEntity.vehiclePhysicsState2D.angularVelocity, Contexts.sharedInstance));
+            }
+        }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            // Get Vehicle Entites
+            IGroup<GameEntity> entities =
+                Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+            foreach (var vehicle in entities)
+            {
+                vehicleEntity = vehicle;
+                // Get scale from component
+                vehicle.ReplaceVehiclePhysicsState2D(vehicle.vehiclePhysicsState2D.Position, vehicle.vehiclePhysicsState2D.TempPosition, new Vector2(vehicle.vehiclePhysicsState2D.Scale.x, vehicle.vehiclePhysicsState2D.Scale.y), vehicle.vehiclePhysicsState2D.Scale, vehicle.vehiclePhysicsState2D.angularVelocity, vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
+                     vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
+            }
+
+            float velocity = Mathf.Lerp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, 1.0f, vehicleEntity.vehiclePhysicsState2D.angularAcceleration * Time.deltaTime);
+
+            vehiclePhysics.ProcessMovement(new Vector2(velocity, vehicleEntity.vehiclePhysicsState2D.angularVelocity.y), Contexts.sharedInstance);
+        }
+        else if (Input.GetKeyUp(KeyCode.D))
+        {
+            // Get Vehicle Entites
+            IGroup<GameEntity> entities =
+                Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+            foreach (var vehicle in entities)
+            {
+                vehicleEntity = vehicle;
+
+                StartCoroutine(vehiclePhysics.Break(true, vehicleEntity.vehiclePhysicsState2D.angularVelocity, Contexts.sharedInstance));
+            }
+        }
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            canUpdateGravity = false;
+            // Get Vehicle Entites
+            IGroup<GameEntity> entities =
+                Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+            foreach (var vehicle in entities)
+            {
+                vehicleEntity = vehicle;
+            }
+
+            float velocity = Mathf.Lerp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.y, 1.0f, vehicleEntity.vehiclePhysicsState2D.angularAcceleration * Time.deltaTime);
+            vehiclePhysics.ProcessMovement(new Vector2(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, velocity), Contexts.sharedInstance);
+        }
+        else if (Input.GetKeyUp(KeyCode.W))
+        {
+            canUpdateGravity = true;
+            // Get Vehicle Entites
+            IGroup<GameEntity> entities =
+                Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+            foreach (var vehicle in entities)
+            {
+                vehicleEntity = vehicle;
+
+                StartCoroutine(vehiclePhysics.Break(false, vehicleEntity.vehiclePhysicsState2D.angularVelocity, Contexts.sharedInstance));
+            }
+        }
+
+        if (Input.GetKey(KeyCode.S))
+        {
+            canUpdateGravity = false;
+            // Get Vehicle Entites
+            IGroup<GameEntity> entities =
+                Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+            foreach (var vehicle in entities)
+            {
+                vehicleEntity = vehicle;
+            }
+
+            float velocity = Mathf.Lerp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.y, -1.0f, vehicleEntity.vehiclePhysicsState2D.angularAcceleration * Time.deltaTime);
+
+            vehiclePhysics.ProcessMovement(new Vector2(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, velocity), Contexts.sharedInstance);
+        }
+        else if (Input.GetKeyUp(KeyCode.S))
+        {
+            canUpdateGravity = true;
+            // Get Vehicle Entites
+            IGroup<GameEntity> entities =
+                Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+            foreach (var vehicle in entities)
+            {
+                vehicleEntity = vehicle;
+
+                StartCoroutine(vehiclePhysics.Break(false, vehicleEntity.vehiclePhysicsState2D.angularVelocity, Contexts.sharedInstance));
+            }
+        }
     }
 
     // Draw Gizmos of collider (works only in editor mode)

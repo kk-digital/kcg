@@ -6,21 +6,18 @@ namespace Vehicle
 {
     public class SpawnerSystem
     {
-        private static int vehiceID;
+        private static int vehicleID;
 
-        public Entity SpawnVehicle(string spritePath, int witdh, int height, Material material, Vector2 position)
+        public Entity SpawnVehicle(Material material, int spriteID, int width, int height, Vector2 position)
         {
             // Create Entity
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
             // Increase ID per object statically
-            vehiceID++;
+            vehicleID++;
 
             // Set Png Size
-            var pngSize = new Vector2Int(witdh, height);
-
-            // Set Sprite ID from Sheet ID
-            var spriteID = GameState.SpriteLoader.GetSpriteSheetID(spritePath, pngSize.x, pngSize.y);
+            var pngSize = new Vector2Int(width, height);
 
             // Set Sprite ID from Sprite Atlas
             var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
@@ -38,14 +35,14 @@ namespace Vehicle
             var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
 
             // Add ID Component
-            entity.AddVehicleID(vehiceID);
+            entity.AddVehicleID(vehicleID);
 
             // Add Sprite Component
             entity.AddVehicleSprite2D(texture, spriteSize);
 
             // Add Physics State 2D Component
-            entity.AddVehiclePhysicsState2D(position, position, Vector2.one, Vector2.one,
-                Vector2.zero, 1.0f, 1.0f, 1.5f, Vector2.zero);
+            entity.AddVehiclePhysicsState2D(position, position, Vector2.one, Vector2.one, Vector2.zero, 1.0f, 1.0f, 1.5f,
+                Vector2.zero);
 
             // Add Physics Box Collider Component
             entity.AddPhysicsBox2DCollider(spriteSize, Vector2.zero);

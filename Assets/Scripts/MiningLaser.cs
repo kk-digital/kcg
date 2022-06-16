@@ -16,19 +16,36 @@ public class MiningLaser : MonoBehaviour
     // Entitas Contexts
     Contexts contexts;
 
-    // Item Spawner System
-    Item.SpawnerSystem SpawnerSystem;
-    
-    // Item Draw System
-    Item.DrawSystem DrawSystem;
-
     // Initialize
     private bool Init;
     private Vector2 laserPosition;
 
+    // Laser Properties
+    private bool isHeld = false;
+    public Vector2 offset = Vector2.zero;
+
+    // Item Draw System
+    Item.DrawSystem DrawSystem;
+
+    // Inventory Manager System
+    Inventory.ManagerSystem inventoryManagerSystem;
+
+    // Inventory Draw System
+    Inventory.DrawSystem inventoryDrawSystem;
+
+    // Item Spawner System
+    Item.SpawnerSystem itemSpawnSystem;
+
+    // Input Process System
+    ECSInput.ProcessSystem inputProcessSystem;
+
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
     void Start()
     {
+        // Initialize the mining laser item
+        Initialize();
+
+        // Laser Position
         laserPosition = new Vector2(2.0f, 2.5f);
 
         tileMap = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().TileMap;
@@ -36,14 +53,54 @@ public class MiningLaser : MonoBehaviour
         // Assign Contexts
         contexts = Contexts.sharedInstance;
 
-        // Assign Spawner System
-        SpawnerSystem = new Item.SpawnerSystem(contexts);
-
         // Assign Draw System
         DrawSystem = new Item.DrawSystem(contexts);
 
-        // Initialize the mining laser
-        Initialize();
+        // Create Inventory Manager System
+        inventoryManagerSystem = new Inventory.ManagerSystem(contexts);
+
+        // Create Item Spawner System
+        itemSpawnSystem = new Item.SpawnerSystem(contexts);
+
+        // Create Draw System
+        inventoryDrawSystem = new Inventory.DrawSystem(contexts);
+
+        // Create Input Process System
+        inputProcessSystem = new ECSInput.ProcessSystem();
+
+        // Create Inventory Attacher
+        var inventoryAttacher = Inventory.InventoryAttacher.Instance;
+
+        // Create Agent and inventory.
+        int agentID = 1;
+        int inventoryWidth = 6;
+        int inventoryHeight = 5;
+        int toolBarSize = 8;
+
+        GameEntity playerEntity = contexts.game.CreateEntity();
+        playerEntity.ReplaceAgentID(agentID);
+        playerEntity.isAgentPlayer = true;
+        inventoryAttacher.AttachInventoryToAgent(inventoryWidth, inventoryHeight, agentID);
+        inventoryAttacher.AttachToolBarToPlayer(toolBarSize, agentID);
+
+        int inventoryID = playerEntity.agentInventory.InventoryID;
+        int toolBarID = playerEntity.agentToolBar.ToolBarID;
+
+        // Add item to tool bar.
+        {
+            GameEntity entity = itemSpawnSystem.SpawnIventoryItem(Enums.ItemType.Gun);
+            inventoryManagerSystem.AddItem(entity, toolBarID);
+        }
+
+        // Test not stackable items.
+        for (uint i = 0; i < 10; i++)
+        {
+            GameEntity entity = itemSpawnSystem.SpawnIventoryItem(Enums.ItemType.Gun);
+            inventoryManagerSystem.AddItem(entity, inventoryID);
+        }
+
+        // Initialize Laser Object
+        InitializeLaser();
     }
 
     private void Initialize()
@@ -51,23 +108,26 @@ public class MiningLaser : MonoBehaviour
         // Get Sheet ID
         int laserSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\lasergun-temp.png", 195, 79);
 
-        // Create Item Entity
-        Item.CreationApi.Instance.CreateItem(Enums.ItemType.Gun, "Laser");
+        // Create Item
+        Item.CreationApi.Instance.CreateItem(Enums.ItemType.Gun, "LaserItem");
 
-        // Create Texture
+        // Set texture of item
         Item.CreationApi.Instance.SetTexture(laserSpriteSheet);
 
-        // Create Inventory Texture
+        // Create Inventory texture
         Item.CreationApi.Instance.SetInventoryTexture(laserSpriteSheet);
 
         // Create Size Component
         Item.CreationApi.Instance.SetSize(new Vector2(1.0f, 0.5f));
 
-        // End
+        // End of the item
         Item.CreationApi.Instance.EndItem();
+    }
 
+    private void InitializeLaser()
+    {
         // Spawn the created item
-        SpawnerSystem.SpawnItem(Enums.ItemType.Gun, laserPosition);
+        itemSpawnSystem.SpawnItem(Enums.ItemType.Gun, laserPosition);
 
         // Initializon done
         Init = true;
@@ -78,6 +138,29 @@ public class MiningLaser : MonoBehaviour
     {
         if (Init)
         {
+            // Get Slot Entites
+            IGroup<GameEntity> entities =
+            contexts.game.GetGroup(GameMatcher.InventorySlots);
+            foreach (var slots in entities)
+            {
+                if (slots.inventorySlots.Selected == 1)
+                {
+                    isHeld = true;
+                }
+                else
+                {
+                    isHeld = false;
+                }
+            }
+
+            // Get Laser Position
+            IGroup<GameEntity> Laserentities =
+            contexts.game.GetGroup(GameMatcher.PhysicsPosition2D);
+            foreach (var laser in Laserentities)
+            {
+                laserPosition = laser.physicsPosition2D.Value;
+            }
+
             // Delete the old one
             foreach (var mr in GetComponentsInChildren<MeshRenderer>())
             {
@@ -92,9 +175,14 @@ public class MiningLaser : MonoBehaviour
             }
 
             // Draw System Update
-            DrawSystem.Draw(Instantiate(Material), transform, 14);
+            inputProcessSystem.Update();
+            inventoryDrawSystem.Draw(Instantiate(Material), transform, 100);
 
-            if (Input.GetKey(KeyCode.Mouse0))
+            // If laser held, draw it.
+            if(isHeld)
+                DrawSystem.Draw(Instantiate(Material), transform, 16);
+
+            if (Input.GetKey(KeyCode.Mouse0) && isHeld)
             {
                 Vector3 mousePos = Input.mousePosition;
                 mousePos.z = Camera.main.nearClipPlane;
@@ -103,8 +191,8 @@ public class MiningLaser : MonoBehaviour
                 // Create new start and end position based on mouse position
                 Cell start = new Cell
                 {
-                    x = (int)laserPosition.x,
-                    y = (int)laserPosition.y
+                    x = (int)laserPosition.x + (int)offset.x,
+                    y = (int)laserPosition.y + (int)offset.y
                 };
 
                 Cell end = new Cell
