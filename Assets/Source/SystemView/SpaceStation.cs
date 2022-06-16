@@ -7,7 +7,7 @@ namespace SystemView
         public List<SystemShip>         LandedShips = new();
         public List<SystemShip>         OwnedShips  = new();
 
-        public SystemViewBody           Self        = new();
+        public SpaceObject              Self        = new();
         public OrbitingObjectDescriptor Descriptor;
 
         public SpaceStation()

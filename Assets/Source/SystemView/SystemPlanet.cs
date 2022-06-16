@@ -2,15 +2,14 @@ namespace SystemView
 {
     public class SystemPlanet
     {
-        public SystemViewBody           Self;
+        public SpaceObject              Self;
         public OrbitingObjectDescriptor Descriptor;
 
         // todo: add more properties
 
         public SystemPlanet()
         {
-            Self       = new SystemViewBody();
-            Self.Mass  = 5000.0f;
+            Self       = new SpaceObject();
             Descriptor = new OrbitingObjectDescriptor(Self);
         }
     }

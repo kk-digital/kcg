@@ -11,7 +11,7 @@ namespace SystemView
         public SystemShip Self;
         public ShipWeapon Weapon;
 
-        public SystemViewBody Body;
+        public SpaceObject Body;
 
         public float TimeElapsed;
         public float LifeSpan;
@@ -28,7 +28,7 @@ namespace SystemView
         public ShipWeaponProjectile()
         {
             Body = new();
-            Body.Mass = 1.0f;
+            Body.mass = 1.0f;
         }
 
         public bool UpdatePosition(float dt)
@@ -41,8 +41,8 @@ namespace SystemView
 
             if (Descriptor == null) // Linear trajectory
             {
-                Body.PosX += dt * Body.VelX;
-                Body.PosY += dt * Body.VelY;
+                Body.posx += dt * Body.velx;
+                Body.posy += dt * Body.vely;
             }
             /*else // Orbital trajectory todo
             {
@@ -59,8 +59,8 @@ namespace SystemView
 
         public bool InRangeOf(SystemShip Target, float AcceptableRange)
         {
-            float dx = Body.PosX - Target.Self.PosX;
-            float dy = Body.PosY - Target.Self.PosY;
+            float dx = Body.posx - Target.self.posx;
+            float dy = Body.posy - Target.self.posy;
 
             return Target != null && Math.Sqrt(dx * dx + dy * dy) < AcceptableRange;
         }

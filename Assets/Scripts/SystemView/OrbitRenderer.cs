@@ -37,23 +37,23 @@ namespace SystemView
             float cos = (float)Math.Cos(angle);
 
             // sine and cosine of the rotation
-            float rotsin = (float)Math.Sin(descriptor.Rotation);
-            float rotcos = (float)Math.Cos(descriptor.Rotation);
+            float rotsin = (float)Math.Sin(descriptor.rotation);
+            float rotcos = (float)Math.Cos(descriptor.rotation);
 
             // eccentricity
-            float c = descriptor.EccentricDistance;
+            float c = descriptor.linear_eccentricity;
 
             float x = 1.0f;
             float y = 0.0f;
 
             for (int i = 0; i < segments; i++)
             {
-                float vx = x * descriptor.SemiMajorAxis - c;
-                float vy = y * descriptor.SemiMinorAxis;
+                float vx = x * descriptor.semimajoraxis - c;
+                float vy = y * descriptor.semiminoraxis;
 
                 vertices[i] = new Vector3(
-                    rotcos * vx - rotsin * vy + descriptor.CentralBody.PosX,
-                    rotsin * vx + rotcos * vy + descriptor.CentralBody.PosY,
+                    rotcos * vx - rotsin * vy + descriptor.central_body.posx,
+                    rotsin * vx + rotcos * vy + descriptor.central_body.posy,
                     0.0f
                 );
 

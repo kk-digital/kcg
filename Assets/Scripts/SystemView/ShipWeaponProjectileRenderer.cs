@@ -26,14 +26,14 @@ namespace SystemView
 
             Scale = (float)Math.Log(Projectile.Damage * 0.3f) * 0.6f;
 
-            sr.transform.position = new Vector3(Projectile.Body.PosX, Projectile.Body.PosY, -0.06f);
+            sr.transform.position = new Vector3(Projectile.Body.posx, Projectile.Body.posy, -0.06f);
             sr.transform.localScale = new Vector3(Scale / Camera.scale, Scale / Camera.scale, 1.0f);
             sr.color = Projectile.ProjectileColor;
         }
 
         void Update()
         {
-            sr.transform.position = new Vector3(Projectile.Body.PosX, Projectile.Body.PosY, -0.06f);
+            sr.transform.position = new Vector3(Projectile.Body.posx, Projectile.Body.posy, -0.06f);
             sr.transform.localScale = new Vector3(Scale / Camera.scale, Scale / Camera.scale, 1.0f);
             sr.color = Projectile.ProjectileColor;
         }

@@ -80,12 +80,12 @@ namespace SystemView
         // Update is called once per frame
         void Update()
         {
-            ShipRender.transform.position     = new Vector3(ship.Self.PosX, ship.Self.PosY, -0.1f);
+            ShipRender.transform.position     = new Vector3(ship.self.posx, ship.self.posy, -0.1f);
             ShipRender.transform.localScale   = new Vector3(5.0f * width / Camera.scale, 5.0f / Camera.scale, 1.0f);
 
             ShipRender.transform.Rotate(new Vector3(0.0f, 0.0f, (ship.Rotation - LastRotation) * 180.0f / 3.1415926f));
 
-            ShieldRender.transform.position   = new Vector3(ship.Self.PosX, ship.Self.PosY, -0.05f);
+            ShieldRender.transform.position   = new Vector3(ship.self.posx, ship.self.posy, -0.05f);
             ShieldRender.transform.localScale = new Vector3(20.0f / Camera.scale, 15.0f / Camera.scale, 1.0f);
 
             ShieldRender.transform.Rotate(new Vector3(0.0f, 0.0f, (ship.Rotation - LastRotation) * 180.0f / 3.1415926f));
@@ -99,20 +99,20 @@ namespace SystemView
             else
                 ShieldRender.color = new Color(shieldColor.r, shieldColor.g, shieldColor.b, shieldColor.a * ship.Shield / ship.MaxShield);
 
-            float v = (float)Math.Sqrt(ship.Self.VelX * ship.Self.VelX + ship.Self.VelY * ship.Self.VelY);
+            float v = (float)Math.Sqrt(ship.self.velx * ship.self.velx + ship.self.vely * ship.self.vely);
             if (ship.Weapons.Count > 0 && v > 0.0f)
             {
                 Vector3[] vertices = new Vector3[2];
-                vertices[0] = new Vector3(ship.Self.PosX, ship.Self.PosY, -0.075f);
-                vertices[1] = new Vector3(ship.Self.PosX + (float)Math.Cos(ship.Rotation) * 10.0f / Camera.scale, ship.Self.PosY + (float)Math.Sin(ship.Rotation) * 10.0f / Camera.scale, -0.075f);
+                vertices[0] = new Vector3(ship.self.posx, ship.self.posy, -0.075f);
+                vertices[1] = new Vector3(ship.self.posx + (float)Math.Cos(ship.Rotation) * 10.0f / Camera.scale, ship.self.posy + (float)Math.Sin(ship.Rotation) * 10.0f / Camera.scale, -0.075f);
                 DirectionRenderer.SetPositions(vertices);
                 DirectionRenderer.positionCount = 2;
                 DirectionRenderer.startColor = DirectionRenderer.endColor = directionColor;
                 DirectionRenderer.startWidth = DirectionRenderer.endWidth = 0.2f / Camera.scale;
 
                 Vector3[] vertices2 = new Vector3[2];
-                vertices2[0] = new Vector3(ship.Self.PosX, ship.Self.PosY, -0.075f);
-                vertices2[1] = new Vector3(ship.Self.PosX + ship.Self.VelX / v * 10.0f / Camera.scale, ship.Self.PosY + ship.Self.VelY / v * 10.0f / Camera.scale, -0.075f);
+                vertices2[0] = new Vector3(ship.self.posx, ship.self.posy, -0.075f);
+                vertices2[1] = new Vector3(ship.self.posx + ship.self.velx / v * 10.0f / Camera.scale, ship.self.posy + ship.self.vely / v * 10.0f / Camera.scale, -0.075f);
                 VelocityRenderer.SetPositions(vertices2);
                 VelocityRenderer.positionCount = 2;
                 VelocityRenderer.startColor = VelocityRenderer.endColor = velocityColor;

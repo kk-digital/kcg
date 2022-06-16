@@ -7,8 +7,8 @@ namespace SystemView
 {
     public class LaserTower : MonoBehaviour
     {
-        public float PosX;
-        public float PosY;
+        public float posx;
+        public float posy;
 
         public float AngularVelocity;
         public float Rotation;
@@ -58,8 +58,8 @@ namespace SystemView
         {
             rand = new System.Random();
 
-            PosX = (float)rand.NextDouble() * 50.0f - 25.0f;
-            PosY = (float)rand.NextDouble() * 50.0f - 25.0f;
+            posx = (float)rand.NextDouble() * 50.0f - 25.0f;
+            posy = (float)rand.NextDouble() * 50.0f - 25.0f;
 
             AngularVelocity = 0.4f;
             Rotation = 0.0f;
@@ -114,7 +114,7 @@ namespace SystemView
         // Update is called once per frame
         void Update()
         {
-            sr.transform.position = new Vector3(PosX, PosY, -0.1f);
+            sr.transform.position = new Vector3(posx, posy, -0.1f);
             sr.transform.localScale = new Vector3(5.0f / Camera.scale, 5.0f / Camera.scale, 1.0f);
 
             sr.transform.Rotate(new Vector3(0.0f, 0.0f, (Rotation - LastRotation) * 180.0f / 3.1415926f));
@@ -123,11 +123,11 @@ namespace SystemView
             Vector3[] vertices1 = new Vector3[2];
             Vector3[] vertices2 = new Vector3[2];
 
-            vertices1[0] = new Vector3(PosX, PosY, 0.0f);
-            vertices1[1] = new Vector3(PosX + (float)Math.Cos(Rotation - FOV / 2.0f) * Range, PosY + (float)Math.Sin(Rotation - FOV / 2.0f) * Range, 0.0f);
+            vertices1[0] = new Vector3(posx, posy, 0.0f);
+            vertices1[1] = new Vector3(posx + (float)Math.Cos(Rotation - FOV / 2.0f) * Range, posy + (float)Math.Sin(Rotation - FOV / 2.0f) * Range, 0.0f);
 
-            vertices2[0] = new Vector3(PosX, PosY, 0.0f);
-            vertices2[1] = new Vector3(PosX + (float)Math.Cos(Rotation + FOV / 2.0f) * Range, PosY + (float)Math.Sin(Rotation + FOV / 2.0f) * Range, 0.0f);
+            vertices2[0] = new Vector3(posx, posy, 0.0f);
+            vertices2[1] = new Vector3(posx + (float)Math.Cos(Rotation + FOV / 2.0f) * Range, posy + (float)Math.Sin(Rotation + FOV / 2.0f) * Range, 0.0f);
 
             DebugLineRenderer1.startWidth = DebugLineRenderer1.endWidth = DebugLineRenderer2.startWidth = DebugLineRenderer2.endWidth = 0.1f / Camera.scale;
             DebugLineRenderer1.startColor = DebugLineRenderer1.endColor = DebugLineRenderer2.startColor = DebugLineRenderer2.endColor = DebugConeColor;
@@ -166,8 +166,8 @@ namespace SystemView
             // Pick target
             if (Target != null)
             {
-                float DistanceX = Target.Self.PosX - PosX;
-                float DistanceY = Target.Self.PosY - PosY;
+                float DistanceX = Target.self.posx - posx;
+                float DistanceY = Target.self.posy - posy;
                 float Distance  = (float)Math.Sqrt(DistanceX * DistanceX + DistanceY * DistanceY);
 
                 if (Distance > Range) Target = null;
@@ -178,8 +178,8 @@ namespace SystemView
                 if (State != null) foreach (SystemShip Ship in State.Ships)
                 {
 
-                    float DistanceX = Ship.Self.PosX - PosX;
-                    float DistanceY = Ship.Self.PosY - PosY;
+                    float DistanceX = Ship.self.posx - posx;
+                    float DistanceY = Ship.self.posy - posy;
                     float Distance = (float)Math.Sqrt(DistanceX * DistanceX + DistanceY * DistanceY);
 
                     if (Distance <= Range) { Target = Ship; break; }
@@ -197,8 +197,8 @@ namespace SystemView
 
         public bool TryTargeting(SystemShip ship, int CurrentMillis)
         {
-            float DistanceX = ship.Self.PosX - PosX;
-            float DistanceY = ship.Self.PosY - PosY;
+            float DistanceX = ship.self.posx - posx;
+            float DistanceY = ship.self.posy - posy;
             float Distance = (float)Math.Sqrt(DistanceX * DistanceX + DistanceY * DistanceY);
 
             while (Rotation < 0.0f) Rotation = 2.0f * 3.1415926f + Rotation;
@@ -207,7 +207,7 @@ namespace SystemView
             if (Distance > Range) return false;
 
             float Angle = (float)Math.Acos(DistanceX / Distance);
-            if (ship.Self.PosY < PosY) Angle = 2.0f * 3.1415926f - Angle;
+            if (ship.self.posy < posy) Angle = 2.0f * 3.1415926f - Angle;
 
             if (Rotation == Angle) return true;
 
@@ -249,8 +249,8 @@ namespace SystemView
         {
             if (Cooldown > 0) return false;
 
-            float DistanceX = Target.Self.PosX - PosX;
-            float DistanceY = Target.Self.PosY - PosY;
+            float DistanceX = Target.self.posx - posx;
+            float DistanceY = Target.self.posy - posy;
             float Distance = (float)Math.Sqrt(DistanceX * DistanceX + DistanceY * DistanceY);
 
             if (Rotation < 0.0f) Rotation = 2.0f * 3.1415926f + Rotation;
@@ -259,13 +259,13 @@ namespace SystemView
             if (Distance > Range) return false;
 
             float Angle = (float)Math.Acos(DistanceX / Distance);
-            if (Target.Self.PosY < PosY) Angle = 2.0f * 3.1415926f - Angle;
+            if (Target.self.posy < posy) Angle = 2.0f * 3.1415926f - Angle;
 
             if (Angle > Rotation + FOV / 2.0f || Angle < Rotation - FOV / 2.0f) return false;
 
             Vector3[] vertices = new Vector3[2];
-            vertices[0] = new Vector3(PosX, PosY, 0.0f);
-            vertices[1] = new Vector3(Target.Self.PosX, Target.Self.PosY, 0.0f);
+            vertices[0] = new Vector3(posx, posy, 0.0f);
+            vertices[1] = new Vector3(Target.self.posx, Target.self.posy, 0.0f);
             LaserLineRenderer.SetPositions(vertices);
             LaserLineRenderer.positionCount = 2;
 

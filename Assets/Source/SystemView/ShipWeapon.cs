@@ -44,8 +44,8 @@ namespace SystemView
             Cooldown -= CurrentTime;
             if (Cooldown < 0) Cooldown = 0;
 
-            float dx = Target.Self.PosX - Self.Self.PosX;
-            float dy = Target.Self.PosY - Self.Self.PosY;
+            float dx = Target.self.posx - Self.self.posx;
+            float dy = Target.self.posy - Self.self.posy;
 
             float d = (float)Math.Sqrt(dx * dx + dy * dy);
 
@@ -65,11 +65,11 @@ namespace SystemView
                 Projectile.Self = Self;
                 Projectile.Weapon = this;
 
-                Projectile.Body.PosX = Self.Self.PosX;
-                Projectile.Body.PosY = Self.Self.PosY;
+                Projectile.Body.posx = Self.self.posx;
+                Projectile.Body.posy = Self.self.posy;
 
-                Projectile.Body.VelX = (Target.Self.PosX - Self.Self.PosX) / d * ProjectileVelocity;
-                Projectile.Body.VelY = (Target.Self.PosY - Self.Self.PosY) / d * ProjectileVelocity;
+                Projectile.Body.velx = (Target.self.posx - Self.self.posx) / d * ProjectileVelocity;
+                Projectile.Body.vely = (Target.self.posy - Self.self.posy) / d * ProjectileVelocity;
             //}
 
             Projectile.TimeElapsed            = 0.0f;
@@ -103,11 +103,11 @@ namespace SystemView
                 Projectile.Self = Self;
                 Projectile.Weapon = this;
 
-                Projectile.Body.PosX = Self.Self.PosX;
-                Projectile.Body.PosY = Self.Self.PosY;
+                Projectile.Body.posx = Self.self.posx;
+                Projectile.Body.posy = Self.self.posy;
 
-                float dx = x - Self.Self.PosX;
-                float dy = y - Self.Self.PosY;
+                float dx = x - Self.self.posx;
+                float dy = y - Self.self.posy;
 
                 float d = (float)Math.Sqrt(dx * dx + dy * dy);
 
@@ -118,8 +118,8 @@ namespace SystemView
                 float cos = (float)Math.Cos(angle);
                 float sin = (float)Math.Sin(angle);
 
-                Projectile.Body.VelX = cos * (float)Math.Sqrt(ProjectileVelocity * ProjectileVelocity - sin * sin) + Self.Self.VelX;
-                Projectile.Body.VelY = sin * (float)Math.Sqrt(ProjectileVelocity * ProjectileVelocity - cos * cos) + Self.Self.VelY;
+                Projectile.Body.velx = cos * (float)Math.Sqrt(ProjectileVelocity * ProjectileVelocity - sin * sin) + Self.self.velx;
+                Projectile.Body.vely = sin * (float)Math.Sqrt(ProjectileVelocity * ProjectileVelocity - cos * cos) + Self.self.vely;
 
                 Projectile.TimeElapsed = 0.0f;
                 Projectile.LifeSpan = Range / ProjectileVelocity;

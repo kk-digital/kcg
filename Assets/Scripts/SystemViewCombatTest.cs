@@ -45,9 +45,9 @@ namespace SystemView
         {
             LastTime = (int)(Time.time * 1000.0f);
 
-            State.Star.Mass = 5000000.0f;
-            State.Star.PosX = -5.0f;
-            State.Star.PosY = 0.0f;
+            State.Star.mass = 5000000.0f;
+            State.Star.posx = -5.0f;
+            State.Star.posy = 0.0f;
 
             RespawnPlayer();
 
@@ -63,12 +63,12 @@ namespace SystemView
             if (Player != null && State.Player == null)
             {
                 State.Player = Player;
-                State.Ships.Add(Player.Ship);
+                State.Ships.Add(Player.ship);
             }
 
             while (PendingEnemies.Count > 0)
             {
-                State.Ships.Add(PendingEnemies[0].Ship);
+                State.Ships.Add(PendingEnemies[0].ship);
                 Enemies.Add(PendingEnemies[0]);
                 PendingEnemies.RemoveAt(0);
             }
@@ -103,13 +103,13 @@ namespace SystemView
 
                 if (Projectile.UpdatePosition(CurrentMillis / 1000.0f))
                 {
-                    foreach (SystemShip Ship in State.Ships)
+                    foreach (SystemShip ship in State.Ships)
                     {
-                        if (Ship == Projectile.Self) continue;
+                        if (ship == Projectile.Self) continue;
 
-                        if (Projectile.InRangeOf(Ship, 1.0f))
+                        if (Projectile.InRangeOf(ship, 1.0f))
                         {
-                            Projectile.DoDamage(Ship);
+                            Projectile.DoDamage(ship);
                             Projectile.Weapon.ProjectilesFired.Remove(Projectile);
 
                             GameObject.Destroy(ProjectileRenderers[Projectile]);
@@ -132,9 +132,9 @@ namespace SystemView
 
             for (int i = 0; i < State.Ships.Count; i++)
             {
-                SystemShip Ship = State.Ships[i];
+                SystemShip ship = State.Ships[i];
 
-                foreach (ShipWeapon Weapon in Ship.Weapons)
+                foreach (ShipWeapon Weapon in ship.Weapons)
                 {
                     foreach (ShipWeaponProjectile Projectile in Weapon.ProjectilesFired)
                     {
@@ -151,10 +151,10 @@ namespace SystemView
                     }
                 }
 
-                if (Ship.Destroyed)
+                if (ship.Destroyed)
                 {
-                    State.Ships.Remove(Ship);
-                    if (Ship == Player.Ship)
+                    State.Ships.Remove(ship);
+                    if (ship == Player.ship)
                     {
                         GameObject.Destroy(Player);
                         Player = null;
@@ -163,7 +163,7 @@ namespace SystemView
                     {
                         for (int j = 0; j < Enemies.Count; j++)
                         {
-                            if (Enemies[j].Ship == Ship)
+                            if (Enemies[j].ship == ship)
                             {
                                 SystemEnemy Enemy = Enemies[j];
                                 Enemies.Remove(Enemy);
@@ -178,17 +178,17 @@ namespace SystemView
                     continue;
                 }
 
-                Ship.Shield += Ship.ShieldRegenerationRate * CurrentMillis;
-                if (Ship.Shield > Ship.MaxShield) Ship.Shield = Ship.MaxShield;
+                ship.Shield += ship.ShieldRegenerationRate * CurrentMillis;
+                if (ship.Shield > ship.MaxShield) ship.Shield = ship.MaxShield;
             }
 
             foreach (SystemEnemy Enemy in Enemies)
             {
-                Enemy.Ship.Rotation = Enemy.Ship.Descriptor.TrueAnomaly + Enemy.Ship.Descriptor.Rotation + 3.1415926f * 0.5f;
+                Enemy.ship.Rotation = Enemy.ship.Descriptor.true_anomaly + Enemy.ship.Descriptor.rotation + Tools.halfpi;
 
-                foreach (ShipWeapon Weapon in Enemy.Ship.Weapons)
+                foreach (ShipWeapon Weapon in Enemy.ship.Weapons)
                 {
-                    Weapon.TryFiringAt(Player.Ship, CurrentMillis);
+                    Weapon.TryFiringAt(Player.ship, CurrentMillis);
                 }
             }
 
@@ -199,14 +199,14 @@ namespace SystemView
         {
             if (Player != null)
             {
-                State.Ships.Remove(Player.Ship);
+                State.Ships.Remove(Player.ship);
                 GameObject.Destroy(Player);
                 State.Player = null;
             }
 
             Player = gameObject.AddComponent<PlayerShip>();
 
-            // todo: Ship can't fire after being respawned. Fix it
+            // todo: ship can't fire after being respawned. Fix it
         }
 
         public void AddEnemy()
@@ -326,17 +326,17 @@ namespace SystemView
                 UpdateEnemyButton.interactable        = true;
                 DeleteEnemyButton.interactable        = true;
 
-                SemiMajorAxisSlider.value             = SelectedEnemy.Ship.Descriptor.SemiMajorAxis;
-                SemiMinorAxisSlider.value             = SelectedEnemy.Ship.Descriptor.SemiMinorAxis;
-                RotationSlider.value                  = SelectedEnemy.Ship.Descriptor.Rotation;
-                MaxHealthSlider.value                 = SelectedEnemy.Ship.MaxHealth;
-                MaxShieldSlider.value                 = SelectedEnemy.Ship.MaxShield;
-                ShieldRegenerationSlider.value        = SelectedEnemy.Ship.ShieldRegenerationRate;
-                WeaponCooldownSlider.value            = SelectedEnemy.Ship.Weapons[0].AttackSpeed;
-                WeaponRangeSlider.value               = SelectedEnemy.Ship.Weapons[0].Range;
-                WeaponDamageSlider.value              = SelectedEnemy.Ship.Weapons[0].Damage;
-                ShieldPenetrationSlider.value         = SelectedEnemy.Ship.Weapons[0].ShieldPenetration;
-                ProjectileVelocitySlider.value        = SelectedEnemy.Ship.Weapons[0].ProjectileVelocity;
+                SemiMajorAxisSlider.value             = SelectedEnemy.ship.Descriptor.semimajoraxis;
+                SemiMinorAxisSlider.value             = SelectedEnemy.ship.Descriptor.semiminoraxis;
+                RotationSlider.value                  = SelectedEnemy.ship.Descriptor.rotation;
+                MaxHealthSlider.value                 = SelectedEnemy.ship.MaxHealth;
+                MaxShieldSlider.value                 = SelectedEnemy.ship.MaxShield;
+                ShieldRegenerationSlider.value        = SelectedEnemy.ship.ShieldRegenerationRate;
+                WeaponCooldownSlider.value            = SelectedEnemy.ship.Weapons[0].AttackSpeed;
+                WeaponRangeSlider.value               = SelectedEnemy.ship.Weapons[0].Range;
+                WeaponDamageSlider.value              = SelectedEnemy.ship.Weapons[0].Damage;
+                ShieldPenetrationSlider.value         = SelectedEnemy.ship.Weapons[0].ShieldPenetration;
+                ProjectileVelocitySlider.value        = SelectedEnemy.ship.Weapons[0].ProjectileVelocity;
             }
         }
 
@@ -344,22 +344,22 @@ namespace SystemView
         {
             if (SelectedEnemy != null && Enemies.Contains(SelectedEnemy))
             {
-                SelectedEnemy.Ship.Descriptor.SemiMajorAxis      =      SemiMajorAxisSlider.value;
-                SelectedEnemy.Ship.Descriptor.SemiMinorAxis      =      SemiMinorAxisSlider.value;
-                SelectedEnemy.Ship.Descriptor.Rotation           =      RotationSlider.value;
-                SelectedEnemy.Ship.MaxHealth                     = (int)MaxHealthSlider.value;
-                SelectedEnemy.Ship.MaxShield                     = (int)MaxShieldSlider.value;
-                SelectedEnemy.Ship.ShieldRegenerationRate        = (int)ShieldRegenerationSlider.value;
-                SelectedEnemy.Ship.Weapons[0].AttackSpeed        = (int)WeaponCooldownSlider.value;
-                SelectedEnemy.Ship.Weapons[0].Range              =      WeaponRangeSlider.value;
-                SelectedEnemy.Ship.Weapons[0].Damage             = (int)WeaponDamageSlider.value;
-                SelectedEnemy.Ship.Weapons[0].ShieldPenetration  =      ShieldPenetrationSlider.value;
-                SelectedEnemy.Ship.Weapons[0].ProjectileVelocity =      ProjectileVelocitySlider.value;
+                SelectedEnemy.ship.Descriptor.semimajoraxis      =      SemiMajorAxisSlider.value;
+                SelectedEnemy.ship.Descriptor.semiminoraxis      =      SemiMinorAxisSlider.value;
+                SelectedEnemy.ship.Descriptor.rotation           =      RotationSlider.value;
+                SelectedEnemy.ship.MaxHealth                     = (int)MaxHealthSlider.value;
+                SelectedEnemy.ship.MaxShield                     = (int)MaxShieldSlider.value;
+                SelectedEnemy.ship.ShieldRegenerationRate        = (int)ShieldRegenerationSlider.value;
+                SelectedEnemy.ship.Weapons[0].AttackSpeed        = (int)WeaponCooldownSlider.value;
+                SelectedEnemy.ship.Weapons[0].Range              =      WeaponRangeSlider.value;
+                SelectedEnemy.ship.Weapons[0].Damage             = (int)WeaponDamageSlider.value;
+                SelectedEnemy.ship.Weapons[0].ShieldPenetration  =      ShieldPenetrationSlider.value;
+                SelectedEnemy.ship.Weapons[0].ProjectileVelocity =      ProjectileVelocitySlider.value;
 
-                if (SelectedEnemy.Ship.Health > SelectedEnemy.Ship.MaxHealth)
-                    SelectedEnemy.Ship.Health = SelectedEnemy.Ship.MaxHealth;
+                if (SelectedEnemy.ship.Health > SelectedEnemy.ship.MaxHealth)
+                    SelectedEnemy.ship.Health = SelectedEnemy.ship.MaxHealth;
 
-                SelectedEnemy.Ship.Descriptor.Compute();
+                SelectedEnemy.ship.Descriptor.Compute();
             }
         }
 
@@ -367,7 +367,7 @@ namespace SystemView
         {
             if (SelectedEnemy != null && Enemies.Contains(SelectedEnemy))
             {
-                State.Ships.Remove(SelectedEnemy.Ship);
+                State.Ships.Remove(SelectedEnemy.ship);
                 Enemies.Remove(SelectedEnemy);
                 GameObject.Destroy(SelectedEnemy);
                 SelectEnemy(0);

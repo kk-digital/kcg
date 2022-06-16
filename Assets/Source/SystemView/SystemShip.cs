@@ -28,7 +28,7 @@ namespace SystemView
 
         public int ShieldRegenerationRate;
 
-        public SystemViewBody Self;
+        public SpaceObject self;
 
         public float Acceleration;
 
@@ -45,8 +45,8 @@ namespace SystemView
 
         public SystemShip()
         {
-            Self       = new SystemViewBody();
-            Descriptor = new OrbitingObjectDescriptor(Self);
+            self       = new SpaceObject();
+            Descriptor = new OrbitingObjectDescriptor(self);
             Weapons    = new List<ShipWeapon>();
         }
 
@@ -57,16 +57,16 @@ namespace SystemView
 
         public void RotateTo(float Angle, float CurrentTime)
         {
-            while (Rotation < 0.0f) Rotation = 2.0f * 3.1415926f + Rotation;
-            while (Rotation > 2.0f * 3.1415926f) Rotation -= 2.0f * 3.1415926f;
+            while (Rotation < 0.0f) Rotation = Tools.twopi + Rotation;
+            while (Rotation > Tools.twopi) Rotation -= Tools.twopi;
 
             if (Rotation == Angle) return;
 
             float diff1 = Angle - Rotation;
             float diff2 = Rotation - Angle;
 
-            if (diff1 < 0.0f) diff1 = 2.0f * 3.1415926f + diff1;
-            if (diff2 < 0.0f) diff2 = 2.0f * 3.1415926f + diff2;
+            if (diff1 < 0.0f) diff1 = Tools.twopi + diff1;
+            if (diff2 < 0.0f) diff2 = Tools.twopi + diff2;
 
             if (diff2 < diff1)
             {
@@ -75,8 +75,8 @@ namespace SystemView
                 diff1 = Angle - Rotation;
                 diff2 = Rotation - Angle;
 
-                if (diff1 < 0.0f) diff1 = 2.0f * 3.1415926f + diff1;
-                if (diff2 < 0.0f) diff2 = 2.0f * 3.1415926f + diff2;
+                if (diff1 < 0.0f) diff1 = Tools.twopi + diff1;
+                if (diff2 < 0.0f) diff2 = Tools.twopi + diff2;
 
                 if (diff1 < diff2) Rotation = Angle;
             }
@@ -87,8 +87,8 @@ namespace SystemView
                 diff1 = Angle - Rotation;
                 diff2 = Rotation - Angle;
 
-                if (diff1 < 0.0f) diff1 = 2.0f * 3.1415926f + diff1;
-                if (diff2 < 0.0f) diff2 = 2.0f * 3.1415926f + diff2;
+                if (diff1 < 0.0f) diff1 = Tools.twopi + diff1;
+                if (diff2 < 0.0f) diff2 = Tools.twopi + diff2;
 
                 if (diff2 < diff1) Rotation = Angle;
             }
@@ -96,16 +96,13 @@ namespace SystemView
 
         public void Circularize(float CurrentTime)
         {
-            if (Descriptor.CentralBody == null) return;
+            if (Descriptor.central_body == null) return;
 
-            const float     pi = 3.1415926f;
-            const float halfpi = 3.1415926f * 0.5f;
-
-            float[] Vel = Descriptor.GetVelocityAt(Descriptor.GetDistanceFromCenterAt(3.1415926f), 3.1415926f);
+            float[] Vel = Descriptor.GetVelocityAt(Descriptor.GetDistanceFromCenterAt(Tools.pi), Tools.pi);
 
             float targetrotation = (float)Math.Acos(Vel[0] / Math.Sqrt(Vel[0] * Vel[0] + Vel[1] * Vel[1]));
-            float VelocityDirection = (float)Math.Acos(Self.VelX / Math.Sqrt(Self.VelX * Self.VelX + Self.VelY * Self.VelY));
-            if (Self.VelY < 0.0f) VelocityDirection = 2.0f * 3.1415926f - VelocityDirection;
+            float VelocityDirection = (float)Math.Acos(self.velx / Math.Sqrt(self.velx * self.velx + self.vely * self.vely));
+            if (self.vely < 0.0f) VelocityDirection = Tools.twopi - VelocityDirection;
 
             if (Rotation == targetrotation)
             {
@@ -118,13 +115,13 @@ namespace SystemView
                     AccX *= CurrentTime;
                     AccY *= CurrentTime;
 
-                    Self.PosX += Self.VelX * CurrentTime + AccX / 2.0f * CurrentTime;
-                    Self.PosY += Self.VelY * CurrentTime + AccY / 2.0f * CurrentTime;
+                    self.posx += self.velx * CurrentTime + AccX / 2.0f * CurrentTime;
+                    self.posy += self.vely * CurrentTime + AccY / 2.0f * CurrentTime;
 
-                    Self.VelX += AccX;
-                    Self.VelY += AccY;
+                    self.velx += AccX;
+                    self.vely += AccY;
 
-                    Descriptor.ChangeFrameOfReference(Descriptor.CentralBody);
+                    Descriptor.ChangeFrameOfReference(Descriptor.central_body);
                 } else Descriptor.UpdatePosition(CurrentTime);
             } else { RotateTo(targetrotation, CurrentTime); Descriptor.UpdatePosition(CurrentTime); }
         }
@@ -152,7 +149,7 @@ namespace SystemView
 
                 case AutopilotStage.CIRCULARIZING:
                     Circularize(CurrentTime);
-                    if (Descriptor.Eccentricity < 0.02f) autopilotStage = AutopilotStage.PLANNING_TRAJECTORY;
+                    if (Descriptor.eccentricity < 0.02f) autopilotStage = AutopilotStage.PLANNING_TRAJECTORY;
                     break;
 
                 case AutopilotStage.PLANNING_TRAJECTORY:
@@ -167,15 +164,15 @@ namespace SystemView
                 case AutopilotStage.IN_TRANSIT:
                     Descriptor.UpdatePosition(CurrentTime);
 
-                    float dx = dockingAutopilotTarget.Self.PosX - Self.PosX;
-                    float dy = dockingAutopilotTarget.Self.PosY - Self.PosY;
+                    float dx = dockingAutopilotTarget.Self.posx - self.posx;
+                    float dy = dockingAutopilotTarget.Self.posy - self.posy;
                     float d  = (float)Math.Sqrt(dx * dx + dy * dy);
 
                     float targetMeanAnomaly;
                     if (Descriptor.GetDistanceFromCenter() > dockingAutopilotTarget.Descriptor.GetDistanceFromCenter()) targetMeanAnomaly =       0.0f;
-                    else                                                                                                targetMeanAnomaly = 3.1415926f;
+                    else                                                                                                targetMeanAnomaly = Tools.pi;
 
-                    float eta = Descriptor.OrbitalPeriod * (targetMeanAnomaly - Descriptor.MeanAnomaly) * 0.5f;
+                    float eta = Descriptor.orbital_period * (targetMeanAnomaly - Descriptor.mean_anomaly) * 0.5f;
                     if (eta < 0.0f) eta *= -1;
 
                     float[] vel = Descriptor.GetVelocityAt(Descriptor.GetDistanceFromCenterAt(targetMeanAnomaly), targetMeanAnomaly);
