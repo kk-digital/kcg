@@ -72,16 +72,16 @@ public class MiningLaser : MonoBehaviour
         var inventoryAttacher = Inventory.InventoryAttacher.Instance;
 
         // Create Agent and inventory.
-        int agnetID = 0;
+        int agentID = 1;
         int inventoryWidth = 6;
         int inventoryHeight = 5;
         int toolBarSize = 8;
 
         GameEntity playerEntity = contexts.game.CreateEntity();
-        playerEntity.AddAgentID(agnetID);
+        playerEntity.ReplaceAgentID(agentID);
         playerEntity.isAgentPlayer = true;
-        inventoryAttacher.AttachInventoryToAgent(inventoryWidth, inventoryHeight, agnetID);
-        inventoryAttacher.AttachToolBarToPlayer(toolBarSize, agnetID);
+        inventoryAttacher.AttachInventoryToAgent(inventoryWidth, inventoryHeight, agentID);
+        inventoryAttacher.AttachToolBarToPlayer(toolBarSize, agentID);
 
         int inventoryID = playerEntity.agentInventory.InventoryID;
         int toolBarID = playerEntity.agentToolBar.ToolBarID;
@@ -143,7 +143,7 @@ public class MiningLaser : MonoBehaviour
             contexts.game.GetGroup(GameMatcher.InventorySlots);
             foreach (var slots in entities)
             {
-                if(slots.inventorySlots.Selected == 1)
+                if (slots.inventorySlots.Selected == 1)
                 {
                     isHeld = true;
                 }

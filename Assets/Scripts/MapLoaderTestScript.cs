@@ -177,7 +177,25 @@ namespace Planet.Unity
             TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
             TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Ore);
         }
-        
 
+#if UNITY_EDITOR
+        public void OnDrawGizmos()
+        {
+            if (!Application.isPlaying) return;
+
+            var group = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsBox2DCollider));
+           
+            Gizmos.color = Color.green;
+
+            foreach (var entity in group)
+            {
+                var pos = entity.physicsPosition2D;
+                var boxCollider = entity.physicsBox2DCollider;
+                var boxBorders = boxCollider.CreateEntityBoxBorders(pos.Value);
+
+                Gizmos.DrawWireCube(boxBorders.Center, new Vector3(boxCollider.Size.x, boxCollider.Size.y, 0.0f));
+            }
+        }
+#endif
     }
 }
