@@ -66,6 +66,8 @@ namespace KMath
         [MethodImpl((MethodImplOptions) 256)]
         public static Vec2i operator -(Vec2i a, Vec2i b) => new(a.X - b.X, a.Y - b.Y);
         [MethodImpl((MethodImplOptions) 256)]
+        public static Vec2i operator -(Vec2i a, int b) => new(a.X - b, a.Y - b);
+        [MethodImpl((MethodImplOptions) 256)]
         public static Vec2i operator +(Vec2i a, Vec2i b) => new(a.X + b.X, a.Y + b.Y);
 
         #endregion

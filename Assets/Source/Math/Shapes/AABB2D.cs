@@ -34,11 +34,11 @@ namespace KMath
 
         public int IntLeft
         {
-            [MethodImpl((MethodImplOptions) 256)] get => (int) LeftBottom.X;
+            [MethodImpl((MethodImplOptions) 256)] get => LeftBottom.X >= 0f ? (int)LeftBottom.X : (int)LeftBottom.X - 1;
         }
         public int IntRight
         {
-            [MethodImpl((MethodImplOptions) 256)] get => (int) RightBottom.X;
+            [MethodImpl((MethodImplOptions) 256)] get => RightBottom.X >= 0f ? (int)RightBottom.X : (int)RightBottom.X - 1;
         }
         public int IntTop
         {
@@ -94,6 +94,14 @@ namespace KMath
             
             return sqDist;
         }
+        
+        public Vec2f GetCornerByBitMask(int index)
+        {
+            Vec2f p;
+            p.X = Convert.ToBoolean(index & 1) ? Right : Left;
+            p.Y = Convert.ToBoolean(index & 1) ? Top : Bottom;
+            return p;
+        }
 
         #region Intersection
 
@@ -116,6 +124,60 @@ namespace KMath
             var delta = closestPoint - circle.Center;
 
             return Vec2f.Dot(delta, delta) <= circle.Radius * circle.Radius;
+        }
+
+        /// <summary>
+        /// Intersect ray R(t) = p + t*d against AABB.
+        /// </summary>
+        /// <param name="p">point</param>
+        /// <param name="d">direction</param>
+        /// <param name="intersectionPoint"></param>
+        /// <returns>Intersection distance tmin and intersectionPoint</returns>
+        public bool IntersectsRay(Vec2f p, Vec2f d, out float tMin, out Vec2f intersectionPoint)
+        {
+            tMin = 0.0f; // set to -FLT_MAX to get first hit on line
+            var tMax = float.MaxValue; // set to max distance ray can travel (for segment)
+
+            var direction = new[] {d.X, d.Y};
+            var point = new[] {p.X, p.Y};
+            var boxMin = new[] {LeftBottom.X, LeftBottom.Y};
+            var boxMax = new[] {RightTop.X, RightTop.Y};
+            
+            // For all two slabs
+            for (int axes = 0; axes < 2; axes++)
+            {
+                if (Math.Abs(direction[axes]) < float.Epsilon)
+                {
+                    // Ray is parallel to slab. No hit if origin not within slab
+                    if (point[axes] < boxMin[axes] || point[axes] > boxMax[axes])
+                    {
+                        intersectionPoint = Vec2f.Zero;
+                        return false;
+                    }
+                }
+                else
+                {
+                    // Compute intersection t value of ray with near and far plane of slab
+                    var ood = 1.0f / direction[axes];
+                    var t1 = (boxMin[axes] - point[axes]) * ood;
+                    var t2 = (boxMax[axes] - point[axes]) * ood;
+                    // Make t1 be intersection with near plane, t2 with far plane
+                    if (t1 > t2) (t1, t2) = (t2, t1);
+                    // Compute the intersection of slab intersection intervals
+                    if (t1 > tMin) tMin = t1;
+                    if (t2 > tMax) tMax = t2;
+                    // Exit with no collision as soon as slab intersection becomes empty
+                    if (tMin > tMax)
+                    {
+                        intersectionPoint = Vec2f.Zero;
+                        return false;
+                    }
+                }
+            }
+
+            // Ray intersects all 2 slabs. Return point (q) and intersection t value (tmin)
+            intersectionPoint = p + d * tMin;
+            return true;
         }
 
         #endregion

@@ -22,8 +22,8 @@ namespace Agent
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
             entity.AddAgentSprite2D(spriteId, spriteSize);
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
-            var box = new AABB2D(position, new Vec2f(spriteSize.X - 0.5f, spriteSize.Y));
-            entity.AddPhysicsCircle2DCollider(0.8f);
+            var size = new Vec2f(spriteSize.X - 0.5f, spriteSize.Y);
+            entity.AddPhysicsBox2DCollider(size, new Vec2f(0.25f, .0f));
             entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.Zero, newAcceleration: Vec2f.Zero);
             
             // Add Inventory and toolbar.

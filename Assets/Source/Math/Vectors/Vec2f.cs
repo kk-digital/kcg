@@ -134,6 +134,8 @@ namespace KMath
         [MethodImpl((MethodImplOptions) 256)]
         public static Vec2f operator +(Vec2f a, Vec2f b) => new(a.X + b.X, a.Y + b.Y);
         [MethodImpl((MethodImplOptions) 256)]
+        public static Vec2f operator +(Vec2f a, float b) => new(a.X + b, a.Y + b);
+        [MethodImpl((MethodImplOptions) 256)]
         public static bool operator ==(Vec2f lhs, Vec2f rhs)
         {
             float num1 = lhs.X - rhs.X;

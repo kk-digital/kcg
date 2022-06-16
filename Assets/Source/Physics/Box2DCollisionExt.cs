@@ -1,4 +1,5 @@
 using KMath;
+using Utility;
 
 namespace Physics
 {
@@ -17,7 +18,12 @@ namespace Physics
                     ref var tile = ref tileMap.GetTileRef(x, y, Enums.Tile.MapLayerType.Front);
                     if (tile.Type >= 0)
                     {
-                        return tile.Borders.Intersects(edgePosition);
+                        var isColliding = tile.Borders.Intersects(edgePosition);
+                        if (isColliding)
+                        {
+                            tile.Borders.DrawBox();
+                            return true;
+                        }
                     }
                    }
              //   }
@@ -38,7 +44,12 @@ namespace Physics
                     ref var tile = ref tileMap.GetTileRef(x, y, Enums.Tile.MapLayerType.Front);
                     if (tile.Type >= 0)
                     {
-                        return tile.Borders.Intersects(edgePosition);
+                        var isColliding = tile.Borders.Intersects(edgePosition);
+                        if (isColliding)
+                        {
+                            tile.Borders.DrawBox();
+                            return true;
+                        }
                     }
                    }
                // }
@@ -59,7 +70,12 @@ namespace Physics
                     ref var tile = ref tileMap.GetTileRef(x, y, Enums.Tile.MapLayerType.Front);
                     if (tile.Type >= 0)
                     {
-                        return tile.Borders.Intersects(edgePosition);
+                        var isColliding = tile.Borders.Intersects(edgePosition);
+                        if (isColliding)
+                        {
+                            tile.Borders.DrawBox();
+                            return true;
+                        }
                     }
                    }
                // }
@@ -82,7 +98,12 @@ namespace Physics
                     ref var tile = ref tileMap.GetTileRef(x, y, Enums.Tile.MapLayerType.Front);
                     if (tile.Type >= 0)
                     {
-                        return tile.Borders.Intersects(edgePosition);
+                        var isColliding = tile.Borders.Intersects(edgePosition);
+                        if (isColliding)
+                        {
+                            tile.Borders.DrawBox();
+                            return true;
+                        }
                     }
                    }
                 //}
