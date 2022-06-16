@@ -8,8 +8,8 @@ namespace Physics
         {
             if (velocity.X >= 0.0f) return false;
             
-            int x = borders.Left;
-            for(int y = borders.Bottom; y <= borders.Top; y++)
+            int x = borders.IntLeft;
+            for(int y = borders.IntBottom; y <= borders.IntTop; y++)
             {
                 var edgePosition = new Vec2f(x, y);
                 if (tileMap.Borders.Intersects(edgePosition))
@@ -29,8 +29,8 @@ namespace Physics
         {
             if (velocity.X <= 0.0f) return false;
             
-            int x = borders.Right;
-            for(int y = borders.Bottom; y <= borders.Top; y++)
+            int x = borders.IntRight;
+            for(int y = borders.IntBottom; y <= borders.IntTop; y++)
             {
                 var edgePosition = new Vec2f(x, y);
                 if (tileMap.Borders.Intersects(edgePosition))
@@ -50,8 +50,8 @@ namespace Physics
         {
             if (velocity.Y >= 0.0f) return false;
             
-            int y = borders.Bottom;
-            for(int x = borders.Left; x <= borders.Right; x++)
+            int y = borders.IntBottom;
+            for(int x = borders.IntLeft; x <= borders.IntRight; x++)
             {
                 var edgePosition = new Vec2f(x, y);
                 if (tileMap.Borders.Intersects(edgePosition))
@@ -72,8 +72,8 @@ namespace Physics
         {
             if (velocity.Y <= 0.0f) return false;
             
-            int y = borders.Top;
-            for(int x = borders.Left; x <= borders.Right; x++)
+            int y = borders.IntTop;
+            for(int x = borders.IntLeft; x <= borders.IntRight; x++)
             {
                 var edgePosition = new Vec2f(x, y);
                 

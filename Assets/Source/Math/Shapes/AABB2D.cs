@@ -32,21 +32,38 @@ namespace KMath
             [MethodImpl((MethodImplOptions) 256)]get => Center + new Vec2f(-HalfSize.X, HalfSize.Y);
         }
 
-        public int Left
+        public int IntLeft
         {
             [MethodImpl((MethodImplOptions) 256)] get => (int) LeftBottom.X;
         }
-        public int Right
+        public int IntRight
         {
             [MethodImpl((MethodImplOptions) 256)] get => (int) RightBottom.X;
         }
-        public int Top
+        public int IntTop
         {
             [MethodImpl((MethodImplOptions) 256)] get => (int) LeftTop.Y;
         }
-        public int Bottom
+        public int IntBottom
         {
             [MethodImpl((MethodImplOptions) 256)] get => (int) LeftBottom.Y;
+        }
+        
+        public float Left
+        {
+            [MethodImpl((MethodImplOptions) 256)] get => LeftBottom.X;
+        }
+        public float Right
+        {
+            [MethodImpl((MethodImplOptions) 256)] get => RightBottom.X;
+        }
+        public float Top
+        {
+            [MethodImpl((MethodImplOptions) 256)] get => LeftTop.Y;
+        }
+        public float Bottom
+        {
+            [MethodImpl((MethodImplOptions) 256)] get => LeftBottom.Y;
         }
 
         #endregion
@@ -57,12 +74,33 @@ namespace KMath
             Center = position + HalfSize;
         }
 
+        public Vec2f GetClosestPoint(Vec2f point)
+        {
+            var closestX = Math.Min(Math.Max(point.X, Left), Right);
+            var closestY = Math.Min(Math.Max(point.Y, Bottom), Top);
+
+            return new Vec2f(closestX, closestY);
+        }
+
+        public float SqrDistanceBetween(Vec2f point)
+        {
+            float sqDist = 0.0f;
+            
+            if (point.X < Left) sqDist += (Left - point.X) * (Left - point.X);
+            if (point.X > Right) sqDist += (point.X - Right) * (point.X - Right);
+            
+            if (point.Y < Bottom) sqDist += (Bottom - point.Y) * (Bottom - point.Y);
+            if (point.Y > Top) sqDist += (point.Y - Top) * (point.Y - Top);
+            
+            return sqDist;
+        }
+
         #region Intersection
 
         public bool Intersects(Vec2f position)
         {
-            return position.X >= Left && position.X <= Right &&
-                   position.Y >= Bottom && position.Y <= Top;
+            return position.X >= IntLeft && position.X <= IntRight &&
+                   position.Y >= IntBottom && position.Y <= IntTop;
         }
         
         public bool Intersects(AABB2D other)
@@ -72,15 +110,12 @@ namespace KMath
             return true;
         }
 
-        public bool Intersects(Sphere2D sphere2D)
+        public bool Intersects(Sphere2D circle)
         {
-            var nearestX = Math.Max(LeftBottom.X, Math.Min(sphere2D.Center.X, RightBottom.X));
-            var nearestY = Math.Max(LeftBottom.Y, Math.Min(sphere2D.Center.Y, RightTop.Y));
+            var closestPoint = GetClosestPoint(circle.Center);
+            var delta = closestPoint - circle.Center;
 
-            var deltaX = sphere2D.Center.X - nearestX;
-            var deltaY = sphere2D.Center.Y - nearestY;
-
-            return deltaX * deltaX + deltaY * deltaY <= sphere2D.Radius * sphere2D.Radius;
+            return Vec2f.Dot(delta, delta) <= circle.Radius * circle.Radius;
         }
 
         #endregion
