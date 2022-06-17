@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Enums.Tile;
+using KMath;
 
 namespace Planet.Unity
 {
@@ -57,75 +58,75 @@ namespace Planet.Unity
         public void Initialize()
         {
             int TilesMoon =
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png", 16, 16);
+                        Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png", 16, 16);
             int OreTileSheet =
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
+            Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
 
             int CharacterSpriteSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png", 32, 48);
+            Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png", 32, 48);
 
-            int CharacterSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(CharacterSpriteSheet, 0, 0, Enums.AtlasType.Agent);
+            int CharacterSpriteId = Game.State.SpriteAtlasManager.CopySpriteToAtlas(CharacterSpriteSheet, 0, 0, Enums.AtlasType.Agent);
 
-            GameState.TileCreationApi.CreateTile(8);
-            GameState.TileCreationApi.SetTileName("ore_1");
-            GameState.TileCreationApi.SetTileTexture16(OreTileSheet, 0, 0);
-            GameState.TileCreationApi.EndTile();
+            Game.State.TileCreationApi.CreateTile(8);
+            Game.State.TileCreationApi.SetTileName("ore_1");
+            Game.State.TileCreationApi.SetTileTexture16(OreTileSheet, 0, 0);
+            Game.State.TileCreationApi.EndTile();
 
-            GameState.TileCreationApi.CreateTile(9);
-            GameState.TileCreationApi.SetTileName("glass");
-            GameState.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 11, 10);
-            GameState.TileCreationApi.EndTile();
+            Game.State.TileCreationApi.CreateTile(9);
+            Game.State.TileCreationApi.SetTileName("glass");
+            Game.State.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 11, 10);
+            Game.State.TileCreationApi.EndTile();
 
-            GameState.TileCreationApi.CreateTile(10);
-            GameState.TileCreationApi.SetTileName("moon");
-            GameState.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 0, 0);
-            GameState.TileCreationApi.EndTile();
+            Game.State.TileCreationApi.CreateTile(10);
+            Game.State.TileCreationApi.SetTileName("moon");
+            Game.State.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 0, 0);
+            Game.State.TileCreationApi.EndTile();
 
             int GunSpriteSheet =
-                GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\gun-temp.png", 44, 25);
+                Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\gun-temp.png", 44, 25);
             int OreSpriteSheet =
-                GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
+                Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
 
             Item.CreationApi.Instance.CreateItem(Enums.ItemType.Gun, "Gun");
             Item.CreationApi.Instance.SetTexture(GunSpriteSheet);
             Item.CreationApi.Instance.SetInventoryTexture(GunSpriteSheet);
-            Item.CreationApi.Instance.SetSize(new Vector2(0.5f, 0.5f));
+            Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
             Item.CreationApi.Instance.EndItem();
 
             Item.CreationApi.Instance.CreateItem(Enums.ItemType.Ore, "Ore");
             Item.CreationApi.Instance.SetTexture(OreSpriteSheet);
             Item.CreationApi.Instance.SetInventoryTexture(OreSpriteSheet);
-            Item.CreationApi.Instance.SetSize(new Vector2(0.5f, 0.5f));
+            Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
             Item.CreationApi.Instance.SetStackable(99);
             Item.CreationApi.Instance.EndItem();
 
             // Generating the map
-            Vector2Int mapSize = new Vector2Int(16, 16);
+            Vec2i mapSize = new Vec2i(16, 16);
             Planet = new Planet.PlanetState(mapSize);
             GenerateMap();
 
-            Planet.AddPlayer(Instantiate(Material),CharacterSpriteId, 32, 48, new Vector2(3.0f, 3.0f), 0);
+            Planet.AddPlayer(Instantiate(Material),CharacterSpriteId, 32, 48, new Vec2f(3.0f, 3.0f), 0);
 
-            SpawnerSystem.SpawnItem(Enums.ItemType.Gun, new Vector2(3.0f, 3.0f));
-            SpawnerSystem.SpawnItem(Enums.ItemType.Ore, new Vector2(6.0f, 3.0f));
+            SpawnerSystem.SpawnItem(Enums.ItemType.Gun, new Vec2f(3.0f, 3.0f));
+            SpawnerSystem.SpawnItem(Enums.ItemType.Ore, new Vec2f(6.0f, 3.0f));
             SpawnerSystem.SpawnIventoryItem(Enums.ItemType.Ore);
         }
         void GenerateMap()
         {
             Planet.TileMap TileMap = Planet.TileMap;
 
-            Vector2Int mapSize = TileMap.MapSize;
+            var mapSize = TileMap.MapSize;
 
-            for (int j = 0; j < mapSize.y; j++)
+            for (int j = 0; j < mapSize.Y; j++)
             {
-                for (int i = 0; i < mapSize.x; i++)
+                for (int i = 0; i < mapSize.X; i++)
                 {
                     Tile.Tile frontTile = Tile.Tile.EmptyTile;
                     Tile.Tile oreTile = Tile.Tile.EmptyTile;
 
-                    if (i >= mapSize.x / 2)
+                    if (i >= mapSize.X / 2)
                     {
-                        if (j % 2 == 0 && i == mapSize.x / 2)
+                        if (j % 2 == 0 && i == mapSize.X / 2)
                         {
                             frontTile.Type = 10;
                         }
@@ -136,7 +137,7 @@ namespace Planet.Unity
                     }
                     else
                     {
-                        if (j % 3 == 0 && i == mapSize.x / 2 + 1)
+                        if (j % 3 == 0 && i == mapSize.X / 2 + 1)
                         {
                             frontTile.Type = 9;
                         }

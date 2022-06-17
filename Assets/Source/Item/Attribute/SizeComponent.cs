@@ -1,4 +1,5 @@
 ﻿using Entitas;
+using KMath;
 using UnityEngine;
 
 namespace Item.Attribute
@@ -8,6 +9,6 @@ namespace Item.Attribute
         /// <summary>
         /// .x = 1.0f = tile Size.
         /// </summary>
-        public Vector2 Size;
+        public Vec2f Size;
     }
 }

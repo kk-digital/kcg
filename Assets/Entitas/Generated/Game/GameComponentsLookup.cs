@@ -53,6 +53,7 @@ public static class GameComponentsLookup {
     public const int PhysicsMovable = 42;
     public const int PhysicsPosition2D = 43;
     public const int ProjectileCollider = 44;
+    public const int PhysicsSphere2DCollider = 44;
     public const int ProjectileID = 45;
     public const int ProjectilePhysicsState2D = 46;
     public const int ProjectileSprite2D = 47;
@@ -109,6 +110,7 @@ public static class GameComponentsLookup {
         "PhysicsMovable",
         "PhysicsPosition2D",
         "ProjectileCollider",
+        "PhysicsSphere2DCollider",
         "ProjectileID",
         "ProjectilePhysicsState2D",
         "ProjectileSprite2D",
@@ -164,6 +166,7 @@ public static class GameComponentsLookup {
         typeof(Physics.MovableComponent),
         typeof(Physics.Position2DComponent),
         typeof(Projectile.ColliderComponent),
+        typeof(Physics.Sphere2DColliderComponent),
         typeof(Projectile.IDComponent),
         typeof(Projectile.PhysicsState2DComponent),
         typeof(Projectile.Sprite2DComponent),

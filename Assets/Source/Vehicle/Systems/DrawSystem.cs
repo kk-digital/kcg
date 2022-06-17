@@ -20,10 +20,10 @@ namespace Vehicle
                     TextureCoords = new Vector4(0, 0, 1, 1)
                 };
 
-                var x = entity.vehiclePhysicsState2D.Position.x;
-                var y = entity.vehiclePhysicsState2D.Position.y;
-                var width = entity.vehicleSprite2D.Size.x;
-                var height = entity.vehicleSprite2D.Size.y;
+                var x = entity.vehiclePhysicsState2D.Position.X;
+                var y = entity.vehiclePhysicsState2D.Position.Y;
+                var width = entity.vehicleSprite2D.Size.X;
+                var height = entity.vehicleSprite2D.Size.Y;
 
                 Utility.Render.DrawSprite(x, y, width, height, sprite, material, transform, drawOrder++);
             }

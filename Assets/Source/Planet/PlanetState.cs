@@ -4,6 +4,7 @@ using Vehicle;
 using Projectile;
 using FloatingText;
 using Entitas;
+using KMath;
 using UnityEngine;
 using KMath;
 
@@ -21,7 +22,7 @@ namespace Planet
         public FloatingTextList FloatingTextList;
 
 
-        public PlanetState(UnityEngine.Vector2Int mapSize)
+        public PlanetState(Vec2i mapSize)
         {
             TileMap = new Planet.TileMap(mapSize);
             AgentList = new AgentList();
@@ -32,10 +33,10 @@ namespace Planet
 
 
         public AgentEntity AddPlayer(UnityEngine.Material material, int spriteId, 
-                                int width, int height, Vector2 position, int startingAnimation)
+                                int width, int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity gameEntity = GameState.SpawnerSystem.SpawnPlayer(material, spriteId, width, height, position, newEntity.Index, 
+            GameEntity gameEntity = Game.State.SpawnerSystem.SpawnPlayer(material, spriteId, width, height, position, newEntity.Index, 
                     startingAnimation);
             newEntity.Entity = gameEntity;
 
@@ -43,10 +44,10 @@ namespace Planet
         }
 
         public AgentEntity AddAgent(UnityEngine.Material material, int spriteId, int width,
-                     int height, Vector2 position, int startingAnimation)
+                     int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity entity = GameState.SpawnerSystem.SpawnAgent(material, spriteId, width, height, position,
+            GameEntity entity = Game.State.SpawnerSystem.SpawnAgent(material, spriteId, width, height, position,
                                                                     newEntity.Index, startingAnimation);
             newEntity.Entity = entity;
             
@@ -55,10 +56,10 @@ namespace Planet
         }
 
         public AgentEntity AddEnemy(UnityEngine.Material material, int spriteId, 
-                        int width, int height, Vector2 position, int startingAnimation)
+                        int width, int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity entity = GameState.SpawnerSystem.SpawnEnemy(material, spriteId, width, height, position,
+            GameEntity entity = Game.State.SpawnerSystem.SpawnEnemy(material, spriteId, width, height, position,
             newEntity.Index, startingAnimation);
 
             newEntity.Entity = entity;
@@ -77,7 +78,7 @@ namespace Planet
         public FloatingTextEntity AddFloatingText(string text, float timeToLive, Vec2f velocity, Vec2f position)
         {
             ref FloatingTextEntity newEntity = ref FloatingTextList.Add();
-            GameEntity entity = GameState.FloatingTextSpawnerSystem.SpawnFloatingText(text, timeToLive, velocity, position, newEntity.Index);
+            GameEntity entity = Game.State.FloatingTextSpawnerSystem.SpawnFloatingText(text, timeToLive, velocity, position, newEntity.Index);
 
             newEntity.Entity = entity;
 
@@ -167,19 +168,19 @@ namespace Planet
 
             
 
-            GameState.ProcessSystem.Update();
-            GameState.MovableSystem.Update();
-            GameState.ProcessCollisionSystem.Update(TileMap);
-            GameState.EnemyAiSystem.Update(this);
-            GameState.InventoryManagerSystem.Update();
-            GameState.FloatingTextUpdateSystem.Update(this, frameTime);
-            GameState.AnimationUpdateSystem.Update(frameTime);
+            Game.State.ProcessSystem.Update();
+            Game.State.MovableSystem.Update();
+            Game.State.ProcessCollisionSystem.Update(TileMap);
+            Game.State.EnemyAiSystem.Update(this);
+            Game.State.InventoryManagerSystem.Update();
+            Game.State.FloatingTextUpdateSystem.Update(this, frameTime);
+            Game.State.AnimationUpdateSystem.Update(frameTime);
             
             //TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Front, Object.Instantiate(material), transform, 10);
             //TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Ore, Object.Instantiate(material), transform, 11);
-            GameState.DrawSystem.Draw(Object.Instantiate(material), transform, 12);
-            GameState.ItemDrawSystem.Draw(Material.Instantiate(material), transform, 13);
-            GameState.FloatingTextDrawSystem.Draw(transform, 10000);
+            Game.State.DrawSystem.Draw(Object.Instantiate(material), transform, 12);
+            Game.State.ItemDrawSystem.Draw(Material.Instantiate(material), transform, 13);
+            Game.State.FloatingTextDrawSystem.Draw(transform, 10000);
 
             #region Gui drawing systems
             //GameState.InventoryDrawSystem.Draw(material, transform, 1000);

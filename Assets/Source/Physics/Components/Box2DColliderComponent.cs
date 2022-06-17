@@ -1,11 +1,11 @@
-using UnityEngine;
 using Entitas;
+using KMath;
 
 namespace Physics
 {
     public struct Box2DColliderComponent : IComponent
     {
-        public Vector2 Size;
-        public Vector2 Offset;
+        public Vec2f Size;
+        public Vec2f Offset;
     }
-}
+} 

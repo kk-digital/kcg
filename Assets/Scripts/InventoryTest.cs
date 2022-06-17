@@ -81,11 +81,11 @@ public class InventoryTest : MonoBehaviour
     private void Initialize()
     {
         int GunSpriteSheet =
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\gun-temp.png", 44, 25);
+            Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\gun-temp.png", 44, 25);
         int RockSpriteSheet =
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1.png", 16, 16);
+            Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1.png", 16, 16);
         int RockDustSpriteSheet =
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1_dust.png", 16, 16);
+            Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1_dust.png", 16, 16);
 
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.Gun, "Gun");
         Item.CreationApi.Instance.SetTexture(GunSpriteSheet);
