@@ -56,11 +56,19 @@ namespace Projectile
                 var position = projectile.projectilePhysicsState2D;
                 position.TempPosition = position.Position;
 
+                // Calculate distance
                 float distance = difference.magnitude;
+
+                // Calculate direction
                 Vector2 direction = difference / distance;
+
+                // Normalize the Direction
                 direction.Normalize();
+
+                // Set Angular velocity with new direciton
                 position.angularVelocity = (direction * 2500.0f) * Time.deltaTime;
 
+                // Process the velocity
                 position.Position += projectile.projectilePhysicsState2D.angularVelocity * Time.deltaTime;
 
                 // Update the position
