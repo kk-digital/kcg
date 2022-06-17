@@ -241,8 +241,7 @@ namespace SystemView {
             return (float)Math.Asin(posy);
         }
 
-        public float[] get_intersection_with(float startx, float starty, float slope)
-        {
+        public float[] get_intersection_with(float startx, float starty, float slope) {
             // sine and cosine of the orbit's rotation
             // would be faster if C# had a function that calls x86's fsincos instruction (as it calculates both sin and cos in one single instruction)
             float rotsin = (float)Math.Sin(rotation);
@@ -351,13 +350,6 @@ namespace SystemView {
             float[] target_pos_at_encounter  = destination.get_position_at(true_anom, destination.get_distance_from_center_at(true_anom));
 
             // Check whether apoapsis is close enough to where the target will be to ensure an encounter
-            // 
-            // if (Math.Sqrt((IntersectionAt[0] - TargetPosAtEncounter[0]) * (IntersectionAt[0] - TargetPosAtEncounter[0])
-            //  + (IntersectionAt[1] - TargetPosAtEncounter[1]) * (IntersectionAt[1] - TargetPosAtEncounter[1]))
-            //  < AcceptableDeviation)
-            // 
-            // Instead of calculating square root, just square the acceptable deviation instead. Much faster this way.
-
             float dx = intersetion_at[0] - target_pos_at_encounter[0];
             float dy = intersetion_at[1] - target_pos_at_encounter[1];
 
@@ -387,8 +379,7 @@ namespace SystemView {
             return time_required; 
         }
 
-        public float[] get_velocity_at(float radius, float E)
-        {
+        public float[] get_velocity_at(float radius, float E) {
             // →   √ (μa)        -sin(E)
             // v = ------ ( √(1 - ε²) cos(E) )
             //       rc             0
@@ -416,8 +407,7 @@ namespace SystemView {
             return get_velocity_at(heliocentric_distance, eccentric_anomaly);
         }
 
-        public void update_position(float dt)
-        {
+        public void update_position(float dt) {
             mean_anomaly         += dt * mean_motion;
             eccentric_anomaly     = get_eccentric_anomaly_at(mean_anomaly);
             true_anomaly          = get_true_anomaly(eccentric_anomaly);
@@ -436,16 +426,14 @@ namespace SystemView {
             if    (true_anomaly      <        0.0f) true_anomaly      += Tools.twopi;
         }
 
-        /*public void DebugOut()
-        {
+        /*public void DebugOut() {
             Debug.Log("Orbiting object debug log: ");
             Debug.Log("a: " + SemiMajorAxis + " b: " + SemiMinorAxis + " ω: " + Rotation + " P: " + OrbitalPeriod + " μ: " + StandardGravitationalParameter + " ε: " + Eccentricity + " D: " + EccentricDistance);
             Debug.Log("n: " + MeanMotion + " M: " + MeanAnomaly + " E: " + EccentricAnomaly + " ν: " + TrueAnomaly);
             Debug.Log("x: " + Self.PosX + " y: " + Self.PosX + " vx: " + Self.VelX + " vy: " + Self.VelY);
         }*/
 
-        public void change_frame_of_reference(SpaceObject new_frame_of_reference)
-        {
+        public void change_frame_of_reference(SpaceObject new_frame_of_reference) {
             float posx = self.posx - central_body.posx;
             float posy = self.posy - central_body.posy;
 

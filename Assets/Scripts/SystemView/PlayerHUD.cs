@@ -33,7 +33,7 @@ namespace SystemView
 
                 DragText.text = "Drag: " + String.Format("{0:0.00}", Drag) + " m/s²";*/
 
-                AccelerationText.text = "Acceleration: " + String.Format("{0:0.00}", State.Player.ship.Acceleration) + " m/s²  ";
+                AccelerationText.text = "Acceleration: " + String.Format("{0:0.00}", State.Player.ship.acceleration) + " m/s²  ";
 
                 float g  = 0.0f;
                 float gx = 0.0f;
@@ -56,10 +56,10 @@ namespace SystemView
                 g = (float)Math.Sqrt(gx * gx + gy * gy);
 
                 GravityText.text = "  Gravity: " + String.Format("{0:0.00}", g) + " m/s²";
-                OrbitalPeriodText.text = "Orbital period: " + (float.IsNaN(State.Player.ship.Descriptor.orbital_period) ? " not orbiting  " : (String.Format("{0:0.00}", State.Player.ship.Descriptor.orbital_period) + " s  "));
+                OrbitalPeriodText.text = "Orbital period: " + (float.IsNaN(State.Player.ship.descriptor.orbital_period) ? " not orbiting  " : (String.Format("{0:0.00}", State.Player.ship.descriptor.orbital_period) + " s  "));
 
-                HealthText.text = "  Health: " + State.Player.ship.Health + " / " + State.Player.ship.MaxHealth;
-                ShieldText.text = "Shield: " + State.Player.ship.Shield + " / " + State.Player.ship.MaxShield + "  ";
+                HealthText.text = "  Health: " + State.Player.ship.health + " / " + State.Player.ship.max_health;
+                ShieldText.text = "Shield: " + State.Player.ship.shield + " / " + State.Player.ship.max_shield + "  ";
             }
         }
     }

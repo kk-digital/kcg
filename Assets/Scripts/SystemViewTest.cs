@@ -27,8 +27,6 @@ namespace SystemView
         public Dictionary<SystemShip,         ObjectInfo<SystemShipRenderer>>         Ships     = new();
         public Dictionary<SpaceStation,       ObjectInfo<SpaceStationRenderer>>       Stations  = new();
 
-        //public const int UpdatesPerTick = 64;
-
         public System.Random rnd = new System.Random();
 
         public  int   InnerPlanets     =                    4;
@@ -45,7 +43,7 @@ namespace SystemView
 
         public  float TimeScale        =                 1.0f;
         
-        public  float Acceleration     =               250.0f;
+        public  float acceleration     =               250.0f;
         public  float DragFactor       =             10000.0f;
         public  float SailingFactor    =                20.0f;
 
@@ -69,14 +67,14 @@ namespace SystemView
 
         public void setTimeScale(float f)       { TimeScale       =             f; }
 
-        public void setAcceleration(float f)    { Acceleration    =             f; }
+        public void setAcceleration(float f)    { acceleration    =             f; }
         public void setDragFactor(float f)      { DragFactor      = 100000.0f - f; }
         public void setSailingFactor(float f)   { SailingFactor   =   1000.0f - f; }
 
         public Dropdown DockingTargetSelector;
         private SpaceStation DockingTarget;
 
-        private void Start()
+        private void start()
         {
             RegenerateSystem();
 
@@ -149,17 +147,17 @@ namespace SystemView
             {
                 SystemPlanet Planet = new SystemPlanet();
 
-                Planet.Descriptor.central_body = State.Star;
+                Planet.descriptor.central_body = State.Star;
 
-                Planet.Descriptor.semiminoraxis = (30.0f + (i + 1) * (i + 1) * 10) * SystemScale;
-                Planet.Descriptor.semimajoraxis = Planet.Descriptor.semiminoraxis + ((float)rnd.NextDouble() * (i + 5) * SystemScale);
+                Planet.descriptor.semiminoraxis = (30.0f + (i + 1) * (i + 1) * 10) * SystemScale;
+                Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + ((float)rnd.NextDouble() * (i + 5) * SystemScale);
 
-                Planet.Descriptor.rotation     = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
-                Planet.Descriptor.mean_anomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Planet.descriptor.rotation     = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Planet.descriptor.mean_anomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
-                Planet.Descriptor.compute();
+                Planet.descriptor.compute();
 
-                Planet.Descriptor.self.mass = PlanetMass;
+                Planet.descriptor.self.mass = PlanetMass;
 
                 ObjectInfo<SystemPlanetRenderer> PlanetInfo = new();
 
@@ -179,7 +177,7 @@ namespace SystemView
             InnerAsteroidBeltDescriptor.CenterX = State.Star.posx;
             InnerAsteroidBeltDescriptor.CenterY = State.Star.posy;
 
-            InnerAsteroidBeltDescriptor.semiminoraxis = State.Planets[InnerPlanets - 1].Descriptor.semimajoraxis + 6.0f;
+            InnerAsteroidBeltDescriptor.semiminoraxis = State.Planets[InnerPlanets - 1].descriptor.semimajoraxis + 6.0f;
             InnerAsteroidBeltDescriptor.semimajoraxis = InnerAsteroidBeltDescriptor.semiminoraxis + (float)rnd.NextDouble() / 4.0f;
 
             InnerAsteroidBeltDescriptor.rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
@@ -214,20 +212,20 @@ namespace SystemView
             {
                 SystemPlanet Planet = new SystemPlanet();
 
-                Planet.Descriptor.central_body = State.Star;
+                Planet.descriptor.central_body = State.Star;
 
-                //Planet.Descriptor.semiminoraxis = InnerAsteroidBeltDescriptor.semimajoraxis + (i + 3) * (i + 3);
-                //Planet.Descriptor.semimajoraxis = Planet.Descriptor.semiminoraxis + (float)rnd.NextDouble() * i / 2.0f;
+                //Planet.descriptor.semiminoraxis = InnerAsteroidBeltDescriptor.semimajoraxis + (i + 3) * (i + 3);
+                //Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + (float)rnd.NextDouble() * i / 2.0f;
 
-                Planet.Descriptor.semiminoraxis = State.Planets[InnerPlanets - 1].Descriptor.semimajoraxis + ((i + 3) * (i + 3) * 10 * SystemScale);
-                Planet.Descriptor.semimajoraxis = Planet.Descriptor.semiminoraxis + ((float)rnd.NextDouble() * i / 20.0f) * SystemScale;
+                Planet.descriptor.semiminoraxis = State.Planets[InnerPlanets - 1].descriptor.semimajoraxis + ((i + 3) * (i + 3) * 10 * SystemScale);
+                Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + ((float)rnd.NextDouble() * i / 20.0f) * SystemScale;
 
-                Planet.Descriptor.rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
-                Planet.Descriptor.mean_anomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Planet.descriptor.rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Planet.descriptor.mean_anomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
-                Planet.Descriptor.compute();
+                Planet.descriptor.compute();
 
-                Planet.Descriptor.self.mass = PlanetMass;
+                Planet.descriptor.self.mass = PlanetMass;
 
                 ObjectInfo<SystemPlanetRenderer> PlanetInfo = new();
 
@@ -244,17 +242,17 @@ namespace SystemView
                 {
                     SystemPlanet Moon = new SystemPlanet();
 
-                    Moon.Descriptor.self.mass = MoonMass;
+                    Moon.descriptor.self.mass = MoonMass;
 
-                    Moon.Descriptor.central_body = Planet.Descriptor.self;
+                    Moon.descriptor.central_body = Planet.descriptor.self;
 
-                    Moon.Descriptor.semiminoraxis = ((float)rnd.NextDouble() * (j + 1) + 5.0f) * SystemScale;
-                    Moon.Descriptor.semimajoraxis = Moon.Descriptor.semiminoraxis + ((float)rnd.NextDouble() * 2.0f) * SystemScale;
+                    Moon.descriptor.semiminoraxis = ((float)rnd.NextDouble() * (j + 1) + 5.0f) * SystemScale;
+                    Moon.descriptor.semimajoraxis = Moon.descriptor.semiminoraxis + ((float)rnd.NextDouble() * 2.0f) * SystemScale;
 
-                    Moon.Descriptor.rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
-                    Moon.Descriptor.mean_anomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                    Moon.descriptor.rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                    Moon.descriptor.mean_anomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
-                    Moon.Descriptor.compute();
+                    Moon.descriptor.compute();
 
                     State.Planets.Add(Moon);
 
@@ -275,7 +273,7 @@ namespace SystemView
             OuterAsteroidBeltDescriptor.CenterX = State.Star.posx;
             OuterAsteroidBeltDescriptor.CenterY = State.Star.posy;
 
-            OuterAsteroidBeltDescriptor.semiminoraxis = State.Planets[InnerPlanets + OuterPlanets - 1].Descriptor.semimajoraxis + 24.0f;
+            OuterAsteroidBeltDescriptor.semiminoraxis = State.Planets[InnerPlanets + OuterPlanets - 1].descriptor.semimajoraxis + 24.0f;
             OuterAsteroidBeltDescriptor.semimajoraxis = OuterAsteroidBeltDescriptor.semiminoraxis + (float)rnd.NextDouble() * 6.0f;
 
             OuterAsteroidBeltDescriptor.rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
@@ -312,20 +310,20 @@ namespace SystemView
             {
                 SystemPlanet Planet = new SystemPlanet();
 
-                Planet.Descriptor.central_body = State.Star;
+                Planet.descriptor.central_body = State.Star;
 
-                //Planet.Descriptor.semiminoraxis = InnerAsteroidBeltDescriptor.semimajoraxis + (i + 3) * (i + 3);
-                //Planet.Descriptor.semimajoraxis = Planet.Descriptor.semiminoraxis + (float)rnd.NextDouble() * i / 2.0f;
+                //Planet.descriptor.semiminoraxis = InnerAsteroidBeltDescriptor.semimajoraxis + (i + 3) * (i + 3);
+                //Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + (float)rnd.NextDouble() * i / 2.0f;
 
-                Planet.Descriptor.semiminoraxis = State.Planets[InnerPlanets + OuterPlanets - 1].Descriptor.semimajoraxis + ((i + 3) * (i + 3) * 31 * SystemScale);
-                Planet.Descriptor.semimajoraxis = Planet.Descriptor.semiminoraxis + (float)rnd.NextDouble() * (i + 1) * 82 * SystemScale;
+                Planet.descriptor.semiminoraxis = State.Planets[InnerPlanets + OuterPlanets - 1].descriptor.semimajoraxis + ((i + 3) * (i + 3) * 31 * SystemScale);
+                Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + (float)rnd.NextDouble() * (i + 1) * 82 * SystemScale;
 
-                Planet.Descriptor.rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
-                Planet.Descriptor.mean_anomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Planet.descriptor.rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Planet.descriptor.mean_anomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
-                Planet.Descriptor.compute();
+                Planet.descriptor.compute();
 
-                Planet.Descriptor.self.mass = PlanetMass;
+                Planet.descriptor.self.mass = PlanetMass;
 
                 ObjectInfo<SystemPlanetRenderer> PlanetInfo = new();
 
@@ -341,7 +339,7 @@ namespace SystemView
 
             foreach (SystemPlanet Planet in State.Planets)
             {
-                State.Objects.Add(Planet.Descriptor.self);
+                State.Objects.Add(Planet.descriptor.self);
             }
             State.Objects.Add(State.Star);
 
@@ -349,17 +347,17 @@ namespace SystemView
             {
                 SpaceStation Station = new();
 
-                Station.Descriptor.central_body   = State.Star;
+                Station.descriptor.central_body   = State.Star;
 
-                Station.Descriptor.semiminoraxis = ((float)rnd.NextDouble() * State.Planets[InnerPlanets + OuterPlanets - 1].Descriptor.semimajoraxis + 4.0f);
-                Station.Descriptor.semimajoraxis =  (float)rnd.NextDouble() * SystemScale + Station.Descriptor.semiminoraxis;
+                Station.descriptor.semiminoraxis = ((float)rnd.NextDouble() * State.Planets[InnerPlanets + OuterPlanets - 1].descriptor.semimajoraxis + 4.0f);
+                Station.descriptor.semimajoraxis =  (float)rnd.NextDouble() * SystemScale + Station.descriptor.semiminoraxis;
 
-                Station.Descriptor.rotation      =  (float)rnd.NextDouble() * 2.0f * 3.1415926f;
-                Station.Descriptor.mean_anomaly   =  (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Station.descriptor.rotation      =  (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Station.descriptor.mean_anomaly   =  (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
-                Station.Descriptor.compute();
+                Station.descriptor.compute();
 
-                Station.Descriptor.self.mass = StationMass;
+                Station.descriptor.self.mass = StationMass;
 
                 ObjectInfo<SpaceStationRenderer> StationInfo = new();
 
@@ -374,14 +372,14 @@ namespace SystemView
             }
 
             for (int i = 0; i < State.Planets.Count; i++)
-                if (State.Planets[i].Descriptor.central_body == State.Star)
+                if (State.Planets[i].descriptor.central_body == State.Star)
                     for (int j = 0; j < State.Planets.Count; j++)
-                        if (i != j && State.Planets[j].Descriptor.central_body == State.Star)
+                        if (i != j && State.Planets[j].descriptor.central_body == State.Star)
                         {
                             SystemShip ship = new SystemShip();
-                            ship.Start = State.Planets[i].Descriptor;
-                            ship.Destination = State.Planets[j].Descriptor;
-                            ship.Descriptor = new OrbitingObjectDescriptor(ship.Start, ship.self);
+                            ship.start = State.Planets[i].descriptor;
+                            ship.destination = State.Planets[j].descriptor;
+                            ship.descriptor = new OrbitingObjectDescriptor(ship.start, ship.self);
 
                             State.Ships.Add(ship);
 
@@ -406,91 +404,56 @@ namespace SystemView
             LastTime = Time.time;
             int UpdatesCompleted = 0;
 
-            if (CachedSunMass != SunMass)
-            {
+            if (CachedSunMass != SunMass) {
                 State.Star.mass = CachedSunMass = SunMass;
 
                 for (int i = 0; i < Planets.Count; i++)
-                {
-                    Planets.ElementAt(i).Key.Descriptor.compute();
-                }
+                    Planets.ElementAt(i).Key.descriptor.compute();
 
                 foreach (SystemShip ship in State.Ships)
-                {
-                    ship.Descriptor.compute();
-                }
+                    ship.descriptor.compute();
             }
 
-            if (CachedPlanetMass != PlanetMass)
-            {
+            if (CachedPlanetMass != PlanetMass) {
                 CachedPlanetMass = PlanetMass;
 
                 for (int i = 0; i < Planets.Count; i++)
-                {
-                    Planets.ElementAt(i).Key.Descriptor.self.mass = PlanetMass;
-                }
+                    Planets.ElementAt(i).Key.descriptor.self.mass = PlanetMass;
 
                 for (int i = 0; i < Moons.Count; i++)
-                {
-                    Moons.ElementAt(i).Key.Descriptor.compute();
-                }
+                    Moons.ElementAt(i).Key.descriptor.compute();
             }
 
-            if (CachedMoonMass != MoonMass)
-            {
+            if (CachedMoonMass != MoonMass) {
                 CachedPlanetMass = MoonMass;
 
                 for (int i = 0; i < Moons.Count; i++)
-                {
-                    Moons.ElementAt(i).Key.Descriptor.self.mass = MoonMass;
-                }
+                    Moons.ElementAt(i).Key.descriptor.self.mass = MoonMass;
             }
 
             foreach (SystemPlanet p in State.Planets)
-            {
-                //if (Planets[p].LastCycle == CurrentCycle) continue;
-
-                p.Descriptor.update_position(CurrentTime);
-                //Planets[p].LastCycle = CurrentCycle;
-
-                //if (++UpdatesCompleted == UpdatesPerTick) return;
-            }
-
-            /*foreach (SystemAsteroidBelt b in State.AsteroidBelts)
-            {
-                //if (Asteroids[b].LastCycle == CurrentCycle) continue;
-
-                b.UpdatePositions(CurrentMillis / 200.0f);
-                //Asteroids[b].LastCycle = CurrentCycle;
-
-                //if (++UpdatesCompleted == UpdatesPerTick) return;
-            }*/
+                p.descriptor.update_position(CurrentTime);
 
             foreach (SpaceStation s in State.Stations)
-            {
-                s.Descriptor.update_position(CurrentTime);
-            }
+                s.descriptor.update_position(CurrentTime);
 
-            foreach (SystemShip s in State.Ships)
-            {
-                if (!s.PathPlanned && !s.Reached)
-                    s.PathPlanned = s.Descriptor.plan_path(s.Destination, 0.1f * SystemScale);
-                else if (!s.Reached && s.Descriptor.get_distance_from(s.Destination) < SystemScale)
-                {
-                    s.Descriptor.copy(s.Destination);
-                    s.PathPlanned = false;
-                    (s.Start, s.Destination) = (s.Destination, s.Start);
+            foreach (SystemShip s in State.Ships) {
+                if (!s.path_planned)
+                    s.path_planned = s.descriptor.plan_path(s.destination, 0.1f * SystemScale);
+                else if (s.descriptor.get_distance_from(s.destination) < SystemScale) {
+                    s.descriptor.copy(s.destination);
+                    s.path_planned = false;
+                    (s.start, s.destination) = (s.destination, s.start);
                 }
 
-                s.Descriptor.update_position(CurrentTime);
+                s.descriptor.update_position(CurrentTime);
             }
 
             float GravVelX = 0.0f;
             float GravVelY = 0.0f;
 
             // this behaves weird when getting really close to central body --- is float too inaccurate?
-            foreach (SpaceObject Body in State.Objects)
-            {
+            foreach (SpaceObject Body in State.Objects) {
                 float dx = Body.posx - State.Player.ship.self.posx;
                 float dy = Body.posy - State.Player.ship.self.posy;
 
@@ -515,7 +478,7 @@ namespace SystemView
             //State.Player.ship.self.posx   += GravVelX * CurrentTime * 0.5f;
             //State.Player.ship.self.posy   += GravVelY * CurrentTime * 0.5f;
 
-            State.Player.ship.Acceleration = Acceleration;
+            State.Player.ship.acceleration = acceleration;
             State.Player.DragFactor        = DragFactor;
             State.Player.SailingFactor     = SailingFactor;
             State.Player.TimeScale         = TimeScale;
@@ -564,10 +527,10 @@ namespace SystemView
             if (i == 0 || i > Stations.Count)
             {
                 DockingTarget = null;
-                State.Player.ship.DisengageDockingAutopilot();
+                State.Player.ship.disengage_docking_autopilot();
             }
             else if (DockingTarget != Stations.ElementAt(i - 1).Key)
-                State.Player.ship.EngageDockingAutopilot(DockingTarget = Stations.ElementAt(i - 1).Key);
+                State.Player.ship.engage_docking_autopilot(DockingTarget = Stations.ElementAt(i - 1).Key);
         }
     }
 }

@@ -46,7 +46,7 @@ namespace SystemView
 
             ship.self.posx = 0.0f;
             ship.self.posy = 0.0f;
-            ship.Acceleration = 5.0f;
+            ship.acceleration = 5.0f;
 
             ship.self.mass = 1.0f;
 
@@ -55,10 +55,10 @@ namespace SystemView
             renderer.shipColor = Color.blue;
             renderer.width = 3.0f;
 
-            ship.Health = ship.MaxHealth = 25000;
-            ship.Shield = ship.MaxShield = 50000;
+            ship.health = ship.max_health = 25000;
+            ship.shield = ship.max_shield = 50000;
 
-            ship.ShieldRegenerationRate = 3;
+            ship.shield_regeneration_rate = 3;
 
             ShipWeapon LeftCannon = new ShipWeapon();
 
@@ -131,11 +131,11 @@ namespace SystemView
 
             Weapon.flags = (int)WeaponFlags.WEAPON_PROJECTILE;
 
-            ship.Weapons.Add(Weapon);
-            ship.Weapons.Add(LeftCannon);
-            ship.Weapons.Add(LeftGun);
-            ship.Weapons.Add(RightCannon);
-            ship.Weapons.Add(RightGun);
+            ship.weapons.Add(Weapon);
+            ship.weapons.Add(LeftCannon);
+            ship.weapons.Add(LeftGun);
+            ship.weapons.Add(RightCannon);
+            ship.weapons.Add(RightGun);
         }
 
         private void Update()
@@ -157,7 +157,7 @@ namespace SystemView
             if (!MouseSteering)
             {
                 if (Input.GetKey("left ctrl")) HorizontalMovement = Input.GetAxis("Horizontal");
-                else ship.Rotation -= Input.GetAxis("Horizontal") * CurrentTime * ship.RotationSpeedModifier;
+                else ship.rotation -= Input.GetAxis("Horizontal") * CurrentTime * ship.rotational_speed_modifier;
             }
             else
             {
@@ -173,18 +173,18 @@ namespace SystemView
 
                 if (dy < 0.0f) angle = 2.0f * 3.1415926f - angle;
 
-                ship.RotateTo(angle, CurrentTime);
+                ship.rotate_to(angle, CurrentTime);
             }
 
             float Movement = Input.GetAxis("Vertical");
             if (Movement == 0.0f && Input.GetKey("w")) Movement =  1.0f;
             if (Movement == 0.0f && Input.GetKey("s")) Movement = -1.0f;
 
-            float accx = (float)Math.Cos(ship.Rotation) * Movement - (float)Math.Sin(ship.Rotation) * HorizontalMovement;
-            float accy = (float)Math.Sin(ship.Rotation) * Movement + (float)Math.Cos(ship.Rotation) * HorizontalMovement;
+            float accx = (float)Math.Cos(ship.rotation) * Movement - (float)Math.Sin(ship.rotation) * HorizontalMovement;
+            float accy = (float)Math.Sin(ship.rotation) * Movement + (float)Math.Cos(ship.rotation) * HorizontalMovement;
 
-            accx *= CurrentTime * ship.Acceleration;
-            accy *= CurrentTime * ship.Acceleration;
+            accx *= CurrentTime * ship.acceleration;
+            accy *= CurrentTime * ship.acceleration;
             
             if (HorizontalMovement != 0.0f && Movement != 0.0f)
             {
@@ -222,13 +222,13 @@ namespace SystemView
                 
                 float SpeedMagnitude = Tools.magnitude(ship.self.velx, ship.self.vely);
 
-                ship.self.velx = ((SailingFactor + GravitationalFactor) * ship.self.velx + (float)Math.Cos(ship.Rotation) * SpeedMagnitude) / (1.0f + SailingFactor + GravitationalFactor);
-                ship.self.vely = ((SailingFactor + GravitationalFactor) * ship.self.vely + (float)Math.Sin(ship.Rotation) * SpeedMagnitude) / (1.0f + SailingFactor + GravitationalFactor);
+                ship.self.velx = ((SailingFactor + GravitationalFactor) * ship.self.velx + (float)Math.Cos(ship.rotation) * SpeedMagnitude) / (1.0f + SailingFactor + GravitationalFactor);
+                ship.self.vely = ((SailingFactor + GravitationalFactor) * ship.self.vely + (float)Math.Sin(ship.rotation) * SpeedMagnitude) / (1.0f + SailingFactor + GravitationalFactor);
             }
 
-            renderer.shipColor.b = (float) ship.Health / ship.MaxHealth;
+            renderer.shipColor.b = (float) ship.health / ship.max_health;
 
-            foreach (ShipWeapon Weapon in ship.Weapons)
+            foreach (ShipWeapon Weapon in ship.weapons)
             {
                 Weapon.Cooldown -= (int)(CurrentTime * 1000.0f);
                 if (Weapon.Cooldown < 0) Weapon.Cooldown = 0;
@@ -236,8 +236,8 @@ namespace SystemView
 
             if (RenderOrbit)
             {
-                if (ship.Descriptor.central_body == null)
-                    ship.Descriptor.central_body = State.Star;
+                if (ship.descriptor.central_body == null)
+                    ship.descriptor.central_body = State.Star;
 
                 SpaceObject StrongestGravityBody = null;
                 float g = 0.0f;
@@ -259,17 +259,17 @@ namespace SystemView
                 }
 
                 if (StrongestGravityBody != null)
-                    ship.Descriptor.change_frame_of_reference(StrongestGravityBody);
+                    ship.descriptor.change_frame_of_reference(StrongestGravityBody);
 
-                if (ship.Descriptor.eccentricity <= 1.0f)
-                    ship.PathPlanned = true;
+                if (ship.descriptor.eccentricity <= 1.0f)
+                    ship.path_planned = true;
                 else
-                    ship.PathPlanned = false;
+                    ship.path_planned = false;
             }
 
             if (!MouseSteering) {
                 if (Input.GetKey("space") || Input.GetMouseButton(0)) {
-                    foreach (ShipWeapon Weapon in ship.Weapons) {
+                    foreach (ShipWeapon Weapon in ship.weapons) {
                         Vector3 MousePosition = Camera.GetAbsPos(Input.mousePosition);
 
                         if ((Weapon.flags & (int)WeaponFlags.WEAPON_LASER) != 0) {
@@ -279,9 +279,9 @@ namespace SystemView
                 }
             } else {
                 if (Input.GetKey("space")) {
-                    foreach (ShipWeapon Weapon in ship.Weapons) {
-                        float x = ship.self.posx + (float)Math.Cos(ship.Rotation) * Weapon.Range;
-                        float y = ship.self.posy + (float)Math.Sin(ship.Rotation) * Weapon.Range;
+                    foreach (ShipWeapon Weapon in ship.weapons) {
+                        float x = ship.self.posx + (float)Math.Cos(ship.rotation) * Weapon.Range;
+                        float y = ship.self.posy + (float)Math.Sin(ship.rotation) * Weapon.Range;
 
                         if ((Weapon.flags & (int)WeaponFlags.WEAPON_LASER) != 0) {
 

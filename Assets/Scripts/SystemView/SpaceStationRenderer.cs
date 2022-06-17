@@ -22,7 +22,7 @@ namespace SystemView
             OrbitRender = gameObject.AddComponent<OrbitRenderer>();
             StationRenderer = gameObject.AddComponent<SpriteRenderer>();
 
-            OrbitRender.descriptor = Station.Descriptor;
+            OrbitRender.descriptor = Station.descriptor;
 
             Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
@@ -33,7 +33,7 @@ namespace SystemView
         // Update is called once per frame
         void Update()
         {
-            float[] Position = Station.Descriptor.get_position();
+            float[] Position = Station.descriptor.get_position();
 
             StationRenderer.transform.position = new Vector3(Position[0], Position[1], -0.1f);
             StationRenderer.transform.localScale = new Vector3(12.5f / Camera.scale, 12.5f / Camera.scale, 1.0f);
@@ -41,7 +41,7 @@ namespace SystemView
             StationRenderer.color = stationColor;
             OrbitRender.color = orbitColor;
 
-            OrbitRender.descriptor = Station.Descriptor;
+            OrbitRender.descriptor = Station.descriptor;
 
             OrbitRender.UpdateRenderer(128);
         }

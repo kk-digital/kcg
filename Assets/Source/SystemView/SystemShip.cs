@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SystemView
-{
-    enum AutopilotStage
-    {
+namespace SystemView {
+    enum AutopilotStage {
         DISENGAGED = 0,
         CIRCULARIZING,
         PLANNING_TRAJECTORY,
@@ -15,217 +13,204 @@ namespace SystemView
         DOCKING
     };
 
-    public class SystemShip
-    {
-        public OrbitingObjectDescriptor Descriptor;
-        public OrbitingObjectDescriptor Start, Destination;
+    public class SystemShip {
+        public OrbitingObjectDescriptor descriptor;
+        public OrbitingObjectDescriptor start, destination;
 
-        public bool PathPlanned = false;
-        public bool Reached     = false;
+        public bool path_planned = false;
 
-        public int Health, MaxHealth;
-        public int Shield, MaxShield;
+        public int health, max_health;
+        public int shield, max_shield;
 
-        public int ShieldRegenerationRate;
+        public int shield_regeneration_rate;
 
         public SpaceObject self;
 
-        public float Acceleration;
+        public float acceleration;
 
-        public float Rotation;
+        public float rotation;
 
-        public float RotationSpeedModifier = 2.0f;
+        public float rotational_speed_modifier = 2.0f;
 
-        public List<ShipWeapon> Weapons;
+        public List<ShipWeapon> weapons;
 
-        private float[] AutopilotTimeRequired;
-        private float[] AutopilotDeltaV;
+        private float[] autopilot_time_required;
+        private float[] autopilot_delta_v;
 
-        public bool Destroyed = false;
+        public bool destroyed = false;
 
-        private AutopilotStage autopilotStage;
-        private SpaceStation dockingAutopilotTarget;
+        private AutopilotStage stage;
+        private SpaceStation docking_target;
 
-        public SystemShip()
-        {
+        public SystemShip() {
             self            = new SpaceObject();
-            Descriptor      = new OrbitingObjectDescriptor(self);
-            Weapons         = new List<ShipWeapon>();
-            AutopilotDeltaV = new float[2];
+            descriptor      = new OrbitingObjectDescriptor(self);
+            weapons         = new List<ShipWeapon>();
+            autopilot_delta_v = new float[2];
         }
 
-        public void Destroy()
-        {
-            Destroyed = true;
+        public void destroy() {
+            destroyed = true;
         }
 
-        public void RotateTo(float Angle, float CurrentTime)
-        {
-            while (Rotation < 0.0f) Rotation = Tools.twopi + Rotation;
-            while (Rotation > Tools.twopi) Rotation -= Tools.twopi;
+        public void rotate_to(float angle, float current_time) {
+            while (rotation < 0.0f)        rotation  = Tools.twopi + rotation;
+            while (rotation > Tools.twopi) rotation -= Tools.twopi;
 
-            if (Rotation == Angle) return;
+            if (rotation == angle) return;
 
-            float diff1 = Angle - Rotation;
-            float diff2 = Rotation - Angle;
+            float diff1 = angle - rotation;
+            float diff2 = rotation - angle;
 
             if (diff1 < 0.0f) diff1 = Tools.twopi + diff1;
             if (diff2 < 0.0f) diff2 = Tools.twopi + diff2;
 
-            if (diff2 < diff1)
-            {
-                Rotation -= RotationSpeedModifier * CurrentTime;
+            if (diff2 < diff1) {
+                rotation -= rotational_speed_modifier * current_time;
 
-                diff1 = Angle - Rotation;
-                diff2 = Rotation - Angle;
-
-                if (diff1 < 0.0f) diff1 = Tools.twopi + diff1;
-                if (diff2 < 0.0f) diff2 = Tools.twopi + diff2;
-
-                if (diff1 < diff2) Rotation = Angle;
-            }
-            else
-            {
-                Rotation += RotationSpeedModifier * CurrentTime;
-
-                diff1 = Angle - Rotation;
-                diff2 = Rotation - Angle;
+                diff1 = angle - rotation;
+                diff2 = rotation - angle;
 
                 if (diff1 < 0.0f) diff1 = Tools.twopi + diff1;
                 if (diff2 < 0.0f) diff2 = Tools.twopi + diff2;
 
-                if (diff2 < diff1) Rotation = Angle;
+                if (diff1 < diff2) rotation = angle;
+            } else {
+                rotation += rotational_speed_modifier * current_time;
+
+                diff1 = angle - rotation;
+                diff2 = rotation - angle;
+
+                if (diff1 < 0.0f) diff1 = Tools.twopi + diff1;
+                if (diff2 < 0.0f) diff2 = Tools.twopi + diff2;
+
+                if (diff2 < diff1) rotation = angle;
             }
         }
 
-        public void Accelerate(float CurrentTime) {
-            float AccX = (float)Math.Cos(Rotation) * Acceleration;
-            float AccY = (float)Math.Sin(Rotation) * Acceleration;
+        public void accelerate(float current_time) {
+            float accx = (float)Math.Cos(rotation) * acceleration;
+            float accy = (float)Math.Sin(rotation) * acceleration;
 
-            AccX *= CurrentTime;
-            AccY *= CurrentTime;
+            accx *= current_time;
+            accy *= current_time;
 
-            self.posx += self.velx * CurrentTime + AccX / 2.0f * CurrentTime;
-            self.posy += self.vely * CurrentTime + AccY / 2.0f * CurrentTime;
+            self.posx += self.velx * current_time + accx / 2.0f * current_time;
+            self.posy += self.vely * current_time + accy / 2.0f * current_time;
 
-            self.velx += AccX;
-            self.vely += AccY;
+            self.velx += accx;
+            self.vely += accy;
 
-            Descriptor.change_frame_of_reference(Descriptor.central_body);
+            descriptor.change_frame_of_reference(descriptor.central_body);
         }
 
-        public void Circularize(float CurrentTime)
+        public void circularize(float curent_time)
         {
-            if (Descriptor.central_body == null) return;
+            if (descriptor.central_body == null) return;
 
-            float[] Vel = Descriptor.get_velocity_at(Descriptor.get_distance_from_center_at(Tools.pi), Tools.pi);
+            float[] vel = descriptor.get_velocity_at(descriptor.get_distance_from_center_at(Tools.pi), Tools.pi);
 
-            float targetrotation = (float)Math.Acos(Vel[0] / Math.Sqrt(Vel[0] * Vel[0] + Vel[1] * Vel[1]));
-            float VelocityDirection = (float)Math.Acos(self.velx / Math.Sqrt(self.velx * self.velx + self.vely * self.vely));
-            if (self.vely < 0.0f) VelocityDirection = Tools.twopi - VelocityDirection;
+            float targetrotation     = Tools.get_angle(vel[0], vel[1]);
+            float velocity_direction = Tools.get_angle(self.velx, self.vely);
+            if (self.vely < 0.0f) velocity_direction = Tools.twopi - velocity_direction;
 
-            if (Rotation == targetrotation)
-            {
-                float diff = targetrotation - VelocityDirection;
-                if (diff > -0.4f && diff < 0.4f) Accelerate(CurrentTime);
-                else Descriptor.update_position(CurrentTime);
-            } else { RotateTo(targetrotation, CurrentTime); Descriptor.update_position(CurrentTime); }
+            if (rotation == targetrotation) {
+                float diff = targetrotation - velocity_direction;
+                if (diff > -0.4f && diff < 0.4f) accelerate(curent_time);
+                else descriptor.update_position(curent_time);
+            } else { rotate_to(targetrotation, curent_time); descriptor.update_position(curent_time); }
         }
 
-        public void EngageDockingAutopilot(SpaceStation Station)
-        {
-            autopilotStage = AutopilotStage.CIRCULARIZING;
-            dockingAutopilotTarget = Station;
+        public void engage_docking_autopilot(SpaceStation station) {
+            stage = AutopilotStage.CIRCULARIZING;
+            docking_target = station;
         }
 
-        public void DisengageDockingAutopilot()
-        {
-            autopilotStage = AutopilotStage.DISENGAGED;
-            dockingAutopilotTarget = null;
+        public void disengage_docking_autopilot() {
+            stage = AutopilotStage.DISENGAGED;
+            docking_target = null;
         }
 
-        public bool DockingAutopilotLoop(float CurrentTime, float AcceptedDeviation)
-        {
-            if (autopilotStage != AutopilotStage.DISENGAGED) Debug.Log(autopilotStage);
+        public bool DockingAutopilotLoop(float CurrentTime, float AcceptedDeviation) {
+            if (stage != AutopilotStage.DISENGAGED) Debug.Log(stage);
 
-            switch (autopilotStage)
-            {
+            switch (stage) {
                 case AutopilotStage.DISENGAGED:
                     return false;
 
                 case AutopilotStage.CIRCULARIZING:
-                    Circularize(CurrentTime);
-                    if (Descriptor.eccentricity < 0.02f) autopilotStage = AutopilotStage.PLANNING_TRAJECTORY;
+                    circularize(CurrentTime);
+                    if (descriptor.eccentricity < 0.02f) stage = AutopilotStage.PLANNING_TRAJECTORY;
                     break;
 
                 case AutopilotStage.PLANNING_TRAJECTORY:
-                    Descriptor.update_position(CurrentTime);
-                    AutopilotTimeRequired = Descriptor.calculate_required_deltav(dockingAutopilotTarget.Descriptor, Acceleration, 20.0f);
-                    if (AutopilotTimeRequired != null) autopilotStage = AutopilotStage.TRANSITIONING;
+                    descriptor.update_position(CurrentTime);
+                    autopilot_time_required = descriptor.calculate_required_deltav(docking_target.descriptor, acceleration, 20.0f);
+                    if (autopilot_time_required != null) stage = AutopilotStage.TRANSITIONING;
                     break;
 
                 case AutopilotStage.TRANSITIONING: {
-                    float tx = AutopilotTimeRequired[0];
-                    float ty = AutopilotTimeRequired[1];
+                    float tx = autopilot_time_required[0];
+                    float ty = autopilot_time_required[1];
 
                     float target_rotation = Tools.get_angle(tx, ty);
 
-                    if(Rotation != target_rotation) RotateTo(target_rotation, CurrentTime);
+                    if(rotation != target_rotation) rotate_to(target_rotation, CurrentTime);
                     else {
-                        Accelerate(CurrentTime);
-                        AutopilotTimeRequired[0] -= (float)Math.Cos(target_rotation) * CurrentTime;
-                        AutopilotTimeRequired[1] -= (float)Math.Sin(target_rotation) * CurrentTime;
+                        accelerate(CurrentTime);
+                        autopilot_time_required[0] -= (float)Math.Cos(target_rotation) * CurrentTime;
+                        autopilot_time_required[1] -= (float)Math.Sin(target_rotation) * CurrentTime;
 
-                        if((tx > 0.0f && AutopilotTimeRequired[0] < 0.0f)
-                        || (tx < 0.0f && AutopilotTimeRequired[0] > 0.0f)
-                        || (ty > 0.0f && AutopilotTimeRequired[1] < 0.0f)
-                        || (ty < 0.0f && AutopilotTimeRequired[1] > 0.0f)) autopilotStage = AutopilotStage.IN_TRANSIT;
+                        if((tx > 0.0f && autopilot_time_required[0] < 0.0f)
+                        || (tx < 0.0f && autopilot_time_required[0] > 0.0f)
+                        || (ty > 0.0f && autopilot_time_required[1] < 0.0f)
+                        || (ty < 0.0f && autopilot_time_required[1] > 0.0f)) stage = AutopilotStage.IN_TRANSIT;
                     }
                     break;
                 }
 
                 case AutopilotStage.IN_TRANSIT:
-                    Descriptor.update_position(CurrentTime);
+                    descriptor.update_position(CurrentTime);
 
-                    float dx = dockingAutopilotTarget.Self.posx - self.posx;
-                    float dy = dockingAutopilotTarget.Self.posy - self.posy;
+                    float dx = docking_target.Self.posx - self.posx;
+                    float dy = docking_target.Self.posy - self.posy;
                     float d  = (float)Math.Sqrt(dx * dx + dy * dy);
 
                     float targetMeanAnomaly;
-                    if (Descriptor.get_distance_from_center() > dockingAutopilotTarget.Descriptor.get_distance_from_center()) targetMeanAnomaly =       0.0f;
+                    if (descriptor.get_distance_from_center() > docking_target.descriptor.get_distance_from_center()) targetMeanAnomaly =       0.0f;
                     else targetMeanAnomaly = Tools.pi;
 
-                    float eta = Descriptor.orbital_period * (targetMeanAnomaly - Descriptor.mean_anomaly) * 0.5f;
+                    float eta = descriptor.orbital_period * (targetMeanAnomaly - descriptor.mean_anomaly) * 0.5f;
                     if (eta < 0.0f) eta *= -1;
 
-                    float[] vel = Descriptor.get_velocity_at(Descriptor.get_distance_from_center_at(targetMeanAnomaly), targetMeanAnomaly);
+                    float[] vel = descriptor.get_velocity_at(descriptor.get_distance_from_center_at(targetMeanAnomaly), targetMeanAnomaly);
 
-                    AutopilotDeltaV[0] = vel[0] - self.velx;
-                    AutopilotDeltaV[1] = vel[1] - self.vely;
+                    autopilot_delta_v[0] = vel[0] - self.velx;
+                    autopilot_delta_v[1] = vel[1] - self.vely;
 
-                    float timeToSlowDown = Tools.magnitude(AutopilotDeltaV) / Acceleration;
+                    float timeToSlowDown = Tools.magnitude(autopilot_delta_v) / acceleration;
 
                     float dt = eta - timeToSlowDown;
 
-                    if (dt < 5.0f) autopilotStage = AutopilotStage.MATCHING_ORBIT;
+                    if (dt < 5.0f) stage = AutopilotStage.MATCHING_ORBIT;
                     break;
 
                 case AutopilotStage.MATCHING_ORBIT: {
-                    float dvx = AutopilotDeltaV[0];
-                    float dvy = AutopilotDeltaV[1];
+                    float dvx = autopilot_delta_v[0];
+                    float dvy = autopilot_delta_v[1];
 
                     float target_rotation = Tools.get_angle(dvx, dvy);
 
-                    if(Rotation != target_rotation) RotateTo(target_rotation, CurrentTime);
+                    if(rotation != target_rotation) rotate_to(target_rotation, CurrentTime);
                     else {
-                        Accelerate(CurrentTime);
-                        AutopilotDeltaV[0] -= (float)Math.Cos(target_rotation) * CurrentTime * Acceleration;
-                        AutopilotDeltaV[1] -= (float)Math.Sin(target_rotation) * CurrentTime * Acceleration;
+                        accelerate(CurrentTime);
+                        autopilot_delta_v[0] -= (float)Math.Cos(target_rotation) * CurrentTime * acceleration;
+                        autopilot_delta_v[1] -= (float)Math.Sin(target_rotation) * CurrentTime * acceleration;
 
-                        if((dvx > 0.0f && AutopilotDeltaV[0] < 0.0f)
-                        || (dvx < 0.0f && AutopilotDeltaV[0] > 0.0f)
-                        || (dvy > 0.0f && AutopilotDeltaV[1] < 0.0f)
-                        || (dvy < 0.0f && AutopilotDeltaV[1] > 0.0f)) autopilotStage = AutopilotStage.DOCKING;
+                        if((dvx > 0.0f && autopilot_delta_v[0] < 0.0f)
+                        || (dvx < 0.0f && autopilot_delta_v[0] > 0.0f)
+                        || (dvy > 0.0f && autopilot_delta_v[1] < 0.0f)
+                        || (dvy < 0.0f && autopilot_delta_v[1] > 0.0f)) stage = AutopilotStage.DOCKING;
                     }
                     break;
                 }

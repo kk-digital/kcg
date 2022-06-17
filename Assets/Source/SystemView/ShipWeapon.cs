@@ -102,7 +102,7 @@ namespace SystemView
             if(d > Range) return;
 
             if((flags & (int)WeaponFlags.WEAPON_BROADSIDE) != 0) {
-                float angle = Self.Rotation + (((flags & (int)WeaponFlags.WEAPON_POSX) != 0) ? Tools.halfpi : -Tools.halfpi);
+                float angle = Self.rotation + (((flags & (int)WeaponFlags.WEAPON_POSX) != 0) ? Tools.halfpi : -Tools.halfpi);
 
                 if(angle < 0.0f) angle = Tools.twopi + angle;
                 while(angle > Tools.twopi) angle -= Tools.twopi;

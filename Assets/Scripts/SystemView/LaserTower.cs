@@ -272,19 +272,19 @@ namespace SystemView
             float ShieldDamage = Damage * ShieldDamageMultiplier * 1.0f - ShieldPenetration;
             float HullDamage   = Damage * HullDamageMultiplier   *        ShieldPenetration;
 
-            Target.Shield -= (int)ShieldDamage;
+            Target.shield -= (int)ShieldDamage;
 
-            if (Target.Shield < 0)
+            if (Target.shield < 0)
             {
-                HullDamage -= (float)Target.Shield / ShieldDamageMultiplier * HullDamageMultiplier;
-                Target.Shield = 0;
+                HullDamage -= (float)Target.shield / ShieldDamageMultiplier * HullDamageMultiplier;
+                Target.shield = 0;
             }
 
-            Target.Health -= (int)HullDamage;
+            Target.health -= (int)HullDamage;
 
-            if (Target.Health <= 0)
+            if (Target.health <= 0)
             {
-                Target.Destroy();
+                Target.destroy();
                 Target = null;
             }
 

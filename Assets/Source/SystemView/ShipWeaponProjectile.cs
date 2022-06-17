@@ -67,18 +67,18 @@ namespace SystemView
 
         public void DoDamage(SystemShip Target)
         {
-            Target.Shield -= (int)(Damage * (1.0 - ShieldPenetration));
-            Target.Health -= (int)(Damage * ShieldPenetration);
+            Target.shield -= (int)(Damage * (1.0 - ShieldPenetration));
+            Target.health -= (int)(Damage * ShieldPenetration);
 
-            if (Target.Shield < 0)
+            if (Target.shield < 0)
             {
-                Target.Health += Target.Shield;
-                Target.Shield = 0;
+                Target.health += Target.shield;
+                Target.shield = 0;
             }
 
-            if (Target.Health <= 0)
+            if (Target.health <= 0)
             {
-                Target.Destroy();
+                Target.destroy();
             }
 
             Weapon.ProjectilesFired.Remove(this);

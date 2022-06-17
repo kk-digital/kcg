@@ -8,11 +8,11 @@ namespace SystemView
         public List<SystemShip>         OwnedShips  = new();
 
         public SpaceObject              Self        = new();
-        public OrbitingObjectDescriptor Descriptor;
+        public OrbitingObjectDescriptor descriptor;
 
         public SpaceStation()
         {
-            Descriptor = new(Self);
+            descriptor = new(Self);
         }
     }
 }

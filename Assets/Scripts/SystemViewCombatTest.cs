@@ -92,7 +92,7 @@ namespace SystemView
                 SemiMajorAxisSlider.minValue = SemiMinorAxisSlider.value;
             }
 
-            int CurrentMillis = (int)(Time.time * 1000) - LastTime;
+            int current_millis = (int)(Time.time * 1000) - LastTime;
             LastTime = (int)(Time.time * 1000);
 
             for (int i = 0; i < ProjectileRenderers.Count; i++)
@@ -101,7 +101,7 @@ namespace SystemView
                 ShipWeaponProjectile Projectile = ProjectileRenderer.Key;
                 GameObject Renderer = ProjectileRenderer.Value;
 
-                if (Projectile.UpdatePosition(CurrentMillis / 1000.0f))
+                if (Projectile.UpdatePosition(current_millis / 1000.0f))
                 {
                     foreach (SystemShip ship in State.Ships)
                     {
@@ -134,7 +134,7 @@ namespace SystemView
             {
                 SystemShip ship = State.Ships[i];
 
-                foreach (ShipWeapon Weapon in ship.Weapons)
+                foreach (ShipWeapon Weapon in ship.weapons)
                 {
                     foreach (ShipWeaponProjectile Projectile in Weapon.ProjectilesFired)
                     {
@@ -151,7 +151,7 @@ namespace SystemView
                     }
                 }
 
-                if (ship.Destroyed)
+                if (ship.destroyed)
                 {
                     State.Ships.Remove(ship);
                     if (ship == Player.ship)
@@ -178,17 +178,17 @@ namespace SystemView
                     continue;
                 }
 
-                ship.Shield += ship.ShieldRegenerationRate * CurrentMillis;
-                if (ship.Shield > ship.MaxShield) ship.Shield = ship.MaxShield;
+                ship.shield += ship.shield_regeneration_rate * current_millis;
+                if (ship.shield > ship.max_shield) ship.shield = ship.max_shield;
             }
 
             foreach (SystemEnemy Enemy in Enemies)
             {
-                Enemy.ship.Rotation = Enemy.ship.Descriptor.true_anomaly + Enemy.ship.Descriptor.rotation + Tools.halfpi;
+                Enemy.ship.rotation = Enemy.ship.descriptor.true_anomaly + Enemy.ship.descriptor.rotation + Tools.halfpi;
 
-                foreach (ShipWeapon Weapon in Enemy.ship.Weapons)
+                foreach (ShipWeapon Weapon in Enemy.ship.weapons)
                 {
-                    Weapon.TryFiringAt(Player.ship, CurrentMillis);
+                    Weapon.TryFiringAt(Player.ship, current_millis);
                 }
             }
 
@@ -326,17 +326,17 @@ namespace SystemView
                 UpdateEnemyButton.interactable        = true;
                 DeleteEnemyButton.interactable        = true;
 
-                SemiMajorAxisSlider.value             = SelectedEnemy.ship.Descriptor.semimajoraxis;
-                SemiMinorAxisSlider.value             = SelectedEnemy.ship.Descriptor.semiminoraxis;
-                RotationSlider.value                  = SelectedEnemy.ship.Descriptor.rotation;
-                MaxHealthSlider.value                 = SelectedEnemy.ship.MaxHealth;
-                MaxShieldSlider.value                 = SelectedEnemy.ship.MaxShield;
-                ShieldRegenerationSlider.value        = SelectedEnemy.ship.ShieldRegenerationRate;
-                WeaponCooldownSlider.value            = SelectedEnemy.ship.Weapons[0].AttackSpeed;
-                WeaponRangeSlider.value               = SelectedEnemy.ship.Weapons[0].Range;
-                WeaponDamageSlider.value              = SelectedEnemy.ship.Weapons[0].Damage;
-                ShieldPenetrationSlider.value         = SelectedEnemy.ship.Weapons[0].ShieldPenetration;
-                ProjectileVelocitySlider.value        = SelectedEnemy.ship.Weapons[0].ProjectileVelocity;
+                SemiMajorAxisSlider.value             = SelectedEnemy.ship.descriptor.semimajoraxis;
+                SemiMinorAxisSlider.value             = SelectedEnemy.ship.descriptor.semiminoraxis;
+                RotationSlider.value                  = SelectedEnemy.ship.descriptor.rotation;
+                MaxHealthSlider.value                 = SelectedEnemy.ship.max_health;
+                MaxShieldSlider.value                 = SelectedEnemy.ship.max_shield;
+                ShieldRegenerationSlider.value        = SelectedEnemy.ship.shield_regeneration_rate;
+                WeaponCooldownSlider.value            = SelectedEnemy.ship.weapons[0].AttackSpeed;
+                WeaponRangeSlider.value               = SelectedEnemy.ship.weapons[0].Range;
+                WeaponDamageSlider.value              = SelectedEnemy.ship.weapons[0].Damage;
+                ShieldPenetrationSlider.value         = SelectedEnemy.ship.weapons[0].ShieldPenetration;
+                ProjectileVelocitySlider.value        = SelectedEnemy.ship.weapons[0].ProjectileVelocity;
             }
         }
 
@@ -344,22 +344,22 @@ namespace SystemView
         {
             if (SelectedEnemy != null && Enemies.Contains(SelectedEnemy))
             {
-                SelectedEnemy.ship.Descriptor.semimajoraxis      =      SemiMajorAxisSlider.value;
-                SelectedEnemy.ship.Descriptor.semiminoraxis      =      SemiMinorAxisSlider.value;
-                SelectedEnemy.ship.Descriptor.rotation           =      RotationSlider.value;
-                SelectedEnemy.ship.MaxHealth                     = (int)MaxHealthSlider.value;
-                SelectedEnemy.ship.MaxShield                     = (int)MaxShieldSlider.value;
-                SelectedEnemy.ship.ShieldRegenerationRate        = (int)ShieldRegenerationSlider.value;
-                SelectedEnemy.ship.Weapons[0].AttackSpeed        = (int)WeaponCooldownSlider.value;
-                SelectedEnemy.ship.Weapons[0].Range              =      WeaponRangeSlider.value;
-                SelectedEnemy.ship.Weapons[0].Damage             = (int)WeaponDamageSlider.value;
-                SelectedEnemy.ship.Weapons[0].ShieldPenetration  =      ShieldPenetrationSlider.value;
-                SelectedEnemy.ship.Weapons[0].ProjectileVelocity =      ProjectileVelocitySlider.value;
+                SelectedEnemy.ship.descriptor.semimajoraxis      =      SemiMajorAxisSlider.value;
+                SelectedEnemy.ship.descriptor.semiminoraxis      =      SemiMinorAxisSlider.value;
+                SelectedEnemy.ship.descriptor.rotation           =      RotationSlider.value;
+                SelectedEnemy.ship.max_health                    = (int)MaxHealthSlider.value;
+                SelectedEnemy.ship.max_shield                    = (int)MaxShieldSlider.value;
+                SelectedEnemy.ship.shield_regeneration_rate      = (int)ShieldRegenerationSlider.value;
+                SelectedEnemy.ship.weapons[0].AttackSpeed        = (int)WeaponCooldownSlider.value;
+                SelectedEnemy.ship.weapons[0].Range              =      WeaponRangeSlider.value;
+                SelectedEnemy.ship.weapons[0].Damage             = (int)WeaponDamageSlider.value;
+                SelectedEnemy.ship.weapons[0].ShieldPenetration  =      ShieldPenetrationSlider.value;
+                SelectedEnemy.ship.weapons[0].ProjectileVelocity =      ProjectileVelocitySlider.value;
 
-                if (SelectedEnemy.ship.Health > SelectedEnemy.ship.MaxHealth)
-                    SelectedEnemy.ship.Health = SelectedEnemy.ship.MaxHealth;
+                if (SelectedEnemy.ship.health > SelectedEnemy.ship.max_health)
+                    SelectedEnemy.ship.health = SelectedEnemy.ship.max_health;
 
-                SelectedEnemy.ship.Descriptor.compute();
+                SelectedEnemy.ship.descriptor.compute();
             }
         }
 

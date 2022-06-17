@@ -24,38 +24,38 @@ namespace SystemView
 
             ship = new SystemShip();
 
-            ship.Descriptor = new OrbitingObjectDescriptor(ship.self);
+            ship.descriptor = new OrbitingObjectDescriptor(ship.self);
 
-            ship.Descriptor.semiminoraxis = (float)Rand.NextDouble() * 5.0f + 6.0f;
-            ship.Descriptor.semimajoraxis = (float)Rand.NextDouble() * 2.0f + ship.Descriptor.semiminoraxis;
+            ship.descriptor.semiminoraxis = (float)Rand.NextDouble() * 5.0f + 6.0f;
+            ship.descriptor.semimajoraxis = (float)Rand.NextDouble() * 2.0f + ship.descriptor.semiminoraxis;
 
-            ship.Descriptor.rotation      = (float)Rand.NextDouble() * 2.0f * 3.1415926f;
-            ship.Descriptor.mean_anomaly   = (float)Rand.NextDouble() * 2.0f * 3.1415926f;
+            ship.descriptor.rotation      = (float)Rand.NextDouble() * 2.0f * 3.1415926f;
+            ship.descriptor.mean_anomaly   = (float)Rand.NextDouble() * 2.0f * 3.1415926f;
 
             GameLoop gl = GetComponent<GameLoop>();
 
             SystemState State = gl.CurrentSystemState;
 
-            ship.Descriptor.central_body = State.Star;
+            ship.descriptor.central_body = State.Star;
 
-            ship.Start = ship.Destination = ship.Descriptor;
+            ship.start = ship.destination = ship.descriptor;
 
-            ship.PathPlanned = true;
+            ship.path_planned = true;
 
             Object = new GameObject();
             Object.name = "Enemy ship";
 
-            ship.Descriptor.compute();
+            ship.descriptor.compute();
 
             Renderer = Object.AddComponent<SystemShipRenderer>();
             Renderer.ship = ship;
             Renderer.shipColor = Color.red;
             Renderer.width = 3.0f;
 
-            ship.Health = ship.MaxHealth = 25000;
-            ship.Shield = ship.MaxShield = 50000;
+            ship.health = ship.max_health = 25000;
+            ship.shield = ship.max_shield = 50000;
 
-            ship.ShieldRegenerationRate = 2;
+            ship.shield_regeneration_rate = 2;
 
             ShipWeapon Weapon = new ShipWeapon();
 
@@ -69,7 +69,7 @@ namespace SystemView
             Weapon.Cooldown = 0;
             Weapon.Self = ship;
 
-            ship.Weapons.Add(Weapon);
+            ship.weapons.Add(Weapon);
         }
 
         private void Update()
@@ -77,9 +77,9 @@ namespace SystemView
             int CurrentMillis = (int)(Time.time * 1000) - LastTime;
             LastTime = (int)(Time.time * 1000);
 
-            ship.Descriptor.update_position(CurrentMillis);
+            ship.descriptor.update_position(CurrentMillis);
 
-            Renderer.shipColor.r = (float) ship.Health / ship.MaxHealth;
+            Renderer.shipColor.r = (float) ship.health / ship.max_health;
         }
 
         void OnDestroy()

@@ -25,7 +25,7 @@ namespace SystemView
 
             Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
-            or.descriptor = planet.Descriptor;
+            or.descriptor = planet.descriptor;
 
             // Temporary circular sprite
             sr.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
@@ -34,7 +34,7 @@ namespace SystemView
         // LateUpdate is called once per frame
         void LateUpdate()
         {
-            float[] pos = planet.Descriptor.get_position();
+            float[] pos = planet.descriptor.get_position();
 
             sr.transform.position = new Vector3(pos[0], pos[1], -0.1f);
             sr.transform.localScale = new Vector3(3.0f / Camera.scale, 3.0f / Camera.scale, 1.0f);
