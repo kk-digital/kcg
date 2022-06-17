@@ -10,7 +10,7 @@ namespace Projectile
         // Projectile ID
         private static int projectileID;
 
-        public Entity SpawnProjectile(Material material, int spriteID, int witdh, int height, Vector2 position, 
+        public Entity SpawnProjectile(Material material, int spriteID, int witdh, int height, Vector2 startPos,
             ProjectileType projectileType, ProjectileDrawType projectileDrawType)
         {
             // Create Entity
@@ -18,7 +18,7 @@ namespace Projectile
 
             // Increase ID per object statically
             projectileID++;
-
+            
             // Set Png Size
             var pngSize = new Vector2Int(witdh, height);
 
@@ -44,7 +44,7 @@ namespace Projectile
             entity.AddProjectileSprite2D(texture, spriteSize);
 
             // Add Physics State 2D Component
-            entity.AddProjectilePhysicsState2D(position, position, Vector2.zero, 1.0f, 1.0f, 1.5f,
+            entity.AddProjectilePhysicsState2D(startPos, startPos, Vector2.zero, 1.0f, 1.0f, 0.5f,
                 Vector2.zero);
 
             // Add Projectile Type

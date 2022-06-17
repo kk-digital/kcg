@@ -1,5 +1,7 @@
 using UnityEngine;
 using Enums;
+using Entitas;
+
 public class ProjectileTest : MonoBehaviour
 {
     // Projectile Draw System
@@ -14,6 +16,12 @@ public class ProjectileTest : MonoBehaviour
     // Rendering Material
     [SerializeField]
     Material Material;
+    int image;
+    bool init;
+
+    // Projectile Properties
+    private Vector2 startPos;
+    Vector3 worldPosition;
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
     void Start()
@@ -28,27 +36,54 @@ public class ProjectileTest : MonoBehaviour
         projectileSpawnerSystem = new Projectile.SpawnerSystem();
 
         // Initialize Image
-        int image = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\grenades\\Grenades4.png", 16, 16);
+        image = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\grenades\\Grenades7.png", 16, 16);
 
+        init = true;
+    }
+
+    private void SpawnProjectile(Vector2 startPos)
+    {
         // Loading Image
-        projectileSpawnerSystem.SpawnProjectile(Material, image, 16, 16, Vector2.zero, 
+        projectileSpawnerSystem.SpawnProjectile(Material, image, 16, 16, startPos,
             ProjectileType.Grenade, ProjectileDrawType.Standard);
     }
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
     private void Update()
     {
-        // Clear last frame
-        foreach (var mr in GetComponentsInChildren<MeshRenderer>())
-            if (Application.isPlaying)
-                Destroy(mr.gameObject);
-            else
-                DestroyImmediate(mr.gameObject);
+        if(init)
+        {
+            // Clear last frame
+            foreach (var mr in GetComponentsInChildren<MeshRenderer>())
+                if (Application.isPlaying)
+                    Destroy(mr.gameObject);
+                else
+                    DestroyImmediate(mr.gameObject);
 
-        // Process Physics
-        projectileVelocitySystem.Process(Contexts.sharedInstance);
+            // Get Vehicle Entites
+            IGroup<GameEntity> entities =
+            Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentPlayer);
+            foreach (var entity in entities)
+            {
+                startPos = entity.physicsPosition2D.Value;
+            }
 
-        // Draw Initialized Projectile
-        projectileDrawSystem.Draw(Instantiate(Material), transform, 12);
+            if(Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                Vector3 mousePos = Input.mousePosition;
+                mousePos.z = Camera.main.nearClipPlane;
+                worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
+
+                SpawnProjectile(startPos);
+            }
+
+            Vector3 difference = new Vector2(worldPosition.x, worldPosition.y) - startPos;
+
+            // Process Physics
+            projectileVelocitySystem.Update(difference, Contexts.sharedInstance);
+
+            // Draw Initialized Projectile
+            projectileDrawSystem.Draw(Instantiate(Material), transform, 12);
+        }
     }
 }
