@@ -19,8 +19,16 @@ namespace Animation
             CurrentTime += animationSpeed * deltaTime;
             AnimationProperties animationType = GameState.AnimationManager.Get(Type);
 
-            if (animationType.TimePerFrame != 0)
-                CurrentFrame = (int)(CurrentTime / animationType.TimePerFrame) % animationType.FrameCount;
+            if (animationType.TimePerFrame >= -0.001 && animationType.TimePerFrame <= 0.001)
+            {
+                animationType.TimePerFrame = 1.0f;
+            }
+            if (animationType.FrameCount == 0)
+            {
+                animationType.FrameCount = 1;
+            }
+        
+            CurrentFrame = (int)(CurrentTime / animationType.TimePerFrame) % animationType.FrameCount;
         }
 
         public int GetSpriteId()

@@ -41,23 +41,21 @@ namespace Item
             ItemType.AddItemAttributeSize(size);
         }
 
-        public void SetTexture(int spriteSheetID)
+        public void SetTexture(int spriteId)
         {
             if (ItemType == null)
                 return;
 
-            int spriteAtlasID = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteSheetID, 0, 0, Enums.AtlasType.Particle);
-            ItemType.AddItemAttributeSprite(spriteAtlasID);
+            ItemType.AddItemAttributeSprite(spriteId);
         }
 
 
-        public void SetInventoryTexture(int spriteSheetID)
+        public void SetInventoryTexture(int spriteId)
         {
             if (ItemType == null)
                 return;
 
-            int spriteAtlasID = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteSheetID, 0, 0, Enums.AtlasType.Particle);
-            ItemType.AddItemAttributeInventorySprite(spriteAtlasID);
+            ItemType.AddItemAttributeInventorySprite(spriteId);
 
         }
 

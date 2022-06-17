@@ -86,15 +86,18 @@ namespace Planet.Unity
             int OreSpriteSheet =
                 GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
 
+            int GunIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(GunSpriteSheet, 0, 0, Enums.AtlasType.Particle);
+            int OreIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(OreSpriteSheet, 0, 0, Enums.AtlasType.Particle);
+
             Item.CreationApi.Instance.CreateItem(Enums.ItemType.Gun, "Gun");
-            Item.CreationApi.Instance.SetTexture(GunSpriteSheet);
-            Item.CreationApi.Instance.SetInventoryTexture(GunSpriteSheet);
+            Item.CreationApi.Instance.SetTexture(GunIcon);
+            Item.CreationApi.Instance.SetInventoryTexture(GunIcon);
             Item.CreationApi.Instance.SetSize(new Vector2(0.5f, 0.5f));
             Item.CreationApi.Instance.EndItem();
 
             Item.CreationApi.Instance.CreateItem(Enums.ItemType.Ore, "Ore");
-            Item.CreationApi.Instance.SetTexture(OreSpriteSheet);
-            Item.CreationApi.Instance.SetInventoryTexture(OreSpriteSheet);
+            Item.CreationApi.Instance.SetTexture(OreIcon);
+            Item.CreationApi.Instance.SetInventoryTexture(OreIcon);
             Item.CreationApi.Instance.SetSize(new Vector2(0.5f, 0.5f));
             Item.CreationApi.Instance.SetStackable(99);
             Item.CreationApi.Instance.EndItem();
