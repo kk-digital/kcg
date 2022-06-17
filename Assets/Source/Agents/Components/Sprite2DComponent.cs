@@ -1,5 +1,4 @@
 using Entitas;
-using KMath;
 using UnityEngine;
 
 namespace Agent
@@ -7,6 +6,6 @@ namespace Agent
     public struct Sprite2DComponent : IComponent
     {
         public int SpriteId;
-        public Vec2f Size;
+        public Vector2 Size;
     }
 }

@@ -1,24 +1,19 @@
-﻿using KMath;
+﻿using Physics;
+using UnityEngine;
 
 namespace Tile
 {
-    //TODO: add material type for block
-    //TODO: per material coefficient of restitution, coefficient of static friction and coefficient of dynamic friction
-    //TODO: Want to use elliptical/capsule collider eventually too, not just box collider
-    //TODO: Each Tile type has as collision type enum, determining collision behavior/lines
     /// <summary> Contains info about tile, include all layers </summary>
     public struct Tile
     {
         public static readonly Tile EmptyTile = new() {Type = -1, SpriteId = -1};
-        public static readonly Vec2i Size = new(1, 1);
+        public static readonly Vector2Int Size = new Vector2Int(1, 1);
         
         // Contains the TileProperties Ids for every layer
         public int Type;
         public int SpriteId;
 
-        public AABB2D Borders;
-
-        //public Verticies BoxBorders;
+        public Box2DBorders BoxBorders;
         //Health
         public byte Durability;
 

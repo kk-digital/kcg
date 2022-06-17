@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using Enums;
-using KMath;
 
 namespace Item
 {
@@ -17,16 +16,16 @@ namespace Item
             EntitasContext = entitasContext;
         }
 
-        public GameEntity SpawnItem(ItemType itemType, Vec2f position)
+        public GameEntity SpawnItem(ItemType itemType, Vector2 position)
         {
             var entityAttribute = EntitasContext.game.GetEntityWithItemAttributes(itemType);
-            Vec2f size = entityAttribute.itemAttributeSize.Size;
+            Vector2 size = entityAttribute.itemAttributeSize.Size;
 
             var entity = EntitasContext.game.CreateEntity();
             entity.AddItemID(ItemID, itemType);
-            entity.AddPhysicsPosition2D(position, Vec2f.Zero);
-            entity.AddPhysicsBox2DCollider(size, Vec2f.Zero);
-            entity.AddPhysicsMovable(0f, Vec2f.Zero, Vec2f.Zero);
+            entity.AddPhysicsPosition2D(position, position);
+            entity.AddPhysicsBox2DCollider(size, Vector2.zero);
+            entity.AddPhysicsMovable(0f, Vector2.zero, Vector2.zero, 0f);
 
             ItemID++;
             return entity;

@@ -3,14 +3,14 @@ using System;
 
 namespace KMath.PerlinNoise {
     public class PerlinField2D {
-        public static int[] primes =  {
+        static public int[] primes =  {
              2,  3,  5,  7, 11,
             13, 17, 19, 23, 29,
             31, 37, 41, 43, 47,
             53, 59, 61, 67, 71
         };
         
-        public static float dot(int gi, float x, float y, float z) {
+        static public float dot(int gi, float x, float y, float z) {
             int[,] g3 = {
                 {1, 1, 0}, {-1,  1, 0}, {1, -1,  0}, {-1, -1,  0},
                 {1, 0, 1}, {-1,  0, 1}, {1,  0, -1}, {-1,  0, -1},

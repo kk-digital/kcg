@@ -11,7 +11,7 @@ public partial class GameEntity {
     public Physics.Position2DComponent physicsPosition2D { get { return (Physics.Position2DComponent)GetComponent(GameComponentsLookup.PhysicsPosition2D); } }
     public bool hasPhysicsPosition2D { get { return HasComponent(GameComponentsLookup.PhysicsPosition2D); } }
 
-    public void AddPhysicsPosition2D(KMath.Vec2f newValue, KMath.Vec2f newPreviousValue) {
+    public void AddPhysicsPosition2D(UnityEngine.Vector2 newValue, UnityEngine.Vector2 newPreviousValue) {
         var index = GameComponentsLookup.PhysicsPosition2D;
         var component = (Physics.Position2DComponent)CreateComponent(index, typeof(Physics.Position2DComponent));
         component.Value = newValue;
@@ -19,7 +19,7 @@ public partial class GameEntity {
         AddComponent(index, component);
     }
 
-    public void ReplacePhysicsPosition2D(KMath.Vec2f newValue, KMath.Vec2f newPreviousValue) {
+    public void ReplacePhysicsPosition2D(UnityEngine.Vector2 newValue, UnityEngine.Vector2 newPreviousValue) {
         var index = GameComponentsLookup.PhysicsPosition2D;
         var component = (Physics.Position2DComponent)CreateComponent(index, typeof(Physics.Position2DComponent));
         component.Value = newValue;

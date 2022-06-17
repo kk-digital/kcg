@@ -1,23 +1,22 @@
 using System;
 using System.Linq;
-using KMath;
 using UnityEngine;
 
 namespace Planet
 {
     public class ChunkList
     {
-        public Vec2i MapSize;
+        public Vector2Int MapSize;
 
         public Chunk[] Data;
         private Chunk errorChunk = new(Enums.Tile.MapChunkType.Error);
         private Chunk emptyChunk = new(Enums.Tile.MapChunkType.Empty);
 
-        public ChunkList(Vec2i mapSize)
+        public ChunkList(Vector2Int mapSize)
         {
             MapSize = mapSize;
 
-            var tileCount = mapSize.X * mapSize.Y;
+            var tileCount = mapSize.x * mapSize.y;
             var chunkCount = (tileCount + (tileCount & 0x0f)) >> 4;
             
             Data = Enumerable.Repeat(new Chunk(Enums.Tile.MapChunkType.Empty), chunkCount).ToArray();
@@ -38,9 +37,9 @@ namespace Planet
         
         public int GetChunkIndex(int x, int y)
         {
-            int chunkMulti = Chunk.Size.X * Chunk.Size.Y;
+            int chunkMulti = Chunk.Size.x * Chunk.Size.y;
             
-            return (x * Chunk.Size.X + y * MapSize.X) / chunkMulti;
+            return (x * Chunk.Size.x + y * MapSize.x) / chunkMulti;
         }
         
         public ref Chunk GetChunkRef(int x, int y)

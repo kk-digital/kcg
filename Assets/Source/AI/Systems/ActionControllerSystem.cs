@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Entitas;
-using KMath;
 using UnityEngine;
 
 namespace AI
@@ -50,7 +49,7 @@ namespace AI
 
                     // Todo: Create state class with get method.
                     if (Effects.states.ContainsKey("pos"))
-                        ActorEntity.ReplaceAgentPositionDiscrete2D((Vec2i)ActionEntity.aIAction.Effects.states["pos"], Vec2i.zero);
+                        ActorEntity.ReplaceAgentPositionDiscrete2D((Vector2Int)ActionEntity.aIAction.Effects.states["pos"], Vector2Int.zero);
                     else
                         Debug.Log("There is no key called pos.");
 
