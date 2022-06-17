@@ -1,5 +1,6 @@
 using UnityEngine;
 using Entitas;
+using KMath;
 
 public class SpawnEnemy : MonoBehaviour
 {
@@ -157,7 +158,7 @@ public class SpawnEnemy : MonoBehaviour
                 Vector3 mousePos = Input.mousePosition;
                 mousePos.z = Camera.main.nearClipPlane;
                 Vector2 worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
-                SpawnEnemySlime(new Vector2(worldPosition.x, worldPosition.y));
+                SpawnEnemySlime(new Vec2f(worldPosition.x, worldPosition.y));
             }
 
             // Delete the old one
