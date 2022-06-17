@@ -56,7 +56,7 @@ public class ProjectileTest : MonoBehaviour
         projectileCollisionSystem = new Projectile.ProcessCollisionSystem();
 
         // Initialize Image
-        image = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\grenades\\Grenades7.png", 16, 16);
+        image = Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\grenades\\Grenades7.png", 16, 16);
 
         // Init is done, now all updates ready to work
         init = true;
@@ -87,7 +87,7 @@ public class ProjectileTest : MonoBehaviour
             Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentPlayer);
             foreach (var entity in entities)
             {
-                startPos = entity.physicsPosition2D.Value;
+                startPos = new Vector2(entity.physicsPosition2D.Value.X, entity.physicsPosition2D.Value.Y);
             }
 
             IGroup<GameEntity> Pentities =
@@ -164,9 +164,9 @@ public class ProjectileTest : MonoBehaviour
         {
             var pos = entity.projectilePhysicsState2D;
             var boxCollider = entity.physicsBox2DCollider;
-            var boxBorders = boxCollider.CreateEntityBoxBorders(pos.Position);
+            var boxBorders = new AABB2D(new Vec2f(pos.Position.x, pos.Position.y), boxCollider.Size);
 
-            Gizmos.DrawWireCube(boxBorders.Center, new Vector3(boxCollider.Size.x, boxCollider.Size.y, 0.0f));
+            Gizmos.DrawWireCube(new Vector3(boxBorders.Center.X, boxBorders.Center.Y, 0.0f), new Vector3(boxCollider.Size.X, boxCollider.Size.Y, 0.0f));
         }
     }
 #endif

@@ -1,5 +1,6 @@
 using UnityEngine;
 using Physics;
+using KMath;
 
 namespace Projectile
 {
@@ -18,18 +19,20 @@ namespace Projectile
                 // Set Vehicle Physics to variable
                 var pos = entity.projectilePhysicsState2D;
 
+                var size = entity.physicsBox2DCollider.Size;
+
                 // Create Box Borders
-                var entityBoxBorders = entity.physicsBox2DCollider.CreateEntityBoxBorders(new Vector2(pos.TempPosition.x, pos.Position.y));
+                var entityBoxBorders = new AABB2D(new Vec2f(pos.TempPosition.x, pos.Position.y), size);
 
                 // If is colliding bottom-top stop y movement
-                if (entityBoxBorders.IsCollidingBottom(tileMap, pos.angularVelocity))
+                if (entityBoxBorders.IsCollidingBottom(tileMap, new Vec2f(pos.angularVelocity.x, pos.angularVelocity.y)))
                 {
                     if (entity.projectileCollider.isFirstSolid)
                     {
                         entity.Destroy();
                     }
                 }
-                else if (entityBoxBorders.IsCollidingTop(tileMap, pos.angularVelocity))
+                else if (entityBoxBorders.IsCollidingTop(tileMap, new Vec2f(pos.angularVelocity.x, pos.angularVelocity.y)))
                 {
                     if(entity.projectileCollider.isFirstSolid)
                     {
@@ -38,17 +41,18 @@ namespace Projectile
                 }
 
                 pos = entity.projectilePhysicsState2D;
-                entityBoxBorders = entity.physicsBox2DCollider.CreateEntityBoxBorders(new Vector2(pos.Position.x, pos.TempPosition.y));
+                size = entity.physicsBox2DCollider.Size;
+                entityBoxBorders = new AABB2D(new Vec2f(pos.Position.x, pos.TempPosition.y), size);
 
                 // If is colliding left-right stop x movement
-                if (entityBoxBorders.IsCollidingLeft(tileMap, pos.angularVelocity))
+                if (entityBoxBorders.IsCollidingLeft(tileMap, new Vec2f(pos.angularVelocity.x, pos.angularVelocity.y)))
                 {
                     if (entity.projectileCollider.isFirstSolid)
                     {
                         entity.Destroy();
                     }
                 }
-                else if (entityBoxBorders.IsCollidingRight(tileMap, pos.angularVelocity))
+                else if (entityBoxBorders.IsCollidingRight(tileMap, new Vec2f(pos.angularVelocity.x, pos.angularVelocity.y)))
                 {
                     if (entity.projectileCollider.isFirstSolid)
                     {
