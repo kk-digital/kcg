@@ -53,12 +53,12 @@ public class SpawnEnemy : MonoBehaviour
         Game.State.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 2, 0, Enums.AtlasType.Agent);
         Game.State.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 3, 0, Enums.AtlasType.Agent);
 
-        GameState.AnimationManager.CreateAnimation(1);
-        GameState.AnimationManager.SetName("slime-move-left");
-        GameState.AnimationManager.SetTimePerFrame(0.35f);
-        GameState.AnimationManager.SetBaseSpriteID(SlimeMoveLeftBaseSpriteId);
-        GameState.AnimationManager.SetFrameCount(4);
-        GameState.AnimationManager.EndAnimation();
+        Game.State.AnimationManager.CreateAnimation(1);
+        Game.State.AnimationManager.SetName("slime-move-left");
+        Game.State.AnimationManager.SetTimePerFrame(0.35f);
+        Game.State.AnimationManager.SetBaseSpriteID(SlimeMoveLeftBaseSpriteId);
+        Game.State.AnimationManager.SetFrameCount(4);
+        Game.State.AnimationManager.EndAnimation();
 
         // Assign Contexts
         contexts = Contexts.sharedInstance;
@@ -108,7 +108,7 @@ public class SpawnEnemy : MonoBehaviour
     }
 
     // Spawn Enemy
-    private void SpawnEnemySlime(Vector2 pos)
+    private void SpawnEnemySlime(Vec2f pos)
     {
         // Add Enemy to Enemy list
         planetState.AddEnemy(Material, SlimeMoveLeftBaseSpriteId, 32, 32, pos, 1);
