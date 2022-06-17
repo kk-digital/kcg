@@ -52,16 +52,15 @@ public static class GameComponentsLookup {
     public const int PhysicsBox2DCollider = 41;
     public const int PhysicsMovable = 42;
     public const int PhysicsPosition2D = 43;
-    public const int PhysicsSphere2DCollider = 44;
-    public const int ProjectileID = 45;
-    public const int ProjectilePhysicsState2D = 46;
-    public const int ProjectileSprite2D = 47;
-    public const int ProjectileType = 48;
-    public const int VehicleID = 49;
-    public const int VehiclePhysicsState2D = 50;
-    public const int VehicleSprite2D = 51;
+    public const int ProjectileID = 44;
+    public const int ProjectilePhysicsState2D = 45;
+    public const int ProjectileSprite2D = 46;
+    public const int ProjectileType = 47;
+    public const int VehicleID = 48;
+    public const int VehiclePhysicsState2D = 49;
+    public const int VehicleSprite2D = 50;
 
-    public const int TotalComponents = 52;
+    public const int TotalComponents = 51;
 
     public static readonly string[] componentNames = {
         "AgentEnemy",
@@ -108,7 +107,6 @@ public static class GameComponentsLookup {
         "PhysicsBox2DCollider",
         "PhysicsMovable",
         "PhysicsPosition2D",
-        "PhysicsSphere2DCollider",
         "ProjectileID",
         "ProjectilePhysicsState2D",
         "ProjectileSprite2D",
@@ -163,7 +161,6 @@ public static class GameComponentsLookup {
         typeof(Physics.Box2DColliderComponent),
         typeof(Physics.MovableComponent),
         typeof(Physics.Position2DComponent),
-        typeof(Physics.Sphere2DColliderComponent),
         typeof(Projectile.IDComponent),
         typeof(Projectile.PhysicsState2DComponent),
         typeof(Projectile.Sprite2DComponent),

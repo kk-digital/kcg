@@ -124,7 +124,7 @@ namespace Tile
                     for(int i = row; i < row + 4; i++)
                     {
                         int atlasSpriteId = 
-                            Game.State.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(spriteSheetId, i, j, 0);
+                            GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(spriteSheetId, i, j, 0);
                         if (i == row && j == column)
                         {
                             baseId = atlasSpriteId;
@@ -147,7 +147,7 @@ namespace Tile
                     for(int j = column; j <= column + 4; j++)
                     {
                         int atlasSpriteId = 
-                            Game.State.TileSpriteAtlasManager.CopyTileSpriteToAtlas(spriteSheetId, i, j, 0);
+                            GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas(spriteSheetId, i, j, 0);
                         if (i == row && j == column)
                         {
                             baseId = atlasSpriteId;
@@ -164,7 +164,7 @@ namespace Tile
             if (CurrentTileIndex != -1)
             {
                 int atlasSpriteId = 
-                    Game.State.TileSpriteAtlasManager.CopyTileSpriteToAtlas(spriteSheetId, row, column, 0);
+                    GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas(spriteSheetId, row, column, 0);
                 PropertiesArray[CurrentTileIndex].BaseSpriteId = atlasSpriteId;
                 PropertiesArray[CurrentTileIndex].AutoMapping = false;
             }
@@ -174,7 +174,7 @@ namespace Tile
         {
             if (CurrentTileIndex == -1) return;
             
-            int atlasSpriteId = Game.State.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(spriteSheetId, row, column, 0);
+            int atlasSpriteId = GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(spriteSheetId, row, column, 0);
             PropertiesArray[CurrentTileIndex].BaseSpriteId = atlasSpriteId;
             PropertiesArray[CurrentTileIndex].AutoMapping = false;
         }

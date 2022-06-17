@@ -9,17 +9,17 @@ namespace Animation
 
         public static void CreateDefaultAnimation()
         {
-            Game.State.AnimationManager.CreateAnimation((int)AnimationType.Generic);
-            Game.State.AnimationManager.SetName("Generic");
-            Game.State.AnimationManager.SetFrameCount(5);
-            Game.State.AnimationManager.SetTimePerFrame(0.15f);
-            Game.State.AnimationManager.EndAnimation();
+            GameState.AnimationManager.CreateAnimation((int)AnimationType.Generic);
+            GameState.AnimationManager.SetName("Generic");
+            GameState.AnimationManager.SetFrameCount(5);
+            GameState.AnimationManager.SetTimePerFrame(0.15f);
+            GameState.AnimationManager.EndAnimation();
 
-            Game.State.AnimationManager.CreateAnimation((int)AnimationType.Particle);
-            Game.State.AnimationManager.SetName("Particle");
-            Game.State.AnimationManager.SetFrameCount(5);
-            Game.State.AnimationManager.SetTimePerFrame(0.15f);
-            Game.State.AnimationManager.EndAnimation();
+            GameState.AnimationManager.CreateAnimation((int)AnimationType.Particle);
+            GameState.AnimationManager.SetName("Particle");
+            GameState.AnimationManager.SetFrameCount(5);
+            GameState.AnimationManager.SetTimePerFrame(0.15f);
+            GameState.AnimationManager.EndAnimation();
         }
     }
 }

@@ -18,11 +18,11 @@ public class MiningLaser : MonoBehaviour
 
     // Initialize
     private bool Init;
-    private Vec2f laserPosition;
+    private Vector2 laserPosition;
 
     // Laser Properties
     private bool isHeld = false;
-    public Vec2f offset = Vec2f.Zero;
+    public Vector2 offset = Vector2.zero;
 
     // Item Draw System
     Item.DrawSystem DrawSystem;
@@ -46,7 +46,7 @@ public class MiningLaser : MonoBehaviour
         Initialize();
 
         // Laser Position
-        laserPosition = new Vec2f(2.0f, 2.5f);
+        laserPosition = new Vector2(2.0f, 2.5f);
 
         tileMap = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().TileMap;
 
@@ -106,7 +106,7 @@ public class MiningLaser : MonoBehaviour
     private void Initialize()
     {
         // Get Sheet ID
-        int laserSpriteSheet = Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\lasergun-temp.png", 195, 79);
+        int laserSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\lasergun-temp.png", 195, 79);
 
         // Create Item
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.Gun, "LaserItem");
@@ -118,7 +118,7 @@ public class MiningLaser : MonoBehaviour
         Item.CreationApi.Instance.SetInventoryTexture(laserSpriteSheet);
 
         // Create Size Component
-        Item.CreationApi.Instance.SetSize(new Vec2f(1.0f, 0.5f));
+        Item.CreationApi.Instance.SetSize(new Vector2(1.0f, 0.5f));
 
         // End of the item
         Item.CreationApi.Instance.EndItem();
@@ -191,8 +191,8 @@ public class MiningLaser : MonoBehaviour
                 // Create new start and end position based on mouse position
                 Cell start = new Cell
                 {
-                    x = (int)laserPosition.X + (int)offset.X,
-                    y = (int)laserPosition.Y + (int)offset.Y
+                    x = (int)laserPosition.x + (int)offset.x,
+                    y = (int)laserPosition.y + (int)offset.y
                 };
 
                 Cell end = new Cell

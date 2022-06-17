@@ -11,7 +11,7 @@ public partial class GameEntity {
     public Physics.Box2DColliderComponent physicsBox2DCollider { get { return (Physics.Box2DColliderComponent)GetComponent(GameComponentsLookup.PhysicsBox2DCollider); } }
     public bool hasPhysicsBox2DCollider { get { return HasComponent(GameComponentsLookup.PhysicsBox2DCollider); } }
 
-    public void AddPhysicsBox2DCollider(KMath.Vec2f newSize, KMath.Vec2f newOffset) {
+    public void AddPhysicsBox2DCollider(UnityEngine.Vector2 newSize, UnityEngine.Vector2 newOffset) {
         var index = GameComponentsLookup.PhysicsBox2DCollider;
         var component = (Physics.Box2DColliderComponent)CreateComponent(index, typeof(Physics.Box2DColliderComponent));
         component.Size = newSize;
@@ -19,7 +19,7 @@ public partial class GameEntity {
         AddComponent(index, component);
     }
 
-    public void ReplacePhysicsBox2DCollider(KMath.Vec2f newSize, KMath.Vec2f newOffset) {
+    public void ReplacePhysicsBox2DCollider(UnityEngine.Vector2 newSize, UnityEngine.Vector2 newOffset) {
         var index = GameComponentsLookup.PhysicsBox2DCollider;
         var component = (Physics.Box2DColliderComponent)CreateComponent(index, typeof(Physics.Box2DColliderComponent));
         component.Size = newSize;

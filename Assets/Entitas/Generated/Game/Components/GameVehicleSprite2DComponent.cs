@@ -11,7 +11,7 @@ public partial class GameEntity {
     public Vehicle.Sprite2DComponent vehicleSprite2D { get { return (Vehicle.Sprite2DComponent)GetComponent(GameComponentsLookup.VehicleSprite2D); } }
     public bool hasVehicleSprite2D { get { return HasComponent(GameComponentsLookup.VehicleSprite2D); } }
 
-    public void AddVehicleSprite2D(UnityEngine.Texture2D newTexture, KMath.Vec2f newSize) {
+    public void AddVehicleSprite2D(UnityEngine.Texture2D newTexture, UnityEngine.Vector2 newSize) {
         var index = GameComponentsLookup.VehicleSprite2D;
         var component = (Vehicle.Sprite2DComponent)CreateComponent(index, typeof(Vehicle.Sprite2DComponent));
         component.Texture = newTexture;
@@ -19,7 +19,7 @@ public partial class GameEntity {
         AddComponent(index, component);
     }
 
-    public void ReplaceVehicleSprite2D(UnityEngine.Texture2D newTexture, KMath.Vec2f newSize) {
+    public void ReplaceVehicleSprite2D(UnityEngine.Texture2D newTexture, UnityEngine.Vector2 newSize) {
         var index = GameComponentsLookup.VehicleSprite2D;
         var component = (Vehicle.Sprite2DComponent)CreateComponent(index, typeof(Vehicle.Sprite2DComponent));
         component.Texture = newTexture;

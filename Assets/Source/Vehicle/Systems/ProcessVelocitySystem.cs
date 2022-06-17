@@ -1,7 +1,6 @@
 using UnityEngine;
 using Entitas;
 using System.Collections;
-using KMath;
 
 namespace Vehicle
 {
@@ -25,7 +24,7 @@ namespace Vehicle
             gameContext = Contexts.sharedInstance.game;
         }
 
-        public void ProcessMovement(Vec2f newSpeed, Contexts contexts)
+        public void ProcessMovement(Vector2 newSpeed, Contexts contexts)
         {
             // Get Vehicle Entites
             IGroup<GameEntity> entities =
@@ -62,7 +61,7 @@ namespace Vehicle
             contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
             foreach (var vehicle in entities)
             {
-                if (vehicle.vehiclePhysicsState2D.angularVelocity.Y > 0.5f)
+                if (vehicle.vehiclePhysicsState2D.angularVelocity.y > 0.5f)
                     return;
 
                 // Get position from component
@@ -71,7 +70,7 @@ namespace Vehicle
 
                 // Update the position
                 vehicle.ReplaceVehiclePhysicsState2D(position.Position, position.TempPosition, position.Scale, position.TempScale,
-                    new Vec2f(vehicle.vehiclePhysicsState2D.angularVelocity.X, (vehicle.vehiclePhysicsState2D.angularVelocity.Y - vehicle.vehiclePhysicsState2D.centerOfGravity) * Time.deltaTime), vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
+                    new Vector2(vehicle.vehiclePhysicsState2D.angularVelocity.x, (vehicle.vehiclePhysicsState2D.angularVelocity.y - vehicle.vehiclePhysicsState2D.centerOfGravity) * Time.deltaTime), vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
                          vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
 
                 // Add velocity to position
@@ -86,7 +85,7 @@ namespace Vehicle
             }
         }
 
-        public IEnumerator Break(bool xAxis, Vec2f angularVelocity, Contexts contexts)
+        public IEnumerator Break(bool xAxis, Vector2 angularVelocity, Contexts contexts)
         {
             IGroup<GameEntity> entities =
             contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
@@ -103,15 +102,15 @@ namespace Vehicle
                     float duration = 1.0f;
                     while (elapsed < duration)
                     {
-                        newVelo = Mathf.Lerp(angularVelocity.X, 0.0f, elapsed / duration);
+                        newVelo = Mathf.Lerp(angularVelocity.x, 0.0f, elapsed / duration);
                         // Update the position
                         vehicle.ReplaceVehiclePhysicsState2D(position.Position, position.TempPosition, position.Scale, position.TempScale,
-                            new Vec2f(newVelo, position.angularVelocity.Y), vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
+                            new Vector2(newVelo, position.angularVelocity.y), vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
                                  vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
                         elapsed += Time.deltaTime;
                         yield return null;
                     }
-                    angularVelocity.X = 0.0f;
+                    angularVelocity.x = 0.0f;
                 }
                 else
                 {
@@ -119,15 +118,15 @@ namespace Vehicle
                     float duration = 1.0f;
                     while (elapsed < duration)
                     {
-                        newVelo = Mathf.Lerp(angularVelocity.Y, 0.0f, elapsed / duration);
+                        newVelo = Mathf.Lerp(angularVelocity.y, 0.0f, elapsed / duration);
                         // Update the position
                         vehicle.ReplaceVehiclePhysicsState2D(position.Position, position.TempPosition, position.Scale, position.TempScale,
-                            new Vec2f(position.angularVelocity.X, newVelo), vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
+                            new Vector2(position.angularVelocity.x, newVelo), vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
                                  vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
                         elapsed += Time.deltaTime;
                         yield return null;
                     }
-                    angularVelocity.Y = 0.0f;
+                    angularVelocity.y = 0.0f;
                 }
             }
 

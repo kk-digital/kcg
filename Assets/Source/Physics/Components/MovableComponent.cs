@@ -1,6 +1,5 @@
-using System;
 using Entitas;
-using KMath;
+using UnityEngine;
 
 namespace Physics
 {
@@ -8,7 +7,7 @@ namespace Physics
     {
         public static void CheckPrecision(this ref float num)
         {
-            if (Math.Abs(num - 0f) <= 0.01f)
+            if (Mathf.Abs(num - 0f) <= 0.01f)
             {
                 num = 0f;
             }
@@ -17,8 +16,9 @@ namespace Physics
     public struct MovableComponent : IComponent
     {
         public float Speed;
-        public Vec2f Velocity;
-        public Vec2f Acceleration;
+        public Vector2 Velocity;
+        public Vector2 Acceleration;
+        public float AccelerationTime;
     }
 }
 
