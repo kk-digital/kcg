@@ -8,6 +8,9 @@ namespace Projectile
         // Singleton
         public static readonly ProcessVelocitySystem Instance;
 
+        float distance;
+        Vector2 direction;
+
         // Game Context
         private GameContext gameContext;
 
@@ -56,17 +59,22 @@ namespace Projectile
                 var position = projectile.projectilePhysicsState2D;
                 position.TempPosition = position.Position;
 
-                // Calculate distance
-                float distance = difference.magnitude;
+                if (!projectile.projectileCollider.isFired)
+                {
+                    // Calculate distance
+                    distance = difference.magnitude;
 
-                // Calculate direction
-                Vector2 direction = difference / distance;
+                    // Calculate direction
+                    direction = difference / distance;
 
-                // Normalize the Direction
-                direction.Normalize();
+                    // Normalize the Direction
+                    direction.Normalize();
 
-                // Set Angular velocity with new direciton
-                position.angularVelocity = (direction * 2000.0f) * Time.deltaTime;
+                    // Set Angular velocity with new direciton
+                    position.angularVelocity = (direction * 2000.0f) * Time.deltaTime;
+                }
+
+                projectile.projectileCollider.isFired = true;
 
                 // Process the velocity
                 position.Position += projectile.projectilePhysicsState2D.angularVelocity * Time.deltaTime;

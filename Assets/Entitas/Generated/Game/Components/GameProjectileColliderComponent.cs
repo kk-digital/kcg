@@ -11,17 +11,19 @@ public partial class GameEntity {
     public Projectile.ColliderComponent projectileCollider { get { return (Projectile.ColliderComponent)GetComponent(GameComponentsLookup.ProjectileCollider); } }
     public bool hasProjectileCollider { get { return HasComponent(GameComponentsLookup.ProjectileCollider); } }
 
-    public void AddProjectileCollider(bool newIsFirstSolid) {
+    public void AddProjectileCollider(bool newIsFirstSolid, bool newIsFired) {
         var index = GameComponentsLookup.ProjectileCollider;
         var component = (Projectile.ColliderComponent)CreateComponent(index, typeof(Projectile.ColliderComponent));
         component.isFirstSolid = newIsFirstSolid;
+        component.isFired = newIsFired;
         AddComponent(index, component);
     }
 
-    public void ReplaceProjectileCollider(bool newIsFirstSolid) {
+    public void ReplaceProjectileCollider(bool newIsFirstSolid, bool newIsFired) {
         var index = GameComponentsLookup.ProjectileCollider;
         var component = (Projectile.ColliderComponent)CreateComponent(index, typeof(Projectile.ColliderComponent));
         component.isFirstSolid = newIsFirstSolid;
+        component.isFired = newIsFired;
         ReplaceComponent(index, component);
     }
 
