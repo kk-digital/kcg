@@ -371,14 +371,20 @@ namespace SystemView {
             return false;
         }
 
-        public float[] force_encounter(OrbitingObjectDescriptor destination, float acceleration) {
-            float[] required_velocity_change = new float[2];
+        public float[] calculate_required_deltav(OrbitingObjectDescriptor destination, float acceleration, float acceptable_deviation) {
+            float[] time_required = new float[2];
 
             OrbitingObjectDescriptor new_orbit = new OrbitingObjectDescriptor(this);
 
-            // todo: this function
+            if(!new_orbit.plan_path(destination, acceptable_deviation)) return null;
 
-            return required_velocity_change; 
+            float[] current_vel = get_velocity();
+            float[]  target_vel = new_orbit.get_velocity();
+
+            time_required[0] = (target_vel[0] - current_vel[0]) / acceleration;
+            time_required[1] = (target_vel[1] - current_vel[1]) / acceleration;
+
+            return time_required; 
         }
 
         public float[] get_velocity_at(float radius, float E)

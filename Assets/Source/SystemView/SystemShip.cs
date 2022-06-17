@@ -38,6 +38,9 @@ namespace SystemView
 
         public List<ShipWeapon> Weapons;
 
+        private float[] AutopilotTimeRequired;
+        private float[] AutopilotDeltaV;
+
         public bool Destroyed = false;
 
         private AutopilotStage autopilotStage;
@@ -45,9 +48,10 @@ namespace SystemView
 
         public SystemShip()
         {
-            self       = new SpaceObject();
-            Descriptor = new OrbitingObjectDescriptor(self);
-            Weapons    = new List<ShipWeapon>();
+            self            = new SpaceObject();
+            Descriptor      = new OrbitingObjectDescriptor(self);
+            Weapons         = new List<ShipWeapon>();
+            AutopilotDeltaV = new float[2];
         }
 
         public void Destroy()
@@ -94,6 +98,22 @@ namespace SystemView
             }
         }
 
+        public void Accelerate(float CurrentTime) {
+            float AccX = (float)Math.Cos(Rotation) * Acceleration;
+            float AccY = (float)Math.Sin(Rotation) * Acceleration;
+
+            AccX *= CurrentTime;
+            AccY *= CurrentTime;
+
+            self.posx += self.velx * CurrentTime + AccX / 2.0f * CurrentTime;
+            self.posy += self.vely * CurrentTime + AccY / 2.0f * CurrentTime;
+
+            self.velx += AccX;
+            self.vely += AccY;
+
+            Descriptor.change_frame_of_reference(Descriptor.central_body);
+        }
+
         public void Circularize(float CurrentTime)
         {
             if (Descriptor.central_body == null) return;
@@ -107,22 +127,8 @@ namespace SystemView
             if (Rotation == targetrotation)
             {
                 float diff = targetrotation - VelocityDirection;
-                if (diff > -0.4f && diff < 0.4f)
-                {
-                    float AccX = (float)Math.Cos(Rotation) * Acceleration;
-                    float AccY = (float)Math.Sin(Rotation) * Acceleration;
-
-                    AccX *= CurrentTime;
-                    AccY *= CurrentTime;
-
-                    self.posx += self.velx * CurrentTime + AccX / 2.0f * CurrentTime;
-                    self.posy += self.vely * CurrentTime + AccY / 2.0f * CurrentTime;
-
-                    self.velx += AccX;
-                    self.vely += AccY;
-
-                    Descriptor.change_frame_of_reference(Descriptor.central_body);
-                } else Descriptor.update_position(CurrentTime);
+                if (diff > -0.4f && diff < 0.4f) Accelerate(CurrentTime);
+                else Descriptor.update_position(CurrentTime);
             } else { RotateTo(targetrotation, CurrentTime); Descriptor.update_position(CurrentTime); }
         }
 
@@ -154,12 +160,29 @@ namespace SystemView
 
                 case AutopilotStage.PLANNING_TRAJECTORY:
                     Descriptor.update_position(CurrentTime);
-                    if (Descriptor.plan_path(dockingAutopilotTarget.Descriptor, AcceptedDeviation)) autopilotStage = AutopilotStage.TRANSITIONING;
+                    AutopilotTimeRequired = Descriptor.calculate_required_deltav(dockingAutopilotTarget.Descriptor, Acceleration, 20.0f);
+                    if (AutopilotTimeRequired != null) autopilotStage = AutopilotStage.TRANSITIONING;
                     break;
 
-                case AutopilotStage.TRANSITIONING:
+                case AutopilotStage.TRANSITIONING: {
+                    float tx = AutopilotTimeRequired[0];
+                    float ty = AutopilotTimeRequired[1];
 
+                    float target_rotation = Tools.get_angle(tx, ty);
+
+                    if(Rotation != target_rotation) RotateTo(target_rotation, CurrentTime);
+                    else {
+                        Accelerate(CurrentTime);
+                        AutopilotTimeRequired[0] -= (float)Math.Cos(target_rotation) * CurrentTime;
+                        AutopilotTimeRequired[1] -= (float)Math.Sin(target_rotation) * CurrentTime;
+
+                        if((tx > 0.0f && AutopilotTimeRequired[0] < 0.0f)
+                        || (tx < 0.0f && AutopilotTimeRequired[0] > 0.0f)
+                        || (ty > 0.0f && AutopilotTimeRequired[1] < 0.0f)
+                        || (ty < 0.0f && AutopilotTimeRequired[1] > 0.0f)) autopilotStage = AutopilotStage.IN_TRANSIT;
+                    }
                     break;
+                }
 
                 case AutopilotStage.IN_TRANSIT:
                     Descriptor.update_position(CurrentTime);
@@ -170,23 +193,42 @@ namespace SystemView
 
                     float targetMeanAnomaly;
                     if (Descriptor.get_distance_from_center() > dockingAutopilotTarget.Descriptor.get_distance_from_center()) targetMeanAnomaly =       0.0f;
-                    else                                                                                                targetMeanAnomaly = Tools.pi;
+                    else targetMeanAnomaly = Tools.pi;
 
                     float eta = Descriptor.orbital_period * (targetMeanAnomaly - Descriptor.mean_anomaly) * 0.5f;
                     if (eta < 0.0f) eta *= -1;
 
                     float[] vel = Descriptor.get_velocity_at(Descriptor.get_distance_from_center_at(targetMeanAnomaly), targetMeanAnomaly);
 
-                    float timeToSlowDown = (float)Math.Sqrt(vel[0] * vel[0] + vel[1] * vel[1]) / Acceleration;
+                    AutopilotDeltaV[0] = vel[0] - self.velx;
+                    AutopilotDeltaV[1] = vel[1] - self.vely;
+
+                    float timeToSlowDown = Tools.magnitude(AutopilotDeltaV) / Acceleration;
 
                     float dt = eta - timeToSlowDown;
 
                     if (dt < 5.0f) autopilotStage = AutopilotStage.MATCHING_ORBIT;
                     break;
 
-                case AutopilotStage.MATCHING_ORBIT:
+                case AutopilotStage.MATCHING_ORBIT: {
+                    float dvx = AutopilotDeltaV[0];
+                    float dvy = AutopilotDeltaV[1];
 
+                    float target_rotation = Tools.get_angle(dvx, dvy);
+
+                    if(Rotation != target_rotation) RotateTo(target_rotation, CurrentTime);
+                    else {
+                        Accelerate(CurrentTime);
+                        AutopilotDeltaV[0] -= (float)Math.Cos(target_rotation) * CurrentTime * Acceleration;
+                        AutopilotDeltaV[1] -= (float)Math.Sin(target_rotation) * CurrentTime * Acceleration;
+
+                        if((dvx > 0.0f && AutopilotDeltaV[0] < 0.0f)
+                        || (dvx < 0.0f && AutopilotDeltaV[0] > 0.0f)
+                        || (dvy > 0.0f && AutopilotDeltaV[1] < 0.0f)
+                        || (dvy < 0.0f && AutopilotDeltaV[1] > 0.0f)) autopilotStage = AutopilotStage.DOCKING;
+                    }
                     break;
+                }
 
                 case AutopilotStage.DOCKING:
                     // todo

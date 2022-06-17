@@ -47,5 +47,13 @@ namespace SystemView {
         public static float magnitude(float x, float y, float z) {
             return (float)Math.Sqrt(x * x + y * y + z * z);
         }
+
+        /*
+         * Quick and simple function to get the angle a vector points to
+         */
+        public static float get_angle(float x, float y) {
+            float angle = (float)Math.Acos(x / magnitude(x, y));
+            return y >= 0.0f ? angle : twopi - angle;
+        }
     }
 }
