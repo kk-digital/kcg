@@ -74,7 +74,7 @@ namespace SystemView
         public Dropdown DockingTargetSelector;
         private SpaceStation DockingTarget;
 
-        private void start()
+        private void Start()
         {
             RegenerateSystem();
 
@@ -353,7 +353,7 @@ namespace SystemView
                 Station.descriptor.semimajoraxis =  (float)rnd.NextDouble() * SystemScale + Station.descriptor.semiminoraxis;
 
                 Station.descriptor.rotation      =  (float)rnd.NextDouble() * 2.0f * 3.1415926f;
-                Station.descriptor.mean_anomaly   =  (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                Station.descriptor.mean_anomaly  =  (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
                 Station.descriptor.compute();
 
