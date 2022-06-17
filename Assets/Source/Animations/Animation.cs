@@ -18,6 +18,11 @@ namespace Animation
         {
             CurrentTime += animationSpeed * deltaTime;
             AnimationProperties animationType = GameState.AnimationManager.Get(Type);
+
+            if (animationType.TimePerFrame >= -0.001 && animationType.TimePerFrame <= 0.001)
+            {
+                animationType.TimePerFrame = 1.0f;
+            } 
         
             CurrentFrame = (int)(CurrentTime / animationType.TimePerFrame) % animationType.FrameCount;
         }

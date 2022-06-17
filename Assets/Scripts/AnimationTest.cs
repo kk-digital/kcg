@@ -94,22 +94,11 @@ namespace Planet.Unity
             GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
 
     
-            int DustBaseSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 0, 0, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 1, 0, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 2, 0, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 3, 0, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 4, 0, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 5, 0, Enums.AtlasType.Agent);
+            int DustBaseSpriteId = GameState.SpriteAtlasManager.CopySpritesToAtlas(DustSpriteSheet, 0, 0, 5, 0, Enums.AtlasType.Agent);
 
-            int SlimeIdleBaseSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 0, 0, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 1, 0, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 2, 0, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 3, 0, Enums.AtlasType.Agent);
+            int SlimeIdleBaseSpriteId = GameState.SpriteAtlasManager.CopySpritesToAtlas(SlimeSpriteSheet, 0, 0, 3, 0, Enums.AtlasType.Agent);
 
-            int SlimeJumpBaseSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 0, 2, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 1, 2, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 0, 3, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 1, 3, Enums.AtlasType.Agent);
+            int SlimeJumpBaseSpriteId = GameState.SpriteAtlasManager.CopySpritesToAtlas(SlimeSpriteSheet, 0, 2, 1, 3, Enums.AtlasType.Agent);
 
 
             GameState.TileCreationApi.CreateTile(8);

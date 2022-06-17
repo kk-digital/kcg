@@ -65,10 +65,7 @@ public class SpawnEnemy : MonoBehaviour
         int EnemySpriteSheetID = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
 
         // Slime Animation Slice Tiles
-        SlimeMoveLeftBaseSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 0, 0, Enums.AtlasType.Agent);
-        GameState.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 1, 0, Enums.AtlasType.Agent);
-        GameState.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 2, 0, Enums.AtlasType.Agent);
-        GameState.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 3, 0, Enums.AtlasType.Agent);
+        SlimeMoveLeftBaseSpriteId = GameState.SpriteAtlasManager.CopySpritesToAtlas(EnemySpriteSheetID, 0, 0, 3, 0, Enums.AtlasType.Agent);
 
         // Create Input Process System
         InputProcessSystems = new ECSInput.ProcessSystem();
@@ -137,22 +134,22 @@ public class SpawnEnemy : MonoBehaviour
 
     private void SpawnEnemySlime(Vector2 pos)
     {
-        AgentSpawnerSystem.SpawnEnemy(Material, SlimeMoveLeftBaseSpriteId, 32, 32, pos, agentID++);
+        AgentSpawnerSystem.SpawnEnemy(Material, 0, 32, 32, pos, agentID++, SlimeMoveLeftBaseSpriteId);
     }
 
     private void InitializeItems()
     {
         // Get Sheet ID
         int slimeSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
-
+        int slimeIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(slimeSpriteSheet, 0, 0, Enums.AtlasType.Particle);
         // Create Item
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.PlacementTool, "Slime");
 
         // Set texture of item
-        Item.CreationApi.Instance.SetTexture(slimeSpriteSheet);
+        Item.CreationApi.Instance.SetTexture(slimeIcon);
 
         // Create Inventory texture
-        Item.CreationApi.Instance.SetInventoryTexture(slimeSpriteSheet);
+        Item.CreationApi.Instance.SetInventoryTexture(slimeIcon);
 
         // End of the item
         Item.CreationApi.Instance.EndItem();

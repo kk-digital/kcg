@@ -107,15 +107,16 @@ public class MiningLaser : MonoBehaviour
     {
         // Get Sheet ID
         int laserSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\lasergun-temp.png", 195, 79);
-
+        int LaserIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(laserSpriteSheet, 0, 0, Enums.AtlasType.Particle);
+   
         // Create Item
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.Gun, "LaserItem");
 
         // Set texture of item
-        Item.CreationApi.Instance.SetTexture(laserSpriteSheet);
+        Item.CreationApi.Instance.SetTexture(LaserIcon);
 
         // Create Inventory texture
-        Item.CreationApi.Instance.SetInventoryTexture(laserSpriteSheet);
+        Item.CreationApi.Instance.SetInventoryTexture(LaserIcon);
 
         // Create Size Component
         Item.CreationApi.Instance.SetSize(new Vector2(1.0f, 0.5f));
