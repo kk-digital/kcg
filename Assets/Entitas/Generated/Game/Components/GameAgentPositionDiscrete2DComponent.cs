@@ -11,7 +11,7 @@ public partial class GameEntity {
     public Agent.PositionDiscrete2DComponent agentPositionDiscrete2D { get { return (Agent.PositionDiscrete2DComponent)GetComponent(GameComponentsLookup.AgentPositionDiscrete2D); } }
     public bool hasAgentPositionDiscrete2D { get { return HasComponent(GameComponentsLookup.AgentPositionDiscrete2D); } }
 
-    public void AddAgentPositionDiscrete2D(KMath.Vec2i newValue, KMath.Vec2i newPreviousValue) {
+    public void AddAgentPositionDiscrete2D(UnityEngine.Vector2Int newValue, UnityEngine.Vector2Int newPreviousValue) {
         var index = GameComponentsLookup.AgentPositionDiscrete2D;
         var component = (Agent.PositionDiscrete2DComponent)CreateComponent(index, typeof(Agent.PositionDiscrete2DComponent));
         component.Value = newValue;
@@ -19,7 +19,7 @@ public partial class GameEntity {
         AddComponent(index, component);
     }
 
-    public void ReplaceAgentPositionDiscrete2D(KMath.Vec2i newValue, KMath.Vec2i newPreviousValue) {
+    public void ReplaceAgentPositionDiscrete2D(UnityEngine.Vector2Int newValue, UnityEngine.Vector2Int newPreviousValue) {
         var index = GameComponentsLookup.AgentPositionDiscrete2D;
         var component = (Agent.PositionDiscrete2DComponent)CreateComponent(index, typeof(Agent.PositionDiscrete2DComponent));
         component.Value = newValue;

@@ -1,5 +1,4 @@
 using System;
-using KMath;
 using UnityEngine;
 
 namespace Physics
@@ -16,36 +15,36 @@ namespace Physics
                 var pos = entity.physicsPosition2D;
                 var movable = entity.physicsMovable;
 
-                movable.Acceleration.Y -= 400.0f * deltaTime;
+                movable.Acceleration.y -= 400.0f * deltaTime;
 
-                if (movable.Acceleration.Y <= -30.0f)
+                if (movable.Acceleration.y <= -30.0f)
                 {
-                    movable.Acceleration.Y = -30.0f;
+                    movable.Acceleration.y = -30.0f;
                 }
 
-                if (movable.Acceleration.Y >= 30.0f)
+                if (movable.Acceleration.y >= 30.0f)
                 {
-                    movable.Acceleration.Y = 30.0f;
+                    movable.Acceleration.y = 30.0f;
                 }
 
-                Vec2f displacement = 
+                Vector2 displacement = 
                         0.5f * movable.Acceleration * (deltaTime * deltaTime) + movable.Velocity * deltaTime;
-                Vec2f newVelocity = movable.Acceleration * deltaTime + movable.Velocity;
-                newVelocity.X *= 0.7f;
+                Vector2 newVelocity = movable.Acceleration * deltaTime + movable.Velocity;
+                newVelocity.x *= 0.7f;
 
-                if (newVelocity.Y > 5.0f)
+                if (newVelocity.y > 5.0f)
                 {
-                    newVelocity.Y = 5.0f;
+                    newVelocity.y = 5.0f;
                 }
-                if (newVelocity.Y < -5.0f)
+                if (newVelocity.y < -5.0f)
                 {
-                    newVelocity.Y = -5.0f;
+                    newVelocity.y = -5.0f;
                 }
 
 
-                Vec2f newPosition = pos.Value + displacement;
+                Vector2 newPosition = pos.Value + displacement;
 
-                entity.ReplacePhysicsMovable(entity.physicsMovable.Speed, newVelocity, movable.Acceleration);
+                entity.ReplacePhysicsMovable(entity.physicsMovable.Speed, newVelocity, movable.Acceleration, entity.physicsMovable.AccelerationTime);
                 entity.ReplacePhysicsPosition2D(newPosition, pos.Value);
             }
         }

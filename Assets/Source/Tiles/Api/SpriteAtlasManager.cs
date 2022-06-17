@@ -89,7 +89,7 @@ namespace Tile
         // returns an id that can be used later to get texture coordinates
         public int CopyTileSpriteToAtlas(int spriteSheetID, int row, int column, int atlasId)
         {
-            Sprites.SpriteSheet sheet = Game.State.SpriteLoader.SpriteSheets[spriteSheetID];
+            Sprites.SpriteSheet sheet = GameState.SpriteLoader.SpriteSheets[spriteSheetID];
             ref Sprites.SpriteAtlas atlas = ref SpritesArray[atlasId];
             ref int count = ref Count[atlasId];
             
@@ -126,7 +126,7 @@ namespace Tile
         // returns an id that can be used later to get texture coordinates
          public int CopyTileSpriteToAtlas16To32(int spriteSheetID, int row, int column, int atlasId)
         {
-            Sprites.SpriteSheet sheet = Game.State.SpriteLoader.SpriteSheets[spriteSheetID];
+            Sprites.SpriteSheet sheet = GameState.SpriteLoader.SpriteSheets[spriteSheetID];
             ref Sprites.SpriteAtlas atlas = ref SpritesArray[atlasId];
             ref int count = ref Count[atlasId];
             
@@ -168,7 +168,7 @@ namespace Tile
         // returns an id that can be used later to get texture coordinates
         public int CopyTileSpriteToAtlas8To32(int spriteSheetID, int row, int column, int atlasId)
         {
-            Sprites.SpriteSheet sheet = Game.State.SpriteLoader.SpriteSheets[spriteSheetID];
+            Sprites.SpriteSheet sheet = GameState.SpriteLoader.SpriteSheets[spriteSheetID];
             ref Sprites.SpriteAtlas atlas = ref SpritesArray[atlasId];
             ref int count = ref Count[atlasId];
             

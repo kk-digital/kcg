@@ -15,7 +15,7 @@ namespace FloatingText
                 var movable = entity.floatingTextMovable;
                 var state = entity.floatingTextState;
 
-                Utility.Render.DrawString(movable.Position.X, movable.Position.Y,
+                Utility.Render.DrawString(movable.Position.x, movable.Position.y,
                      0.35f, state.Text, 18, new Color(255, 0, 0, 255),
                     transform, drawOrder);
 

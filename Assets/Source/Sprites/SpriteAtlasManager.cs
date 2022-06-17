@@ -112,13 +112,38 @@ namespace Sprites
             }
         }
 
+        // add many sprites to the sprite atlas
+        public int CopySpritesToAtlas(int spriteSheetId, int startColumn, int startRow,
+                    int endColumn, int endRow, Enums.AtlasType type)
+        {
+            int result = 0;
+            if (startColumn <= endColumn && startRow <= endRow)
+            {
+                for(int x = startColumn; x <= endColumn; x++)
+                {
+                    for(int y = startRow; y <= endRow; y++)
+                    {
+                        if (x == startColumn && y == startRow)
+                        {
+                            result = CopySpriteToAtlas(spriteSheetId, x, y, type);
+                        }
+                        else
+                        {
+                        CopySpriteToAtlas(spriteSheetId, x, y, type);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
         // generic blit function used to add a sprite 
         // to the sprite atlas
         public int CopySpriteToAtlas(int spriteSheetID, int column, int row, Enums.AtlasType type)
         {
             ref SpriteAtlas atlas = ref GetSpriteAtlas(type);
             int oldSize = atlas.Rectangles.Length;
-            SpriteSheet sheet = Game.State.SpriteLoader.SpriteSheets[spriteSheetID];
+            SpriteSheet sheet = GameState.SpriteLoader.SpriteSheets[spriteSheetID];
 
             int index = atlas.Rectangles.Length;
 
@@ -223,7 +248,6 @@ namespace Sprites
                     int sheetIndex = 4 * ((x + column * sheet.SpriteWidth) + 
                                     ((y + row * sheet.SpriteHeight) * sheet.Width));
 
-                    Debug.Log(sheet.Data.Length);
                     // RGBA8
                     atlas.Data[atlasIndex + 0] = 
                             sheet.Data[sheetIndex + 0];

@@ -25,8 +25,8 @@ namespace FloatingText
                 {
                     var movable = entity.floatingTextMovable;
 
-                    Vec2f newPosition = new Vec2f(movable.Position.X + movable.Velocity.X,
-                                                    movable.Position.Y + movable.Velocity.Y);
+                    Vec2f newPosition = new Vec2f(movable.Position.x + movable.Velocity.x,
+                                                    movable.Position.y + movable.Velocity.y);
                     entity.ReplaceFloatingTextMovable(movable.Velocity, newPosition);
                 }
 

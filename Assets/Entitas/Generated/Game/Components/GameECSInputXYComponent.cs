@@ -11,7 +11,7 @@ public partial class GameEntity {
     public ECSInput.XYComponent eCSInputXY { get { return (ECSInput.XYComponent)GetComponent(GameComponentsLookup.ECSInputXY); } }
     public bool hasECSInputXY { get { return HasComponent(GameComponentsLookup.ECSInputXY); } }
 
-    public void AddECSInputXY(KMath.Vec2f newValue, bool newJump) {
+    public void AddECSInputXY(UnityEngine.Vector2 newValue, bool newJump) {
         var index = GameComponentsLookup.ECSInputXY;
         var component = (ECSInput.XYComponent)CreateComponent(index, typeof(ECSInput.XYComponent));
         component.Value = newValue;
@@ -19,7 +19,7 @@ public partial class GameEntity {
         AddComponent(index, component);
     }
 
-    public void ReplaceECSInputXY(KMath.Vec2f newValue, bool newJump) {
+    public void ReplaceECSInputXY(UnityEngine.Vector2 newValue, bool newJump) {
         var index = GameComponentsLookup.ECSInputXY;
         var component = (ECSInput.XYComponent)CreateComponent(index, typeof(ECSInput.XYComponent));
         component.Value = newValue;

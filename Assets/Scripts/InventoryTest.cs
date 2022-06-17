@@ -81,26 +81,30 @@ public class InventoryTest : MonoBehaviour
     private void Initialize()
     {
         int GunSpriteSheet =
-            Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\gun-temp.png", 44, 25);
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\gun-temp.png", 44, 25);
         int RockSpriteSheet =
-            Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1.png", 16, 16);
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1.png", 16, 16);
         int RockDustSpriteSheet =
-            Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1_dust.png", 16, 16);
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1_dust.png", 16, 16);
+
+        int GunIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(GunSpriteSheet, 0, 0, Enums.AtlasType.Particle);
+        int RockIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(RockSpriteSheet, 0, 0, Enums.AtlasType.Particle);
+        int RockDustIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(RockDustSpriteSheet, 0, 0, Enums.AtlasType.Particle);
 
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.Gun, "Gun");
-        Item.CreationApi.Instance.SetTexture(GunSpriteSheet);
-        Item.CreationApi.Instance.SetInventoryTexture(GunSpriteSheet);
+        Item.CreationApi.Instance.SetTexture(GunIcon);
+        Item.CreationApi.Instance.SetInventoryTexture(GunIcon);
         Item.CreationApi.Instance.EndItem();
 
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.Rock, "Rock");
-        Item.CreationApi.Instance.SetTexture(RockSpriteSheet);
-        Item.CreationApi.Instance.SetInventoryTexture(RockSpriteSheet);
+        Item.CreationApi.Instance.SetTexture(RockIcon);
+        Item.CreationApi.Instance.SetInventoryTexture(RockIcon);
         Item.CreationApi.Instance.SetStackable(99);
         Item.CreationApi.Instance.EndItem();
 
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.RockDust, "RockDust");
-        Item.CreationApi.Instance.SetTexture(RockDustSpriteSheet);
-        Item.CreationApi.Instance.SetInventoryTexture(RockDustSpriteSheet);
+        Item.CreationApi.Instance.SetTexture(RockDustIcon);
+        Item.CreationApi.Instance.SetInventoryTexture(RockDustIcon);
         Item.CreationApi.Instance.SetStackable(99);
         Item.CreationApi.Instance.EndItem();
     }

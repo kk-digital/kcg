@@ -25,14 +25,16 @@ namespace Agent
                 }
                 var sprite = new Sprites.Sprite
                 {
-                    Texture = Game.State.UnityImage2DCache.Get(spriteId, Enums.AtlasType.Agent),
+                    Texture = GameState.UnityImage2DCache.Get(spriteId, Enums.AtlasType.Agent),
                     TextureCoords = new Vector4(0, 0, 1, 1)
                 };
 
-                var x = entity.physicsPosition2D.Value.X;
-                var y = entity.physicsPosition2D.Value.Y;
-                var width = entity.agentSprite2D.Size.X;
-                var height = entity.agentSprite2D.Size.Y;
+
+
+                var x = entity.physicsPosition2D.Value.x;
+                var y = entity.physicsPosition2D.Value.y;
+                var width = entity.agentSprite2D.Size.x;
+                var height = entity.agentSprite2D.Size.y;
 
                 Utility.Render.DrawSprite(x, y, width, height, sprite, Material.Instantiate(material), transform, drawOrder++);
             }

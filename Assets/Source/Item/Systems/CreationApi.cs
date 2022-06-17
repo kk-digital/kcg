@@ -1,7 +1,6 @@
 ﻿using Entitas;
 using UnityEngine;
 using System;
-using KMath;
 
 /*
     How To use it:
@@ -37,28 +36,26 @@ namespace Item
             ItemType.ReplaceItemAttributes(Attributes.ItemType, name);
         }
 
-        public void SetSize(Vec2f size)
+        public void SetSize(Vector2 size)
         {
             ItemType.AddItemAttributeSize(size);
         }
 
-        public void SetTexture(int spriteSheetID)
+        public void SetTexture(int spriteId)
         {
             if (ItemType == null)
                 return;
 
-            int spriteAtlasID = Game.State.SpriteAtlasManager.CopySpriteToAtlas(spriteSheetID, 0, 0, Enums.AtlasType.Particle);
-            ItemType.AddItemAttributeSprite(spriteAtlasID);
+            ItemType.AddItemAttributeSprite(spriteId);
         }
 
 
-        public void SetInventoryTexture(int spriteSheetID)
+        public void SetInventoryTexture(int spriteId)
         {
             if (ItemType == null)
                 return;
 
-            int spriteAtlasID = Game.State.SpriteAtlasManager.CopySpriteToAtlas(spriteSheetID, 0, 0, Enums.AtlasType.Particle);
-            ItemType.AddItemAttributeInventorySprite(spriteAtlasID);
+            ItemType.AddItemAttributeInventorySprite(spriteId);
 
         }
 

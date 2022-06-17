@@ -17,15 +17,23 @@ namespace Animation
         public void Update(float deltaTime, float animationSpeed)
         {
             CurrentTime += animationSpeed * deltaTime;
-            AnimationProperties animationType = Game.State.AnimationManager.Get(Type);
+            AnimationProperties animationType = GameState.AnimationManager.Get(Type);
 
-            if (animationType.TimePerFrame != 0)
-                CurrentFrame = (int)(CurrentTime / animationType.TimePerFrame) % animationType.FrameCount;
+            if (animationType.TimePerFrame >= -0.001 && animationType.TimePerFrame <= 0.001)
+            {
+                animationType.TimePerFrame = 1.0f;
+            }
+            if (animationType.FrameCount == 0)
+            {
+                animationType.FrameCount = 1;
+            }
+        
+            CurrentFrame = (int)(CurrentTime / animationType.TimePerFrame) % animationType.FrameCount;
         }
 
         public int GetSpriteId()
         {
-            AnimationProperties animationType = Game.State.AnimationManager.Get(Type);
+            AnimationProperties animationType = GameState.AnimationManager.Get(Type);
             return animationType.BaseSpriteId + CurrentFrame;
         }
     }

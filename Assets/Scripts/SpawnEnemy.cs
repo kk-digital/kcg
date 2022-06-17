@@ -1,6 +1,5 @@
 using UnityEngine;
 using Entitas;
-using KMath;
 
 public class SpawnEnemy : MonoBehaviour
 {
@@ -45,20 +44,17 @@ public class SpawnEnemy : MonoBehaviour
         planetState = new Planet.PlanetState(tileMap.MapSize);
 
         // Enemy Sprite Sheet ID
-        int EnemySpriteSheetID = Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
+        int EnemySpriteSheetID = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
 
         // Slime Animation Slice Tiles
-        SlimeMoveLeftBaseSpriteId = Game.State.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 0, 0, Enums.AtlasType.Agent);
-        Game.State.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 1, 0, Enums.AtlasType.Agent);
-        Game.State.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 2, 0, Enums.AtlasType.Agent);
-        Game.State.SpriteAtlasManager.CopySpriteToAtlas(EnemySpriteSheetID, 3, 0, Enums.AtlasType.Agent);
+        SlimeMoveLeftBaseSpriteId = GameState.SpriteAtlasManager.CopySpritesToAtlas(EnemySpriteSheetID, 0, 0, 3, 0, Enums.AtlasType.Agent);
 
-        Game.State.AnimationManager.CreateAnimation(1);
-        Game.State.AnimationManager.SetName("slime-move-left");
-        Game.State.AnimationManager.SetTimePerFrame(0.35f);
-        Game.State.AnimationManager.SetBaseSpriteID(SlimeMoveLeftBaseSpriteId);
-        Game.State.AnimationManager.SetFrameCount(4);
-        Game.State.AnimationManager.EndAnimation();
+        GameState.AnimationManager.CreateAnimation(1);
+        GameState.AnimationManager.SetName("slime-move-left");
+        GameState.AnimationManager.SetTimePerFrame(0.35f);
+        GameState.AnimationManager.SetBaseSpriteID(SlimeMoveLeftBaseSpriteId);
+        GameState.AnimationManager.SetFrameCount(4);
+        GameState.AnimationManager.EndAnimation();
 
         // Assign Contexts
         contexts = Contexts.sharedInstance;
@@ -108,7 +104,7 @@ public class SpawnEnemy : MonoBehaviour
     }
 
     // Spawn Enemy
-    private void SpawnEnemySlime(Vec2f pos)
+    private void SpawnEnemySlime(Vector2 pos)
     {
         // Add Enemy to Enemy list
         planetState.AddEnemy(Material, SlimeMoveLeftBaseSpriteId, 32, 32, pos, 1);
@@ -117,16 +113,16 @@ public class SpawnEnemy : MonoBehaviour
     private void InitializeItems()
     {
         // Get Sheet ID
-        int slimeSpriteSheet = Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
-
+        int slimeSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
+        int slimeIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(slimeSpriteSheet, 0, 0, Enums.AtlasType.Particle);
         // Create Item
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.PlacementTool, "Slime");
 
         // Set texture of item
-        Item.CreationApi.Instance.SetTexture(slimeSpriteSheet);
+        Item.CreationApi.Instance.SetTexture(slimeIcon);
 
         // Create Inventory texture
-        Item.CreationApi.Instance.SetInventoryTexture(slimeSpriteSheet);
+        Item.CreationApi.Instance.SetInventoryTexture(slimeIcon);
 
         // End of the item
         Item.CreationApi.Instance.EndItem();
@@ -158,7 +154,7 @@ public class SpawnEnemy : MonoBehaviour
                 Vector3 mousePos = Input.mousePosition;
                 mousePos.z = Camera.main.nearClipPlane;
                 Vector2 worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
-                SpawnEnemySlime(new Vec2f(worldPosition.x, worldPosition.y));
+                SpawnEnemySlime(new Vector2(worldPosition.x, worldPosition.y));
             }
 
             // Delete the old one

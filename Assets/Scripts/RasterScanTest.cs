@@ -17,7 +17,7 @@ public class RasterScanTest : MonoBehaviour
     private GameContext gameContext;
 
     // Player Position
-    Vec2f playerPosition;
+    Vector3 playerPosition;
 
     // Mouse Position
     Vector2 pointerPos;
@@ -64,8 +64,8 @@ public class RasterScanTest : MonoBehaviour
             // Create new start and end position based on mouse position
             Cell start = new Cell
             {
-                x = (int)playerPosition.X,
-                y = (int)playerPosition.Y
+                x = (int)playerPosition.x,
+                y = (int)playerPosition.y
             };
 
             Cell end = new Cell
