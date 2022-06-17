@@ -48,7 +48,7 @@ namespace Projectile
                 Vector2.zero);
 
             // Add Physics Box Collider Component
-            entity.AddPhysicsBox2DCollider(new KMath.Vec2f(spriteSize.x, spriteSize.y), new KMath.Vec2f(0.0f, 0.0f));
+            entity.AddPhysicsBox2DCollider(spriteSize, Vector2.zero);
 
             // Add Physics Collider Component
             entity.AddProjectileCollider(true, false);
