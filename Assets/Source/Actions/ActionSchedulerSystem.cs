@@ -43,12 +43,11 @@ namespace Action
                             break;
                         case Enums.ActionState.Success:
                             actionEntity.actionExecution.Logic.OnExit();
-                            actorEntity.agentActionScheduler.ActiveActionIDs.RemoveAt(i);
-                            actionEntity.Destroy();
+                            actorEntity.agentActionScheduler.ActiveActionIDs.RemoveAt(i--);
                             break;
                         case Enums.ActionState.Fail:
                             actionEntity.actionExecution.Logic.OnExit();
-                            actorEntity.agentActionScheduler.ActiveActionIDs.RemoveAt(i);
+                            actorEntity.agentActionScheduler.ActiveActionIDs.RemoveAt(i--);
                             break;
                         default:
                             Debug.Log("Not valid Action state.");

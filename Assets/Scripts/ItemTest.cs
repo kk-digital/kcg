@@ -52,12 +52,13 @@ namespace Planet.Unity
 
             if (Input.GetKeyDown(KeyCode.E))
             {
-                GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity, (int)Enums.ActionType.Drop);
+                GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity, Action.DefaultActions.CreateDropAction(Player.Entity.agentID.ID));
             }
 
-            Planet.Update(Time.deltaTime, Material, transform);
             GameState.InventoryDrawSystem.Draw(Material, transform, 14);
             GameState.ItemPickUpSystem.Update();
+            Planet.Update(Time.deltaTime, Material, transform);
+
         }
 
         // create the sprite atlas for testing purposes

@@ -48,16 +48,16 @@ public static class GameComponentsLookup {
     public const int ItemAttributeSprite = 37;
     public const int ItemAttributeStackable = 38;
     public const int ItemAttributes = 39;
-    public const int ItemID = 40;
-    public const int ItemLabel = 41;
-    public const int ItemStack = 42;
-    public const int ItemUse = 43;
-    public const int ParticleEmitter2dPosition = 44;
-    public const int ParticleEmitterState = 45;
-    public const int ParticlePosition2D = 46;
-    public const int ParticleState = 47;
-    public const int PhysicsBox2DCollider = 48;
-    public const int PhysicsDrawPosition2D = 49;
+    public const int ItemDrawPosition2D = 40;
+    public const int ItemID = 41;
+    public const int ItemLabel = 42;
+    public const int ItemStack = 43;
+    public const int ItemUse = 44;
+    public const int ParticleEmitter2dPosition = 45;
+    public const int ParticleEmitterState = 46;
+    public const int ParticlePosition2D = 47;
+    public const int ParticleState = 48;
+    public const int PhysicsBox2DCollider = 49;
     public const int PhysicsMovable = 50;
     public const int PhysicsPosition2D = 51;
     public const int ProjectileID = 52;
@@ -111,6 +111,7 @@ public static class GameComponentsLookup {
         "ItemAttributeSprite",
         "ItemAttributeStackable",
         "ItemAttributes",
+        "ItemDrawPosition2D",
         "ItemID",
         "ItemLabel",
         "ItemStack",
@@ -120,7 +121,6 @@ public static class GameComponentsLookup {
         "ParticlePosition2D",
         "ParticleState",
         "PhysicsBox2DCollider",
-        "PhysicsDrawPosition2D",
         "PhysicsMovable",
         "PhysicsPosition2D",
         "PhysicsSphere2DCollider",
@@ -175,6 +175,7 @@ public static class GameComponentsLookup {
         typeof(Item.Attribute.SpriteComponent),
         typeof(Item.Attribute.StackableComponent),
         typeof(Item.Attributes.Component),
+        typeof(Item.DrawPosition2DComponent),
         typeof(Item.IDComponent),
         typeof(Item.LabelComponent),
         typeof(Item.StackComponent),
@@ -184,7 +185,6 @@ public static class GameComponentsLookup {
         typeof(Particle.Position2DComponent),
         typeof(Particle.StateComponent),
         typeof(Physics.Box2DColliderComponent),
-        typeof(Physics.DrawPosition2DComponent),
         typeof(Physics.MovableComponent),
         typeof(Physics.Position2DComponent),
         typeof(Physics.Sphere2DColliderComponent),

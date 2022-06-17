@@ -1,8 +1,9 @@
 ﻿using Entitas;
 using UnityEngine;
 
-namespace Physics
+namespace Item
 {
+    // Used by pickup actions.
     public struct DrawPosition2DComponent : IComponent
     {
         public Vector2 Value;

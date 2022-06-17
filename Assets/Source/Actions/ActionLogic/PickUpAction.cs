@@ -7,6 +7,8 @@ namespace Action
     public class PickUpAction : ActionBase
     {
         private GameEntity ItemEntity;
+        private float Speed = 3.0f;
+        private float aceleration = 0.5f;
 
         public PickUpAction(int actionID, int agentID, int itemID) : base(actionID, agentID)
         {
@@ -16,43 +18,82 @@ namespace Action
 
         public override void OnEnter()
         {
-            // ItemDoesnt Exist.
+
+#if DEBUG
+            // Item Doesnt Exist
             if (ItemEntity == null)
             {
                 ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
                 return;
             }
 
-            // Check space in toolBar
-            if (AgentEntity.hasAgentToolBar)
+            // Check if Agent has too bar or an inventory.
+            if (!(AgentEntity.hasAgentToolBar || AgentEntity.hasAgentInventory))
             {
-                int toolBarID = AgentEntity.agentToolBar.ToolBarID;
+                ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
+                return;
+            }
+#endif
 
-                // Try ading item to toolBar.
-                if (!GameState.InventoryManager.IsFull(toolBarID))
+            Vector2 drawPos = ItemEntity.physicsPosition2D.Value;
+            ItemEntity.ReplaceItemDrawPosition2D(drawPos, Vector2.zero);
+
+            ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Active);
+        }
+
+        public override void OnUpdate(float deltaTime)
+        {
+            // Update item pos.
+
+            // Center position Item.
+            Vector2 itemSize = Contexts.sharedInstance.game.GetEntityWithItemAttributes(ItemEntity.itemID.ItemType).itemAttributeSize.Size;
+            Vector2 itemCenterPos = ItemEntity.itemDrawPosition2D.Value + itemSize / 2.0f;
+            Vector2 agentCenterPos = AgentEntity.physicsPosition2D.Value + new Vector2(1.0f, 1.5f)/2f; // Todo: Add agentSizeCompenent
+
+            if ((itemCenterPos - agentCenterPos).magnitude < 0.1f)
+            {
+                if (AgentEntity.hasAgentToolBar)
                 {
-                    GameState.InventoryManager.PickUp(ItemEntity, toolBarID);
-                    AgentEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
-                    return;
+                    int toolBarID = AgentEntity.agentToolBar.ToolBarID;
+
+                    // Try ading item to toolBar.
+                    if (!GameState.InventoryManager.IsFull(toolBarID))
+                    {
+                        GameState.InventoryManager.PickUp(ItemEntity, toolBarID);
+                        ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
+                        return;
+                    }
                 }
 
-            }
-
-            if (AgentEntity.hasAgentInventory)
-            {
-                int inventoryID = AgentEntity.agentInventory.InventoryID;
-
-                // Try ading item to Inventory.
-                if (!GameState.InventoryManager.IsFull(inventoryID))
+                if (AgentEntity.hasAgentInventory)
                 {
-                    GameState.InventoryManager.PickUp(ItemEntity, inventoryID);
-                    ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
-                    return;
+                    int inventoryID = AgentEntity.agentInventory.InventoryID;
+
+                    // Try ading item to Inventory.
+                    if (!GameState.InventoryManager.IsFull(inventoryID))
+                    {
+                        GameState.InventoryManager.PickUp(ItemEntity, inventoryID);
+                        ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
+                        return;
+                    }
                 }
+
+                // Inventory and toolbar are full.
+                ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
             }
 
-            // Inventory and ToolBar full or non existent. 
-            ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
+            Speed += aceleration * deltaTime;
+            float speed = Speed * deltaTime;
+
+            // Update Draw Position.
+            Vector2 mov = (agentCenterPos - itemCenterPos).normalized * speed;
+            ItemEntity.ReplaceItemDrawPosition2D(ItemEntity.itemDrawPosition2D.Value + mov, ItemEntity.itemDrawPosition2D.Value);
+        }
+
+        public override void OnExit()
+        {
+            ItemEntity.RemoveItemDrawPosition2D();
+            base.OnExit();
         }
     }
 }

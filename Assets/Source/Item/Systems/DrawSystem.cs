@@ -25,12 +25,31 @@ namespace Item
                 var ItemsOfType = EntitasContext.game.GetEntitiesWithItemIDItemType(ItemTypeEntity.itemAttributes.ItemType);
                 foreach (var entity in ItemsOfType)
                 {
-                    if (entity.hasPhysicsPosition2D == false || ItemTypeEntity.hasItemAttributeSize == false) // Test if Item is Drawable.
+                    // Test if Item is Drawable.
+                    if (!ItemTypeEntity.hasItemAttributeSize) // Test if Item is Drawable.
                         continue;
-                    float x = entity.physicsPosition2D.Value.X;
-                    float y = entity.physicsPosition2D.Value.Y;
-                    float w = ItemTypeEntity.itemAttributeSize.Size.X;
-                    float h = ItemTypeEntity.itemAttributeSize.Size.Y;
+
+                    float x, y;
+                    if (entity.hasItemDrawPosition2D)
+                    {
+                        x = entity.itemDrawPosition2D.Value.x;
+                        y = entity.itemDrawPosition2D.Value.y;
+                    }
+                    else
+                    {
+                        if (entity.hasPhysicsPosition2D)
+                        {
+                            x = entity.physicsPosition2D.Value.x;
+                            y = entity.physicsPosition2D.Value.y;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+
+                    float w = ItemTypeEntity.itemAttributeSize.Size.x;
+                    float h = ItemTypeEntity.itemAttributeSize.Size.y;
                     Utility.Render.DrawSprite(x, y, w, h, sprite, Object.Instantiate(material), transform, drawOrder);
                 }
 
