@@ -13,6 +13,7 @@ namespace Utility
             var tex = sprite.Texture;
             var mat = material;
             mat.SetTexture("_MainTex", tex);
+            //FIX: Do UnityEngine.CreateMesh, not using UnityEngine
             var mesh = CreateMesh(transform, "sprite", drawOrder, mat);
 
             List<int> triangles = new List<int>();
@@ -59,6 +60,7 @@ namespace Utility
         {
             var mat = material;
             mat.color = color;
+            //FIX: Do UnityEngine.CreateMesh, not using UnityEngine
             var mesh = CreateMesh(transform, "colorQuad", drawOrder, mat);
 
             List<int> triangles = new List<int>();

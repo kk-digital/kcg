@@ -4,7 +4,7 @@
     {
         public int ID;
         public string Name; //later use string pool
-        public string Description;
+        public string Description; //later use string pool
 
         public bool AutoMapping;
         

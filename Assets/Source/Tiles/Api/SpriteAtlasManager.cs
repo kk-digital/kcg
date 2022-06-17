@@ -116,6 +116,8 @@ namespace Tile
             // todo: upload texture to open gl
 
             count++;
+            //FIX: Set NeedsUpdate flag. Have function Update Texture. Call from GameLoop; if NeedsUpdate==false return;
+            //Do not update texture every single time a tile is added
             atlas.Texture = Utility.Texture.CreateTextureFromRGBA(atlas.Data, atlas.Width * 32, atlas.Height * 32);
             
             return count - 1;
@@ -157,6 +159,9 @@ namespace Tile
             // todo: upload texture to open gl
 
             count++;
+
+            //FIX: Set NeedsUpdate flag. Have function Update Texture. Call from GameLoop; if NeedsUpdate==false return;
+            //Do not update texture every single time a tile is added
             atlas.Texture = Utility.Texture.CreateTextureFromRGBA(atlas.Data, atlas.Width * 32, atlas.Height * 32);
             
             return count - 1;
@@ -198,6 +203,9 @@ namespace Tile
             // todo: upload texture to open gl
 
             count++;
+
+            //FIX: Set NeedsUpdate flag. Have function Update Texture. Call from GameLoop; if NeedsUpdate==false return;
+            //Do not update texture every single time a tile is added
             atlas.Texture = Utility.Texture.CreateTextureFromRGBA(atlas.Data, atlas.Width * 32, atlas.Height * 32);
             
 

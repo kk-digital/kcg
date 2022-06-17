@@ -123,6 +123,8 @@ namespace Tile
                 {
                     for(int i = row; i < row + 4; i++)
                     {
+                        //FIX: Dont import GameState, make a method?
+                        //TileAtlas is imported by GameState, so TileAtlas should not import GameState
                         int atlasSpriteId = 
                             GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(spriteSheetId, i, j, 0);
                         if (i == row && j == column)
@@ -147,6 +149,7 @@ namespace Tile
                     for(int j = column; j <= column + 4; j++)
                     {
                         int atlasSpriteId = 
+                            //FIX: Dont import GameState, maybe put this as a method on the class?
                             GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas(spriteSheetId, i, j, 0);
                         if (i == row && j == column)
                         {
@@ -163,6 +166,8 @@ namespace Tile
         {
             if (CurrentTileIndex != -1)
             {
+                //FIX: Dont import GameState, make a method?
+                //TileAtlas is imported by GameState, so TileAtlas should not import GameState
                 int atlasSpriteId = 
                     GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas(spriteSheetId, row, column, 0);
                 PropertiesArray[CurrentTileIndex].BaseSpriteId = atlasSpriteId;
