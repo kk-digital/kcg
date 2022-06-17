@@ -66,7 +66,7 @@ namespace Projectile
                 direction.Normalize();
 
                 // Set Angular velocity with new direciton
-                position.angularVelocity = (direction * 2500.0f) * Time.deltaTime;
+                position.angularVelocity = (direction * 2000.0f) * Time.deltaTime;
 
                 // Process the velocity
                 position.Position += projectile.projectilePhysicsState2D.angularVelocity * Time.deltaTime;

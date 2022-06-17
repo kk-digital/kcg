@@ -47,6 +47,12 @@ namespace Projectile
             entity.AddProjectilePhysicsState2D(startPos, startPos, Vector2.zero, 1.0f, 1.0f, 0.5f,
                 Vector2.zero);
 
+            // Add Physics Box Collider Component
+            entity.AddPhysicsBox2DCollider(spriteSize, Vector2.zero);
+
+            // Add Physics Collider Component
+            entity.AddProjectileCollider(true);
+
             // Add Projectile Type
             entity.AddProjectileType(projectileType, projectileDrawType);
 
