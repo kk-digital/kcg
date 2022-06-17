@@ -9,6 +9,9 @@ namespace Physics
     //TODO: Collision calculation should internally cache the chunks around player
     //TODO: (up left, up right, bottom left, bottom right) instead of doing GetTile for each tile.
     //TODO: Implement Prediction Movement Collision
+    //TODO: Create broad-phase for getting tiles
+    // https://www.flipcode.com/archives/Raytracing_Topics_Techniques-Part_4_Spatial_Subdivisions.shtml
+    // http://www.cs.yorku.ca/~amana/research/grid.pdf
     public class ProcessCollisionSystem
     {
         public void Update(Planet.TileMap tileMap)
