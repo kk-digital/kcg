@@ -11,12 +11,16 @@ namespace SystemView {
         public const float gravitational_constant = 6.67408e-11f;   //  G                   6.67408 * 10    -------
                                                                     //                                      kg * s²
 
-        public const float twopi                  = 6.2831852f;     // 2π                   6.2831852
-        public const float pi                     = 3.1415926f;     //  π                   3.1415926
+        public const float twopi                  = 6.2831852f;     // 2π                   6.2831852                   360°
+        public const float pi                     = 3.1415926f;     //  π                   3.1415926                   180°
 
                                                                     //  π
-        public const float halfpi                 = 1.5707963f;     // ---                  1.5707963
+        public const float halfpi                 = 1.5707963f;     // ---                  1.5707963                    90°
                                                                     //  2
+
+                                                                    //  π
+        public const float quarterpi              = 0.7853982f;     // ---                  0.7853982                    45°
+                                                                    //  4
 
         public const float  sqrt2                 = 1.4142136f;     // √ 2                  1.4142136
 

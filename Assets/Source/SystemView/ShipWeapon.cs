@@ -6,12 +6,12 @@ namespace SystemView
 {
     public enum WeaponFlags               // Useful for storing many of a weapon's properties on one single byte
     {
-        WEAPON_PROJECTILE = 2 >> 0,
-        WEAPON_LASER      = 2 >> 1,
-        WEAPON_BROADSIDE  = 2 >> 2,
-        WEAPON_TURRET     = 2 >> 3,
-        WEAPON_POSX       = 2 >> 4,       // Left  = flags & WEAPON_POSX, right = ~flags & WEAPON_POSX
-        WEAPON_POSY       = 2 >> 5        // front = flags & WEAPON_POSY, back  = ~flags & WEAPON_POSY
+        WEAPON_PROJECTILE = 1 << 0,
+        WEAPON_LASER      = 1 << 1,
+        WEAPON_BROADSIDE  = 1 << 2,
+        WEAPON_TURRET     = 1 << 3,
+        WEAPON_POSX       = 1 << 4,       // Left  = flags & WEAPON_POSX, right = ~flags & WEAPON_POSX
+        WEAPON_POSY       = 1 << 5        // front = flags & WEAPON_POSY, back  = ~flags & WEAPON_POSY
     }
 
     public class ShipWeapon
@@ -36,7 +36,9 @@ namespace SystemView
 
         public List<ShipWeaponProjectile> ProjectilesFired = new List<ShipWeaponProjectile>();
 
-        public WeaponFlags flags;
+        // Can't be WeaponFlags as type as C# doesn't let you bitwise OR enum values unless every single possible combination
+        // you might want to OR is defined as a value... Microsoft why??
+        public int flags;
 
         // todo update this later
         public bool TryFiringAt(SystemShip Target, int CurrentTime)
@@ -93,11 +95,27 @@ namespace SystemView
         {
             if (Cooldown > 0) return;
 
+            float dx = x - Self.self.posx;
+            float dy = y - Self.self.posy;
+            float d  = Tools.magnitude(dx, dy);
+
+            if(d > Range) return;
+
+            if((flags & (int)WeaponFlags.WEAPON_BROADSIDE) != 0) {
+                float angle = Self.Rotation + (((flags & (int)WeaponFlags.WEAPON_POSX) != 0) ? Tools.halfpi : -Tools.halfpi);
+
+                if(angle < 0.0f) angle = Tools.twopi + angle;
+                while(angle > Tools.twopi) angle -= Tools.twopi;
+
+                float firing_angle = (float)Math.Acos(dx / d);
+                if(dy < 0.0f) firing_angle = 2.0f * 3.1415926f - firing_angle;
+
+                if(firing_angle < angle - Tools.quarterpi || firing_angle > angle + Tools.quarterpi) return;
+            }
+            
             Cooldown = AttackSpeed;
 
-            // if (flags & WeaponFlags.WEAPON_PROJECTILE)     // don't you hate it when languages don't accept ints or enums in ifs?...
-            if ((flags & WeaponFlags.WEAPON_PROJECTILE) != 0) // like do I really need that != 0 and those brackets?...
-            {
+            if((flags & (int)WeaponFlags.WEAPON_PROJECTILE) != 0) {
                 ShipWeaponProjectile Projectile = new ShipWeaponProjectile();
 
                 Projectile.Self = Self;
@@ -105,11 +123,6 @@ namespace SystemView
 
                 Projectile.Body.posx = Self.self.posx;
                 Projectile.Body.posy = Self.self.posy;
-
-                float dx = x - Self.self.posx;
-                float dy = y - Self.self.posy;
-
-                float d = (float)Math.Sqrt(dx * dx + dy * dy);
 
                 float angle = (float)Math.Acos(dx / d);
 

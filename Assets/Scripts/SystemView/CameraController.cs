@@ -10,7 +10,7 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (((Input.GetMouseButton(0) && !DisableDragging) || Input.GetMouseButton(1)) && Input.mousePosition.x < Screen.width * 0.75)
+        if (Input.GetMouseButton(1) && Input.mousePosition.x < Screen.width * 0.75)
         {
             transform.position += Vector3.right * Input.GetAxis("Mouse X") * -0.28f / scale;
             transform.position += Vector3.up    * Input.GetAxis("Mouse Y") * -0.28f / scale;

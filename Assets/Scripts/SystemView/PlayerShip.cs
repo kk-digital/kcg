@@ -20,7 +20,7 @@ namespace SystemView
 
         public float TimeScale = 1.0f;
         public float DragFactor = 10000.0f;
-        public float SailingFactor = 200.0f;
+        public float SailingFactor = 20.0f;
         public float SystemScale = 1.0f;
 
         public bool  MouseSteering = false;
@@ -60,19 +60,62 @@ namespace SystemView
 
             ship.ShieldRegenerationRate = 3;
 
-            ShipWeapon Cannon = new ShipWeapon();
+            ShipWeapon LeftCannon = new ShipWeapon();
 
-            Cannon.ProjectileColor = new Color(0.7f, 0.9f, 1.0f, 1.0f);
+            LeftCannon.ProjectileColor = new Color(0.7f, 0.9f, 1.0f, 1.0f);
 
-            Cannon.Range = 45.0f;
-            Cannon.ShieldPenetration = 0.2f;
-            Cannon.ProjectileVelocity = 50.0f;
-            Cannon.Damage = 6000;
-            Cannon.AttackSpeed = 2500;
-            Cannon.Cooldown = 0;
-            Cannon.Self = ship;
+            LeftCannon.Range = 45.0f;
+            LeftCannon.ShieldPenetration = 0.2f;
+            LeftCannon.ProjectileVelocity = 50.0f;
+            LeftCannon.Damage = 6000;
+            LeftCannon.AttackSpeed = 1250;
+            LeftCannon.Cooldown = 0;
+            LeftCannon.Self = ship;
 
-            Cannon.flags = WeaponFlags.WEAPON_PROJECTILE;
+            LeftCannon.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE | (int)WeaponFlags.WEAPON_POSX;
+
+
+            ShipWeapon LeftGun = new ShipWeapon();
+
+            LeftGun.ProjectileColor = new Color(0.4f, 0.8f, 1.0f, 1.0f);
+
+            LeftGun.Range = 30.0f;
+            LeftGun.ShieldPenetration = 0.02f;
+            LeftGun.ProjectileVelocity = 50.0f;
+            LeftGun.Damage = 2000;
+            LeftGun.AttackSpeed = 400;
+            LeftGun.Cooldown = 0;
+            LeftGun.Self = ship;
+
+            LeftGun.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE | (int)WeaponFlags.WEAPON_POSX;
+
+            ShipWeapon RightCannon = new ShipWeapon();
+
+            RightCannon.ProjectileColor = new Color(0.7f, 0.9f, 1.0f, 1.0f);
+
+            RightCannon.Range = 45.0f;
+            RightCannon.ShieldPenetration = 0.2f;
+            RightCannon.ProjectileVelocity = 50.0f;
+            RightCannon.Damage = 6000;
+            RightCannon.AttackSpeed = 1250;
+            RightCannon.Cooldown = 0;
+            RightCannon.Self = ship;
+
+            RightCannon.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE;
+
+            ShipWeapon RightGun = new ShipWeapon();
+
+            RightGun.ProjectileColor = new Color(0.4f, 0.8f, 1.0f, 1.0f);
+
+            RightGun.Range = 30.0f;
+            RightGun.ShieldPenetration = 0.02f;
+            RightGun.ProjectileVelocity = 50.0f;
+            RightGun.Damage = 2000;
+            RightGun.AttackSpeed = 400;
+            RightGun.Cooldown = 0;
+            RightGun.Self = ship;
+
+            RightGun.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE;
 
             ShipWeapon Weapon = new ShipWeapon();
 
@@ -86,10 +129,13 @@ namespace SystemView
             Weapon.Cooldown = 0;
             Weapon.Self = ship;
 
-            Weapon.flags = WeaponFlags.WEAPON_PROJECTILE;
+            Weapon.flags = (int)WeaponFlags.WEAPON_PROJECTILE;
 
             ship.Weapons.Add(Weapon);
-            ship.Weapons.Add(Cannon);
+            ship.Weapons.Add(LeftCannon);
+            ship.Weapons.Add(LeftGun);
+            ship.Weapons.Add(RightCannon);
+            ship.Weapons.Add(RightGun);
         }
 
         private void Update()
@@ -174,8 +220,7 @@ namespace SystemView
                 float Effectiveaccx = accx + DragX;
                 float Effectiveaccy = accy + DragY;
                 
-                float SpeedMagnitude = (float)Math.Sqrt(ship.self.velx * ship.self.velx + ship.self.vely * ship.self.vely);
-                float AccMagnitude   = (float)Math.Sqrt(Effectiveaccx * Effectiveaccx + Effectiveaccy * Effectiveaccy);
+                float SpeedMagnitude = Tools.magnitude(ship.self.velx, ship.self.vely);
 
                 ship.self.velx = ((SailingFactor + GravitationalFactor) * ship.self.velx + (float)Math.Cos(ship.Rotation) * SpeedMagnitude) / (1.0f + SailingFactor + GravitationalFactor);
                 ship.self.vely = ((SailingFactor + GravitationalFactor) * ship.self.vely + (float)Math.Sin(ship.Rotation) * SpeedMagnitude) / (1.0f + SailingFactor + GravitationalFactor);
@@ -222,43 +267,27 @@ namespace SystemView
                     ship.PathPlanned = false;
             }
 
-            if (!MouseSteering)
-            {
-                if (Input.GetKey("space"))
-                {
-                    foreach (ShipWeapon Weapon in ship.Weapons)
-                    {
+            if (!MouseSteering) {
+                if (Input.GetKey("space") || Input.GetMouseButton(0)) {
+                    foreach (ShipWeapon Weapon in ship.Weapons) {
+                        Vector3 MousePosition = Camera.GetAbsPos(Input.mousePosition);
+
+                        if ((Weapon.flags & (int)WeaponFlags.WEAPON_LASER) != 0) {
+
+                        } else Weapon.Fire(MousePosition.x, MousePosition.y);
+                    }
+                }
+            } else {
+                if (Input.GetKey("space")) {
+                    foreach (ShipWeapon Weapon in ship.Weapons) {
                         float x = ship.self.posx + (float)Math.Cos(ship.Rotation) * Weapon.Range;
                         float y = ship.self.posy + (float)Math.Sin(ship.Rotation) * Weapon.Range;
 
-                        if ((Weapon.flags & WeaponFlags.WEAPON_LASER) != 0)
-                        {
+                        if ((Weapon.flags & (int)WeaponFlags.WEAPON_LASER) != 0) {
 
-                        }
-                        else Weapon.Fire(x, y);
+                        } else Weapon.Fire(x, y);
                     }
                 }
-
-                Camera.DisableDragging = false;
-            }
-            else
-            {
-                if (Input.GetKey("space") || Input.GetMouseButton(0))
-                {
-
-                    Vector3 MousePosition = Camera.GetAbsPos(Input.mousePosition);
-
-                    foreach (ShipWeapon Weapon in ship.Weapons)
-                    {
-                        if ((Weapon.flags & WeaponFlags.WEAPON_LASER) != 0)
-                        {
-
-                        }
-                        else Weapon.Fire(MousePosition.x, MousePosition.y);
-                    }
-                }
-
-                Camera.DisableDragging = true;
             }
         }
 
