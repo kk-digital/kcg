@@ -118,7 +118,7 @@ namespace Sprites
         {
             ref SpriteAtlas atlas = ref GetSpriteAtlas(type);
             int oldSize = atlas.Rectangles.Length;
-            SpriteSheet sheet = GameState.SpriteLoader.SpriteSheets[spriteSheetID];
+            SpriteSheet sheet = Game.State.SpriteLoader.SpriteSheets[spriteSheetID];
 
             int index = atlas.Rectangles.Length;
 

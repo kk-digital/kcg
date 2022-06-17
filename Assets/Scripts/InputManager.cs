@@ -137,4 +137,3 @@ public class InputManager : MonoBehaviour
         return Enums.eInputDevice.Invalid;
     }
 }
-

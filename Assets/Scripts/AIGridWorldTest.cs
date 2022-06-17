@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using AI;
+using KMath;
 
 // Note: Unit Testing to test AI.
 public class AIGridWorldTest : MonoBehaviour
@@ -31,8 +32,8 @@ public class AIGridWorldTest : MonoBehaviour
     ActionControllerSystem  ActionController;
 
     SquareType[,] map;
-    Vector2Int CurrentAgentPos = new Vector2Int(3, 0);
-    Vector2Int GoalPos = new Vector2Int(5, 7);
+    Vec2i CurrentAgentPos = new(3, 0);
+    Vec2i GoalPos = new(5, 7);
 
     public void Start()
     {
@@ -73,11 +74,11 @@ public class AIGridWorldTest : MonoBehaviour
 
     private void UpdateBord()
     {
-        Vector2Int NewPos = agent.agentPositionDiscrete2D.Value;
-        map[CurrentAgentPos.x, CurrentAgentPos.y] = SquareType.AgentPathSquare;
+        Vec2i NewPos = agent.agentPositionDiscrete2D.Value;
+        map[CurrentAgentPos.X, CurrentAgentPos.Y] = SquareType.AgentPathSquare;
 
         CurrentAgentPos = NewPos;
-        map[CurrentAgentPos.x, CurrentAgentPos.y] = SquareType.AgentSquare;
+        map[CurrentAgentPos.X, CurrentAgentPos.Y] = SquareType.AgentSquare;
     }
 
     public void Update()
@@ -125,7 +126,7 @@ public class AIGridWorldTest : MonoBehaviour
         initialWorldState.states.Add("pos", CurrentAgentPos);
 
         agent = context.game.CreateEntity();
-        agent.AddAgentPositionDiscrete2D(CurrentAgentPos, Vector2Int.zero);
+        agent.AddAgentPositionDiscrete2D(CurrentAgentPos, Vec2i.zero);
         agent.AddAIAgentPlanner(0, new Queue<int>(), new List<ActionInfo>(), new List<int>() { GoalID }, initialWorldState);
 
         int numRows = map.GetLength(0);

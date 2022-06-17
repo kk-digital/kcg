@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Enums.Tile;
+using KMath;
 
 namespace Planet.Unity
 {
@@ -77,91 +78,91 @@ namespace Planet.Unity
 
 
             int TilesMoon = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png", 16, 16);
+                        Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png", 16, 16);
             int OreTileSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
+            Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
             int GunSpriteSheet =
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\gun-temp.png", 44, 25);
+            Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\gun-temp.png", 44, 25);
 
             int RockSpriteSheet =
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1.png", 16, 16);
+            Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1.png", 16, 16);
             int RockDustSpriteSheet =
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1_dust.png", 16, 16);
+            Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1_dust.png", 16, 16);
 
             int DustSpriteSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\particles\\dust1.png", 16, 16);
+            Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\particles\\dust1.png", 16, 16);
             int SlimeSpriteSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
+            Game.State.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
 
     
-            int DustBaseSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 0, 0, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 1, 0, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 2, 0, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 3, 0, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 4, 0, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 5, 0, Enums.AtlasType.Agent);
+            int DustBaseSpriteId = Game.State.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 0, 0, Enums.AtlasType.Agent);
+            Game.State.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 1, 0, Enums.AtlasType.Agent);
+            Game.State.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 2, 0, Enums.AtlasType.Agent);
+            Game.State.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 3, 0, Enums.AtlasType.Agent);
+            Game.State.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 4, 0, Enums.AtlasType.Agent);
+            Game.State.SpriteAtlasManager.CopySpriteToAtlas(DustSpriteSheet, 5, 0, Enums.AtlasType.Agent);
 
-            int SlimeIdleBaseSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 0, 0, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 1, 0, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 2, 0, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 3, 0, Enums.AtlasType.Agent);
+            int SlimeIdleBaseSpriteId = Game.State.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 0, 0, Enums.AtlasType.Agent);
+            Game.State.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 1, 0, Enums.AtlasType.Agent);
+            Game.State.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 2, 0, Enums.AtlasType.Agent);
+            Game.State.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 3, 0, Enums.AtlasType.Agent);
 
-            int SlimeJumpBaseSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 0, 2, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 1, 2, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 0, 3, Enums.AtlasType.Agent);
-            GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 1, 3, Enums.AtlasType.Agent);
+            int SlimeJumpBaseSpriteId = Game.State.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 0, 2, Enums.AtlasType.Agent);
+            Game.State.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 1, 2, Enums.AtlasType.Agent);
+            Game.State.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 0, 3, Enums.AtlasType.Agent);
+            Game.State.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 1, 3, Enums.AtlasType.Agent);
 
 
-            GameState.TileCreationApi.CreateTile(8);
-            GameState.TileCreationApi.SetTileName("ore_1");
-            GameState.TileCreationApi.SetTileTexture16(OreTileSheet, 0, 0);
-            GameState.TileCreationApi.EndTile();
+            Game.State.TileCreationApi.CreateTile(8);
+            Game.State.TileCreationApi.SetTileName("ore_1");
+            Game.State.TileCreationApi.SetTileTexture16(OreTileSheet, 0, 0);
+            Game.State.TileCreationApi.EndTile();
 
-            GameState.TileCreationApi.CreateTile(9);
-            GameState.TileCreationApi.SetTileName("glass");
-            GameState.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 11, 10);
-            GameState.TileCreationApi.EndTile();
+            Game.State.TileCreationApi.CreateTile(9);
+            Game.State.TileCreationApi.SetTileName("glass");
+            Game.State.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 11, 10);
+            Game.State.TileCreationApi.EndTile();
 
-            GameState.TileCreationApi.CreateTile(10);
-            GameState.TileCreationApi.SetTileName("moon");
-            GameState.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 0, 0);
-            GameState.TileCreationApi.EndTile();
+            Game.State.TileCreationApi.CreateTile(10);
+            Game.State.TileCreationApi.SetTileName("moon");
+            Game.State.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 0, 0);
+            Game.State.TileCreationApi.EndTile();
 
             int particleAnimation = 0;
             int slimeIdle = 1;
             int slimeJump = 2;
 
-            GameState.AnimationManager.CreateAnimation(particleAnimation);
-            GameState.AnimationManager.SetName("particle");
-            GameState.AnimationManager.SetTimePerFrame(0.15f);
-            GameState.AnimationManager.SetBaseSpriteID(DustBaseSpriteId);
-            GameState.AnimationManager.SetFrameCount(6);
-            GameState.AnimationManager.EndAnimation();
+            Game.State.AnimationManager.CreateAnimation(particleAnimation);
+            Game.State.AnimationManager.SetName("particle");
+            Game.State.AnimationManager.SetTimePerFrame(0.15f);
+            Game.State.AnimationManager.SetBaseSpriteID(DustBaseSpriteId);
+            Game.State.AnimationManager.SetFrameCount(6);
+            Game.State.AnimationManager.EndAnimation();
 
-            GameState.AnimationManager.CreateAnimation(slimeIdle);
-            GameState.AnimationManager.SetName("slime-idle");
-            GameState.AnimationManager.SetTimePerFrame(0.35f);
-            GameState.AnimationManager.SetBaseSpriteID(SlimeIdleBaseSpriteId);
-            GameState.AnimationManager.SetFrameCount(4);
-            GameState.AnimationManager.EndAnimation();
+            Game.State.AnimationManager.CreateAnimation(slimeIdle);
+            Game.State.AnimationManager.SetName("slime-idle");
+            Game.State.AnimationManager.SetTimePerFrame(0.35f);
+            Game.State.AnimationManager.SetBaseSpriteID(SlimeIdleBaseSpriteId);
+            Game.State.AnimationManager.SetFrameCount(4);
+            Game.State.AnimationManager.EndAnimation();
 
-            GameState.AnimationManager.CreateAnimation(slimeJump);
-            GameState.AnimationManager.SetName("slime-jump");
-            GameState.AnimationManager.SetTimePerFrame(0.35f);
-            GameState.AnimationManager.SetBaseSpriteID(SlimeJumpBaseSpriteId);
-            GameState.AnimationManager.SetFrameCount(4);
-            GameState.AnimationManager.EndAnimation();
+            Game.State.AnimationManager.CreateAnimation(slimeJump);
+            Game.State.AnimationManager.SetName("slime-jump");
+            Game.State.AnimationManager.SetTimePerFrame(0.35f);
+            Game.State.AnimationManager.SetBaseSpriteID(SlimeJumpBaseSpriteId);
+            Game.State.AnimationManager.SetFrameCount(4);
+            Game.State.AnimationManager.EndAnimation();
 
 
 
             // Generating the map
-            Vector2Int mapSize = new Vector2Int(16, 16);
+            Vec2i mapSize = new Vec2i(16, 16);
             Planet = new Planet.PlanetState(mapSize);
             GenerateMap();
 
-            Planet.AddAgent(Instantiate(Material), 0, 16, 16, new Vector2(6.0f, 3.0f), particleAnimation);
-            Planet.AddAgent(Instantiate(Material), 0, 32, 32, new Vector2(2.0f, 3.0f), slimeIdle);
-            Planet.AddAgent(Instantiate(Material), 0, 32, 32, new Vector2(4.0f, 3.0f), slimeJump);
+            Planet.AddAgent(Instantiate(Material), 0, 16, 16, new Vec2f(6.0f, 3.0f), particleAnimation);
+            Planet.AddAgent(Instantiate(Material), 0, 32, 32, new Vec2f(2.0f, 3.0f), slimeIdle);
+            Planet.AddAgent(Instantiate(Material), 0, 32, 32, new Vec2f(4.0f, 3.0f), slimeJump);
         }
 
 
@@ -171,18 +172,18 @@ namespace Planet.Unity
         {
             Planet.TileMap TileMap = Planet.TileMap;
 
-           Vector2Int mapSize = TileMap.MapSize;
+            Vec2i mapSize = TileMap.MapSize;
 
-           for(int j = 0; j < mapSize.y; j++)
+           for(int j = 0; j < mapSize.Y; j++)
             {
-                for(int i = 0; i < mapSize.x; i++)
+                for(int i = 0; i < mapSize.X; i++)
                 {
                     Tile.Tile frontTile = Tile.Tile.EmptyTile;
                     Tile.Tile oreTile = Tile.Tile.EmptyTile;
 
-                    if (i >= mapSize.x / 2)
+                    if (i >= mapSize.X / 2)
                     {
-                        if (j % 2 == 0 && i == mapSize.x / 2)
+                        if (j % 2 == 0 && i == mapSize.X / 2)
                         {
                             frontTile.Type = 10;
                         }
@@ -193,7 +194,7 @@ namespace Planet.Unity
                     }
                     else
                     {
-                        if (j % 3 == 0 && i == mapSize.x / 2 + 1)
+                        if (j % 3 == 0 && i == mapSize.X / 2 + 1)
                         {
                             frontTile.Type = 9;
                         }

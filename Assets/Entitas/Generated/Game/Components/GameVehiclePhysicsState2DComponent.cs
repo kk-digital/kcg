@@ -11,7 +11,7 @@ public partial class GameEntity {
     public Vehicle.PhysicsState2DComponent vehiclePhysicsState2D { get { return (Vehicle.PhysicsState2DComponent)GetComponent(GameComponentsLookup.VehiclePhysicsState2D); } }
     public bool hasVehiclePhysicsState2D { get { return HasComponent(GameComponentsLookup.VehiclePhysicsState2D); } }
 
-    public void AddVehiclePhysicsState2D(UnityEngine.Vector2 newPosition, UnityEngine.Vector2 newTempPosition, UnityEngine.Vector2 newScale, UnityEngine.Vector2 newTempScale, UnityEngine.Vector2 newAngularVelocity, float newAngularMass, float newAngularAcceleration, float newCenterOfGravity, UnityEngine.Vector2 newCenterOfRotation) {
+    public void AddVehiclePhysicsState2D(KMath.Vec2f newPosition, KMath.Vec2f newTempPosition, KMath.Vec2f newScale, KMath.Vec2f newTempScale, KMath.Vec2f newAngularVelocity, float newAngularMass, float newAngularAcceleration, float newCenterOfGravity, KMath.Vec2f newCenterOfRotation) {
         var index = GameComponentsLookup.VehiclePhysicsState2D;
         var component = (Vehicle.PhysicsState2DComponent)CreateComponent(index, typeof(Vehicle.PhysicsState2DComponent));
         component.Position = newPosition;
@@ -26,7 +26,7 @@ public partial class GameEntity {
         AddComponent(index, component);
     }
 
-    public void ReplaceVehiclePhysicsState2D(UnityEngine.Vector2 newPosition, UnityEngine.Vector2 newTempPosition, UnityEngine.Vector2 newScale, UnityEngine.Vector2 newTempScale, UnityEngine.Vector2 newAngularVelocity, float newAngularMass, float newAngularAcceleration, float newCenterOfGravity, UnityEngine.Vector2 newCenterOfRotation) {
+    public void ReplaceVehiclePhysicsState2D(KMath.Vec2f newPosition, KMath.Vec2f newTempPosition, KMath.Vec2f newScale, KMath.Vec2f newTempScale, KMath.Vec2f newAngularVelocity, float newAngularMass, float newAngularAcceleration, float newCenterOfGravity, KMath.Vec2f newCenterOfRotation) {
         var index = GameComponentsLookup.VehiclePhysicsState2D;
         var component = (Vehicle.PhysicsState2DComponent)CreateComponent(index, typeof(Vehicle.PhysicsState2DComponent));
         component.Position = newPosition;

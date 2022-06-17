@@ -1,3 +1,4 @@
+using KMath;
 using UnityEngine;
 using Physics;
 
@@ -18,34 +19,37 @@ namespace Vehicle
                 // Set Vehicle Physics to variable
                 var pos = entity.vehiclePhysicsState2D;
 
+                var size = entity.physicsBox2DCollider.Size;
+
                 // Create Box Borders
-                var entityBoxBorders = entity.physicsBox2DCollider.CreateEntityBoxBorders(new Vector2(pos.TempPosition.x, pos.Position.y));
+                var entityBoxBorders = new AABB2D(new Vec2f(pos.TempPosition.X, pos.Position.Y), size);
 
                 // If is colliding bottom-top stop y movement
                 if (entityBoxBorders.IsCollidingBottom(tileMap, pos.angularVelocity))
                 {
-                    entity.ReplaceVehiclePhysicsState2D(new Vector2(pos.Position.x, pos.TempPosition.y), pos.TempPosition, pos.Scale, pos.TempScale, 
-                        new Vector2(pos.angularVelocity.x, 0.0f), pos.angularMass, pos.angularAcceleration, pos.centerOfGravity, pos.centerOfRotation);
+                    entity.ReplaceVehiclePhysicsState2D(new Vec2f(pos.Position.X, pos.TempPosition.Y), pos.TempPosition, pos.Scale, pos.TempScale, 
+                        new Vec2f(pos.angularVelocity.X, 0.0f), pos.angularMass, pos.angularAcceleration, pos.centerOfGravity, pos.centerOfRotation);
                 }
                 else if (entityBoxBorders.IsCollidingTop(tileMap, pos.angularVelocity))
                 {
-                    entity.ReplaceVehiclePhysicsState2D(new Vector2(pos.Position.x, pos.TempPosition.y), pos.TempPosition, pos.Scale, pos.TempScale,
-                      new Vector2(pos.angularVelocity.x, 0.0f), pos.angularMass, pos.angularAcceleration, pos.centerOfGravity, pos.centerOfRotation);
+                    entity.ReplaceVehiclePhysicsState2D(new Vec2f(pos.Position.X, pos.TempPosition.Y), pos.TempPosition, pos.Scale, pos.TempScale,
+                      new Vec2f(pos.angularVelocity.X, 0.0f), pos.angularMass, pos.angularAcceleration, pos.centerOfGravity, pos.centerOfRotation);
                 }
 
                 pos = entity.vehiclePhysicsState2D;
-                entityBoxBorders = entity.physicsBox2DCollider.CreateEntityBoxBorders(new Vector2(pos.Position.x, pos.TempPosition.y));
+                size = entity.physicsBox2DCollider.Size;
+                entityBoxBorders = new AABB2D(new Vec2f(pos.Position.X, pos.TempPosition.Y), size);
 
                 // If is colliding left-right stop x movement
                 if (entityBoxBorders.IsCollidingLeft(tileMap, pos.angularVelocity))
                 {
-                    entity.ReplaceVehiclePhysicsState2D(new Vector2(pos.Position.x, pos.TempPosition.y), pos.TempPosition, pos.Scale, pos.TempScale,
-                      new Vector2(0.0f, pos.angularVelocity.y), pos.angularMass, pos.angularAcceleration, pos.centerOfGravity, pos.centerOfRotation);
+                    entity.ReplaceVehiclePhysicsState2D(new Vec2f(pos.Position.X, pos.TempPosition.Y), pos.TempPosition, pos.Scale, pos.TempScale,
+                      new Vec2f(0.0f, pos.angularVelocity.Y), pos.angularMass, pos.angularAcceleration, pos.centerOfGravity, pos.centerOfRotation);
                 }
                 else if (entityBoxBorders.IsCollidingRight(tileMap, pos.angularVelocity))
                 {
-                    entity.ReplaceVehiclePhysicsState2D(new Vector2(pos.Position.x, pos.TempPosition.y), pos.TempPosition, pos.Scale, pos.TempScale,
-                      new Vector2(0.0f, pos.angularVelocity.y), pos.angularMass, pos.angularAcceleration, pos.centerOfGravity, pos.centerOfRotation);
+                    entity.ReplaceVehiclePhysicsState2D(new Vec2f(pos.Position.X, pos.TempPosition.Y), pos.TempPosition, pos.Scale, pos.TempScale,
+                      new Vec2f(0.0f, pos.angularVelocity.Y), pos.angularMass, pos.angularAcceleration, pos.centerOfGravity, pos.centerOfRotation);
                 }
             }
         }
