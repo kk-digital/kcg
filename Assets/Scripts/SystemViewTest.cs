@@ -34,18 +34,18 @@ namespace SystemView
         public  int   FarOrbitPlanets  =                    2;
         public  int   SpaceStations    =                   15;
 
-        public  float SystemScale      =                25.0f;
+        public  float system_scale     =                25.0f;
 
         public  float SunMass          = 50000000000000000.0f;
         public  float PlanetMass       =   100000000000000.0f;
         public  float MoonMass         =    20000000000000.0f;
         public  float StationMass      =        1000000000.0f;
 
-        public  float TimeScale        =                 1.0f;
+        public  float time_scale       =                 1.0f;
         
         public  float acceleration     =               250.0f;
-        public  float DragFactor       =             10000.0f;
-        public  float SailingFactor    =                20.0f;
+        public  float drag_factor      =             10000.0f;
+        public  float sailing_factor   =                20.0f;
 
         private float CachedSunMass    = 50000000000000000.0f;
         private float CachedPlanetMass =   100000000000000.0f;
@@ -59,17 +59,17 @@ namespace SystemView
         public void setOuterPlanets(float f)    { OuterPlanets    =        (int)f; }
         public void setFarOrbitPlanets(float f) { FarOrbitPlanets =        (int)f; }
 
-        public void setSystemScale(float f)     { SystemScale     =             f; }
+        public void setSystemScale(float f)     { system_scale    =             f; }
 
         public void setSunMass(float f)         { SunMass         =             f; }
         public void setPlanetMass(float f)      { PlanetMass      =             f; }
         public void setMoonMass(float f)        { MoonMass        =             f; }
 
-        public void setTimeScale(float f)       { TimeScale       =             f; }
+        public void setTimeScale(float f)       { time_scale      =             f; }
 
         public void setAcceleration(float f)    { acceleration    =             f; }
-        public void setDragFactor(float f)      { DragFactor      = 100000.0f - f; }
-        public void setSailingFactor(float f)   { SailingFactor   =   1000.0f - f; }
+        public void setDragFactor(float f)      { drag_factor     = 100000.0f - f; }
+        public void setSailingFactor(float f)   { sailing_factor  =   1000.0f - f; }
 
         public Dropdown DockingTargetSelector;
         private SpaceStation DockingTarget;
@@ -89,7 +89,7 @@ namespace SystemView
 
         public void CenterCamera()
         {
-            Camera.setPosition(-State.Player.ship.self.posx, -State.Player.ship.self.posy, 0.25f / SystemScale);
+            Camera.setPosition(-State.Player.ship.self.posx, -State.Player.ship.self.posy, 0.25f / system_scale);
         }
 
         public void RegenerateSystem()
@@ -97,8 +97,8 @@ namespace SystemView
             LastTime = Time.time;
 
             State.Star.mass = SunMass;
-            State.Star.posx = ((float)rnd.NextDouble() * 8.0f - 64.0f) * SystemScale;
-            State.Star.posy = ((float)rnd.NextDouble() * 8.0f - 4.0f)  * SystemScale;
+            State.Star.posx = ((float)rnd.NextDouble() * 8.0f - 64.0f) * system_scale;
+            State.Star.posy = ((float)rnd.NextDouble() * 8.0f - 4.0f)  * system_scale;
 
             // delete previous system
 
@@ -149,8 +149,8 @@ namespace SystemView
 
                 Planet.descriptor.central_body = State.Star;
 
-                Planet.descriptor.semiminoraxis = (30.0f + (i + 1) * (i + 1) * 10) * SystemScale;
-                Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + ((float)rnd.NextDouble() * (i + 5) * SystemScale);
+                Planet.descriptor.semiminoraxis = (30.0f + (i + 1) * (i + 1) * 10) * system_scale;
+                Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + ((float)rnd.NextDouble() * (i + 5) * system_scale);
 
                 Planet.descriptor.rotation     = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
                 Planet.descriptor.mean_anomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
@@ -217,8 +217,8 @@ namespace SystemView
                 //Planet.descriptor.semiminoraxis = InnerAsteroidBeltDescriptor.semimajoraxis + (i + 3) * (i + 3);
                 //Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + (float)rnd.NextDouble() * i / 2.0f;
 
-                Planet.descriptor.semiminoraxis = State.Planets[InnerPlanets - 1].descriptor.semimajoraxis + ((i + 3) * (i + 3) * 10 * SystemScale);
-                Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + ((float)rnd.NextDouble() * i / 20.0f) * SystemScale;
+                Planet.descriptor.semiminoraxis = State.Planets[InnerPlanets - 1].descriptor.semimajoraxis + ((i + 3) * (i + 3) * 10 * system_scale);
+                Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + ((float)rnd.NextDouble() * i / 20.0f) * system_scale;
 
                 Planet.descriptor.rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
                 Planet.descriptor.mean_anomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
@@ -246,8 +246,8 @@ namespace SystemView
 
                     Moon.descriptor.central_body = Planet.descriptor.self;
 
-                    Moon.descriptor.semiminoraxis = ((float)rnd.NextDouble() * (j + 1) + 5.0f) * SystemScale;
-                    Moon.descriptor.semimajoraxis = Moon.descriptor.semiminoraxis + ((float)rnd.NextDouble() * 2.0f) * SystemScale;
+                    Moon.descriptor.semiminoraxis = ((float)rnd.NextDouble() * (j + 1) + 5.0f) * system_scale;
+                    Moon.descriptor.semimajoraxis = Moon.descriptor.semiminoraxis + ((float)rnd.NextDouble() * 2.0f) * system_scale;
 
                     Moon.descriptor.rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
                     Moon.descriptor.mean_anomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
@@ -315,8 +315,8 @@ namespace SystemView
                 //Planet.descriptor.semiminoraxis = InnerAsteroidBeltDescriptor.semimajoraxis + (i + 3) * (i + 3);
                 //Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + (float)rnd.NextDouble() * i / 2.0f;
 
-                Planet.descriptor.semiminoraxis = State.Planets[InnerPlanets + OuterPlanets - 1].descriptor.semimajoraxis + ((i + 3) * (i + 3) * 31 * SystemScale);
-                Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + (float)rnd.NextDouble() * (i + 1) * 82 * SystemScale;
+                Planet.descriptor.semiminoraxis = State.Planets[InnerPlanets + OuterPlanets - 1].descriptor.semimajoraxis + ((i + 3) * (i + 3) * 31 * system_scale);
+                Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + (float)rnd.NextDouble() * (i + 1) * 82 * system_scale;
 
                 Planet.descriptor.rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
                 Planet.descriptor.mean_anomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
@@ -350,7 +350,7 @@ namespace SystemView
                 Station.descriptor.central_body   = State.Star;
 
                 Station.descriptor.semiminoraxis = ((float)rnd.NextDouble() * State.Planets[InnerPlanets + OuterPlanets - 1].descriptor.semimajoraxis + 4.0f);
-                Station.descriptor.semimajoraxis =  (float)rnd.NextDouble() * SystemScale + Station.descriptor.semiminoraxis;
+                Station.descriptor.semimajoraxis =  (float)rnd.NextDouble() * system_scale + Station.descriptor.semiminoraxis;
 
                 Station.descriptor.rotation      =  (float)rnd.NextDouble() * 2.0f * 3.1415926f;
                 Station.descriptor.mean_anomaly  =  (float)rnd.NextDouble() * 2.0f * 3.1415926f;
@@ -395,12 +395,12 @@ namespace SystemView
                         }
 
             State.Player = gameObject.AddComponent<PlayerShip>();
-            State.Player.SystemScale = SystemScale;
+            State.Player.system_scale = system_scale;
         }
 
         void Update()
         {
-            float CurrentTime = (Time.time - LastTime) * TimeScale;
+            float CurrentTime = (Time.time - LastTime) * time_scale;
             LastTime = Time.time;
             int UpdatesCompleted = 0;
 
@@ -439,8 +439,8 @@ namespace SystemView
 
             foreach (SystemShip s in State.Ships) {
                 if (!s.path_planned)
-                    s.path_planned = s.descriptor.plan_path(s.destination, 0.1f * SystemScale);
-                else if (s.descriptor.get_distance_from(s.destination) < SystemScale) {
+                    s.path_planned = s.descriptor.plan_path(s.destination, 0.1f * system_scale);
+                else if (s.descriptor.get_distance_from(s.destination) < system_scale) {
                     s.descriptor.copy(s.destination);
                     s.path_planned = false;
                     (s.start, s.destination) = (s.destination, s.start);
@@ -468,7 +468,7 @@ namespace SystemView
                 GravVelY += Velocity * dy / d;
             }
 
-            State.Player.GravitationalStrength = (float)Math.Sqrt(GravVelX * GravVelX + GravVelY * GravVelY) * 0.4f / CurrentTime;
+            State.Player.gravitational_strength = (float)Math.Sqrt(GravVelX * GravVelX + GravVelY * GravVelY) * 0.4f / CurrentTime;
 
             State.Player.ship.self.velx   += GravVelX;
             State.Player.ship.self.vely   += GravVelY;
@@ -479,9 +479,9 @@ namespace SystemView
             //State.Player.ship.self.posy   += GravVelY * CurrentTime * 0.5f;
 
             State.Player.ship.acceleration = acceleration;
-            State.Player.DragFactor        = DragFactor;
-            State.Player.SailingFactor     = SailingFactor;
-            State.Player.TimeScale         = TimeScale;
+            State.Player.drag_factor       = drag_factor;
+            State.Player.sailing_factor    = sailing_factor;
+            State.Player.time_scale        = time_scale;
 
             UpdateDropdownMenu();
 

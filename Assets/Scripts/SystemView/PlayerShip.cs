@@ -1,43 +1,39 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SystemView
-{
-    public class PlayerShip : MonoBehaviour
-    {
+namespace SystemView {
+    public class PlayerShip : MonoBehaviour {
         public SystemShip ship;
 
         public GameObject o;
         public SystemShipRenderer renderer;
 
-        public float LastTime;
+        public float last_time;
 
-        public bool RenderOrbit = true;
+        public bool render_orbit = true;
 
-        public float GravitationalStrength = 0.0f;
+        public float gravitational_strength = 0.0f;
 
-        public float TimeScale = 1.0f;
-        public float DragFactor = 10000.0f;
-        public float SailingFactor = 20.0f;
-        public float SystemScale = 1.0f;
+        public float time_scale = 1.0f;
+        public float drag_factor = 10000.0f;
+        public float sailing_factor = 20.0f;
+        public float system_scale = 1.0f;
 
-        public bool  MouseSteering = false;
-        public CameraController Camera;
+        public bool  mouse_steering = false;
+        public CameraController camera;
 
-        public SystemState State;
+        public SystemState state;
 
-        public List<LineRenderer> LaserLineRenderers;
-        public List<GameObject>   LaserLineObjects;
+        public List<LineRenderer> laser_line_renderers;
+        public List<GameObject>   laser_line_objects;
 
-        private void Start()
-        {
-            Camera   = GameObject.Find("Main Camera").GetComponent<CameraController>();
+        private void Start() {
+            camera   = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
-            State    = GetComponent<GameLoop>().CurrentSystemState;
+            state    = GetComponent<GameLoop>().CurrentSystemState;
 
-            LastTime = Time.time * 1000.0f;
+            last_time = Time.time * 1000.0f;
 
             ship = new SystemShip();
 
@@ -60,109 +56,105 @@ namespace SystemView
 
             ship.shield_regeneration_rate = 3;
 
-            ShipWeapon LeftCannon = new ShipWeapon();
+            ShipWeapon left_cannon = new ShipWeapon();
 
-            LeftCannon.ProjectileColor = new Color(0.7f, 0.9f, 1.0f, 1.0f);
+            left_cannon.ProjectileColor = new Color(0.7f, 0.9f, 1.0f, 1.0f);
 
-            LeftCannon.Range = 45.0f;
-            LeftCannon.ShieldPenetration = 0.2f;
-            LeftCannon.ProjectileVelocity = 50.0f;
-            LeftCannon.Damage = 6000;
-            LeftCannon.AttackSpeed = 1250;
-            LeftCannon.Cooldown = 0;
-            LeftCannon.Self = ship;
+            left_cannon.Range = 45.0f;
+            left_cannon.ShieldPenetration = 0.2f;
+            left_cannon.ProjectileVelocity = 50.0f;
+            left_cannon.Damage = 6000;
+            left_cannon.AttackSpeed = 1250;
+            left_cannon.Cooldown = 0;
+            left_cannon.Self = ship;
 
-            LeftCannon.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE | (int)WeaponFlags.WEAPON_POSX;
+            left_cannon.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE | (int)WeaponFlags.WEAPON_POSX;
 
 
-            ShipWeapon LeftGun = new ShipWeapon();
+            ShipWeapon left_gun = new ShipWeapon();
 
-            LeftGun.ProjectileColor = new Color(0.4f, 0.8f, 1.0f, 1.0f);
+            left_gun.ProjectileColor = new Color(0.4f, 0.8f, 1.0f, 1.0f);
 
-            LeftGun.Range = 30.0f;
-            LeftGun.ShieldPenetration = 0.02f;
-            LeftGun.ProjectileVelocity = 50.0f;
-            LeftGun.Damage = 2000;
-            LeftGun.AttackSpeed = 400;
-            LeftGun.Cooldown = 0;
-            LeftGun.Self = ship;
+            left_gun.Range = 30.0f;
+            left_gun.ShieldPenetration = 0.02f;
+            left_gun.ProjectileVelocity = 50.0f;
+            left_gun.Damage = 2000;
+            left_gun.AttackSpeed = 400;
+            left_gun.Cooldown = 0;
+            left_gun.Self = ship;
 
-            LeftGun.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE | (int)WeaponFlags.WEAPON_POSX;
+            left_gun.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE | (int)WeaponFlags.WEAPON_POSX;
 
-            ShipWeapon RightCannon = new ShipWeapon();
+            ShipWeapon right_cannon = new ShipWeapon();
 
-            RightCannon.ProjectileColor = new Color(0.7f, 0.9f, 1.0f, 1.0f);
+            right_cannon.ProjectileColor = new Color(0.7f, 0.9f, 1.0f, 1.0f);
 
-            RightCannon.Range = 45.0f;
-            RightCannon.ShieldPenetration = 0.2f;
-            RightCannon.ProjectileVelocity = 50.0f;
-            RightCannon.Damage = 6000;
-            RightCannon.AttackSpeed = 1250;
-            RightCannon.Cooldown = 0;
-            RightCannon.Self = ship;
+            right_cannon.Range = 45.0f;
+            right_cannon.ShieldPenetration = 0.2f;
+            right_cannon.ProjectileVelocity = 50.0f;
+            right_cannon.Damage = 6000;
+            right_cannon.AttackSpeed = 1250;
+            right_cannon.Cooldown = 0;
+            right_cannon.Self = ship;
 
-            RightCannon.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE;
+            right_cannon.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE;
 
-            ShipWeapon RightGun = new ShipWeapon();
+            ShipWeapon right_gun = new ShipWeapon();
 
-            RightGun.ProjectileColor = new Color(0.4f, 0.8f, 1.0f, 1.0f);
+            right_gun.ProjectileColor = new Color(0.4f, 0.8f, 1.0f, 1.0f);
 
-            RightGun.Range = 30.0f;
-            RightGun.ShieldPenetration = 0.02f;
-            RightGun.ProjectileVelocity = 50.0f;
-            RightGun.Damage = 2000;
-            RightGun.AttackSpeed = 400;
-            RightGun.Cooldown = 0;
-            RightGun.Self = ship;
+            right_gun.Range = 30.0f;
+            right_gun.ShieldPenetration = 0.02f;
+            right_gun.ProjectileVelocity = 50.0f;
+            right_gun.Damage = 2000;
+            right_gun.AttackSpeed = 400;
+            right_gun.Cooldown = 0;
+            right_gun.Self = ship;
 
-            RightGun.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE;
+            right_gun.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE;
 
-            ShipWeapon Weapon = new ShipWeapon();
+            ShipWeapon weapon = new ShipWeapon();
 
-            Weapon.ProjectileColor = Color.white;
+            weapon.ProjectileColor = Color.white;
 
-            Weapon.Range = 20.0f;
-            Weapon.ShieldPenetration = 0.1f;
-            Weapon.ProjectileVelocity = 8.0f;
-            Weapon.Damage = 200;
-            Weapon.AttackSpeed = 50;
-            Weapon.Cooldown = 0;
-            Weapon.Self = ship;
+            weapon.Range = 20.0f;
+            weapon.ShieldPenetration = 0.1f;
+            weapon.ProjectileVelocity = 8.0f;
+            weapon.Damage = 200;
+            weapon.AttackSpeed = 50;
+            weapon.Cooldown = 0;
+            weapon.Self = ship;
 
-            Weapon.flags = (int)WeaponFlags.WEAPON_PROJECTILE;
+            weapon.flags = (int)WeaponFlags.WEAPON_PROJECTILE;
 
-            ship.weapons.Add(Weapon);
-            ship.weapons.Add(LeftCannon);
-            ship.weapons.Add(LeftGun);
-            ship.weapons.Add(RightCannon);
-            ship.weapons.Add(RightGun);
+            ship.weapons.Add(weapon);
+            ship.weapons.Add(left_cannon);
+            ship.weapons.Add(left_gun);
+            ship.weapons.Add(right_cannon);
+            ship.weapons.Add(right_gun);
         }
 
-        private void Update()
-        {
-            float CurrentTime = Time.time - LastTime;
+        private void Update() {
+            float current_time = Time.time - last_time;
 
-            if (CurrentTime == 0.0f) return;
+            if (current_time == 0.0f) return;
 
-            CurrentTime *= TimeScale;
+            current_time *= time_scale;
 
-            LastTime = Time.time;
+            last_time = Time.time;
 
-            if (ship.DockingAutopilotLoop(CurrentTime, 0.1f * SystemScale)) return;
+            if (ship.DockingAutopilotLoop(current_time, 0.1f * system_scale)) return;
 
-            if (Input.GetKeyDown("tab")) MouseSteering = !MouseSteering;
+            if (Input.GetKeyDown("tab")) mouse_steering = !mouse_steering;
 
-            float HorizontalMovement = 0.0f;
+            float horizontal_movement = 0.0f;
 
-            if (!MouseSteering)
-            {
-                if (Input.GetKey("left ctrl")) HorizontalMovement = Input.GetAxis("Horizontal");
-                else ship.rotation -= Input.GetAxis("Horizontal") * CurrentTime * ship.rotational_speed_modifier;
-            }
-            else
-            {
-                HorizontalMovement = -Input.GetAxis("Horizontal");
-                Vector3 RelPos = Camera.GetRelPos(new Vector3(ship.self.posx, ship.self.posy, 0.0f));
+            if (!mouse_steering) {
+                if (Input.GetKey("left ctrl")) horizontal_movement = Input.GetAxis("Horizontal");
+                else ship.rotation -= Input.GetAxis("Horizontal") * current_time * ship.rotational_speed_modifier;
+            } else {
+                horizontal_movement = -Input.GetAxis("Horizontal");
+                Vector3 RelPos = camera.GetRelPos(new Vector3(ship.self.posx, ship.self.posy, 0.0f));
 
                 float dx = Input.mousePosition.x - RelPos.x;
                 float dy = Input.mousePosition.y - RelPos.y;
@@ -173,31 +165,26 @@ namespace SystemView
 
                 if (dy < 0.0f) angle = 2.0f * 3.1415926f - angle;
 
-                ship.rotate_to(angle, CurrentTime);
+                ship.rotate_to(angle, current_time);
             }
 
-            float Movement = Input.GetAxis("Vertical");
-            if (Movement == 0.0f && Input.GetKey("w")) Movement =  1.0f;
-            if (Movement == 0.0f && Input.GetKey("s")) Movement = -1.0f;
+            float movement = Input.GetAxis("Vertical");
+            if (movement == 0.0f && Input.GetKey("w")) movement =  1.0f;
+            if (movement == 0.0f && Input.GetKey("s")) movement = -1.0f;
 
-            float accx = (float)Math.Cos(ship.rotation) * Movement - (float)Math.Sin(ship.rotation) * HorizontalMovement;
-            float accy = (float)Math.Sin(ship.rotation) * Movement + (float)Math.Cos(ship.rotation) * HorizontalMovement;
+            float accx = (float)Math.Cos(ship.rotation) * movement - (float)Math.Sin(ship.rotation) * horizontal_movement;
+            float accy = (float)Math.Sin(ship.rotation) * movement + (float)Math.Cos(ship.rotation) * horizontal_movement;
 
-            accx *= CurrentTime * ship.acceleration;
-            accy *= CurrentTime * ship.acceleration;
+            accx *= current_time * ship.acceleration;
+            accy *= current_time * ship.acceleration;
             
-            if (HorizontalMovement != 0.0f && Movement != 0.0f)
-            {
-                                                 //  1
-                const float rsqrt2 = 0.7071068f; // ---
-                                                 // √ 2
-
-                accx *= rsqrt2;
-                accy *= rsqrt2;
+            if (horizontal_movement != 0.0f && movement != 0.0f) {
+                accx *= Tools.rsqrt2;
+                accy *= Tools.rsqrt2;
             }
 
-            ship.self.posx += ship.self.velx * CurrentTime + accx / 2.0f * CurrentTime;
-            ship.self.posy += ship.self.vely * CurrentTime + accy / 2.0f * CurrentTime;
+            ship.self.posx += ship.self.velx * current_time + accx / 2.0f * current_time;
+            ship.self.posy += ship.self.vely * current_time + accy / 2.0f * current_time;
 
             ship.self.velx += accx;
             ship.self.vely += accy;
@@ -205,61 +192,56 @@ namespace SystemView
             // "Sailing" and "air resistance" effects are dampened the closer the player is to a massive object
             // This is to make gravity and slingshotting more realistic and easier for the player to use.
 
-            if (GravitationalStrength < 1.0f)
-            {
-                float GravitationalFactor = 1.0f / (1.0f - GravitationalStrength);
+            if (gravitational_strength < 1.0f) {
+                float gravitational_factor = 1.0f / (1.0f - gravitational_strength);
 
                 // "Air resistance" effect
-                float DragX = ship.self.velx * -CurrentTime / (GravitationalFactor + DragFactor);
-                float DragY = ship.self.vely * -CurrentTime / (GravitationalFactor + DragFactor);
+                float drag_x = ship.self.velx * -current_time / (gravitational_factor + drag_factor);
+                float drag_y = ship.self.vely * -current_time / (gravitational_factor + drag_factor);
 
-                ship.self.velx *= 1.0f + DragX;
-                ship.self.vely *= 1.0f + DragY;
+                ship.self.velx *= 1.0f + drag_x;
+                ship.self.vely *= 1.0f + drag_y;
 
                 // "Sailing" effect
-                float Effectiveaccx = accx + DragX;
-                float Effectiveaccy = accy + DragY;
+                float effective_accx = accx + drag_x;
+                float effective_accy = accy + drag_y;
                 
-                float SpeedMagnitude = Tools.magnitude(ship.self.velx, ship.self.vely);
+                float magnitude = Tools.magnitude(ship.self.velx, ship.self.vely);
 
-                ship.self.velx = ((SailingFactor + GravitationalFactor) * ship.self.velx + (float)Math.Cos(ship.rotation) * SpeedMagnitude) / (1.0f + SailingFactor + GravitationalFactor);
-                ship.self.vely = ((SailingFactor + GravitationalFactor) * ship.self.vely + (float)Math.Sin(ship.rotation) * SpeedMagnitude) / (1.0f + SailingFactor + GravitationalFactor);
+                ship.self.velx = ((sailing_factor + gravitational_factor) * ship.self.velx + (float)Math.Cos(ship.rotation) * magnitude) / (1.0f + sailing_factor + gravitational_factor);
+                ship.self.vely = ((sailing_factor + gravitational_factor) * ship.self.vely + (float)Math.Sin(ship.rotation) * magnitude) / (1.0f + sailing_factor + gravitational_factor);
             }
 
             renderer.shipColor.b = (float) ship.health / ship.max_health;
 
-            foreach (ShipWeapon Weapon in ship.weapons)
-            {
-                Weapon.Cooldown -= (int)(CurrentTime * 1000.0f);
-                if (Weapon.Cooldown < 0) Weapon.Cooldown = 0;
+            foreach (ShipWeapon weapon in ship.weapons) {
+                weapon.Cooldown -= (int)(current_time * 1000.0f);
+                if (weapon.Cooldown < 0) weapon.Cooldown = 0;
             }
 
-            if (RenderOrbit)
-            {
+            if (render_orbit) {
                 if (ship.descriptor.central_body == null)
-                    ship.descriptor.central_body = State.Star;
+                    ship.descriptor.central_body = state.Star;
 
-                SpaceObject StrongestGravityBody = null;
+                SpaceObject strongest_gravity_object = null;
                 float g = 0.0f;
 
-                foreach (SpaceObject obj in State.Objects)
-                {
-                    float dx = obj.posx - State.Player.ship.self.posx;
-                    float dy = obj.posy - State.Player.ship.self.posy;
+                foreach (SpaceObject obj in state.Objects) {
+                    float dx = obj.posx - state.Player.ship.self.posx;
+                    float dy = obj.posy - state.Player.ship.self.posy;
 
                     float d2 = dx * dx + dy * dy;
 
                     float curg = 6.67408E-11f * obj.mass / d2;
 
-                    if (curg > g)
-                    {
+                    if (curg > g) {
                         g = curg;
-                        StrongestGravityBody = obj;
+                        strongest_gravity_object = obj;
                     }
                 }
 
-                if (StrongestGravityBody != null)
-                    ship.descriptor.change_frame_of_reference(StrongestGravityBody);
+                if (strongest_gravity_object != null)
+                    ship.descriptor.change_frame_of_reference(strongest_gravity_object);
 
                 if (ship.descriptor.eccentricity <= 1.0f)
                     ship.path_planned = true;
@@ -267,10 +249,10 @@ namespace SystemView
                     ship.path_planned = false;
             }
 
-            if (!MouseSteering) {
+            if (!mouse_steering) {
                 if (Input.GetKey("space") || Input.GetMouseButton(0)) {
                     foreach (ShipWeapon Weapon in ship.weapons) {
-                        Vector3 MousePosition = Camera.GetAbsPos(Input.mousePosition);
+                        Vector3 MousePosition = camera.GetAbsPos(Input.mousePosition);
 
                         if ((Weapon.flags & (int)WeaponFlags.WEAPON_LASER) != 0) {
 
@@ -291,8 +273,13 @@ namespace SystemView
             }
         }
 
-        void OnDestroy()
-        {
+        void OnDestroy() {
+            foreach(LineRenderer r in laser_line_renderers)
+                GameObject.Destroy(r);
+
+            foreach(GameObject obj in laser_line_objects)
+                GameObject.Destroy(obj);
+
             GameObject.Destroy(renderer);
             GameObject.Destroy(o);
         }
