@@ -50,6 +50,7 @@ public class GameState
     #region Item
     public static readonly Item.SpawnerSystem ItemSpawnSystem;
     public static readonly Item.DrawSystem ItemDrawSystem;
+    public static readonly Item.PickUpSystem ItemPickUpSystem;
     #endregion
 
     #region FloatingText
@@ -86,6 +87,7 @@ public class GameState
         //UnityImage2DCache = new Sprites.UnityImage2DCache();
         ItemSpawnSystem = new Item.SpawnerSystem(entitasContext);
         ItemDrawSystem = new Item.DrawSystem(entitasContext);
+        ItemPickUpSystem = new Item.PickUpSystem(entitasContext);
         ActionManager = new Action.ActionManager();
         ActionSchedulerSystem = new Action.ActionSchedulerSystem();
     }

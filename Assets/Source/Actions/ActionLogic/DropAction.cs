@@ -5,17 +5,19 @@ namespace Action
 {
     public class DropAction : ActionBase
     {
-        public override void OnEnter(int actionID, int agentID)
+        public DropAction(int actionID, int agentID) : base(actionID, agentID)
+        { 
+        }
+
+        public override void OnEnter()
         {
             // Doing everything here for now.
 
             var gameContext = Contexts.sharedInstance.game;
-            GameEntity agentEntity = gameContext.GetEntityWithAgentID(agentID);
-            GameEntity actionEntity = gameContext.GetEntityWithActionID(actionID);
 
-            if (agentEntity.hasAgentToolBar)
+            if (AgentEntity.hasAgentToolBar)
             {
-                int toolBarID = agentEntity.agentToolBar.ToolBarID;
+                int toolBarID = AgentEntity.agentToolBar.ToolBarID;
                 GameEntity toolBarEntity = gameContext.GetEntityWithInventoryID(toolBarID);
 
                 int selected = toolBarEntity.inventorySlots.Selected;
@@ -26,24 +28,24 @@ namespace Action
                     GameEntity item = GameState.InventoryManager.GetItemInSlot(toolBarID, selected);
                     if (item == null)
                     {
-                        actionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
+                        ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
                         return;
                     }
                     GameState.InventoryManager.RemoveItem(item, selected);
 
-                    Vector2 pos = agentEntity.physicsPosition2D.Value;
+                    Vector2 pos = AgentEntity.physicsPosition2D.Value;
                     Vector2 size = Contexts.sharedInstance.game.GetEntityWithItemAttributes(item.itemID.ItemType).itemAttributeSize.Size;
 
                     item.AddPhysicsPosition2D(pos, pos);
                     item.AddPhysicsBox2DCollider(size, Vector2.zero);
                     item.AddPhysicsMovable(0f, Vector2.zero, Vector2.zero, 0f);
-                    actionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
+                    ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
                     return;
                 }
 
             }
             // Inventory and ToolBar full or non existent. 
-            actionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
+            ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
         }
     }
 }

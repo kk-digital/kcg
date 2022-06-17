@@ -8,8 +8,6 @@ namespace Action
     // 
     public class ActionSchedulerSystem
     {
-        public float CurrentTime;
-
         public void Update(float deltaTime)
         {
             var group = Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentActionScheduler);
@@ -26,42 +24,35 @@ namespace Action
             }
         }
 
-        private void ExcuteActions(GameEntity ActorEntity, float deltaTime)
+        private void ExcuteActions(GameEntity actorEntity, float deltaTime)
         {
-            for (int i = 0; i < ActorEntity.agentActionScheduler.ActiveActionIDs.Count; i++)
+            for (int i = 0; i < actorEntity.agentActionScheduler.ActiveActionIDs.Count; i++)
             {
-                int actionID = ActorEntity.agentActionScheduler.ActiveActionIDs[i];
+                int actionID = actorEntity.agentActionScheduler.ActiveActionIDs[i];
+                GameEntity actionEntity = Contexts.sharedInstance.game.GetEntityWithActionID(actionID);
 
-                GameEntity ActionEntity = Contexts.sharedInstance.game.GetEntityWithActionID(actionID);
-
-                CurrentTime += deltaTime;
-                float actionDeltaTime = -1f;
-
-                if (ActionEntity.hasActionExecution)
+                if (actionEntity.hasActionExecution)
                 {
-                    switch (ActionEntity.actionExecution.State)
+                    switch (actionEntity.actionExecution.State)
                     {
                         case Enums.ActionState.None:
-                            ActionEntity.actionExecution.Logic.OnEnter(actionID, ActorEntity.agentID.ID);
+                            actionEntity.actionExecution.Logic.OnEnter();
+                            break;
+                        case Enums.ActionState.Active:
+                            actionEntity.actionExecution.Logic.OnUpdate(deltaTime);
                             break;
                         case Enums.ActionState.Success:
-                            ActionEntity.actionExecution.Logic.OnExit(actionID, ActorEntity.agentID.ID);
-                            ActorEntity.agentActionScheduler.ActiveActionIDs.RemoveAt(i);
+                            actionEntity.actionExecution.Logic.OnExit();
+                            actorEntity.agentActionScheduler.ActiveActionIDs.RemoveAt(i);
+                            actionEntity.Destroy();
                             break;
                         case Enums.ActionState.Fail:
-                            ActionEntity.actionExecution.Logic.OnExit(actionID, ActorEntity.agentID.ID);
-                            ActorEntity.agentActionScheduler.ActiveActionIDs.RemoveAt(i);
+                            actionEntity.actionExecution.Logic.OnExit();
+                            actorEntity.agentActionScheduler.ActiveActionIDs.RemoveAt(i);
                             break;
                         default:
                             Debug.Log("Not valid Action state.");
                             break;
-                    }
-
-                    if (ActionEntity.actionExecution.State == Enums.ActionState.Active && ActionEntity.hasActionTime)
-                    {
-                        // Get delta time.
-                        actionDeltaTime = CurrentTime - ActionEntity.actionTime.StartTime;
-                        ActionEntity.actionExecution.Logic.OnUpdate(actionID, ActorEntity.agentID.ID, actionDeltaTime);
                     }
                 }
 

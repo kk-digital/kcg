@@ -1,21 +1,25 @@
 ﻿namespace Action
 { 
-    public class DefaultActions
+    public struct DefaultActions
     {
-        // Should be called before any other action is created.
-        public DefaultActions() 
+        static public int CreatePickUpAction(int agentID, int itemID)
         {
             // Pick Up action.
             GameState.ActionManager.CreateAction();
-            GameState.ActionManager.SetExecution(new PickUpAction());
+            int actionID = GameState.ActionManager.GetCurrentID();
+            GameState.ActionManager.SetExecution(new PickUpAction(actionID, agentID, itemID));
             GameState.ActionManager.EndAction();
-
-            // Drop Action.
-            GameState.ActionManager.CreateAction();
-            GameState.ActionManager.SetExecution(new DropAction());
-            GameState.ActionManager.EndAction();
+            return actionID;
         }
 
-
+        static public int CreateDropAction(int agentID)
+        {
+            // Drop Action.
+            GameState.ActionManager.CreateAction();
+            int actionID = GameState.ActionManager.GetCurrentID();
+            GameState.ActionManager.SetExecution(new DropAction(actionID, agentID));
+            GameState.ActionManager.EndAction();
+            return actionID;
+        }
     }
 }

@@ -12,7 +12,6 @@ namespace Planet.Unity
         Contexts                    EntitasContext;
         Planet.PlanetState          Planet;
         Agent.AgentEntity           Player;
-        Action.DefaultActions       DefaultActions;
 
         static bool Init = false;
 
@@ -46,10 +45,10 @@ namespace Planet.Unity
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity, (int)Enums.ActionType.PickUp);
-            }
+            //if (Input.GetKeyDown(KeyCode.Q))
+            //{
+            //    GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity, (int)Enums.ActionType.PickUp);
+            //}
 
             if (Input.GetKeyDown(KeyCode.E))
             {
@@ -58,6 +57,7 @@ namespace Planet.Unity
 
             Planet.Update(Time.deltaTime, Material, transform);
             GameState.InventoryDrawSystem.Draw(Material, transform, 14);
+            GameState.ItemPickUpSystem.Update();
         }
 
         // create the sprite atlas for testing purposes
@@ -122,9 +122,6 @@ namespace Planet.Unity
             GameState.AnimationManager.SetBaseSpriteID(CharacterSpriteId);
             GameState.AnimationManager.SetFrameCount(1);
             GameState.AnimationManager.EndAnimation();
-
-            // Intialize Actions
-            DefaultActions = new Action.DefaultActions();
 
             // Generating the map
             Vec2i mapSize = new Vec2i(16, 16);
