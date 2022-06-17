@@ -2,6 +2,10 @@
 
 namespace Tile
 {
+    //TODO: add material type for block
+    //TODO: per material coefficient of restitution, coefficient of static friction and coefficient of dynamic friction
+    //TODO: Want to use elliptical/capsule collider eventually too, not just box collider
+    //TODO: Each Tile type has as collision type enum, determining collision behavior/lines
     /// <summary> Contains info about tile, include all layers </summary>
     public struct Tile
     {

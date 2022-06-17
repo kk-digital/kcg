@@ -6,6 +6,9 @@ using Utility;
 
 namespace Physics
 {
+    //TODO: Collision calculation should internally cache the chunks around player
+    //TODO: (up left, up right, bottom left, bottom right) instead of doing GetTile for each tile.
+    //TODO: Implement Prediction Movement Collision
     public class ProcessCollisionSystem
     {
         public void Update(Planet.TileMap tileMap)
@@ -21,7 +24,7 @@ namespace Physics
                 var movable = entity.physicsMovable;
 
 
-
+                // TODO: Need to rework logic, because MovingIntersects not working
                 ref var tile = ref tileMap.GetTileRef(2, 1, MapLayerType.Front);
                 if (tile.Type >= 0)
                 {
