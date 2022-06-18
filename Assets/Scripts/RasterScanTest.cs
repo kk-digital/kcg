@@ -97,7 +97,6 @@ public class RasterScanTest : MonoBehaviour
             // Draw Debug Line
             Debug.DrawLine(new Vector3(start.x, start.y, 0.0f), new Vector3(end.x, end.y, 0.0f), Color.red);
 #endif
-
         }
     }
 

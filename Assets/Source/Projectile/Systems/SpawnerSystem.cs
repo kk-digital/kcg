@@ -51,7 +51,7 @@ namespace Projectile
             entity.AddPhysicsBox2DCollider(spriteSize, Vector2.zero);
 
             // Add Physics Collider Component
-            entity.AddProjectileCollider(true, false);
+            entity.AddProjectileCollider(false, false);
 
             // Add Projectile Type
             entity.AddProjectileType(projectileType, projectileDrawType);
