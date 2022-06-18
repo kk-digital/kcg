@@ -29,11 +29,15 @@ namespace SystemView
 
         public float projectile_velocity;
 
+        public float last_x;
+        public float last_y;
+
         public int damage;
 
         public float rotation_rate;
         public float rotation;
         public float FOV;
+        public Vector3[] vertices = new Vector3[2];
 
         public int attack_speed; // in milliseconds
         public int cooldown;     // in milliseconds
@@ -115,6 +119,12 @@ namespace SystemView
                 int remaining_time          = cooldown - (attack_speed - laser_duration_time);
 
                 if(remaining_time > 0) {
+                    vertices[0]                  = new Vector3(self.self.posx, self.self.posy, 0.0f);
+                    vertices[1]                  = new Vector3(last_x, last_y, 0.0f);
+
+                    laser_renderer.SetPositions(vertices);
+                    laser_renderer.positionCount = 2;
+
                     if(remaining_charging_time > 0) {
                         float RemainingTimeAsPercentage = 1.0f - (float)remaining_charging_time / (float)laser_duration_time;
                         laser_renderer.startWidth = laser_renderer.endWidth = 0.1f * RemainingTimeAsPercentage / camera.scale;
@@ -240,6 +250,20 @@ namespace SystemView
             }
 
             if((flags & (int)WeaponFlags.WEAPON_LASER) != 0) {
+                if(mat == null) {
+                    Shader shader = Shader.Find("Hidden/Internal-Colored");
+                    mat = new Material(shader);
+                    mat.hideFlags = HideFlags.HideAndDontSave;
+
+                    mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                    mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+
+                    // Turn off backface culling, depth writes, depth test.
+                    mat.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
+                    mat.SetInt("_ZWrite", 0);
+                    mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
+                }
+
                 laser_object                 = new GameObject();
                 laser_object.name            = "Laser";
 
@@ -247,14 +271,18 @@ namespace SystemView
                 laser_renderer.material      = mat;
                 laser_renderer.useWorldSpace = true;
 
-                Vector3[] vertices           = new Vector3[2];
                 vertices[0]                  = new Vector3(self.self.posx, self.self.posy, 0.0f);
                 vertices[1]                  = new Vector3(x, y, 0.0f);
 
                 laser_renderer.SetPositions(vertices);
                 laser_renderer.positionCount = 2;
+                laser_renderer.material      = mat;
+
+                last_x = x;
+                last_y = y;
 
                 // todo: should be able to target stuff other than ships
+                // todo: should be able to hit ship with whole laser, not just tip
                 SystemShip target = null;
 
                 foreach(SystemShip ship in state.ships) {
@@ -262,7 +290,7 @@ namespace SystemView
                     float _dy = ship.self.posy - y;
                     float _d  = Tools.magnitude(_dx, _dy);
 
-                    if(_d < 0.5f) {
+                    if(_d < 2.5f / camera.scale) {
                         target = ship;
                         break;
                     }

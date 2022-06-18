@@ -44,14 +44,13 @@ namespace SystemView
         public GameObject DirectionObject;
         public GameObject VelocityObject;
 
-        public CameraController camera;
+        public CameraController camera_controller;
 
         public List<DebugWeaponInfo> weapons = new();
 
         public float LastRotation;
 
         public Material mat;
-        public SystemState state;
 
         // Start is called before the first frame update
         void Start()
@@ -66,7 +65,7 @@ namespace SystemView
 
             OrbitRender.descriptor = ship.descriptor;
 
-            camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
+            camera_controller = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
             // Temporary sprites
             ShipRender.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
@@ -97,20 +96,18 @@ namespace SystemView
             VelocityRenderer = VelocityObject.AddComponent<LineRenderer>();
             VelocityRenderer.material = mat;
             VelocityRenderer.useWorldSpace = true;
-
-            state = GameObject.FindWithTag("SystemController").GetComponent<GameLoop>().CurrentSystemState;
         }
 
         // Update is called once per frame
         void Update()
         {
             ShipRender.transform.position     = new Vector3(ship.self.posx, ship.self.posy, -0.1f);
-            ShipRender.transform.localScale   = new Vector3(5.0f * width / camera.scale, 5.0f / camera.scale, 1.0f);
+            ShipRender.transform.localScale   = new Vector3(5.0f * width / camera_controller.scale, 5.0f / camera_controller.scale, 1.0f);
 
             ShipRender.transform.Rotate(new Vector3(0.0f, 0.0f, (ship.rotation - LastRotation) * 180.0f / 3.1415926f));
 
             ShieldRender.transform.position   = new Vector3(ship.self.posx, ship.self.posy, -0.05f);
-            ShieldRender.transform.localScale = new Vector3(20.0f / camera.scale, 15.0f / camera.scale, 1.0f);
+            ShieldRender.transform.localScale = new Vector3(20.0f / camera_controller.scale, 15.0f / camera_controller.scale, 1.0f);
 
             ShieldRender.transform.Rotate(new Vector3(0.0f, 0.0f, (ship.rotation - LastRotation) * 180.0f / 3.1415926f));
 
@@ -124,28 +121,24 @@ namespace SystemView
                 ShieldRender.color = new Color(shieldColor.r, shieldColor.g, shieldColor.b, shieldColor.a * ship.shield / ship.max_shield);
 
             float v = (float)Math.Sqrt(ship.self.velx * ship.self.velx + ship.self.vely * ship.self.vely);
-            if (ship.weapons.Count > 0 && v > 0.0f)
-            {
+            if (ship.weapons.Count > 0 && v > 0.0f) {
                 Vector3[] vertices = new Vector3[2];
                 vertices[0] = new Vector3(ship.self.posx, ship.self.posy, -0.075f);
-                vertices[1] = new Vector3(ship.self.posx + (float)Math.Cos(ship.rotation) * 10.0f / camera.scale, ship.self.posy + (float)Math.Sin(ship.rotation) * 10.0f / camera.scale, -0.075f);
+                vertices[1] = new Vector3(ship.self.posx + (float)Math.Cos(ship.rotation) * 10.0f / camera_controller.scale, ship.self.posy + (float)Math.Sin(ship.rotation) * 10.0f / camera_controller.scale, -0.075f);
                 DirectionRenderer.SetPositions(vertices);
                 DirectionRenderer.positionCount = 2;
                 DirectionRenderer.startColor = DirectionRenderer.endColor = directionColor;
-                DirectionRenderer.startWidth = DirectionRenderer.endWidth = 0.2f / camera.scale;
+                DirectionRenderer.startWidth = DirectionRenderer.endWidth = 0.2f / camera_controller.scale;
 
                 Vector3[] vertices2 = new Vector3[2];
                 vertices2[0] = new Vector3(ship.self.posx, ship.self.posy, -0.075f);
-                vertices2[1] = new Vector3(ship.self.posx + ship.self.velx / v * 10.0f / camera.scale, ship.self.posy + ship.self.vely / v * 10.0f / camera.scale, -0.075f);
+                vertices2[1] = new Vector3(ship.self.posx + ship.self.velx / v * 10.0f / camera_controller.scale, ship.self.posy + ship.self.vely / v * 10.0f / camera_controller.scale, -0.075f);
                 VelocityRenderer.SetPositions(vertices2);
                 VelocityRenderer.positionCount = 2;
                 VelocityRenderer.startColor = VelocityRenderer.endColor = velocityColor;
-                VelocityRenderer.startWidth = VelocityRenderer.endWidth = 0.2f / camera.scale;
-            }
-            else
-            {
+                VelocityRenderer.startWidth = VelocityRenderer.endWidth = 0.2f / camera_controller.scale;
+            } else
                 DirectionRenderer.positionCount = VelocityRenderer.positionCount = 0;
-            }
 
             if (!ship.path_planned) OrbitRender.descriptor = null;
             else OrbitRender.descriptor = ship.descriptor;
@@ -194,12 +187,6 @@ namespace SystemView
                         info.vertices2[1]        = new Vector3(0.0f, 0.0f, 0.02f);
 
                         weapons.Add(info);
-
-                        if((weapon.flags & (int)WeaponFlags.WEAPON_LASER) != 0) {
-                            weapon.mat           = mat;
-                            weapon.camera        = camera;
-                            weapon.state         = state;
-                        }
                     }
                 }
 
@@ -213,24 +200,24 @@ namespace SystemView
 
                 // Update renderers
                 foreach(DebugWeaponInfo info in weapons) {
-                    info.vertices1[0].x   = ship.self.posx;
-                    info.vertices1[0].y   = ship.self.posy;
+                    info.vertices1[0].x    = ship.self.posx;
+                    info.vertices1[0].y    = ship.self.posy;
 
-                    info.vertices1[1].x   = ship.self.posx + (float)Math.Cos(info.weapon.rotation - info.weapon.FOV / 2.0f) * info.weapon.range;
-                    info.vertices1[1].y   = ship.self.posy + (float)Math.Sin(info.weapon.rotation - info.weapon.FOV / 2.0f) * info.weapon.range;
+                    info.vertices1[1].x    = ship.self.posx + (float)Math.Cos(info.weapon.rotation - info.weapon.FOV / 2.0f) * info.weapon.range;
+                    info.vertices1[1].y    = ship.self.posy + (float)Math.Sin(info.weapon.rotation - info.weapon.FOV / 2.0f) * info.weapon.range;
 
-                    info.vertices2[0].x   = ship.self.posx;
-                    info.vertices2[0].y   = ship.self.posy;
+                    info.vertices2[0].x    = ship.self.posx;
+                    info.vertices2[0].y    = ship.self.posy;
 
-                    info.vertices2[1].x   = ship.self.posx + (float)Math.Cos(info.weapon.rotation + info.weapon.FOV / 2.0f) * info.weapon.range;
-                    info.vertices2[1].y   = ship.self.posy + (float)Math.Sin(info.weapon.rotation + info.weapon.FOV / 2.0f) * info.weapon.range;
+                    info.vertices2[1].x    = ship.self.posx + (float)Math.Cos(info.weapon.rotation + info.weapon.FOV / 2.0f) * info.weapon.range;
+                    info.vertices2[1].y    = ship.self.posy + (float)Math.Sin(info.weapon.rotation + info.weapon.FOV / 2.0f) * info.weapon.range;
 
-                    info.line1.startWidth = 0.1f / camera.scale;
-                    info.line1.endWidth   = 0.1f / camera.scale;
+                    info.line1.startWidth  = 0.1f / camera_controller.scale;
+                    info.line1.endWidth    = 0.1f / camera_controller.scale;
                     info.line1.SetPositions(info.vertices1);
 
-                    info.line2.startWidth = 0.1f / camera.scale;
-                    info.line2.endWidth   = 0.1f / camera.scale;
+                    info.line2.startWidth  = 0.1f / camera_controller.scale;
+                    info.line2.endWidth    = 0.1f / camera_controller.scale;
                     info.line2.SetPositions(info.vertices2);
                 }
             }

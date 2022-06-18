@@ -21,32 +21,32 @@ namespace SystemView {
         public float system_scale = 1.0f;
 
         public bool  mouse_steering = false;
-        public CameraController camera;
+        public CameraController camera_controller;
 
         public SystemState state;
 
         private void Start() {
-            camera   = GameObject.Find("Main Camera").GetComponent<CameraController>();
+            camera_controller  = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
-            state    = GetComponent<GameLoop>().CurrentSystemState;
+            state              = GetComponent<GameLoop>().CurrentSystemState;
 
-            last_time = Time.time * 1000.0f;
+            last_time          = Time.time * 1000.0f;
 
-            ship = new SystemShip();
+            ship               = new SystemShip();
 
-            o = new GameObject();
-            o.name = "Player ship";
+            o                  = new GameObject();
+            o.name             = "Player ship";
 
-            ship.self.posx = 0.0f;
-            ship.self.posy = 0.0f;
-            ship.acceleration = 5.0f;
+            ship.self.posx     = 0.0f;
+            ship.self.posy     = 0.0f;
+            ship.acceleration  = 5.0f;
 
-            ship.self.mass = 1.0f;
+            ship.self.mass     = 1.0f;
 
-            renderer = o.AddComponent<SystemShipRenderer>();
-            renderer.ship = ship;
+            renderer           = o.AddComponent<SystemShipRenderer>();
+            renderer.ship      = ship;
             renderer.shipColor = Color.blue;
-            renderer.width = 3.0f;
+            renderer.width     = 3.0f;
 
             ship.health = ship.max_health = 25000;
             ship.shield = ship.max_shield = 50000;
@@ -131,13 +131,34 @@ namespace SystemView {
             turret.attack_speed              = 50;
             turret.cooldown                  = 0;
             turret.FOV                       = Tools.eigthpi;
+            turret.rotation                  = Tools.pi;
             turret.rotation_rate             = 2.0f;
             turret.self                      = ship;
 
             turret.flags                     = (int)WeaponFlags.WEAPON_PROJECTILE
                                              | (int)WeaponFlags.WEAPON_TURRET;
 
+
+            ShipWeapon laser                 = new ShipWeapon();
+
+            laser.color                      = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+
+            laser.range                      = 50.0f;
+            laser.shield_penetration         = 0.1f;
+            laser.projectile_velocity        = 8.0f;
+            laser.damage                     = 7500;
+            laser.attack_speed               = 1800;
+            laser.cooldown                   = 0;
+            laser.shield_damage_multiplier   = 2.0f;
+            laser.hull_damage_multiplier     = 0.01f;
+            laser.self                       = ship;
+            laser.state                      = state;
+            laser.camera                     = camera_controller;
+
+            laser.flags                      = (int)WeaponFlags.WEAPON_LASER;
+
             ship.weapons.Add(turret);
+            ship.weapons.Add(laser);
             ship.weapons.Add(left_cannon);
             ship.weapons.Add(left_gun);
             ship.weapons.Add(right_cannon);
@@ -166,7 +187,7 @@ namespace SystemView {
                 else ship.rotation -= Input.GetAxis("Horizontal") * current_time * ship.rotational_speed_modifier;
             } else {
                 horizontal_movement = -Input.GetAxis("Horizontal");
-                Vector3 RelPos = camera.GetRelPos(new Vector3(ship.self.posx, ship.self.posy, 0.0f));
+                Vector3 RelPos = camera_controller.GetRelPos(new Vector3(ship.self.posx, ship.self.posy, 0.0f));
 
                 float dx = Input.mousePosition.x - RelPos.x;
                 float dy = Input.mousePosition.y - RelPos.y;
@@ -272,7 +293,7 @@ namespace SystemView {
 
             if(!mouse_steering) {
                 if(Input.GetKey("space") || Input.GetMouseButton(0)) {
-                    Vector3 mouse_position = camera.GetAbsPos(Input.mousePosition);
+                    Vector3 mouse_position = camera_controller.GetAbsPos(Input.mousePosition);
 
                     foreach(ShipWeapon weapon in ship.weapons)
                         if(weapon.try_targeting(mouse_position.x, mouse_position.y, current_time))
