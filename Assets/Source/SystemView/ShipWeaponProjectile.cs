@@ -35,7 +35,7 @@ namespace SystemView
         {
             if((TimeElapsed += dt) > LifeSpan)
             {
-                Weapon.ProjectilesFired.Remove(this);
+                Weapon.projectiles_fired.Remove(this);
                 return false;
             }
 
@@ -81,7 +81,7 @@ namespace SystemView
                 Target.destroy();
             }
 
-            Weapon.ProjectilesFired.Remove(this);
+            Weapon.projectiles_fired.Remove(this);
         }
     }
 }

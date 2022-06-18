@@ -25,9 +25,6 @@ namespace SystemView {
 
         public SystemState state;
 
-        public List<LineRenderer> laser_line_renderers;
-        public List<GameObject>   laser_line_objects;
-
         private void Start() {
             camera   = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
@@ -58,72 +55,72 @@ namespace SystemView {
 
             ShipWeapon left_cannon = new ShipWeapon();
 
-            left_cannon.ProjectileColor = new Color(0.7f, 0.9f, 1.0f, 1.0f);
+            left_cannon.color = new Color(0.7f, 0.9f, 1.0f, 1.0f);
 
-            left_cannon.Range = 45.0f;
-            left_cannon.ShieldPenetration = 0.2f;
-            left_cannon.ProjectileVelocity = 50.0f;
-            left_cannon.Damage = 6000;
-            left_cannon.AttackSpeed = 1250;
-            left_cannon.Cooldown = 0;
-            left_cannon.Self = ship;
+            left_cannon.range = 45.0f;
+            left_cannon.shield_penetration = 0.2f;
+            left_cannon.projectile_velocity = 50.0f;
+            left_cannon.damage = 6000;
+            left_cannon.attack_speed = 1250;
+            left_cannon.cooldown = 0;
+            left_cannon.self = ship;
 
             left_cannon.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE | (int)WeaponFlags.WEAPON_POSX;
 
 
             ShipWeapon left_gun = new ShipWeapon();
 
-            left_gun.ProjectileColor = new Color(0.4f, 0.8f, 1.0f, 1.0f);
+            left_gun.color = new Color(0.4f, 0.8f, 1.0f, 1.0f);
 
-            left_gun.Range = 30.0f;
-            left_gun.ShieldPenetration = 0.02f;
-            left_gun.ProjectileVelocity = 50.0f;
-            left_gun.Damage = 2000;
-            left_gun.AttackSpeed = 400;
-            left_gun.Cooldown = 0;
-            left_gun.Self = ship;
+            left_gun.range = 30.0f;
+            left_gun.shield_penetration = 0.02f;
+            left_gun.projectile_velocity = 50.0f;
+            left_gun.damage = 2000;
+            left_gun.attack_speed = 400;
+            left_gun.cooldown = 0;
+            left_gun.self = ship;
 
             left_gun.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE | (int)WeaponFlags.WEAPON_POSX;
 
             ShipWeapon right_cannon = new ShipWeapon();
 
-            right_cannon.ProjectileColor = new Color(0.7f, 0.9f, 1.0f, 1.0f);
+            right_cannon.color = new Color(0.7f, 0.9f, 1.0f, 1.0f);
 
-            right_cannon.Range = 45.0f;
-            right_cannon.ShieldPenetration = 0.2f;
-            right_cannon.ProjectileVelocity = 50.0f;
-            right_cannon.Damage = 6000;
-            right_cannon.AttackSpeed = 1250;
-            right_cannon.Cooldown = 0;
-            right_cannon.Self = ship;
+            right_cannon.range = 45.0f;
+            right_cannon.shield_penetration = 0.2f;
+            right_cannon.projectile_velocity = 50.0f;
+            right_cannon.damage = 6000;
+            right_cannon.attack_speed = 1250;
+            right_cannon.cooldown = 0;
+            right_cannon.self = ship;
 
             right_cannon.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE;
 
             ShipWeapon right_gun = new ShipWeapon();
 
-            right_gun.ProjectileColor = new Color(0.4f, 0.8f, 1.0f, 1.0f);
+            right_gun.color = new Color(0.4f, 0.8f, 1.0f, 1.0f);
 
-            right_gun.Range = 30.0f;
-            right_gun.ShieldPenetration = 0.02f;
-            right_gun.ProjectileVelocity = 50.0f;
-            right_gun.Damage = 2000;
-            right_gun.AttackSpeed = 400;
-            right_gun.Cooldown = 0;
-            right_gun.Self = ship;
+            right_gun.range = 30.0f;
+            right_gun.shield_penetration = 0.02f;
+            right_gun.projectile_velocity = 50.0f;
+            right_gun.damage = 2000;
+            right_gun.attack_speed = 400;
+            right_gun.cooldown = 0;
+            right_gun.self = ship;
 
             right_gun.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE;
 
             ShipWeapon weapon = new ShipWeapon();
 
-            weapon.ProjectileColor = Color.white;
+            weapon.color = Color.white;
 
-            weapon.Range = 20.0f;
-            weapon.ShieldPenetration = 0.1f;
-            weapon.ProjectileVelocity = 8.0f;
-            weapon.Damage = 200;
-            weapon.AttackSpeed = 50;
-            weapon.Cooldown = 0;
-            weapon.Self = ship;
+            weapon.range = 20.0f;
+            weapon.shield_penetration = 0.1f;
+            weapon.projectile_velocity = 8.0f;
+            weapon.damage = 200;
+            weapon.attack_speed = 50;
+            weapon.cooldown = 0;
+            weapon.self = ship;
 
             weapon.flags = (int)WeaponFlags.WEAPON_PROJECTILE;
 
@@ -215,8 +212,8 @@ namespace SystemView {
             renderer.shipColor.b = (float) ship.health / ship.max_health;
 
             foreach (ShipWeapon weapon in ship.weapons) {
-                weapon.Cooldown -= (int)(current_time * 1000.0f);
-                if (weapon.Cooldown < 0) weapon.Cooldown = 0;
+                weapon.cooldown -= (int)(current_time * 1000.0f);
+                if (weapon.cooldown < 0) weapon.cooldown = 0;
             }
 
             if (render_orbit) {
@@ -251,35 +248,24 @@ namespace SystemView {
 
             if (!mouse_steering) {
                 if (Input.GetKey("space") || Input.GetMouseButton(0)) {
-                    foreach (ShipWeapon Weapon in ship.weapons) {
-                        Vector3 MousePosition = camera.GetAbsPos(Input.mousePosition);
+                    Vector3 mouse_position = camera.GetAbsPos(Input.mousePosition);
 
-                        if ((Weapon.flags & (int)WeaponFlags.WEAPON_LASER) != 0) {
-
-                        } else Weapon.Fire(MousePosition.x, MousePosition.y);
-                    }
+                    foreach (ShipWeapon weapon in ship.weapons)
+                        if(weapon.try_targeting(mouse_position.x, mouse_position.y, current_time))
+                            weapon.fire(mouse_position.x, mouse_position.y);
                 }
             } else {
-                if (Input.GetKey("space")) {
-                    foreach (ShipWeapon Weapon in ship.weapons) {
-                        float x = ship.self.posx + (float)Math.Cos(ship.rotation) * Weapon.Range;
-                        float y = ship.self.posy + (float)Math.Sin(ship.rotation) * Weapon.Range;
-
-                        if ((Weapon.flags & (int)WeaponFlags.WEAPON_LASER) != 0) {
-
-                        } else Weapon.Fire(x, y);
+                if (Input.GetKey("space"))
+                    foreach (ShipWeapon weapon in ship.weapons) {
+                        float x = ship.self.posx + (float)Math.Cos(ship.rotation) * weapon.range;
+                        float y = ship.self.posy + (float)Math.Sin(ship.rotation) * weapon.range;
+                        if(weapon.try_targeting(x, y, current_time))
+                            weapon.fire(x, y);
                     }
-                }
             }
         }
 
         void OnDestroy() {
-            foreach(LineRenderer r in laser_line_renderers)
-                GameObject.Destroy(r);
-
-            foreach(GameObject obj in laser_line_objects)
-                GameObject.Destroy(obj);
-
             GameObject.Destroy(renderer);
             GameObject.Destroy(o);
         }

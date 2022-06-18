@@ -59,15 +59,15 @@ namespace SystemView
 
             ShipWeapon Weapon = new ShipWeapon();
 
-            Weapon.ProjectileColor = Color.white;
+            Weapon.color = Color.white;
 
-            Weapon.Range = 20.0f;
-            Weapon.ShieldPenetration = 0.1f;
-            Weapon.ProjectileVelocity = 5.0f;
-            Weapon.Damage = 250;
-            Weapon.AttackSpeed = 40;
-            Weapon.Cooldown = 0;
-            Weapon.Self = ship;
+            Weapon.range = 20.0f;
+            Weapon.shield_penetration = 0.1f;
+            Weapon.projectile_velocity = 5.0f;
+            Weapon.damage = 250;
+            Weapon.attack_speed = 40;
+            Weapon.cooldown = 0;
+            Weapon.self = ship;
 
             ship.weapons.Add(Weapon);
         }

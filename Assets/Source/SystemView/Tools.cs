@@ -7,6 +7,8 @@ namespace SystemView {
      */
 
     public static class Tools {
+        public const bool  debug                  = true;           // When enabled additional debug information is shown
+
                                                                     //                                  -11    m³
         public const float gravitational_constant = 6.67408e-11f;   //  G                   6.67408 * 10    -------
                                                                     //                                      kg * s²
