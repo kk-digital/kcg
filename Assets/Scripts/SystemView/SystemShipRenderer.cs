@@ -5,6 +5,22 @@ using UnityEngine;
 
 namespace SystemView
 {
+    public struct DebugWeaponInfo {
+        public ShipWeapon   weapon;
+        public GameObject   obj1;
+        public GameObject   obj2;
+        public LineRenderer line1;
+        public LineRenderer line2;
+        public Vector3[]    vertices1;
+        public Vector3[]    vertices2;
+
+        public void delete() {
+            GameObject.Destroy(line1);
+            GameObject.Destroy(line2);
+            GameObject.Destroy(obj1);
+            GameObject.Destroy(obj2);
+        }
+    }
     public class SystemShipRenderer : MonoBehaviour
     {
         public SystemShip ship;
@@ -19,6 +35,7 @@ namespace SystemView
         public Color shieldColor    = new Color(0.4f, 0.7f, 1.0f, 0.5f);
         public Color directionColor = new Color(1.0f, 0.7f, 0.5f, 0.4f);
         public Color velocityColor  = new Color(1.0f, 1.0f, 1.0f, 0.2f);
+        public Color debugLineColor = new Color(1.0f, 1.0f, 1.0f, 0.3f);
         public Color shipColor      = Color.white;
 
         public float width = 1.0f;
@@ -29,7 +46,11 @@ namespace SystemView
 
         public CameraController Camera;
 
+        public List<DebugWeaponInfo> weapons = new();
+
         public float LastRotation;
+
+        public Material mat;
 
         // Start is called before the first frame update
         void Start()
@@ -51,7 +72,7 @@ namespace SystemView
             ShieldRender.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
 
             Shader shader = Shader.Find("Hidden/Internal-Colored");
-            Material mat = new Material(shader);
+            mat = new Material(shader);
             mat.hideFlags = HideFlags.HideAndDontSave;
 
             mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
@@ -127,6 +148,83 @@ namespace SystemView
             else OrbitRender.descriptor = ship.descriptor;
 
             OrbitRender.UpdateRenderer(128);
+
+            if(Tools.debug) {
+                // Add new weapons
+                foreach(ShipWeapon weapon in ship.weapons) {
+                    if(weapon.FOV == 0.0f) continue;
+
+                    bool found = false;
+
+                    foreach(DebugWeaponInfo info in weapons)
+                        if(info.weapon.Equals(weapon)) {
+                            found = true;
+                            break;
+                        }
+
+                    if(!found) {
+                        DebugWeaponInfo info     = new DebugWeaponInfo();
+                        info.weapon              = weapon;
+
+                        info.obj1                = new GameObject();
+                        info.obj1.name           = "Ship weapon cone renderer";
+                        info.line1               = info.obj1.AddComponent<LineRenderer>();
+                        info.line1.material      = mat;
+                        info.line1.useWorldSpace = true;
+                        info.line1.positionCount = 2;
+                        info.line1.startColor    = debugLineColor;
+                        info.line1.endColor      = debugLineColor;
+                        info.vertices1           = new Vector3[2];
+                        info.vertices1[0]        = new Vector3(0.0f, 0.0f, 0.02f);
+                        info.vertices1[1]        = new Vector3(0.0f, 0.0f, 0.02f);
+
+                        info.obj2                = new GameObject();
+                        info.obj2.name           = "Ship weapon cone renderer";
+                        info.line2               = info.obj2.AddComponent<LineRenderer>();
+                        info.line2.material      = mat;
+                        info.line2.useWorldSpace = true;
+                        info.line2.positionCount = 2;
+                        info.line2.startColor    = debugLineColor;
+                        info.line2.endColor      = debugLineColor;
+                        info.vertices2           = new Vector3[2];
+                        info.vertices2[0]        = new Vector3(0.0f, 0.0f, 0.02f);
+                        info.vertices2[1]        = new Vector3(0.0f, 0.0f, 0.02f);
+
+                        weapons.Add(info);
+                    }
+                }
+
+                // Remove weapons that have been removed or replaced
+                for(int i = 0; i < weapons.Count; i++)
+                    if(!ship.weapons.Contains(weapons[i].weapon)) {
+                        weapons[i].delete();
+                        weapons.RemoveAt(i);
+                        i--;
+                    }
+
+                // Update renderers
+                foreach(DebugWeaponInfo info in weapons) {
+                    info.vertices1[0].x   = ship.self.posx;
+                    info.vertices1[0].y   = ship.self.posy;
+
+                    info.vertices1[1].x   = ship.self.posx + (float)Math.Cos(info.weapon.rotation - info.weapon.FOV / 2.0f) * info.weapon.range;
+                    info.vertices1[1].y   = ship.self.posy + (float)Math.Sin(info.weapon.rotation - info.weapon.FOV / 2.0f) * info.weapon.range;
+
+                    info.vertices2[0].x   = ship.self.posx;
+                    info.vertices2[0].y   = ship.self.posy;
+
+                    info.vertices2[1].x   = ship.self.posx + (float)Math.Cos(info.weapon.rotation + info.weapon.FOV / 2.0f) * info.weapon.range;
+                    info.vertices2[1].y   = ship.self.posy + (float)Math.Sin(info.weapon.rotation + info.weapon.FOV / 2.0f) * info.weapon.range;
+
+                    info.line1.startWidth = 0.1f / Camera.scale;
+                    info.line1.endWidth   = 0.1f / Camera.scale;
+                    info.line1.SetPositions(info.vertices1);
+
+                    info.line2.startWidth = 0.1f / Camera.scale;
+                    info.line2.endWidth   = 0.1f / Camera.scale;
+                    info.line2.SetPositions(info.vertices2);
+                }
+            }
         }
 
         void OnDestroy()

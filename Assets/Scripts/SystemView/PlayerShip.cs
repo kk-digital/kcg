@@ -53,76 +53,86 @@ namespace SystemView {
 
             ship.shield_regeneration_rate = 3;
 
-            ShipWeapon left_cannon = new ShipWeapon();
+            ShipWeapon left_cannon           = new ShipWeapon();
 
-            left_cannon.color = new Color(0.7f, 0.9f, 1.0f, 1.0f);
+            left_cannon.color                = new Color(0.7f, 0.9f, 1.0f, 1.0f);
 
-            left_cannon.range = 45.0f;
-            left_cannon.shield_penetration = 0.2f;
-            left_cannon.projectile_velocity = 50.0f;
-            left_cannon.damage = 6000;
-            left_cannon.attack_speed = 1250;
-            left_cannon.cooldown = 0;
-            left_cannon.self = ship;
+            left_cannon.range                = 45.0f;
+            left_cannon.shield_penetration   = 0.2f;
+            left_cannon.projectile_velocity  = 50.0f;
+            left_cannon.damage               = 6000;
+            left_cannon.attack_speed         = 1250;
+            left_cannon.cooldown             = 0;
+            left_cannon.self                 = ship;
+            left_cannon.FOV                  = Tools.quarterpi;
 
-            left_cannon.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE | (int)WeaponFlags.WEAPON_POSX;
+            left_cannon.flags                = (int)WeaponFlags.WEAPON_PROJECTILE
+                                             | (int)WeaponFlags.WEAPON_BROADSIDE
+                                             | (int)WeaponFlags.WEAPON_POSX;
 
 
-            ShipWeapon left_gun = new ShipWeapon();
+            ShipWeapon left_gun              = new ShipWeapon();
 
-            left_gun.color = new Color(0.4f, 0.8f, 1.0f, 1.0f);
+            left_gun.color                   = new Color(0.4f, 0.8f, 1.0f, 1.0f);
 
-            left_gun.range = 30.0f;
-            left_gun.shield_penetration = 0.02f;
-            left_gun.projectile_velocity = 50.0f;
-            left_gun.damage = 2000;
-            left_gun.attack_speed = 400;
-            left_gun.cooldown = 0;
-            left_gun.self = ship;
+            left_gun.range                   = 30.0f;
+            left_gun.shield_penetration      = 0.02f;
+            left_gun.projectile_velocity     = 25.0f;
+            left_gun.damage                  = 2000;
+            left_gun.attack_speed            = 400;
+            left_gun.cooldown                = 0;
+            left_gun.self                    = ship;
+            left_gun.FOV                     = Tools.halfpi;
 
-            left_gun.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE | (int)WeaponFlags.WEAPON_POSX;
+            left_gun.flags                   = (int)WeaponFlags.WEAPON_PROJECTILE
+                                             | (int)WeaponFlags.WEAPON_BROADSIDE
+                                             | (int)WeaponFlags.WEAPON_POSX;
 
-            ShipWeapon right_cannon = new ShipWeapon();
+            ShipWeapon right_cannon          = new ShipWeapon();
 
-            right_cannon.color = new Color(0.7f, 0.9f, 1.0f, 1.0f);
+            right_cannon.color               = new Color(0.7f, 0.9f, 1.0f, 1.0f);
 
-            right_cannon.range = 45.0f;
-            right_cannon.shield_penetration = 0.2f;
+            right_cannon.range               = 45.0f;
+            right_cannon.shield_penetration  = 0.2f;
             right_cannon.projectile_velocity = 50.0f;
-            right_cannon.damage = 6000;
-            right_cannon.attack_speed = 1250;
-            right_cannon.cooldown = 0;
-            right_cannon.self = ship;
+            right_cannon.damage              = 6000;
+            right_cannon.attack_speed        = 1250;
+            right_cannon.cooldown            = 0;
+            right_cannon.self                = ship;
+            right_cannon.FOV                 = Tools.quarterpi;
 
-            right_cannon.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE;
+            right_cannon.flags               = (int)WeaponFlags.WEAPON_PROJECTILE
+                                             | (int)WeaponFlags.WEAPON_BROADSIDE;
 
-            ShipWeapon right_gun = new ShipWeapon();
+            ShipWeapon right_gun             = new ShipWeapon();
 
-            right_gun.color = new Color(0.4f, 0.8f, 1.0f, 1.0f);
+            right_gun.color                  = new Color(0.4f, 0.8f, 1.0f, 1.0f);
 
-            right_gun.range = 30.0f;
-            right_gun.shield_penetration = 0.02f;
-            right_gun.projectile_velocity = 50.0f;
-            right_gun.damage = 2000;
-            right_gun.attack_speed = 400;
-            right_gun.cooldown = 0;
-            right_gun.self = ship;
+            right_gun.range                  = 30.0f;
+            right_gun.shield_penetration     = 0.02f;
+            right_gun.projectile_velocity    = 25.0f;
+            right_gun.damage                 = 2000;
+            right_gun.attack_speed           = 400;
+            right_gun.cooldown               = 0;
+            right_gun.self                   = ship;
+            right_gun.FOV                    = Tools.halfpi;
 
-            right_gun.flags = (int)WeaponFlags.WEAPON_PROJECTILE | (int)WeaponFlags.WEAPON_BROADSIDE;
+            right_gun.flags                  = (int)WeaponFlags.WEAPON_PROJECTILE
+                                             | (int)WeaponFlags.WEAPON_BROADSIDE;
 
-            ShipWeapon weapon = new ShipWeapon();
+            ShipWeapon weapon                = new ShipWeapon();
 
-            weapon.color = Color.white;
+            weapon.color                     = Color.white;
 
-            weapon.range = 20.0f;
-            weapon.shield_penetration = 0.1f;
-            weapon.projectile_velocity = 8.0f;
-            weapon.damage = 200;
-            weapon.attack_speed = 50;
-            weapon.cooldown = 0;
-            weapon.self = ship;
+            weapon.range                     = 20.0f;
+            weapon.shield_penetration        = 0.1f;
+            weapon.projectile_velocity       = 8.0f;
+            weapon.damage                    = 200;
+            weapon.attack_speed              = 50;
+            weapon.cooldown                  = 0;
+            weapon.self                      = ship;
 
-            weapon.flags = (int)WeaponFlags.WEAPON_PROJECTILE;
+            weapon.flags                     = (int)WeaponFlags.WEAPON_PROJECTILE;
 
             ship.weapons.Add(weapon);
             ship.weapons.Add(left_cannon);
@@ -246,19 +256,23 @@ namespace SystemView {
                     ship.path_planned = false;
             }
 
-            if (!mouse_steering) {
-                if (Input.GetKey("space") || Input.GetMouseButton(0)) {
+            foreach(ShipWeapon weapon in ship.weapons)
+                weapon.update();
+
+            if(!mouse_steering) {
+                if(Input.GetKey("space") || Input.GetMouseButton(0)) {
                     Vector3 mouse_position = camera.GetAbsPos(Input.mousePosition);
 
-                    foreach (ShipWeapon weapon in ship.weapons)
+                    foreach(ShipWeapon weapon in ship.weapons)
                         if(weapon.try_targeting(mouse_position.x, mouse_position.y, current_time))
                             weapon.fire(mouse_position.x, mouse_position.y);
                 }
             } else {
-                if (Input.GetKey("space"))
-                    foreach (ShipWeapon weapon in ship.weapons) {
+                if(Input.GetKey("space"))
+                    foreach(ShipWeapon weapon in ship.weapons) {
                         float x = ship.self.posx + (float)Math.Cos(ship.rotation) * weapon.range;
                         float y = ship.self.posy + (float)Math.Sin(ship.rotation) * weapon.range;
+
                         if(weapon.try_targeting(x, y, current_time))
                             weapon.fire(x, y);
                     }

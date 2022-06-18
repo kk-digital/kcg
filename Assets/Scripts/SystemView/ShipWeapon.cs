@@ -95,15 +95,22 @@ namespace SystemView
             return true;
         }
 
+        public void update() {
+            if(rotation_rate == 0.0f) {
+                rotation = self.rotation;
+
+                if((flags & (int)WeaponFlags.WEAPON_BROADSIDE) != 0)
+                    rotation += (((flags & (int)WeaponFlags.WEAPON_POSX) != 0) ? Tools.halfpi : -Tools.halfpi);
+            }
+        }
+
         public bool try_targeting(float x, float y, float current_time) {
             float dx = x - self.self.posx;
             float dy = y - self.self.posy;
             float d  = Tools.magnitude(dx, dy);
 
-            if (FOV == 0.0f) {
-                rotation = self.rotation;
+            if (rotation_rate == 0.0f)
                 return d <= range;
-            }
 
             while(rotation <        0.0f) rotation  = Tools.twopi + rotation;
             while(rotation > Tools.twopi) rotation -= Tools.twopi;
