@@ -1,42 +1,38 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Source.SystemView;
 
-namespace SystemView
-{
-    public class SystemStarRenderer : MonoBehaviour
-    {
-        public SpaceObject Star;
+namespace Scripts {
+    namespace SystemView {
+        public class SystemStarRenderer : MonoBehaviour {
+            public SpaceObject Star;
 
-        public SpriteRenderer sr;
+            public SpriteRenderer sr;
 
-        public Color color = Color.white;
+            public Color color = Color.white;
 
-        public CameraController Camera;
+            public CameraController Camera;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-            sr = gameObject.AddComponent<SpriteRenderer>();
+            // Start is called before the first frame update
+            void Start() {
+                sr = gameObject.AddComponent<SpriteRenderer>();
 
-            Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
+                Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
-            // Temporary circular sprite
-            sr.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
-        }
+                // Temporary circular sprite
+                sr.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
+            }
 
-        // Update is called once per frame
-        void Update()
-        {
-            sr.transform.position = new Vector3(Star.posx, Star.posy, -0.1f);
-            sr.transform.localScale = new Vector3(10.0f / Camera.scale, 10.0f / Camera.scale, 1.0f);
+            // Update is called once per frame
+            void Update() {
+                sr.transform.position = new Vector3(Star.posx, Star.posy, -0.1f);
+                sr.transform.localScale = new Vector3(10.0f / Camera.scale, 10.0f / Camera.scale, 1.0f);
 
-            sr.color = color;
-        }
+                sr.color = color;
+            }
 
-        void OnDestroy()
-        {
-            GameObject.Destroy(sr);
+            void OnDestroy() {
+                GameObject.Destroy(sr);
+            }
         }
     }
 }

@@ -1,65 +1,63 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using Source.SystemView;
 
-namespace SystemView
-{
-    public class PlayerHUD : MonoBehaviour
-    {
-        public SystemState State;
+namespace Scripts {
+    namespace SystemView {
+        public class PlayerHUD : MonoBehaviour {
+            public SystemState State;
 
-        public Text SpeedText;
-        //public Text DragText;
-        public Text AccelerationText;
-        public Text GravityText;
-        public Text OrbitalPeriodText;
-        public Text HealthText;
-        public Text ShieldText;
+            public Text SpeedText;
+            //public Text DragText;
+            public Text AccelerationText;
+            public Text GravityText;
+            public Text OrbitalPeriodText;
+            public Text HealthText;
+            public Text ShieldText;
 
-        void Update()
-        {
-            if (State.Player != null)
-            {
-                float Speed = (float)Math.Sqrt(State.Player.ship.self.velx * State.Player.ship.self.velx + State.Player.ship.self.vely * State.Player.ship.self.vely);
-                SpeedText.text = "  Velocity: " + String.Format("{0:0.00}", Speed) + " m/s";
+            void Update() {
+                if(State.Player != null) {
+                    float Speed = (float)Math.Sqrt(State.Player.ship.self.velx * State.Player.ship.self.velx + State.Player.ship.self.vely * State.Player.ship.self.vely);
+                    SpeedText.text = "  Velocity: " + String.Format("{0:0.00}", Speed) + " m/s";
 
-                /*float Drag = 0.0f;
-                if (State.Player.GravitationalStrength < 1.0f)
-                {
-                    float GravitationalFactor = 1.0f / (1.0f - State.Player.GravitationalStrength);
+                    /*float Drag = 0.0f;
+                    if (State.Player.GravitationalStrength < 1.0f)
+                    {
+                        float GravitationalFactor = 1.0f / (1.0f - State.Player.GravitationalStrength);
 
-                    Drag = Speed * (1.0f / (GravitationalFactor + State.Player.DragFactor));
+                        Drag = Speed * (1.0f / (GravitationalFactor + State.Player.DragFactor));
+                    }
+
+                    DragText.text = "Drag: " + String.Format("{0:0.00}", Drag) + " m/s²";*/
+
+                    AccelerationText.text = "Acceleration: " + String.Format("{0:0.00}", State.Player.ship.acceleration) + " m/s²  ";
+
+                    float g  = 0.0f;
+                    float gx = 0.0f;
+                    float gy = 0.0f;
+
+                    foreach(SpaceObject o in State.Objects) {
+                        float dx = o.posx - State.Player.ship.self.posx;
+                        float dy = o.posy - State.Player.ship.self.posy;
+
+                        float d2 = dx * dx + dy * dy;
+                        float d  = (float)Math.Sqrt(d2);
+
+                        float curg = 6.67408E-11f * o.mass / d2;
+
+                        gx += curg * dx / d;
+                        gy += curg * dy / d;
+                    }
+
+                    g = (float)Math.Sqrt(gx * gx + gy * gy);
+
+                    GravityText.text = "  Gravity: " + String.Format("{0:0.00}", g) + " m/s²";
+                    OrbitalPeriodText.text = "Orbital period: " + (float.IsNaN(State.Player.ship.descriptor.orbital_period) ? " not orbiting  " : (String.Format("{0:0.00}", State.Player.ship.descriptor.orbital_period) + " s  "));
+
+                    HealthText.text = "  Health: " + State.Player.ship.health + " / " + State.Player.ship.max_health;
+                    ShieldText.text = "Shield: " + State.Player.ship.shield + " / " + State.Player.ship.max_shield + "  ";
                 }
-
-                DragText.text = "Drag: " + String.Format("{0:0.00}", Drag) + " m/s²";*/
-
-                AccelerationText.text = "Acceleration: " + String.Format("{0:0.00}", State.Player.ship.acceleration) + " m/s²  ";
-
-                float g  = 0.0f;
-                float gx = 0.0f;
-                float gy = 0.0f;
-
-                foreach (SpaceObject o in State.Objects)
-                {
-                    float dx = o.posx - State.Player.ship.self.posx;
-                    float dy = o.posy - State.Player.ship.self.posy;
-
-                    float d2 = dx * dx + dy * dy;
-                    float d  = (float)Math.Sqrt(d2);
-
-                    float curg = 6.67408E-11f * o.mass / d2;
-
-                    gx += curg * dx / d;
-                    gy += curg * dy / d;
-                }
-
-                g = (float)Math.Sqrt(gx * gx + gy * gy);
-
-                GravityText.text = "  Gravity: " + String.Format("{0:0.00}", g) + " m/s²";
-                OrbitalPeriodText.text = "Orbital period: " + (float.IsNaN(State.Player.ship.descriptor.orbital_period) ? " not orbiting  " : (String.Format("{0:0.00}", State.Player.ship.descriptor.orbital_period) + " s  "));
-
-                HealthText.text = "  Health: " + State.Player.ship.health + " / " + State.Player.ship.max_health;
-                ShieldText.text = "Shield: " + State.Player.ship.shield + " / " + State.Player.ship.max_shield + "  ";
             }
         }
     }

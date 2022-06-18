@@ -1,15 +1,14 @@
-namespace SystemView
-{
-    public class SystemAsteroid
-    {
-        public float RotationalPosition;
-        public int Layer;
+namespace Source {
+    namespace SystemView {
+        public class SystemAsteroid {
+            public float RotationalPosition;
+            public int Layer;
 
-        // todo: add more properties
+            // todo: add more properties
 
-        public SystemAsteroid()
-        {
+            public SystemAsteroid() {
 
+            }
         }
     }
 }

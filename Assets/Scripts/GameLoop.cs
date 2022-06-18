@@ -1,6 +1,6 @@
 using UnityEngine;
 
-using SystemView;
+using Scripts.SystemView;
 
 public class GameLoop : MonoBehaviour
 {
