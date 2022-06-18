@@ -120,21 +120,24 @@ namespace SystemView {
             right_gun.flags                  = (int)WeaponFlags.WEAPON_PROJECTILE
                                              | (int)WeaponFlags.WEAPON_BROADSIDE;
 
-            ShipWeapon weapon                = new ShipWeapon();
+            ShipWeapon turret                = new ShipWeapon();
 
-            weapon.color                     = Color.white;
+            turret.color                     = Color.white;
 
-            weapon.range                     = 20.0f;
-            weapon.shield_penetration        = 0.1f;
-            weapon.projectile_velocity       = 8.0f;
-            weapon.damage                    = 200;
-            weapon.attack_speed              = 50;
-            weapon.cooldown                  = 0;
-            weapon.self                      = ship;
+            turret.range                     = 20.0f;
+            turret.shield_penetration        = 0.1f;
+            turret.projectile_velocity       = 8.0f;
+            turret.damage                    = 200;
+            turret.attack_speed              = 50;
+            turret.cooldown                  = 0;
+            turret.FOV                       = Tools.eigthpi;
+            turret.rotation_rate             = 2.0f;
+            turret.self                      = ship;
 
-            weapon.flags                     = (int)WeaponFlags.WEAPON_PROJECTILE;
+            turret.flags                     = (int)WeaponFlags.WEAPON_PROJECTILE
+                                             | (int)WeaponFlags.WEAPON_TURRET;
 
-            ship.weapons.Add(weapon);
+            ship.weapons.Add(turret);
             ship.weapons.Add(left_cannon);
             ship.weapons.Add(left_gun);
             ship.weapons.Add(right_cannon);
@@ -156,6 +159,8 @@ namespace SystemView {
 
             float horizontal_movement = 0.0f;
 
+            float rotation_change = ship.rotation;
+
             if (!mouse_steering) {
                 if (Input.GetKey("left ctrl")) horizontal_movement = Input.GetAxis("Horizontal");
                 else ship.rotation -= Input.GetAxis("Horizontal") * current_time * ship.rotational_speed_modifier;
@@ -174,6 +179,8 @@ namespace SystemView {
 
                 ship.rotate_to(angle, current_time);
             }
+
+            rotation_change -= ship.rotation;
 
             float movement = Input.GetAxis("Vertical");
             if (movement == 0.0f && Input.GetKey("w")) movement =  1.0f;
@@ -256,8 +263,12 @@ namespace SystemView {
                     ship.path_planned = false;
             }
 
-            foreach(ShipWeapon weapon in ship.weapons)
+            foreach(ShipWeapon weapon in ship.weapons) {
                 weapon.update();
+
+                if((weapon.flags & (int)WeaponFlags.WEAPON_TURRET) != 0)
+                    weapon.rotation -= rotation_change;
+            }
 
             if(!mouse_steering) {
                 if(Input.GetKey("space") || Input.GetMouseButton(0)) {

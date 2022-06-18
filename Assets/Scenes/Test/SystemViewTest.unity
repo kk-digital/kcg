@@ -1336,6 +1336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scale: 1
+  DisableDragging: 0
 --- !u!1 &272912025
 GameObject:
   m_ObjectHideFlags: 0
@@ -1864,7 +1865,7 @@ GameObject:
   - component: {fileID: 451157158}
   m_Layer: 0
   m_Name: SystemViewTest
-  m_TagString: Untagged
+  m_TagString: SystemController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1886,15 +1887,15 @@ MonoBehaviour:
   OuterPlanets: 6
   FarOrbitPlanets: 2
   SpaceStations: 15
-  SystemScale: 25
+  system_scale: 25
   SunMass: 5e+16
   PlanetMass: 1e+14
   MoonMass: 2e+13
   StationMass: 1e+9
-  TimeScale: 1
-  Acceleration: 5
-  DragFactor: 10000
-  SailingFactor: 200
+  time_scale: 1
+  acceleration: 5
+  drag_factor: 10000
+  sailing_factor: 200
   Camera: {fileID: 0}
   DockingTargetSelector: {fileID: 1953044954}
 --- !u!4 &451157159

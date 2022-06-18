@@ -63,12 +63,12 @@ namespace SystemView
             if (Player != null && State.Player == null)
             {
                 State.Player = Player;
-                State.Ships.Add(Player.ship);
+                State.ships.Add(Player.ship);
             }
 
             while (PendingEnemies.Count > 0)
             {
-                State.Ships.Add(PendingEnemies[0].ship);
+                State.ships.Add(PendingEnemies[0].ship);
                 Enemies.Add(PendingEnemies[0]);
                 PendingEnemies.RemoveAt(0);
             }
@@ -103,7 +103,7 @@ namespace SystemView
 
                 if (Projectile.UpdatePosition(current_millis / 1000.0f))
                 {
-                    foreach (SystemShip ship in State.Ships)
+                    foreach (SystemShip ship in State.ships)
                     {
                         if (ship == Projectile.Self) continue;
 
@@ -130,9 +130,9 @@ namespace SystemView
                 }
             }
 
-            for (int i = 0; i < State.Ships.Count; i++)
+            for (int i = 0; i < State.ships.Count; i++)
             {
-                SystemShip ship = State.Ships[i];
+                SystemShip ship = State.ships[i];
 
                 foreach (ShipWeapon Weapon in ship.weapons)
                 {
@@ -153,7 +153,7 @@ namespace SystemView
 
                 if (ship.destroyed)
                 {
-                    State.Ships.Remove(ship);
+                    State.ships.Remove(ship);
                     if (ship == Player.ship)
                     {
                         GameObject.Destroy(Player);
@@ -199,7 +199,7 @@ namespace SystemView
         {
             if (Player != null)
             {
-                State.Ships.Remove(Player.ship);
+                State.ships.Remove(Player.ship);
                 GameObject.Destroy(Player);
                 State.Player = null;
             }
@@ -229,7 +229,7 @@ namespace SystemView
                 Enemies.RemoveAt(0);
             }
 
-            State.Ships.Clear();
+            State.ships.Clear();
 
             while (State.LaserTowers.Count > 0)
             {
@@ -367,7 +367,7 @@ namespace SystemView
         {
             if (SelectedEnemy != null && Enemies.Contains(SelectedEnemy))
             {
-                State.Ships.Remove(SelectedEnemy.ship);
+                State.ships.Remove(SelectedEnemy.ship);
                 Enemies.Remove(SelectedEnemy);
                 GameObject.Destroy(SelectedEnemy);
                 SelectEnemy(0);

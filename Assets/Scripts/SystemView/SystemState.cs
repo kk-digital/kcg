@@ -8,7 +8,7 @@ namespace SystemView
     {
         public List<SystemPlanet>       Planets       = new();
         //public List<SystemAsteroidBelt> AsteroidBelts = new();
-        public List<SystemShip>         Ships         = new();
+        public List<SystemShip>         ships         = new();
         public List<SpaceStation>       Stations      = new();
         public List<LaserTower>         LaserTowers   = new();
         public List<SpaceObject>        Objects       = new();

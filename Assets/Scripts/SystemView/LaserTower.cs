@@ -175,7 +175,7 @@ namespace SystemView
 
             if (Target == null)
             {
-                if (State != null) foreach (SystemShip Ship in State.Ships)
+                if (State != null) foreach (SystemShip Ship in State.ships)
                 {
 
                     float DistanceX = Ship.self.posx - posx;

@@ -111,7 +111,7 @@ namespace SystemView
                 Ships.Remove(Ships.ElementAt(0).Key);
             }
 
-            State.Ships.Clear();
+            State.ships.Clear();
 
             while (Moons.Count > 0)
             {
@@ -381,7 +381,7 @@ namespace SystemView
                             ship.destination = State.Planets[j].descriptor;
                             ship.descriptor = new OrbitingObjectDescriptor(ship.start, ship.self);
 
-                            State.Ships.Add(ship);
+                            State.ships.Add(ship);
 
                             ObjectInfo<SystemShipRenderer> ShipInfo = new();
 
@@ -410,7 +410,7 @@ namespace SystemView
                 for (int i = 0; i < Planets.Count; i++)
                     Planets.ElementAt(i).Key.descriptor.compute();
 
-                foreach (SystemShip ship in State.Ships)
+                foreach (SystemShip ship in State.ships)
                     ship.descriptor.compute();
             }
 
@@ -437,7 +437,7 @@ namespace SystemView
             foreach (SpaceStation s in State.Stations)
                 s.descriptor.update_position(CurrentTime);
 
-            foreach (SystemShip s in State.Ships) {
+            foreach (SystemShip s in State.ships) {
                 if (!s.path_planned)
                     s.path_planned = s.descriptor.plan_path(s.destination, 0.1f * system_scale);
                 else if (s.descriptor.get_distance_from(s.destination) < system_scale) {

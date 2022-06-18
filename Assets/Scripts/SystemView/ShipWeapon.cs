@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine; // For color
+using UnityEngine;
 
 namespace SystemView
 {
@@ -40,13 +40,18 @@ namespace SystemView
 
         public List<ShipWeaponProjectile> projectiles_fired = new List<ShipWeaponProjectile>();
 
+        public CameraController camera;
+        public GameObject       laser_object;
+        public LineRenderer     laser_renderer;
+        public Material         mat;
+        public SystemState      state;
+
         // Can't be WeaponFlags as type as C# doesn't let you bitwise OR enum values unless every single possible combination
         // you might want to OR is defined as a value... Microsoft why??
         public int flags;
 
         // todo update this later
-        public bool TryFiringAt(SystemShip target, int current_millis)
-        {
+        public bool TryFiringAt(SystemShip target, int current_millis) {
             cooldown -= current_millis;
             if (cooldown < 0) cooldown = 0;
 
@@ -100,7 +105,31 @@ namespace SystemView
                 rotation = self.rotation;
 
                 if((flags & (int)WeaponFlags.WEAPON_BROADSIDE) != 0)
-                    rotation += (((flags & (int)WeaponFlags.WEAPON_POSX) != 0) ? Tools.halfpi : -Tools.halfpi);
+                    rotation += ((flags & (int)WeaponFlags.WEAPON_POSX) != 0) ? Tools.halfpi : -Tools.halfpi;
+            }
+
+            if((flags & (int)WeaponFlags.WEAPON_LASER) != 0) {
+                int charging_time           = (int)(attack_speed * 0.05f);
+                int laser_duration_time     = (int)(attack_speed * 0.45f);
+                int remaining_charging_time = cooldown - (attack_speed - charging_time);
+                int remaining_time          = cooldown - (attack_speed - laser_duration_time);
+
+                if(remaining_time > 0) {
+                    if(remaining_charging_time > 0) {
+                        float RemainingTimeAsPercentage = 1.0f - (float)remaining_charging_time / (float)laser_duration_time;
+                        laser_renderer.startWidth = laser_renderer.endWidth = 0.1f * RemainingTimeAsPercentage / camera.scale;
+                        laser_renderer.startColor = new Color(color.r, color.g, color.b, color.a * RemainingTimeAsPercentage + 0.10f);
+                        laser_renderer.endColor   = new Color(color.r, color.g, color.b, color.a * RemainingTimeAsPercentage + 0.02f);
+                    } else {
+                        float RemainingTimeAsPercentage = (float)remaining_time / (float)laser_duration_time;
+                        laser_renderer.startWidth = laser_renderer.endWidth = RemainingTimeAsPercentage * 0.1f / camera.scale;
+                        laser_renderer.startColor = new Color(color.r, color.g, color.b, color.a * RemainingTimeAsPercentage + 0.10f);
+                        laser_renderer.endColor   = new Color(color.r, color.g, color.b, color.a * RemainingTimeAsPercentage + 0.02f);
+                    }
+                } else {
+                    GameObject.Destroy(laser_renderer);
+                    GameObject.Destroy(laser_object);
+                }
             }
         }
 
@@ -152,8 +181,7 @@ namespace SystemView
             return true;
         }
 
-        public void fire(float x, float y)
-        {
+        public void fire(float x, float y) {
             if (cooldown > 0) return;
 
             float dx = x - self.self.posx;
@@ -209,6 +237,52 @@ namespace SystemView
                 projectile.Damage = damage;
 
                 projectiles_fired.Add(projectile);
+            }
+
+            if((flags & (int)WeaponFlags.WEAPON_LASER) != 0) {
+                laser_object                 = new GameObject();
+                laser_object.name            = "Laser";
+
+                laser_renderer               = laser_object.AddComponent<LineRenderer>();
+                laser_renderer.material      = mat;
+                laser_renderer.useWorldSpace = true;
+
+                Vector3[] vertices           = new Vector3[2];
+                vertices[0]                  = new Vector3(self.self.posx, self.self.posy, 0.0f);
+                vertices[1]                  = new Vector3(x, y, 0.0f);
+
+                laser_renderer.SetPositions(vertices);
+                laser_renderer.positionCount = 2;
+
+                // todo: should be able to target stuff other than ships
+                SystemShip target = null;
+
+                foreach(SystemShip ship in state.ships) {
+                    float _dx = ship.self.posx - x;
+                    float _dy = ship.self.posy - y;
+                    float _d  = Tools.magnitude(_dx, _dy);
+
+                    if(_d < 0.5f) {
+                        target = ship;
+                        break;
+                    }
+                }
+
+                if(target == null) return;
+
+                float shield_damage          = damage * shield_damage_multiplier * 1.0f - shield_penetration;
+                float hull_damage            = damage *   hull_damage_multiplier *        shield_penetration;
+
+                target.shield               -= (int)shield_damage;
+
+                if(target.shield < 0) {
+                    hull_damage             -= (float)target.shield / shield_damage_multiplier * hull_damage_multiplier;
+                    target.shield            = 0;
+                }
+
+                target.health               -= (int)hull_damage;
+
+                if(target.health <= 0) target.destroy();
             }
         }
     }
