@@ -53,21 +53,21 @@ namespace Scripts {
 
             public  CameraController Camera;
 
-            public void setInnerPlanets(float f) { InnerPlanets    =        (int)f; }
-            public void setOuterPlanets(float f) { OuterPlanets    =        (int)f; }
+            public void setInnerPlanets(float f)    { InnerPlanets    =        (int)f; }
+            public void setOuterPlanets(float f)    { OuterPlanets    =        (int)f; }
             public void setFarOrbitPlanets(float f) { FarOrbitPlanets =        (int)f; }
 
-            public void setSystemScale(float f) { system_scale    =             f; }
+            public void setSystemScale(float f)     { system_scale    =             f; }
 
-            public void setSunMass(float f) { SunMass         =             f; }
-            public void setPlanetMass(float f) { PlanetMass      =             f; }
-            public void setMoonMass(float f) { MoonMass        =             f; }
+            public void setSunMass(float f)         { SunMass         =             f; }
+            public void setPlanetMass(float f)      { PlanetMass      =             f; }
+            public void setMoonMass(float f)        { MoonMass        =             f; }
 
-            public void setTimeScale(float f) { time_scale      =             f; }
+            public void setTimeScale(float f)       { time_scale      =             f; }
 
-            public void setAcceleration(float f) { acceleration    =             f; }
-            public void setDragFactor(float f) { drag_factor     = 100000.0f - f; }
-            public void setSailingFactor(float f) { sailing_factor  =   1000.0f - f; }
+            public void setAcceleration(float f)    { acceleration    =             f; }
+            public void setDragFactor(float f)      { drag_factor     = 100000.0f - f; }
+            public void setSailingFactor(float f)   { sailing_factor  =   1000.0f - f; }
 
             public Dropdown DockingTargetSelector;
             private SpaceStation DockingTarget;
