@@ -52,6 +52,9 @@ namespace Source {
             }
 
             public void destroy() {
+                foreach(ShipWeapon weapon in weapons)
+                    weapon.cleanup();
+
                 destroyed = true;
             }
 

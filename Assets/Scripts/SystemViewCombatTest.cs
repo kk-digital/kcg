@@ -60,6 +60,7 @@ namespace Scripts {
                 if(Player != null && State.Player == null) {
                     State.Player = Player;
                     State.ships.Add(Player.ship);
+                    UpdatePlayerWeapons();
                 }
 
                 while(PendingEnemies.Count > 0) {
@@ -171,14 +172,125 @@ namespace Scripts {
 
             public void RespawnPlayer() {
                 if(Player != null) {
+                    Player.ship.destroy();
                     State.ships.Remove(Player.ship);
                     GameObject.Destroy(Player);
                     State.Player = null;
                 }
 
                 Player = gameObject.AddComponent<PlayerShip>();
+            }
 
-                // todo: ship can't fire after being respawned. Fix it
+            public void UpdatePlayerWeapons() {
+                ShipWeapon left_cannon           = new ShipWeapon();
+
+                left_cannon.color                = new Color(0.7f, 0.9f, 1.0f, 1.0f);
+
+                left_cannon.range                = 45.0f;
+                left_cannon.shield_penetration   = 0.2f;
+                left_cannon.projectile_velocity  = 50.0f;
+                left_cannon.damage               = 6000;
+                left_cannon.attack_speed         = 1250;
+                left_cannon.cooldown             = 0;
+                left_cannon.self                 = Player.ship;
+                left_cannon.FOV                  = Tools.quarterpi;
+
+                left_cannon.flags                = (int)WeaponFlags.WEAPON_PROJECTILE
+                                                 | (int)WeaponFlags.WEAPON_BROADSIDE
+                                                 | (int)WeaponFlags.WEAPON_POSX;
+
+
+                ShipWeapon left_gun              = new ShipWeapon();
+
+                left_gun.color                   = new Color(0.4f, 0.8f, 1.0f, 1.0f);
+
+                left_gun.range                   = 30.0f;
+                left_gun.shield_penetration      = 0.02f;
+                left_gun.projectile_velocity     = 25.0f;
+                left_gun.damage                  = 2000;
+                left_gun.attack_speed            = 400;
+                left_gun.cooldown                = 0;
+                left_gun.self                    = Player.ship;
+                left_gun.FOV                     = Tools.halfpi;
+
+                left_gun.flags                   = (int)WeaponFlags.WEAPON_PROJECTILE
+                                                 | (int)WeaponFlags.WEAPON_BROADSIDE
+                                                 | (int)WeaponFlags.WEAPON_POSX;
+
+                ShipWeapon right_cannon          = new ShipWeapon();
+
+                right_cannon.color               = new Color(0.7f, 0.9f, 1.0f, 1.0f);
+
+                right_cannon.range               = 45.0f;
+                right_cannon.shield_penetration  = 0.2f;
+                right_cannon.projectile_velocity = 50.0f;
+                right_cannon.damage              = 6000;
+                right_cannon.attack_speed        = 1250;
+                right_cannon.cooldown            = 0;
+                right_cannon.self                = Player.ship;
+                right_cannon.FOV                 = Tools.quarterpi;
+
+                right_cannon.flags               = (int)WeaponFlags.WEAPON_PROJECTILE
+                                                 | (int)WeaponFlags.WEAPON_BROADSIDE;
+
+                ShipWeapon right_gun             = new ShipWeapon();
+
+                right_gun.color                  = new Color(0.4f, 0.8f, 1.0f, 1.0f);
+
+                right_gun.range                  = 30.0f;
+                right_gun.shield_penetration     = 0.02f;
+                right_gun.projectile_velocity    = 25.0f;
+                right_gun.damage                 = 2000;
+                right_gun.attack_speed           = 400;
+                right_gun.cooldown               = 0;
+                right_gun.self                   = Player.ship;
+                right_gun.FOV                    = Tools.halfpi;
+
+                right_gun.flags                  = (int)WeaponFlags.WEAPON_PROJECTILE
+                                                 | (int)WeaponFlags.WEAPON_BROADSIDE;
+
+                ShipWeapon turret                = new ShipWeapon();
+
+                turret.color                     = Color.white;
+
+                turret.range                     = 20.0f;
+                turret.shield_penetration        = 0.1f;
+                turret.projectile_velocity       = 8.0f;
+                turret.damage                    = 200;
+                turret.attack_speed              = 50;
+                turret.cooldown                  = 0;
+                turret.FOV                       = Tools.eigthpi;
+                turret.rotation                  = Tools.pi;
+                turret.rotation_rate             = 2.0f;
+                turret.self                      = Player.ship;
+
+                turret.flags                     = (int)WeaponFlags.WEAPON_PROJECTILE
+                                                 | (int)WeaponFlags.WEAPON_TURRET;
+
+                ShipWeapon laser                 = new ShipWeapon();
+
+                laser.color                      = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+
+                laser.range                      = 50.0f;
+                laser.shield_penetration         = 0.1f;
+                laser.projectile_velocity        = 8.0f;
+                laser.damage                     = 7500;
+                laser.attack_speed               = 1800;
+                laser.cooldown                   = 0;
+                laser.shield_damage_multiplier   = 2.0f;
+                laser.hull_damage_multiplier     = 0.01f;
+                laser.self                       = Player.ship;
+                laser.state                      = State;
+                laser.camera                     = GameObject.Find("Main Camera").GetComponent<CameraController>();
+
+                laser.flags                      = (int)WeaponFlags.WEAPON_LASER;
+
+                Player.ship.weapons.Add(turret);
+                Player.ship.weapons.Add(laser);
+                Player.ship.weapons.Add(left_cannon);
+                Player.ship.weapons.Add(left_gun);
+                Player.ship.weapons.Add(right_cannon);
+                Player.ship.weapons.Add(right_gun);
             }
 
             public void AddEnemy() {

@@ -30,6 +30,7 @@ namespace Scripts {
             public OrbitRenderer OrbitRender;
             public LineRenderer DirectionRenderer;
             public LineRenderer VelocityRenderer;
+            public SystemState State;
 
             public Color orbitColor     = new Color(1.0f, 0.7f, 0.5f, 1.0f);
             public Color shieldColor    = new Color(0.4f, 0.7f, 1.0f, 0.5f);
@@ -54,6 +55,7 @@ namespace Scripts {
 
             // Start is called before the first frame update
             void Start() {
+                State = GameObject.FindWithTag("SystemController").GetComponent<GameLoop>().CurrentSystemState;
                 OrbitRender = gameObject.AddComponent<OrbitRenderer>();
                 ShipRender = gameObject.AddComponent<SpriteRenderer>();
 
@@ -118,8 +120,8 @@ namespace Scripts {
                 else
                     ShieldRender.color = new Color(shieldColor.r, shieldColor.g, shieldColor.b, shieldColor.a * ship.shield / ship.max_shield);
 
-                float v = (float)Math.Sqrt(ship.self.velx * ship.self.velx + ship.self.vely * ship.self.vely);
-                if (ship.weapons.Count > 0 && v > 0.0f) {
+                float v = Tools.magnitude(ship.self.velx, ship.self.vely);
+                if(ship.weapons.Count > 0 || ship == State.Player.ship) {
                     Vector3[] vertices = new Vector3[2];
                     vertices[0] = new Vector3(ship.self.posx, ship.self.posy, -0.075f);
                     vertices[1] = new Vector3(ship.self.posx + (float)Math.Cos(ship.rotation) * 10.0f / camera_controller.scale, ship.self.posy + (float)Math.Sin(ship.rotation) * 10.0f / camera_controller.scale, -0.075f);
@@ -128,13 +130,15 @@ namespace Scripts {
                     DirectionRenderer.startColor = DirectionRenderer.endColor = directionColor;
                     DirectionRenderer.startWidth = DirectionRenderer.endWidth = 0.2f / camera_controller.scale;
 
-                    Vector3[] vertices2 = new Vector3[2];
-                    vertices2[0] = new Vector3(ship.self.posx, ship.self.posy, -0.075f);
-                    vertices2[1] = new Vector3(ship.self.posx + ship.self.velx / v * 10.0f / camera_controller.scale, ship.self.posy + ship.self.vely / v * 10.0f / camera_controller.scale, -0.075f);
-                    VelocityRenderer.SetPositions(vertices2);
-                    VelocityRenderer.positionCount = 2;
-                    VelocityRenderer.startColor = VelocityRenderer.endColor = velocityColor;
-                    VelocityRenderer.startWidth = VelocityRenderer.endWidth = 0.2f / camera_controller.scale;
+                    if(v != 0.0f) {
+                        Vector3[] vertices2 = new Vector3[2];
+                        vertices2[0] = new Vector3(ship.self.posx, ship.self.posy, -0.075f);
+                        vertices2[1] = new Vector3(ship.self.posx + ship.self.velx / v * 10.0f / camera_controller.scale, ship.self.posy + ship.self.vely / v * 10.0f / camera_controller.scale, -0.075f);
+                        VelocityRenderer.SetPositions(vertices2);
+                        VelocityRenderer.positionCount = 2;
+                        VelocityRenderer.startColor = VelocityRenderer.endColor = velocityColor;
+                        VelocityRenderer.startWidth = VelocityRenderer.endWidth = 0.2f / camera_controller.scale;
+                    }
                 } else
                     DirectionRenderer.positionCount = VelocityRenderer.positionCount = 0;
 
@@ -230,6 +234,13 @@ namespace Scripts {
                 GameObject.Destroy(ShieldObject);
                 GameObject.Destroy(DirectionObject);
                 GameObject.Destroy(VelocityObject);
+
+                foreach(DebugWeaponInfo weapon in weapons) {
+                    GameObject.Destroy(weapon. obj1);
+                    GameObject.Destroy(weapon. obj2);
+                    GameObject.Destroy(weapon.line1);
+                    GameObject.Destroy(weapon.line2);
+                }
             }
         }
     }

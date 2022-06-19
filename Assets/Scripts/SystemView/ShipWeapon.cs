@@ -56,6 +56,11 @@ namespace Scripts {
             // you might want to OR is defined as a value... Microsoft why??
             public int flags;
 
+            public void cleanup() {
+                if(laser_renderer != null) GameObject.Destroy(laser_renderer);
+                if(laser_object   != null) GameObject.Destroy(laser_object);
+            }
+
             // todo update this later
             public bool TryFiringAt(SystemShip target, int current_millis) {
                 cooldown -= current_millis;
