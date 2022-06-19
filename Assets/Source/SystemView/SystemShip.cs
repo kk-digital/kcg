@@ -119,6 +119,53 @@ namespace Source {
                     else descriptor.update_position(current_time);
                 } else { rotate_to(targetrotation, current_time); descriptor.update_position(current_time); }
             }
+
+            public bool set_apoapsis(float target, float current_time) {
+                if(descriptor.central_body == null || descriptor.apoapsis == target) return true;
+
+                float   mean_anomaly       = target > descriptor.apoapsis ? 0.0f : Tools.pi;
+                float[] vel                = descriptor.get_velocity_at(descriptor.get_distance_from_center_at(mean_anomaly), mean_anomaly);
+                float   targetrotation     = Tools.get_angle(vel[0], vel[1]);
+                float   velocity_direction = Tools.get_angle(self.velx, self.vely);
+
+                float   d                  = descriptor.apoapsis - target;
+
+                if(rotation == targetrotation) {
+                    float diff = targetrotation - velocity_direction;
+                    if((diff >          - 0.4f && diff <            0.4f && target > descriptor.apoapsis)
+                    || (diff > Tools.pi - 0.4f && diff < Tools.pi + 0.4f && target < descriptor.apoapsis))
+                        accelerate(current_time);
+                    else
+                        descriptor.update_position(current_time);
+                } else { rotate_to(targetrotation, current_time); descriptor.update_position(current_time); }
+
+                float   d2                 = descriptor.apoapsis - target;
+
+                return (d > 0.0f && d2 <= 0.0f) || (d < 0.0f && d2 >= 0.0f);
+            }
+
+            public bool set_periapsis(float target, float current_time) {
+                if(descriptor.central_body == null || descriptor.periapsis == target) return true;
+
+                float   mean_anomaly       = target > descriptor.periapsis ? Tools.pi : 0.0f;
+                float[] vel                = descriptor.get_velocity_at(descriptor.get_distance_from_center_at(mean_anomaly), mean_anomaly);
+                float   targetrotation     = Tools.get_angle(vel[0], vel[1]);
+                float   velocity_direction = Tools.get_angle(self.velx, self.vely);
+
+                float   d                  = descriptor.periapsis - target;
+
+                if(rotation == targetrotation) {
+                    float diff = targetrotation - velocity_direction;
+                    if((diff >          -0.4f && diff <            0.4f && target > descriptor.periapsis)
+                    || (diff > Tools.pi - 0.4f && diff < Tools.pi + 0.4f && target < descriptor.periapsis))
+                        accelerate(current_time);
+                    else
+                        descriptor.update_position(current_time);
+                } else { rotate_to(targetrotation, current_time); descriptor.update_position(current_time); }
+
+                float   d2                 = descriptor.periapsis - target;
+
+                return (d > 0.0f && d2 <= 0.0f) || (d < 0.0f && d2 >= 0.0f);
             }
 
             public void engage_docking_autopilot(SpaceStation station) {
