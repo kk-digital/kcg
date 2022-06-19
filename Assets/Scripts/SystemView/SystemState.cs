@@ -5,16 +5,16 @@ using Source.SystemView;
 namespace Scripts {
     namespace SystemView {
         public class SystemState : MonoBehaviour {
-            public List<SystemPlanet>       Planets       = new();
+            public List<SystemPlanet>       planets       = new();
             //public List<SystemAsteroidBelt> AsteroidBelts = new();
             public List<SystemShip>         ships         = new();
-            public List<SpaceStation>       Stations      = new();
-            public List<LaserTower>         LaserTowers   = new();
-            public List<SpaceObject>        Objects       = new();
+            public List<SpaceStation>       stations      = new();
+            public List<LaserTower>         laser_towers  = new();
+            public List<SpaceObject>        objects       = new();
 
-            public PlayerShip Player;
+            public PlayerShip player;
 
-            public SpaceObject Star = new();
+            public SpaceObject star = new();
         }
     }
 }

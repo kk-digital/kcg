@@ -32,7 +32,7 @@ namespace Scripts {
 
                 SystemState State = gl.CurrentSystemState;
 
-                ship.descriptor.central_body = State.Star;
+                ship.descriptor.central_body = State.star;
 
                 ship.start = ship.destination = ship.descriptor;
 

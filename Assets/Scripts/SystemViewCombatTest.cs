@@ -43,9 +43,9 @@ namespace Scripts {
             void Start() {
                 LastTime = (int)(Time.time * 1000.0f);
 
-                State.Star.mass = 5000000.0f;
-                State.Star.posx = -5.0f;
-                State.Star.posy = 0.0f;
+                State.star.mass = 5000000.0f;
+                State.star.posx = -5.0f;
+                State.star.posy = 0.0f;
 
                 RespawnPlayer();
 
@@ -53,12 +53,12 @@ namespace Scripts {
                 StarObject.name = "Star Renderer";
 
                 SystemStarRenderer starRenderer = StarObject.AddComponent<SystemStarRenderer>();
-                starRenderer.Star = State.Star;
+                starRenderer.Star = State.star;
             }
 
             void LateUpdate() {
-                if(Player != null && State.Player == null) {
-                    State.Player = Player;
+                if(Player != null && State.player == null) {
+                    State.player = Player;
                     State.ships.Add(Player.ship);
                     UpdatePlayerWeapons();
                 }
@@ -70,8 +70,8 @@ namespace Scripts {
                 }
 
                 while(PendingLasers.Count > 0) {
-                    State.LaserTowers.Add(PendingLasers[0]);
-                    PendingLasers[0].State = State;
+                    State.laser_towers.Add(PendingLasers[0]);
+                    PendingLasers[0].state = State;
                     PendingLasers.RemoveAt(0);
                 }
 
@@ -175,7 +175,7 @@ namespace Scripts {
                     Player.ship.destroy();
                     State.ships.Remove(Player.ship);
                     GameObject.Destroy(Player);
-                    State.Player = null;
+                    State.player = null;
                 }
 
                 Player = gameObject.AddComponent<PlayerShip>();
@@ -311,10 +311,10 @@ namespace Scripts {
 
                 State.ships.Clear();
 
-                while(State.LaserTowers.Count > 0) {
-                    GameObject.Destroy(State.LaserTowers[0]);
+                while(State.laser_towers.Count > 0) {
+                    GameObject.Destroy(State.laser_towers[0]);
                     GameObject.Destroy(LaserObjects[0]);
-                    State.LaserTowers.RemoveAt(0);
+                    State.laser_towers.RemoveAt(0);
                     LaserObjects.RemoveAt(0);
                 }
 

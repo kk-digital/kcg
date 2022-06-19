@@ -79,21 +79,21 @@ namespace Scripts {
                 StarObject.name = "Star Renderer";
 
                 SystemStarRenderer starRenderer = StarObject.AddComponent<SystemStarRenderer>();
-                starRenderer.Star = State.Star;
+                starRenderer.Star = State.star;
 
                 Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
             }
 
             public void CenterCamera() {
-                Camera.setPosition(-State.Player.ship.self.posx, -State.Player.ship.self.posy, 0.25f / system_scale);
+                Camera.setPosition(-State.player.ship.self.posx, -State.player.ship.self.posy, 0.25f / system_scale);
             }
 
             public void RegenerateSystem() {
                 LastTime = Time.time;
 
-                State.Star.mass = SunMass;
-                State.Star.posx = ((float)rnd.NextDouble() * 8.0f - 64.0f) * system_scale;
-                State.Star.posy = ((float)rnd.NextDouble() * 8.0f - 4.0f)  * system_scale;
+                State.star.mass = SunMass;
+                State.star.posx = ((float)rnd.NextDouble() * 8.0f - 64.0f) * system_scale;
+                State.star.posy = ((float)rnd.NextDouble() * 8.0f - 4.0f)  * system_scale;
 
                 // delete previous system
 
@@ -119,7 +119,7 @@ namespace Scripts {
                     Planets.Remove(Planets.ElementAt(0).Key);
                 }
 
-                State.Planets.Clear();
+                State.planets.Clear();
 
                 while(Stations.Count > 0) {
                     GameObject.Destroy(Stations.ElementAt(0).Value.Renderer);
@@ -127,16 +127,16 @@ namespace Scripts {
                     Stations.Remove(Stations.ElementAt(0).Key);
                 }
 
-                State.Stations.Clear();
+                State.stations.Clear();
 
-                if(State.Player != null) {
-                    GameObject.Destroy(State.Player);
+                if(State.player != null) {
+                    GameObject.Destroy(State.player);
                 }
 
                 for(int i = 0; i < InnerPlanets; i++) {
                     SystemPlanet Planet = new SystemPlanet();
 
-                    Planet.descriptor.central_body = State.Star;
+                    Planet.descriptor.central_body = State.star;
 
                     Planet.descriptor.semiminoraxis = (30.0f + (i + 1) * (i + 1) * 10) * system_scale;
                     Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + ((float)rnd.NextDouble() * (i + 5) * system_scale);
@@ -156,7 +156,7 @@ namespace Scripts {
                     PlanetInfo.Renderer = PlanetInfo.Object.AddComponent<SystemPlanetRenderer>();
                     PlanetInfo.Renderer.planet = Planet;
 
-                    State.Planets.Add(Planet);
+                    State.planets.Add(Planet);
                     Planets.Add(Planet, PlanetInfo);
                 }
 
@@ -200,12 +200,12 @@ namespace Scripts {
                 for(int i = 0; i < OuterPlanets; i++) {
                     SystemPlanet Planet = new SystemPlanet();
 
-                    Planet.descriptor.central_body = State.Star;
+                    Planet.descriptor.central_body = State.star;
 
                     //Planet.descriptor.semiminoraxis = InnerAsteroidBeltDescriptor.semimajoraxis + (i + 3) * (i + 3);
                     //Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + (float)rnd.NextDouble() * i / 2.0f;
 
-                    Planet.descriptor.semiminoraxis = State.Planets[InnerPlanets - 1].descriptor.semimajoraxis + ((i + 3) * (i + 3) * 10 * system_scale);
+                    Planet.descriptor.semiminoraxis = State.planets[InnerPlanets - 1].descriptor.semimajoraxis + ((i + 3) * (i + 3) * 10 * system_scale);
                     Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + ((float)rnd.NextDouble() * i / 20.0f) * system_scale;
 
                     Planet.descriptor.rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
@@ -223,7 +223,7 @@ namespace Scripts {
                     PlanetInfo.Renderer = PlanetInfo.Object.AddComponent<SystemPlanetRenderer>();
                     PlanetInfo.Renderer.planet = Planet;
 
-                    State.Planets.Add(Planet);
+                    State.planets.Add(Planet);
                     Planets.Add(Planet, PlanetInfo);
 
                     for(int j = 0; j < rnd.Next(i + 1); j++) {
@@ -241,7 +241,7 @@ namespace Scripts {
 
                         Moon.descriptor.compute();
 
-                        State.Planets.Add(Moon);
+                        State.planets.Add(Moon);
 
                         ObjectInfo<SystemPlanetRenderer> MoonInfo = new();
 
@@ -296,12 +296,12 @@ namespace Scripts {
                 for(int i = 0; i < FarOrbitPlanets; i++) {
                     SystemPlanet Planet = new SystemPlanet();
 
-                    Planet.descriptor.central_body = State.Star;
+                    Planet.descriptor.central_body = State.star;
 
                     //Planet.descriptor.semiminoraxis = InnerAsteroidBeltDescriptor.semimajoraxis + (i + 3) * (i + 3);
                     //Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + (float)rnd.NextDouble() * i / 2.0f;
 
-                    Planet.descriptor.semiminoraxis = State.Planets[InnerPlanets + OuterPlanets - 1].descriptor.semimajoraxis + ((i + 3) * (i + 3) * 31 * system_scale);
+                    Planet.descriptor.semiminoraxis = State.planets[InnerPlanets + OuterPlanets - 1].descriptor.semimajoraxis + ((i + 3) * (i + 3) * 31 * system_scale);
                     Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + (float)rnd.NextDouble() * (i + 1) * 82 * system_scale;
 
                     Planet.descriptor.rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
@@ -319,21 +319,21 @@ namespace Scripts {
                     PlanetInfo.Renderer = PlanetInfo.Object.AddComponent<SystemPlanetRenderer>();
                     PlanetInfo.Renderer.planet = Planet;
 
-                    State.Planets.Add(Planet);
+                    State.planets.Add(Planet);
                     Planets.Add(Planet, PlanetInfo);
                 }
 
-                foreach(SystemPlanet Planet in State.Planets) {
-                    State.Objects.Add(Planet.descriptor.self);
+                foreach(SystemPlanet Planet in State.planets) {
+                    State.objects.Add(Planet.descriptor.self);
                 }
-                State.Objects.Add(State.Star);
+                State.objects.Add(State.star);
 
                 for(int i = 0; i < SpaceStations; i++) {
                     SpaceStation Station = new();
 
-                    Station.descriptor.central_body   = State.Star;
+                    Station.descriptor.central_body   = State.star;
 
-                    Station.descriptor.semiminoraxis = ((float)rnd.NextDouble() * State.Planets[InnerPlanets + OuterPlanets - 1].descriptor.semimajoraxis + 4.0f);
+                    Station.descriptor.semiminoraxis = ((float)rnd.NextDouble() * State.planets[InnerPlanets + OuterPlanets - 1].descriptor.semimajoraxis + 4.0f);
                     Station.descriptor.semimajoraxis =  (float)rnd.NextDouble() * system_scale + Station.descriptor.semiminoraxis;
 
                     Station.descriptor.rotation      =  (float)rnd.NextDouble() * 2.0f * 3.1415926f;
@@ -351,17 +351,17 @@ namespace Scripts {
                     StationInfo.Renderer = StationInfo.Object.AddComponent<SpaceStationRenderer>();
                     StationInfo.Renderer.Station = Station;
 
-                    State.Stations.Add(Station);
+                    State.stations.Add(Station);
                     Stations.Add(Station, StationInfo);
                 }
 
-                for(int i = 0; i < State.Planets.Count; i++)
-                    if(State.Planets[i].descriptor.central_body == State.Star)
-                        for(int j = 0; j < State.Planets.Count; j++)
-                            if(i != j && State.Planets[j].descriptor.central_body == State.Star) {
+                for(int i = 0; i < State.planets.Count; i++)
+                    if(State.planets[i].descriptor.central_body == State.star)
+                        for(int j = 0; j < State.planets.Count; j++)
+                            if(i != j && State.planets[j].descriptor.central_body == State.star) {
                                 SystemShip ship = new SystemShip();
-                                ship.start = State.Planets[i].descriptor;
-                                ship.destination = State.Planets[j].descriptor;
+                                ship.start = State.planets[i].descriptor;
+                                ship.destination = State.planets[j].descriptor;
                                 ship.descriptor = new OrbitingObjectDescriptor(ship.start, ship.self);
 
                                 State.ships.Add(ship);
@@ -377,8 +377,8 @@ namespace Scripts {
                                 Ships.Add(ship, ShipInfo);
                             }
 
-                State.Player = gameObject.AddComponent<PlayerShip>();
-                State.Player.system_scale = system_scale;
+                State.player = gameObject.AddComponent<PlayerShip>();
+                State.player.system_scale = system_scale;
             }
 
             void Update() {
@@ -386,7 +386,7 @@ namespace Scripts {
                 LastTime = Time.time;
 
                 if(CachedSunMass != SunMass) {
-                    State.Star.mass = CachedSunMass = SunMass;
+                    State.star.mass = CachedSunMass = SunMass;
 
                     for(int i = 0; i < Planets.Count; i++)
                         Planets.ElementAt(i).Key.descriptor.compute();
@@ -412,10 +412,10 @@ namespace Scripts {
                         Moons.ElementAt(i).Key.descriptor.self.mass = MoonMass;
                 }
 
-                foreach(SystemPlanet p in State.Planets)
+                foreach(SystemPlanet p in State.planets)
                     p.descriptor.update_position(CurrentTime);
 
-                foreach(SpaceStation s in State.Stations)
+                foreach(SpaceStation s in State.stations)
                     s.descriptor.update_position(CurrentTime);
 
                 foreach(SystemShip s in State.ships) {
@@ -434,9 +434,9 @@ namespace Scripts {
                 float GravVelY = 0.0f;
 
                 // this behaves weird when getting really close to central body --- is float too inaccurate?
-                foreach(SpaceObject Body in State.Objects) {
-                    float dx = Body.posx - State.Player.ship.self.posx;
-                    float dy = Body.posy - State.Player.ship.self.posy;
+                foreach(SpaceObject Body in State.objects) {
+                    float dx = Body.posx - State.player.ship.self.posx;
+                    float dy = Body.posy - State.player.ship.self.posy;
 
                     float d2 = dx * dx + dy * dy;
                     float d = (float)Math.Sqrt(d2);
@@ -449,20 +449,20 @@ namespace Scripts {
                     GravVelY += Velocity * dy / d;
                 }
 
-                State.Player.gravitational_strength = (float)Math.Sqrt(GravVelX * GravVelX + GravVelY * GravVelY) * 0.4f / CurrentTime;
+                State.player.gravitational_strength = (float)Math.Sqrt(GravVelX * GravVelX + GravVelY * GravVelY) * 0.4f / CurrentTime;
 
-                State.Player.ship.self.velx   += GravVelX;
-                State.Player.ship.self.vely   += GravVelY;
+                State.player.ship.self.velx   += GravVelX;
+                State.player.ship.self.vely   += GravVelY;
 
                 // For some reason this messes stuff up?!
 
                 //State.Player.ship.self.posx   += GravVelX * CurrentTime * 0.5f;
                 //State.Player.ship.self.posy   += GravVelY * CurrentTime * 0.5f;
 
-                State.Player.ship.acceleration = acceleration;
-                State.Player.drag_factor       = drag_factor;
-                State.Player.sailing_factor    = sailing_factor;
-                State.Player.time_scale        = time_scale;
+                State.player.ship.acceleration = acceleration;
+                State.player.drag_factor       = drag_factor;
+                State.player.sailing_factor    = sailing_factor;
+                State.player.time_scale        = time_scale;
 
                 UpdateDropdownMenu();
 
@@ -501,9 +501,9 @@ namespace Scripts {
             public void SelectDockingTarget(int i) {
                 if(i == 0 || i > Stations.Count) {
                     DockingTarget = null;
-                    State.Player.ship.disengage_docking_autopilot();
+                    State.player.ship.disengage_docking_autopilot();
                 } else if(DockingTarget != Stations.ElementAt(i - 1).Key)
-                    State.Player.ship.engage_docking_autopilot(DockingTarget = Stations.ElementAt(i - 1).Key);
+                    State.player.ship.engage_docking_autopilot(DockingTarget = Stations.ElementAt(i - 1).Key);
             }
         }
     }

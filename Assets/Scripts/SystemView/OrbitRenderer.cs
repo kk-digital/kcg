@@ -5,7 +5,7 @@ using Source.SystemView;
 namespace Scripts {
     namespace SystemView {
         public class OrbitRenderer : MonoBehaviour {
-            private LineRenderer linerenderer;
+            private LineRenderer line_renderer;
 
             public OrbitingObjectDescriptor descriptor;
 
@@ -13,14 +13,14 @@ namespace Scripts {
 
             public Color color = new Color(0.5f, 0.7f, 1.0f, 1.0f);
 
-            public float LineWidth = 0.1f;
+            public float line_width = 0.1f;
 
-            public CameraController Camera;
+            public CameraController camera;
 
             public void UpdateRenderer(int segments) {
-                if(linerenderer == null) return;
+                if(line_renderer == null) return;
                 if(descriptor == null) {
-                    linerenderer.startWidth = linerenderer.endWidth = 0.0f;
+                    line_renderer.startWidth = line_renderer.endWidth = 0.0f;
                     return;
                 }
 
@@ -55,17 +55,17 @@ namespace Scripts {
                     (x, y) = (cos * x - sin * y, sin * x + cos * y);
                 }
 
-                linerenderer.startWidth = linerenderer.endWidth = LineWidth == 0.1f ? LineWidth / Camera.scale : LineWidth;
-                linerenderer.startColor = linerenderer.endColor = color;
-                linerenderer.SetPositions(vertices);
-                linerenderer.positionCount = segments;
+                line_renderer.startWidth = line_renderer.endWidth = line_width == 0.1f ? line_width / camera.scale : line_width;
+                line_renderer.startColor = line_renderer.endColor = color;
+                line_renderer.SetPositions(vertices);
+                line_renderer.positionCount = segments;
             }
 
             // Start is called before the first frame update
             void Start() {
-                Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
+                camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
-                linerenderer = gameObject.AddComponent<LineRenderer>();
+                line_renderer = gameObject.AddComponent<LineRenderer>();
 
                 // Load unity test shader
                 // this could alternatively also be our GLTestShader
@@ -82,15 +82,15 @@ namespace Scripts {
                 mat.SetInt("_ZWrite", 0);
                 mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
 
-                linerenderer.material = mat;
+                line_renderer.material = mat;
 
-                linerenderer.useWorldSpace = true;
+                line_renderer.useWorldSpace = true;
 
-                linerenderer.loop = true;
+                line_renderer.loop = true;
             }
 
             void OnDestroy() {
-                GameObject.Destroy(linerenderer);
+                GameObject.Destroy(line_renderer);
             }
         }
     }

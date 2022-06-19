@@ -17,8 +17,8 @@ namespace Scripts {
             public Text ShieldText;
 
             void Update() {
-                if(State.Player != null) {
-                    float Speed = (float)Math.Sqrt(State.Player.ship.self.velx * State.Player.ship.self.velx + State.Player.ship.self.vely * State.Player.ship.self.vely);
+                if(State.player != null) {
+                    float Speed = (float)Math.Sqrt(State.player.ship.self.velx * State.player.ship.self.velx + State.player.ship.self.vely * State.player.ship.self.vely);
                     SpeedText.text = "  Velocity: " + String.Format("{0:0.00}", Speed) + " m/s";
 
                     /*float Drag = 0.0f;
@@ -31,15 +31,15 @@ namespace Scripts {
 
                     DragText.text = "Drag: " + String.Format("{0:0.00}", Drag) + " m/s²";*/
 
-                    AccelerationText.text = "Acceleration: " + String.Format("{0:0.00}", State.Player.ship.acceleration) + " m/s²  ";
+                    AccelerationText.text = "Acceleration: " + String.Format("{0:0.00}", State.player.ship.acceleration) + " m/s²  ";
 
                     float g  = 0.0f;
                     float gx = 0.0f;
                     float gy = 0.0f;
 
-                    foreach(SpaceObject o in State.Objects) {
-                        float dx = o.posx - State.Player.ship.self.posx;
-                        float dy = o.posy - State.Player.ship.self.posy;
+                    foreach(SpaceObject o in State.objects) {
+                        float dx = o.posx - State.player.ship.self.posx;
+                        float dy = o.posy - State.player.ship.self.posy;
 
                         float d2 = dx * dx + dy * dy;
                         float d  = (float)Math.Sqrt(d2);
@@ -53,10 +53,10 @@ namespace Scripts {
                     g = (float)Math.Sqrt(gx * gx + gy * gy);
 
                     GravityText.text = "  Gravity: " + String.Format("{0:0.00}", g) + " m/s²";
-                    OrbitalPeriodText.text = "Orbital period: " + (float.IsNaN(State.Player.ship.descriptor.orbital_period) ? " not orbiting  " : (String.Format("{0:0.00}", State.Player.ship.descriptor.orbital_period) + " s  "));
+                    OrbitalPeriodText.text = "Orbital period: " + (float.IsNaN(State.player.ship.descriptor.orbital_period) ? " not orbiting  " : (String.Format("{0:0.00}", State.player.ship.descriptor.orbital_period) + " s  "));
 
-                    HealthText.text = "  Health: " + State.Player.ship.health + " / " + State.Player.ship.max_health;
-                    ShieldText.text = "Shield: " + State.Player.ship.shield + " / " + State.Player.ship.max_shield + "  ";
+                    HealthText.text = "  Health: " + State.player.ship.health + " / " + State.player.ship.max_health;
+                    ShieldText.text = "Shield: " + State.player.ship.shield + " / " + State.player.ship.max_shield + "  ";
                 }
             }
         }

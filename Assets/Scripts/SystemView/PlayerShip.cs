@@ -146,14 +146,14 @@ namespace Scripts {
 
                 if (render_orbit) {
                     if (ship.descriptor.central_body == null)
-                        ship.descriptor.central_body = state.Star;
+                        ship.descriptor.central_body = state.star;
 
                     SpaceObject strongest_gravity_object = null;
                     float g = 0.0f;
 
-                    foreach (SpaceObject obj in state.Objects) {
-                        float dx = obj.posx - state.Player.ship.self.posx;
-                        float dy = obj.posy - state.Player.ship.self.posy;
+                    foreach (SpaceObject obj in state.objects) {
+                        float dx = obj.posx - state.player.ship.self.posx;
+                        float dy = obj.posy - state.player.ship.self.posy;
 
                         float d2 = dx * dx + dy * dy;
 
