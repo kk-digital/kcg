@@ -106,20 +106,19 @@ namespace Source {
                 descriptor.change_frame_of_reference(descriptor.central_body);
             }
 
-            public void circularize(float curent_time) {
+            public void circularize(float current_time) {
                 if(descriptor.central_body == null) return;
 
-                float[] vel = descriptor.get_velocity_at(descriptor.get_distance_from_center_at(Tools.pi), Tools.pi);
-
+                float[] vel              = descriptor.get_velocity_at(descriptor.get_distance_from_center_at(Tools.pi), Tools.pi);
                 float targetrotation     = Tools.get_angle(vel[0], vel[1]);
                 float velocity_direction = Tools.get_angle(self.velx, self.vely);
-                if(self.vely < 0.0f) velocity_direction = Tools.twopi - velocity_direction;
 
                 if(rotation == targetrotation) {
                     float diff = targetrotation - velocity_direction;
-                    if(diff > -0.4f && diff < 0.4f) accelerate(curent_time);
-                    else descriptor.update_position(curent_time);
-                } else { rotate_to(targetrotation, curent_time); descriptor.update_position(curent_time); }
+                    if(diff > -0.4f && diff < 0.4f) accelerate(current_time);
+                    else descriptor.update_position(current_time);
+                } else { rotate_to(targetrotation, current_time); descriptor.update_position(current_time); }
+            }
             }
 
             public void engage_docking_autopilot(SpaceStation station) {
