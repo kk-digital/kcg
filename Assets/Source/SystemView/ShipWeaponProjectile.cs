@@ -1,84 +1,81 @@
 ﻿using System;
 using UnityEngine; // For color
+using Scripts.SystemView;
 
-namespace SystemView
-{
-    public class ShipWeaponProjectile
-    {
-        // todo: is this even needed?        v
-        public OrbitingObjectDescriptor Descriptor;
+namespace Source {
+    namespace SystemView {
+        public class ShipWeaponProjectile {
+            // todo: is this even needed?        v
+            public OrbitingObjectDescriptor Descriptor;
 
-        public SystemShip Self;
-        public ShipWeapon Weapon;
+            public SystemShip Self;
+            public ShipWeapon Weapon;
 
-        public SystemViewBody Body;
+            public SpaceObject Body;
 
-        public float TimeElapsed;
-        public float LifeSpan;
+            public float TimeElapsed;
+            public float LifeSpan;
 
-        public Color ProjectileColor;
+            public Color ProjectileColor;
 
-        public float ShieldPenetration;
+            public float ShieldPenetration;
 
-        public int Damage;
+            public float ShieldDamageMultiplier;
+            public float HullDamageMultiplier;
 
-        public ShipWeaponProjectile()
-        {
-            Body = new();
-            Body.Mass = 1.0f;
-        }
+            public int Damage;
 
-        public bool UpdatePosition(float dt)
-        {
-            if((TimeElapsed += dt) > LifeSpan)
-            {
-                Weapon.ProjectilesFired.Remove(this);
-                return false;
+            public ShipWeaponProjectile() {
+                Body = new();
+                Body.mass = 1.0f;
             }
 
-            if (Descriptor == null) // Linear trajectory
-            {
-                Body.PosX += dt * Body.VelX;
-                Body.PosY += dt * Body.VelY;
-            }
-            /*else // Orbital trajectory todo
-            {
-                Descriptor.RotationalPosition += dt / Descriptor.GetDistanceFromCenter() / Descriptor.GetDistanceFromCenter();
+            public bool UpdatePosition(float dt) {
+                if((TimeElapsed += dt) > LifeSpan) {
+                    Weapon.projectiles_fired.Remove(this);
+                    return false;
+                }
 
-                float[] Pos = Descriptor.GetPosition();
+                if(Descriptor == null) // Linear trajectory
+                {
+                    Body.posx += dt * Body.velx;
+                    Body.posy += dt * Body.vely;
+                }
+                /*else // Orbital trajectory todo
+                {
+                    Descriptor.RotationalPosition += dt / Descriptor.GetDistanceFromCenter() / Descriptor.GetDistanceFromCenter();
 
-                PosX = Pos[0];
-                PosY = Pos[1];
-            }*/
+                    float[] Pos = Descriptor.GetPosition();
 
-            return true;
-        }
+                    PosX = Pos[0];
+                    PosY = Pos[1];
+                }*/
 
-        public bool InRangeOf(SystemShip Target, float AcceptableRange)
-        {
-            float dx = Body.PosX - Target.Self.PosX;
-            float dy = Body.PosY - Target.Self.PosY;
-
-            return Target != null && Math.Sqrt(dx * dx + dy * dy) < AcceptableRange;
-        }
-
-        public void DoDamage(SystemShip Target)
-        {
-            Target.Shield -= (int)(Damage * (1.0 - ShieldPenetration));
-            Target.Health -= (int)(Damage * ShieldPenetration);
-
-            if (Target.Shield < 0)
-            {
-                Target.Health += Target.Shield;
-                Target.Shield = 0;
+                return true;
             }
 
-            if (Target.Health <= 0)
-            {
-                Target.Destroy();
+            public bool InRangeOf(SystemShip Target, float AcceptableRange) {
+                float dx = Body.posx - Target.self.posx;
+                float dy = Body.posy - Target.self.posy;
+
+                return Target != null && Math.Sqrt(dx * dx + dy * dy) < AcceptableRange;
             }
 
-            Weapon.ProjectilesFired.Remove(this);
+            public void DoDamage(SystemShip Target) {
+                Target.shield -= (int)(Damage * (1.0 - ShieldPenetration));
+                Target.health -= (int)(Damage * ShieldPenetration);
+
+                if(Target.shield < 0) {
+                    Target.health += Target.shield;
+                    Target.shield = 0;
+                }
+
+                if(Target.health <= 0) {
+                    Target.destroy();
+                }
+
+                Weapon.projectiles_fired.Remove(this);
+            }
         }
     }
 }

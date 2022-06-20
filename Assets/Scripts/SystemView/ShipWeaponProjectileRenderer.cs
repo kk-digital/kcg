@@ -1,46 +1,42 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Source.SystemView;
 
-namespace SystemView
-{
-    public class ShipWeaponProjectileRenderer : MonoBehaviour
-    {
-        public ShipWeaponProjectile Projectile;
+namespace Scripts {
+    namespace SystemView {
+        public class ShipWeaponProjectileRenderer : MonoBehaviour {
+            public ShipWeaponProjectile Projectile;
 
-        public SpriteRenderer sr;
+            public SpriteRenderer sr;
 
-        public CameraController Camera;
+            public CameraController Camera;
 
-        public float Scale;
+            public float Scale;
 
-        void Start()
-        {
-            sr = gameObject.AddComponent<SpriteRenderer>();
+            void Start() {
+                sr = gameObject.AddComponent<SpriteRenderer>();
 
-            // Temporary circular sprite
-            sr.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
+                // Temporary circular sprite
+                sr.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
 
-            Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
+                Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
-            Scale = (float)Math.Log(Projectile.Damage * 0.3f) * 0.6f;
+                Scale = (float)Math.Log(Projectile.Damage * 0.3f) * 0.6f;
 
-            sr.transform.position = new Vector3(Projectile.Body.PosX, Projectile.Body.PosY, -0.06f);
-            sr.transform.localScale = new Vector3(Scale / Camera.scale, Scale / Camera.scale, 1.0f);
-            sr.color = Projectile.ProjectileColor;
-        }
+                sr.transform.position = new Vector3(Projectile.Body.posx, Projectile.Body.posy, -0.06f);
+                sr.transform.localScale = new Vector3(Scale / Camera.scale, Scale / Camera.scale, 1.0f);
+                sr.color = Projectile.ProjectileColor;
+            }
 
-        void Update()
-        {
-            sr.transform.position = new Vector3(Projectile.Body.PosX, Projectile.Body.PosY, -0.06f);
-            sr.transform.localScale = new Vector3(Scale / Camera.scale, Scale / Camera.scale, 1.0f);
-            sr.color = Projectile.ProjectileColor;
-        }
+            void Update() {
+                sr.transform.position = new Vector3(Projectile.Body.posx, Projectile.Body.posy, -0.06f);
+                sr.transform.localScale = new Vector3(Scale / Camera.scale, Scale / Camera.scale, 1.0f);
+                sr.color = Projectile.ProjectileColor;
+            }
 
-        void OnDestroy()
-        {
-            GameObject.Destroy(sr);
+            void OnDestroy() {
+                GameObject.Destroy(sr);
+            }
         }
     }
 }

@@ -1,18 +1,17 @@
 using System.Collections.Generic;
 
-namespace SystemView
-{
-    public class SpaceStation
-    {
-        public List<SystemShip>         LandedShips = new();
-        public List<SystemShip>         OwnedShips  = new();
+namespace Source {
+    namespace SystemView {
+        public class SpaceStation {
+            public List<SystemShip>         LandedShips = new();
+            public List<SystemShip>         OwnedShips  = new();
 
-        public SystemViewBody           Self        = new();
-        public OrbitingObjectDescriptor Descriptor;
+            public SpaceObject              Self        = new();
+            public OrbitingObjectDescriptor descriptor;
 
-        public SpaceStation()
-        {
-            Descriptor = new(Self);
+            public SpaceStation() {
+                descriptor = new(Self);
+            }
         }
     }
 }

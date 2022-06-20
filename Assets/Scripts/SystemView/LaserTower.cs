@@ -2,305 +2,340 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Source.SystemView;
 
-namespace SystemView
-{
-    public class LaserTower : MonoBehaviour
-    {
-        public float PosX;
-        public float PosY;
+namespace Scripts {
+    namespace SystemView {
+        public class LaserTower : MonoBehaviour {
+            public  float posx;
+            public  float posy;
 
-        public float AngularVelocity;
-        public float Rotation;
-        public float LastRotation;
-        public float FOV;
-        public float Range;
+            public  float angular_velocity;
+            public  float rotation;
+            private float last_rotation;
+            public  float FOV;
+            public  float range;
 
-        public int Damage;
-        public int FiringRate;
-        public int LastMillis;
-        public int Cooldown;
+            public  int damage;
+            public  int firing_rate;
+            public  int last_millis;
+            public  int cooldown;
 
-        public float ShieldPenetration;
+            public  float shield_penetration;
 
-        public float ShieldDamageMultiplier;
-        public float HullDamageMultiplier;
+            public  float shield_damage_multiplier;
+            public  float hull_damage_multiplier;
 
-        public System.Random rand;
+            public  System.Random rand;
 
-        public SpriteRenderer sr;
-        public CameraController Camera;
+            public  SpriteRenderer sr;
+            public  CameraController camera;
 
-        private GameObject DebugLineObject1;
-        private GameObject DebugLineObject2;
-        private GameObject LaserLineObject;
+            private GameObject debug_line_object1;
+            private GameObject debug_line_object2;
+            private GameObject laser_line_object;
 
-        private LineRenderer DebugLineRenderer1;
-        private LineRenderer DebugLineRenderer2;
+            private LineRenderer debug_line_renderer1;
+            private LineRenderer debug_line_renderer2;
 
-        private Color DebugConeColor = new Color(0.8f, 0.6f, 0.1f, 0.4f);
+            private Color debug_cone_color         = new Color(0.8f, 0.6f, 0.1f, 0.4f);
 
-        public LineRenderer LaserLineRenderer;
-        public Color LaserColor = new Color(0.2f, 0.8f, 0.3f, 0.7f);
+            public LineRenderer laser_renderer;
+            public Color laser_color               = new Color(0.2f, 0.8f, 0.3f, 0.7f);
 
-        public float LaserChargingDuration;
-        public float LaserDuration;
-        public float LaserWidth;
+            public float laser_charging_time;
+            public float laser_duration;
+            public float laser_width;
 
-        public SystemState State;
+            public SystemState state;
 
-        public SystemShip Target;
+            public SystemShip target;
 
-        // todo apply gravity to laser tower
+            // todo apply gravity to laser tower
 
-        // Start is called before the first frame update
-        void Start()
-        {
-            rand = new System.Random();
+            // Start is called before the first frame update
+            void Start() {
+                rand                               = new System.Random();
 
-            PosX = (float)rand.NextDouble() * 50.0f - 25.0f;
-            PosY = (float)rand.NextDouble() * 50.0f - 25.0f;
+                posx                               = (float)rand.NextDouble() * 50.0f - 25.0f;
+                posy                               = (float)rand.NextDouble() * 50.0f - 25.0f;
 
-            AngularVelocity = 0.4f;
-            Rotation = 0.0f;
-            LastRotation = 0.0f;
-            FOV = 3.1415926f / 6.0f;
-            Range = 20.0f;
-            LaserWidth = 0.6f;
-            LaserChargingDuration = 0.125f;
-            LaserDuration = 0.3f;
+                angular_velocity                   = 0.4f;
+                rotation                           = 0.0f;
+                last_rotation                      = 0.0f;
+                FOV                                = Tools.pi / 6.0f;
+                range                              = 20.0f;
+                laser_width                        = 0.6f;
+                laser_charging_time                = 0.125f;
+                laser_duration                     = 0.3f;
 
-            FiringRate = 3250;
-            Damage = 3000;
-            ShieldDamageMultiplier = 3.0f;
-            HullDamageMultiplier = 0.2f;
-            ShieldPenetration = 0.02f;
+                firing_rate                        = 3250;
+                damage                             = 3000;
+                shield_damage_multiplier           = 3.0f;
+                hull_damage_multiplier             = 0.2f;
+                shield_penetration                 = 0.02f;
 
-            sr = gameObject.AddComponent<SpriteRenderer>();
-            sr.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
+                sr                                 = gameObject.AddComponent<SpriteRenderer>();
+                sr.sprite                          = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
 
-            Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
+                camera                             = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
-            DebugLineObject1   = new GameObject();
-            DebugLineObject2   = new GameObject();
-            LaserLineObject    = new GameObject();
+                debug_line_object1                 = new GameObject();
+                debug_line_object2                 = new GameObject();
+                laser_line_object                  = new GameObject();
 
-            DebugLineRenderer1 = DebugLineObject1.AddComponent<LineRenderer>();
-            DebugLineRenderer2 = DebugLineObject2.AddComponent<LineRenderer>();
-            LaserLineRenderer  = LaserLineObject.AddComponent<LineRenderer>();
+                debug_line_renderer1               = debug_line_object1.AddComponent<LineRenderer>();
+                debug_line_renderer2               = debug_line_object2.AddComponent<LineRenderer>();
+                laser_renderer                     = laser_line_object.AddComponent<LineRenderer>();
 
-            Shader shader = Shader.Find("Hidden/Internal-Colored");
-            Material mat = new Material(shader);
-            mat.hideFlags = HideFlags.HideAndDontSave;
+                Shader shader                      = Shader.Find("Hidden/Internal-Colored");
+                Material mat                       = new Material(shader);
+                mat.hideFlags                      = HideFlags.HideAndDontSave;
 
-            mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-            mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
 
-            // Turn off backface culling, depth writes, depth test.
-            mat.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
-            mat.SetInt("_ZWrite", 0);
-            mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
+                // Turn off backface culling, depth writes, depth test.
+                mat.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
+                mat.SetInt("_ZWrite", 0);
+                mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
 
-            DebugLineRenderer1.material = DebugLineRenderer2.material = LaserLineRenderer.material = mat;
+                debug_line_renderer1.material      =
+                debug_line_renderer2.material      =
+                laser_renderer.material            = mat;
 
-            DebugLineRenderer1.useWorldSpace = DebugLineRenderer2.useWorldSpace = LaserLineRenderer.useWorldSpace = true;
+                debug_line_renderer1.useWorldSpace =
+                debug_line_renderer2.useWorldSpace =
+                laser_renderer.useWorldSpace       = true;
 
-            LastMillis = (int)(Time.time * 1000.0f);
+                last_millis                        = (int)(Time.time * 1000.0f);
 
-            LaserLineRenderer.startWidth = LaserLineRenderer.endWidth = 0.15f / Camera.scale;
-            LaserLineRenderer.startColor = LaserLineRenderer.endColor = LaserColor;
-        }
+                laser_renderer.startWidth          =
+                laser_renderer.endWidth            = 0.15f / camera.scale;
 
-        // Update is called once per frame
-        void Update()
-        {
-            sr.transform.position = new Vector3(PosX, PosY, -0.1f);
-            sr.transform.localScale = new Vector3(5.0f / Camera.scale, 5.0f / Camera.scale, 1.0f);
+                laser_renderer.startColor          =
+                laser_renderer.endColor            = laser_color;
+            }
 
-            sr.transform.Rotate(new Vector3(0.0f, 0.0f, (Rotation - LastRotation) * 180.0f / 3.1415926f));
-            LastRotation = Rotation;
+            // Update is called once per frame
+            void Update() {
+                sr.transform.position              = new Vector3(posx, posy, -0.1f);
+                sr.transform.localScale            = new Vector3(5.0f / camera.scale,
+                                                                 5.0f / camera.scale,
+                                                                 1.0f);
 
-            Vector3[] vertices1 = new Vector3[2];
-            Vector3[] vertices2 = new Vector3[2];
+                sr.transform.Rotate(new Vector3(0.0f, 0.0f, (rotation - last_rotation) * 180.0f / Tools.pi));
+                last_rotation                      = rotation;
 
-            vertices1[0] = new Vector3(PosX, PosY, 0.0f);
-            vertices1[1] = new Vector3(PosX + (float)Math.Cos(Rotation - FOV / 2.0f) * Range, PosY + (float)Math.Sin(Rotation - FOV / 2.0f) * Range, 0.0f);
+                Vector3[] vertices1                = new Vector3[2];
+                Vector3[] vertices2                = new Vector3[2];
 
-            vertices2[0] = new Vector3(PosX, PosY, 0.0f);
-            vertices2[1] = new Vector3(PosX + (float)Math.Cos(Rotation + FOV / 2.0f) * Range, PosY + (float)Math.Sin(Rotation + FOV / 2.0f) * Range, 0.0f);
+                vertices1[0]                       = new Vector3(posx, posy, 0.0f);
+                vertices1[1]                       = new Vector3(posx + (float)Math.Cos(rotation - FOV / 2.0f) * range,
+                                                                 posy + (float)Math.Sin(rotation - FOV / 2.0f) * range,
+                                                                 0.0f);
 
-            DebugLineRenderer1.startWidth = DebugLineRenderer1.endWidth = DebugLineRenderer2.startWidth = DebugLineRenderer2.endWidth = 0.1f / Camera.scale;
-            DebugLineRenderer1.startColor = DebugLineRenderer1.endColor = DebugLineRenderer2.startColor = DebugLineRenderer2.endColor = DebugConeColor;
-            DebugLineRenderer1.SetPositions(vertices1);
-            DebugLineRenderer2.SetPositions(vertices2);
-            DebugLineRenderer1.positionCount = DebugLineRenderer2.positionCount = 2;
+                vertices2[0]                       = new Vector3(posx, posy, 0.0f);
+                vertices2[1]                       = new Vector3(posx + (float)Math.Cos(rotation + FOV / 2.0f) * range,
+                                                                 posy + (float)Math.Sin(rotation + FOV / 2.0f) * range,
+                                                                 0.0f);
 
-            int CurrentMillis = (int)(Time.time * 1000.0f) - LastMillis;
-            LastMillis = (int)(Time.time * 1000.0f);
+                debug_line_renderer1.startWidth    =
+                debug_line_renderer1.endWidth      =
+                debug_line_renderer2.startWidth    =
+                debug_line_renderer2.endWidth      = 0.1f / camera.scale;
+                
+                debug_line_renderer1.startColor    =
+                debug_line_renderer1.endColor      =
+                debug_line_renderer2.startColor    =
+                debug_line_renderer2.endColor      = debug_cone_color;
 
-            int ChargingTime = (int)(FiringRate * LaserDuration * LaserChargingDuration);
-            int LaserDurationTime = (int)(FiringRate * LaserDuration * (1.0f - LaserChargingDuration));
-            int RemainingChargingTime = Cooldown - (FiringRate - ChargingTime);
-            int RemainingTime = Cooldown - (FiringRate - LaserDurationTime);
-            if (RemainingTime > 0)
-            {
-                if (RemainingChargingTime > 0)
-                {
-                    float RemainingTimeAsPercentage = 1.0f - (float)RemainingChargingTime / (float)LaserDurationTime;
-                    LaserLineRenderer.startWidth = LaserLineRenderer.endWidth = LaserWidth * RemainingTimeAsPercentage / Camera.scale;
-                    LaserLineRenderer.startColor = new Color(LaserColor.r, LaserColor.g, LaserColor.b, LaserColor.a * RemainingTimeAsPercentage + 0.10f);
-                    LaserLineRenderer.endColor   = new Color(LaserColor.r, LaserColor.g, LaserColor.b, LaserColor.a * RemainingTimeAsPercentage + 0.02f);
+                debug_line_renderer1.SetPositions(vertices1);
+                debug_line_renderer2.SetPositions(vertices2);
+
+                debug_line_renderer1.positionCount =
+                debug_line_renderer2.positionCount = 2;
+
+                int CurrentMillis                  = (int)(Time.time * 1000.0f) - last_millis;
+                last_millis                        = (int)(Time.time * 1000.0f);
+
+                int ChargingTime                   = (int)(firing_rate * laser_duration *         laser_charging_time );
+                int LaserDurationTime              = (int)(firing_rate * laser_duration * (1.0f - laser_charging_time));
+
+                int RemainingChargingTime          = cooldown - (firing_rate -      ChargingTime);
+                int RemainingTime                  = cooldown - (firing_rate - LaserDurationTime);
+
+                if(RemainingTime > 0) {
+                    if(RemainingChargingTime > 0) {
+                        float RemainingTimeAsPercentage = 1.0f - (float)RemainingChargingTime
+                                                               / (float)LaserDurationTime;
+                        laser_renderer.startWidth =
+                        laser_renderer.endWidth   = laser_width * RemainingTimeAsPercentage / camera.scale;
+
+                        laser_renderer.startColor = new Color(laser_color.r,
+                                                              laser_color.g,
+                                                              laser_color.b,
+                                                              laser_color.a * RemainingTimeAsPercentage + 0.10f);
+
+                        laser_renderer.endColor   = new Color(laser_color.r,
+                                                              laser_color.g,
+                                                              laser_color.b,
+                                                              laser_color.a * RemainingTimeAsPercentage + 0.02f);
+                    } else {
+                        float RemainingTimeAsPercentage = (float)RemainingTime / (float)LaserDurationTime;
+                        laser_renderer.startWidth =
+                        laser_renderer.endWidth   = RemainingTimeAsPercentage * laser_width / camera.scale;
+
+                        laser_renderer.startColor = new Color(laser_color.r,
+                                                              laser_color.g,
+                                                              laser_color.b,
+                                                              laser_color.a * RemainingTimeAsPercentage + 0.10f);
+
+                        laser_renderer.endColor   = new Color(laser_color.r,
+                                                              laser_color.g,
+                                                              laser_color.b,
+                                                              laser_color.a * RemainingTimeAsPercentage + 0.02f);
+                    }
                 }
-                else
-                { 
-                    float RemainingTimeAsPercentage = (float)RemainingTime / (float)LaserDurationTime;
-                    LaserLineRenderer.startWidth = LaserLineRenderer.endWidth = RemainingTimeAsPercentage * LaserWidth / Camera.scale;
-                    LaserLineRenderer.startColor = new Color(LaserColor.r, LaserColor.g, LaserColor.b, LaserColor.a * RemainingTimeAsPercentage + 0.10f);
-                    LaserLineRenderer.endColor   = new Color(LaserColor.r, LaserColor.g, LaserColor.b, LaserColor.a * RemainingTimeAsPercentage + 0.02f);
+
+                cooldown                         -= CurrentMillis;
+                if(cooldown < 0) cooldown         = 0;
+
+                // Pick target
+                if(target != null) {
+                    float DistanceX               = target.self.posx - posx;
+                    float DistanceY               = target.self.posy - posy;
+                    float Distance                = Tools.magnitude(DistanceX, DistanceY);
+
+                    if(Distance > range) target   = null;
+                }
+
+                if(target == null) {
+                    if(state != null) foreach(SystemShip Ship in state.ships) {
+
+                            float DistanceX       = Ship.self.posx - posx;
+                            float DistanceY       = Ship.self.posy - posy;
+                            float Distance        = Tools.magnitude(DistanceX, DistanceY);
+
+                            if(Distance <= range) { target = Ship; break; }
+                        }
+                }
+
+                if(target != null) {
+                    if(try_targeting(target, CurrentMillis) && cooldown == 0) {
+                        try_shooting();
+                    }
                 }
             }
 
-            Cooldown -= CurrentMillis;
-            if (Cooldown < 0) Cooldown = 0;
+            public bool try_targeting(SystemShip ship, int CurrentMillis) {
+                float DistanceX                   = ship.self.posx - posx;
+                float DistanceY                   = ship.self.posy - posy;
+                float Distance                    = Tools.magnitude(DistanceX, DistanceY);
 
-            // Pick target
-            if (Target != null)
-            {
-                float DistanceX = Target.Self.PosX - PosX;
-                float DistanceY = Target.Self.PosY - PosY;
-                float Distance  = (float)Math.Sqrt(DistanceX * DistanceX + DistanceY * DistanceY);
+                while(rotation <        0.0f)
+                    rotation                      = Tools.twopi + rotation;
 
-                if (Distance > Range) Target = null;
-            }
+                while(rotation > Tools.twopi)
+                    rotation                     -= Tools.twopi;
 
-            if (Target == null)
-            {
-                if (State != null) foreach (SystemShip Ship in State.Ships)
-                {
+                if(Distance > range) return false;
 
-                    float DistanceX = Ship.Self.PosX - PosX;
-                    float DistanceY = Ship.Self.PosY - PosY;
-                    float Distance = (float)Math.Sqrt(DistanceX * DistanceX + DistanceY * DistanceY);
+                float Angle                       = (float)Math.Acos(DistanceX / Distance);
+                if(ship.self.posy < posy) Angle   = Tools.twopi - Angle;
 
-                    if (Distance <= Range) { Target = Ship; break; }
+                if(rotation == Angle) return true;
+
+                float diff1                       = Angle - rotation;
+                float diff2                       = rotation - Angle;
+
+                if(diff1 < 0.0f) diff1            = Tools.twopi + diff1;
+                if(diff2 < 0.0f) diff2            = Tools.twopi + diff2;
+
+                if(diff2 < diff1) {
+                    rotation                     -= angular_velocity / 1000.0f * CurrentMillis;
+
+                    diff1                         = Angle - rotation;
+                    diff2                         = rotation - Angle;
+
+                    if(diff1 < 0.0f) diff1        = Tools.twopi + diff1;
+                    if(diff2 < 0.0f) diff2        = Tools.twopi + diff2;
+
+                    if(diff1 < diff2) rotation    = Angle;
+                } else {
+                    rotation                     += angular_velocity / 1000.0f * CurrentMillis;
+
+                    diff1                         = Angle - rotation;
+                    diff2                         = rotation - Angle;
+
+                    if(diff1 < 0.0f) diff1        = Tools.twopi + diff1;
+                    if(diff2 < 0.0f) diff2        = Tools.twopi + diff2;
+
+                    if(diff2 < diff1) rotation    = Angle;
                 }
+
+                return true;
             }
 
-            if (Target != null)
-            {
-                if (TryTargeting(Target, CurrentMillis) && Cooldown == 0)
-                {
-                    TryShooting();
+            public bool try_shooting() {
+                if(cooldown > 0) return false;
+
+                float DistanceX                   = target.self.posx - posx;
+                float DistanceY                   = target.self.posy - posy;
+                float Distance                    = Tools.magnitude(DistanceX, DistanceY);
+
+                if   (rotation <        0.0f)
+                    rotation                      = Tools.twopi + rotation;
+
+                while(rotation > Tools.twopi)
+                    rotation                     -= Tools.twopi;
+
+                if(Distance > range) return false;
+
+                float Angle                       = (float)Math.Acos(DistanceX / Distance);
+                if(target.self.posy < posy) Angle = Tools.twopi - Angle;
+
+                if(Angle > rotation + FOV / 2.0f
+                || Angle < rotation - FOV / 2.0f) return false;
+
+                Vector3[] vertices                = new Vector3[2];
+                vertices[0]                       = new Vector3(posx, posy, 0.0f);
+                vertices[1]                       = new Vector3(target.self.posx, target.self.posy, 0.0f);
+
+                laser_renderer.SetPositions(vertices);
+
+                laser_renderer.positionCount      = 2;
+
+                float ShieldDamage                = damage * shield_damage_multiplier * 1.0f - shield_penetration;
+                float HullDamage                  = damage *   hull_damage_multiplier *        shield_penetration;
+
+                target.shield                    -= (int)ShieldDamage;
+
+                if(target.shield < 0) {
+                    HullDamage                   -= (float)target.shield / shield_damage_multiplier * hull_damage_multiplier;
+                    target.shield                 = 0;
                 }
-            }
-        }
 
-        public bool TryTargeting(SystemShip ship, int CurrentMillis)
-        {
-            float DistanceX = ship.Self.PosX - PosX;
-            float DistanceY = ship.Self.PosY - PosY;
-            float Distance = (float)Math.Sqrt(DistanceX * DistanceX + DistanceY * DistanceY);
+                target.health                    -= (int)HullDamage;
 
-            while (Rotation < 0.0f) Rotation = 2.0f * 3.1415926f + Rotation;
-            while (Rotation > 2.0f * 3.1415926f) Rotation -= 2.0f * 3.1415926f;
+                if(target.health <= 0) {
+                    target.destroy();
+                    target                        = null;
+                }
 
-            if (Distance > Range) return false;
+                cooldown                          = firing_rate;
 
-            float Angle = (float)Math.Acos(DistanceX / Distance);
-            if (ship.Self.PosY < PosY) Angle = 2.0f * 3.1415926f - Angle;
-
-            if (Rotation == Angle) return true;
-
-            float diff1 = Angle - Rotation;
-            float diff2 = Rotation - Angle;
-
-            if (diff1 < 0.0f) diff1 = 2.0f * 3.1415926f + diff1;
-            if (diff2 < 0.0f) diff2 = 2.0f * 3.1415926f + diff2;
-
-            if (diff2 < diff1)
-            {
-                Rotation -= AngularVelocity / 1000.0f * CurrentMillis;
-
-                diff1 = Angle - Rotation;
-                diff2 = Rotation - Angle;
-
-                if (diff1 < 0.0f) diff1 = 2.0f * 3.1415926f + diff1;
-                if (diff2 < 0.0f) diff2 = 2.0f * 3.1415926f + diff2;
-
-                if (diff1 < diff2) Rotation = Angle;
-            }
-            else
-            {
-                Rotation += AngularVelocity / 1000.0f * CurrentMillis;
-
-                diff1 = Angle - Rotation;
-                diff2 = Rotation - Angle;
-
-                if (diff1 < 0.0f) diff1 = 2.0f * 3.1415926f + diff1;
-                if (diff2 < 0.0f) diff2 = 2.0f * 3.1415926f + diff2;
-
-                if (diff2 < diff1) Rotation = Angle;
+                return true;
             }
 
-            return true;
-        }
-
-        public bool TryShooting()
-        {
-            if (Cooldown > 0) return false;
-
-            float DistanceX = Target.Self.PosX - PosX;
-            float DistanceY = Target.Self.PosY - PosY;
-            float Distance = (float)Math.Sqrt(DistanceX * DistanceX + DistanceY * DistanceY);
-
-            if (Rotation < 0.0f) Rotation = 2.0f * 3.1415926f + Rotation;
-            while (Rotation > 2.0f * 3.1415926f) Rotation -= 2.0f * 3.1415926f;
-
-            if (Distance > Range) return false;
-
-            float Angle = (float)Math.Acos(DistanceX / Distance);
-            if (Target.Self.PosY < PosY) Angle = 2.0f * 3.1415926f - Angle;
-
-            if (Angle > Rotation + FOV / 2.0f || Angle < Rotation - FOV / 2.0f) return false;
-
-            Vector3[] vertices = new Vector3[2];
-            vertices[0] = new Vector3(PosX, PosY, 0.0f);
-            vertices[1] = new Vector3(Target.Self.PosX, Target.Self.PosY, 0.0f);
-            LaserLineRenderer.SetPositions(vertices);
-            LaserLineRenderer.positionCount = 2;
-
-            float ShieldDamage = Damage * ShieldDamageMultiplier * 1.0f - ShieldPenetration;
-            float HullDamage   = Damage * HullDamageMultiplier   *        ShieldPenetration;
-
-            Target.Shield -= (int)ShieldDamage;
-
-            if (Target.Shield < 0)
-            {
-                HullDamage -= (float)Target.Shield / ShieldDamageMultiplier * HullDamageMultiplier;
-                Target.Shield = 0;
+            void OnDestroy() {
+                GameObject.Destroy(debug_line_renderer1);
+                GameObject.Destroy(debug_line_renderer2);
+                GameObject.Destroy(laser_renderer);
+                GameObject.Destroy(debug_line_object1);
+                GameObject.Destroy(debug_line_object2);
+                GameObject.Destroy(laser_line_object);
             }
-
-            Target.Health -= (int)HullDamage;
-
-            if (Target.Health <= 0)
-            {
-                Target.Destroy();
-                Target = null;
-            }
-
-            Cooldown = FiringRate;
-
-            return true;
-        }
-
-        void OnDestroy()
-        {
-            GameObject.Destroy(DebugLineRenderer1);
-            GameObject.Destroy(DebugLineRenderer2);
-            GameObject.Destroy(LaserLineRenderer);
-            GameObject.Destroy(DebugLineObject1);
-            GameObject.Destroy(DebugLineObject2);
-            GameObject.Destroy(LaserLineObject);
         }
     }
 }
