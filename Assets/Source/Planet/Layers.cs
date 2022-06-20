@@ -10,12 +10,10 @@ namespace Planet
         
         public Vec2i MapSize;
         public Texture2D[] LayerTextures;
-        public Tile.Tile[][] Tiles;
         public bool[] NeedsUpdate;
         
         public void DrawLayer(TileMap tileMap, Enums.Tile.MapLayerType planetLayer, Material material, Transform transform, int DrawOrder)
         {
-
             BuildLayerTexture(tileMap, planetLayer);
 
             /*for(int y = 0; y < MapSize.Y; y++)
@@ -42,7 +40,6 @@ namespace Planet
         {
             if (NeedsUpdate[(int)planetLayer])
             {
-
                 NeedsUpdate[(int)planetLayer] = false;
 
                 byte[] bytes = new byte[32 * 32 * 4];

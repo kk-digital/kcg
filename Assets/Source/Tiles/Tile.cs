@@ -9,7 +9,7 @@ namespace Tile
     /// <summary> Contains info about tile, include all layers </summary>
     public struct Tile
     {
-        public static readonly Tile EmptyTile = new() {Type = -1, SpriteId = -1};
+        public static readonly Tile Empty = new() {Type = -1, SpriteId = -1};
         public static readonly Vec2i Size = new(1, 1);
         
         // Contains the TileProperties Ids for every layer
@@ -18,9 +18,6 @@ namespace Tile
 
         public AABB2D Borders;
 
-        //public Verticies BoxBorders;
-        //Health
-        public byte Durability;
 
         // TODO: Refactor
         public int CheckTile(int[] neighbors, int rules, int tileId)

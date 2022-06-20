@@ -107,8 +107,8 @@ namespace KMath
 
         public bool Intersects(Vec2f position)
         {
-            return position.X >= IntLeft && position.X <= IntRight &&
-                   position.Y >= IntBottom && position.Y <= IntTop;
+            return position.X >= IntLeft && position.X < IntRight &&
+                   position.Y >= IntBottom && position.Y < IntTop;
         }
         
         public bool Intersects(AABB2D other)

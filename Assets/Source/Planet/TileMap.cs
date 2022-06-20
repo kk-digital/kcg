@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using KMath;
 using UnityEngine;
 
@@ -6,41 +7,22 @@ namespace Planet
 {
     public class TileMap
     {
-        public Vec2i MapSize;
         public AABB2D Borders;
         public ChunkList Chunks;
         public Layers Layers;
-        public HeightMap HeightMap;
 
         public TileMap(Vec2i mapSize)
         {
-            MapSize = mapSize;
-
             Chunks = new ChunkList(mapSize);
             
-            Borders = new AABB2D(Vec2f.Zero, (Vec2f)mapSize * 16);
-
-            HeightMap = new HeightMap(MapSize);
+            Borders = new AABB2D(Vec2f.Zero, (Vec2f)mapSize);
+            
             Layers = new Layers
             {
                 LayerTextures = new Texture2D[Layers.Count],
-                Tiles = new Tile.Tile[Layers.Count][],
                 NeedsUpdate = new bool[Layers.Count],
                 MapSize = mapSize
             };
-
-            for(int layerIndex = 0; layerIndex < Layers.Count; layerIndex++)
-            {
-                int mapTileSize = mapSize.X * mapSize.Y;
-                Tile.Tile[] layerTiles = new Tile.Tile[mapTileSize];
-                Layers.Tiles[layerIndex] = layerTiles;
-                for(int tileIndex = 0; tileIndex < mapTileSize; tileIndex++)
-                {
-                    layerTiles[tileIndex] = Tile.Tile.EmptyTile;
-                }
-
-                Layers.NeedsUpdate[layerIndex] = true;
-            }
         }
 
         private void BuildLayerTexture(Enums.Tile.MapLayerType planetLayer)
@@ -50,11 +32,29 @@ namespace Planet
 
         #region TileApi
 
-    
+        /// <summary>
+        /// Getting Tile index by Chunk Dimensions. INLINED
+        /// </summary>
+        /// <param name="x">TileMap coordinates</param>
+        /// <param name="y">TileMap coordiantes</param>
+        /// <returns>Tile index</returns>
+        [MethodImpl((MethodImplOptions) 256)]
+        public int GetTileIndex(int x, int y)
+        {
+            // x & 0x0f == x AND 15
+            // EX: 16 AND 15 == 0, 13 AND 15 == 13
+            // (<< 4) == (* 16) 
+            return (x & 0x0f) + ((y & 0x0f) << 4);
+        }
         
         public ref Tile.Tile GetTileRef(int x, int y, Enums.Tile.MapLayerType planetLayer)
         {
-            return ref Layers.Tiles[(int)planetLayer][x + y * MapSize.X];
+            if (!Borders.Intersects(new Vec2f(x, y))) throw new IndexOutOfRangeException();
+            
+            var chunk = Chunks.GetChunkRef(x, y);
+            var tileIndex = GetTileIndex(x, y);
+
+            return ref chunk.Tiles[(int)planetLayer][tileIndex];
         }
 
         public Tile.Tile[] GetTiles(Vec2i[] positions, Enums.Tile.MapLayerType planetLayer)
@@ -64,13 +64,18 @@ namespace Planet
             
             foreach (var position in positions)
             {
-                if (position.X < 0 || position.Y < 0) continue;
-                
-                ref var tile = ref GetTileRef(position.X, position.Y, planetLayer);
-                if (tile.Type >= 0)
+                try
                 {
-                    tiles[count] = tile;
-                    count++;
+                    ref var tile = ref GetTileRef(position.X, position.Y, planetLayer);
+                    if (tile.Type >= 0)
+                    {
+                        tiles[count] = tile;
+                        count++;
+                    }
+                }
+                catch
+                {
+                    // Just check next position
                 }
             }
 
@@ -84,47 +89,34 @@ namespace Planet
             return tiles;
         }
         
-        public void SetTile(int x, int y, Tile.Tile tile, Enums.Tile.MapLayerType planetLayer)
+        public void AddTile(int x, int y, Tile.Tile tile, Enums.Tile.MapLayerType planetLayer)
         {
-            if (x >= 0 && x < MapSize.X &&
-                        y >= 0 && y < MapSize.Y)
-            {
-                Layers.Tiles[(int)planetLayer][x + y * MapSize.X] = tile;
-            }
+            if (!Borders.Intersects(new Vec2f(x, y))) throw new IndexOutOfRangeException();
+            
+            ref var chunk = ref Chunks.GetChunkRef(x, y);
+            var tileIndex = GetTileIndex(x, y);
 
-            Layers.NeedsUpdate[(int)planetLayer] = true;
-        }
-
-
-        // placing a tile should update the tile sprite type 
-        public void PlaceTile(int x, int y, Tile.Tile tile, Enums.Tile.MapLayerType planetLayer)
-        {
-            if (x >= 0 && x < MapSize.X && y >= 0 && y < MapSize.Y)
-            {
-                SetTile(x, y, tile, planetLayer);
-
-                for(int i = x - 1; i <= x + 1; i++)
-                {
-                    for(int j = y - 1; j <= y + 1; j++)
-                    {
-                        UpdateTilesOnPosition(i, j, planetLayer);
-                    }
-                }
-            }
-
-            Layers.NeedsUpdate[(int)planetLayer] = true;
+            tile.Borders = new AABB2D(new Vec2f(x, y), (Vec2f)Tile.Tile.Size);
+            chunk.Tiles[(int) planetLayer][tileIndex] = tile;
+            
+            UpdateTile(x, y, planetLayer);
         }
 
         public void RemoveTile(int x, int y, Enums.Tile.MapLayerType planetLayer)
         {
             ref Tile.Tile tile = ref GetTileRef(x, y, planetLayer);
-
             tile.Type = -1;
+            UpdateTile(x, y, planetLayer);
+        }
 
+        private void UpdateTile(int x, int y, Enums.Tile.MapLayerType planetLayer)
+        {
             for(int i = x - 1; i <= x + 1; i++)
             {
+                if (!Borders.Intersects(new Vec2f(i, 0f))) continue;
                 for(int j = y - 1; j <= y + 1; j++)
                 {
+                    if (!Borders.Intersects(new Vec2f(i, j))) continue;
                     UpdateTilesOnPosition(i, j, planetLayer);
                 }
             }
@@ -138,84 +130,82 @@ namespace Planet
 
         public void UpdateTilesOnPosition(int x, int y, Enums.Tile.MapLayerType planetLayer)
         {
-            if (x >= 0 && x < MapSize.X && y >= 0 && y < MapSize.Y)
+            // standard sheet mapping
+            // every tile has a constant offset
+            // in the sprite atlas
+
+            // example: 15 is (3,3)
+            //           8 is (0,2)
+            //           1 is (1,0)
+            int[] tilePositionToTileSet = {15, 12, 14, 13, 3, 0, 2, 1, 11, 8, 10, 9, 7, 4, 6, 5};
+
+            ref Tile.Tile tile = ref GetTileRef(x, y, planetLayer);
+
+            if (tile.Type >= 0)
             {
-                // standard sheet mapping
-                // every tile has a constant offset
-                // in the sprite atlas
-
-                // example: 15 is (3,3)
-                //           8 is (0,2)
-                //           1 is (1,0)
-                int[] tilePositionToTileSet = {15, 12, 14, 13, 3, 0, 2, 1, 11, 8, 10, 9, 7, 4, 6, 5};
-                
-                ref Tile.Tile tile = ref GetTileRef(x, y, planetLayer);
-                
-                if (tile.Type >= 0)
+                Tile.Type properties = GameState.TileCreationApi.GetTileProperties(tile.Type);
+                if (properties.AutoMapping)
                 {
-                    Tile.Type properties = GameState.TileCreationApi.GetTileProperties(tile.Type);
-                    if (properties.AutoMapping)
+                    // we have 4 neighbors per tile
+                    // could be more but its 4 for now
+                    // right/left/down/up
+                    int[] neighbors = new int[4];
+
+                    for (int i = 0; i < neighbors.Length; i++)
                     {
-                        // we have 4 neighbors per tile
-                        // could be more but its 4 for now
-                        // right/left/down/up
-                        int[] neighbors = new int[4];
-
-                        for(int i = 0; i < neighbors.Length; i++)
-                        {
-                            neighbors[i] = -1;
-                        }
-
-                        if (x + 1 < MapSize.X)
-                        {
-                            ref Tile.Tile neighborTile = ref GetTileRef(x + 1, y, planetLayer);
-                            neighbors[(int)Enums.Tile.Neighbor.Right] = neighborTile.Type;
-                        }
-
-                        if (x - 1 >= 0)
-                        {
-                            ref Tile.Tile neighborTile = ref GetTileRef(x - 1, y, planetLayer);
-                            neighbors[(int)Enums.Tile.Neighbor.Left] = neighborTile.Type;
-                        }
-
-                        if (y + 1 < MapSize.Y)
-                        {
-                            ref Tile.Tile neighborTile = ref GetTileRef(x, y + 1, planetLayer);
-                            neighbors[(int)Enums.Tile.Neighbor.Up] = neighborTile.Type;
-                        }
-
-                        if (y - 1 >= 0)
-                        {
-                            ref Tile.Tile neighborTile = ref GetTileRef(x, y - 1, planetLayer);
-                            neighbors[(int)Enums.Tile.Neighbor.Down] = neighborTile.Type;
-                        }
-
-
-                        Enums.Tile.Position tilePosition = tile.GetTilePosition(neighbors, tile.Type);
-
-                        // the sprite ids are next to each other in the sprite atlas
-                        // we jus thave to know which one to draw based on the offset
-                        tile.SpriteId = properties.BaseSpriteId + tilePositionToTileSet[(int)tilePosition];
+                        neighbors[i] = -1;
                     }
 
-                    else
+                    if (x + 1 < Borders.IntRight)
                     {
-                        tile.SpriteId = properties.BaseSpriteId;
+                        ref Tile.Tile neighborTile = ref GetTileRef(x + 1, y, planetLayer);
+                        neighbors[(int) Enums.Tile.Neighbor.Right] = neighborTile.Type;
                     }
+
+                    if (x - 1 >= 0)
+                    {
+                        ref Tile.Tile neighborTile = ref GetTileRef(x - 1, y, planetLayer);
+                        neighbors[(int) Enums.Tile.Neighbor.Left] = neighborTile.Type;
+                    }
+
+                    if (y + 1 < Borders.IntTop)
+                    {
+                        ref Tile.Tile neighborTile = ref GetTileRef(x, y + 1, planetLayer);
+                        neighbors[(int) Enums.Tile.Neighbor.Up] = neighborTile.Type;
+                    }
+
+                    if (y - 1 >= 0)
+                    {
+                        ref Tile.Tile neighborTile = ref GetTileRef(x, y - 1, planetLayer);
+                        neighbors[(int) Enums.Tile.Neighbor.Down] = neighborTile.Type;
+                    }
+
+
+                    Enums.Tile.Position tilePosition = tile.GetTilePosition(neighbors, tile.Type);
+
+                    // the sprite ids are next to each other in the sprite atlas
+                    // we jus thave to know which one to draw based on the offset
+                    tile.SpriteId = properties.BaseSpriteId + tilePositionToTileSet[(int) tilePosition];
                 }
+
                 else
                 {
-                    tile.SpriteId = -1;
+                    tile.SpriteId = properties.BaseSpriteId;
                 }
             }
+            else
+            {
+                tile.SpriteId = -1;
+            }
 
-            Layers.NeedsUpdate[(int)planetLayer] = true;
+            Layers.NeedsUpdate[(int) planetLayer] = true;
         }
+
         public void UpdateTileMapPositions(Enums.Tile.MapLayerType planetLayer)
         {
-            for(int y = 0; y < MapSize.Y; y++)
+            for(int y = Borders.IntBottom; y < Borders.IntTop; y++)
             {
-                for(int x = 0; x < MapSize.X; x++)
+                for(int x = Borders.IntLeft; x < Borders.IntRight; x++)
                 {
                     UpdateTilesOnPosition(x, y, planetLayer);
                 }

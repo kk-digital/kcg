@@ -1,6 +1,7 @@
 using UnityEngine;
 using Enums;
 using Entitas;
+using Enums.Tile;
 using KMath;
 using Physics;
 
@@ -146,10 +147,10 @@ public class ProjectileTest : MonoBehaviour
                 {
                     // Get Chunks because it's faster
                     ref var tile = ref chunkList.GetChunkRef(cell.x, cell.y);
-                    if (tile.Type >= 0)
+                    if (tile.Type is not (MapChunkType.Empty or MapChunkType.Error))
                     {
-                        IGroup<GameEntity> Centities = Contexts.sharedInstance.game.GetGroup(GameMatcher.ProjectileCollider);
-                        foreach (var entity in Centities)
+                        IGroup<GameEntity> cEntities = Contexts.sharedInstance.game.GetGroup(GameMatcher.ProjectileCollider);
+                        foreach (var entity in cEntities)
                         {
                             entity.projectileCollider.isFirstSolid = true;
                         }

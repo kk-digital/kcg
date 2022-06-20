@@ -73,14 +73,14 @@ namespace Planet.Unity
             // Generating the map
             var mapSize = new Vec2i(16, 16);
 
-            TileMap = new Planet.TileMap(mapSize);
+            TileMap = new TileMap(mapSize);
 
-            for(int j = 0; j < mapSize.Y; j++)
+            for(int j = TileMap.Borders.IntBottom; j < TileMap.Borders.IntTop; j++)
             {
-                for(int i = 0; i < mapSize.X; i++)
+                for(int i = TileMap.Borders.IntLeft; i < TileMap.Borders.IntRight; i++)
                 {
-                    Tile.Tile frontTile = Tile.Tile.EmptyTile;
-                    Tile.Tile oreTile = Tile.Tile.EmptyTile;
+                    Tile.Tile frontTile = Tile.Tile.Empty;
+                    Tile.Tile oreTile = Tile.Tile.Empty;
 
                     if (i >= mapSize.X / 2)
                     {
@@ -111,19 +111,17 @@ namespace Planet.Unity
                         oreTile.Type = 8;
                     }
 
-                    if ((j > 1 && j < 6) || (j > (8 + i)))
+                    if (j is > 1 and < 6 || (j > (8 + i)))
                     {
                        frontTile.Type = -1; 
                        oreTile.Type = -1;
                     }
 
                     
-                    TileMap.SetTile(i, j, frontTile, Enums.Tile.MapLayerType.Front);
-                    TileMap.SetTile(i, j, oreTile, Enums.Tile.MapLayerType.Ore);
+                    TileMap.AddTile(i, j, frontTile, Enums.Tile.MapLayerType.Front);
+                    TileMap.AddTile(i, j, oreTile, Enums.Tile.MapLayerType.Ore);
                 }
             }
-
-            TileMap.HeightMap.UpdateTopTilesMap(ref TileMap);
 
             TileMap.UpdateTileMapPositions(Enums.Tile.MapLayerType.Front);
             TileMap.UpdateTileMapPositions(Enums.Tile.MapLayerType.Ore);

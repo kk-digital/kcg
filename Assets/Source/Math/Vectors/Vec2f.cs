@@ -6,7 +6,6 @@ namespace KMath
     // Vector 2D Floating-Point
     public struct Vec2f
     {
-        //
         /// <summary>
         ///   <para>Shorthand for writing Vec2f(0, 0).</para>
         /// </summary>
@@ -124,7 +123,7 @@ namespace KMath
         public static Vec2f operator *(Vec2f a, float d) => new(a.X * d, a.Y * d);
         [MethodImpl((MethodImplOptions) 256)]
         public static Vec2f operator *(float d, Vec2f a) => new(a.X * d, a.Y * d);
-        
+
         [MethodImpl((MethodImplOptions) 256)]
         public static Vec2f operator /(Vec2f a, float d) => new(a.X / d, a.Y / d);
         

@@ -133,20 +133,18 @@ namespace Planet.Unity
 
         void GenerateMap()
         {
-            Planet.TileMap TileMap = Planet.TileMap;
+            TileMap tileMap = Planet.TileMap;
 
-            var mapSize = TileMap.MapSize;
-
-            for (int j = 0; j < mapSize.Y; j++)
+            for (int j = tileMap.Borders.IntBottom; j < tileMap.Borders.IntTop; j++)
             {
-                for (int i = 0; i < mapSize.X; i++)
+                for (int i = tileMap.Borders.IntLeft; i < tileMap.Borders.IntRight; i++)
                 {
-                    Tile.Tile frontTile = Tile.Tile.EmptyTile;
-                    Tile.Tile oreTile = Tile.Tile.EmptyTile;
+                    Tile.Tile frontTile = Tile.Tile.Empty;
+                    Tile.Tile oreTile = Tile.Tile.Empty;
 
-                    if (i >= mapSize.X / 2)
+                    if (i >= tileMap.Borders.IntRight / 2)
                     {
-                        if (j % 2 == 0 && i == mapSize.X / 2)
+                        if (j % 2 == 0 && i == tileMap.Borders.IntRight / 2)
                         {
                             frontTile.Type = 10;
                         }
@@ -157,7 +155,7 @@ namespace Planet.Unity
                     }
                     else
                     {
-                        if (j % 3 == 0 && i == mapSize.X / 2 + 1)
+                        if (j % 3 == 0 && i == tileMap.Borders.IntRight / 2 + 1)
                         {
                             frontTile.Type = 9;
                         }
@@ -173,22 +171,22 @@ namespace Planet.Unity
                         oreTile.Type = 8;
                     }
 
-                    if ((j > 1 && j < 6) || (j > (8 + i)))
+                    if (j is > 1 and < 6 || (j > (8 + i)))
                     {
                         frontTile.Type = -1;
                         oreTile.Type = -1;
                     }
 
 
-                    TileMap.SetTile(i, j, frontTile, MapLayerType.Front);
-                    TileMap.SetTile(i, j, oreTile, MapLayerType.Ore);
+                    tileMap.AddTile(i, j, frontTile, MapLayerType.Front);
+                    tileMap.AddTile(i, j, oreTile, MapLayerType.Ore);
                 }
             }
 
-            TileMap.HeightMap.UpdateTopTilesMap(ref TileMap);
 
-            TileMap.UpdateTileMapPositions(MapLayerType.Front);
-            TileMap.UpdateTileMapPositions(MapLayerType.Ore);
+
+            tileMap.UpdateTileMapPositions(MapLayerType.Front);
+            tileMap.UpdateTileMapPositions(MapLayerType.Ore);
             //TileMap.BuildLayerTexture(MapLayerType.Front);
             //TileMap.BuildLayerTexture(MapLayerType.Ore);
         }

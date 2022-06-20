@@ -59,6 +59,8 @@ namespace KMath
         public static Vec2i operator *(Vec2i a, int d) => new(a.X * d, a.Y * d);
         [MethodImpl((MethodImplOptions) 256)]
         public static Vec2i operator *(int d, Vec2i a) => new(a.X * d, a.Y * d);
+        [MethodImpl((MethodImplOptions) 256)]
+        public static Vec2i operator <<(Vec2i a, int d) => new(a.X << d, a.Y << d);
         
         [MethodImpl((MethodImplOptions) 256)]
         public static Vec2i operator /(Vec2i a, int d) => new(a.X / d, a.Y / d);

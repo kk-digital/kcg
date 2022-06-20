@@ -1,59 +1,81 @@
 using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using KMath;
-using UnityEngine;
 
 namespace Planet
 {
-    public class ChunkList
+    public struct ChunkList
     {
-        public Vec2i MapSize;
-
-        public Chunk[] Data;
-        private Chunk errorChunk = new(Enums.Tile.MapChunkType.Error);
-        private Chunk emptyChunk = new(Enums.Tile.MapChunkType.Empty);
+        private Chunk[][] data;
+        public int ChunkCount => data.Sum(yChunks => yChunks.Length);
 
         public ChunkList(Vec2i mapSize)
         {
-            MapSize = mapSize;
+            // xCount & 0x0f == xCount AND 15
+            // (>> 4) == (/ 16)
 
-            var tileCount = mapSize.X * mapSize.Y;
-            var chunkCount = (tileCount + (tileCount & 0x0f)) >> 4;
+            var xCount = mapSize.X >> 4;
+            if ((mapSize.X & 0x0f) != 0)
+                xCount++;
             
-            Data = Enumerable.Repeat(new Chunk(Enums.Tile.MapChunkType.Empty), chunkCount).ToArray();
-        }
-        
-        private int AddChunk(int x, int y)
-        {
-            var chunkCount = Data.Length;
-            
-            // I feel like resizing by 1 each time is not very efficient... Change it later?
-            Array.Resize(ref Data, chunkCount + 1);
+            var yCount = mapSize.Y >> 4;
+            if ((mapSize.Y & 0x0f) != 0)
+                yCount++;
 
-            Data[chunkCount] = new Chunk(Enums.Tile.MapChunkType.Empty);
+            data = new Chunk[yCount][];
             
-            // Return Chunk Last Index
-            return chunkCount;
-        }
-        
-        public int GetChunkIndex(int x, int y)
-        {
-            int chunkMulti = Chunk.Size.X * Chunk.Size.Y;
-            
-            return (x * Chunk.Size.X + y * MapSize.X) / chunkMulti;
-        }
-        
-        public ref Chunk GetChunkRef(int x, int y)
-        {
-            int chunkIndex = GetChunkIndex(x, y);
-
-            if (chunkIndex + 1 > Data.Length || chunkIndex + 1 < 0)
+            for (int y = 0; y < yCount; y++)
             {
-                Debug.Log("Chunk does not exist");
-                return ref errorChunk;
+                data[y] = Enumerable.Repeat(new Chunk(Enums.Tile.MapChunkType.Empty), xCount).ToArray();
             }
+        }
+
+        public int GetXAxisChunksCount(int y)
+        {
+            return data[y].Length;
+        }
+
+        public int GetYAxisChunksCount(int x)
+        {
+            var count = 0;
+
+            for (int y = 0; y < data.Length; y++)
+            {
+                if (GetXAxisChunksCount(y) > x)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        [MethodImpl((MethodImplOptions) 256)]
+        public Vec2i GetChunkIndex(int x, int y)
+        {
+            // (>> 4) == (/ 16)
+            return new Vec2i(x >> 4, y >> 4);
+        }
+        
+        public ref Chunk GetChunkRef(int tileX, int tileY)
+        {
+            var chunkIndex = GetChunkIndex(tileX, tileY);
+
+            return ref data[chunkIndex.Y][chunkIndex.X];
+        }
+        
+        public void AddChunkOnX(int y, int count = 1)
+        {
+            var oldChunkCountOnX = data[y].Length;
+            var newChunkCountOnX = oldChunkCountOnX + count;
             
-            return ref Data[chunkIndex];
+            Array.Resize(ref data[y], newChunkCountOnX);
+
+            for (int x = oldChunkCountOnX; x < newChunkCountOnX; x++)
+            {
+                data[y][x] = new Chunk(Enums.Tile.MapChunkType.Empty);
+            }
         }
     }
 }
