@@ -12,7 +12,8 @@ namespace Planet.VisualEffects
         private bool Init;
         private Vector2Int pngSize;
         private PerlinField2D perlinField;
-        private Vector2 position;
+        private List<Sprites.Sprite> stars;
+        int i = 0;
 
         public void Initialize()
         {
@@ -22,7 +23,9 @@ namespace Planet.VisualEffects
 
             perlinField = new PerlinField2D();
 
-            perlinField.init(100, 500);
+            stars = new List<Sprites.Sprite>();
+
+            perlinField.init(100, 200);
 
             // Load image from fil
             var spriteSheetID = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\Starsheet2.png", width, height);
@@ -47,7 +50,7 @@ namespace Planet.VisualEffects
 
         public void Draw(Material Material, Transform transform, int drawOrder)
         {
-            if(Init)
+            if (Init)
             {
                 var sprite = new Sprites.Sprite
                 {
@@ -55,9 +58,38 @@ namespace Planet.VisualEffects
                     TextureCoords = new Vector4(0, 0, 1, 1)
                 };
 
-                perlinField.noise(position.x, position.y);
-                Utility.Render.DrawSprite(position.x, position.y, 1, 1, sprite, Material, transform, drawOrder);
+                for (; i < 10; i++)
+                {
+                    stars.Add(sprite);
+
+                    int randomX = Random.Range(100, 200);
+                    int randomY = Random.Range(100, 200);
+
+                    float rand1 = perlinField.noise(randomX, randomY);
+                    float rand2 = perlinField.noise(randomX, randomY);
+
+                    Utility.Render.DrawSprite(rand1, rand2, 1, 1, sprite, Material, transform, drawOrder);
+                }
             }
+        }
+
+        private int[,] GenPerlin(int width, int height, int contrast, int scale)
+        {
+            int[,] grid = new int[width, height];
+            var max = 1.4142135623730951f / (1.9f * contrast);
+            var min = -1.4142135623730951f / (1.9f * contrast);
+            for(int y = 0; y < width; y++)
+            {
+                grid = new int[width, height];
+                for (int x = 0; x < height; x++)
+                {
+                    var result = perlinField.noise(x * scale, y * scale);
+                    result = Mathf.Clamp(result - min / (max - min), 0.0f, 1.0f);
+                    // TODO: Correct the grid
+                    //grid[y, y] = new int[,] { grid[y], result };
+                }
+            }
+            return grid;
         }
 
         private Texture2D CreateTextureFromRGBA(byte[] rgba, int w, int h)

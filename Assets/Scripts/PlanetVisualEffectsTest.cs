@@ -29,13 +29,6 @@ public class PlanetVisualEffectsTest : MonoBehaviour
     {
         if(Init)
         {
-            // Clear last frame
-            foreach (var mr in GetComponentsInChildren<MeshRenderer>())
-                if (Application.isPlaying)
-                    Destroy(mr.gameObject);
-                else
-                    DestroyImmediate(mr.gameObject);
-
             // Draw The Visual Effects
             planetVisualEffects.Draw(Instantiate(Material), transform, 1);
         }
