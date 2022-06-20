@@ -18,12 +18,12 @@ namespace Physics
                     ref var tile = ref tileMap.GetTileRef(x, y, Enums.Tile.MapLayerType.Front);
                     if (tile.Type >= 0)
                     {
-                        var isColliding = tile.Borders.Intersects(edgePosition);
-                        if (isColliding)
-                        {
+                        //var isColliding = tile.Borders.Intersects(edgePosition);
+                        //if (isColliding)
+                        //{
                             tile.Borders.DrawBox();
                             return true;
-                        }
+                        //}
                     }
                    }
              //   }
@@ -44,12 +44,12 @@ namespace Physics
                     ref var tile = ref tileMap.GetTileRef(x, y, Enums.Tile.MapLayerType.Front);
                     if (tile.Type >= 0)
                     {
-                        var isColliding = tile.Borders.Intersects(edgePosition);
-                        if (isColliding)
-                        {
+                        //var isColliding = tile.Borders.Intersects(edgePosition);
+                        //if (isColliding)
+                        //{
                             tile.Borders.DrawBox();
                             return true;
-                        }
+                        //}
                     }
                    }
                // }
@@ -70,12 +70,12 @@ namespace Physics
                     ref var tile = ref tileMap.GetTileRef(x, y, Enums.Tile.MapLayerType.Front);
                     if (tile.Type >= 0)
                     {
-                        var isColliding = tile.Borders.Intersects(edgePosition);
-                        if (isColliding)
-                        {
+                        //var isColliding = tile.Borders.Intersects(edgePosition);
+                        //if (isColliding)
+                        //{
                             tile.Borders.DrawBox();
                             return true;
-                        }
+                        //}
                     }
                    }
                // }
@@ -98,12 +98,12 @@ namespace Physics
                     ref var tile = ref tileMap.GetTileRef(x, y, Enums.Tile.MapLayerType.Front);
                     if (tile.Type >= 0)
                     {
-                        var isColliding = tile.Borders.Intersects(edgePosition);
-                        if (isColliding)
-                        {
+                        //var isColliding = tile.Borders.Intersects(edgePosition);
+                        //if (isColliding)
+                        //{
                             tile.Borders.DrawBox();
                             return true;
-                        }
+                        //}
                     }
                    }
                 //}
