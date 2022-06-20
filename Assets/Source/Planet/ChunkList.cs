@@ -50,19 +50,13 @@ namespace Planet
 
             return count;
         }
-
-        [MethodImpl((MethodImplOptions) 256)]
-        public Vec2i GetChunkIndex(int x, int y)
-        {
-            // (>> 4) == (/ 16)
-            return new Vec2i(x >> 4, y >> 4);
-        }
         
+        
+        [MethodImpl((MethodImplOptions) 256)]
         public ref Chunk GetChunkRef(int tileX, int tileY)
         {
-            var chunkIndex = GetChunkIndex(tileX, tileY);
-
-            return ref data[chunkIndex.Y][chunkIndex.X];
+            // (>> 4) == (/ 16)
+            return ref data[tileX >> 4][tileY >> 4];
         }
         
         public void AddChunkOnX(int y, int count = 1)
