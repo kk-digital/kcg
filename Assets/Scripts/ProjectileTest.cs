@@ -32,13 +32,18 @@ public class ProjectileTest : MonoBehaviour
     private Vector2 startPos;
     Vector3 worldPosition;
     private Planet.TileMap tileMap;
+    private Planet.ChunkList chunkList;
     Vector3 difference;
     private Vector2 projectilePosition;
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
     void Start()
     {
+        // Create Tile Map
         tileMap = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().TileMap;
+
+        // Create Chunk List
+        chunkList = tileMap.Chunks;
 
         // Initialize Projectile Draw System
         projectileDrawSystem = new Projectile.DrawSystem();
@@ -123,27 +128,29 @@ public class ProjectileTest : MonoBehaviour
                 // Spawn Projectile
                 SpawnProjectile(startPos);
 
-                // Log places drawed line go through
-                //foreach (var cell in start.LineTo(end))
-                //{
-                //    ref var tile = ref tileMap.GetTileRef(cell.x, cell.y, Enums.Tile.MapLayerType.Front);
-                //    if (tile.Type >= 0)
-                //    {
-                //        tileMap.RemoveTile(cell.x, cell.y, Enums.Tile.MapLayerType.Front);
-                //        tileMap.BuildLayerTexture(Enums.Tile.MapLayerType.Front);
-                //        IGroup<GameEntity> Centities = Contexts.sharedInstance.game.GetGroup(GameMatcher.ProjectileCollider);
-                //        foreach (var entity in Centities)
-                //        {
-                //            entity.projectileCollider.isFirstSolid = true;
-                //        }
-                //    }
-                //}
+                // Log Places Shooted Ray Go Through
+                foreach (var cell in start.LineTo(end))
+                {
+                    // Get Chunks because it's faster
+                    ref var tile = ref chunkList.GetChunkRef(cell.x, cell.y);
+                    if (tile.Type >= 0)
+                    {
+                        IGroup<GameEntity> Centities = Contexts.sharedInstance.game.GetGroup(GameMatcher.ProjectileCollider);
+                        foreach (var entity in Centities)
+                        {
+                            entity.projectileCollider.isFirstSolid = true;
+                        }
+                    }
+                }
 
+                // Draw Debug Line to see shooted ray
                 Debug.DrawLine(new Vector3(start.x, start.y, 0.0f), new Vector3(end.x, end.y), Color.red);
             }
 
             // Process Physics
             projectileVelocitySystem.Update(difference, Contexts.sharedInstance);
+
+            // Process Collision System
             projectileCollisionSystem.Update(tileMap);
 
             // Draw Initialized Projectile
@@ -154,18 +161,25 @@ public class ProjectileTest : MonoBehaviour
 #if UNITY_EDITOR
     public void OnDrawGizmos()
     {
+        // If App is running, quit.
         if (!Application.isPlaying) return;
 
+        // Get Group of projectile physics state
         var group = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.ProjectilePhysicsState2D));
 
+        // Set Gizmo Color
         Gizmos.color = Color.green;
 
+        // Get Entity in entites
         foreach (var entity in group)
         {
             var pos = entity.projectilePhysicsState2D;
             var boxCollider = entity.physicsBox2DCollider;
-            var boxBorders = boxCollider.CreateEntityBoxBorders(pos.Position);
 
+            // Create Box Collision Gizmo
+            var boxBorders = boxCollider.CreateEntityBoxBorders(pos.Position); 
+
+            // Drawing the gizmo
             Gizmos.DrawWireCube(boxBorders.Center, new Vector3(boxCollider.Size.x, boxCollider.Size.y, 0.0f));
         }
     }

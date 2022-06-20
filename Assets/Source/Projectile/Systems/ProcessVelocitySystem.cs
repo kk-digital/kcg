@@ -71,7 +71,7 @@ namespace Projectile
                     direction.Normalize();
 
                     // Set Angular velocity with new direciton
-                    position.angularVelocity = (direction * 2000.0f) * Time.deltaTime;
+                    position.angularVelocity = (direction * 3000.0f) * Time.deltaTime;
                 }
 
                 projectile.projectileCollider.isFired = true;
