@@ -45,20 +45,13 @@ namespace Planet.Unity
                 }
             }
 
-            //if (Input.GetKeyDown(KeyCode.Q))
-            //{
-            //    GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity, (int)Enums.ActionType.PickUp);
-            //}
-
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.T))
             {
                 GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity, Action.DefaultActions.CreateDropAction(Player.Entity.agentID.ID));
             }
 
             GameState.InventoryDrawSystem.Draw(Material, transform, 14);
-            GameState.ItemPickUpSystem.Update();
             Planet.Update(Time.deltaTime, Material, transform);
-
         }
 
         // create the sprite atlas for testing purposes

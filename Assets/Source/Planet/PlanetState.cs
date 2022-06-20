@@ -186,7 +186,10 @@ namespace Planet
             GameState.EnemyAiSystem.Update(this);
             GameState.FloatingTextUpdateSystem.Update(this, frameTime);
             GameState.AnimationUpdateSystem.Update(frameTime);
-            
+            GameState.ActionSchedulerSystem.Update(frameTime);
+            GameState.ItemPickUpSystem.Update();
+
+
             TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Front, Object.Instantiate(material), transform, 10);
             TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Ore, Object.Instantiate(material), transform, 11);
             GameState.AgentDrawSystem.Draw(Object.Instantiate(material), transform, 12);

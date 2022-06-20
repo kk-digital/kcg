@@ -52,25 +52,26 @@ public static class GameComponentsLookup {
     public const int ItemID = 41;
     public const int ItemLabel = 42;
     public const int ItemStack = 43;
-    public const int ItemUse = 44;
-    public const int ParticleEmitter2dPosition = 45;
-    public const int ParticleEmitterState = 46;
-    public const int ParticlePosition2D = 47;
-    public const int ParticleState = 48;
-    public const int PhysicsBox2DCollider = 49;
-    public const int PhysicsMovable = 50;
-    public const int PhysicsPosition2D = 51;
-    public const int PhysicsSphere2DCollider = 52;
-    public const int ProjectileCollider = 53;
-    public const int ProjectileID = 54;
-    public const int ProjectilePhysicsState2D = 55;
-    public const int ProjectileSprite2D = 56;
-    public const int ProjectileType = 57;
-    public const int VehicleID = 58;
-    public const int VehiclePhysicsState2D = 59;
-    public const int VehicleSprite2D = 60;
+    public const int ItemUnpickable = 44;
+    public const int ItemUse = 45;
+    public const int ParticleEmitter2dPosition = 46;
+    public const int ParticleEmitterState = 47;
+    public const int ParticlePosition2D = 48;
+    public const int ParticleState = 49;
+    public const int PhysicsBox2DCollider = 50;
+    public const int PhysicsMovable = 51;
+    public const int PhysicsPosition2D = 52;
+    public const int PhysicsSphere2DCollider = 53;
+    public const int ProjectileCollider = 54;
+    public const int ProjectileID = 55;
+    public const int ProjectilePhysicsState2D = 56;
+    public const int ProjectileSprite2D = 57;
+    public const int ProjectileType = 58;
+    public const int VehicleID = 59;
+    public const int VehiclePhysicsState2D = 60;
+    public const int VehicleSprite2D = 61;
 
-    public const int TotalComponents = 61;
+    public const int TotalComponents = 62;
 
     public static readonly string[] componentNames = {
         "ActionAnimation",
@@ -117,6 +118,7 @@ public static class GameComponentsLookup {
         "ItemID",
         "ItemLabel",
         "ItemStack",
+        "ItemUnpickable",
         "ItemUse",
         "ParticleEmitter2dPosition",
         "ParticleEmitterState",
@@ -181,6 +183,7 @@ public static class GameComponentsLookup {
         typeof(Item.IDComponent),
         typeof(Item.LabelComponent),
         typeof(Item.StackComponent),
+        typeof(Item.Unpickable),
         typeof(Item.UseComponent),
         typeof(Particle.Emitter2dPositionComponent),
         typeof(Particle.EmitterStateComponent),

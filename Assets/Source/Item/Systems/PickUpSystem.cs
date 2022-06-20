@@ -25,7 +25,7 @@ namespace Item
 
             // Get all pickable items.
             var pickableItems = EntitasContext.game.GetGroup(
-                GameMatcher.AllOf(GameMatcher.ItemID, GameMatcher.PhysicsPosition2D).NoneOf(GameMatcher.ItemDrawPosition2D));
+                GameMatcher.AllOf(GameMatcher.ItemID, GameMatcher.PhysicsPosition2D).NoneOf(GameMatcher.ItemUnpickable));
 
 
             foreach (var item in pickableItems)
@@ -36,7 +36,7 @@ namespace Item
                 foreach (var agent in agents)
                 {
                     // Todo: Use action center Position.
-                    if ((agent.physicsPosition2D.Value - centerPos).Magnitude <= 2.0f)
+                    if ((agent.physicsPosition2D.Value - centerPos).Magnitude <= 1.5f)
                     {
                         GameState.ActionSchedulerSystem.ScheduleAction(agent, DefaultActions.CreatePickUpAction(agent.agentID.ID, item.itemID.ID));
                     }

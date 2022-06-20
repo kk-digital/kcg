@@ -14,7 +14,6 @@ namespace Action
         public PickUpAction(int actionID, int agentID, int itemID) : base(actionID, agentID)
         {
             ItemEntity = Contexts.sharedInstance.game.GetEntityWithItemIDID(itemID);
-
         }
 
         public override void OnEnter()
@@ -37,7 +36,8 @@ namespace Action
 #endif
 
             Vec2f drawPos = ItemEntity.physicsPosition2D.Value;
-            ItemEntity.ReplaceItemDrawPosition2D(drawPos, Vec2f.Zero);
+            ItemEntity.AddItemDrawPosition2D(drawPos, Vec2f.Zero);
+            ItemEntity.isItemUnpickable = true;
 
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Active);
         }
