@@ -42,7 +42,7 @@ namespace Planet.Unity
         {
             Planet.TileMap TileMap = Planet.TileMap;
             Material material = Material;
-            Vector2 playerPosition = Player.Entity.physicsPosition2D.Value;
+            Vec2f playerPosition = Player.Entity.physicsPosition2D.Value;
 
             // Get Slot Entites
             IGroup<GameEntity> slotEntities =
@@ -93,13 +93,13 @@ namespace Planet.Unity
                     Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     float x = worldPosition.x;
                     float y = worldPosition.y;
-                    Planet.AddEnemy(Instantiate(Material), CharacterSpriteId, 32, 32, new Vector2(x, y), 2);
+                    Planet.AddEnemy(Instantiate(Material), CharacterSpriteId, 32, 32, new Vec2f(x, y), 2);
                 }
                 else if (highlightItemType == Enums.ItemType.MiningLaserTool)
                 {
                     Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    int fromX = (int)playerPosition.x;
-                    int fromY = (int)playerPosition.y;
+                    int fromX = (int)playerPosition.X;
+                    int fromY = (int)playerPosition.Y;
 
                     int toX = (int)worldPosition.x;
                     int toY = (int)worldPosition.y;
@@ -129,7 +129,7 @@ namespace Planet.Unity
                             TileMap.RemoveTile(cell.x, cell.y, Enums.Tile.MapLayerType.Ore);
                         }
 
-                        Debug.DrawLine(new Vector3(playerPosition.x, playerPosition.y, 0.0f), new Vector3(worldPosition.x, worldPosition.y, 0.0f), Color.red);
+                        Debug.DrawLine(new Vector3(playerPosition.X, playerPosition.Y, 0.0f), new Vector3(worldPosition.x, worldPosition.y, 0.0f), Color.red);
                     }
 
                     //TileMap.BuildLayerTexture(Enums.Tile.MapLayerType.Front);
@@ -301,13 +301,13 @@ namespace Planet.Unity
             Item.CreationApi.Instance.CreateItem(Enums.ItemType.RemoveTileTool, "RemoveTileTool");
             Item.CreationApi.Instance.SetTexture(RemoveToolIcon);
             Item.CreationApi.Instance.SetInventoryTexture(RemoveToolIcon);
-            Item.CreationApi.Instance.SetSize(new Vector2(0.5f, 0.5f));
+            Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
             Item.CreationApi.Instance.EndItem();
 
             Item.CreationApi.Instance.CreateItem(Enums.ItemType.SpawnEnemySlimeTool, "SpawnSlimeTool");
             Item.CreationApi.Instance.SetTexture(SlimeIcon);
             Item.CreationApi.Instance.SetInventoryTexture(SlimeIcon);
-            Item.CreationApi.Instance.SetSize(new Vector2(0.5f, 0.5f));
+            Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
             Item.CreationApi.Instance.EndItem();
 
             Item.CreationApi.Instance.CreateItem(Enums.ItemType.MiningLaserTool, "MiningLaserTool");
@@ -415,15 +415,15 @@ namespace Planet.Unity
                 }
             }
 
-            for(int i = 0; i < TileMap.MapSize.x; i++)
+            for(int i = 0; i < TileMap.MapSize.X; i++)
             {
-                for(int j = TileMap.MapSize.y - 10; j < TileMap.MapSize.y; j++)
+                for(int j = TileMap.MapSize.Y - 10; j < TileMap.MapSize.Y; j++)
                 {
                     TileMap.SetTile(i, j, Tile.Tile.EmptyTile, MapLayerType.Front);
                 }
             }
 
-            int carveHeight = TileMap.MapSize.y - 10;
+            int carveHeight = TileMap.MapSize.Y - 10;
 
             for(int i = 0; i < TileMap.MapSize.X; i++)
             {

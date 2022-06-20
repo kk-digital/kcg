@@ -11,7 +11,7 @@ public partial class GameEntity {
     public Projectile.PhysicsState2DComponent projectilePhysicsState2D { get { return (Projectile.PhysicsState2DComponent)GetComponent(GameComponentsLookup.ProjectilePhysicsState2D); } }
     public bool hasProjectilePhysicsState2D { get { return HasComponent(GameComponentsLookup.ProjectilePhysicsState2D); } }
 
-    public void AddProjectilePhysicsState2D(UnityEngine.Vector2 newPosition, UnityEngine.Vector2 newTempPosition, UnityEngine.Vector2 newAngularVelocity, float newAngularMass, float newAngularAcceleration, float newCenterOfGravity, UnityEngine.Vector2 newCenterOfRotation) {
+    public void AddProjectilePhysicsState2D(KMath.Vec2f newPosition, KMath.Vec2f newTempPosition, KMath.Vec2f newAngularVelocity, float newAngularMass, float newAngularAcceleration, float newCenterOfGravity, KMath.Vec2f newCenterOfRotation) {
         var index = GameComponentsLookup.ProjectilePhysicsState2D;
         var component = (Projectile.PhysicsState2DComponent)CreateComponent(index, typeof(Projectile.PhysicsState2DComponent));
         component.Position = newPosition;
@@ -24,7 +24,7 @@ public partial class GameEntity {
         AddComponent(index, component);
     }
 
-    public void ReplaceProjectilePhysicsState2D(UnityEngine.Vector2 newPosition, UnityEngine.Vector2 newTempPosition, UnityEngine.Vector2 newAngularVelocity, float newAngularMass, float newAngularAcceleration, float newCenterOfGravity, UnityEngine.Vector2 newCenterOfRotation) {
+    public void ReplaceProjectilePhysicsState2D(KMath.Vec2f newPosition, KMath.Vec2f newTempPosition, KMath.Vec2f newAngularVelocity, float newAngularMass, float newAngularAcceleration, float newCenterOfGravity, KMath.Vec2f newCenterOfRotation) {
         var index = GameComponentsLookup.ProjectilePhysicsState2D;
         var component = (Projectile.PhysicsState2DComponent)CreateComponent(index, typeof(Projectile.PhysicsState2DComponent));
         component.Position = newPosition;

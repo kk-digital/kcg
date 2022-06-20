@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Entitas;
 using Enums;
+using KMath;
 
 namespace Projectile
 {
@@ -10,7 +11,7 @@ namespace Projectile
         // Projectile ID
         private static int projectileID;
 
-        public Entity SpawnProjectile(Material material, int spriteID, int witdh, int height, Vector2 startPos,
+        public Entity SpawnProjectile(Material material, int spriteID, int witdh, int height, Vec2f startPos,
             ProjectileType projectileType, ProjectileDrawType projectileDrawType)
         {
             // Create Entity
@@ -35,7 +36,7 @@ namespace Projectile
             var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, pngSize.x, pngSize.y);
 
             // Set Sprite Size
-            var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
+            var spriteSize = new Vec2f(pngSize.x / 32f, pngSize.y / 32f);
 
             // Add ID Component
             entity.AddProjectileID(projectileID);
@@ -44,11 +45,11 @@ namespace Projectile
             entity.AddProjectileSprite2D(texture, spriteSize);
 
             // Add Physics State 2D Component
-            entity.AddProjectilePhysicsState2D(startPos, startPos, Vector2.zero, 1.0f, 1.0f, 0.5f,
-                Vector2.zero);
+            entity.AddProjectilePhysicsState2D(startPos, startPos, Vec2f.Zero, 1.0f, 1.0f, 0.5f,
+                Vec2f.Zero);
 
             // Add Physics Box Collider Component
-            entity.AddPhysicsBox2DCollider(spriteSize, Vector2.zero);
+            entity.AddPhysicsBox2DCollider(spriteSize, Vec2f.Zero);
 
             // Add Physics Collider Component
             entity.AddProjectileCollider(false, false);

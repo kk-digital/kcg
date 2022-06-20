@@ -1,5 +1,6 @@
 using UnityEngine;
 using Entitas;
+using KMath;
 
 namespace Projectile
 {
@@ -9,7 +10,7 @@ namespace Projectile
         public static readonly ProcessVelocitySystem Instance;
 
         float distance;
-        Vector2 direction;
+        Vec2f direction;
 
         // Game Context
         private GameContext gameContext;
@@ -48,7 +49,7 @@ namespace Projectile
         }
 
         // Physics Tick
-        public void Update(Vector3 difference, Contexts contexts)
+        public void Update(Vec3f difference, Contexts contexts)
         {
             // Get Projectile Entites
             IGroup<GameEntity> entities =
@@ -62,10 +63,10 @@ namespace Projectile
                 if (!projectile.projectileCollider.isFired)
                 {
                     // Calculate distance
-                    distance = difference.magnitude;
+                    distance = difference.Magnitude;
 
                     // Calculate direction
-                    direction = difference / distance;
+                    direction = (Vec2f)difference / distance;
 
                     // Normalize the Direction
                     direction.Normalize();

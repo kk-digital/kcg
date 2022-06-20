@@ -20,10 +20,10 @@ namespace Projectile
                     TextureCoords = new Vector4(0, 0, 1, 1)
                 };
 
-                var x = entity.projectilePhysicsState2D.Position.x;
-                var y = entity.projectilePhysicsState2D.Position.y;
-                var width = entity.projectileSprite2D.Size.x;
-                var height = entity.projectileSprite2D.Size.y;
+                var x = entity.projectilePhysicsState2D.Position.X;
+                var y = entity.projectilePhysicsState2D.Position.Y;
+                var width = entity.projectileSprite2D.Size.X;
+                var height = entity.projectileSprite2D.Size.Y;
 
                 Utility.Render.DrawSprite(x, y, width, height, sprite, material, transform, drawOrder++);
             }
