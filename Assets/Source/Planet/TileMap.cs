@@ -25,6 +25,7 @@ namespace Planet
             {
                 LayerTextures = new Texture2D[Layers.Count],
                 Tiles = new Tile.Tile[Layers.Count][],
+                NeedsUpdate = new bool[Layers.Count],
                 MapSize = mapSize
             };
 
@@ -40,9 +41,9 @@ namespace Planet
             }
         }
 
-        public void BuildLayerTexture(Enums.Tile.MapLayerType planetLayer)
+        private void BuildLayerTexture(Enums.Tile.MapLayerType planetLayer)
         {
-            Layers.BuildLayerTexture(this, planetLayer);
+            //Layers.BuildLayerTexture(this, planetLayer);
         }
 
         #region TileApi
@@ -61,6 +62,8 @@ namespace Planet
             {
                 Layers.Tiles[(int)planetLayer][x + y * MapSize.x] = tile;
             }
+
+            Layers.NeedsUpdate[(int)planetLayer] = true;
         }
 
 
@@ -79,6 +82,8 @@ namespace Planet
                     }
                 }
             }
+
+            Layers.NeedsUpdate[(int)planetLayer] = true;
         }
 
         public void RemoveTile(int x, int y, Enums.Tile.MapLayerType planetLayer)
@@ -94,6 +99,8 @@ namespace Planet
                     UpdateTilesOnPosition(i, j, planetLayer);
                 }
             }
+
+            Layers.NeedsUpdate[(int)planetLayer] = true;
         }
 
         #endregion
@@ -171,6 +178,8 @@ namespace Planet
                     tile.SpriteId = -1;
                 }
             }
+
+            Layers.NeedsUpdate[(int)planetLayer] = true;
         }
         public void UpdateTileMapPositions(Enums.Tile.MapLayerType planetLayer)
         {

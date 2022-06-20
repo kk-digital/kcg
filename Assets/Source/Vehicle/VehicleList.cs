@@ -73,7 +73,7 @@ namespace Vehicle
 
             // creating the Entity and initializing it
             VehicleEntity NewEntity = new VehicleEntity();
-            NewEntity.Index = Found;
+            NewEntity.VehicleId = Found;
             NewEntity.IsInitialized = true;
 
             List[Found] = NewEntity;

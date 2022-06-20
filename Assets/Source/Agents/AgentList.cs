@@ -73,7 +73,7 @@ namespace Agent
 
             // creating the Entity and initializing it
             AgentEntity NewEntity = new AgentEntity();
-            NewEntity.Index = Found;
+            NewEntity.AgentId = Found;
             NewEntity.IsInitialized = true;
 
             List[Found] = NewEntity;

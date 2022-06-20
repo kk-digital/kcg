@@ -44,7 +44,7 @@ namespace Planet.Unity
         ECSInput.ProcessSystem InputProcessSystems;
         Agent.SpawnerSystem AgentSpawnerSystem;
         Physics.MovableSystem PhysicsMovableSystem;
-        Agent.DrawSystem AgentDrawSystem;
+        Agent.AgentDrawSystem AgentDrawSystem;
         Physics.ProcessCollisionSystem AgentProcessCollisionSystem;
 
         public void Start()
@@ -69,7 +69,7 @@ namespace Planet.Unity
             InputProcessSystems = new ECSInput.ProcessSystem();
             AgentSpawnerSystem = new Agent.SpawnerSystem();
             PhysicsMovableSystem = new Physics.MovableSystem();
-            AgentDrawSystem = new Agent.DrawSystem();
+            AgentDrawSystem = new Agent.AgentDrawSystem();
             AgentProcessCollisionSystem = new Physics.ProcessCollisionSystem();
 
             AgentSpawnerSystem.SpawnPlayer(Material, CharacterSpriteId, 32, 48, new Vector2(3.0f, 2.0f), 0, 0);
@@ -96,7 +96,7 @@ namespace Planet.Unity
                 int y = (int)worldPosition.y;
                 Debug.Log(x + " " + y);
                 TileMap.RemoveTile(x, y, Enums.Tile.MapLayerType.Front);
-                TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
+                //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
                 
             }
 
@@ -109,8 +109,8 @@ namespace Planet.Unity
             InputProcessSystems.Update();
             PhysicsMovableSystem.Update();
             AgentProcessCollisionSystem.Update(TileMap);
-            TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Front, Instantiate(Material), transform, 10);
-            TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Ore, Instantiate(Material), transform, 11);
+            TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Front, Instantiate(Material), transform, 10);
+            TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Ore, Instantiate(Material), transform, 11);
             AgentDrawSystem.Draw(Instantiate(Material), transform, 12);
         }
 
@@ -174,8 +174,8 @@ namespace Planet.Unity
             TileMap.HeightMap.UpdateTopTilesMap(ref TileMap);
             TileMap.UpdateTileMapPositions(Enums.Tile.MapLayerType.Front);
             TileMap.UpdateTileMapPositions(Enums.Tile.MapLayerType.Ore);
-            TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
-            TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Ore);
+            //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
+            //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Ore);
         }
 
 #if UNITY_EDITOR

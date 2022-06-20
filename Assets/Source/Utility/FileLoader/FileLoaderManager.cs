@@ -5,7 +5,7 @@ using System;
 using BigGustave;
 using System.IO;
 
-namespace ImageLoader
+namespace Utility
 {
     public class FileData
     {

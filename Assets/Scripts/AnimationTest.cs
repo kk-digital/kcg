@@ -35,7 +35,7 @@ namespace Planet.Unity
                 int x = (int)worldPosition.x;
                 int y = (int)worldPosition.y;
                 Planet.PlaceTile(x, y, 10, MapLayerType.Front);
-                TileMap.BuildLayerTexture(MapLayerType.Front);
+                //TileMap.BuildLayerTexture(MapLayerType.Front);
                 
             }
 
@@ -45,7 +45,7 @@ namespace Planet.Unity
                 int x = (int)worldPosition.x;
                 int y = (int)worldPosition.y;
                 TileMap.RemoveTile(x, y, MapLayerType.Front);
-                TileMap.BuildLayerTexture(MapLayerType.Front);
+                //TileMap.BuildLayerTexture(MapLayerType.Front);
                 
             }
 
@@ -214,8 +214,8 @@ namespace Planet.Unity
 
             TileMap.UpdateTileMapPositions(MapLayerType.Front);
             TileMap.UpdateTileMapPositions(MapLayerType.Ore);
-            TileMap.BuildLayerTexture(MapLayerType.Front);
-            TileMap.BuildLayerTexture(MapLayerType.Ore);
+            //TileMap.BuildLayerTexture(MapLayerType.Front);
+            //TileMap.BuildLayerTexture(MapLayerType.Ore);
         
         }
         

@@ -47,7 +47,9 @@ namespace Agent
 
                     if (Len <= entity.agentEnemy.DetectionRadius && Len >= 0.5f)
                     {
-                        bool jump = Math.Abs(movable.Acceleration.x) <= 0.01f;
+                        bool jump = Math.Abs(movable.Acceleration.x) <= 0.01f && 
+                                        movable.Acceleration.y <= 0.01f && 
+                                        movable.Acceleration.y >= -0.01f;
                         movable.Acceleration = direction * movable.Speed * 25.0f;
                         if (jump)
                         {

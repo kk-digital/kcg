@@ -6,10 +6,20 @@ namespace Sprites
 {
     public class SpriteAtlasManager
     {
+        private SpriteLoader SpriteLoader;
         private SpriteAtlas[] AtlasArray;
 
-        public SpriteAtlasManager()
+        public int Length
         {
+            get
+            {
+                return AtlasArray.Length;
+            }
+        }
+
+        public SpriteAtlasManager(SpriteLoader spriteLoader)
+        {
+            SpriteLoader = spriteLoader;
             AtlasArray = new SpriteAtlas[Enum.GetNames(typeof(Enums.AtlasType)).Length - 1];
 
             for (int i = 0; i < AtlasArray.Length; i++)
@@ -27,6 +37,18 @@ namespace Sprites
 
                 AtlasArray[i] = atlas;
             }
+        }
+
+        public void UpdateAtlasTexture(int id)
+        {
+            ref SpriteAtlas atlas = ref AtlasArray[id];
+            if (atlas.TextureNeedsUpdate)
+            {
+                atlas.Texture = Utility.Texture.CreateTextureFromRGBA(atlas.Data, atlas.Width, atlas.Height);
+                
+                atlas.TextureNeedsUpdate = false;
+            }
+            
         }
 
         public ref SpriteAtlas GetSpriteAtlas(Enums.AtlasType type)
@@ -129,7 +151,7 @@ namespace Sprites
                         }
                         else
                         {
-                        CopySpriteToAtlas(spriteSheetId, x, y, type);
+                                CopySpriteToAtlas(spriteSheetId, x, y, type);
                         }
                     }
                 }
@@ -143,7 +165,7 @@ namespace Sprites
         {
             ref SpriteAtlas atlas = ref GetSpriteAtlas(type);
             int oldSize = atlas.Rectangles.Length;
-            SpriteSheet sheet = GameState.SpriteLoader.SpriteSheets[spriteSheetID];
+            SpriteSheet sheet = SpriteLoader.SpriteSheets[spriteSheetID];
 
             int index = atlas.Rectangles.Length;
 
@@ -260,8 +282,9 @@ namespace Sprites
                 }
             }
 
-            atlas.Texture = Utility.Texture.CreateTextureFromRGBA(atlas.Data, atlas.Width, atlas.Height);
-            
+
+             atlas.TextureNeedsUpdate = true;
+
             return index;
         }
     }

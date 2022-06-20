@@ -73,7 +73,7 @@ namespace FloatingText
 
             // creating the Entity and initializing it
             FloatingTextEntity NewEntity = new FloatingTextEntity();
-            NewEntity.Index = Found;
+            NewEntity.FloatingTextId = Found;
             NewEntity.IsInitialized = true;
 
             List[Found] = NewEntity;
