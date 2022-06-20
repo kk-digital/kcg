@@ -1,5 +1,6 @@
 ﻿using Entitas;
 using UnityEngine;
+using KMath;
 
 namespace Action
 {
@@ -33,12 +34,12 @@ namespace Action
                     }
                     GameState.InventoryManager.RemoveItem(item, selected);
 
-                    Vector2 pos = AgentEntity.physicsPosition2D.Value;
-                    Vector2 size = Contexts.sharedInstance.game.GetEntityWithItemAttributes(item.itemID.ItemType).itemAttributeSize.Size;
+                    Vec2f pos = AgentEntity.physicsPosition2D.Value;
+                    Vec2f size = Contexts.sharedInstance.game.GetEntityWithItemAttributes(item.itemID.ItemType).itemAttributeSize.Size;
 
                     item.AddPhysicsPosition2D(pos, pos);
-                    item.AddPhysicsBox2DCollider(size, Vector2.zero);
-                    item.AddPhysicsMovable(0f, Vector2.zero, Vector2.zero, 0f);
+                    item.AddPhysicsBox2DCollider(size, Vec2f.Zero);
+                    item.AddPhysicsMovable(0f, Vec2f.Zero, Vec2f.Zero);
                     ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
                     return;
                 }

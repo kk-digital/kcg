@@ -32,15 +32,15 @@ namespace Item
                     float x, y;
                     if (entity.hasItemDrawPosition2D)
                     {
-                        x = entity.itemDrawPosition2D.Value.x;
-                        y = entity.itemDrawPosition2D.Value.y;
+                        x = entity.itemDrawPosition2D.Value.X;
+                        y = entity.itemDrawPosition2D.Value.Y;
                     }
                     else
                     {
                         if (entity.hasPhysicsPosition2D)
                         {
-                            x = entity.physicsPosition2D.Value.x;
-                            y = entity.physicsPosition2D.Value.y;
+                            x = entity.physicsPosition2D.Value.X;
+                            y = entity.physicsPosition2D.Value.Y;
                         }
                         else
                         {
@@ -48,8 +48,8 @@ namespace Item
                         }
                     }
 
-                    float w = ItemTypeEntity.itemAttributeSize.Size.x;
-                    float h = ItemTypeEntity.itemAttributeSize.Size.y;
+                    float w = ItemTypeEntity.itemAttributeSize.Size.X;
+                    float h = ItemTypeEntity.itemAttributeSize.Size.Y;
                     Utility.Render.DrawSprite(x, y, w, h, sprite, Object.Instantiate(material), transform, drawOrder);
                 }
 

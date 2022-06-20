@@ -1,6 +1,7 @@
 ﻿using Action;
 using Entitas;
 using UnityEngine;
+using KMath;
 
 namespace Item
 {
@@ -31,11 +32,11 @@ namespace Item
             {
                 // Get item ceter position.
                 var itemAttribute = EntitasContext.game.GetEntityWithItemAttributes(item.itemID.ItemType);
-                Vector2 centerPos = item.physicsPosition2D.Value + itemAttribute.itemAttributeSize.Size / 2.0f;
+                Vec2f centerPos = item.physicsPosition2D.Value + itemAttribute.itemAttributeSize.Size / 2.0f;
                 foreach (var agent in agents)
                 {
                     // Todo: Use action center Position.
-                    if ((agent.physicsPosition2D.Value - centerPos).magnitude <= 2.0f)
+                    if ((agent.physicsPosition2D.Value - centerPos).Magnitude <= 2.0f)
                     {
                         GameState.ActionSchedulerSystem.ScheduleAction(agent, DefaultActions.CreatePickUpAction(agent.agentID.ID, item.itemID.ID));
                     }

@@ -11,7 +11,7 @@ public partial class GameEntity {
     public Item.DrawPosition2DComponent itemDrawPosition2D { get { return (Item.DrawPosition2DComponent)GetComponent(GameComponentsLookup.ItemDrawPosition2D); } }
     public bool hasItemDrawPosition2D { get { return HasComponent(GameComponentsLookup.ItemDrawPosition2D); } }
 
-    public void AddItemDrawPosition2D(UnityEngine.Vector2 newValue, UnityEngine.Vector2 newPreviousValue) {
+    public void AddItemDrawPosition2D(KMath.Vec2f newValue, KMath.Vec2f newPreviousValue) {
         var index = GameComponentsLookup.ItemDrawPosition2D;
         var component = (Item.DrawPosition2DComponent)CreateComponent(index, typeof(Item.DrawPosition2DComponent));
         component.Value = newValue;
@@ -19,7 +19,7 @@ public partial class GameEntity {
         AddComponent(index, component);
     }
 
-    public void ReplaceItemDrawPosition2D(UnityEngine.Vector2 newValue, UnityEngine.Vector2 newPreviousValue) {
+    public void ReplaceItemDrawPosition2D(KMath.Vec2f newValue, KMath.Vec2f newPreviousValue) {
         var index = GameComponentsLookup.ItemDrawPosition2D;
         var component = (Item.DrawPosition2DComponent)CreateComponent(index, typeof(Item.DrawPosition2DComponent));
         component.Value = newValue;

@@ -60,15 +60,17 @@ public static class GameComponentsLookup {
     public const int PhysicsBox2DCollider = 49;
     public const int PhysicsMovable = 50;
     public const int PhysicsPosition2D = 51;
-    public const int ProjectileID = 52;
-    public const int ProjectilePhysicsState2D = 53;
-    public const int ProjectileSprite2D = 54;
-    public const int ProjectileType = 55;
-    public const int VehicleID = 56;
-    public const int VehiclePhysicsState2D = 57;
-    public const int VehicleSprite2D = 58;
+    public const int PhysicsSphere2DCollider = 52;
+    public const int ProjectileCollider = 53;
+    public const int ProjectileID = 54;
+    public const int ProjectilePhysicsState2D = 55;
+    public const int ProjectileSprite2D = 56;
+    public const int ProjectileType = 57;
+    public const int VehicleID = 58;
+    public const int VehiclePhysicsState2D = 59;
+    public const int VehicleSprite2D = 60;
 
-    public const int TotalComponents = 59;
+    public const int TotalComponents = 61;
 
     public static readonly string[] componentNames = {
         "ActionAnimation",

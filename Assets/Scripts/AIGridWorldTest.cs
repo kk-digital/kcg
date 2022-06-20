@@ -75,10 +75,10 @@ public class AIGridWorldTest : MonoBehaviour
     private void UpdateBord()
     {
         Vec2i newPos = agent.agentPositionDiscrete2D.Value;
-        map[currentAgentPos.x, currentAgentPos.y] = SquareType.AgentPathSquare;
+        map[currentAgentPos.X, currentAgentPos.X] = SquareType.AgentPathSquare;
 
         currentAgentPos = newPos;
-        map[currentAgentPos.x, currentAgentPos.y] = SquareType.AgentSquare;
+        map[currentAgentPos.Y, currentAgentPos.Y] = SquareType.AgentSquare;
     }
 
     public void Update()
@@ -126,7 +126,7 @@ public class AIGridWorldTest : MonoBehaviour
         initialWorldState.states.Add("pos", currentAgentPos);
 
         agent = context.game.CreateEntity();
-        agent.AddAgentPositionDiscrete2D(currentAgentPos, Vector2Int.zero);
+        agent.AddAgentPositionDiscrete2D(currentAgentPos, Vec2i.zero);
         agent.AddAgentActionScheduler(new List<int>(), new List<int>());
         agent.AddAgentAIController(0, new Queue<int>(), new List<int>() { GoalID }, initialWorldState);
 

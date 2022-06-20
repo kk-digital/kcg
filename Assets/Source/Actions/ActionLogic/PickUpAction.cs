@@ -1,6 +1,7 @@
 ﻿using Entitas;
 using System.Windows.Forms;
 using UnityEngine;
+using KMath;
 
 namespace Action
 {
@@ -35,8 +36,8 @@ namespace Action
             }
 #endif
 
-            Vector2 drawPos = ItemEntity.physicsPosition2D.Value;
-            ItemEntity.ReplaceItemDrawPosition2D(drawPos, Vector2.zero);
+            Vec2f drawPos = ItemEntity.physicsPosition2D.Value;
+            ItemEntity.ReplaceItemDrawPosition2D(drawPos, Vec2f.Zero);
 
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Active);
         }
@@ -46,11 +47,11 @@ namespace Action
             // Update item pos.
 
             // Center position Item.
-            Vector2 itemSize = Contexts.sharedInstance.game.GetEntityWithItemAttributes(ItemEntity.itemID.ItemType).itemAttributeSize.Size;
-            Vector2 itemCenterPos = ItemEntity.itemDrawPosition2D.Value + itemSize / 2.0f;
-            Vector2 agentCenterPos = AgentEntity.physicsPosition2D.Value + new Vector2(1.0f, 1.5f)/2f; // Todo: Add agentSizeCompenent
+            Vec2f itemSize = Contexts.sharedInstance.game.GetEntityWithItemAttributes(ItemEntity.itemID.ItemType).itemAttributeSize.Size;
+            Vec2f itemCenterPos = ItemEntity.itemDrawPosition2D.Value + itemSize / 2.0f;
+            Vec2f agentCenterPos = AgentEntity.physicsPosition2D.Value + new Vec2f(1.0f, 1.5f)/2f; // Todo: Add agentSizeCompenent
 
-            if ((itemCenterPos - agentCenterPos).magnitude < 0.1f)
+            if ((itemCenterPos - agentCenterPos).Magnitude < 0.1f)
             {
                 if (AgentEntity.hasAgentToolBar)
                 {
@@ -86,7 +87,7 @@ namespace Action
             float speed = Speed * deltaTime;
 
             // Update Draw Position.
-            Vector2 mov = (agentCenterPos - itemCenterPos).normalized * speed;
+            Vec2f mov = (agentCenterPos - itemCenterPos).Normalized * speed;
             ItemEntity.ReplaceItemDrawPosition2D(ItemEntity.itemDrawPosition2D.Value + mov, ItemEntity.itemDrawPosition2D.Value);
         }
 
