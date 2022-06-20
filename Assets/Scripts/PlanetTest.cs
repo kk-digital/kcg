@@ -129,7 +129,8 @@ namespace Planet.Unity
                             TileMap.RemoveTile(cell.x, cell.y, Enums.Tile.MapLayerType.Ore);
                         }
 
-                        Debug.DrawLine(new Vector3(playerPosition.X, playerPosition.Y, 0.0f), new Vector3(worldPosition.x, worldPosition.y, 0.0f), Color.red);
+                        Debug.DrawLine(new Vector3(playerPosition.X, playerPosition.Y, 0.0f),
+                                     new Vector3(worldPosition.x, worldPosition.y, 0.0f), Color.red);
                     }
 
                     //TileMap.BuildLayerTexture(Enums.Tile.MapLayerType.Front);
@@ -207,10 +208,7 @@ namespace Planet.Unity
 
             int SlimeMoveLeftBaseSpriteId = GameState.SpriteAtlasManager.CopySpritesToAtlas(SlimeSpriteSheet, 0, 0, 3, 0, Enums.AtlasType.Agent);
 
-            GameState.TileCreationApi.CreateTile(8);
-            GameState.TileCreationApi.SetTileName("ore_1");
-            GameState.TileCreationApi.SetTileTexture16(OreTileSheet, 0, 0);
-            GameState.TileCreationApi.EndTile();
+            CharacterSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(CharacterSpriteSheet, 0, 0, Enums.AtlasType.Agent);
 
 
             int OreIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(OreTileSheet, 0, 0, Enums.AtlasType.Particle);
@@ -220,16 +218,6 @@ namespace Planet.Unity
             int RemoveToolIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(Ore2TileSheet, 0, 0, Enums.AtlasType.Particle);
             int MiningLaserToolIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(LaserSpriteSheet, 0, 0, Enums.AtlasType.Particle);
             
-
-            GameState.TileCreationApi.CreateTile(8);
-            GameState.TileCreationApi.SetTileName("ore_1");
-            GameState.TileCreationApi.SetTileTexture16(OreTileSheet, 0, 0);
-            GameState.TileCreationApi.EndTile();
-
-            GameState.TileCreationApi.CreateTile(10);
-            GameState.TileCreationApi.SetTileName("moon");
-            GameState.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 0, 0);
-            GameState.TileCreationApi.EndTile();
 
             GameState.TileCreationApi.CreateTile(8);
             GameState.TileCreationApi.SetTileName("ore_1");
@@ -379,7 +367,7 @@ namespace Planet.Unity
             KMath.Random.Mt19937.init_genrand((ulong)System.DateTime.Now.Ticks);
             Planet.TileMap TileMap = Planet.TileMap;
 
-            Vec2i mapSize = TileMap.MapSize;
+           Vec2i mapSize = TileMap.MapSize;
 
            for(int j = 0; j < mapSize.Y; j++)
             {
@@ -484,7 +472,8 @@ namespace Planet.Unity
 
             float spawnHeight = TileMap.MapSize.Y + 2.0f;
 
-            Player = Planet.AddPlayer(Instantiate(Material), CharacterSpriteId, 32, 48, new Vec2f(3.0f, spawnHeight), 0);
+            Player = Planet.AddPlayer(Instantiate(Material), CharacterSpriteId, 32, 48, 
+                    new Vec2f(3.0f, spawnHeight), 0);
             PlayerID = Player.Entity.agentID.ID;
 
             Planet.AddAgent(Instantiate(Material), CharacterSpriteId, 32, 48, new Vec2f(6.0f, spawnHeight), 0);
@@ -506,5 +495,3 @@ namespace Planet.Unity
         
     }
 }
-
-

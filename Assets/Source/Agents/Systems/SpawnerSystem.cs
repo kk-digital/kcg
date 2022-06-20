@@ -62,8 +62,8 @@ namespace Agent
             
             entity.AddAgentID(AgentId);
 
-            Vec2f box2dCollider = new Vec2f(0.5f, 1.5f);
-            entity.AddPhysicsBox2DCollider(box2dCollider, new Vec2f(0.25f, 0.0f));
+            Vec2f box2dCollider = new Vec2f(0.75f, 0.5f);
+            entity.AddPhysicsBox2DCollider(box2dCollider, new Vec2f(0.125f, 0.0f));
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
             entity.AddAgentSprite2D(spriteId, spriteSize);
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
