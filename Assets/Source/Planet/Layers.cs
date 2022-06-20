@@ -1,4 +1,5 @@
 using System;
+using KMath;
 using UnityEngine;
 
 namespace Planet
@@ -7,7 +8,7 @@ namespace Planet
     {
         public static readonly int Count = Enum.GetNames(typeof(Enums.Tile.MapLayerType)).Length;
         
-        public Vector2Int MapSize;
+        public Vec2i MapSize;
         public Texture2D[] LayerTextures;
         public Tile.Tile[][] Tiles;
         public bool[] NeedsUpdate;
@@ -19,7 +20,7 @@ namespace Planet
 
             var sprite = new Sprites.Sprite(LayerTextures[(int) planetLayer]);
 
-            Utility.Render.DrawSprite(0, 0, 1.0f * MapSize.x, 1.0f * MapSize.y, sprite, material, transform, DrawOrder);
+            Utility.Render.DrawSprite(0, 0, 1.0f * MapSize.X, 1.0f * MapSize.Y, sprite, material, transform, DrawOrder);
         }
         
         private void BuildLayerTexture(TileMap tileMap, Enums.Tile.MapLayerType planetLayer)
@@ -30,11 +31,11 @@ namespace Planet
                 NeedsUpdate[(int)planetLayer] = false;
 
                 byte[] bytes = new byte[32 * 32 * 4];
-                byte[] data = new byte[MapSize.x * MapSize.y * 32 * 32 * 4];
+                byte[] data = new byte[MapSize.X * MapSize.Y * 32 * 32 * 4];
 
-                for(int y = 0; y < MapSize.y; y++)
+                for(int y = 0; y < MapSize.Y; y++)
                 {
-                    for(int x = 0; x < MapSize.x; x++)
+                    for(int x = 0; x < MapSize.X; x++)
                     {
                         ref Tile.Tile tile = ref tileMap.GetTileRef(x, y, planetLayer);
 
@@ -52,7 +53,7 @@ namespace Planet
                             {
                                 for(int i = 0; i < 32; i++)
                                 {
-                                    int index = 4 * (((i + tileX)) + ((j + tileY)) * (MapSize.x * 32));
+                                    int index = 4 * (((i + tileX)) + ((j + tileY)) * (MapSize.X * 32));
                                     int bytesIndex = 4 * (i + (32 - j - 1) * 32);
                                     data[index] = 
                                         bytes[bytesIndex];
@@ -68,7 +69,7 @@ namespace Planet
                     }
                 }
                 
-                LayerTextures[(int)planetLayer] = Utility.Texture.CreateTextureFromRGBA(data, MapSize.x * 32, MapSize.y * 32);
+                LayerTextures[(int)planetLayer] = Utility.Texture.CreateTextureFromRGBA(data, MapSize.X * 32, MapSize.Y * 32);
             }
         }
     }

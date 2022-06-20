@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Enums.Tile;
+using KMath;
 
 namespace Planet.Unity
 {
@@ -92,43 +93,43 @@ namespace Planet.Unity
             Item.CreationApi.Instance.CreateItem(Enums.ItemType.Gun, "Gun");
             Item.CreationApi.Instance.SetTexture(GunIcon);
             Item.CreationApi.Instance.SetInventoryTexture(GunIcon);
-            Item.CreationApi.Instance.SetSize(new Vector2(0.5f, 0.5f));
+            Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
             Item.CreationApi.Instance.EndItem();
 
             Item.CreationApi.Instance.CreateItem(Enums.ItemType.Ore, "Ore");
             Item.CreationApi.Instance.SetTexture(OreIcon);
             Item.CreationApi.Instance.SetInventoryTexture(OreIcon);
-            Item.CreationApi.Instance.SetSize(new Vector2(0.5f, 0.5f));
+            Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
             Item.CreationApi.Instance.SetStackable(99);
             Item.CreationApi.Instance.EndItem();
 
             // Generating the map
-            Vector2Int mapSize = new Vector2Int(16, 16);
+            Vec2i mapSize = new Vec2i(16, 16);
             Planet = new Planet.PlanetState(mapSize);
             GenerateMap();
 
-            Planet.AddPlayer(Instantiate(Material),CharacterSpriteId, 32, 48, new Vector2(3.0f, 3.0f), 0);
+            Planet.AddPlayer(Instantiate(Material),CharacterSpriteId, 32, 48, new Vec2f(3.0f, 3.0f), 0);
 
-            SpawnerSystem.SpawnItem(Enums.ItemType.Gun, new Vector2(3.0f, 3.0f));
-            SpawnerSystem.SpawnItem(Enums.ItemType.Ore, new Vector2(6.0f, 3.0f));
+            SpawnerSystem.SpawnItem(Enums.ItemType.Gun, new Vec2f(3.0f, 3.0f));
+            SpawnerSystem.SpawnItem(Enums.ItemType.Ore, new Vec2f(6.0f, 3.0f));
             SpawnerSystem.SpawnIventoryItem(Enums.ItemType.Ore);
         }
         void GenerateMap()
         {
             Planet.TileMap TileMap = Planet.TileMap;
 
-            Vector2Int mapSize = TileMap.MapSize;
+            var mapSize = TileMap.MapSize;
 
-            for (int j = 0; j < mapSize.y; j++)
+            for (int j = 0; j < mapSize.Y; j++)
             {
-                for (int i = 0; i < mapSize.x; i++)
+                for (int i = 0; i < mapSize.X; i++)
                 {
                     Tile.Tile frontTile = Tile.Tile.EmptyTile;
                     Tile.Tile oreTile = Tile.Tile.EmptyTile;
 
-                    if (i >= mapSize.x / 2)
+                    if (i >= mapSize.X / 2)
                     {
-                        if (j % 2 == 0 && i == mapSize.x / 2)
+                        if (j % 2 == 0 && i == mapSize.X / 2)
                         {
                             frontTile.Type = 10;
                         }
@@ -139,7 +140,7 @@ namespace Planet.Unity
                     }
                     else
                     {
-                        if (j % 3 == 0 && i == mapSize.x / 2 + 1)
+                        if (j % 3 == 0 && i == mapSize.X / 2 + 1)
                         {
                             frontTile.Type = 9;
                         }

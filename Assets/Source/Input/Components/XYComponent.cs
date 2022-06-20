@@ -1,11 +1,12 @@
 using Entitas;
+using KMath;
 using UnityEngine;
 
 namespace ECSInput
 {
     public class XYComponent : IComponent
     {
-        public Vector2 Value;
+        public Vec2f Value;
         public bool Jump;
     }
 }

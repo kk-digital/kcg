@@ -1,27 +1,29 @@
-using UnityEngine;
+using KMath;
+using Utility;
 
 namespace Physics
 {
     public static class Box2DCollisionExt
     {
-        public static bool IsCollidingLeft(this ref Box2DBorders borders, Planet.TileMap tileMap, Vector2 velocity)
+        public static bool IsCollidingLeft(this AABB2D borders, Planet.TileMap tileMap, Vec2f velocity)
         {
-            if (velocity.x >= 0.0f) return false;
+            if (velocity.X >= 0.0f) return false;
             
-            int x = borders.Left;
-            for(int y = borders.Down; y <= borders.Up; y++)
+            int x = borders.IntLeft;
+            for(int y = borders.IntBottom; y <= borders.IntTop; y++)
             {
-                /*var edgePosition = new Vector2(x, y);
-                if (tileMap.BoxBorders.Intersects(edgePosition))
-                {*/
-                if (x >= 0 && x < tileMap.MapSize.x &&
-                   y >= 0 && y < tileMap.MapSize.y)
-                   {
+                var edgePosition = new Vec2f(x, y);
+                if (tileMap.Borders.Intersects(edgePosition))
+                {
                     ref var tile = ref tileMap.GetTileRef(x, y, Enums.Tile.MapLayerType.Front);
                     if (tile.Type >= 0)
                     {
-                        return true;
-                      //  return tile.BoxBorders.Intersects(edgePosition);
+                        var isColliding = tile.Borders.Intersects(edgePosition);
+                        if (isColliding)
+                        {
+                            tile.Borders.DrawBox();
+                            return true;
+                        }
                     }
                    }
              //   }
@@ -29,24 +31,25 @@ namespace Physics
             return false;
         }
 
-        public static bool IsCollidingRight(this ref Box2DBorders borders, Planet.TileMap tileMap, Vector2 velocity)
+        public static bool IsCollidingRight(this AABB2D borders, Planet.TileMap tileMap, Vec2f velocity)
         {
-            if (velocity.x <= 0.0f) return false;
+            if (velocity.X <= 0.0f) return false;
             
-            int x = borders.Right;
-            for(int y = borders.Down; y <= borders.Up; y++)
+            int x = borders.IntRight;
+            for(int y = borders.IntBottom; y <= borders.IntTop; y++)
             {
-               /* var edgePosition = new Vector2(x, y);
-                if (tileMap.BoxBorders.Intersects(edgePosition))
-                {*/
-                if (x >= 0 && x < tileMap.MapSize.x &&
-                   y >= 0 && y < tileMap.MapSize.y)
-                   {
+                var edgePosition = new Vec2f(x, y);
+                if (tileMap.Borders.Intersects(edgePosition))
+                {
                     ref var tile = ref tileMap.GetTileRef(x, y, Enums.Tile.MapLayerType.Front);
                     if (tile.Type >= 0)
                     {
-                        return true;
-                        //return tile.BoxBorders.Intersects(edgePosition);
+                        var isColliding = tile.Borders.Intersects(edgePosition);
+                        if (isColliding)
+                        {
+                            tile.Borders.DrawBox();
+                            return true;
+                        }
                     }
                    }
                // }
@@ -54,23 +57,25 @@ namespace Physics
             return false;
         }
         
-        public static bool IsCollidingBottom(this ref Box2DBorders borders, Planet.TileMap tileMap, Vector2 velocity)
+        public static bool IsCollidingBottom(this AABB2D borders, Planet.TileMap tileMap, Vec2f velocity)
         {
-            if (velocity.y >= 0.0f) return false;
+            if (velocity.Y >= 0.0f) return false;
             
-            int y = borders.Down;
-            for(int x = borders.Left; x <= borders.Right; x++)
+            int y = borders.IntBottom;
+            for(int x = borders.IntLeft; x <= borders.IntRight; x++)
             {
-                /*var edgePosition = new Vector2(x, y);
-                if (tileMap.BoxBorders.Intersects(edgePosition))
-                {*/
-                if (x >= 0 && x < tileMap.MapSize.x &&
-                   y >= 0 && y < tileMap.MapSize.y)
-                   {
+                var edgePosition = new Vec2f(x, y);
+                if (tileMap.Borders.Intersects(edgePosition))
+                {
                     ref var tile = ref tileMap.GetTileRef(x, y, Enums.Tile.MapLayerType.Front);
                     if (tile.Type >= 0)
                     {
-                        return true; //tile.BoxBorders.Intersects(edgePosition);
+                        var isColliding = tile.Borders.Intersects(edgePosition);
+                        if (isColliding)
+                        {
+                            tile.Borders.DrawBox();
+                            return true;
+                        }
                     }
                    }
                // }
@@ -79,25 +84,26 @@ namespace Physics
             return false;
         }
 
-        public static bool IsCollidingTop(this ref Box2DBorders borders, Planet.TileMap tileMap, Vector2 velocity)
+        public static bool IsCollidingTop(this AABB2D borders, Planet.TileMap tileMap, Vec2f velocity)
         {
-            if (velocity.y <= 0.0f) return false;
+            if (velocity.Y <= 0.0f) return false;
             
-            int y = borders.Up;
-            for(int x = borders.Left; x <= borders.Right; x++)
+            int y = borders.IntTop;
+            for(int x = borders.IntLeft; x <= borders.IntRight; x++)
             {
-                /*var edgePosition = new Vector2(x, y);
+                var edgePosition = new Vec2f(x, y);
                 
-                if (tileMap.BoxBorders.Intersects(edgePosition))
-                {*/
-                if (x >= 0 && x < tileMap.MapSize.x &&
-                   y >= 0 && y < tileMap.MapSize.y)
-                   {
+                if (tileMap.Borders.Intersects(edgePosition))
+                {
                     ref var tile = ref tileMap.GetTileRef(x, y, Enums.Tile.MapLayerType.Front);
                     if (tile.Type >= 0)
                     {
-                        return true;
-                       // return tile.BoxBorders.Intersects(edgePosition);
+                        var isColliding = tile.Borders.Intersects(edgePosition);
+                        if (isColliding)
+                        {
+                            tile.Borders.DrawBox();
+                            return true;
+                        }
                     }
                    }
                 //}

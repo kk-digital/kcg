@@ -29,12 +29,12 @@ public class ProjectileTest : MonoBehaviour
     private bool init;
 
     // Projectile Properties
-    private Vector2 startPos;
+    private Vec2f startPos;
     Vector3 worldPosition;
     private Planet.TileMap tileMap;
     private Planet.ChunkList chunkList;
-    Vector3 difference;
-    private Vector2 projectilePosition;
+    Vec3f difference;
+    private Vec2f projectilePosition;
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
     void Start()
@@ -68,7 +68,7 @@ public class ProjectileTest : MonoBehaviour
     }
 
     // Spawn Projectiles
-    private void SpawnProjectile(Vector2 startPos)
+    private void SpawnProjectile(Vec2f startPos)
     {
         // Loading Image
         projectileSpawnerSystem.SpawnProjectile(Material, image, 16, 16, startPos,
@@ -104,7 +104,7 @@ public class ProjectileTest : MonoBehaviour
             Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentPlayer);
             foreach (var entity in entities)
             {
-                startPos = new Vector2(entity.physicsPosition2D.Value.y, entity.physicsPosition2D.Value.y);
+                startPos = new Vec2f(entity.physicsPosition2D.Value.Y, entity.physicsPosition2D.Value.Y);
             }
 
             IGroup<GameEntity> Pentities =
@@ -123,18 +123,19 @@ public class ProjectileTest : MonoBehaviour
                 worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
 
                 // Calculate difference
-                difference = new Vector2(worldPosition.x, worldPosition.y) - startPos;
+                var diff = new Vec2f(worldPosition.x, worldPosition.y) - startPos;
+                difference = new Vec3f(diff.X, diff.Y);
 
                 Cell start = new Cell
                 {
-                    x = (int)startPos.x,
-                    y = (int)startPos.y
+                    x = (int)startPos.X,
+                    y = (int)startPos.Y
                 };
 
                 Cell end = new Cell
                 {
-                    x = (int)projectilePosition.x,
-                    y = (int)projectilePosition.y
+                    x = (int)projectilePosition.X,
+                    y = (int)projectilePosition.Y
                 };
 
                 // Spawn Projectile
@@ -169,31 +170,4 @@ public class ProjectileTest : MonoBehaviour
             projectileDrawSystem.Draw(Instantiate(Material), transform, 12);
         }
     }
-
-#if UNITY_EDITOR
-    public void OnDrawGizmos()
-    {
-        // If App is running, quit.
-        if (!Application.isPlaying) return;
-
-        // Get Group of projectile physics state
-        var group = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.ProjectilePhysicsState2D));
-
-        // Set Gizmo Color
-        Gizmos.color = Color.green;
-
-        // Get Entity in entites
-        foreach (var entity in group)
-        {
-            var pos = entity.projectilePhysicsState2D;
-            var boxCollider = entity.physicsBox2DCollider;
-
-            // Create Box Collision Gizmo
-            var boxBorders = boxCollider.CreateEntityBoxBorders(pos.Position); 
-
-            // Drawing the gizmo
-            Gizmos.DrawWireCube(boxBorders.Center, new Vector3(boxCollider.Size.x, boxCollider.Size.y, 0.0f));
-        }
-    }
-#endif
 }

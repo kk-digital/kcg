@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using KMath;
 using Planet;
 using UnityEngine;
 
@@ -21,7 +21,7 @@ namespace World
 
         public PlanetState AddPlanet()
         {
-            PlanetState newPlanet = new PlanetState(new Vector2Int(16, 16));
+            PlanetState newPlanet = new PlanetState(new Vec2i(16, 16));
             PlanetList.Add(newPlanet);
 
             newPlanet.Index = PlanetList.Count - 1;

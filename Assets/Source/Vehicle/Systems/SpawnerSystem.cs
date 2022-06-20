@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Entitas;
+using KMath;
 
 namespace Vehicle
 {
@@ -8,7 +9,7 @@ namespace Vehicle
     {
         private static int vehicleID;
 
-        public Entity SpawnVehicle(Material material, int spriteID, int width, int height, Vector2 position)
+        public Entity SpawnVehicle(Material material, int spriteID, int width, int height, Vec2f position)
         {
             // Create Entity
             var entity = Contexts.sharedInstance.game.CreateEntity();
@@ -17,22 +18,22 @@ namespace Vehicle
             vehicleID++;
 
             // Set Png Size
-            var pngSize = new Vector2Int(width, height);
+            var pngSize = new Vec2i(width, height);
 
             // Set Sprite ID from Sprite Atlas
             var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
 
             // Set Sprite Data
-            byte[] spriteData = new byte[pngSize.x * pngSize.y * 4];
+            byte[] spriteData = new byte[pngSize.X * pngSize.Y * 4];
 
             // Get Sprite Bytes
             GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, Enums.AtlasType.Agent);
 
             // Set Texture
-            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, pngSize.x, pngSize.y);
+            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, pngSize.X, pngSize.Y);
 
             // Set Sprite Size
-            var spriteSize = new Vector2(pngSize.x / 32f, pngSize.y / 32f);
+            var spriteSize = new Vec2f(pngSize.X / 32f, pngSize.Y / 32f);
 
             // Add ID Component
             entity.AddVehicleID(vehicleID);
@@ -41,11 +42,11 @@ namespace Vehicle
             entity.AddVehicleSprite2D(texture, spriteSize);
 
             // Add Physics State 2D Component
-            entity.AddVehiclePhysicsState2D(position, position, Vector2.one, Vector2.one, Vector2.zero, 1.0f, 1.0f, 1.5f,
-                Vector2.zero);
+            entity.AddVehiclePhysicsState2D(position, position, Vec2f.One, Vec2f.One, Vec2f.Zero, 1.0f, 1.0f, 1.5f,
+                Vec2f.Zero);
 
             // Add Physics Box Collider Component
-            entity.AddPhysicsBox2DCollider(spriteSize, Vector2.zero);
+            entity.AddPhysicsBox2DCollider(spriteSize, Vec2f.Zero);
 
             // Return projectile entity
             return entity;
