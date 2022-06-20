@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Entitas/Generated/Game/Components/GameProjectileColliderComponent.cs.meta
-guid: d439fdf4d6f97f04a951eb339d2ad941
-========
-guid: 4b3311c8ddd01744bb5cbaae3d8e5efc
->>>>>>>> ee08f728 (Collisions and Math):Assets/Entitas/Generated/Game/Components/GamePhysicsSphere2DColliderComponent.cs.meta
+guid: 1d8c495f333c5d746a706de2730c77d9
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

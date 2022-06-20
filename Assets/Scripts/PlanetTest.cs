@@ -12,7 +12,7 @@ namespace Planet.Unity
         [SerializeField] Material Material;
 
         Planet.PlanetState Planet;
-        Inventory.ManagerSystem inventoryManagerSystem;
+        Inventory.InventoryManager inventoryManager;
         Inventory.DrawSystem    inventoryDrawSystem;
 
         Contexts EntitasContext;
@@ -176,8 +176,8 @@ namespace Planet.Unity
         public void Initialize()
         {
             EntitasContext = Contexts.sharedInstance;
-        
-            inventoryManagerSystem = new Inventory.ManagerSystem(EntitasContext);
+
+            inventoryManager = new Inventory.InventoryManager();
             inventoryDrawSystem = new Inventory.DrawSystem(EntitasContext);
 
 
@@ -315,17 +315,19 @@ namespace Planet.Unity
             inventoryID = Player.Entity.agentInventory.InventoryID;
             toolBarID = Player.Entity.agentToolBar.ToolBarID;
 
-            GameEntity gun = GameState.ItemSpawnSystem.SpawnIventoryItem(Enums.ItemType.Gun);
-            GameEntity ore = GameState.ItemSpawnSystem.SpawnIventoryItem(Enums.ItemType.Ore);
-            GameEntity placementTool = GameState.ItemSpawnSystem.SpawnIventoryItem(Enums.ItemType.PlacementTool);
-            GameEntity removeTileTool = GameState.ItemSpawnSystem.SpawnIventoryItem(Enums.ItemType.RemoveTileTool);
-            GameEntity spawnEnemySlimeTool = GameState.ItemSpawnSystem.SpawnIventoryItem(Enums.ItemType.SpawnEnemySlimeTool);
-            GameEntity miningLaserTool = GameState.ItemSpawnSystem.SpawnIventoryItem(Enums.ItemType.MiningLaserTool);
+            GameEntity gun = GameState.ItemSpawnSystem.SpawnInventoryItem(Enums.ItemType.Gun);
+            GameEntity ore = GameState.ItemSpawnSystem.SpawnInventoryItem(Enums.ItemType.Ore);
+            GameEntity placementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Enums.ItemType.PlacementTool);
+            GameEntity removeTileTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Enums.ItemType.RemoveTileTool);
+            GameEntity spawnEnemySlimeTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Enums.ItemType.SpawnEnemySlimeTool);
+            GameEntity miningLaserTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Enums.ItemType.MiningLaserTool);
 
-            inventoryManagerSystem.AddItem(placementTool, toolBarID);
-            inventoryManagerSystem.AddItem(removeTileTool, toolBarID);
-            inventoryManagerSystem.AddItem(spawnEnemySlimeTool, toolBarID);
-            inventoryManagerSystem.AddItem(miningLaserTool, toolBarID);
+
+            inventoryManager.AddItem(placementTool, toolBarID);
+            inventoryManager.AddItem(removeTileTool, toolBarID);
+            inventoryManager.AddItem(spawnEnemySlimeTool, toolBarID);
+            inventoryManager.AddItem(miningLaserTool, toolBarID);
+
         }
 
 

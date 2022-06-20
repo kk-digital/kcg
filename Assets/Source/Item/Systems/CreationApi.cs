@@ -19,9 +19,9 @@ namespace Item
         private static CreationApi instance;
         public static CreationApi Instance => instance ??= new CreationApi();
 
-        public Contexts EntitasContext = Contexts.sharedInstance;
+        private Contexts EntitasContext = Contexts.sharedInstance;
 
-        public GameEntity ItemType = null;
+        private GameEntity ItemType = null;
 
         public void CreateItem(Enums.ItemType itemType, string name)
         {
@@ -33,6 +33,7 @@ namespace Item
         {
             if (ItemType == null)
                 return;
+
             var Attributes = ItemType.itemAttributes;
             ItemType.ReplaceItemAttributes(Attributes.ItemType, name);
         }

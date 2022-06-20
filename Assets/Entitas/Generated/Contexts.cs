@@ -58,9 +58,9 @@ public partial class Contexts : Entitas.IContexts {
 //------------------------------------------------------------------------------
 public partial class Contexts {
 
+    public const string ActionID = "ActionID";
+    public const string AgentAIController = "AgentAIController";
     public const string AgentID = "AgentID";
-    public const string AIAction = "AIAction";
-    public const string AIAgentPlanner = "AIAgentPlanner";
     public const string AIGoal = "AIGoal";
     public const string InventoryID = "InventoryID";
     public const string ItemAttachedInventory = "ItemAttachedInventory";
@@ -74,19 +74,19 @@ public partial class Contexts {
     [Entitas.CodeGeneration.Attributes.PostConstructor]
     public void InitializeEntityIndices() {
         game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
+            ActionID,
+            game.GetGroup(GameMatcher.ActionID),
+            (e, c) => ((Action.IDComponent)c).ID));
+
+        game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
+            AgentAIController,
+            game.GetGroup(GameMatcher.AgentAIController),
+            (e, c) => ((Agent.AIController)c).AgentPlannerID));
+
+        game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
             AgentID,
             game.GetGroup(GameMatcher.AgentID),
             (e, c) => ((Agent.IDComponent)c).ID));
-
-        game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
-            AIAction,
-            game.GetGroup(GameMatcher.AIAction),
-            (e, c) => ((AI.ActionComponent)c).ActionID));
-
-        game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
-            AIAgentPlanner,
-            game.GetGroup(GameMatcher.AIAgentPlanner),
-            (e, c) => ((AI.AgentPlannerComponent)c).AgentPlannerID));
 
         game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
             AIGoal,
@@ -137,16 +137,16 @@ public partial class Contexts {
 
 public static class ContextsExtensions {
 
+    public static GameEntity GetEntityWithActionID(this GameContext context, int ID) {
+        return ((Entitas.PrimaryEntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.ActionID)).GetEntity(ID);
+    }
+
+    public static GameEntity GetEntityWithAgentAIController(this GameContext context, int AgentPlannerID) {
+        return ((Entitas.PrimaryEntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.AgentAIController)).GetEntity(AgentPlannerID);
+    }
+
     public static GameEntity GetEntityWithAgentID(this GameContext context, int ID) {
         return ((Entitas.PrimaryEntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.AgentID)).GetEntity(ID);
-    }
-
-    public static GameEntity GetEntityWithAIAction(this GameContext context, int ActionID) {
-        return ((Entitas.PrimaryEntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.AIAction)).GetEntity(ActionID);
-    }
-
-    public static GameEntity GetEntityWithAIAgentPlanner(this GameContext context, int AgentPlannerID) {
-        return ((Entitas.PrimaryEntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.AIAgentPlanner)).GetEntity(AgentPlannerID);
     }
 
     public static GameEntity GetEntityWithAIGoal(this GameContext context, int GoalID) {

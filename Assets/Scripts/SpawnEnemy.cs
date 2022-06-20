@@ -8,7 +8,7 @@ public class SpawnEnemy : MonoBehaviour
     [SerializeField] Material Material;
 
     // Inventory Manager System
-    Inventory.ManagerSystem inventoryManagerSystem;
+    Inventory.InventoryManager InventoryManager;
 
     // Inventory Draw System
     Inventory.DrawSystem inventoryDrawSystem;
@@ -60,8 +60,8 @@ public class SpawnEnemy : MonoBehaviour
         // Assign Contexts
         contexts = Contexts.sharedInstance;
 
-        // Create Inventory Manager System
-        inventoryManagerSystem = new Inventory.ManagerSystem(contexts);
+        // Create Inventory Manager
+        InventoryManager = new Inventory.InventoryManager();
 
         // Create Item Spawner System
         itemSpawnSystem = new Item.SpawnerSystem(contexts);
@@ -89,15 +89,15 @@ public class SpawnEnemy : MonoBehaviour
 
         // Add item to tool bar.
         {
-            GameEntity entity = itemSpawnSystem.SpawnIventoryItem(Enums.ItemType.PlacementTool);
-            inventoryManagerSystem.AddItem(entity, toolBarID);
+            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(Enums.ItemType.PlacementTool);
+            InventoryManager.AddItem(entity, toolBarID);
         }
 
         // Test not stackable items.
         for (uint i = 0; i < 10; i++)
         {
-            GameEntity entity = itemSpawnSystem.SpawnIventoryItem(Enums.ItemType.PlacementTool);
-            inventoryManagerSystem.AddItem(entity, inventoryID);
+            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(Enums.ItemType.PlacementTool);
+            InventoryManager.AddItem(entity, inventoryID);
         }
 
         // Init finished

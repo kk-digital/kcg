@@ -10,13 +10,13 @@ namespace Animation
         private int CurrentIndex;
         private AnimationProperties[] TypeArray;
 
-        private  Dictionary<string, int> NameToID;
+        private Dictionary<string, int> NameToID;
 
         public AnimationManager()
         {
             NameToID = new Dictionary<string, int>();
             TypeArray = new AnimationProperties[1024];
-            for(int i = 0; i < TypeArray.Length; i++)
+            for (int i = 0; i < TypeArray.Length; i++)
             {
                 TypeArray[i] = new AnimationProperties();
             }
@@ -62,7 +62,7 @@ namespace Animation
         public void SetName(string name)
         {
             if (CurrentIndex == -1) return;
-            
+
             if (!NameToID.ContainsKey(name))
             {
                 NameToID.Add(name, CurrentIndex);
@@ -77,7 +77,7 @@ namespace Animation
 
             TypeArray[CurrentIndex].TimePerFrame = timePerFrame;
         }
-        
+
         public void SetFrameCount(int frameCount)
         {
             if (CurrentIndex == -1) return;

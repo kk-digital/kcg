@@ -4,7 +4,6 @@
     {
         None,
         Active,
-        Paused,
         Success,
         Fail
     }

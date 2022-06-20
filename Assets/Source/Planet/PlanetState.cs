@@ -32,12 +32,11 @@ namespace Planet
         }
 
 
-        public AgentEntity AddPlayer(UnityEngine.Material material, int spriteId, 
+        public AgentEntity AddPlayer(UnityEngine.Material material, int spriteId,
                                 int width, int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity gameEntity = GameState.SpawnerSystem.SpawnPlayer(material, spriteId, width, height, position, 
-                    newEntity.AgentId, 
+            GameEntity gameEntity = GameState.SpawnerSystem.SpawnPlayer(material, spriteId, width, height, position, newEntity.AgentId,
                     startingAnimation);
             newEntity.Entity = gameEntity;
 
@@ -51,12 +50,12 @@ namespace Planet
             GameEntity entity = GameState.SpawnerSystem.SpawnAgent(material, spriteId, width, height, position,
                                                                     newEntity.AgentId, startingAnimation);
             newEntity.Entity = entity;
-            
+
 
             return newEntity;
         }
 
-        public AgentEntity AddEnemy(UnityEngine.Material material, int spriteId, 
+        public AgentEntity AddEnemy(UnityEngine.Material material, int spriteId,
                         int width, int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
@@ -64,7 +63,7 @@ namespace Planet
             newEntity.AgentId, startingAnimation);
 
             newEntity.Entity = entity;
-            
+
 
             return newEntity;
         }
@@ -142,7 +141,7 @@ namespace Planet
 
             TimeState.Deficit += deltaTime;
 
-            while(TimeState.Deficit >= frameTime)
+            while (TimeState.Deficit >= frameTime)
             {
                 TimeState.Deficit -= frameTime;
                 // do a server/client tick right here
@@ -153,7 +152,7 @@ namespace Planet
 
 
 
-                    for(int index = 0; index < ProjectileList.Capacity; index++)
+                    for (int index = 0; index < ProjectileList.Capacity; index++)
                     {
                         ref ProjectileEntity projectile = ref ProjectileList.List[index];
                         if (projectile.IsInitialized)
@@ -185,10 +184,12 @@ namespace Planet
             GameState.MovableSystem.Update();
             GameState.ProcessCollisionSystem.Update(TileMap);
             GameState.EnemyAiSystem.Update(this);
-            GameState.InventoryManagerSystem.Update();
             GameState.FloatingTextUpdateSystem.Update(this, frameTime);
             GameState.AnimationUpdateSystem.Update(frameTime);
-            
+            GameState.ActionSchedulerSystem.Update(frameTime);
+            GameState.ItemPickUpSystem.Update();
+
+
             TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Front, Object.Instantiate(material), transform, 10);
             TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Ore, Object.Instantiate(material), transform, 11);
             GameState.AgentDrawSystem.Draw(Object.Instantiate(material), transform, 12);
@@ -200,4 +201,4 @@ namespace Planet
             #endregion
         }
     }
-}   
+}
