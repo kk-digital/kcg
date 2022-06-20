@@ -13,7 +13,7 @@ public class GameState
     #region Tile
 
     public static readonly Tile.TileAtlasManager TileSpriteAtlasManager;
-    public static readonly Tile.CreationApi TileCreationApi;
+    public static readonly Tile.TileCreationApi TileCreationApi;
 
     #endregion
     
@@ -61,7 +61,7 @@ public class GameState
         SpriteLoader = new Sprites.SpriteLoader();
         TileSpriteAtlasManager = new Tile.TileAtlasManager(SpriteLoader);
         SpriteAtlasManager = new Sprites.SpriteAtlasManager(SpriteLoader);
-        TileCreationApi = new Tile.CreationApi();
+        TileCreationApi = new Tile.TileCreationApi();
         FileLoadingManager = new Utility.FileLoadingManager();
         ProcessSystem = new ECSInput.ProcessSystem();
         SpawnerSystem = new Agent.SpawnerSystem();

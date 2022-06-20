@@ -130,6 +130,18 @@ public class SpawnEnemy : MonoBehaviour
 
     void Update()
     {
+        // check if the sprite atlas textures needs to be updated
+        for(int type = 0; type < GameState.SpriteAtlasManager.Length; type++)
+        {
+            GameState.SpriteAtlasManager.UpdateAtlasTexture(type);
+        }
+
+        // check if the tile sprite atlas textures needs to be updated
+        for(int type = 0; type < GameState.TileSpriteAtlasManager.Length; type++)
+        {
+            GameState.TileSpriteAtlasManager.UpdateAtlasTexture(type);
+        }
+
         if (Init)
         {
             // Get Slot Entites

@@ -44,7 +44,7 @@ namespace Tile
     //ALL TILES ARE CREATED FROM FUNCTIONS IN THIS FILE
     //ALL SPRITES FOR TILES ARE SET AND ASSIGNED FROM THIS API
 
-    public class CreationApi
+    public class TileCreationApi
     {
         // Start is called before the first frame update
 
@@ -53,7 +53,7 @@ namespace Tile
 
         private  Dictionary<string, int> NameToID;
 
-        public CreationApi()
+        public TileCreationApi()
         {
             NameToID = new Dictionary<string, int>();
             PropertiesArray = new Type[1024];
