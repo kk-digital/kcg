@@ -2,7 +2,7 @@
 
 namespace Tile
 {
-    public class SpriteAtlasManager
+    public class TileAtlasManager
     {
         private Sprites.SpriteLoader SpriteLoader;
         private Sprites.SpriteAtlas[] SpritesArray;
@@ -16,7 +16,7 @@ namespace Tile
             }
         }
 
-        public SpriteAtlasManager(Sprites.SpriteLoader spriteLoader)
+        public TileAtlasManager(Sprites.SpriteLoader spriteLoader)
         {
             SpriteLoader = spriteLoader;
             SpritesArray = new Sprites.SpriteAtlas[1];

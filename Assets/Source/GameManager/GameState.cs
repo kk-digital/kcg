@@ -12,7 +12,7 @@ public class GameState
     
     #region Tile
 
-    public static readonly Tile.SpriteAtlasManager TileSpriteAtlasManager;
+    public static readonly Tile.TileAtlasManager TileSpriteAtlasManager;
     public static readonly Tile.CreationApi TileCreationApi;
 
     #endregion
@@ -59,7 +59,7 @@ public class GameState
         Contexts entitasContext = Contexts.sharedInstance;
 
         SpriteLoader = new Sprites.SpriteLoader();
-        TileSpriteAtlasManager = new Tile.SpriteAtlasManager(SpriteLoader);
+        TileSpriteAtlasManager = new Tile.TileAtlasManager(SpriteLoader);
         SpriteAtlasManager = new Sprites.SpriteAtlasManager(SpriteLoader);
         TileCreationApi = new Tile.CreationApi();
         FileLoadingManager = new Utility.FileLoadingManager();
