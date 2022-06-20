@@ -1,5 +1,6 @@
 using UnityEngine;
 using Entitas;
+using KMath;
 
 public class SpawnEnemy : MonoBehaviour
 {
@@ -104,7 +105,7 @@ public class SpawnEnemy : MonoBehaviour
     }
 
     // Spawn Enemy
-    private void SpawnEnemySlime(Vector2 pos)
+    private void SpawnEnemySlime(Vec2f pos)
     {
         // Add Enemy to Enemy list
         planetState.AddEnemy(Material, SlimeMoveLeftBaseSpriteId, 32, 32, pos, 1);
@@ -166,7 +167,7 @@ public class SpawnEnemy : MonoBehaviour
                 Vector3 mousePos = Input.mousePosition;
                 mousePos.z = Camera.main.nearClipPlane;
                 Vector2 worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
-                SpawnEnemySlime(new Vector2(worldPosition.x, worldPosition.y));
+                SpawnEnemySlime(new Vec2f(worldPosition.x, worldPosition.y));
             }
 
             // Delete the old one

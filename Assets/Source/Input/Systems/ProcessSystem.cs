@@ -1,3 +1,4 @@
+using KMath;
 using UnityEngine;
 
 namespace ECSInput
@@ -21,7 +22,7 @@ namespace ECSInput
 
             foreach (var entity in AgentsWithXY)
             {
-                entity.ReplaceECSInputXY(new Vector2(x, 0.0f), jump);
+                entity.ReplaceECSInputXY(new Vec2f(x, 0.0f), jump);
 
                 var input = entity.eCSInputXY;
                 var movable = entity.physicsMovable;
@@ -29,11 +30,11 @@ namespace ECSInput
                 movable.Acceleration = input.Value * movable.Speed * 50.0f;
                 if (jump)
                 {
-                    movable.Acceleration.y += 100.0f;
-                    movable.Velocity.y = 5.0f;
+                    movable.Acceleration.Y += 100.0f;
+                    movable.Velocity.Y = 5.0f;
                 }
 
-                entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration, movable.AccelerationTime);
+                entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration);
 
             }
 

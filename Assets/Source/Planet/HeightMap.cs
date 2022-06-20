@@ -1,24 +1,25 @@
+using KMath;
 using UnityEngine;
 
 namespace Planet
 {
     public struct HeightMap
     {
-        public Vector2Int MapSize;
+        public Vec2i MapSize;
         public int[] Data;
 
-        public HeightMap(Vector2Int mapSize)
+        public HeightMap(Vec2i mapSize)
         {
             MapSize = mapSize;
-            Data = new int[mapSize.x];
+            Data = new int[mapSize.X];
         }
         
         public void UpdateTopTilesMap(ref TileMap tileMap)
         {
-            for(int i = 0; i < MapSize.x; i++)
+            for(int i = 0; i < MapSize.X; i++)
             {
                 Data[i] = 0;
-                for(int j = MapSize.y - 1; j >= 0; j--)
+                for(int j = MapSize.Y - 1; j >= 0; j--)
                 {
                     ref var tile = ref tileMap.GetTileRef(i, j, Enums.Tile.MapLayerType.Front);
                     if (tile.Type != -1)

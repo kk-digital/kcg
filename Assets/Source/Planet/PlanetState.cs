@@ -4,6 +4,7 @@ using Vehicle;
 using Projectile;
 using FloatingText;
 using Entitas;
+using KMath;
 using UnityEngine;
 using KMath;
 
@@ -21,7 +22,7 @@ namespace Planet
         public FloatingTextList FloatingTextList;
 
 
-        public PlanetState(UnityEngine.Vector2Int mapSize)
+        public PlanetState(Vec2i mapSize)
         {
             TileMap = new Planet.TileMap(mapSize);
             AgentList = new AgentList();
@@ -32,7 +33,7 @@ namespace Planet
 
 
         public AgentEntity AddPlayer(UnityEngine.Material material, int spriteId, 
-                                int width, int height, Vector2 position, int startingAnimation)
+                                int width, int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity gameEntity = GameState.SpawnerSystem.SpawnPlayer(material, spriteId, width, height, position, 
@@ -44,7 +45,7 @@ namespace Planet
         }
 
         public AgentEntity AddAgent(UnityEngine.Material material, int spriteId, int width,
-                     int height, Vector2 position, int startingAnimation)
+                     int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.SpawnerSystem.SpawnAgent(material, spriteId, width, height, position,
@@ -56,7 +57,7 @@ namespace Planet
         }
 
         public AgentEntity AddEnemy(UnityEngine.Material material, int spriteId, 
-                        int width, int height, Vector2 position, int startingAnimation)
+                        int width, int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.SpawnerSystem.SpawnEnemy(material, spriteId, width, height, position,

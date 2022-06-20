@@ -27,10 +27,10 @@ namespace Item
                 {
                     if (entity.hasPhysicsPosition2D == false || ItemTypeEntity.hasItemAttributeSize == false) // Test if Item is Drawable.
                         continue;
-                    float x = entity.physicsPosition2D.Value.x;
-                    float y = entity.physicsPosition2D.Value.y;
-                    float w = ItemTypeEntity.itemAttributeSize.Size.x;
-                    float h = ItemTypeEntity.itemAttributeSize.Size.y;
+                    float x = entity.physicsPosition2D.Value.X;
+                    float y = entity.physicsPosition2D.Value.Y;
+                    float w = ItemTypeEntity.itemAttributeSize.Size.X;
+                    float h = ItemTypeEntity.itemAttributeSize.Size.Y;
                     Utility.Render.DrawSprite(x, y, w, h, sprite, Object.Instantiate(material), transform, drawOrder);
                 }
 

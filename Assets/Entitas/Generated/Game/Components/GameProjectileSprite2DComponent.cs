@@ -11,7 +11,7 @@ public partial class GameEntity {
     public Projectile.Sprite2DComponent projectileSprite2D { get { return (Projectile.Sprite2DComponent)GetComponent(GameComponentsLookup.ProjectileSprite2D); } }
     public bool hasProjectileSprite2D { get { return HasComponent(GameComponentsLookup.ProjectileSprite2D); } }
 
-    public void AddProjectileSprite2D(UnityEngine.Texture2D newTexture, UnityEngine.Vector2 newSize) {
+    public void AddProjectileSprite2D(UnityEngine.Texture2D newTexture, KMath.Vec2f newSize) {
         var index = GameComponentsLookup.ProjectileSprite2D;
         var component = (Projectile.Sprite2DComponent)CreateComponent(index, typeof(Projectile.Sprite2DComponent));
         component.Texture = newTexture;
@@ -19,7 +19,7 @@ public partial class GameEntity {
         AddComponent(index, component);
     }
 
-    public void ReplaceProjectileSprite2D(UnityEngine.Texture2D newTexture, UnityEngine.Vector2 newSize) {
+    public void ReplaceProjectileSprite2D(UnityEngine.Texture2D newTexture, KMath.Vec2f newSize) {
         var index = GameComponentsLookup.ProjectileSprite2D;
         var component = (Projectile.Sprite2DComponent)CreateComponent(index, typeof(Projectile.Sprite2DComponent));
         component.Texture = newTexture;
