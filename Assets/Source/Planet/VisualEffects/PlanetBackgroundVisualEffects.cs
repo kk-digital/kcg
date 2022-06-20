@@ -12,18 +12,24 @@ namespace Planet.VisualEffects
 
         public void Initialize()
         {
-            starField = new Planet.VisualEffects.PlanetBackgroundStarField();
+            if(GameLoop.BackgroundDraw)
+            {
+                starField = new Planet.VisualEffects.PlanetBackgroundStarField();
 
-            starField.Initialize();
+                starField.Initialize();
 
-            Init = true;
+                Init = true;
+            }
         }
 
         public void Draw(Material material, Transform transform, int drawOrder)
         {
             if(Init)
             {
-                starField.Draw(material, transform, drawOrder);
+                if(GameLoop.BackgroundDraw)
+                {
+                    starField.Draw(material, transform, drawOrder);
+                }
             }
         }
     }

@@ -14,6 +14,8 @@ public class GameLoop : MonoBehaviour
 
     public SystemState CurrentSystemState;
 
+    public static bool BackgroundDraw = true;
+
     private void Init()
     {
 
