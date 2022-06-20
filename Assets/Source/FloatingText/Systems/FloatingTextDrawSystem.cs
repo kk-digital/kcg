@@ -4,7 +4,7 @@ using KMath;
 
 namespace FloatingText
 {
-    public class DrawSystem
+    public class FloatingTextDrawSystem
     {
         public void Draw(Transform transform, int drawOrder)
         {

@@ -73,7 +73,7 @@ namespace Projectile
 
             // creating the Entity and initializing it
             ProjectileEntity NewEntity = new ProjectileEntity();
-            NewEntity.Index = Found;
+            NewEntity.ProjectileId = Found;
             NewEntity.IsInitialized = true;
 
             List[Found] = NewEntity;

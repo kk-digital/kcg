@@ -35,7 +35,8 @@ namespace Planet
                                 int width, int height, Vector2 position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity gameEntity = GameState.SpawnerSystem.SpawnPlayer(material, spriteId, width, height, position, newEntity.Index, 
+            GameEntity gameEntity = GameState.SpawnerSystem.SpawnPlayer(material, spriteId, width, height, position, 
+                    newEntity.AgentId, 
                     startingAnimation);
             newEntity.Entity = gameEntity;
 
@@ -47,7 +48,7 @@ namespace Planet
         {
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.SpawnerSystem.SpawnAgent(material, spriteId, width, height, position,
-                                                                    newEntity.Index, startingAnimation);
+                                                                    newEntity.AgentId, startingAnimation);
             newEntity.Entity = entity;
             
 
@@ -59,7 +60,7 @@ namespace Planet
         {
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.SpawnerSystem.SpawnEnemy(material, spriteId, width, height, position,
-            newEntity.Index, startingAnimation);
+            newEntity.AgentId, startingAnimation);
 
             newEntity.Entity = entity;
             
@@ -77,7 +78,8 @@ namespace Planet
         public FloatingTextEntity AddFloatingText(string text, float timeToLive, Vec2f velocity, Vec2f position)
         {
             ref FloatingTextEntity newEntity = ref FloatingTextList.Add();
-            GameEntity entity = GameState.FloatingTextSpawnerSystem.SpawnFloatingText(text, timeToLive, velocity, position, newEntity.Index);
+            GameEntity entity = GameState.FloatingTextSpawnerSystem.SpawnFloatingText(text, timeToLive, velocity, position,
+                         newEntity.FloatingTextId);
 
             newEntity.Entity = entity;
 
@@ -164,8 +166,19 @@ namespace Planet
 
             }
 
+            // check if the sprite atlas textures needs to be updated
+            for(int type = 0; type < GameState.SpriteAtlasManager.Length; type++)
+            {
+                GameState.SpriteAtlasManager.UpdateAtlasTexture(type);
+            }
 
-            
+            // check if the tile sprite atlas textures needs to be updated
+            for(int type = 0; type < GameState.TileSpriteAtlasManager.Length; type++)
+            {
+                GameState.TileSpriteAtlasManager.UpdateAtlasTexture(type);
+            }
+
+            // calling all the systems we have
 
             GameState.ProcessSystem.Update();
             GameState.MovableSystem.Update();
@@ -175,9 +188,9 @@ namespace Planet
             GameState.FloatingTextUpdateSystem.Update(this, frameTime);
             GameState.AnimationUpdateSystem.Update(frameTime);
             
-            TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Front, Object.Instantiate(material), transform, 10);
-            TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Ore, Object.Instantiate(material), transform, 11);
-            GameState.DrawSystem.Draw(Object.Instantiate(material), transform, 12);
+            TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Front, Object.Instantiate(material), transform, 10);
+            TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Ore, Object.Instantiate(material), transform, 11);
+            GameState.AgentDrawSystem.Draw(Object.Instantiate(material), transform, 12);
             GameState.ItemDrawSystem.Draw(Material.Instantiate(material), transform, 13);
             GameState.FloatingTextDrawSystem.Draw(transform, 10000);
 

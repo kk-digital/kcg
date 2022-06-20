@@ -76,7 +76,7 @@ namespace Planet.Unity
                     int x = (int)worldPosition.x;
                     int y = (int)worldPosition.y;
                     Planet.PlaceTile(x, y, 10, MapLayerType.Front);
-                    TileMap.BuildLayerTexture(MapLayerType.Front);
+                    //TileMap.BuildLayerTexture(MapLayerType.Front);
                 }
                 else if (highlightItemType == Enums.ItemType.RemoveTileTool)
                 {
@@ -85,8 +85,8 @@ namespace Planet.Unity
                     int y = (int)worldPosition.y;
                     TileMap.RemoveTile(x, y, MapLayerType.Front);
                     TileMap.RemoveTile(x, y, MapLayerType.Ore);
-                    TileMap.BuildLayerTexture(MapLayerType.Front);
-                    TileMap.BuildLayerTexture(MapLayerType.Ore);
+                    //TileMap.BuildLayerTexture(MapLayerType.Front);
+                    //TileMap.BuildLayerTexture(MapLayerType.Ore);
                 }
                 else if (highlightItemType == Enums.ItemType.SpawnEnemySlimeTool)
                 {
@@ -132,8 +132,8 @@ namespace Planet.Unity
                         Debug.DrawLine(new Vector3(playerPosition.x, playerPosition.y, 0.0f), new Vector3(worldPosition.x, worldPosition.y, 0.0f), Color.red);
                     }
 
-                    TileMap.BuildLayerTexture(Enums.Tile.MapLayerType.Front);
-                    TileMap.BuildLayerTexture(Enums.Tile.MapLayerType.Ore);
+                    //TileMap.BuildLayerTexture(Enums.Tile.MapLayerType.Front);
+                    //TileMap.BuildLayerTexture(Enums.Tile.MapLayerType.Ore);
                 }
             }
 
@@ -459,8 +459,8 @@ namespace Planet.Unity
 
             TileMap.UpdateTileMapPositions(MapLayerType.Front);
             TileMap.UpdateTileMapPositions(MapLayerType.Ore);
-            TileMap.BuildLayerTexture(MapLayerType.Front);
-            TileMap.BuildLayerTexture(MapLayerType.Ore);
+            //TileMap.BuildLayerTexture(MapLayerType.Front);
+            //TileMap.BuildLayerTexture(MapLayerType.Ore);
         
         }
 

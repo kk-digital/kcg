@@ -30,7 +30,7 @@ namespace Planet.Unity
                 int y = (int)worldPosition.y;
                 Debug.Log(x + " " + y);
                 TileMap.RemoveTile(x, y, Enums.Tile.MapLayerType.Front);
-                TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
+                //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
                 
             }
 
@@ -40,8 +40,8 @@ namespace Planet.Unity
                 else
                     DestroyImmediate(mr.gameObject);
 
-            TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Front, Instantiate(Material), transform, 10);
-            TileMap.Layers.DrawLayer(Enums.Tile.MapLayerType.Ore, Instantiate(Material), transform, 11);
+            TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Front, Instantiate(Material), transform, 10);
+            TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Ore, Instantiate(Material), transform, 11);
         }
 
         // create the sprite atlas for testing purposes
@@ -127,8 +127,8 @@ namespace Planet.Unity
             TileMap.UpdateTileMapPositions(Enums.Tile.MapLayerType.Front);
             TileMap.UpdateTileMapPositions(Enums.Tile.MapLayerType.Ore);
 
-            TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
-            TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Ore);
+            //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
+            //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Ore);
         }
         
     }

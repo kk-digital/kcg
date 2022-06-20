@@ -78,6 +78,18 @@ namespace Planet.Unity
         // drawing the sprite atlas
         void DrawSpriteAtlas()
         {
+            // check if the sprite atlas textures needs to be updated
+            for(int type = 0; type < GameState.SpriteAtlasManager.Length; type++)
+            {
+                GameState.SpriteAtlasManager.UpdateAtlasTexture(type);
+            }
+
+            // check if the tile sprite atlas textures needs to be updated
+            for(int type = 0; type < GameState.TileSpriteAtlasManager.Length; type++)
+            {
+                GameState.TileSpriteAtlasManager.UpdateAtlasTexture(type);
+            }
+            
             ref Sprites.SpriteAtlas atlas = ref GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Generic);
             Sprites.Sprite sprite = new Sprites.Sprite
             {

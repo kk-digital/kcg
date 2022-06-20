@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Agent
 {
-    public class DrawSystem
+    public class AgentDrawSystem
     {
         List<int> triangles = new();
         List<Vector2> uvs = new();
@@ -23,11 +23,8 @@ namespace Agent
                     var animation = entity.animationState;
                     spriteId = animation.State.GetSpriteId();
                 }
-                var sprite = new Sprites.Sprite
-                {
-                    Texture = GameState.UnityImage2DCache.Get(spriteId, Enums.AtlasType.Agent),
-                    TextureCoords = new Vector4(0, 0, 1, 1)
-                };
+
+                Sprites.Sprite sprite = GameState.SpriteAtlasManager.GetSprite(spriteId, Enums.AtlasType.Agent);
 
 
 

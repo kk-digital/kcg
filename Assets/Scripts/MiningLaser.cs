@@ -137,6 +137,18 @@ public class MiningLaser : MonoBehaviour
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
     void Update()
     {
+        // check if the sprite atlas textures needs to be updated
+        for(int type = 0; type < GameState.SpriteAtlasManager.Length; type++)
+        {
+            GameState.SpriteAtlasManager.UpdateAtlasTexture(type);
+        }
+
+        // check if the tile sprite atlas textures needs to be updated
+        for(int type = 0; type < GameState.TileSpriteAtlasManager.Length; type++)
+        {
+            GameState.TileSpriteAtlasManager.UpdateAtlasTexture(type);
+        }
+
         if (Init)
         {
             // Get Slot Entites
@@ -211,7 +223,7 @@ public class MiningLaser : MonoBehaviour
                     if (tile.Type >= 0)
                     {
                         tileMap.RemoveTile(cell.x, cell.y, Enums.Tile.MapLayerType.Front);
-                        tileMap.BuildLayerTexture(Enums.Tile.MapLayerType.Front);
+                        //tileMap.BuildLayerTexture(Enums.Tile.MapLayerType.Front);
                     }
 
                     Debug.DrawLine(new Vector3(start.x, start.y, 0.0f), new Vector3(pointerPos.x, pointerPos.y, 0.0f), Color.red);

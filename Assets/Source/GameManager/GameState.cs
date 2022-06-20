@@ -3,7 +3,7 @@
 /// </summary>
 public class GameState
 {
-    public static readonly Sprites.UnityImage2DCache UnityImage2DCache;
+    //public static readonly Sprites.UnityImage2DCache UnityImage2DCache;
 
     #region Atinmation
     public static readonly Animation.AnimationManager AnimationManager;
@@ -12,8 +12,8 @@ public class GameState
     
     #region Tile
 
-    public static readonly Tile.SpriteAtlasManager TileSpriteAtlasManager;
-    public static readonly Tile.CreationApi TileCreationApi;
+    public static readonly Tile.TileAtlasManager TileSpriteAtlasManager;
+    public static readonly Tile.TileCreationApi TileCreationApi;
 
     #endregion
     
@@ -27,7 +27,7 @@ public class GameState
     #region Agent
 
     public static readonly Agent.SpawnerSystem SpawnerSystem;
-    public static readonly Agent.DrawSystem DrawSystem;
+    public static readonly Agent.AgentDrawSystem AgentDrawSystem;
     public static readonly Agent.EnemyAiSystem EnemyAiSystem;
 
     #endregion
@@ -48,25 +48,25 @@ public class GameState
     #region FloatingText
     public static readonly FloatingText.UpdateSystem FloatingTextUpdateSystem;
     public static readonly FloatingText.SpawnerSystem FloatingTextSpawnerSystem;
-    public static readonly FloatingText.DrawSystem FloatingTextDrawSystem;
+    public static readonly FloatingText.FloatingTextDrawSystem FloatingTextDrawSystem;
     #endregion
 
-    public static readonly ImageLoader.FileLoadingManager FileLoadingManager;
+    public static readonly Utility.FileLoadingManager FileLoadingManager;
     public static readonly ECSInput.ProcessSystem ProcessSystem;
 
     static GameState()
     {
         Contexts entitasContext = Contexts.sharedInstance;
 
-        TileSpriteAtlasManager = new Tile.SpriteAtlasManager();
-        SpriteAtlasManager = new Sprites.SpriteAtlasManager();
-        TileCreationApi = new Tile.CreationApi();
         SpriteLoader = new Sprites.SpriteLoader();
-        FileLoadingManager = new ImageLoader.FileLoadingManager();
+        TileSpriteAtlasManager = new Tile.TileAtlasManager(SpriteLoader);
+        SpriteAtlasManager = new Sprites.SpriteAtlasManager(SpriteLoader);
+        TileCreationApi = new Tile.TileCreationApi();
+        FileLoadingManager = new Utility.FileLoadingManager();
         ProcessSystem = new ECSInput.ProcessSystem();
         SpawnerSystem = new Agent.SpawnerSystem();
         MovableSystem = new Physics.MovableSystem();
-        DrawSystem = new Agent.DrawSystem();
+        AgentDrawSystem = new Agent.AgentDrawSystem();
         InventoryDrawSystem = new Inventory.DrawSystem();
         InventoryManagerSystem = new Inventory.ManagerSystem();
         ProcessCollisionSystem = new Physics.ProcessCollisionSystem();
@@ -74,9 +74,9 @@ public class GameState
         AnimationManager = new Animation.AnimationManager();
         FloatingTextUpdateSystem = new FloatingText.UpdateSystem();
         FloatingTextSpawnerSystem = new FloatingText.SpawnerSystem(entitasContext);
-        FloatingTextDrawSystem = new FloatingText.DrawSystem();
+        FloatingTextDrawSystem = new FloatingText.FloatingTextDrawSystem();
         AnimationUpdateSystem = new Animation.UpdateSystem();
-        UnityImage2DCache = new Sprites.UnityImage2DCache();
+        //UnityImage2DCache = new Sprites.UnityImage2DCache();
         ItemSpawnSystem = new Item.SpawnerSystem(entitasContext);
         ItemDrawSystem = new Item.DrawSystem(entitasContext);
 

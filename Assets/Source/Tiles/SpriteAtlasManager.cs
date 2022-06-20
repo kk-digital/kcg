@@ -2,13 +2,23 @@
 
 namespace Tile
 {
-    public class SpriteAtlasManager
+    public class TileAtlasManager
     {
+        private Sprites.SpriteLoader SpriteLoader;
         private Sprites.SpriteAtlas[] SpritesArray;
         private int[] Count;
 
-        public SpriteAtlasManager()
+        public int Length
         {
+            get
+            {
+                return SpritesArray.Length;
+            }
+        }
+
+        public TileAtlasManager(Sprites.SpriteLoader spriteLoader)
+        {
+            SpriteLoader = spriteLoader;
             SpritesArray = new Sprites.SpriteAtlas[1];
             Count = new int[1];
 
@@ -24,28 +34,40 @@ namespace Tile
             }
             SpritesArray[0] = atlas;
         }
+
+        public void UpdateAtlasTexture(int id)
+        {
+            ref Sprites.SpriteAtlas atlas = ref SpritesArray[id];
+            if (atlas.TextureNeedsUpdate)
+            {
+                atlas.Texture = Utility.Texture.CreateTextureFromRGBA(atlas.Data, atlas.Width * 32, atlas.Height * 32);
+                atlas.TextureNeedsUpdate = false;
+            }
+        }
         
         public ref Sprites.SpriteAtlas GetSpriteAtlas(int id)
         {
+            ref Sprites.SpriteAtlas atlas = ref SpritesArray[id];
+
             return ref SpritesArray[id];
         }
 
-        public int GetGlTextureId(int id)
+        public int GetGlTextureId(int id, int type = 0)
         {
-            Sprites.SpriteAtlas atlas = GetSpriteAtlas(id);
+            Sprites.SpriteAtlas atlas = GetSpriteAtlas(type);
             return atlas.GLTextureID;
         }
 
-        public Texture2D GetTexture(int id)
+        public Texture2D GetTexture(int id, int type = 0)
         {
-            ref Sprites.SpriteAtlas atlas = ref GetSpriteAtlas(id);
+            ref Sprites.SpriteAtlas atlas = ref GetSpriteAtlas(type);
             return atlas.Texture; 
         }
 
-        public Sprites.Sprite GetSprite(int id)
+        public Sprites.Sprite GetSprite(int id, int type = 0)
         {
             var sprite = new Sprites.Sprite();
-            ref Sprites.SpriteAtlas atlas = ref GetSpriteAtlas(0);
+            ref Sprites.SpriteAtlas atlas = ref GetSpriteAtlas(type);
 
             sprite.Texture = atlas.Texture;
 
@@ -60,9 +82,9 @@ namespace Tile
             return sprite;
         }
 
-        public void GetSpriteBytes(int id, byte[] data)
+        public void GetSpriteBytes(int id, byte[] data, int type = 0)
         {
-            ref Sprites.SpriteAtlas atlas = ref SpritesArray[0];
+            ref Sprites.SpriteAtlas atlas = ref SpritesArray[type];
 
             int xOffset = (id % atlas.Width) * 32;
             int yOffset = (id / atlas.Height) * 32;
@@ -89,7 +111,7 @@ namespace Tile
         // returns an id that can be used later to get texture coordinates
         public int CopyTileSpriteToAtlas(int spriteSheetID, int row, int column, int atlasId)
         {
-            Sprites.SpriteSheet sheet = GameState.SpriteLoader.SpriteSheets[spriteSheetID];
+            ref Sprites.SpriteSheet sheet = ref SpriteLoader.SpriteSheets[spriteSheetID];
             ref Sprites.SpriteAtlas atlas = ref SpritesArray[atlasId];
             ref int count = ref Count[atlasId];
             
@@ -115,11 +137,9 @@ namespace Tile
 
             // todo: upload texture to open gl
 
+            atlas.TextureNeedsUpdate = true;
+
             count++;
-            //FIX: Set NeedsUpdate flag. Have function Update Texture. Call from GameLoop; if NeedsUpdate==false return;
-            //Do not update texture every single time a tile is added
-            atlas.Texture = Utility.Texture.CreateTextureFromRGBA(atlas.Data, atlas.Width * 32, atlas.Height * 32);
-            
             return count - 1;
         }
 
@@ -128,7 +148,7 @@ namespace Tile
         // returns an id that can be used later to get texture coordinates
          public int CopyTileSpriteToAtlas16To32(int spriteSheetID, int row, int column, int atlasId)
         {
-            Sprites.SpriteSheet sheet = GameState.SpriteLoader.SpriteSheets[spriteSheetID];
+            ref Sprites.SpriteSheet sheet = ref SpriteLoader.SpriteSheets[spriteSheetID];
             ref Sprites.SpriteAtlas atlas = ref SpritesArray[atlasId];
             ref int count = ref Count[atlasId];
             
@@ -157,13 +177,9 @@ namespace Tile
             }
 
             // todo: upload texture to open gl
-
+            atlas.TextureNeedsUpdate = true;
             count++;
 
-            //FIX: Set NeedsUpdate flag. Have function Update Texture. Call from GameLoop; if NeedsUpdate==false return;
-            //Do not update texture every single time a tile is added
-            atlas.Texture = Utility.Texture.CreateTextureFromRGBA(atlas.Data, atlas.Width * 32, atlas.Height * 32);
-            
             return count - 1;
         }
         
@@ -173,7 +189,7 @@ namespace Tile
         // returns an id that can be used later to get texture coordinates
         public int CopyTileSpriteToAtlas8To32(int spriteSheetID, int row, int column, int atlasId)
         {
-            Sprites.SpriteSheet sheet = GameState.SpriteLoader.SpriteSheets[spriteSheetID];
+            ref Sprites.SpriteSheet sheet = ref SpriteLoader.SpriteSheets[spriteSheetID];
             ref Sprites.SpriteAtlas atlas = ref SpritesArray[atlasId];
             ref int count = ref Count[atlasId];
             
@@ -201,13 +217,8 @@ namespace Tile
                 }
 
             // todo: upload texture to open gl
-
+            atlas.TextureNeedsUpdate = true;
             count++;
-
-            //FIX: Set NeedsUpdate flag. Have function Update Texture. Call from GameLoop; if NeedsUpdate==false return;
-            //Do not update texture every single time a tile is added
-            atlas.Texture = Utility.Texture.CreateTextureFromRGBA(atlas.Data, atlas.Width * 32, atlas.Height * 32);
-            
 
             return count - 1;
         }

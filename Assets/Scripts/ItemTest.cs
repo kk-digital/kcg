@@ -171,8 +171,8 @@ namespace Planet.Unity
 
             TileMap.UpdateTileMapPositions(MapLayerType.Front);
             TileMap.UpdateTileMapPositions(MapLayerType.Ore);
-            TileMap.BuildLayerTexture(MapLayerType.Front);
-            TileMap.BuildLayerTexture(MapLayerType.Ore);
+            //TileMap.BuildLayerTexture(MapLayerType.Front);
+            //TileMap.BuildLayerTexture(MapLayerType.Ore);
         }
 
     }
