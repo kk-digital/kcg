@@ -41,8 +41,9 @@ public class SpawnEnemy : MonoBehaviour
 
         // Find Tile Map
         tileMap = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().TileMap;
+        Contexts entitasContext = Contexts.sharedInstance;
 
-        planetState = new Planet.PlanetState(tileMap.MapSize);
+        planetState = new Planet.PlanetState(tileMap.MapSize, entitasContext.game);
 
         // Enemy Sprite Sheet ID
         int EnemySpriteSheetID = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
@@ -64,10 +65,10 @@ public class SpawnEnemy : MonoBehaviour
         InventoryManager = new Inventory.InventoryManager();
 
         // Create Item Spawner System
-        itemSpawnSystem = new Item.SpawnerSystem(contexts);
+        itemSpawnSystem = new Item.SpawnerSystem();
 
         // Create Draw System
-        inventoryDrawSystem = new Inventory.DrawSystem(contexts);
+        inventoryDrawSystem = new Inventory.DrawSystem();
 
         // Create Inventory Attacher
         var inventoryAttacher = Inventory.InventoryAttacher.Instance;
@@ -89,14 +90,14 @@ public class SpawnEnemy : MonoBehaviour
 
         // Add item to tool bar.
         {
-            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(Enums.ItemType.PlacementTool);
+            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.game, Enums.ItemType.PlacementTool);
             InventoryManager.AddItem(entity, toolBarID);
         }
 
         // Test not stackable items.
         for (uint i = 0; i < 10; i++)
         {
-            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(Enums.ItemType.PlacementTool);
+            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.game, Enums.ItemType.PlacementTool);
             InventoryManager.AddItem(entity, inventoryID);
         }
 

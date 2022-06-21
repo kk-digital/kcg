@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ECSInput
 {
-    public class ProcessSystem
+    public class InputProcessSystem
     {
         public void Update()
         {

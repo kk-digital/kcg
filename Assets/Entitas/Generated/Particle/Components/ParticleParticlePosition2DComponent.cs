@@ -6,13 +6,13 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public partial class GameEntity {
+public partial class ParticleEntity {
 
-    public Particle.Position2DComponent particlePosition2D { get { return (Particle.Position2DComponent)GetComponent(GameComponentsLookup.ParticlePosition2D); } }
-    public bool hasParticlePosition2D { get { return HasComponent(GameComponentsLookup.ParticlePosition2D); } }
+    public Particle.Position2DComponent particlePosition2D { get { return (Particle.Position2DComponent)GetComponent(ParticleComponentsLookup.ParticlePosition2D); } }
+    public bool hasParticlePosition2D { get { return HasComponent(ParticleComponentsLookup.ParticlePosition2D); } }
 
     public void AddParticlePosition2D(UnityEngine.Vector2 newPosition, UnityEngine.Vector2 newAcceleration, UnityEngine.Vector2 newVelocity) {
-        var index = GameComponentsLookup.ParticlePosition2D;
+        var index = ParticleComponentsLookup.ParticlePosition2D;
         var component = (Particle.Position2DComponent)CreateComponent(index, typeof(Particle.Position2DComponent));
         component.Position = newPosition;
         component.Acceleration = newAcceleration;
@@ -21,7 +21,7 @@ public partial class GameEntity {
     }
 
     public void ReplaceParticlePosition2D(UnityEngine.Vector2 newPosition, UnityEngine.Vector2 newAcceleration, UnityEngine.Vector2 newVelocity) {
-        var index = GameComponentsLookup.ParticlePosition2D;
+        var index = ParticleComponentsLookup.ParticlePosition2D;
         var component = (Particle.Position2DComponent)CreateComponent(index, typeof(Particle.Position2DComponent));
         component.Position = newPosition;
         component.Acceleration = newAcceleration;
@@ -30,7 +30,7 @@ public partial class GameEntity {
     }
 
     public void RemoveParticlePosition2D() {
-        RemoveComponent(GameComponentsLookup.ParticlePosition2D);
+        RemoveComponent(ParticleComponentsLookup.ParticlePosition2D);
     }
 }
 
@@ -42,15 +42,15 @@ public partial class GameEntity {
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public sealed partial class GameMatcher {
+public sealed partial class ParticleMatcher {
 
-    static Entitas.IMatcher<GameEntity> _matcherParticlePosition2D;
+    static Entitas.IMatcher<ParticleEntity> _matcherParticlePosition2D;
 
-    public static Entitas.IMatcher<GameEntity> ParticlePosition2D {
+    public static Entitas.IMatcher<ParticleEntity> ParticlePosition2D {
         get {
             if (_matcherParticlePosition2D == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.ParticlePosition2D);
-                matcher.componentNames = GameComponentsLookup.componentNames;
+                var matcher = (Entitas.Matcher<ParticleEntity>)Entitas.Matcher<ParticleEntity>.AllOf(ParticleComponentsLookup.ParticlePosition2D);
+                matcher.componentNames = ParticleComponentsLookup.componentNames;
                 _matcherParticlePosition2D = matcher;
             }
 

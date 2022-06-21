@@ -4,15 +4,17 @@ using UnityEngine;
 
 namespace Particle
 {
-     public class UpdateSystem
+     public class ParticleUpdateSystem
     {
-        List<GameEntity> ToDestroy = new List<GameEntity>();
-        public void Execute()
+        List<ParticleEntity> ToDestroy = new List<ParticleEntity>();
+
+
+        public void Execute(ParticleContext particleContext)
         {
             ToDestroy.Clear();
 
             float deltaTime = Time.deltaTime;
-            IGroup<GameEntity> entities = Contexts.sharedInstance.game.GetGroup(GameMatcher.ParticleState);
+            IGroup<ParticleEntity> entities = particleContext.GetGroup(ParticleMatcher.ParticleState);
             foreach (var gameEntity in entities)
             {
                 var state = gameEntity.particleState;

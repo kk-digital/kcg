@@ -12,7 +12,7 @@ namespace Physics
     //TODO: Create broad-phase for getting tiles
     // https://www.flipcode.com/archives/Raytracing_Topics_Techniques-Part_4_Spatial_Subdivisions.shtml
     // http://www.cs.yorku.ca/~amana/research/grid.pdf
-    public class ProcessCollisionSystem
+    public class PhysicsProcessCollisionSystem
     {
         public void Update(Planet.TileMap tileMap)
         {

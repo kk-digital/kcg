@@ -4,7 +4,7 @@ using KMath;
 
 namespace FloatingText
 {
-    public class UpdateSystem
+    public class FloatingTextUpdateSystem
     {
         List<GameEntity> ToRemoveEntities = new List<GameEntity>();
 

@@ -10,7 +10,7 @@ public class InventoryTest : MonoBehaviour
     Inventory.InventoryManager inventoryManager;
     Inventory.DrawSystem    inventoryDrawSystem;
     Item.SpawnerSystem      itemSpawnSystem;
-    ECSInput.ProcessSystem  inputProcessSystem;
+    ECSInput.InputProcessSystem  inputProcessSystem;
 
     [SerializeField] Material material;
 
@@ -20,9 +20,9 @@ public class InventoryTest : MonoBehaviour
 
         context = Contexts.sharedInstance;
         inventoryManager = new Inventory.InventoryManager();
-        itemSpawnSystem = new Item.SpawnerSystem(context);
-        inventoryDrawSystem = new Inventory.DrawSystem(context);
-        inputProcessSystem = new ECSInput.ProcessSystem();
+        itemSpawnSystem = new Item.SpawnerSystem();
+        inventoryDrawSystem = new Inventory.DrawSystem();
+        inputProcessSystem = new ECSInput.InputProcessSystem();
         var inventoryAttacher = Inventory.InventoryAttacher.Instance;
 
         // Create Agent and inventory.
@@ -42,23 +42,23 @@ public class InventoryTest : MonoBehaviour
 
         // Add item to tool bar.
         {
-            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(Enums.ItemType.Gun);
+            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(context.game, Enums.ItemType.Gun);
             inventoryManager.AddItem(entity, toolBarID);
         }
 
         // Test not stackable items.
         for (uint i = 0; i < 10; i++)
         {
-            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(Enums.ItemType.Gun);
+            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(context.game, Enums.ItemType.Gun);
             inventoryManager.AddItem(entity, inventoryID);
         }
 
         // Testing stackable items.
         for (uint i = 0; i < 10; i++)
         {
-            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(Enums.ItemType.Rock);
+            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(context.game, Enums.ItemType.Rock);
             inventoryManager.AddItem(entity, inventoryID);
-            entity = itemSpawnSystem.SpawnInventoryItem(Enums.ItemType.RockDust);
+            entity = itemSpawnSystem.SpawnInventoryItem(context.game, Enums.ItemType.RockDust);
             inventoryManager.AddItem(entity, inventoryID);
         }
     }

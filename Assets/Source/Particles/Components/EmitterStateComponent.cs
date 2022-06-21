@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Particle
 {
+    [Particle]
     public struct EmitterStateComponent : IComponent
     {
         public GameObject GameObject;

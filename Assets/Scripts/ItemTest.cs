@@ -119,16 +119,16 @@ namespace Planet.Unity
 
             // Generating the map
             Vec2i mapSize = new Vec2i(16, 16);
-            Planet = new Planet.PlanetState(mapSize);
+            Planet = new Planet.PlanetState(mapSize, EntitasContext.game);
             GenerateMap();
 
             Player = Planet.AddPlayer(Instantiate(Material),CharacterSpriteId, 32, 48, new Vec2f(3.0f, 3.0f), 0);
             Player.Entity.AddAgentActionScheduler(new List<int>(), new List<int>());
 
             // Create Action            
-            GameState.ItemSpawnSystem.SpawnItem(Enums.ItemType.Gun, new Vec2f(3.0f, 3.0f));
-            GameState.ItemSpawnSystem.SpawnItem(Enums.ItemType.Ore, new Vec2f(6.0f, 3.0f));
-            GameState.ItemSpawnSystem.SpawnInventoryItem(Enums.ItemType.Ore);
+            GameState.ItemSpawnSystem.SpawnItem(EntitasContext.game, Enums.ItemType.Gun, new Vec2f(3.0f, 3.0f));
+            GameState.ItemSpawnSystem.SpawnItem(EntitasContext.game, Enums.ItemType.Ore, new Vec2f(6.0f, 3.0f));
+            GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.Ore);
         }
 
         void GenerateMap()

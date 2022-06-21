@@ -30,8 +30,8 @@ namespace Planet.Unity
 
         Texture2D VentSprite;
         
-        Particle.UpdateSystem ParticleUpdateSystem;
-        Particle.EmitterUpdateSystem ParticleEmitterUpdateSystem;
+        Particle.ParticleUpdateSystem ParticleUpdateSystem;
+        Particle.ParticleEmitterUpdateSystem ParticleEmitterUpdateSystem;
 
         GameObject PipePrefab;
         GameObject OrePrefab;
@@ -52,16 +52,19 @@ namespace Planet.Unity
 
         public void Update()
         {
-            ParticleUpdateSystem.Execute();
-            ParticleEmitterUpdateSystem.Execute();
+            Contexts entitasContext = Contexts.sharedInstance;
+
+            ParticleUpdateSystem.Execute(entitasContext.particle);
+            ParticleEmitterUpdateSystem.Execute(entitasContext.particle);
         }
 
         // create the sprite atlas for testing purposes
         public void Initialize()
         {
             
-            ParticleUpdateSystem = new Particle.UpdateSystem();
-            ParticleEmitterUpdateSystem = new Particle.EmitterUpdateSystem();
+            Contexts entitasContext = Contexts.sharedInstance;
+            ParticleUpdateSystem = new Particle.ParticleUpdateSystem();
+            ParticleEmitterUpdateSystem = new Particle.ParticleEmitterUpdateSystem();
 
             // we load the sprite sheets here
             int pipeTileSheet = 
@@ -94,12 +97,12 @@ namespace Planet.Unity
             VentPrefab = CreateParticlePrefab(0, 0, 0.5f, 0.5f, VentSprite);
 
 
-            CreateParticleEmitterEntity(VentPrefab, new Vector2(-4.0f, 0),
+            CreateParticleEmitterEntity(entitasContext.particle, VentPrefab, new Vector2(-4.0f, 0),
              1.0f, new Vector2(0, -20.0f), 1.7f, 0.0f, new int[]{0}, new Vector2(1.0f, 10.0f),
             0.0f, 1.0f, new Color(255.0f, 255.0f, 255.0f, 255.0f),
             0.2f, 3.0f, true, 1, 0.05f, PipePrefab);
 
-            CreateParticleEmitterEntity(VentPrefab, new Vector2(2.0f, 0),
+            CreateParticleEmitterEntity(entitasContext.particle, VentPrefab, new Vector2(2.0f, 0),
              1.0f, new Vector2(0, -20.0f), 3.5f, 0.0f, new int[]{0}, new Vector2(1.0f, 10.0f),
             0.0f, 1.0f, new Color(255.0f, 255.0f, 255.0f, 255.0f),
             0.2f, 3.0f, true, 20, 0.5f, OrePrefab);
@@ -181,14 +184,14 @@ namespace Planet.Unity
             return go;
         }
 
-        private void CreateParticleEmitterEntity(GameObject emitterPrefab, Vector2 position, float decayRate,
+        private void CreateParticleEmitterEntity(ParticleContext context, GameObject emitterPrefab, Vector2 position, float decayRate,
             Vector2 acceleration, float deltaRotation, float deltaScale,
             int[] spriteIds, Vector2 startingVelocity,
             float startingRotation, float startingScale, Color startingColor,
             float animationSpeed, float duration, bool loop, int particleCount, 
             float timeBetweenEmissions, GameObject prefab)
         {
-            var e = Contexts.sharedInstance.game.CreateEntity();
+            var e = context.CreateEntity();
             var gameObject = UnityEngine.Object.Instantiate(emitterPrefab);
             gameObject.transform.position = new Vector3(position.x, position.y, 0.0f);
                 

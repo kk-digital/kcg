@@ -6,13 +6,13 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public partial class GameEntity {
+public partial class ParticleEntity {
 
-    public Particle.StateComponent particleState { get { return (Particle.StateComponent)GetComponent(GameComponentsLookup.ParticleState); } }
-    public bool hasParticleState { get { return HasComponent(GameComponentsLookup.ParticleState); } }
+    public Particle.StateComponent particleState { get { return (Particle.StateComponent)GetComponent(ParticleComponentsLookup.ParticleState); } }
+    public bool hasParticleState { get { return HasComponent(ParticleComponentsLookup.ParticleState); } }
 
     public void AddParticleState(UnityEngine.GameObject newGameObject, float newHealth, float newDecayRate, float newDeltaRotation, float newDeltaScale) {
-        var index = GameComponentsLookup.ParticleState;
+        var index = ParticleComponentsLookup.ParticleState;
         var component = (Particle.StateComponent)CreateComponent(index, typeof(Particle.StateComponent));
         component.GameObject = newGameObject;
         component.Health = newHealth;
@@ -23,7 +23,7 @@ public partial class GameEntity {
     }
 
     public void ReplaceParticleState(UnityEngine.GameObject newGameObject, float newHealth, float newDecayRate, float newDeltaRotation, float newDeltaScale) {
-        var index = GameComponentsLookup.ParticleState;
+        var index = ParticleComponentsLookup.ParticleState;
         var component = (Particle.StateComponent)CreateComponent(index, typeof(Particle.StateComponent));
         component.GameObject = newGameObject;
         component.Health = newHealth;
@@ -34,7 +34,7 @@ public partial class GameEntity {
     }
 
     public void RemoveParticleState() {
-        RemoveComponent(GameComponentsLookup.ParticleState);
+        RemoveComponent(ParticleComponentsLookup.ParticleState);
     }
 }
 
@@ -46,15 +46,15 @@ public partial class GameEntity {
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public sealed partial class GameMatcher {
+public sealed partial class ParticleMatcher {
 
-    static Entitas.IMatcher<GameEntity> _matcherParticleState;
+    static Entitas.IMatcher<ParticleEntity> _matcherParticleState;
 
-    public static Entitas.IMatcher<GameEntity> ParticleState {
+    public static Entitas.IMatcher<ParticleEntity> ParticleState {
         get {
             if (_matcherParticleState == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.ParticleState);
-                matcher.componentNames = GameComponentsLookup.componentNames;
+                var matcher = (Entitas.Matcher<ParticleEntity>)Entitas.Matcher<ParticleEntity>.AllOf(ParticleComponentsLookup.ParticleState);
+                matcher.componentNames = ParticleComponentsLookup.componentNames;
                 _matcherParticleState = matcher;
             }
 

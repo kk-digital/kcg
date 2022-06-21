@@ -6,13 +6,13 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public partial class GameEntity {
+public partial class ParticleEntity {
 
-    public Particle.Emitter2dPositionComponent particleEmitter2dPosition { get { return (Particle.Emitter2dPositionComponent)GetComponent(GameComponentsLookup.ParticleEmitter2dPosition); } }
-    public bool hasParticleEmitter2dPosition { get { return HasComponent(GameComponentsLookup.ParticleEmitter2dPosition); } }
+    public Particle.Emitter2dPositionComponent particleEmitter2dPosition { get { return (Particle.Emitter2dPositionComponent)GetComponent(ParticleComponentsLookup.ParticleEmitter2dPosition); } }
+    public bool hasParticleEmitter2dPosition { get { return HasComponent(ParticleComponentsLookup.ParticleEmitter2dPosition); } }
 
     public void AddParticleEmitter2dPosition(UnityEngine.Vector2 newPosition, UnityEngine.Vector2 newAcceleration, UnityEngine.Vector2 newVelocity) {
-        var index = GameComponentsLookup.ParticleEmitter2dPosition;
+        var index = ParticleComponentsLookup.ParticleEmitter2dPosition;
         var component = (Particle.Emitter2dPositionComponent)CreateComponent(index, typeof(Particle.Emitter2dPositionComponent));
         component.Position = newPosition;
         component.Acceleration = newAcceleration;
@@ -21,7 +21,7 @@ public partial class GameEntity {
     }
 
     public void ReplaceParticleEmitter2dPosition(UnityEngine.Vector2 newPosition, UnityEngine.Vector2 newAcceleration, UnityEngine.Vector2 newVelocity) {
-        var index = GameComponentsLookup.ParticleEmitter2dPosition;
+        var index = ParticleComponentsLookup.ParticleEmitter2dPosition;
         var component = (Particle.Emitter2dPositionComponent)CreateComponent(index, typeof(Particle.Emitter2dPositionComponent));
         component.Position = newPosition;
         component.Acceleration = newAcceleration;
@@ -30,7 +30,7 @@ public partial class GameEntity {
     }
 
     public void RemoveParticleEmitter2dPosition() {
-        RemoveComponent(GameComponentsLookup.ParticleEmitter2dPosition);
+        RemoveComponent(ParticleComponentsLookup.ParticleEmitter2dPosition);
     }
 }
 
@@ -42,15 +42,15 @@ public partial class GameEntity {
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public sealed partial class GameMatcher {
+public sealed partial class ParticleMatcher {
 
-    static Entitas.IMatcher<GameEntity> _matcherParticleEmitter2dPosition;
+    static Entitas.IMatcher<ParticleEntity> _matcherParticleEmitter2dPosition;
 
-    public static Entitas.IMatcher<GameEntity> ParticleEmitter2dPosition {
+    public static Entitas.IMatcher<ParticleEntity> ParticleEmitter2dPosition {
         get {
             if (_matcherParticleEmitter2dPosition == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.ParticleEmitter2dPosition);
-                matcher.componentNames = GameComponentsLookup.componentNames;
+                var matcher = (Entitas.Matcher<ParticleEntity>)Entitas.Matcher<ParticleEntity>.AllOf(ParticleComponentsLookup.ParticleEmitter2dPosition);
+                matcher.componentNames = ParticleComponentsLookup.componentNames;
                 _matcherParticleEmitter2dPosition = matcher;
             }
 

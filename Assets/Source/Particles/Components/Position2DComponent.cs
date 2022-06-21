@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Particle
 {
-
+    [Particle]
     public struct Position2DComponent : IComponent
     {
         public Vector2 Position;

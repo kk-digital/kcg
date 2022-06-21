@@ -8,21 +8,14 @@ namespace Item
 {
     public class SpawnerSystem
     {
-        public Contexts EntitasContext;
-
         private static int ItemID;
 
-        public SpawnerSystem(Contexts entitasContext)
+        public GameEntity SpawnItem(GameContext gameContext, ItemType itemType, Vec2f position)
         {
-            EntitasContext = entitasContext;
-        }
-
-        public GameEntity SpawnItem(ItemType itemType, Vec2f position)
-        {
-            var entityAttribute = EntitasContext.game.GetEntityWithItemAttributes(itemType);
+            var entityAttribute = gameContext.GetEntityWithItemAttributes(itemType);
             Vec2f size = entityAttribute.itemAttributeSize.Size;
 
-            var entity = EntitasContext.game.CreateEntity();
+            var entity = gameContext.CreateEntity();
             entity.AddItemID(ItemID, itemType);
             entity.AddPhysicsPosition2D(position, Vec2f.Zero);
             entity.AddPhysicsBox2DCollider(size, Vec2f.Zero);
@@ -32,9 +25,9 @@ namespace Item
             return entity;
         }
 
-        public GameEntity SpawnInventoryItem(ItemType itemType)
+        public GameEntity SpawnInventoryItem(GameContext gameContext, ItemType itemType)
         {
-            var entity = EntitasContext.game.CreateEntity();
+            var entity = gameContext.CreateEntity();
             entity.AddItemID(ItemID, itemType);
 
             ItemID++;

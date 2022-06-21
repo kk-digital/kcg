@@ -306,7 +306,7 @@ namespace Planet.Unity
 
             // Generating the map
             Vec2i mapSize = new Vec2i(32, 24);
-            Planet = new Planet.PlanetState(mapSize);
+            Planet = new Planet.PlanetState(mapSize, EntitasContext.game);
             GenerateMap();
             SpawnStuff();
 
@@ -315,12 +315,12 @@ namespace Planet.Unity
             inventoryID = Player.Entity.agentInventory.InventoryID;
             toolBarID = Player.Entity.agentToolBar.ToolBarID;
 
-            GameEntity gun = GameState.ItemSpawnSystem.SpawnInventoryItem(Enums.ItemType.Gun);
-            GameEntity ore = GameState.ItemSpawnSystem.SpawnInventoryItem(Enums.ItemType.Ore);
-            GameEntity placementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Enums.ItemType.PlacementTool);
-            GameEntity removeTileTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Enums.ItemType.RemoveTileTool);
-            GameEntity spawnEnemySlimeTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Enums.ItemType.SpawnEnemySlimeTool);
-            GameEntity miningLaserTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Enums.ItemType.MiningLaserTool);
+            GameEntity gun = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.Gun);
+            GameEntity ore = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.Ore);
+            GameEntity placementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.PlacementTool);
+            GameEntity removeTileTool = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.RemoveTileTool);
+            GameEntity spawnEnemySlimeTool = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.SpawnEnemySlimeTool);
+            GameEntity miningLaserTool = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.MiningLaserTool);
 
 
             inventoryManager.AddItem(placementTool, toolBarID);
@@ -491,8 +491,8 @@ namespace Planet.Unity
 
 
             
-            GameState.ItemSpawnSystem.SpawnItem(Enums.ItemType.Gun, new Vec2f(6.0f, spawnHeight));
-            GameState.ItemSpawnSystem.SpawnItem(Enums.ItemType.Ore, new Vec2f(3.0f, spawnHeight));
+            GameState.ItemSpawnSystem.SpawnItem(EntitasContext.game, Enums.ItemType.Gun, new Vec2f(6.0f, spawnHeight));
+            GameState.ItemSpawnSystem.SpawnItem(EntitasContext.game, Enums.ItemType.Ore, new Vec2f(3.0f, spawnHeight));
         }
         
     }
