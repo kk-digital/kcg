@@ -11,7 +11,7 @@ namespace Utility
             Sprites.Sprite sprite, Material material, Transform transform, int drawOrder = 0)
         {
             var tex = sprite.Texture;
-            var mat = material;
+            var mat = Material.Instantiate(material);
             mat.SetTexture("_MainTex", tex);
             //FIX: Do UnityEngine.CreateMesh, not using UnityEngine
             var mesh = CreateMesh(transform, "sprite", drawOrder, mat);
