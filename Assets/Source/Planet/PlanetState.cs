@@ -129,9 +129,11 @@ namespace Planet
         // x, y is the position in the tile map
         public void PlaceTile(int x, int y, int tileType, Enums.Tile.MapLayerType layer)
         {
-            Tile.Tile tile = Tile.Tile.Empty;
-            tile.Type = tileType;
-            TileMap.AddTile(x, y, tile, layer);
+            var tile = new Tile.Tile(new Vec2f(x, y))
+            {
+                Type = tileType
+            };
+            TileMap.AddTile(ref tile, layer);
         }
 
 

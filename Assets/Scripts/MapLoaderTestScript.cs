@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using Enums.Tile;
 using Physics;
 
 #if UNITY_EDITOR
@@ -97,7 +98,7 @@ namespace Planet.Unity
                 int y = (int)worldPosition.y;
                 
                 var chunkIndex = TileMap.Chunks.GetChunkIndex(x, y);
-                var tileIndex = TileMap.GetTileIndex(x, y);
+                var tileIndex = Tile.Tile.GetTileIndex(x, y);
                 
                 Debug.Log($"{x} {y} ChunkIndex: {chunkIndex} TileIndex: {tileIndex}");
             }
@@ -161,8 +162,8 @@ namespace Planet.Unity
             {
                 for(int i = TileMap.Borders.IntLeft; i < TileMap.Borders.IntRight; i++)
                 {
-                    Tile.Tile frontTile = Tile.Tile.Empty;
-                    Tile.Tile oreTile = Tile.Tile.Empty;
+                    var frontTile = new Tile.Tile(new Vec2f(i, j));
+                    var oreTile = new Tile.Tile(new Vec2f(i, j));
 
                     frontTile.Type = 9;
 
@@ -178,14 +179,13 @@ namespace Planet.Unity
                        oreTile.Type = -1;
                     }
 
-                    
-                    TileMap.AddTile(i, j, frontTile, Enums.Tile.MapLayerType.Front);
-                    TileMap.AddTile(i, j, oreTile, Enums.Tile.MapLayerType.Ore);
+                    TileMap.AddTile(ref frontTile, MapLayerType.Front);
+                    TileMap.AddTile(ref oreTile, MapLayerType.Ore);
                 }
             }
             
-            TileMap.UpdateTileMapPositions(Enums.Tile.MapLayerType.Front);
-            TileMap.UpdateTileMapPositions(Enums.Tile.MapLayerType.Ore);
+            TileMap.UpdateTileMapPositions(MapLayerType.Front);
+            TileMap.UpdateTileMapPositions(MapLayerType.Ore);
             //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
             //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Ore);
         }

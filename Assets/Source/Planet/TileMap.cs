@@ -32,27 +32,12 @@ namespace Planet
 
         #region TileApi
 
-        /// <summary>
-        /// Getting Tile index by Chunk Dimensions. INLINED
-        /// </summary>
-        /// <param name="x">TileMap coordinates</param>
-        /// <param name="y">TileMap coordiantes</param>
-        /// <returns>Tile index</returns>
-        [MethodImpl((MethodImplOptions) 256)]
-        public int GetTileIndex(int x, int y)
-        {
-            // x & 0x0f == x AND 15
-            // EX: 16 AND 15 == 0, 13 AND 15 == 13
-            // (<< 4) == (* 16) 
-            return (x & 0x0f) + ((y & 0x0f) << 4);
-        }
-        
         public ref Tile.Tile GetTileRef(int x, int y, Enums.Tile.MapLayerType planetLayer)
         {
             if (!Borders.Intersects(new Vec2f(x, y))) throw new IndexOutOfRangeException();
             
             ref var chunk = ref Chunks[x, y];
-            var tileIndex = GetTileIndex(x, y);
+            var tileIndex = Tile.Tile.GetTileIndex(x, y);
 
             return ref chunk[(int)planetLayer, tileIndex];
         }
@@ -89,22 +74,21 @@ namespace Planet
             return tiles;
         }
         
-        public void AddTile(int x, int y, Tile.Tile tile, Enums.Tile.MapLayerType planetLayer)
+        public void AddTile(ref Tile.Tile tile, Enums.Tile.MapLayerType planetLayer)
         {
-            if (!Borders.Intersects(new Vec2f(x, y))) throw new IndexOutOfRangeException();
-            
-            ref var chunk = ref Chunks[x, y];
-            var tileIndex = GetTileIndex(x, y);
+            if (!Borders.Intersects(tile.Borders)) throw new IndexOutOfRangeException();
 
-            tile.Borders = new AABB2D(new Vec2f(x, y), (Vec2f)Tile.Tile.Size);
-            chunk[(int) planetLayer, tileIndex] = tile;
-            
+            int x = tile.Borders.IntLeft, y = tile.Borders.IntBottom;
+            ref var chunk = ref Chunks[x, y];
+
+            chunk.SetTile(ref tile, planetLayer);
+
             UpdateTile(x, y, planetLayer);
         }
 
         public void RemoveTile(int x, int y, Enums.Tile.MapLayerType planetLayer)
         {
-            ref Tile.Tile tile = ref GetTileRef(x, y, planetLayer);
+            ref var tile = ref GetTileRef(x, y, planetLayer);
             tile.Type = -1;
             UpdateTile(x, y, planetLayer);
         }
@@ -120,8 +104,6 @@ namespace Planet
                     UpdateTilesOnPosition(i, j, planetLayer);
                 }
             }
-
-            Layers.NeedsUpdate[(int)planetLayer] = true;
         }
 
         #endregion

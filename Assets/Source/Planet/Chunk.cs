@@ -12,6 +12,10 @@ namespace Planet
         private Tile.Tile[][] tiles;
         
         public int ReadCount;
+        /// <summary>
+        /// <para>Sequence Number is incremented every write to a chunk</para>
+        /// <para>Only increment sequence number if a write occurs</para>
+        /// </summary>
         public int Seq;
 
         public Chunk(MapChunkType type) : this()
@@ -34,6 +38,11 @@ namespace Planet
                 // 256 == 0001 0000 0000 == 16 * 16
                 tiles[i] = Enumerable.Repeat(Tile.Tile.Empty, 256).ToArray();
             }
+        }
+
+        public void SetTile(ref Tile.Tile tile, MapLayerType planetLayer)
+        {
+            tiles[(int) planetLayer][tile.Index] = tile;
         }
     }
 }

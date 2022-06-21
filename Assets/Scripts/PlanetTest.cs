@@ -216,38 +216,37 @@ namespace Planet.Unity
             inventoryManager.AddItem(miningLaserTool, toolBarID);
             inventoryManager.AddItem(pipePlacementTool, toolBarID);
         }
-
-
-
+        
         void GenerateOre()
         {
-            TileMap TileMap = Planet.TileMap;
-            Tile.Tile oreTile = Tile.Tile.Empty;
-            var borders = TileMap.Borders;
+            var tileMap = Planet.TileMap;
+            var tileMapBorders = tileMap.Borders;
             
-            for(int j = borders.IntBottom; j < borders.IntTop; j++)
+            for(int j = tileMapBorders.IntBottom; j < tileMapBorders.IntTop; j++)
             {
-                for(int i = borders.IntLeft; i < borders.IntRight; i++)
+                for(int i = tileMapBorders.IntLeft; i < tileMapBorders.IntRight; i++)
                 {
-                    ref Tile.Tile tile = ref TileMap.GetTileRef(i, j, MapLayerType.Front);
+                    ref var tile = ref tileMap.GetTileRef(i, j, MapLayerType.Front);
 
-                    if (tile.Type == 10 && (((int)KMath.Random.Mt19937.genrand_int32() % 30) == 0))
+                    if (tile.Type == 10 && (int)KMath.Random.Mt19937.genrand_int32() % 30 == 0)
                     {
-                        int type = ((int)KMath.Random.Mt19937.genrand_int32() % 6);
+                        var oreTile = new Tile.Tile(new Vec2f(i, j));
+                        
+                        int type = (int)KMath.Random.Mt19937.genrand_int32() % 6;
                         if (type == 0)
                         {
                             oreTile.Type = (int)Tile.TileEnum.Ore1;
                         }
-                        else if (type == 1 || type == 2)
+                        else if (type is 1 or 2)
                         {
                             oreTile.Type = (int)Tile.TileEnum.Ore2;
                         }
-                        else if (type == 3 || type == 4)
+                        else if (type is 3 or 4)
                         {
                             oreTile.Type = (int)Tile.TileEnum.Ore3;
                         }
-
-                        TileMap.AddTile(i, j, oreTile, MapLayerType.Ore);
+                        
+                        tileMap.AddTile(ref oreTile, MapLayerType.Ore);
                     }
                 }
             }
@@ -265,7 +264,7 @@ namespace Planet.Unity
             {
                 for (int i = borders.IntLeft; i < borders.IntRight; i++)
                 {
-                    Tile.Tile frontTile = Tile.Tile.Empty;
+                    var frontTile = new Tile.Tile(new Vec2f(i, j));
 
                     if (i >= borders.IntRight / 2)
                     {
@@ -291,7 +290,7 @@ namespace Planet.Unity
                     }
 
 
-                    tileMap.AddTile(i, j, frontTile, MapLayerType.Front);
+                    tileMap.AddTile(ref frontTile, MapLayerType.Front);
                 }
             }
 
@@ -299,7 +298,8 @@ namespace Planet.Unity
             {
                 for (int j = borders.IntTop - 10; j < borders.IntTop; j++)
                 {
-                    tileMap.AddTile(i, j, Tile.Tile.Empty, MapLayerType.Front);
+                    var tile = new Tile.Tile(new Vec2f(i, j));
+                    tileMap.AddTile(ref tile, MapLayerType.Front);
                 }
             }
 
@@ -321,7 +321,8 @@ namespace Planet.Unity
 
                 for (int j = carveHeight; j < borders.IntTop && j < carveHeight + 4; j++)
                 {
-                    tileMap.AddTile(i, j, Tile.Tile.Empty, MapLayerType.Front);
+                    var tile = new Tile.Tile(new Vec2f(i, j));
+                    tileMap.AddTile(ref tile, MapLayerType.Front);
                 }
             }
 
@@ -343,7 +344,8 @@ namespace Planet.Unity
 
                 for (int j = carveHeight; j < borders.IntTop && j < carveHeight + 4; j++)
                 {
-                    tileMap.AddTile(i, j, Tile.Tile.Empty, MapLayerType.Front);
+                    var tile = new Tile.Tile(new Vec2f(i, j));
+                    tileMap.AddTile(ref tile, MapLayerType.Front);
                 }
             }
 

@@ -1,3 +1,4 @@
+using Enums.Tile;
 using KMath;
 using UnityEngine;
 
@@ -79,8 +80,8 @@ namespace Planet.Unity
             {
                 for(int i = TileMap.Borders.IntLeft; i < TileMap.Borders.IntRight; i++)
                 {
-                    Tile.Tile frontTile = Tile.Tile.Empty;
-                    Tile.Tile oreTile = Tile.Tile.Empty;
+                    var frontTile = new Tile.Tile(new Vec2f(i, j));
+                    var oreTile = new Tile.Tile(new Vec2f(i, j));
 
                     if (i >= mapSize.X / 2)
                     {
@@ -117,9 +118,9 @@ namespace Planet.Unity
                        oreTile.Type = -1;
                     }
 
-                    
-                    TileMap.AddTile(i, j, frontTile, Enums.Tile.MapLayerType.Front);
-                    TileMap.AddTile(i, j, oreTile, Enums.Tile.MapLayerType.Ore);
+
+                    TileMap.AddTile(ref frontTile, MapLayerType.Front);
+                    TileMap.AddTile(ref oreTile, MapLayerType.Ore);
                 }
             }
 

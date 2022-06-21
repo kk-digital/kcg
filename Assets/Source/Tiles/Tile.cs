@@ -1,4 +1,5 @@
-﻿using KMath;
+﻿using System.Runtime.CompilerServices;
+using KMath;
 
 namespace Tile
 {
@@ -10,13 +11,41 @@ namespace Tile
     public struct Tile
     {
         public static readonly Tile Empty = new() {Type = -1, SpriteId = -1};
-        public static readonly Vec2i Size = new(1, 1);
+        public static readonly Vec2f Size = new(1, 1);
         
         // Contains the TileProperties Ids for every layer
         public int Type;
         public int SpriteId;
 
         public AABB2D Borders;
+        /// <summary>
+        /// Index position based on Chunk
+        /// </summary>
+        public int Index;
+
+        public Tile(Vec2f position) : this()
+        {
+            Type = -1;
+            SpriteId = -1;
+            Borders = new AABB2D(position, (Vec2f)Size);
+            Index = GetTileIndex((int)position.X, (int)position.Y);
+        }
+        
+        
+        /// <summary>
+        /// Getting Tile index by Chunk Dimensions. INLINED
+        /// </summary>
+        /// <param name="x">TileMap coordinates</param>
+        /// <param name="y">TileMap coordinates</param>
+        /// <returns>Tile index</returns>
+        [MethodImpl((MethodImplOptions) 256)]
+        public static int GetTileIndex(int x, int y)
+        {
+            // x & 0x0f == x AND 15
+            // EX: 16 AND 15 == 0, 13 AND 15 == 13
+            // (<< 4) == (* 16) 
+            return (x & 0x0f) + ((y & 0x0f) << 4);
+        }
 
 
         // TODO: Refactor
@@ -68,6 +97,6 @@ namespace Tile
             }
 
             return tilePosition;
-        } 
+        }
     }
 }

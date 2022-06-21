@@ -139,8 +139,8 @@ namespace Planet.Unity
             {
                 for (int i = tileMap.Borders.IntLeft; i < tileMap.Borders.IntRight; i++)
                 {
-                    Tile.Tile frontTile = Tile.Tile.Empty;
-                    Tile.Tile oreTile = Tile.Tile.Empty;
+                    var frontTile = new Tile.Tile(new Vec2f(i, j));
+                    var oreTile = new Tile.Tile(new Vec2f(i, j));
 
                     if (i >= tileMap.Borders.IntRight / 2)
                     {
@@ -171,15 +171,15 @@ namespace Planet.Unity
                         oreTile.Type = 8;
                     }
 
-                    if (j is > 1 and < 6 || (j > (8 + i)))
+                    if (j is > 1 and < 6 || (j > 8 + i))
                     {
                         frontTile.Type = -1;
                         oreTile.Type = -1;
                     }
 
 
-                    tileMap.AddTile(i, j, frontTile, MapLayerType.Front);
-                    tileMap.AddTile(i, j, oreTile, MapLayerType.Ore);
+                    tileMap.AddTile(ref frontTile, MapLayerType.Front);
+                    tileMap.AddTile(ref oreTile, MapLayerType.Ore);
                 }
             }
 
