@@ -62,7 +62,7 @@ namespace Scripts {
 
                     GravityText.text = "  Gravity: " + String.Format("{0:0.00}", g) + " m/s²";
 
-                    MainGravityText.text = "  Main gravity: " + String.Format("{0:0.00}", g) + " m/s²";
+                    MainGravityText.text = "  Main gravity: " + String.Format("{0:0.00}", maing) + " m/s²";
                     ResidualGravityText.text = "Residual gravity: " + String.Format("{0:0.00}", Math.Abs(g - maing)) + " m/s²  ";
 
                     OrbitalPeriodText.text = "Orbital period: " + (float.IsNaN(State.player.ship.descriptor.orbital_period) ? " hyperbolic  " : (String.Format("{0:0.00}", State.player.ship.descriptor.orbital_period) + " s  "));
