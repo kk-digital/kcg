@@ -25,7 +25,7 @@ namespace Planet
             Init(type);
         }
         
-        public ref Tile.Tile this[int x, int y] => ref tiles[x][y];
+        public ref Tile.Tile this[MapLayerType planetLayer, int tileIndex] => ref tiles[(int)planetLayer][tileIndex];
 
         public void Init(MapChunkType type)
         {
@@ -33,10 +33,10 @@ namespace Planet
 
             tiles = new Tile.Tile[Layers.Count][];
 
-            for (int i = 0; i < Layers.Count; i++)
+            for (int planetLayer = 0; planetLayer < Layers.Count; planetLayer++)
             {
                 // 256 == 0001 0000 0000 == 16 * 16
-                tiles[i] = Enumerable.Repeat(Tile.Tile.Empty, 256).ToArray();
+                tiles[planetLayer] = Enumerable.Repeat(Tile.Tile.Empty, 256).ToArray();
             }
         }
 

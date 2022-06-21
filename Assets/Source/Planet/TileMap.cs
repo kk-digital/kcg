@@ -39,7 +39,7 @@ namespace Planet
             ref var chunk = ref Chunks[x, y];
             var tileIndex = Tile.Tile.GetTileIndex(x, y);
 
-            return ref chunk[(int)planetLayer, tileIndex];
+            return ref chunk[planetLayer, tileIndex];
         }
 
         public Tile.Tile[] GetTiles(Vec2i[] positions, Enums.Tile.MapLayerType planetLayer)
