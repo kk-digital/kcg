@@ -48,6 +48,9 @@ namespace Planet
             
             // Init first not existed chunk in list
             chunkList[0].Init(MapChunkType.Empty);
+            chunkList[1].Init(MapChunkType.Empty);
+            chunkList[2].Init(MapChunkType.Empty);
+            chunkList[3].Init(MapChunkType.Empty);
         }
         
         [MethodImpl((MethodImplOptions) 256)]
