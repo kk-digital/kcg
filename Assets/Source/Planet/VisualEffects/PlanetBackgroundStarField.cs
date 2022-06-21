@@ -15,8 +15,6 @@ namespace Planet.VisualEffects
         private PerlinField2D perlinField;
         private List<Sprites.Sprite> stars;
         int i = 0;
-        int tempRandom;
-        int tempRandom2;
         float[,] perlinGrid;
 
         public void Initialize()
@@ -51,43 +49,32 @@ namespace Planet.VisualEffects
             Init = true;
         }
 
-        public float Noise(int x)
-        {
-            Random.seed = x;
-            return Random.seed;
-        } 
-
         public void Draw(Material Material, Transform transform, int drawOrder)
         {
             if (Init)
             {
-                DrawStack(Material, transform, drawOrder);
-            }
-        }
+                var sprite = new Sprites.Sprite
+                {
+                    Texture = tex,
+                    TextureCoords = new Vector4(0, 0, 1, 1)
+                };
 
-        private void DrawStack(Material Material, Transform transform, int drawOrder)
-        {
-            var sprite = new Sprites.Sprite
-            {
-                Texture = tex,
-                TextureCoords = new Vector4(0, 0, 1, 1)
-            };
+                for (; i < 20; i++)
+                {
+                    stars.Add(sprite);
 
-            for (; i < 20; i++)
-            {
-                stars.Add(sprite);
+                    perlinGrid = GenPerlin(256, 256, 2, 20);
 
-                perlinGrid = GenPerlin(256, 256, 2, 20);
+                    int random = Random.Range(0, 256);
 
-                int random = Random.Range(0, 256);
+                    float rand1 = perlinGrid[random, random];
 
-                float rand1 = perlinGrid[random, random];
+                    if (rand1 >= .5)
+                        Utility.Render.DrawSprite(Random.Range(-10, 10), Random.Range(-10, 10), 1, 1, sprite, Material, transform, drawOrder);
+                    else
+                        Utility.Render.DrawSprite(Random.Range(-100, 100), Random.Range(-100, 100), 1, 1, sprite, Material, transform, drawOrder);
 
-                if(rand1 >= .5)
-                    Utility.Render.DrawSprite(Random.Range(-10,10), Random.Range(-10, 10), 1, 1, sprite, Material, transform, drawOrder);
-                else
-                    Utility.Render.DrawSprite(Random.Range(-100, 100), Random.Range(-100, 100), 1, 1, sprite, Material, transform, drawOrder);
-
+                }
             }
         }
 
@@ -135,69 +122,6 @@ namespace Planet.VisualEffects
             res.Apply();
 
             return res;
-        }
-
-        private GameObject InstantiateGameObject(string name, int sortingOrder, Material material, Vector2 size)
-        {
-            var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
-
-            var mesh = new Mesh
-            {
-                indexFormat = UnityEngine.Rendering.IndexFormat.UInt32
-            };
-
-            var mf = go.GetComponent<MeshFilter>();
-            mf.sharedMesh = mesh;
-            var mr = go.GetComponent<MeshRenderer>();
-            mr.sharedMaterial = material;
-            mr.sortingOrder = sortingOrder;
-
-            List<Vector3> verticies = new List<Vector3>();
-            List<int> triangles = new List<int>();
-            List<Vector2> uvs = new List<Vector2>();
-
-            float width = size.x;
-            float height = size.y;
-
-            var p0 = new Vector3(0, 0, 0);
-            var p1 = new Vector3((width), (height), 0);
-            var p2 = p0; p2.y = p1.y;
-            var p3 = p1; p3.y = p0.y;
-
-            verticies.Add(p0);
-            verticies.Add(p1);
-            verticies.Add(p2);
-            verticies.Add(p3);
-
-            triangles.Add(0);
-            triangles.Add(2);
-            triangles.Add(1);
-            triangles.Add(0);
-            triangles.Add(1);
-            triangles.Add(3);
-
-            var u0 = 0;
-            var u1 = 1;
-            var v1 = -1;
-            var v0 = 0;
-
-            var uv0 = new Vector2(u0, v0);
-            var uv1 = new Vector2(u1, v1);
-            var uv2 = uv0; uv2.y = uv1.y;
-            var uv3 = uv1; uv3.y = uv0.y;
-
-
-            uvs.Add(uv0);
-            uvs.Add(uv1);
-            uvs.Add(uv2);
-            uvs.Add(uv3);
-
-
-            mesh.SetVertices(verticies);
-            mesh.SetUVs(0, uvs);
-            mesh.SetTriangles(triangles, 0);
-
-            return go;
         }
     }   
 }
