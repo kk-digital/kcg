@@ -17,7 +17,7 @@ namespace Scripts {
 
             public CameraController camera;
 
-            public void UpdateRenderer(int segments) {
+            public void update_renderer(int segments) {
                 if(line_renderer == null) return;
                 if(descriptor == null) {
                     line_renderer.startWidth = line_renderer.endWidth = 0.0f;
@@ -26,7 +26,7 @@ namespace Scripts {
 
                 Vector3[] vertices = new Vector3[segments];
 
-                float angle = 2.0f * 3.1415926f / (float)segments;
+                float angle = Tools.twopi / (float)segments;
 
                 // sine and cosine of the relative angle between each segment
                 float sin = (float)Math.Sin(angle);
@@ -36,14 +36,11 @@ namespace Scripts {
                 float rotsin = (float)Math.Sin(descriptor.rotation);
                 float rotcos = (float)Math.Cos(descriptor.rotation);
 
-                // eccentricity
-                float c = descriptor.linear_eccentricity;
-
                 float x = 1.0f;
                 float y = 0.0f;
 
                 for(int i = 0; i < segments; i++) {
-                    float vx = x * descriptor.semimajoraxis - c;
+                    float vx = x * descriptor.semimajoraxis - descriptor.linear_eccentricity;
                     float vy = y * descriptor.semiminoraxis;
 
                     vertices[i] = new Vector3(
@@ -51,6 +48,11 @@ namespace Scripts {
                         rotsin * vx + rotcos * vy + descriptor.central_body.posy,
                         0.0f
                     );
+
+                    if(!float.IsFinite(vertices[i].x) || !float.IsFinite(vertices[i].y)) {
+                        line_renderer.startWidth = line_renderer.endWidth = 0.0f;
+                        return;
+                    }
 
                     (x, y) = (cos * x - sin * y, sin * x + cos * y);
                 }

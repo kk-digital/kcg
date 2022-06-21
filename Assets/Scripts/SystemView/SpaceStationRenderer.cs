@@ -39,7 +39,7 @@ namespace Scripts {
 
                 OrbitRender.descriptor = Station.descriptor;
 
-                OrbitRender.UpdateRenderer(128);
+                OrbitRender.update_renderer(128);
             }
 
             void OnDestroy() {

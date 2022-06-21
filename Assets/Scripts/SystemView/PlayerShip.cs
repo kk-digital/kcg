@@ -77,7 +77,7 @@ namespace Scripts {
                     else ship.rotation -= Input.GetAxis("Horizontal") * current_time * ship.rotational_speed_modifier;
                 } else {
                     horizontal_movement = -Input.GetAxis("Horizontal");
-                    Vector3 RelPos = camera_controller.GetRelPos(new Vector3(ship.self.posx, ship.self.posy, 0.0f));
+                    Vector3 RelPos = camera_controller.get_rel_pos(new Vector3(ship.self.posx, ship.self.posy, 0.0f));
 
                     float dx = Input.mousePosition.x - RelPos.x;
                     float dy = Input.mousePosition.y - RelPos.y;
@@ -183,7 +183,7 @@ namespace Scripts {
 
                 if(!mouse_steering) {
                     if(Input.GetKey("space") || Input.GetMouseButton(0)) {
-                        Vector3 mouse_position = camera_controller.GetAbsPos(Input.mousePosition);
+                        Vector3 mouse_position = camera_controller.get_abs_pos(Input.mousePosition);
 
                         foreach(ShipWeapon weapon in ship.weapons)
                             if(weapon.try_targeting(mouse_position.x, mouse_position.y, current_time))
