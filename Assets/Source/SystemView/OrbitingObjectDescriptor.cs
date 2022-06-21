@@ -279,9 +279,9 @@ namespace Source {
                 // (2) y = sin(ω) * x_0 + cos(ω) * y_0 + cy
  
                (intersection1[0], intersection1[1]) = (rotcos * intersection1[0] - rotsin * intersection1[1] + central_body.posx,
-                                                        rotsin * intersection1[0] + rotcos * intersection1[1] + central_body.posy);
+                                                       rotsin * intersection1[0] + rotcos * intersection1[1] + central_body.posy);
                (intersection2[0], intersection2[1]) = (rotcos * intersection2[0] - rotsin * intersection2[1] + central_body.posx,
-                                                        rotsin * intersection2[0] + rotcos * intersection2[1] + central_body.posy);
+                                                       rotsin * intersection2[0] + rotcos * intersection2[1] + central_body.posy);
  
                 // (1) d = √(𐤃x² + 𐤃y²)
  
@@ -459,7 +459,7 @@ namespace Source {
 
                 float pos_magnitude = (float)Math.Sqrt(posx * posx + posy * posy);
 
-                eccentricity_vector[0] = (vely * angular_momentum / standard_gravitational_parameter) - posx / pos_magnitude;
+                eccentricity_vector[0] =  (vely * angular_momentum / standard_gravitational_parameter) - posx / pos_magnitude;
                 eccentricity_vector[1] = -(velx * angular_momentum / standard_gravitational_parameter) - posy / pos_magnitude;
 
                 // ε = |e|

@@ -85,7 +85,7 @@ namespace Scripts {
             }
 
             public void CenterCamera() {
-                Camera.setPosition(-State.player.ship.self.posx, -State.player.ship.self.posy, 0.25f / system_scale);
+                Camera.set_position(-State.player.ship.self.posx, -State.player.ship.self.posy, 0.25f / system_scale);
             }
 
             public void RegenerateSystem() {
@@ -441,7 +441,7 @@ namespace Scripts {
                     float d2 = dx * dx + dy * dy;
                     float d = (float)Math.Sqrt(d2);
 
-                    float g = 6.67408E-11f * Body.mass / d2;
+                    float g = Tools.gravitational_constant * Body.mass / d2;
 
                     float Velocity = g * CurrentTime;
 
