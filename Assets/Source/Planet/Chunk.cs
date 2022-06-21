@@ -6,10 +6,12 @@ namespace Planet
 {
     public struct Chunk
     {
+        public static readonly bool DebugChunkReadCount = true;
+        
         public MapChunkType Type;
         private Tile.Tile[][] Tiles;
         
-        public int Seq;
+        public int ReadCount;
 
         public Chunk(MapChunkType type) : this()
         {

@@ -25,13 +25,19 @@ namespace Planet
             get
             {
                 var chunkIndex = GetChunkIndex(tileX, tileY);
+                ref var chunk = ref chunkList[chunkIndex];
 
-                if (chunkList[chunkIndex].Type == MapChunkType.Error)
+                if (chunk.Type == MapChunkType.Error)
                 {
-                    AddChunk(chunkIndex);
+                    chunk.Init(MapChunkType.Empty);
                 }
-            
-                return ref chunkList[chunkIndex];
+
+                if (Chunk.DebugChunkReadCount)
+                {
+                    chunk.ReadCount++;
+                }
+
+                return ref chunk;
             }
         }
         
@@ -51,12 +57,6 @@ namespace Planet
         // (>> 4) == (/ 16)
         // (>> 8) == (/ 256)
         public int GetChunkIndex(int x, int y) => ((x >> 4) + y * mapSizeX) >> 8;
-
-        public void AddChunk(int chunkIndex)
-        {
-            chunkList[chunkIndex].Init(MapChunkType.Empty);
-            Count++;
-        }
 
         private void IncreaseChunkCapacity()
         {
