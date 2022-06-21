@@ -14,11 +14,6 @@ namespace Planet
         /// Chunk Array capacity
         /// </summary>
         private int capacity;
-        
-        /// <summary>
-        /// Count of existing chunks
-        /// </summary>
-        public int Count { get; private set; }
 
         public ref Chunk this[int tileX, int tileY]
         {
@@ -47,7 +42,6 @@ namespace Planet
             // (>> 4) == (/ 16)
             
             mapSizeX = mapSize.X;
-            Count = 0;
             capacity = 4096;
 
             chunkList = Enumerable.Repeat(new Chunk(MapChunkType.Error), capacity).ToArray();
@@ -57,6 +51,12 @@ namespace Planet
         // (>> 4) == (/ 16)
         // (>> 8) == (/ 256)
         public int GetChunkIndex(int x, int y) => ((x >> 4) + y * mapSizeX) >> 8;
+
+        public void RemoveChunk(int index)
+        {
+            if(chunkList[index].Type == MapChunkType.Error || index >= capacity) return;
+            chunkList[index] = new Chunk(MapChunkType.Error);
+        }
 
         private void IncreaseChunkCapacity()
         {
