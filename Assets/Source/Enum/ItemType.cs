@@ -11,5 +11,6 @@
         RemoveTileTool,
         MiningLaserTool,
         SpawnEnemySlimeTool,
+        PipePlacementTool
     }
 }

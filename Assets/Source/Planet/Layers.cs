@@ -18,6 +18,21 @@ namespace Planet
 
             BuildLayerTexture(tileMap, planetLayer);
 
+            /*for(int y = 0; y < MapSize.Y; y++)
+            {
+                for(int x = 0; x < MapSize.X; x++)
+                {
+                    ref Tile.Tile tile = ref tileMap.GetTileRef(x, y, planetLayer);
+                    if (tile.Type >= 0)
+                    {
+                        Sprites.Sprite sprite = GameState.TileSpriteAtlasManager.GetSprite(tile.SpriteId);
+
+                        Utility.Render.DrawSprite(x, y, 1.0f, 1.0f, sprite, 
+                                                Material.Instantiate(material), transform, DrawOrder);
+                    }
+                }
+            }*/
+
             var sprite = new Sprites.Sprite(LayerTextures[(int) planetLayer]);
 
             Utility.Render.DrawSprite(0, 0, 1.0f * MapSize.X, 1.0f * MapSize.Y, sprite, material, transform, DrawOrder);

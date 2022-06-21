@@ -38,6 +38,8 @@ namespace Planet
                 {
                     layerTiles[tileIndex] = Tile.Tile.EmptyTile;
                 }
+
+                Layers.NeedsUpdate[layerIndex] = true;
             }
         }
 
