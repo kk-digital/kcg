@@ -6,9 +6,9 @@ namespace Scripts {
     namespace SystemView {
         public class GravityRenderer : MonoBehaviour {
             public const int   samples        = 1024;
-            public const float line_thickness = 0.2f;
-            public const float line_length    = 0.8f;
-            public const float color_factor   = 5.0f;
+            public const float line_thickness = 0.15f;
+            public const float line_length    = 0.5f;
+            public const float color_factor   = 2.0f;
 
             private struct ArrowInfo {
                 public float        x;
@@ -95,8 +95,8 @@ namespace Scripts {
                 for(int x = 0; x < width; x++)
                     for(int y = 0; y < height; y++) {
                         Vector3 absolute = camera.get_abs_pos(new Vector3(
-                            x * camera_width  * camera.scale,
-                            y * camera_height * camera.scale * camera.get_aspect_ratio(),
+                            x * camera_width  * 0.65f * camera.scale,
+                            y * camera_height * 0.65f * camera.scale * camera.get_aspect_ratio(),
                             0.0f
                         ));
 
@@ -152,7 +152,7 @@ namespace Scripts {
                         arrows[x, y].line.startColor =
                         arrows[x, y].line.endColor   = new Color(2.0f * (1.0f - 1.0f / (color_factor * magnitude)),
                                                                  2.0f * (       1.0f / (color_factor * magnitude)),
-                                                                 0.0f, 0.8f);
+                                                                 0.0f, 0.5f);
                     }
             }
 
