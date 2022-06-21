@@ -26,7 +26,9 @@ namespace AI
         public int                  HeuristicCost;
         public int                  TotalCost;
     }
+    // Todo: update this for new action system.
 
+    /*
     public class GoapAStar
     {
         List<Node> OpenList = new List<Node>();
@@ -153,5 +155,5 @@ namespace AI
             }
             return cost;
         }
-    }   
+    }  */
 }

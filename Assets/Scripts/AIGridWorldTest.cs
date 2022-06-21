@@ -4,6 +4,7 @@ using AI;
 using KMath;
 
 // Note: Unit Testing to test AI.
+/*
 public class AIGridWorldTest : MonoBehaviour
 {
     [SerializeField] Material Material;
@@ -164,6 +165,7 @@ public class AIGridWorldTest : MonoBehaviour
                         GoapState effects = new GoapState(new Dictionary<string, object>());
                         effects.states.Add("pos", effect);
 
+
                         GameState.ActionManager.CreateAction();
                         GameState.ActionManager.SetTime(durationTime);
                         GameState.ActionManager.SetGoap(preCondition, effects, 1);
@@ -222,4 +224,4 @@ public class AIGridWorldTest : MonoBehaviour
         }
         Utility.Render.DrawQuadColor(posY, posX, cornerSize, cornerSize, color, Instantiate(Material), transform, 0);
     }
-}
+}*/

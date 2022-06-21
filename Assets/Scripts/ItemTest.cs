@@ -117,13 +117,14 @@ namespace Planet.Unity
             GameState.AnimationManager.SetFrameCount(1);
             GameState.AnimationManager.EndAnimation();
 
+            Action.DefaultActions.InitializeActionsAttributes();
+
             // Generating the map
             Vec2i mapSize = new Vec2i(16, 16);
             Planet = new Planet.PlanetState(mapSize, EntitasContext.game);
             GenerateMap();
 
             Player = Planet.AddPlayer(Instantiate(Material),CharacterSpriteId, 32, 48, new Vec2f(3.0f, 3.0f), 0);
-            Player.Entity.AddAgentActionScheduler(new List<int>(), new List<int>());
 
             // Create Action            
             GameState.ItemSpawnSystem.SpawnItem(EntitasContext.game, Enums.ItemType.Gun, new Vec2f(3.0f, 3.0f));

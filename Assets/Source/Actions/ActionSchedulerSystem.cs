@@ -29,16 +29,16 @@ namespace Action
             for (int i = 0; i < actorEntity.agentActionScheduler.ActiveActionIDs.Count; i++)
             {
                 int actionID = actorEntity.agentActionScheduler.ActiveActionIDs[i];
-                GameEntity actionEntity = Contexts.sharedInstance.game.GetEntityWithActionID(actionID);
+                GameEntity actionEntity = Contexts.sharedInstance.game.GetEntityWithActionIDID(actionID);
 
                 if (actionEntity.hasActionExecution)
                 {
                     switch (actionEntity.actionExecution.State)
                     {
-                        case Enums.ActionState.None:
+                        case Enums.ActionState.Entry:
                             actionEntity.actionExecution.Logic.OnEnter();
                             break;
-                        case Enums.ActionState.Active:
+                        case Enums.ActionState.Running:
                             actionEntity.actionExecution.Logic.OnUpdate(deltaTime);
                             break;
                         case Enums.ActionState.Success:

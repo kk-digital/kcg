@@ -20,7 +20,6 @@ namespace Item
             var pickableItems = gameContext.GetGroup(
                 GameMatcher.AllOf(GameMatcher.ItemID, GameMatcher.PhysicsPosition2D).NoneOf(GameMatcher.ItemUnpickable));
 
-
             foreach (var item in pickableItems)
             {
                 // Get item ceter position.

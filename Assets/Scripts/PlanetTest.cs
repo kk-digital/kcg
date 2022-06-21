@@ -366,7 +366,7 @@ namespace Planet.Unity
 
             var borders = tileMap.Borders;
 
-            float spawnHeight = borders.Top + 2.0f;
+            float spawnHeight = borders.Top - 2f;
 
             Player = Planet.AddPlayer(Instantiate(Material), CharacterSpriteId, 32, 48, 
                     new Vec2f(3.0f, spawnHeight), 0);

@@ -11,17 +11,17 @@ public partial class GameEntity {
     public Item.Attribute.ActionComponent itemAttributeAction { get { return (Item.Attribute.ActionComponent)GetComponent(GameComponentsLookup.ItemAttributeAction); } }
     public bool hasItemAttributeAction { get { return HasComponent(GameComponentsLookup.ItemAttributeAction); } }
 
-    public void AddItemAttributeAction(int newActionID) {
+    public void AddItemAttributeAction(int newActionTypeID) {
         var index = GameComponentsLookup.ItemAttributeAction;
         var component = (Item.Attribute.ActionComponent)CreateComponent(index, typeof(Item.Attribute.ActionComponent));
-        component.ActionID = newActionID;
+        component.ActionTypeID = newActionTypeID;
         AddComponent(index, component);
     }
 
-    public void ReplaceItemAttributeAction(int newActionID) {
+    public void ReplaceItemAttributeAction(int newActionTypeID) {
         var index = GameComponentsLookup.ItemAttributeAction;
         var component = (Item.Attribute.ActionComponent)CreateComponent(index, typeof(Item.Attribute.ActionComponent));
-        component.ActionID = newActionID;
+        component.ActionTypeID = newActionTypeID;
         ReplaceComponent(index, component);
     }
 
