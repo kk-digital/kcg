@@ -75,7 +75,15 @@ namespace Planet.Unity
                     Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     int x = (int)worldPosition.x;
                     int y = (int)worldPosition.y;
-                    Planet.PlaceTile(x, y, 10, MapLayerType.Front);
+                    Planet.PlaceTile(x, y, (int)Tile.TileEnum.Moon, MapLayerType.Front);
+                    //TileMap.BuildLayerTexture(MapLayerType.Front);
+                }
+                else if (highlightItemType == Enums.ItemType.PipePlacementTool)
+                {
+                    Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    int x = (int)worldPosition.x;
+                    int y = (int)worldPosition.y;
+                    Planet.PlaceTile(x, y, (int)Tile.TileEnum.Pipe, MapLayerType.Mid);
                     //TileMap.BuildLayerTexture(MapLayerType.Front);
                 }
                 else if (highlightItemType == Enums.ItemType.RemoveTileTool)
@@ -180,129 +188,7 @@ namespace Planet.Unity
             inventoryManager = new Inventory.InventoryManager();
             inventoryDrawSystem = new Inventory.DrawSystem(EntitasContext);
 
-
-
-            int TilesMoon = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png", 16, 16);
-            int OreTileSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
-            int Ore2TileSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\ore_copper_1.png", 16, 16);
-            int Ore3TileSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\ore_adamantine_1.png", 16, 16);
-
-            int GunSpriteSheet =
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\gun-temp.png", 44, 25);
-
-            int RockSpriteSheet =
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1.png", 16, 16);
-            int RockDustSpriteSheet =
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1_dust.png", 16, 16);
-
-            int SlimeSpriteSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
-
-            int CharacterSpriteSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png", 32, 48);
-            int LaserSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\lasergun-temp.png", 195, 79);
-
-            int SlimeMoveLeftBaseSpriteId = GameState.SpriteAtlasManager.CopySpritesToAtlas(SlimeSpriteSheet, 0, 0, 3, 0, Enums.AtlasType.Agent);
-
-            CharacterSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(CharacterSpriteSheet, 0, 0, Enums.AtlasType.Agent);
-
-
-            int OreIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(OreTileSheet, 0, 0, Enums.AtlasType.Particle);
-            int GunIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(GunSpriteSheet, 0, 0, Enums.AtlasType.Particle);
-            int SlimeIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 0, 0, Enums.AtlasType.Particle);
-            int PlacementToolIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(RockSpriteSheet, 0, 0, Enums.AtlasType.Particle);
-            int RemoveToolIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(Ore2TileSheet, 0, 0, Enums.AtlasType.Particle);
-            int MiningLaserToolIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(LaserSpriteSheet, 0, 0, Enums.AtlasType.Particle);
-            
-
-            GameState.TileCreationApi.CreateTile(8);
-            GameState.TileCreationApi.SetTileName("ore_1");
-            GameState.TileCreationApi.SetTileTexture16(OreTileSheet, 0, 0);
-            GameState.TileCreationApi.EndTile();
-
-            GameState.TileCreationApi.CreateTile(9);
-            GameState.TileCreationApi.SetTileName("glass");
-            GameState.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 11, 10);
-            GameState.TileCreationApi.EndTile();
-
-            GameState.TileCreationApi.CreateTile(10);
-            GameState.TileCreationApi.SetTileName("moon");
-            GameState.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 0, 0);
-            GameState.TileCreationApi.EndTile();
-
-            GameState.TileCreationApi.CreateTile(11);
-            GameState.TileCreationApi.SetTileName("ore_2");
-            GameState.TileCreationApi.SetTileTexture16(Ore2TileSheet, 0, 0);
-            GameState.TileCreationApi.EndTile();
-
-            GameState.TileCreationApi.CreateTile(12);
-            GameState.TileCreationApi.SetTileName("ore_3");
-            GameState.TileCreationApi.SetTileTexture16(Ore3TileSheet, 0, 0);
-            GameState.TileCreationApi.EndTile();
-
-
-            GameState.AnimationManager.CreateAnimation(0);
-            GameState.AnimationManager.SetName("character-move-left");
-            GameState.AnimationManager.SetTimePerFrame(0.15f);
-            GameState.AnimationManager.SetBaseSpriteID(CharacterSpriteId);
-            GameState.AnimationManager.SetFrameCount(1);
-            GameState.AnimationManager.EndAnimation();
-
-            GameState.AnimationManager.CreateAnimation(1);
-            GameState.AnimationManager.SetName("character-move-right");
-            GameState.AnimationManager.SetTimePerFrame(0.15f);
-            GameState.AnimationManager.SetBaseSpriteID(CharacterSpriteId);
-            GameState.AnimationManager.SetFrameCount(1);
-            GameState.AnimationManager.EndAnimation();
-
-            GameState.AnimationManager.CreateAnimation(2);
-            GameState.AnimationManager.SetName("slime-move-left");
-            GameState.AnimationManager.SetTimePerFrame(0.35f);
-            GameState.AnimationManager.SetBaseSpriteID(SlimeMoveLeftBaseSpriteId);
-            GameState.AnimationManager.SetFrameCount(4);
-            GameState.AnimationManager.EndAnimation();
-
-
-            Item.CreationApi.Instance.CreateItem(Enums.ItemType.Gun, "Gun");
-            Item.CreationApi.Instance.SetTexture(GunIcon);
-            Item.CreationApi.Instance.SetInventoryTexture(GunIcon);
-            Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-            Item.CreationApi.Instance.EndItem();
-
-            Item.CreationApi.Instance.CreateItem(Enums.ItemType.Ore, "Ore");
-            Item.CreationApi.Instance.SetTexture(OreIcon);
-            Item.CreationApi.Instance.SetInventoryTexture(OreIcon);
-            Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-            Item.CreationApi.Instance.SetStackable(99);
-            Item.CreationApi.Instance.EndItem();
-
-            Item.CreationApi.Instance.CreateItem(Enums.ItemType.PlacementTool, "PlacementTool");
-            Item.CreationApi.Instance.SetTexture(PlacementToolIcon);
-            Item.CreationApi.Instance.SetInventoryTexture(PlacementToolIcon);
-            Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-            Item.CreationApi.Instance.EndItem();
-
-            Item.CreationApi.Instance.CreateItem(Enums.ItemType.RemoveTileTool, "RemoveTileTool");
-            Item.CreationApi.Instance.SetTexture(RemoveToolIcon);
-            Item.CreationApi.Instance.SetInventoryTexture(RemoveToolIcon);
-            Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-            Item.CreationApi.Instance.EndItem();
-
-            Item.CreationApi.Instance.CreateItem(Enums.ItemType.SpawnEnemySlimeTool, "SpawnSlimeTool");
-            Item.CreationApi.Instance.SetTexture(SlimeIcon);
-            Item.CreationApi.Instance.SetInventoryTexture(SlimeIcon);
-            Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-            Item.CreationApi.Instance.EndItem();
-
-            Item.CreationApi.Instance.CreateItem(Enums.ItemType.MiningLaserTool, "MiningLaserTool");
-            Item.CreationApi.Instance.SetTexture(MiningLaserToolIcon);
-            Item.CreationApi.Instance.SetInventoryTexture(MiningLaserToolIcon);
-            Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-            Item.CreationApi.Instance.EndItem();
+            GameResources.Initialize();
 
             // Generating the map
             Vec2i mapSize = new Vec2i(32, 24);
@@ -321,13 +207,14 @@ namespace Planet.Unity
             GameEntity removeTileTool = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.RemoveTileTool);
             GameEntity spawnEnemySlimeTool = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.SpawnEnemySlimeTool);
             GameEntity miningLaserTool = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.MiningLaserTool);
+            GameEntity pipePlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.PipePlacementTool);
 
 
             inventoryManager.AddItem(placementTool, toolBarID);
             inventoryManager.AddItem(removeTileTool, toolBarID);
             inventoryManager.AddItem(spawnEnemySlimeTool, toolBarID);
             inventoryManager.AddItem(miningLaserTool, toolBarID);
-
+            inventoryManager.AddItem(pipePlacementTool, toolBarID);
         }
 
 
@@ -348,15 +235,15 @@ namespace Planet.Unity
                         int type = ((int)KMath.Random.Mt19937.genrand_int32() % 6);
                         if (type == 0)
                         {
-                            oreTile.Type = 8;
+                            oreTile.Type = (int)Tile.TileEnum.Ore1;
                         }
                         else if (type == 1 || type == 2)
                         {
-                            oreTile.Type = 11;
+                            oreTile.Type = (int)Tile.TileEnum.Ore2;
                         }
                         else if (type == 3 || type == 4)
                         {
-                            oreTile.Type = 12;
+                            oreTile.Type = (int)Tile.TileEnum.Ore3;
                         }
 
                         TileMap.SetTile(i, j, oreTile, MapLayerType.Ore);
@@ -381,22 +268,22 @@ namespace Planet.Unity
                     {
                         if (j % 2 == 0 && i == mapSize.X / 2)
                         {
-                            frontTile.Type = 10;
+                            frontTile.Type = (int)Tile.TileEnum.Moon;
                         }
                         else
                         {
-                            frontTile.Type = 9;
+                            frontTile.Type = (int)Tile.TileEnum.Glass;
                         }
                     }
                     else
                     {
                         if (j % 3 == 0 && i == mapSize.X / 2 + 1)
                         {
-                            frontTile.Type = 9;
+                            frontTile.Type = (int)Tile.TileEnum.Glass;
                         }
                         else
                         {
-                            frontTile.Type = 10;
+                            frontTile.Type = (int)Tile.TileEnum.Moon;
                         }
                     }
 
