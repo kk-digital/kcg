@@ -21,14 +21,13 @@ namespace Tile
         /// <summary>
         /// Index position based on Chunk
         /// </summary>
-        public int Index;
+        public int Index => GetTileIndex(Borders.IntLeft, Borders.IntBottom);
 
         public Tile(Vec2f position) : this()
         {
             Type = -1;
             SpriteId = -1;
-            Borders = new AABB2D(position, (Vec2f)Size);
-            Index = GetTileIndex((int)position.X, (int)position.Y);
+            Borders = new AABB2D(position, Size);
         }
         
         
