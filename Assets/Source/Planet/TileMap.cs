@@ -74,7 +74,7 @@ namespace Planet
             return tiles;
         }
         
-        public void AddTile(ref Tile.Tile tile, Enums.Tile.MapLayerType planetLayer)
+        public void SetTile(ref Tile.Tile tile, Enums.Tile.MapLayerType planetLayer)
         {
             if (!Borders.Intersects(tile.Borders)) throw new IndexOutOfRangeException();
 
@@ -89,7 +89,7 @@ namespace Planet
         public void RemoveTile(int x, int y, Enums.Tile.MapLayerType planetLayer)
         {
             ref var tile = ref GetTileRef(x, y, planetLayer);
-            tile.Type = -1;
+            tile = Tile.Tile.Empty;
             UpdateTile(x, y, planetLayer);
         }
 

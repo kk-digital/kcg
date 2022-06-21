@@ -133,7 +133,7 @@ namespace Planet
             {
                 Type = tileType
             };
-            TileMap.AddTile(ref tile, layer);
+            TileMap.SetTile(ref tile, layer);
         }
 
 

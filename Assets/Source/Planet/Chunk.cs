@@ -20,16 +20,23 @@ namespace Planet
 
         public Chunk(MapChunkType type) : this()
         {
-            if (type is MapChunkType.Error) return;
-
-            Init(type);
+            SetChunk(type);
+            ReadCount = 0;
+            Seq = 0;
         }
         
         public ref Tile.Tile this[MapLayerType planetLayer, int tileIndex] => ref tiles[(int)planetLayer][tileIndex];
 
-        public void Init(MapChunkType type)
+        public void SetChunk(MapChunkType type)
         {
+            Seq++;
             Type = type;
+            
+            if (type == MapChunkType.Error)
+            {
+                tiles = null;
+                return;
+            }
 
             tiles = new Tile.Tile[Layers.Count][];
 
@@ -43,6 +50,7 @@ namespace Planet
         public void SetTile(ref Tile.Tile tile, MapLayerType planetLayer)
         {
             tiles[(int) planetLayer][tile.Index] = tile;
+            Seq++;
         }
     }
 }

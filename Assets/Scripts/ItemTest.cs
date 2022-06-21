@@ -178,8 +178,8 @@ namespace Planet.Unity
                     }
 
 
-                    tileMap.AddTile(ref frontTile, MapLayerType.Front);
-                    tileMap.AddTile(ref oreTile, MapLayerType.Ore);
+                    tileMap.SetTile(ref frontTile, MapLayerType.Front);
+                    tileMap.SetTile(ref oreTile, MapLayerType.Ore);
                 }
             }
 

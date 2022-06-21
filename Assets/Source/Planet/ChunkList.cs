@@ -24,7 +24,7 @@ namespace Planet
 
                 if (chunk.Type == MapChunkType.Error)
                 {
-                    chunk.Init(MapChunkType.Empty);
+                    chunk.SetChunk(MapChunkType.Empty);
                 }
 
                 if (Chunk.DebugChunkReadCount)

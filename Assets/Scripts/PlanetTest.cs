@@ -246,7 +246,7 @@ namespace Planet.Unity
                             oreTile.Type = (int)Tile.TileEnum.Ore3;
                         }
                         
-                        tileMap.AddTile(ref oreTile, MapLayerType.Ore);
+                        tileMap.SetTile(ref oreTile, MapLayerType.Ore);
                     }
                 }
             }
@@ -290,7 +290,7 @@ namespace Planet.Unity
                     }
 
 
-                    tileMap.AddTile(ref frontTile, MapLayerType.Front);
+                    tileMap.SetTile(ref frontTile, MapLayerType.Front);
                 }
             }
 
@@ -299,7 +299,7 @@ namespace Planet.Unity
                 for (int j = borders.IntTop - 10; j < borders.IntTop; j++)
                 {
                     var tile = new Tile.Tile(new Vec2f(i, j));
-                    tileMap.AddTile(ref tile, MapLayerType.Front);
+                    tileMap.SetTile(ref tile, MapLayerType.Front);
                 }
             }
 
@@ -322,7 +322,7 @@ namespace Planet.Unity
                 for (int j = carveHeight; j < borders.IntTop && j < carveHeight + 4; j++)
                 {
                     var tile = new Tile.Tile(new Vec2f(i, j));
-                    tileMap.AddTile(ref tile, MapLayerType.Front);
+                    tileMap.SetTile(ref tile, MapLayerType.Front);
                 }
             }
 
@@ -345,7 +345,7 @@ namespace Planet.Unity
                 for (int j = carveHeight; j < borders.IntTop && j < carveHeight + 4; j++)
                 {
                     var tile = new Tile.Tile(new Vec2f(i, j));
-                    tileMap.AddTile(ref tile, MapLayerType.Front);
+                    tileMap.SetTile(ref tile, MapLayerType.Front);
                 }
             }
 
