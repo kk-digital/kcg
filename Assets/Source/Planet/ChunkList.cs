@@ -22,8 +22,9 @@ namespace Planet
         }
         
         [MethodImpl((MethodImplOptions) 256)]
-        // (<< 4) == (* 16)
-        public int GetChunkIndex(int x, int y) => ((x << 4) + y * mapSizeX) >> 8;
+        // (>> 4) == (/ 16)
+        // (>> 8) == (/ 256)
+        public int GetChunkIndex(int x, int y) => ((x >> 4) + y * mapSizeX) >> 8;
         public ref Chunk GetChunkRef(int tileX, int tileY) => ref data[GetChunkIndex(tileX, tileY)];
         
         public void AddChunk(int count = 1)

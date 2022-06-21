@@ -35,12 +35,12 @@ public class SpawnEnemy : MonoBehaviour
     {
         // Initialize All Items
         InitializeItems();
+        
+        Contexts entitasContext = Contexts.sharedInstance;
 
         // Generating the map
         var mapSize = new Vec2i(16, 16);
-        planetState = new Planet.PlanetState(mapSize);
-
-        Contexts entitasContext = Contexts.sharedInstance;
+        planetState = new Planet.PlanetState(mapSize, entitasContext.game);
 
 
         // Enemy Sprite Sheet ID
