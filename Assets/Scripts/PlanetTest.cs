@@ -216,57 +216,59 @@ namespace Planet.Unity
             inventoryManager.AddItem(miningLaserTool, toolBarID);
             inventoryManager.AddItem(pipePlacementTool, toolBarID);
         }
-
-
-
+        
         void GenerateOre()
         {
-            Planet.TileMap TileMap = Planet.TileMap;
-
-            Tile.Tile oreTile = Tile.Tile.EmptyTile;
-            for(int j = 0; j < TileMap.MapSize.Y; j++)
+            var tileMap = Planet.TileMap;
+            var tileMapBorders = tileMap.Borders;
+            
+            for(int j = tileMapBorders.IntBottom; j < tileMapBorders.IntTop; j++)
             {
-                for(int i = 0; i < TileMap.MapSize.X; i++)
+                for(int i = tileMapBorders.IntLeft; i < tileMapBorders.IntRight; i++)
                 {
-                    ref Tile.Tile tile = ref TileMap.GetTileRef(i, j, MapLayerType.Front);
+                    ref var tile = ref tileMap.GetTileRef(i, j, MapLayerType.Front);
 
-                    if (tile.Type == 10 && (((int)KMath.Random.Mt19937.genrand_int32() % 30) == 0))
+                    if (tile.Type == 10 && (int)KMath.Random.Mt19937.genrand_int32() % 30 == 0)
                     {
-                        int type = ((int)KMath.Random.Mt19937.genrand_int32() % 6);
+                        var oreTile = new Tile.Tile(new Vec2f(i, j));
+                        
+                        int type = (int)KMath.Random.Mt19937.genrand_int32() % 6;
                         if (type == 0)
                         {
                             oreTile.Type = (int)Tile.TileEnum.Ore1;
                         }
-                        else if (type == 1 || type == 2)
+                        else if (type is 1 or 2)
                         {
                             oreTile.Type = (int)Tile.TileEnum.Ore2;
                         }
-                        else if (type == 3 || type == 4)
+                        else if (type is 3 or 4)
                         {
                             oreTile.Type = (int)Tile.TileEnum.Ore3;
                         }
-
-                        TileMap.SetTile(i, j, oreTile, MapLayerType.Ore);
+                        
+                        tileMap.SetTile(ref oreTile, MapLayerType.Ore);
                     }
                 }
             }
         }
+
         void GenerateMap()
         {
-            KMath.Random.Mt19937.init_genrand((ulong)System.DateTime.Now.Ticks);
-            Planet.TileMap TileMap = Planet.TileMap;
+            KMath.Random.Mt19937.init_genrand((ulong) System.DateTime.Now.Ticks);
+            
+            TileMap tileMap = Planet.TileMap;
 
-           Vec2i mapSize = TileMap.MapSize;
+            var borders = tileMap.Borders;
 
-           for(int j = 0; j < mapSize.Y; j++)
+            for (int j = borders.IntBottom; j < borders.IntTop; j++)
             {
-                for(int i = 0; i < mapSize.X; i++)
+                for (int i = borders.IntLeft; i < borders.IntRight; i++)
                 {
-                    Tile.Tile frontTile = Tile.Tile.EmptyTile;
+                    var frontTile = new Tile.Tile(new Vec2f(i, j));
 
-                    if (i >= mapSize.X / 2)
+                    if (i >= borders.IntRight / 2)
                     {
-                        if (j % 2 == 0 && i == mapSize.X / 2)
+                        if (j % 2 == 0 && i == borders.IntRight / 2)
                         {
                             frontTile.Type = (int)Tile.TileEnum.Moon;
                         }
@@ -277,7 +279,7 @@ namespace Planet.Unity
                     }
                     else
                     {
-                        if (j % 3 == 0 && i == mapSize.X / 2 + 1)
+                        if (j % 3 == 0 && i == borders.IntRight / 2 + 1)
                         {
                             frontTile.Type = (int)Tile.TileEnum.Glass;
                         }
@@ -287,79 +289,84 @@ namespace Planet.Unity
                         }
                     }
 
-                    
-                    TileMap.SetTile(i, j, frontTile, MapLayerType.Front);
+
+                    tileMap.SetTile(ref frontTile, MapLayerType.Front);
                 }
             }
 
-            for(int i = 0; i < TileMap.MapSize.X; i++)
+            for (int i = 0; i < borders.IntRight; i++)
             {
-                for(int j = TileMap.MapSize.Y - 10; j < TileMap.MapSize.Y; j++)
+                for (int j = borders.IntTop - 10; j < borders.IntTop; j++)
                 {
-                    TileMap.SetTile(i, j, Tile.Tile.EmptyTile, MapLayerType.Front);
+                    var tile = new Tile.Tile(new Vec2f(i, j));
+                    tileMap.SetTile(ref tile, MapLayerType.Front);
                 }
             }
 
-            int carveHeight = TileMap.MapSize.Y - 10;
+            int carveHeight = borders.IntTop - 10;
 
-            for(int i = 0; i < TileMap.MapSize.X; i++)
+            for (int i = borders.IntLeft; i < borders.IntRight; i++)
             {
-                int move = ((int)KMath.Random.Mt19937.genrand_int32() % 3) - 1;
-                if (((int)KMath.Random.Mt19937.genrand_int32() % 5) <= 3)
+                int move = ((int) KMath.Random.Mt19937.genrand_int32() % 3) - 1;
+                if (((int) KMath.Random.Mt19937.genrand_int32() % 5) <= 3)
                 {
                     move = 0;
                 }
+
                 carveHeight += move;
-                if (carveHeight >= TileMap.MapSize.Y)
+                if (carveHeight >= borders.IntTop)
                 {
-                    carveHeight = TileMap.MapSize.Y - 1;
+                    carveHeight = borders.IntTop - 1;
                 }
 
-                for(int j = carveHeight; j < TileMap.MapSize.Y && j < carveHeight + 4; j++)
+                for (int j = carveHeight; j < borders.IntTop && j < carveHeight + 4; j++)
                 {
-                    TileMap.SetTile(i, j, Tile.Tile.EmptyTile, MapLayerType.Front);
+                    var tile = new Tile.Tile(new Vec2f(i, j));
+                    tileMap.SetTile(ref tile, MapLayerType.Front);
                 }
             }
 
             carveHeight = 5;
 
-            for(int i = TileMap.MapSize.X - 1; i >=0; i--)
+            for (int i = borders.IntRight - 1; i >= borders.IntLeft; i--)
             {
-                int move = ((int)KMath.Random.Mt19937.genrand_int32() % 3) - 1;
-                if (((int)KMath.Random.Mt19937.genrand_int32() % 10) <= 3)
+                int move = ((int) KMath.Random.Mt19937.genrand_int32() % 3) - 1;
+                if (((int) KMath.Random.Mt19937.genrand_int32() % 10) <= 3)
                 {
                     move = 1;
                 }
+
                 carveHeight += move;
-                if (carveHeight >= TileMap.MapSize.Y)
+                if (carveHeight >= borders.IntTop)
                 {
-                    carveHeight = TileMap.MapSize.Y - 1;
+                    carveHeight = borders.IntTop - 1;
                 }
 
-                for(int j = carveHeight; j < TileMap.MapSize.Y && j < carveHeight + 4; j++)
+                for (int j = carveHeight; j < borders.IntTop && j < carveHeight + 4; j++)
                 {
-                    TileMap.SetTile(i, j, Tile.Tile.EmptyTile, MapLayerType.Front);
+                    var tile = new Tile.Tile(new Vec2f(i, j));
+                    tileMap.SetTile(ref tile, MapLayerType.Front);
                 }
             }
 
 
             GenerateOre();
 
-            TileMap.HeightMap.UpdateTopTilesMap(ref TileMap);
-
-            TileMap.UpdateTileMapPositions(MapLayerType.Front);
-            TileMap.UpdateTileMapPositions(MapLayerType.Ore);
+            tileMap.UpdateTileMapPositions(MapLayerType.Front);
+            tileMap.UpdateTileMapPositions(MapLayerType.Ore);
             //TileMap.BuildLayerTexture(MapLayerType.Front);
             //TileMap.BuildLayerTexture(MapLayerType.Ore);
-        
+
         }
 
         void SpawnStuff()
         {
-            Planet.TileMap TileMap = Planet.TileMap;
+            TileMap tileMap = Planet.TileMap;
             System.Random random = new System.Random((int)System.DateTime.Now.Ticks);
 
-            float spawnHeight = TileMap.MapSize.Y + 2.0f;
+            var borders = tileMap.Borders;
+
+            float spawnHeight = borders.Top + 2.0f;
 
             Player = Planet.AddPlayer(Instantiate(Material), CharacterSpriteId, 32, 48, 
                     new Vec2f(3.0f, spawnHeight), 0);
@@ -368,7 +375,7 @@ namespace Planet.Unity
             Planet.AddAgent(Instantiate(Material), CharacterSpriteId, 32, 48, new Vec2f(6.0f, spawnHeight), 0);
             Planet.AddAgent(Instantiate(Material), CharacterSpriteId, 32, 48, new Vec2f(1.0f, spawnHeight), 0);
 
-            for(int i = 0; i < TileMap.MapSize.X; i++)
+            for(int i = borders.IntLeft; i < borders.IntRight; i++)
             {
                 if (random.Next() % 5 == 0)
                 {

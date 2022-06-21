@@ -1,59 +1,78 @@
 using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using Enums.Tile;
 using KMath;
-using UnityEngine;
 
 namespace Planet
 {
-    public class ChunkList
+    public struct ChunkList
     {
-        public Vec2i MapSize;
+        private Chunk[] chunkList;
+        private readonly int mapSizeX;
+        /// <summary>
+        /// Chunk Array capacity
+        /// </summary>
+        private int capacity;
 
-        public Chunk[] Data;
-        private Chunk errorChunk = new(Enums.Tile.MapChunkType.Error);
-        private Chunk emptyChunk = new(Enums.Tile.MapChunkType.Empty);
+        public ref Chunk this[int tileX, int tileY]
+        {
+            get
+            {
+                var chunkIndex = GetChunkIndex(tileX, tileY);
+                ref var chunk = ref chunkList[chunkIndex];
 
+                if (chunk.Type == MapChunkType.Error)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
+                if (Chunk.DebugChunkReadCount)
+                {
+                    chunk.ReadCount++;
+                }
+
+                return ref chunk;
+            }
+        }
+        
         public ChunkList(Vec2i mapSize)
         {
-            MapSize = mapSize;
-
-            var tileCount = mapSize.X * mapSize.Y;
-            var chunkCount = (tileCount + (tileCount & 0x0f)) >> 4;
+            // xCount & 0x0f == xCount AND 15
+            // (>> 4) == (/ 16)
             
-            Data = Enumerable.Repeat(new Chunk(Enums.Tile.MapChunkType.Empty), chunkCount).ToArray();
+            mapSizeX = mapSize.X;
+            capacity = 4096;
+
+            chunkList = Enumerable.Repeat(new Chunk(MapChunkType.Error), capacity).ToArray();
+            
+            // Init first not existed chunk in list
+            chunkList[0].Init(MapChunkType.Empty);
         }
         
-        private int AddChunk(int x, int y)
-        {
-            var chunkCount = Data.Length;
-            
-            // I feel like resizing by 1 each time is not very efficient... Change it later?
-            Array.Resize(ref Data, chunkCount + 1);
+        [MethodImpl((MethodImplOptions) 256)]
+        // (>> 4) == (/ 16)
+        // (>> 8) == (/ 256)
+        public int GetChunkIndex(int x, int y) => ((x >> 4) + y * mapSizeX) >> 8;
 
-            Data[chunkCount] = new Chunk(Enums.Tile.MapChunkType.Empty);
-            
-            // Return Chunk Last Index
-            return chunkCount;
-        }
-        
-        public int GetChunkIndex(int x, int y)
+        public void RemoveChunk(int index)
         {
-            int chunkMulti = Chunk.Size.X * Chunk.Size.Y;
-            
-            return (x * Chunk.Size.X + y * MapSize.X) / chunkMulti;
+            if(chunkList[index].Type == MapChunkType.Error || index >= capacity) return;
+            chunkList[index] = new Chunk(MapChunkType.Error);
         }
-        
-        public ref Chunk GetChunkRef(int x, int y)
-        {
-            int chunkIndex = GetChunkIndex(x, y);
 
-            if (chunkIndex + 1 > Data.Length || chunkIndex + 1 < 0)
+        private void IncreaseChunkCapacity()
+        {
+            var newCapacity = capacity + 4096;
+            
+            Array.Resize(ref chunkList, newCapacity);
+
+            for (int i = capacity; i < newCapacity; i++)
             {
-                Debug.Log("Chunk does not exist");
-                return ref errorChunk;
+                chunkList[i] = new Chunk(MapChunkType.Error);
             }
-            
-            return ref Data[chunkIndex];
+
+            capacity = newCapacity;
         }
     }
 }

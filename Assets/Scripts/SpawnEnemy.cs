@@ -19,9 +19,6 @@ public class SpawnEnemy : MonoBehaviour
     // Entitas Contexts
     Contexts contexts;
 
-    // Tile Map
-    private Planet.TileMap tileMap;
-
     // Initializon bool
     private bool Init = false;
 
@@ -38,12 +35,13 @@ public class SpawnEnemy : MonoBehaviour
     {
         // Initialize All Items
         InitializeItems();
-
-        // Find Tile Map
-        tileMap = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().TileMap;
+        
         Contexts entitasContext = Contexts.sharedInstance;
 
-        planetState = new Planet.PlanetState(tileMap.MapSize, entitasContext.game);
+        // Generating the map
+        var mapSize = new Vec2i(16, 16);
+        planetState = new Planet.PlanetState(mapSize, entitasContext.game);
+
 
         // Enemy Sprite Sheet ID
         int EnemySpriteSheetID = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);

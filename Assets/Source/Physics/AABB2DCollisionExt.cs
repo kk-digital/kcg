@@ -3,7 +3,7 @@ using Utility;
 
 namespace Physics
 {
-    public static class Box2DCollisionExt
+    public static class AABB2DCollisionExt
     {
         public static bool IsCollidingLeft(this AABB2D borders, Planet.TileMap tileMap, Vec2f velocity)
         {

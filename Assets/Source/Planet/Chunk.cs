@@ -1,35 +1,56 @@
 using System.Linq;
+using Enums.Tile;
 using KMath;
-using UnityEngine;
 
 namespace Planet
 {
     public struct Chunk
     {
-        // readonly means const(in runtime) after initialization
-        public static readonly Vec2i Size = new(16, 16);
-        public Enums.Tile.MapChunkType Type;
+        public static readonly bool DebugChunkReadCount = true;
         
+        public MapChunkType Type;
+        private Tile.Tile[][] tiles;
+        
+        public int ReadCount;
+        /// <summary>
+        /// <para>Sequence Number is incremented every write to a chunk</para>
+        /// <para>Only increment sequence number if a write occurs</para>
+        /// </summary>
         public int Seq;
 
-        public Chunk(Enums.Tile.MapChunkType type) : this()
+        public Chunk(MapChunkType type) : this()
         {
+            Init(type);
+            ReadCount = 0;
             Seq = 0;
-            Type = Enums.Tile.MapChunkType.Explored;
         }
         
-        /// <summary>
-        /// Getting Tile index by Chunk Dimensions
-        /// </summary>
-        /// <param name="x">TileMap coordinates</param>
-        /// <param name="y">TileMap coordiantes</param>
-        /// <returns>Tile index</returns>
-        public static int GetTileIndex(int x, int y)
-        {
-            var chunkX = x & 0x0f;
-            var chunkY = (y & 0x0f) << 4;
+        public ref Tile.Tile this[MapLayerType planetLayer, int tileIndex] => ref tiles[(int)planetLayer][tileIndex];
 
-            return chunkX + chunkY;
+        public void Init(MapChunkType type)
+        {
+            Seq++;
+            Type = type;
+            
+            if (type == MapChunkType.Error)
+            {
+                tiles = null;
+                return;
+            }
+
+            tiles = new Tile.Tile[Layers.Count][];
+
+            for (int planetLayer = 0; planetLayer < Layers.Count; planetLayer++)
+            {
+                // 256 == 0001 0000 0000 == 16 * 16
+                tiles[planetLayer] = Enumerable.Repeat(Tile.Tile.Empty, 256).ToArray();
+            }
+        }
+
+        public void SetTile(ref Tile.Tile tile, MapLayerType planetLayer)
+        {
+            tiles[(int) planetLayer][tile.Index] = tile;
+            Seq++;
         }
     }
 }

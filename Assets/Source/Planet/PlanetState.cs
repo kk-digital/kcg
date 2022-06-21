@@ -1,12 +1,9 @@
-using System.Collections.Generic;
 using Agent;
 using Vehicle;
 using Projectile;
 using FloatingText;
-using Entitas;
 using KMath;
 using UnityEngine;
-using KMath;
 
 namespace Planet
 {
@@ -27,7 +24,7 @@ namespace Planet
 
         public PlanetState(Vec2i mapSize, GameContext gameContext)
         {
-            TileMap = new Planet.TileMap(mapSize);
+            TileMap = new TileMap(mapSize);
             AgentList = new AgentList();
             VehicleList = new VehicleList();
             ProjectileList = new ProjectileList();
@@ -132,9 +129,11 @@ namespace Planet
         // x, y is the position in the tile map
         public void PlaceTile(int x, int y, int tileType, Enums.Tile.MapLayerType layer)
         {
-            Tile.Tile tile = Tile.Tile.EmptyTile;
-            tile.Type = tileType;
-            TileMap.PlaceTile(x, y, tile, layer);
+            var tile = new Tile.Tile(new Vec2f(x, y))
+            {
+                Type = tileType
+            };
+            TileMap.SetTile(ref tile, layer);
         }
 
 

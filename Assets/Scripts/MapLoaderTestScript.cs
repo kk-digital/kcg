@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using Enums.Tile;
 using Physics;
 
 #if UNITY_EDITOR
@@ -97,7 +98,7 @@ namespace Planet.Unity
                 int y = (int)worldPosition.y;
                 
                 var chunkIndex = TileMap.Chunks.GetChunkIndex(x, y);
-                var tileIndex = Planet.Chunk.GetTileIndex(x, y);
+                var tileIndex = Tile.Tile.GetTileIndex(x, y);
                 
                 Debug.Log($"{x} {y} ChunkIndex: {chunkIndex} TileIndex: {tileIndex}");
             }
@@ -155,14 +156,14 @@ namespace Planet.Unity
             // Generating the map
             Vec2i mapSize = new Vec2i(16, 16);
 
-            TileMap = new Planet.TileMap(mapSize);
+            TileMap = new TileMap(mapSize);
 
-            for(int j = 0; j < mapSize.Y; j++)
+            for(int j = TileMap.Borders.IntBottom; j < TileMap.Borders.IntTop; j++)
             {
-                for(int i = 0; i < mapSize.X; i++)
+                for(int i = TileMap.Borders.IntLeft; i < TileMap.Borders.IntRight; i++)
                 {
-                    Tile.Tile frontTile = Tile.Tile.EmptyTile;
-                    Tile.Tile oreTile = Tile.Tile.EmptyTile;
+                    var frontTile = new Tile.Tile(new Vec2f(i, j));
+                    var oreTile = new Tile.Tile(new Vec2f(i, j));
 
                     frontTile.Type = 9;
 
@@ -172,21 +173,19 @@ namespace Planet.Unity
                         oreTile.Type = 8;
                     }
 
-                    if ((j > 1 && j < 6) || (j > (8 + i)))
+                    if (j is > 1 and < 6 || (j > (8 + i)))
                     {
                        frontTile.Type = -1; 
                        oreTile.Type = -1;
                     }
 
-                    
-                    TileMap.SetTile(i, j, frontTile, Enums.Tile.MapLayerType.Front);
-                    TileMap.SetTile(i, j, oreTile, Enums.Tile.MapLayerType.Ore);
+                    TileMap.SetTile(ref frontTile, MapLayerType.Front);
+                    TileMap.SetTile(ref oreTile, MapLayerType.Ore);
                 }
             }
-
-            TileMap.HeightMap.UpdateTopTilesMap(ref TileMap);
-            TileMap.UpdateTileMapPositions(Enums.Tile.MapLayerType.Front);
-            TileMap.UpdateTileMapPositions(Enums.Tile.MapLayerType.Ore);
+            
+            TileMap.UpdateTileMapPositions(MapLayerType.Front);
+            TileMap.UpdateTileMapPositions(MapLayerType.Ore);
             //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
             //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Ore);
         }
