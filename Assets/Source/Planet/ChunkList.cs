@@ -71,6 +71,8 @@ namespace Planet
             {
                 chunkList[i] = new Chunk(MapChunkType.Error);
             }
+
+            capacity = newCapacity;
         }
     }
 }
