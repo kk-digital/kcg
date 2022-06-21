@@ -98,7 +98,7 @@ namespace Planet.Unity
                 int y = (int)worldPosition.y;
                 
                 var chunkIndex = TileMap.Chunks.GetChunkIndex(x, y);
-                var tileIndex = Tile.Tile.GetTileIndex(x, y);
+                var tileIndex = TileMap.GetTileIndex(x, y);
                 
                 Debug.Log($"{x} {y} ChunkIndex: {chunkIndex} TileIndex: {tileIndex}");
             }

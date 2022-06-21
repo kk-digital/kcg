@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Enums.Tile;
 using KMath;
 using UnityEngine;
@@ -31,13 +32,28 @@ namespace Planet
         }
 
         #region TileApi
+        
+        /// <summary>
+        /// Getting Tile index by Chunk Dimensions. INLINED
+        /// </summary>
+        /// <param name="x">TileMap coordinates</param>
+        /// <param name="y">TileMap coordinates</param>
+        /// <returns>Tile index</returns>
+        [MethodImpl((MethodImplOptions) 256)]
+        public int GetTileIndex(int x, int y)
+        {
+            // x & 0x0f == x AND 15
+            // EX: 16 AND 15 == 0, 13 AND 15 == 13
+            // (<< 4) == (* 16) 
+            return ((Borders.IntRight * y) + x) & 0xFF;
+        }
 
         public ref Tile.Tile GetTileRef(int x, int y, MapLayerType planetLayer)
         {
             if (!Borders.Intersects(new Vec2f(x, y))) throw new IndexOutOfRangeException();
             
             ref var chunk = ref Chunks[x, y];
-            var tileIndex = Tile.Tile.GetTileIndex(x, y);
+            var tileIndex = GetTileIndex(x, y);
 
             return ref chunk[planetLayer, tileIndex];
         }
@@ -81,6 +97,7 @@ namespace Planet
             int x = tile.Borders.IntLeft, y = tile.Borders.IntBottom;
             ref var chunk = ref Chunks[x, y];
 
+            tile.Index = GetTileIndex(x, y);
             chunk.SetTile(ref tile, planetLayer);
             chunk.Type = MapChunkType.Explored;
 

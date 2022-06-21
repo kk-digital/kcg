@@ -18,10 +18,11 @@ namespace Tile
         public int SpriteId;
 
         public AABB2D Borders;
+
         /// <summary>
         /// Index position based on Chunk
         /// </summary>
-        public int Index => GetTileIndex(Borders.IntLeft, Borders.IntBottom);
+        public int Index;
 
         public Tile(Vec2f position) : this()
         {
@@ -29,23 +30,6 @@ namespace Tile
             SpriteId = -1;
             Borders = new AABB2D(position, Size);
         }
-        
-        
-        /// <summary>
-        /// Getting Tile index by Chunk Dimensions. INLINED
-        /// </summary>
-        /// <param name="x">TileMap coordinates</param>
-        /// <param name="y">TileMap coordinates</param>
-        /// <returns>Tile index</returns>
-        [MethodImpl((MethodImplOptions) 256)]
-        public static int GetTileIndex(int x, int y)
-        {
-            // x & 0x0f == x AND 15
-            // EX: 16 AND 15 == 0, 13 AND 15 == 13
-            // (<< 4) == (* 16) 
-            return (x & 0x0f) + ((y & 0x0f) << 4);
-        }
-
 
         // TODO: Refactor
         public int CheckTile(int[] neighbors, int rules, int tileId)
