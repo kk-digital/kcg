@@ -146,8 +146,8 @@ public class ProjectileTest : MonoBehaviour
                 foreach (var cell in start.LineTo(end))
                 {
                     // Get Chunks because it's faster
-                    ref var tile = ref chunkList[cell.x, cell.y];
-                    if (tile.Type is not (MapChunkType.Empty or MapChunkType.Error))
+                    ref var chunk = ref chunkList[cell.x, cell.y];
+                    if (chunk.Type is not (MapChunkType.Empty or MapChunkType.Error))
                     {
                         IGroup<GameEntity> cEntities = Contexts.sharedInstance.game.GetGroup(GameMatcher.ProjectileCollider);
                         foreach (var entity in cEntities)

@@ -6,7 +6,6 @@ namespace Utility
 
     internal static class Render
     {
-
         public static void DrawSprite(float x, float y, float w, float h, 
             Sprites.Sprite sprite, Material material, Transform transform, int drawOrder = 0)
         {
@@ -18,7 +17,7 @@ namespace Utility
 
             List<int> triangles = new List<int>();
             List<Vector2> uvs = new List<Vector2>();
-            List<Vector3> verticies = new List<Vector3>();
+            List<Vector3> vertices = new List<Vector3>();
 
 
             var p0 = new Vector3(x, y, 0);
@@ -26,10 +25,10 @@ namespace Utility
             var p2 = p0; p2.y = p1.y;
             var p3 = p1; p3.y = p0.y;
 
-            verticies.Add(p0);
-            verticies.Add(p1);
-            verticies.Add(p2);
-            verticies.Add(p3);
+            vertices.Add(p0);
+            vertices.Add(p1);
+            vertices.Add(p2);
+            vertices.Add(p3);
 
             triangles.Add(0);
             triangles.Add(2);
@@ -50,7 +49,7 @@ namespace Utility
             uvs.Add(uv3);
     
 
-            mesh.SetVertices(verticies);
+            mesh.SetVertices(vertices);
             mesh.SetUVs(0, uvs);
             mesh.SetTriangles(triangles, 0);
         }

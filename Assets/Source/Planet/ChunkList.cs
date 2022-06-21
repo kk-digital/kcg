@@ -24,7 +24,7 @@ namespace Planet
 
                 if (chunk.Type == MapChunkType.Error)
                 {
-                    chunk.SetChunk(MapChunkType.Empty);
+                    throw new IndexOutOfRangeException();
                 }
 
                 if (Chunk.DebugChunkReadCount)
@@ -45,6 +45,9 @@ namespace Planet
             capacity = 4096;
 
             chunkList = Enumerable.Repeat(new Chunk(MapChunkType.Error), capacity).ToArray();
+            
+            // Init first not existed chunk in list
+            chunkList[0].Init(MapChunkType.Empty);
         }
         
         [MethodImpl((MethodImplOptions) 256)]

@@ -20,14 +20,14 @@ namespace Planet
 
         public Chunk(MapChunkType type) : this()
         {
-            SetChunk(type);
+            Init(type);
             ReadCount = 0;
             Seq = 0;
         }
         
         public ref Tile.Tile this[MapLayerType planetLayer, int tileIndex] => ref tiles[(int)planetLayer][tileIndex];
 
-        public void SetChunk(MapChunkType type)
+        public void Init(MapChunkType type)
         {
             Seq++;
             Type = type;

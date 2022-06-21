@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
+using Enums.Tile;
 using KMath;
 using UnityEngine;
 
@@ -25,14 +25,14 @@ namespace Planet
             };
         }
 
-        private void BuildLayerTexture(Enums.Tile.MapLayerType planetLayer)
+        private void BuildLayerTexture(MapLayerType planetLayer)
         {
             //Layers.BuildLayerTexture(this, planetLayer);
         }
 
         #region TileApi
 
-        public ref Tile.Tile GetTileRef(int x, int y, Enums.Tile.MapLayerType planetLayer)
+        public ref Tile.Tile GetTileRef(int x, int y, MapLayerType planetLayer)
         {
             if (!Borders.Intersects(new Vec2f(x, y))) throw new IndexOutOfRangeException();
             
@@ -42,7 +42,7 @@ namespace Planet
             return ref chunk[planetLayer, tileIndex];
         }
 
-        public Tile.Tile[] GetTiles(Vec2i[] positions, Enums.Tile.MapLayerType planetLayer)
+        public Tile.Tile[] GetTiles(Vec2i[] positions, MapLayerType planetLayer)
         {
             var count = 0;
             var tiles = new Tile.Tile[positions.Length];
@@ -74,7 +74,7 @@ namespace Planet
             return tiles;
         }
         
-        public void SetTile(ref Tile.Tile tile, Enums.Tile.MapLayerType planetLayer)
+        public void SetTile(ref Tile.Tile tile, MapLayerType planetLayer)
         {
             if (!Borders.Intersects(tile.Borders)) throw new IndexOutOfRangeException();
 
@@ -82,18 +82,19 @@ namespace Planet
             ref var chunk = ref Chunks[x, y];
 
             chunk.SetTile(ref tile, planetLayer);
+            chunk.Type = MapChunkType.Explored;
 
             UpdateTile(x, y, planetLayer);
         }
 
-        public void RemoveTile(int x, int y, Enums.Tile.MapLayerType planetLayer)
+        public void RemoveTile(int x, int y, MapLayerType planetLayer)
         {
             ref var tile = ref GetTileRef(x, y, planetLayer);
             tile = Tile.Tile.Empty;
             UpdateTile(x, y, planetLayer);
         }
 
-        private void UpdateTile(int x, int y, Enums.Tile.MapLayerType planetLayer)
+        private void UpdateTile(int x, int y, MapLayerType planetLayer)
         {
             for(int i = x - 1; i <= x + 1; i++)
             {
@@ -110,7 +111,7 @@ namespace Planet
 
         #region TilePositionUpdater
 
-        public void UpdateTilesOnPosition(int x, int y, Enums.Tile.MapLayerType planetLayer)
+        public void UpdateTilesOnPosition(int x, int y, MapLayerType planetLayer)
         {
             // standard sheet mapping
             // every tile has a constant offset
@@ -141,29 +142,29 @@ namespace Planet
                     if (x + 1 < Borders.IntRight)
                     {
                         ref Tile.Tile neighborTile = ref GetTileRef(x + 1, y, planetLayer);
-                        neighbors[(int) Enums.Tile.Neighbor.Right] = neighborTile.Type;
+                        neighbors[(int) Neighbor.Right] = neighborTile.Type;
                     }
 
                     if (x - 1 >= 0)
                     {
                         ref Tile.Tile neighborTile = ref GetTileRef(x - 1, y, planetLayer);
-                        neighbors[(int) Enums.Tile.Neighbor.Left] = neighborTile.Type;
+                        neighbors[(int) Neighbor.Left] = neighborTile.Type;
                     }
 
                     if (y + 1 < Borders.IntTop)
                     {
                         ref Tile.Tile neighborTile = ref GetTileRef(x, y + 1, planetLayer);
-                        neighbors[(int) Enums.Tile.Neighbor.Up] = neighborTile.Type;
+                        neighbors[(int) Neighbor.Up] = neighborTile.Type;
                     }
 
                     if (y - 1 >= 0)
                     {
                         ref Tile.Tile neighborTile = ref GetTileRef(x, y - 1, planetLayer);
-                        neighbors[(int) Enums.Tile.Neighbor.Down] = neighborTile.Type;
+                        neighbors[(int) Neighbor.Down] = neighborTile.Type;
                     }
 
 
-                    Enums.Tile.Position tilePosition = tile.GetTilePosition(neighbors, tile.Type);
+                    var tilePosition = tile.GetTilePosition(neighbors, tile.Type);
 
                     // the sprite ids are next to each other in the sprite atlas
                     // we jus thave to know which one to draw based on the offset
@@ -183,7 +184,7 @@ namespace Planet
             Layers.NeedsUpdate[(int) planetLayer] = true;
         }
 
-        public void UpdateTileMapPositions(Enums.Tile.MapLayerType planetLayer)
+        public void UpdateTileMapPositions(MapLayerType planetLayer)
         {
             for(int y = Borders.IntBottom; y < Borders.IntTop; y++)
             {
