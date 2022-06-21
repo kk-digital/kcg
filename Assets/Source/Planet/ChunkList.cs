@@ -1,42 +1,72 @@
 using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Enums.Tile;
 using KMath;
 
 namespace Planet
 {
     public struct ChunkList
     {
-        private Chunk[] data;
+        private Chunk[] chunkList;
         private readonly int mapSizeX;
+        /// <summary>
+        /// Chunk Array capacity
+        /// </summary>
+        private int capacity;
+        
+        /// <summary>
+        /// Count of existing chunks
+        /// </summary>
+        public int Count { get; private set; }
 
+        public ref Chunk this[int tileX, int tileY]
+        {
+            get
+            {
+                var chunkIndex = GetChunkIndex(tileX, tileY);
+
+                if (chunkList[chunkIndex].Type == MapChunkType.Error)
+                {
+                    AddChunk(chunkIndex);
+                }
+            
+                return ref chunkList[chunkIndex];
+            }
+        }
+        
         public ChunkList(Vec2i mapSize)
         {
             // xCount & 0x0f == xCount AND 15
             // (>> 4) == (/ 16)
             
             mapSizeX = mapSize.X;
-            var firstChunkCount = 1;
+            Count = 0;
+            capacity = 4096;
 
-            data = Enumerable.Repeat(new Chunk(Enums.Tile.MapChunkType.Empty), firstChunkCount).ToArray();
+            chunkList = Enumerable.Repeat(new Chunk(MapChunkType.Error), capacity).ToArray();
         }
         
         [MethodImpl((MethodImplOptions) 256)]
         // (>> 4) == (/ 16)
         // (>> 8) == (/ 256)
         public int GetChunkIndex(int x, int y) => ((x >> 4) + y * mapSizeX) >> 8;
-        public ref Chunk GetChunkRef(int tileX, int tileY) => ref data[GetChunkIndex(tileX, tileY)];
-        
-        public void AddChunk(int count = 1)
-        {
-            var oldChunkCountOnX = data.Length;
-            var newChunkCountOnX = oldChunkCountOnX + count;
-            
-            Array.Resize(ref data, newChunkCountOnX);
 
-            for (int i = oldChunkCountOnX; i < newChunkCountOnX; i++)
+        public void AddChunk(int chunkIndex)
+        {
+            chunkList[chunkIndex].Init(MapChunkType.Empty);
+            Count++;
+        }
+
+        private void IncreaseChunkCapacity()
+        {
+            var newCapacity = capacity + 4096;
+            
+            Array.Resize(ref chunkList, newCapacity);
+
+            for (int i = capacity; i < newCapacity; i++)
             {
-                data[i] = new Chunk(Enums.Tile.MapChunkType.Empty);
+                chunkList[i] = new Chunk(MapChunkType.Error);
             }
         }
     }

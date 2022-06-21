@@ -51,10 +51,10 @@ namespace Planet
         {
             if (!Borders.Intersects(new Vec2f(x, y))) throw new IndexOutOfRangeException();
             
-            var chunk = Chunks.GetChunkRef(x, y);
+            ref var chunk = ref Chunks[x, y];
             var tileIndex = GetTileIndex(x, y);
 
-            return ref chunk.Tiles[(int)planetLayer][tileIndex];
+            return ref chunk[(int)planetLayer, tileIndex];
         }
 
         public Tile.Tile[] GetTiles(Vec2i[] positions, Enums.Tile.MapLayerType planetLayer)
@@ -93,11 +93,11 @@ namespace Planet
         {
             if (!Borders.Intersects(new Vec2f(x, y))) throw new IndexOutOfRangeException();
             
-            ref var chunk = ref Chunks.GetChunkRef(x, y);
+            ref var chunk = ref Chunks[x, y];
             var tileIndex = GetTileIndex(x, y);
 
             tile.Borders = new AABB2D(new Vec2f(x, y), (Vec2f)Tile.Tile.Size);
-            chunk.Tiles[(int) planetLayer][tileIndex] = tile;
+            chunk[(int) planetLayer, tileIndex] = tile;
             
             UpdateTile(x, y, planetLayer);
         }
