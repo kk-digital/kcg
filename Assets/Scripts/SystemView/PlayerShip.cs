@@ -5,6 +5,12 @@ using Source.SystemView;
 namespace Scripts {
     namespace SystemView {
         public class PlayerShip : MonoBehaviour {
+            private enum SelectedWeaponType {
+                MAIN_WEAPONS = 1 << 1,
+                BROADSIDES   = 1 << 2,
+                TURRETS      = 1 << 3
+            };
+
             public SystemShip ship;
 
             public GameObject o;
@@ -12,18 +18,24 @@ namespace Scripts {
 
             public float last_time;
 
-            public bool render_orbit = true;
+            public bool  render_orbit           = true;
 
             public float gravitational_strength = 0.0f;
 
-            public float time_scale = 1.0f;
-            public float drag_factor = 10000.0f;
-            public float sailing_factor = 20.0f;
-            public float system_scale = 1.0f;
+            public float time_scale             = 1.0f;
+            public float drag_factor            = 10000.0f;
+            public float sailing_factor         = 20.0f;
+            public float system_scale           = 1.0f;
 
-            public bool  mouse_steering = false;
+            public bool  mouse_steering         = false;
+
+            public const string main_weapon_key = "1";
+            public const string broadsides_key  = "2";
+            public const string turrets_key     = "3";
+
+            private SelectedWeaponType selectedWeapon = SelectedWeaponType.MAIN_WEAPONS;
+
             public CameraController camera_controller;
-
             public SystemState state;
 
             private void Start() {
@@ -49,8 +61,10 @@ namespace Scripts {
                 renderer.shipColor = Color.blue;
                 renderer.width     = 3.0f;
 
-                ship.health = ship.max_health = 25000;
-                ship.shield = ship.max_shield = 50000;
+                ship.health        =
+                ship.max_health    = 25000;
+                ship.shield        =
+                ship.max_shield    = 50000;
 
                 ship.shield_regeneration_rate = 3;
             }
@@ -174,6 +188,10 @@ namespace Scripts {
                         ship.path_planned = false;
                 }
 
+                     if(Input.GetKey(main_weapon_key)) selectedWeapon = SelectedWeaponType.MAIN_WEAPONS;
+                else if(Input.GetKey( broadsides_key)) selectedWeapon = SelectedWeaponType.BROADSIDES;
+                else if(Input.GetKey(    turrets_key)) selectedWeapon = SelectedWeaponType.TURRETS;
+
                 foreach(ShipWeapon weapon in ship.weapons) {
                     weapon.update();
 
@@ -185,13 +203,22 @@ namespace Scripts {
                     if(Input.GetKey("space") || Input.GetMouseButton(0)) {
                         Vector3 mouse_position = camera_controller.get_abs_pos(Input.mousePosition);
 
-                        foreach(ShipWeapon weapon in ship.weapons)
+                        foreach(ShipWeapon weapon in ship.weapons) {
+                            Debug.Log((int)selectedWeapon + " & " + (int)weapon.flags + " = " + ((int)selectedWeapon & (int)weapon.flags));
+
+                            if(((int)selectedWeapon & (int)weapon.flags) == 0) continue;
+
                             if(weapon.try_targeting(mouse_position.x, mouse_position.y, current_time))
                                 weapon.fire(mouse_position.x, mouse_position.y);
+                        }
                     }
                 } else {
                     if(Input.GetKey("space"))
                         foreach(ShipWeapon weapon in ship.weapons) {
+                            Debug.Log((int)selectedWeapon + " & " + (int)weapon.flags + " = " + ((int)selectedWeapon & (int)weapon.flags));
+
+                            if(((int)selectedWeapon & (int)weapon.flags) == 0) continue;
+
                             float x = ship.self.posx + (float)Math.Cos(ship.rotation) * weapon.range;
                             float y = ship.self.posy + (float)Math.Sin(ship.rotation) * weapon.range;
 

@@ -522,7 +522,9 @@ namespace Source {
                 float one_plus_ecc  = 1 + eccentricity;
                 float one_minus_ecc = 1 - eccentricity;
 
-                eccentric_anomaly = 2.0f * (float)Math.Atan((Math.Sqrt(one_plus_ecc / one_minus_ecc) * one_minus_ecc * Math.Tan(true_anomaly / 2)) / one_plus_ecc);
+                eccentric_anomaly   = 2.0f * (float)Math.Atan((Math.Sqrt(one_plus_ecc / one_minus_ecc)
+                                           * one_minus_ecc
+                                           * Math.Tan(true_anomaly / 2)) / one_plus_ecc);
 
                 // M = E - ε sin(E)
 
