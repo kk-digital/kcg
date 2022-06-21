@@ -7,31 +7,24 @@ namespace Item
 {
     public class PickUpSystem
     {
-        Contexts EntitasContext;
-
-        public PickUpSystem(Contexts entitasContext)
-        {
-            EntitasContext = entitasContext;
-        }
-
         // Todo:
         //  Hash entities by their position.
         //  Only call this after an item or an agent has changed position. 
-        public void Update()
+        public void Update(GameContext gameContext)
         {
             // Get agents able to pick an object.
-            var agents = EntitasContext.game.GetGroup(
+            var agents = gameContext.GetGroup(
                 GameMatcher.AllOf(GameMatcher.AgentActionScheduler, GameMatcher.PhysicsPosition2D).AnyOf(GameMatcher.AgentInventory, GameMatcher.AgentToolBar));
 
             // Get all pickable items.
-            var pickableItems = EntitasContext.game.GetGroup(
+            var pickableItems = gameContext.GetGroup(
                 GameMatcher.AllOf(GameMatcher.ItemID, GameMatcher.PhysicsPosition2D).NoneOf(GameMatcher.ItemUnpickable));
 
 
             foreach (var item in pickableItems)
             {
                 // Get item ceter position.
-                var itemAttribute = EntitasContext.game.GetEntityWithItemAttributes(item.itemID.ItemType);
+                var itemAttribute = gameContext.GetEntityWithItemAttributes(item.itemID.ItemType);
                 Vec2f centerPos = item.physicsPosition2D.Value + itemAttribute.itemAttributeSize.Size / 2.0f;
                 foreach (var agent in agents)
                 {

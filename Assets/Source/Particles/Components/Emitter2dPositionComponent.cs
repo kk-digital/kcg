@@ -5,6 +5,7 @@ using UnityEngine;
 namespace Particle
 {
 
+    [Particle]
     public struct Emitter2dPositionComponent : IComponent
     {
         public Vector2 Position;

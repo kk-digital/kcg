@@ -37,7 +37,7 @@ public class MiningLaser : MonoBehaviour
     Item.SpawnerSystem itemSpawnSystem;
 
     // Input Process System
-    ECSInput.ProcessSystem inputProcessSystem;
+    ECSInput.InputProcessSystem inputProcessSystem;
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
     void Start()
@@ -54,19 +54,19 @@ public class MiningLaser : MonoBehaviour
         contexts = Contexts.sharedInstance;
 
         // Assign Draw System
-        DrawSystem = new Item.DrawSystem(contexts);
+        DrawSystem = new Item.DrawSystem();
 
         // Create Inventory Manager System
         inventoryManager = new Inventory.InventoryManager();
 
         // Create Item Spawner System
-        itemSpawnSystem = new Item.SpawnerSystem(contexts);
+        itemSpawnSystem = new Item.SpawnerSystem();
 
         // Create Draw System
-        inventoryDrawSystem = new Inventory.DrawSystem(contexts);
+        inventoryDrawSystem = new Inventory.DrawSystem();
 
         // Create Input Process System
-        inputProcessSystem = new ECSInput.ProcessSystem();
+        inputProcessSystem = new ECSInput.InputProcessSystem();
 
         // Create Inventory Attacher
         var inventoryAttacher = Inventory.InventoryAttacher.Instance;
@@ -88,14 +88,14 @@ public class MiningLaser : MonoBehaviour
 
         // Add item to tool bar.
         {
-            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(Enums.ItemType.Gun);
+            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.game, Enums.ItemType.Gun);
             inventoryManager.AddItem(entity, toolBarID);
         }
 
         // Test not stackable items.
         for (uint i = 0; i < 10; i++)
         {
-            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(Enums.ItemType.Gun);
+            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.game, Enums.ItemType.Gun);
             inventoryManager.AddItem(entity, inventoryID);
         }
 
@@ -128,7 +128,7 @@ public class MiningLaser : MonoBehaviour
     private void InitializeLaser()
     {
         // Spawn the created item
-        itemSpawnSystem.SpawnItem(Enums.ItemType.Gun, laserPosition);
+        itemSpawnSystem.SpawnItem(contexts.game, Enums.ItemType.Gun, laserPosition);
 
         // Initializon done
         Init = true;
@@ -193,7 +193,7 @@ public class MiningLaser : MonoBehaviour
 
             // If laser held, draw it.
             if(isHeld)
-                DrawSystem.Draw(Instantiate(Material), transform, 16);
+                DrawSystem.Draw(contexts.game, Instantiate(Material), transform, 16);
 
             if (Input.GetKey(KeyCode.Mouse0) && isHeld)
             {

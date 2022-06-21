@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Physics
 {
-    public class MovableSystem
+    public class PhysicsMovableSystem
     {
         public void Update()
         {

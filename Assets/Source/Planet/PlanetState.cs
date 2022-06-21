@@ -22,13 +22,18 @@ namespace Planet
         public FloatingTextList FloatingTextList;
 
 
-        public PlanetState(Vec2i mapSize)
+        public GameContext GameContext;
+
+
+        public PlanetState(Vec2i mapSize, GameContext gameContext)
         {
             TileMap = new Planet.TileMap(mapSize);
             AgentList = new AgentList();
             VehicleList = new VehicleList();
             ProjectileList = new ProjectileList();
             FloatingTextList = new FloatingTextList();
+
+            GameContext = gameContext;
         }
 
 
@@ -36,7 +41,7 @@ namespace Planet
                                 int width, int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity gameEntity = GameState.SpawnerSystem.SpawnPlayer(material, spriteId, width, height, position, newEntity.AgentId,
+            GameEntity gameEntity = GameState.AgentSpawnerSystem.SpawnPlayer(material, spriteId, width, height, position, newEntity.AgentId,
                     startingAnimation);
             newEntity.Entity = gameEntity;
 
@@ -47,7 +52,7 @@ namespace Planet
                      int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity entity = GameState.SpawnerSystem.SpawnAgent(material, spriteId, width, height, position,
+            GameEntity entity = GameState.AgentSpawnerSystem.SpawnAgent(material, spriteId, width, height, position,
                                                                     newEntity.AgentId, startingAnimation);
             newEntity.Entity = entity;
 
@@ -59,7 +64,7 @@ namespace Planet
                         int width, int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity entity = GameState.SpawnerSystem.SpawnEnemy(material, spriteId, width, height, position,
+            GameEntity entity = GameState.AgentSpawnerSystem.SpawnEnemy(material, spriteId, width, height, position,
             newEntity.AgentId, startingAnimation);
 
             newEntity.Entity = entity;
@@ -78,7 +83,7 @@ namespace Planet
         public FloatingTextEntity AddFloatingText(string text, float timeToLive, Vec2f velocity, Vec2f position)
         {
             ref FloatingTextEntity newEntity = ref FloatingTextList.Add();
-            GameEntity entity = GameState.FloatingTextSpawnerSystem.SpawnFloatingText(text, timeToLive, velocity, position,
+            GameEntity entity = GameState.FloatingTextSpawnerSystem.SpawnFloatingText(GameContext, text, timeToLive, velocity, position,
                          newEntity.FloatingTextId);
 
             newEntity.Entity = entity;
@@ -180,20 +185,20 @@ namespace Planet
 
             // calling all the systems we have
 
-            GameState.ProcessSystem.Update();
-            GameState.MovableSystem.Update();
-            GameState.ProcessCollisionSystem.Update(TileMap);
+            GameState.InputProcessSystem.Update();
+            GameState.PhysicsMovableSystem.Update();
+            GameState.PhysicsProcessCollisionSystem.Update(TileMap);
             GameState.EnemyAiSystem.Update(this);
             GameState.FloatingTextUpdateSystem.Update(this, frameTime);
             GameState.AnimationUpdateSystem.Update(frameTime);
             GameState.ActionSchedulerSystem.Update(frameTime);
-            GameState.ItemPickUpSystem.Update();
+            GameState.ItemPickUpSystem.Update(GameContext);
 
 
             TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Front, Object.Instantiate(material), transform, 10);
             TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Ore, Object.Instantiate(material), transform, 11);
             GameState.AgentDrawSystem.Draw(Object.Instantiate(material), transform, 12);
-            GameState.ItemDrawSystem.Draw(Material.Instantiate(material), transform, 13);
+            GameState.ItemDrawSystem.Draw(GameContext, Material.Instantiate(material), transform, 13);
             GameState.FloatingTextDrawSystem.Draw(transform, 10000);
 
             #region Gui drawing systems

@@ -42,11 +42,11 @@ namespace Planet.Unity
         static bool InitTiles;
 
 
-        ECSInput.ProcessSystem InputProcessSystems;
-        Agent.SpawnerSystem AgentSpawnerSystem;
-        Physics.MovableSystem PhysicsMovableSystem;
+        ECSInput.InputProcessSystem InputProcessSystems;
+        Agent.AgentSpawnerSystem AgentSpawnerSystem;
+        Physics.PhysicsMovableSystem PhysicsMovableSystem;
         Agent.AgentDrawSystem AgentDrawSystem;
-        Physics.ProcessCollisionSystem AgentProcessCollisionSystem;
+        Physics.PhysicsProcessCollisionSystem AgentProcessCollisionSystem;
 
         public void Start()
         {
@@ -67,11 +67,11 @@ namespace Planet.Unity
             int CharacterSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(CharacterSpriteSheet, 0, 0, Enums.AtlasType.Agent);
 
 
-            InputProcessSystems = new ECSInput.ProcessSystem();
-            AgentSpawnerSystem = new Agent.SpawnerSystem();
-            PhysicsMovableSystem = new Physics.MovableSystem();
+            InputProcessSystems = new ECSInput.InputProcessSystem();
+            AgentSpawnerSystem = new Agent.AgentSpawnerSystem();
+            PhysicsMovableSystem = new Physics.PhysicsMovableSystem();
             AgentDrawSystem = new Agent.AgentDrawSystem();
-            AgentProcessCollisionSystem = new Physics.ProcessCollisionSystem();
+            AgentProcessCollisionSystem = new Physics.PhysicsProcessCollisionSystem();
 
             AgentSpawnerSystem.SpawnPlayer(Material, CharacterSpriteId, 32, 48, new Vec2f(3.0f, 2.0f), 0, 0);
         }

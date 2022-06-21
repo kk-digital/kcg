@@ -54,24 +54,20 @@ public static class GameComponentsLookup {
     public const int ItemStack = 43;
     public const int ItemUnpickable = 44;
     public const int ItemUse = 45;
-    public const int ParticleEmitter2dPosition = 46;
-    public const int ParticleEmitterState = 47;
-    public const int ParticlePosition2D = 48;
-    public const int ParticleState = 49;
-    public const int PhysicsBox2DCollider = 50;
-    public const int PhysicsMovable = 51;
-    public const int PhysicsPosition2D = 52;
-    public const int PhysicsSphere2DCollider = 53;
-    public const int ProjectileCollider = 54;
-    public const int ProjectileID = 55;
-    public const int ProjectilePhysicsState2D = 56;
-    public const int ProjectileSprite2D = 57;
-    public const int ProjectileType = 58;
-    public const int VehicleID = 59;
-    public const int VehiclePhysicsState2D = 60;
-    public const int VehicleSprite2D = 61;
+    public const int PhysicsBox2DCollider = 46;
+    public const int PhysicsMovable = 47;
+    public const int PhysicsPosition2D = 48;
+    public const int PhysicsSphere2DCollider = 49;
+    public const int ProjectileCollider = 50;
+    public const int ProjectileID = 51;
+    public const int ProjectilePhysicsState2D = 52;
+    public const int ProjectileSprite2D = 53;
+    public const int ProjectileType = 54;
+    public const int VehicleID = 55;
+    public const int VehiclePhysicsState2D = 56;
+    public const int VehicleSprite2D = 57;
 
-    public const int TotalComponents = 62;
+    public const int TotalComponents = 58;
 
     public static readonly string[] componentNames = {
         "ActionAnimation",
@@ -120,10 +116,6 @@ public static class GameComponentsLookup {
         "ItemStack",
         "ItemUnpickable",
         "ItemUse",
-        "ParticleEmitter2dPosition",
-        "ParticleEmitterState",
-        "ParticlePosition2D",
-        "ParticleState",
         "PhysicsBox2DCollider",
         "PhysicsMovable",
         "PhysicsPosition2D",
@@ -185,10 +177,6 @@ public static class GameComponentsLookup {
         typeof(Item.StackComponent),
         typeof(Item.Unpickable),
         typeof(Item.UseComponent),
-        typeof(Particle.Emitter2dPositionComponent),
-        typeof(Particle.EmitterStateComponent),
-        typeof(Particle.Position2DComponent),
-        typeof(Particle.StateComponent),
         typeof(Physics.Box2DColliderComponent),
         typeof(Physics.MovableComponent),
         typeof(Physics.Position2DComponent),

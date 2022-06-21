@@ -31,15 +31,15 @@ public class GameState
 
     #region Agent
 
-    public static readonly Agent.SpawnerSystem SpawnerSystem;
+    public static readonly Agent.AgentSpawnerSystem AgentSpawnerSystem;
     public static readonly Agent.AgentDrawSystem AgentDrawSystem;
     public static readonly Agent.EnemyAiSystem EnemyAiSystem;
 
     #endregion
 
     #region
-    public static readonly Physics.MovableSystem MovableSystem;
-    public static readonly Physics.ProcessCollisionSystem ProcessCollisionSystem;
+    public static readonly Physics.PhysicsMovableSystem PhysicsMovableSystem;
+    public static readonly Physics.PhysicsProcessCollisionSystem PhysicsProcessCollisionSystem;
     #endregion
 
     #region Inventory
@@ -54,13 +54,13 @@ public class GameState
     #endregion
 
     #region FloatingText
-    public static readonly FloatingText.UpdateSystem FloatingTextUpdateSystem;
-    public static readonly FloatingText.SpawnerSystem FloatingTextSpawnerSystem;
+    public static readonly FloatingText.FloatingTextUpdateSystem FloatingTextUpdateSystem;
+    public static readonly FloatingText.FloatingTextSpawnerSystem FloatingTextSpawnerSystem;
     public static readonly FloatingText.FloatingTextDrawSystem FloatingTextDrawSystem;
     #endregion
 
     public static readonly Utility.FileLoadingManager FileLoadingManager;
-    public static readonly ECSInput.ProcessSystem ProcessSystem;
+    public static readonly ECSInput.InputProcessSystem InputProcessSystem;
 
     static GameState()
     {
@@ -71,23 +71,23 @@ public class GameState
         SpriteAtlasManager = new Sprites.SpriteAtlasManager(SpriteLoader);
         TileCreationApi = new Tile.TileCreationApi();
         FileLoadingManager = new Utility.FileLoadingManager();
-        ProcessSystem = new ECSInput.ProcessSystem();
-        SpawnerSystem = new Agent.SpawnerSystem();
-        MovableSystem = new Physics.MovableSystem();
+        InputProcessSystem = new ECSInput.InputProcessSystem();
+        AgentSpawnerSystem = new Agent.AgentSpawnerSystem();
+        PhysicsMovableSystem = new Physics.PhysicsMovableSystem();
         AgentDrawSystem = new Agent.AgentDrawSystem();
         InventoryDrawSystem = new Inventory.DrawSystem();
         InventoryManager = new Inventory.InventoryManager();
-        ProcessCollisionSystem = new Physics.ProcessCollisionSystem();
+        PhysicsProcessCollisionSystem = new Physics.PhysicsProcessCollisionSystem();
         EnemyAiSystem = new Agent.EnemyAiSystem();
         AnimationManager = new Animation.AnimationManager();
-        FloatingTextUpdateSystem = new FloatingText.UpdateSystem();
-        FloatingTextSpawnerSystem = new FloatingText.SpawnerSystem(entitasContext);
+        FloatingTextUpdateSystem = new FloatingText.FloatingTextUpdateSystem();
+        FloatingTextSpawnerSystem = new FloatingText.FloatingTextSpawnerSystem();
         FloatingTextDrawSystem = new FloatingText.FloatingTextDrawSystem();
         AnimationUpdateSystem = new Animation.UpdateSystem();
         //UnityImage2DCache = new Sprites.UnityImage2DCache();
-        ItemSpawnSystem = new Item.SpawnerSystem(entitasContext);
-        ItemDrawSystem = new Item.DrawSystem(entitasContext);
-        ItemPickUpSystem = new Item.PickUpSystem(entitasContext);
+        ItemSpawnSystem = new Item.SpawnerSystem();
+        ItemDrawSystem = new Item.DrawSystem();
+        ItemPickUpSystem = new Item.PickUpSystem();
         ActionManager = new Action.ActionManager();
         ActionSchedulerSystem = new Action.ActionSchedulerSystem();
     }

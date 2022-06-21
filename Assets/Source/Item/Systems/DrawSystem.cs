@@ -1,34 +1,28 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Entitas;
 
 namespace Item
 {
     public class DrawSystem
     {
-
-        Contexts EntitasContext;
-
-        public DrawSystem(Contexts entitasContext)
+        
+        public void Draw(GameContext gameContext, Material material, Transform transform, int drawOrder)
         {
-            EntitasContext = entitasContext;
-        }
-
-        public void Draw(Material material, Transform transform, int drawOrder)
-        {
-            var ItemAttributesWithSprite = EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.ItemAttributeSprite));
+            var ItemAttributesWithSprite = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.ItemAttributeSprite));
             foreach (var ItemTypeEntity in ItemAttributesWithSprite)
             {
                 int SpriteID = ItemTypeEntity.itemAttributeSprite.ID;
                 Sprites.Sprite sprite = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle);
-
+                
                 // Draw all items with same sprite.
-                var ItemsOfType = EntitasContext.game.GetEntitiesWithItemIDItemType(ItemTypeEntity.itemAttributes.ItemType);
+                var ItemsOfType = gameContext.GetEntitiesWithItemIDItemType(ItemTypeEntity.itemAttributes.ItemType);
                 foreach (var entity in ItemsOfType)
                 {
                     // Test if Item is Drawable.
                     if (!ItemTypeEntity.hasItemAttributeSize) // Test if Item is Drawable.
                         continue;
-
+                    
                     float x, y;
                     if (entity.hasItemDrawPosition2D)
                     {
@@ -47,12 +41,12 @@ namespace Item
                             continue;
                         }
                     }
-
+                    
                     float w = ItemTypeEntity.itemAttributeSize.Size.X;
                     float h = ItemTypeEntity.itemAttributeSize.Size.Y;
                     Utility.Render.DrawSprite(x, y, w, h, sprite, Object.Instantiate(material), transform, drawOrder);
                 }
-
+                
             }
         }
     }

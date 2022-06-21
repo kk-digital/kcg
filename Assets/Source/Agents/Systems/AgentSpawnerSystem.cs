@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Agent
 {
-    public class SpawnerSystem
+    public class AgentSpawnerSystem
     {
         public GameEntity SpawnPlayer(Material material, int spriteId, int width, int height, Vec2f position,
         int AgentId, int startingAnimation)
@@ -20,7 +20,7 @@ namespace Agent
 
             entity.AddAgentID(AgentId);
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
-            entity.AddAgentSprite2D(spriteId, spriteSize);
+            entity.AddAgentSprite2D(spriteId, spriteSize); // adds the sprite  component to the entity
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
             var size = new Vec2f(spriteSize.X - 0.5f, spriteSize.Y);
             entity.AddPhysicsBox2DCollider(size, new Vec2f(0.25f, .0f));
@@ -46,7 +46,7 @@ namespace Agent
             Vec2f box2dCollider = new Vec2f(0.5f, 1.5f);
             entity.AddPhysicsBox2DCollider(box2dCollider, new Vec2f(0.25f, 0.0f));
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
-            entity.AddAgentSprite2D(spriteId, spriteSize);
+            entity.AddAgentSprite2D(spriteId, spriteSize); // adds the sprite  component to the entity
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
             entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.Zero, newAcceleration: Vec2f.Zero);
 
@@ -65,7 +65,7 @@ namespace Agent
             Vec2f box2dCollider = new Vec2f(0.75f, 0.5f);
             entity.AddPhysicsBox2DCollider(box2dCollider, new Vec2f(0.125f, 0.0f));
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
-            entity.AddAgentSprite2D(spriteId, spriteSize);
+            entity.AddAgentSprite2D(spriteId, spriteSize); // adds the sprite  component to the entity
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
             entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.Zero, newAcceleration: Vec2f.Zero);
             entity.AddAgentEnemy(0, 4.0f);

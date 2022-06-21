@@ -4,16 +4,16 @@ using UnityEngine;
 
 namespace Particle
 {
-     public class EmitterUpdateSystem
+    public class ParticleEmitterUpdateSystem
     {
-        List<GameEntity> ToDestroy = new List<GameEntity>();
+        List<ParticleEntity> ToDestroy = new List<ParticleEntity>();
 
-        public void Execute()
+        public void Execute(ParticleContext context)
         {
             ToDestroy.Clear();
 
             float deltaTime = Time.deltaTime;
-            IGroup<GameEntity> entities = Contexts.sharedInstance.game.GetGroup(GameMatcher.ParticleEmitterState);
+            IGroup<ParticleEntity> entities = context.GetGroup(ParticleMatcher.ParticleEmitterState);
             foreach (var gameEntity in entities)
             {
                 var state = gameEntity.particleEmitterState;
@@ -27,7 +27,7 @@ namespace Particle
                         int spriteId = state.SpriteIds[(random.Next() % state.SpriteIds.Length)];
                         float randomX = (float)random.NextDouble() * 2.0f - 1.0f;
 
-                        var e = Contexts.sharedInstance.game.CreateEntity();
+                        var e = context.CreateEntity();
                         var gameObject = Object.Instantiate(state.Prefab);
                         e.AddParticleState(gameObject, 1.0f, state.ParticleDecayRate, state.ParticleDeltaRotation, state.ParticleDeltaScale);
                         e.AddParticlePosition2D(position.Position, state.ParticleAcceleration, new Vector2(state.ParticleStartingVelocity.x + randomX, state.ParticleStartingVelocity.y));
