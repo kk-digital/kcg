@@ -9,9 +9,7 @@ namespace Planet.VisualEffects
     public class PlanetBackgroundStarField
     {
         // Stored Properties
-        private Texture2D tex;
         private bool Init;
-        private Vector2Int pngSize;
         private PerlinField2D perlinField;
         private List<Sprites.Sprite> stars;
         int i = 0;
@@ -19,29 +17,62 @@ namespace Planet.VisualEffects
 
         public void Initialize()
         {
-            int width = 8;
-            int height = 8;
-            pngSize = new Vector2Int(width, height);
-
             stars = new List<Sprites.Sprite>();
 
+            int star1Width = 8;
+            int star1Height = 8;
+            Vector2Int star1PngSize = new Vector2Int(star1Width, star1Height);
+
             // Load image from fil
-            var spriteSheetID = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\Starsheet2.png", width, height);
+            var star1Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\Starsheet2.png", star1Width, star1Height);
 
             // Set Sprite ID from Sprite Atlas
-            int spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteSheetID, 0, 0, Enums.AtlasType.Particle);
-            spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteSheetID, 0, 1, Enums.AtlasType.Particle);
-            spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteSheetID, 0, 2, Enums.AtlasType.Particle);
-            spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteSheetID, 0, 3, Enums.AtlasType.Particle);
+            int star1ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(star1Sheet, 0, 0, Enums.AtlasType.Particle);
+            star1ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(star1Sheet, 0, 1, Enums.AtlasType.Particle);
+            star1ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(star1Sheet, 0, 2, Enums.AtlasType.Particle);
+            star1ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(star1Sheet, 0, 3, Enums.AtlasType.Particle);
 
             // Set Sprite Data
-            byte[] spriteData = new byte[pngSize.x * pngSize.y * 4];
+            byte[] star1spriteData = new byte[star1PngSize.x * star1PngSize.y * 4];
 
             // Get Sprite Bytes
-            GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, Enums.AtlasType.Particle);
+            GameState.SpriteAtlasManager.GetSpriteBytes(star1ID, star1spriteData, Enums.AtlasType.Particle);
 
             // Set Texture
-            tex = Utility.Texture.CreateTextureFromRGBA(spriteData, pngSize.x, pngSize.y);
+            Texture2D star1Tex = Utility.Texture.CreateTextureFromRGBA(star1spriteData, star1PngSize.x, star1PngSize.y);
+
+            var star1Sprite = new Sprites.Sprite
+            {
+                Texture = star1Tex,
+                TextureCoords = new Vector4(0, 0, 1, 1)
+            };
+            stars.Add(star1Sprite);
+
+            int star2Width = 8;
+            int star2Height = 8;
+            Vector2Int star2PngSize = new Vector2Int(star2Width, star2Height);
+
+            // Load image from fil
+            var star2Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\Starsheet2.png", star2Width, star2Height);
+
+            // Set Sprite ID from Sprite Atlas
+            int star2ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(star2Sheet, 0, 0, Enums.AtlasType.Particle);
+
+            // Set Sprite Data
+            byte[] star2spriteData = new byte[star2PngSize.x * star2PngSize.y * 4];
+
+            // Get Sprite Bytes
+            GameState.SpriteAtlasManager.GetSpriteBytes(star2ID, star2spriteData, Enums.AtlasType.Particle);
+
+            // Set Texture
+            Texture2D star2Tex = Utility.Texture.CreateTextureFromRGBA(star2spriteData, star2PngSize.x, star2PngSize.y);
+
+            var star2Sprite = new Sprites.Sprite
+            {
+                Texture = star2Tex,
+                TextureCoords = new Vector4(0, 0, 1, 1)
+            };
+            stars.Add(star2Sprite);
 
             perlinField = new PerlinField2D();
             perlinField.init(256, 256);
@@ -53,26 +84,32 @@ namespace Planet.VisualEffects
         {
             if (Init)
             {
-                var sprite = new Sprites.Sprite
-                {
-                    Texture = tex,
-                    TextureCoords = new Vector4(0, 0, 1, 1)
-                };
-
                 for (; i < 20; i++)
                 {
-                    stars.Add(sprite);
-
                     perlinGrid = GenPerlin(256, 256, 2, 20);
 
                     int random = Random.Range(0, 256);
-
+                    int spriteRandom = Random.Range(0, 2);
+                    Sprites.Sprite sprite = new Sprites.Sprite();
                     float rand1 = perlinGrid[random, random];
-
-                    if (rand1 >= .5)
-                        Utility.Render.DrawSprite(Random.Range(-10, 10), Random.Range(-10, 10), 1, 1, sprite, Material, transform, drawOrder);
-                    else
-                        Utility.Render.DrawSprite(Random.Range(-100, 100), Random.Range(-100, 100), 1, 1, sprite, Material, transform, drawOrder);
+                    Debug.Log(spriteRandom);
+                    switch(spriteRandom)
+                    {
+                        case 0:
+                            sprite = stars[0];
+                            if (rand1 >= .5)
+                                Utility.Render.DrawSprite(Random.Range(-10, 10), Random.Range(-10, 10), 1, 1, sprite, Material, transform, drawOrder);
+                            else
+                                Utility.Render.DrawSprite(Random.Range(-100, 100), Random.Range(-100, 100), 1, 1, sprite, Material, transform, drawOrder);
+                            break;
+                        case 1:
+                            sprite = stars[1];
+                            if (rand1 >= .5)
+                                Utility.Render.DrawSprite(Random.Range(-10, 10), Random.Range(-10, 10), 1, 1, sprite, Material, transform, drawOrder);
+                            else
+                                Utility.Render.DrawSprite(Random.Range(-100, 100), Random.Range(-100, 100), 1, 1, sprite, Material, transform, drawOrder);
+                            break;
+                    }
 
                 }
             }
@@ -94,34 +131,6 @@ namespace Planet.VisualEffects
             }
 
             return grid;
-        }
-
-        private Texture2D CreateTextureFromRGBA(byte[] rgba, int w, int h)
-        {
-            var res = new Texture2D(w, h, TextureFormat.RGBA32, false)
-            {
-                filterMode = FilterMode.Point
-            };
-
-            var pixels = new Color32[w * h];
-            for (int x = 0; x < w; x++)
-            {
-                for (int y = 0; y < h; y++)
-                {
-                    int index = (x + y * w) * 4;
-                    var r = rgba[index];
-                    var g = rgba[index + 1];
-                    var b = rgba[index + 2];
-                    var a = rgba[index + 3];
-
-                    pixels[x + y * w] = new Color32(r, g, b, a);
-                }
-            }
-
-            res.SetPixels32(pixels);
-            res.Apply();
-
-            return res;
         }
     }   
 }

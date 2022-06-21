@@ -23,7 +23,6 @@ public class PlanetVisualEffectsTest : MonoBehaviour
         Init = true;
     }
 
-
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
     void Update()
     {
