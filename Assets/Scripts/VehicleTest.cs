@@ -17,9 +17,6 @@ public class VehicleTest : MonoBehaviour
     // Vehicle Physics
     public Vehicle.ProcessVelocitySystem vehiclePhysics;
 
-    // Planet Tile Map
-    private Planet.TileMap tileMap;
-
     // Rendering Material
     [SerializeField]
     Material Material;
@@ -46,9 +43,6 @@ public class VehicleTest : MonoBehaviour
 
         // Loading Image
         vehicleSpawnerSystem.SpawnVehicle(Material, image, 128, 96, new Vec2f(-5.0f, 0));
-
-        // Initialize Planet Tile Map
-        tileMap = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().TileMap;
     }
     
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html

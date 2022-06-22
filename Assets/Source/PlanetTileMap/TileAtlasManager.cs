@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Tile
+namespace PlanetTileMap
 {
     public class TileAtlasManager
     {

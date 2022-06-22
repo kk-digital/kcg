@@ -19,8 +19,9 @@ public class GameState
 
     #region Tile
 
-    public static readonly Tile.TileAtlasManager TileSpriteAtlasManager;
-    public static readonly Tile.TileCreationApi TileCreationApi;
+    public static readonly PlanetTileMap.TileAtlasManager TileSpriteAtlasManager;
+    public static readonly PlanetTileMap.TileCreationApi TileCreationApi;
+    public static readonly PlanetTileMap.TilePropertyManager TilePropertyManager;
 
     #endregion
     
@@ -39,7 +40,7 @@ public class GameState
 
     #endregion
 
-    #region
+    #region Physics
     public static readonly Physics.PhysicsMovableSystem PhysicsMovableSystem;
     public static readonly Physics.PhysicsProcessCollisionSystem PhysicsProcessCollisionSystem;
     #endregion
@@ -74,9 +75,10 @@ public class GameState
         Contexts entitasContext = Contexts.sharedInstance;
 
         SpriteLoader = new Sprites.SpriteLoader();
-        TileSpriteAtlasManager = new Tile.TileAtlasManager(SpriteLoader);
+        TileSpriteAtlasManager = new PlanetTileMap.TileAtlasManager(SpriteLoader);
+        TilePropertyManager = new PlanetTileMap.TilePropertyManager();
         SpriteAtlasManager = new Sprites.SpriteAtlasManager(SpriteLoader);
-        TileCreationApi = new Tile.TileCreationApi();
+        TileCreationApi = new PlanetTileMap.TileCreationApi();
         FileLoadingManager = new Utility.FileLoadingManager();
         InputProcessSystem = new ECSInput.InputProcessSystem();
         AgentSpawnerSystem = new Agent.AgentSpawnerSystem();

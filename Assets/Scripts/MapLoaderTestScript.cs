@@ -29,8 +29,6 @@ namespace Planet.Unity
         List<int> triangles = new();
         List<Vector2> uvs = new();
         List<Vector3> verticies = new();
-        
-        public Planet.TileMap TileMap;
 
         int SortingOrder = 0;
 
@@ -97,8 +95,13 @@ namespace Planet.Unity
                 int x = (int)worldPosition.x;
                 int y = (int)worldPosition.y;
                 
-                var chunkIndex = TileMap.Chunks.GetChunkIndex(x, y);
-                var tileIndex = TileMap.GetTileIndex(x, y);
+                var xChunkIndex = x >> 4;
+                var yChunkIndex = y * TileMap.MapSize.X;
+                var chunkIndex = xChunkIndex + (yChunkIndex >> 4);
+                
+                var xTileIndex = x & 0x0f;
+                var yTileIndex = y & 0x0f;
+                var tileIndex = xTileIndex + (yTileIndex << 4);
                 
                 Debug.Log($"{x} {y} ChunkIndex: {chunkIndex} TileIndex: {tileIndex}");
             }
@@ -155,27 +158,27 @@ namespace Planet.Unity
             // Generating the map
             Vec2i mapSize = new Vec2i(16, 16);
 
-            TileMap = new TileMap(mapSize);
+            var tileMap = new PlanetTileMap.TileMap(mapSize);
 
-            for(int j = TileMap.Borders.IntBottom; j < TileMap.Borders.IntTop; j++)
+            for(int j = 0; j < tileMap.MapSize.Y; j++)
             {
-                for(int i = TileMap.Borders.IntLeft; i < TileMap.Borders.IntRight; i++)
+                for(int i = 0; i < tileMap.MapSize.X; i++)
                 {
-                    var frontTile = new Tile.Tile(new Vec2f(i, j));
-                    var oreTile = new Tile.Tile(new Vec2f(i, j));
+                    var ore1Tile = TileID.Empty;
+                    var glassTile = TileID.Empty;
 
-                    frontTile.Type = 9;
+                    glassTile = TileID.Glass;
 
 
                     if (i % 10 == 0)
                     {
-                        oreTile.Type = 8;
+                        ore1Tile = TileID.Ore1;
                     }
 
                     if (j is > 1 and < 6 || (j > (8 + i)))
                     {
-                       frontTile.Type = -1; 
-                       oreTile.Type = -1;
+                       glassTile = TileID.Empty; 
+                       ore1Tile = TileID.Empty;
                     }
 
                     TileMap.SetTile(ref frontTile, MapLayerType.Front);

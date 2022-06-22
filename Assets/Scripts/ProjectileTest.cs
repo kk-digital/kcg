@@ -1,9 +1,7 @@
 using UnityEngine;
 using Enums;
 using Entitas;
-using Enums.Tile;
 using KMath;
-using Physics;
 
 public class ProjectileTest : MonoBehaviour
 {
@@ -31,8 +29,8 @@ public class ProjectileTest : MonoBehaviour
 
     // Projectile Properties
     private Vec2f startPos;
-    private Planet.TileMap tileMap;
-    private Planet.ChunkList chunkList;
+    Vector3 worldPosition;
+    private PlanetTileMap.ChunkList chunkList;
     private Vec2f projectilePosition;
     private Vec2f worldPosition;
     private Vec2f diff;
@@ -42,12 +40,6 @@ public class ProjectileTest : MonoBehaviour
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
     void Start()
     {
-        // Create Tile Map
-        tileMap = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().TileMap;
-
-        // Create Chunk List
-        chunkList = tileMap.Chunks;
-
         // Initialize Projectile Draw System
         projectileDrawSystem = new Projectile.DrawSystem();
 

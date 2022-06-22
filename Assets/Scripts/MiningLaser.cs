@@ -10,9 +10,6 @@ public class MiningLaser : MonoBehaviour
     // ATLAS
     [SerializeField] Material Material;
 
-    // Planet Tile Map
-    Planet.TileMap tileMap;
-
     // Entitas Contexts
     Contexts contexts;
 
@@ -47,8 +44,6 @@ public class MiningLaser : MonoBehaviour
 
         // Laser Position
         laserPosition = new Vec2f(2.0f, 2.5f);
-
-        tileMap = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().TileMap;
 
         // Assign Contexts
         contexts = Contexts.sharedInstance;
@@ -220,7 +215,7 @@ public class MiningLaser : MonoBehaviour
                     Debug.Log($"({cell.x},{cell.y})");
 
                     ref var tile = ref tileMap.GetTileRef(cell.x, cell.y, Enums.Tile.MapLayerType.Front);
-                    if (tile.Type >= 0)
+                    if (tile.Property >= 0)
                     {
                         tileMap.RemoveTile(cell.x, cell.y, Enums.Tile.MapLayerType.Front);
                         //tileMap.BuildLayerTexture(Enums.Tile.MapLayerType.Front);

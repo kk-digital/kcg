@@ -7,6 +7,6 @@ namespace Agent
     public struct Sprite2DComponent : IComponent
     {
         public int SpriteId;
-        public Vec2f Size;
+        public Vec2i Size;
     }
 }

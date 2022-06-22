@@ -1,9 +1,9 @@
-namespace Tile
+namespace Enums.Tile
 {
-
-
-    public enum TileEnum
+    public enum TileID
     {
+        Error = 0,
+        Air,
         Ore1,
         Ore2,
         Ore3,

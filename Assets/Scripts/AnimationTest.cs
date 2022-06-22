@@ -162,46 +162,46 @@ namespace Planet.Unity
         {
             TileMap tileMap = Planet.TileMap;
 
-            for (int j = tileMap.Borders.IntLeft; j < tileMap.Borders.IntTop; j++)
+            for (int j = 0; j < tileMap.MapSize.Y; j++)
             {
-                for (int i = tileMap.Borders.IntRight; i < tileMap.Borders.IntRight; i++)
+                for (int i = 0; i < tileMap.MapSize.Y; i++)
                 {
-                    var frontTile = new Tile.Tile(new Vec2f(i, j));
-                    var oreTile = new Tile.Tile(new Vec2f(i, j));
+                    int frontTileType = -1;
+                    int oreTileType = -1;
 
-                    if (i >= tileMap.Borders.IntRight / 2)
+                    if (i >= tileMap.MapSize.X / 2)
                     {
-                        if (j % 2 == 0 && i == tileMap.Borders.IntRight / 2)
+                        if (j % 2 == 0 && i == tileMap.MapSize.X / 2)
                         {
-                            frontTile.Type = 10;
+                            frontTileType = 10;
                         }
                         else
                         {
-                            frontTile.Type = 9;
+                            frontTileType = 9;
                         }
                     }
                     else
                     {
-                        if (j % 3 == 0 && i == tileMap.Borders.IntRight / 2 + 1)
+                        if (j % 3 == 0 && i == tileMap.MapSize.X / 2 + 1)
                         {
-                            frontTile.Type = 9;
+                            frontTileType = 9;
                         }
                         else
                         {
-                            frontTile.Type = 10;
+                            frontTileType = 10;
                         }
                     }
 
 
                     if (i % 10 == 0)
                     {
-                        oreTile.Type = 8;
+                        oreTileType = 8;
                     }
 
                     if (j is > 1 and < 6 || (j > 8 + i))
                     {
-                        frontTile.Type = -1;
-                        oreTile.Type = -1;
+                        frontTileType = -1;
+                        oreTileType = -1;
                     }
 
 

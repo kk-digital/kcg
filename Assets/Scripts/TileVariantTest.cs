@@ -7,8 +7,6 @@ namespace Planet.Unity
     class TileVariantTest : MonoBehaviour
     {
         [SerializeField] Material Material;
-        
-        Planet.TileMap TileMap;
 
         static bool Init = false;
         
@@ -75,9 +73,9 @@ namespace Planet.Unity
 
             TileMap = new TileMap(mapSize);
 
-            for(int j = TileMap.Borders.IntBottom; j < TileMap.Borders.IntTop; j++)
+            for(int j = 0; j < TileMap.MapSize.Y; j++)
             {
-                for(int i = TileMap.Borders.IntLeft; i < TileMap.Borders.IntRight; i++)
+                for(int i = 0; i < TileMap.MapSize.X; i++)
                 {
                     var frontTile = new Tile.Tile(new Vec2f(i, j));
                     var oreTile = new Tile.Tile(new Vec2f(i, j));
@@ -86,35 +84,35 @@ namespace Planet.Unity
                     {
                         if (j % 2 == 0 && i == mapSize.X / 2)
                         {
-                            frontTile.Type = 10;
+                            frontTile.Property = 10;
                         }
                         else
                         {
-                            frontTile.Type = 9;
+                            frontTile.Property = 9;
                         }
                     }
                     else
                     {
                         if (j % 3 == 0 && i == mapSize.X / 2 + 1)
                         {
-                            frontTile.Type = 9;
+                            frontTile.Property = 9;
                         }
                         else
                         {
-                            frontTile.Type = 10;
+                            frontTile.Property = 10;
                         }
                     }
 
 
                     if (i % 10 == 0)
                     {
-                        oreTile.Type = 8;
+                        oreTile.Property = 8;
                     }
 
                     if (j is > 1 and < 6 || (j > (8 + i)))
                     {
-                       frontTile.Type = -1; 
-                       oreTile.Type = -1;
+                       frontTile.Property = -1; 
+                       oreTile.Property = -1;
                     }
 
 

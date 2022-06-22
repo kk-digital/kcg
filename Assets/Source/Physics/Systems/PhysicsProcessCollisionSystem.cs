@@ -14,7 +14,7 @@ namespace Physics
     // http://www.cs.yorku.ca/~amana/research/grid.pdf
     public class PhysicsProcessCollisionSystem
     {
-        public void Update(Planet.TileMap tileMap)
+        public void Update(ref PlanetTileMap.TileMap tileMap)
         {
             float deltaTime = Time.deltaTime;
             var entitiesWithBox = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsBox2DCollider, GameMatcher.PhysicsPosition2D));
@@ -29,7 +29,7 @@ namespace Physics
 
                 // TODO: Need to rework logic, because MovingIntersects not working
                 ref var tile = ref tileMap.GetTileRef(2, 1, MapLayerType.Front);
-                if (tile.Type >= 0)
+                if (tile.Property >= 0)
                 {
                     var newCircle = new Sphere2D(pos.Value, circleCollider.Radius, circleCollider.Size);
                     var oldCircle = new Sphere2D(pos.PreviousValue, circleCollider.Radius, circleCollider.Size);

@@ -97,6 +97,7 @@ public class GameManager : MonoBehaviour
     {
         //TODO: Intialize all managers here
         //Setup ECS system
+        GameState.TilePropertyManager.InitStage1();
     }
 
     //Load settings from files and other init, that requires systems to be intialized

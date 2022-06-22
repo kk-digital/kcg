@@ -8,12 +8,12 @@ using UnityEngine;
 
 namespace Planet
 {
-    public class PlanetState
+    public struct PlanetState
     {
         public int Index;
         TimeState TimeState;
 
-        public Planet.TileMap TileMap;
+        public PlanetTileMap.TileMap TileMap;
         public AgentList AgentList;
         public VehicleList VehicleList;
         public ProjectileList ProjectileList;
@@ -27,7 +27,7 @@ namespace Planet
 
         public PlanetState(Vec2i mapSize, GameContext gameContext, ParticleContext particleContext)
         {
-            TileMap = new TileMap(mapSize);
+            TileMap = new PlanetTileMap.TileMap(mapSize);
             AgentList = new AgentList();
             VehicleList = new VehicleList();
             ProjectileList = new ProjectileList();
@@ -137,17 +137,6 @@ namespace Planet
         public void RemoveVehicle(VehicleEntity entity)
         {
             VehicleList.Remove(entity);
-        }
-
-        // used to place a tile into the tile map
-        // x, y is the position in the tile map
-        public void PlaceTile(int x, int y, int tileType, Enums.Tile.MapLayerType layer)
-        {
-            var tile = new Tile.Tile(new Vec2f(x, y))
-            {
-                Type = tileType
-            };
-            TileMap.SetTile(ref tile, layer);
         }
 
 

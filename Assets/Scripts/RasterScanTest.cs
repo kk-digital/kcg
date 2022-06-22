@@ -7,9 +7,6 @@ using Entitas;
 
 public class RasterScanTest : MonoBehaviour
 {
-    // Tile Map
-    Planet.TileMap testTiles;
-
     // Collision Block to test line
     public GameObject CollisionBlock;
 
@@ -30,9 +27,6 @@ public class RasterScanTest : MonoBehaviour
     {
         // Assign Game Context to get players position
         gameContext = Contexts.sharedInstance.game;
-
-        // Assign Test Tiles
-        testTiles = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().TileMap;
 
         // Creatae the blocks array
         blocks = new GameObject[100];
@@ -83,7 +77,7 @@ public class RasterScanTest : MonoBehaviour
                 Debug.Log($"({cell.x},{cell.y})");
 
                 ref var tile = ref testTiles.GetTileRef(cell.x, cell.y, Enums.Tile.MapLayerType.Front);
-                if (tile.Type >= 0)
+                if (tile.Property >= 0)
                 {
                     GameObject Temp = CollisionBlock;
                     Temp = Instantiate(Temp);

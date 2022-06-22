@@ -2,9 +2,9 @@ using System;
 using KMath;
 using UnityEngine;
 
-namespace Planet
+namespace PlanetTileMap
 {
-    public struct Layers
+    public struct Layer
     {
         public static readonly int Count = Enum.GetNames(typeof(Enums.Tile.MapLayerType)).Length;
         

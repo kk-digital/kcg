@@ -11,7 +11,7 @@ namespace Planet.Unity
     {
         [SerializeField] Material Material;
 
-        Planet.PlanetState Planet;
+        PlanetState Planet;
         Inventory.InventoryManager inventoryManager;
         Inventory.DrawSystem    inventoryDrawSystem;
 
@@ -132,30 +132,28 @@ namespace Planet.Unity
             
             TileMap tileMap = Planet.TileMap;
 
-            var borders = tileMap.Borders;
-
-            for (int j = borders.IntBottom; j < borders.IntTop; j++)
+            for (int j = 0; j < tileMap.MapSize.Y; j++)
             {
-                for (int i = borders.IntLeft; i < borders.IntRight; i++)
+                for (int i = 0; i < tileMap.MapSize.X; i++)
                 {
                     var frontTile = new Tile.Tile(new Vec2f(i, j));
 
-                    if (i >= borders.IntRight / 2)
+                    if (i >= tileMap.MapSize.X / 2)
                     {
-                        if (j % 2 == 0 && i == borders.IntRight / 2)
+                        if (j % 2 == 0 && i == tileMap.MapSize.X / 2)
                         {
-                            frontTile.Type = (int)Tile.TileEnum.Moon;
+                            frontTile.Property = (int)Tile.TileProperty.Moon;
                         }
                         else
                         {
-                            frontTile.Type = (int)Tile.TileEnum.Glass;
+                            frontTile.Property = (int)Tile.TileProperty.Glass;
                         }
                     }
                     else
                     {
-                        if (j % 3 == 0 && i == borders.IntRight / 2 + 1)
+                        if (j % 3 == 0 && i == tileMap.MapSize.X / 2 + 1)
                         {
-                            frontTile.Type = (int)Tile.TileEnum.Glass;
+                            frontTile.Property = (int)Tile.TileProperty.Glass;
                         }
                         else
                         {
@@ -182,22 +180,22 @@ namespace Planet.Unity
                     }
 
 
-                    tileMap.SetTile(ref frontTile, MapLayerType.Front);
+                    tileMap.SetTile(ref frontTile, i, j, MapLayerType.Front);
                 }
             }
 
-            for (int i = 0; i < borders.IntRight; i++)
+            for (int i = 0; i < tileMap.MapSize.X; i++)
             {
-                for (int j = borders.IntTop - 10; j < borders.IntTop; j++)
+                for (int j = tileMap.MapSize.Y - 10; j < tileMap.MapSize.Y; j++)
                 {
                     var tile = new Tile.Tile(new Vec2f(i, j));
-                    tileMap.SetTile(ref tile, MapLayerType.Front);
+                    tileMap.SetTile(ref tile, i, j, MapLayerType.Front);
                 }
             }
 
-            int carveHeight = borders.IntTop - 10;
+            int carveHeight = tileMap.MapSize.Y - 10;
 
-            for (int i = borders.IntLeft; i < borders.IntRight; i++)
+            for (int i = 0; i < tileMap.MapSize.X; i++)
             {
                 int move = ((int) KMath.Random.Mt19937.genrand_int32() % 3) - 1;
                 if (((int) KMath.Random.Mt19937.genrand_int32() % 5) <= 3)
@@ -206,21 +204,21 @@ namespace Planet.Unity
                 }
 
                 carveHeight += move;
-                if (carveHeight >= borders.IntTop)
+                if (carveHeight >= tileMap.MapSize.Y)
                 {
-                    carveHeight = borders.IntTop - 1;
+                    carveHeight = tileMap.MapSize.Y - 1;
                 }
 
-                for (int j = carveHeight; j < borders.IntTop && j < carveHeight + 4; j++)
+                for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
                     var tile = new Tile.Tile(new Vec2f(i, j));
-                    tileMap.SetTile(ref tile, MapLayerType.Front);
+                    tileMap.SetTile(ref tile, i, j, MapLayerType.Front);
                 }
             }
 
             carveHeight = 5;
 
-            for (int i = borders.IntRight - 1; i >= borders.IntLeft; i--)
+            for (int i = tileMap.MapSize.X - 1; i >= 0; i--)
             {
                 int move = ((int) KMath.Random.Mt19937.genrand_int32() % 3) - 1;
                 if (((int) KMath.Random.Mt19937.genrand_int32() % 10) <= 3)
@@ -229,15 +227,15 @@ namespace Planet.Unity
                 }
 
                 carveHeight += move;
-                if (carveHeight >= borders.IntTop)
+                if (carveHeight >= tileMap.MapSize.Y)
                 {
-                    carveHeight = borders.IntTop - 1;
+                    carveHeight = tileMap.MapSize.Y - 1;
                 }
 
-                for (int j = carveHeight; j < borders.IntTop && j < carveHeight + 4; j++)
+                for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
                     var tile = new Tile.Tile(new Vec2f(i, j));
-                    tileMap.SetTile(ref tile, MapLayerType.Front);
+                    tileMap.SetTile(ref tile, i, j, MapLayerType.Front);
                 }
             }
 
@@ -262,7 +260,7 @@ namespace Planet.Unity
             Planet.AddAgent(Instantiate(Material), CharacterSpriteId, 32, 48, new Vec2f(6.0f, spawnHeight), 0);
             Planet.AddAgent(Instantiate(Material), CharacterSpriteId, 32, 48, new Vec2f(1.0f, spawnHeight), 0);
 
-            for(int i = borders.IntLeft; i < borders.IntRight; i++)
+            for(int i = 0; i < tileMap.MapSize.X; i++)
             {
                 if (random.Next() % 5 == 0)
                 {
