@@ -6,8 +6,7 @@ using Source.SystemView;
 namespace Scripts {
     namespace SystemView
     {
-        public enum WeaponFlags               // Useful for storing many of a weapon's properties on one single byte
-        {
+        public enum WeaponFlags {             // Useful for storing many of a weapon's properties on one single byte
             WEAPON_PROJECTILE = 1 << 0,
             WEAPON_LASER      = 1 << 1,
             WEAPON_BROADSIDE  = 1 << 2,
@@ -16,8 +15,7 @@ namespace Scripts {
             WEAPON_POSY       = 1 << 5        // front = flags & WEAPON_POSY, back  = ~flags & WEAPON_POSY
         }
 
-        public class ShipWeapon
-        {
+        public class ShipWeapon {
             public SystemShip self;
 
             public Color color;

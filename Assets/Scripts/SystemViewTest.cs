@@ -49,7 +49,7 @@ namespace Scripts {
             private float CachedPlanetMass =   100000000000000.0f;
             private float CachedMoonMass   =    20000000000000.0f;
 
-            private int   CurrentCycle     =                    0;
+            public  bool TrackingPlayer    =                false;
 
             public  CameraController Camera;
 
@@ -86,6 +86,10 @@ namespace Scripts {
 
             public void CenterCamera() {
                 Camera.set_position(-State.player.ship.self.posx, -State.player.ship.self.posy, 0.25f / system_scale);
+            }
+
+            public void TogglePlayerTracking() {
+                TrackingPlayer = !TrackingPlayer;
             }
 
             public void RegenerateSystem() {
@@ -466,7 +470,10 @@ namespace Scripts {
 
                 UpdateDropdownMenu();
 
-                CurrentCycle++;
+                if(TrackingPlayer) {
+                    if(Input.GetMouseButton(1)) TrackingPlayer = false; // Disable camera tracking if user is manually moving camera
+                    else CenterCamera();
+                }
             }
 
             private void UpdateDropdownMenu() {
