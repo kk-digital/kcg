@@ -89,7 +89,7 @@ namespace Scripts {
             }
 
             public void TogglePlayerTracking() {
-                TrackingPlayer = !TrackingPlayer;
+                if(TrackingPlayer = !TrackingPlayer) CenterCamera();                
             }
 
             public void RegenerateSystem() {
@@ -472,7 +472,8 @@ namespace Scripts {
 
                 if(TrackingPlayer) {
                     if(Input.GetMouseButton(1)) TrackingPlayer = false; // Disable camera tracking if user is manually moving camera
-                    else CenterCamera();
+                    else
+                        Camera.set_position(-State.player.ship.self.posx, -State.player.ship.self.posy, Camera.scale);
                 }
             }
 
