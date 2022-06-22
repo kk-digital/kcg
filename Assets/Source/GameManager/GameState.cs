@@ -56,6 +56,12 @@ public class GameState
     public static readonly Item.PickUpSystem ItemPickUpSystem;
     #endregion
 
+    #region Projectile
+    public static readonly Projectile.ProcessCollisionSystem ProjectileCollisionSystem;
+    public static readonly Projectile.ProcessVelocitySystem ProjectileVelocitySystem;
+    public static readonly Projectile.SpawnerSystem ProjectileSpawnerSystem;
+    #endregion
+
     #region FloatingText
     public static readonly FloatingText.FloatingTextUpdateSystem FloatingTextUpdateSystem;
     public static readonly FloatingText.FloatingTextSpawnerSystem FloatingTextSpawnerSystem;
@@ -105,5 +111,8 @@ public class GameState
         ParticleEmitterUpdateSystem = new Particle.ParticleEmitterUpdateSystem();
         ParticleUpdateSystem = new Particle.ParticleUpdateSystem();
         ParticleEmitterSpawnerSystem = new Particle.ParticleEmitterSpawnerSystem();
+        ProjectileCollisionSystem = new Projectile.ProcessCollisionSystem();
+        ProjectileVelocitySystem = new Projectile.ProcessVelocitySystem();
+        ProjectileSpawnerSystem = new Projectile.SpawnerSystem();
     }
 }

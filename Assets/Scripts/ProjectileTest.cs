@@ -41,7 +41,6 @@ public class ProjectileTest : MonoBehaviour
     {
         // Create Tile Map
         planetState = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().PlanetState;
-        
         // Initialize Projectile Draw System
         projectileDrawSystem = new Projectile.DrawSystem();
 
@@ -53,7 +52,7 @@ public class ProjectileTest : MonoBehaviour
 
         // Initialize Projectile Spawner System
         projectileSpawnerSystem = new Projectile.SpawnerSystem();
-        
+
         // Initialize Projectile Collision System
         projectileCollisionSystem = new Projectile.ProcessCollisionSystem();
 
@@ -68,18 +67,18 @@ public class ProjectileTest : MonoBehaviour
     private void Update()
     {
         // check if the sprite atlas textures needs to be updated
-        for(int type = 0; type < GameState.SpriteAtlasManager.Length; type++)
+        for (int type = 0; type < GameState.SpriteAtlasManager.Length; type++)
         {
             GameState.SpriteAtlasManager.UpdateAtlasTexture(type);
         }
 
         // check if the tile sprite atlas textures needs to be updated
-        for(int type = 0; type < GameState.TileSpriteAtlasManager.Length; type++)
+        for (int type = 0; type < GameState.TileSpriteAtlasManager.Length; type++)
         {
             GameState.TileSpriteAtlasManager.UpdateAtlasTexture(type);
         }
 
-        if(init)
+        if (init)
         {
             // Clear last frame
             foreach (var mr in GetComponentsInChildren<MeshRenderer>())
@@ -125,7 +124,7 @@ public class ProjectileTest : MonoBehaviour
                 diff = worldPosition - startPos;
 
                 // Loading Image
-                projectileSpawnerSystem.SpawnProjectile(Material, image, 16, 16, startPos,
+                projectileSpawnerSystem.SpawnProjectile(image, 16, 16, startPos,
                     start, end, ProjectileType.Grenade, ProjectileDrawType.Standard);
             }
 

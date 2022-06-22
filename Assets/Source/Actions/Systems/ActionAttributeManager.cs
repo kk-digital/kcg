@@ -30,11 +30,6 @@ namespace Action
             return entity.actionAttribute.TypeID;
         }
 
-        public void SetPlanet(Planet.PlanetState planetState)
-        {
-            ActionAttributeEntity.AddActionAttributePlanetState(planetState);
-        }
-
         public void SetLogicFactory(Action.ActionCreator actionFactory)
         {
             ActionAttributeEntity.AddActionAttributeFactory(actionFactory);

@@ -41,7 +41,6 @@ namespace Projectile
                 }
 
                 pos = entity.projectilePhysicsState2D;
-
                 entityBoxBorders = new AABB2D(new Vec2f(pos.Position.X, pos.TempPosition.Y), entity.projectileSprite2D.Size);
 
                 // If is colliding left-right stop x movement
@@ -65,4 +64,3 @@ namespace Projectile
         }
     }
 }
-

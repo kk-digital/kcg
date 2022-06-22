@@ -19,11 +19,11 @@
         PlaceTilGlassAction,
         PlaceTilMoonAction,
         PlaceTilPipeAction,
-        PlaceParticleEmitterAction,
 
         /// <summary>
         /// Others tools actions
         /// </summary>
+        PlaceParticleEmitterAction,
         EnemySpawnAction,
         MiningLaserAction,
         RemoveTileAction

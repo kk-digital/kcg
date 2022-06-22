@@ -4,7 +4,6 @@ using KMath;
 
 public class GameResources
 {
-
     // sprite sheets ids
     public static int MoonSpriteSheet;
     public static int OreSpriteSheet;
@@ -202,6 +201,4 @@ public class GameResources
         Item.CreationApi.Instance.SetAction((int)Enums.ActionType.PlaceParticleEmitterAction);
         Item.CreationApi.Instance.EndItem();
     }
-
-
 }

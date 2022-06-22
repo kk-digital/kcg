@@ -43,10 +43,13 @@ namespace Planet.Unity
 
             GameEntity item = GameState.InventoryManager.GetItemInSlot(toolBarID, selectedSlot);
             GameEntity itemAttribute = EntitasContext.game.GetEntityWithItemAttributes(item.itemID.ItemType);
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (itemAttribute.hasItemAttributeAction)
             {
-                GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity,
-                    GameState.ActionCreationSystem.CreateAction(itemAttribute.itemAttributeAction.ActionTypeID, Player.AgentId));
+                if (Input.GetKeyDown(KeyCode.Mouse0))
+                {
+                    GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity,
+                        GameState.ActionCreationSystem.CreateAction(itemAttribute.itemAttributeAction.ActionTypeID, Player.AgentId));
+                }
             }
                 
             // unity rendering stuff
@@ -245,18 +248,18 @@ namespace Planet.Unity
 
             float spawnHeight = tileMap.MapSize.Y - 2;
 
-            Player = Planet.AddPlayer(Instantiate(Material), CharacterSpriteId, 32, 48, 
+            Player = Planet.AddPlayer(CharacterSpriteId, 32, 48, 
                     new Vec2f(3.0f, spawnHeight), 0);
             PlayerID = Player.Entity.agentID.ID;
 
-            Planet.AddAgent(Instantiate(Material), CharacterSpriteId, 32, 48, new Vec2f(6.0f, spawnHeight), 0);
-            Planet.AddAgent(Instantiate(Material), CharacterSpriteId, 32, 48, new Vec2f(1.0f, spawnHeight), 0);
+            Planet.AddAgent( CharacterSpriteId, 32, 48, new Vec2f(6.0f, spawnHeight), 0);
+            Planet.AddAgent(CharacterSpriteId, 32, 48, new Vec2f(1.0f, spawnHeight), 0);
 
             for(int i = 0; i < tileMap.MapSize.X; i++)
             {
                 if (random.Next() % 5 == 0)
                 {
-                    Planet.AddEnemy(Instantiate(Material), CharacterSpriteId, 32, 32, new Vec2f((float)i, spawnHeight), 2);    
+                    Planet.AddEnemy(CharacterSpriteId, 32, 32, new Vec2f((float)i, spawnHeight), 2);    
                 }
             }
 

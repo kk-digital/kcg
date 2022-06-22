@@ -1,4 +1,4 @@
-using Agent;
+ using Agent;
 using Enums.Tile;
 using Vehicle;
 using Projectile;
@@ -40,22 +40,21 @@ namespace Planet
         }
 
 
-        public AgentEntity AddPlayer(UnityEngine.Material material, int spriteId,
-                                int width, int height, Vec2f position, int startingAnimation)
+        public AgentEntity AddPlayer(int spriteId, int width, int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity entity = GameState.AgentSpawnerSystem.SpawnPlayer(material, spriteId, width, height, position, newEntity.AgentId,
+            GameEntity entity = GameState.AgentSpawnerSystem.SpawnPlayer(spriteId, width, height, position, newEntity.AgentId,
                     startingAnimation);
             newEntity.Entity = entity;
 
             return newEntity;
         }
 
-        public AgentEntity AddAgent(UnityEngine.Material material, int spriteId, int width,
+        public AgentEntity AddAgent(int spriteId, int width,
                      int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity entity = GameState.AgentSpawnerSystem.SpawnAgent(material, spriteId, width, height, position,
+            GameEntity entity = GameState.AgentSpawnerSystem.SpawnAgent(spriteId, width, height, position,
                                                                     newEntity.AgentId, startingAnimation);
             newEntity.Entity = entity;
 
@@ -63,11 +62,10 @@ namespace Planet
             return newEntity;
         }
 
-        public AgentEntity AddEnemy(UnityEngine.Material material, int spriteId,
-                        int width, int height, Vec2f position, int startingAnimation)
+        public AgentEntity AddEnemy(int spriteId, int width, int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity entity = GameState.AgentSpawnerSystem.SpawnEnemy(material, spriteId, width, height, position,
+            GameEntity entity = GameState.AgentSpawnerSystem.SpawnEnemy(spriteId, width, height, position,
             newEntity.AgentId, startingAnimation);
 
             newEntity.Entity = entity;
@@ -195,7 +193,7 @@ namespace Planet
             GameState.FloatingTextUpdateSystem.Update(this, frameTime);
             GameState.AnimationUpdateSystem.Update(frameTime);
             GameState.ItemPickUpSystem.Update();
-            GameState.ActionSchedulerSystem.Update(frameTime);
+            GameState.ActionSchedulerSystem.Update(frameTime, ref this);
             GameState.ParticleEmitterUpdateSystem.Update(ParticleContext);
             GameState.ParticleUpdateSystem.Update(this, ParticleContext);
 

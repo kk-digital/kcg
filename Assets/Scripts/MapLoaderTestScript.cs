@@ -64,7 +64,7 @@ namespace Planet.Unity
             AgentDrawSystem = new Agent.AgentDrawSystem();
             AgentProcessCollisionSystem = new Physics.PhysicsProcessCollisionSystem();
 
-            AgentSpawnerSystem.SpawnPlayer(Material, CharacterSpriteId, 32, 48, new Vec2f(3.0f, 2.0f), 0, 0);
+            AgentSpawnerSystem.SpawnPlayer(CharacterSpriteId, 32, 48, new Vec2f(3.0f, 2.0f), 0, 0);
         }
 
         public void Update()

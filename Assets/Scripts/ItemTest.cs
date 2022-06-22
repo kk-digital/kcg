@@ -124,7 +124,7 @@ namespace Planet.Unity
             Planet = new Planet.PlanetState(mapSize, EntitasContext.game, EntitasContext.particle);
             GenerateMap();
 
-            Player = Planet.AddPlayer(Instantiate(Material),CharacterSpriteId, 32, 48, new Vec2f(3.0f, 3.0f), 0);
+            Player = Planet.AddPlayer(CharacterSpriteId, 32, 48, new Vec2f(3.0f, 3.0f), 0);
 
             // Create Action            
             GameState.ItemSpawnSystem.SpawnItem(EntitasContext.game, Enums.ItemType.Gun, new Vec2f(3.0f, 3.0f));
