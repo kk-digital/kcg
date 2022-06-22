@@ -10,5 +10,7 @@ namespace Action
     {
         [PrimaryEntityIndex]
         public int                  ID;
+        [EntityIndex]
+        public int                  TypeID;
     }
 }

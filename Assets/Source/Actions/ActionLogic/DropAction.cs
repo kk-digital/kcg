@@ -7,7 +7,6 @@ namespace Action
     public class DropAction : ActionBase
     {
         private GameEntity ItemEntity;
-        private float exectuionTime;
 
         public DropAction(int actionID, int agentID) : base(actionID, agentID)
         {
@@ -39,7 +38,7 @@ namespace Action
                 ItemEntity.AddPhysicsPosition2D(pos, pos);
                 ItemEntity.AddPhysicsBox2DCollider(size, Vec2f.Zero);
                 ItemEntity.AddPhysicsMovable(0.0f, new Vec2f(-30.0f, 20.0f), Vec2f.Zero);
-                ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Active);
+                ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Running);
                 return;
 
             }
@@ -49,11 +48,12 @@ namespace Action
 
         public override void OnUpdate(float deltaTime)
         {
-            exectuionTime += deltaTime;
-            if (exectuionTime < 2.0f)
+            ActionEntity.ReplaceActionTime(ActionEntity.actionTime.StartTime + deltaTime);
+            if (ActionEntity.actionTime.StartTime < ActionAttributeEntity.actionAttributeTime.Duration)
             {
                 return;
             }
+
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
         }
 
@@ -62,6 +62,14 @@ namespace Action
             if(ActionEntity.actionExecution.State == Enums.ActionState.Success)
                 ItemEntity.isItemUnpickable = false;
             base.OnExit();
+        }
+    }
+    // Factory Method
+    public class DropActionCreator : ActionCreator
+    {
+        public override ActionBase CreateAction(int actionID, int agentID)
+        {
+            return new DropAction(actionID, agentID);
         }
     }
 }

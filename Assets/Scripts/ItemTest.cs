@@ -47,7 +47,8 @@ namespace Planet.Unity
 
             if (Input.GetKeyDown(KeyCode.T))
             {
-                GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity, Action.DefaultActions.CreateDropAction(Player.Entity.agentID.ID));
+                GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity, 
+                    GameState.ActionCreationSystem.CreateAction(Player.AgentId, Player.Entity.agentID.ID));
             }
 
             GameState.InventoryDrawSystem.Draw(Material, transform, 14);
@@ -116,6 +117,7 @@ namespace Planet.Unity
             GameState.AnimationManager.SetBaseSpriteID(CharacterSpriteId);
             GameState.AnimationManager.SetFrameCount(1);
             GameState.AnimationManager.EndAnimation();
+            GameState.ActionInitializeSystem.Initialize(Planet, Material);
 
             // Generating the map
             Vec2i mapSize = new Vec2i(16, 16);
@@ -123,7 +125,6 @@ namespace Planet.Unity
             GenerateMap();
 
             Player = Planet.AddPlayer(Instantiate(Material),CharacterSpriteId, 32, 48, new Vec2f(3.0f, 3.0f), 0);
-            Player.Entity.AddAgentActionScheduler(new List<int>(), new List<int>());
 
             // Create Action            
             GameState.ItemSpawnSystem.SpawnItem(EntitasContext.game, Enums.ItemType.Gun, new Vec2f(3.0f, 3.0f));

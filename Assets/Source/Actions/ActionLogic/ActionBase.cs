@@ -6,11 +6,14 @@ namespace Action
     public class ActionBase
     {
         protected GameEntity ActionEntity;
+        protected GameEntity ActionAttributeEntity;
         protected GameEntity AgentEntity;
 
         public ActionBase(int actionID, int agentID)
-{   
-            ActionEntity = Contexts.sharedInstance.game.GetEntityWithActionID(actionID);
+        {   
+            ActionEntity = Contexts.sharedInstance.game.GetEntityWithActionIDID(actionID);
+            ActionAttributeEntity = Contexts.sharedInstance.game.GetEntityWithActionAttribute(
+                ActionEntity.actionID.TypeID);
             AgentEntity = Contexts.sharedInstance.game.GetEntityWithAgentID(agentID);    
         }
 
@@ -23,9 +26,8 @@ namespace Action
         {      
         }
 
-
         /// <summary>
-        /// We should alweys delete action after executed.
+        /// We should alweys delete actions after executed.
         /// </summary>
         public virtual void OnExit()
         {
@@ -34,10 +36,20 @@ namespace Action
 
         public virtual void CheckProceduralPrecondition(Planet.PlanetState planetState)
         {
+
         }
 
         public virtual void ProceduralEffects()
         { 
+        }
+    }
+
+    // Factory Method
+    public class ActionCreator
+    {
+        public virtual ActionBase CreateAction(int actionID, int agentID)
+        { 
+            return new ActionBase(actionID, agentID);
         }
     }
 }

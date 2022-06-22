@@ -11,19 +11,17 @@ public partial class GameEntity {
     public Action.TimeComponent actionTime { get { return (Action.TimeComponent)GetComponent(GameComponentsLookup.ActionTime); } }
     public bool hasActionTime { get { return HasComponent(GameComponentsLookup.ActionTime); } }
 
-    public void AddActionTime(float newStartTime, float newDuration) {
+    public void AddActionTime(float newStartTime) {
         var index = GameComponentsLookup.ActionTime;
         var component = (Action.TimeComponent)CreateComponent(index, typeof(Action.TimeComponent));
         component.StartTime = newStartTime;
-        component.Duration = newDuration;
         AddComponent(index, component);
     }
 
-    public void ReplaceActionTime(float newStartTime, float newDuration) {
+    public void ReplaceActionTime(float newStartTime) {
         var index = GameComponentsLookup.ActionTime;
         var component = (Action.TimeComponent)CreateComponent(index, typeof(Action.TimeComponent));
         component.StartTime = newStartTime;
-        component.Duration = newDuration;
         ReplaceComponent(index, component);
     }
 

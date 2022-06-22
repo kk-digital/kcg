@@ -40,112 +40,17 @@ namespace Planet.Unity
 
         public void Update()
         {
-            Planet.TileMap TileMap = Planet.TileMap;
-            Material material = Material;
-            Vec2f playerPosition = Player.Entity.physicsPosition2D.Value;
+            int toolBarID = Player.Entity.agentToolBar.ToolBarID;
+            GameEntity Inventory = EntitasContext.game.GetEntityWithInventoryID(toolBarID);
+            int selectedSlot = Inventory.inventorySlots.Selected;
 
-            // Get Slot Entites
-            IGroup<GameEntity> slotEntities =
-            EntitasContext.game.GetGroup(GameMatcher.InventorySlots);
-            int selectedIndex = 0;
-            // Detect if spawner helded or not
-            foreach (var slots in slotEntities)
-            {
-               selectedIndex = slots.inventorySlots.Selected; 
-            }
-
-           
-
-            ItemType highlightItemType = Enums.ItemType.Error;
-            var itemsInToolbar = EntitasContext.game.GetEntitiesWithItemAttachedInventory(toolBarID);
-            foreach(var item in itemsInToolbar)
-            {
-                if (item.itemAttachedInventory.SlotNumber == selectedIndex)
-                {
-                    highlightItemType = item.itemID.ItemType;
-                }
-            }
-
-
-            
+            GameEntity item = GameState.InventoryManager.GetItemInSlot(toolBarID, selectedSlot);
+            GameEntity itemAttribute = EntitasContext.game.GetEntityWithItemAttributes(item.itemID.ItemType);
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                if (highlightItemType == Enums.ItemType.PlacementTool)
-                {
-                    Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    int x = (int)worldPosition.x;
-                    int y = (int)worldPosition.y;
-                    Planet.PlaceTile(x, y, (int)Tile.TileEnum.Moon, MapLayerType.Front);
-                    //TileMap.BuildLayerTexture(MapLayerType.Front);
-                }
-                else if (highlightItemType == Enums.ItemType.PipePlacementTool)
-                {
-                    Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    int x = (int)worldPosition.x;
-                    int y = (int)worldPosition.y;
-                    Planet.PlaceTile(x, y, (int)Tile.TileEnum.Pipe, MapLayerType.Mid);
-                    //TileMap.BuildLayerTexture(MapLayerType.Front);
-                }
-                else if (highlightItemType == Enums.ItemType.RemoveTileTool)
-                {
-                    Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    int x = (int)worldPosition.x;
-                    int y = (int)worldPosition.y;
-                    TileMap.RemoveTile(x, y, MapLayerType.Front);
-                    TileMap.RemoveTile(x, y, MapLayerType.Ore);
-                    //TileMap.BuildLayerTexture(MapLayerType.Front);
-                    //TileMap.BuildLayerTexture(MapLayerType.Ore);
-                }
-                else if (highlightItemType == Enums.ItemType.SpawnEnemySlimeTool)
-                {
-                    Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    float x = worldPosition.x;
-                    float y = worldPosition.y;
-                    Planet.AddEnemy(Instantiate(Material), CharacterSpriteId, 32, 32, new Vec2f(x, y), 2);
-                }
-                else if (highlightItemType == Enums.ItemType.MiningLaserTool)
-                {
-                    Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    int fromX = (int)playerPosition.X;
-                    int fromY = (int)playerPosition.Y;
-
-                    int toX = (int)worldPosition.x;
-                    int toY = (int)worldPosition.y;
-
-
-                    Cell start = new Cell
-                    {
-                        x = (int)fromX,
-                        y = (int)fromY
-                    };
-
-                    Cell end = new Cell
-                    {
-                        x = (int)toX,
-                        y = (int)toY
-                    };
-
-                    // Log places drawed line go through
-                    foreach (var cell in start.LineTo(end))
-                    {
-                        Debug.Log($"({cell.x},{cell.y})");
-
-                        ref var tile = ref TileMap.GetTileRef(cell.x, cell.y, Enums.Tile.MapLayerType.Front);
-                        if (tile.Type >= 0)
-                        {
-                            TileMap.RemoveTile(cell.x, cell.y, Enums.Tile.MapLayerType.Front);
-                            TileMap.RemoveTile(cell.x, cell.y, Enums.Tile.MapLayerType.Ore);
-                        }
-
-                        Debug.DrawLine(new Vector3(playerPosition.X, playerPosition.Y, 0.0f),
-                                     new Vector3(worldPosition.x, worldPosition.y, 0.0f), Color.red);
-                    }
-
-                    //TileMap.BuildLayerTexture(Enums.Tile.MapLayerType.Front);
-                    //TileMap.BuildLayerTexture(Enums.Tile.MapLayerType.Ore);
-                }
+                GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity,
+                    GameState.ActionCreationSystem.CreateAction(itemAttribute.itemAttributeAction.ActionTypeID, Player.AgentId));
             }
-
                 
             // unity rendering stuff
             // will be removed layer
@@ -195,6 +100,8 @@ namespace Planet.Unity
             Planet = new Planet.PlanetState(mapSize, EntitasContext.game);
             GenerateMap();
             SpawnStuff();
+
+            GameState.ActionInitializeSystem.Initialize(Planet, Material);
 
             var inventoryAttacher = Inventory.InventoryAttacher.Instance;
 
@@ -366,7 +273,7 @@ namespace Planet.Unity
 
             var borders = tileMap.Borders;
 
-            float spawnHeight = borders.Top + 2.0f;
+            float spawnHeight = borders.Top - 2f;
 
             Player = Planet.AddPlayer(Instantiate(Material), CharacterSpriteId, 32, 48, 
                     new Vec2f(3.0f, spawnHeight), 0);

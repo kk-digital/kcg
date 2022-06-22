@@ -25,12 +25,12 @@ namespace Agent
             var size = new Vec2f(spriteSize.X - 0.5f, spriteSize.Y);
             entity.AddPhysicsBox2DCollider(size, new Vec2f(0.25f, .0f));
             entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.Zero, newAcceleration: Vec2f.Zero);
-            
+            entity.AddAgentActionScheduler(new List<int>(), new List<int>());
+
             // Add Inventory and toolbar.
             var attacher = Inventory.InventoryAttacher.Instance;
             attacher.AttachInventoryToAgent(6, 5, AgentId);
             attacher.AttachToolBarToPlayer(10, AgentId);
-
             return entity;
         }
 
@@ -76,4 +76,3 @@ namespace Agent
 
     }
 }
-

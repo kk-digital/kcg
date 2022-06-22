@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace AI
 {
+    /*
     public class PlannerSystem
     {
         private static PlannerSystem instance;
@@ -62,5 +63,5 @@ namespace AI
             Goals.Remove(NextGoalEntity.aIGoal.GoalID);
             return NextGoalEntity;
         }
-    }
+    }*/
 }

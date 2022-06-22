@@ -6,6 +6,5 @@ namespace Action
     {
         public ActionBase           Logic;
         public Enums.ActionState    State;
-
     }   
 }

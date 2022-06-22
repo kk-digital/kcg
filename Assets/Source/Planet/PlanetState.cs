@@ -38,9 +38,9 @@ namespace Planet
                                 int width, int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity gameEntity = GameState.AgentSpawnerSystem.SpawnPlayer(material, spriteId, width, height, position, newEntity.AgentId,
+            GameEntity entity = GameState.AgentSpawnerSystem.SpawnPlayer(material, spriteId, width, height, position, newEntity.AgentId,
                     startingAnimation);
-            newEntity.Entity = gameEntity;
+            newEntity.Entity = entity;
 
             return newEntity;
         }
@@ -190,9 +190,8 @@ namespace Planet
             GameState.EnemyAiSystem.Update(this);
             GameState.FloatingTextUpdateSystem.Update(this, frameTime);
             GameState.AnimationUpdateSystem.Update(frameTime);
+            GameState.ItemPickUpSystem.Update();
             GameState.ActionSchedulerSystem.Update(frameTime);
-            GameState.ItemPickUpSystem.Update(GameContext);
-
 
             TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Mid, Object.Instantiate(material), transform, 9);
             TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Front, Object.Instantiate(material), transform, 10);

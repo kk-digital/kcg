@@ -2,8 +2,8 @@
 {
     public enum ActionState
     {
-        None,
-        Active,
+        Entry,
+        Running,
         Success,
         Fail
     }

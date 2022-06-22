@@ -60,7 +60,11 @@ public partial class Contexts : Entitas.IContexts {
 //------------------------------------------------------------------------------
 public partial class Contexts {
 
-    public const string ActionID = "ActionID";
+    public const string ActionAttribute = "ActionAttribute";
+    public const string ActionAttributeName = "ActionAttributeName";
+    public const string ActionIDID = "ActionIDID";
+    public const string ActionIDTypeID = "ActionIDTypeID";
+    public const string ActionItem = "ActionItem";
     public const string AgentAIController = "AgentAIController";
     public const string AgentID = "AgentID";
     public const string AIGoal = "AIGoal";
@@ -76,9 +80,29 @@ public partial class Contexts {
     [Entitas.CodeGeneration.Attributes.PostConstructor]
     public void InitializeEntityIndices() {
         game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
-            ActionID,
+            ActionAttribute,
+            game.GetGroup(GameMatcher.ActionAttribute),
+            (e, c) => ((Action.Attribute.Component)c).TypeID));
+
+        game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, string>(
+            ActionAttributeName,
+            game.GetGroup(GameMatcher.ActionAttributeName),
+            (e, c) => ((Action.Attribute.NameComponent)c).TypeName));
+
+        game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
+            ActionIDID,
             game.GetGroup(GameMatcher.ActionID),
             (e, c) => ((Action.IDComponent)c).ID));
+
+        game.AddEntityIndex(new Entitas.EntityIndex<GameEntity, int>(
+            ActionIDTypeID,
+            game.GetGroup(GameMatcher.ActionID),
+            (e, c) => ((Action.IDComponent)c).TypeID));
+
+        game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
+            ActionItem,
+            game.GetGroup(GameMatcher.ActionItem),
+            (e, c) => ((Action.ItemComponent)c).ItemID));
 
         game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
             AgentAIController,
@@ -108,7 +132,7 @@ public partial class Contexts {
         game.AddEntityIndex(new Entitas.EntityIndex<GameEntity, int>(
             ItemAttributeAction,
             game.GetGroup(GameMatcher.ItemAttributeAction),
-            (e, c) => ((Item.Attribute.ActionComponent)c).ActionID));
+            (e, c) => ((Item.Attribute.ActionComponent)c).ActionTypeID));
 
         game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, Enums.ItemType>(
             ItemAttributes,
@@ -139,8 +163,24 @@ public partial class Contexts {
 
 public static class ContextsExtensions {
 
-    public static GameEntity GetEntityWithActionID(this GameContext context, int ID) {
-        return ((Entitas.PrimaryEntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.ActionID)).GetEntity(ID);
+    public static GameEntity GetEntityWithActionAttribute(this GameContext context, int TypeID) {
+        return ((Entitas.PrimaryEntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.ActionAttribute)).GetEntity(TypeID);
+    }
+
+    public static GameEntity GetEntityWithActionAttributeName(this GameContext context, string TypeName) {
+        return ((Entitas.PrimaryEntityIndex<GameEntity, string>)context.GetEntityIndex(Contexts.ActionAttributeName)).GetEntity(TypeName);
+    }
+
+    public static GameEntity GetEntityWithActionIDID(this GameContext context, int ID) {
+        return ((Entitas.PrimaryEntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.ActionIDID)).GetEntity(ID);
+    }
+
+    public static System.Collections.Generic.HashSet<GameEntity> GetEntitiesWithActionIDTypeID(this GameContext context, int TypeID) {
+        return ((Entitas.EntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.ActionIDTypeID)).GetEntities(TypeID);
+    }
+
+    public static GameEntity GetEntityWithActionItem(this GameContext context, int ItemID) {
+        return ((Entitas.PrimaryEntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.ActionItem)).GetEntity(ItemID);
     }
 
     public static GameEntity GetEntityWithAgentAIController(this GameContext context, int AgentPlannerID) {
@@ -163,8 +203,8 @@ public static class ContextsExtensions {
         return ((Entitas.EntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.ItemAttachedInventory)).GetEntities(InventoryID);
     }
 
-    public static System.Collections.Generic.HashSet<GameEntity> GetEntitiesWithItemAttributeAction(this GameContext context, int ActionID) {
-        return ((Entitas.EntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.ItemAttributeAction)).GetEntities(ActionID);
+    public static System.Collections.Generic.HashSet<GameEntity> GetEntitiesWithItemAttributeAction(this GameContext context, int ActionTypeID) {
+        return ((Entitas.EntityIndex<GameEntity, int>)context.GetEntityIndex(Contexts.ItemAttributeAction)).GetEntities(ActionTypeID);
     }
 
     public static GameEntity GetEntityWithItemAttributes(this GameContext context, Enums.ItemType ItemType) {

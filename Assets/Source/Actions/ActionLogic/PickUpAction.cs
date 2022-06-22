@@ -11,13 +11,13 @@ namespace Action
         private float Speed = 3.0f;
         private float aceleration = 0.5f;
 
-        public PickUpAction(int actionID, int agentID, int itemID) : base(actionID, agentID)
+        public PickUpAction(int actionID, int agentID) : base(actionID, agentID)
         {
-            ItemEntity = Contexts.sharedInstance.game.GetEntityWithItemIDID(itemID);
         }
 
         public override void OnEnter()
         {
+            ItemEntity = Contexts.sharedInstance.game.GetEntityWithItemIDID(ActionEntity.actionItem.ItemID);
 
 #if DEBUG
             // Item Doesnt Exist
@@ -39,7 +39,7 @@ namespace Action
             ItemEntity.AddItemDrawPosition2D(drawPos, Vec2f.Zero);
             ItemEntity.isItemUnpickable = true;
 
-            ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Active);
+            ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Running);
         }
 
         public override void OnUpdate(float deltaTime)
@@ -95,6 +95,14 @@ namespace Action
         {
             ItemEntity.RemoveItemDrawPosition2D();
             base.OnExit();
+        }
+    }
+
+    public class PickUpActionCreator : ActionCreator
+    {
+        public override ActionBase CreateAction(int actionID, int agentID)
+        {
+            return new PickUpAction(actionID, agentID);
         }
     }
 }
