@@ -43,10 +43,13 @@ namespace Planet.Unity
 
             GameEntity item = GameState.InventoryManager.GetItemInSlot(toolBarID, selectedSlot);
             GameEntity itemAttribute = EntitasContext.game.GetEntityWithItemAttributes(item.itemID.ItemType);
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (itemAttribute.hasItemAttributeAction)
             {
-                GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity,
-                    GameState.ActionCreationSystem.CreateAction(itemAttribute.itemAttributeAction.ActionTypeID, Player.AgentId));
+                if (Input.GetKeyDown(KeyCode.Mouse0))
+                {
+                    GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity,
+                        GameState.ActionCreationSystem.CreateAction(itemAttribute.itemAttributeAction.ActionTypeID, Player.AgentId));
+                }
             }
                 
             // unity rendering stuff
