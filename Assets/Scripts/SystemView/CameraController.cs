@@ -34,8 +34,8 @@ namespace Scripts {
             public Vector3 get_rel_pos(Vector3 absolute) { return camera.WorldToScreenPoint(absolute); }
             public Vector3 get_abs_pos(Vector3 relative) { return camera.ScreenToWorldPoint(relative); }
             public float get_aspect_ratio()              { return camera.aspect; }
-            public float get_width()                     { return camera.orthographicSize * camera.aspect * 2.0f; }
-            public float get_height()                    { return camera.orthographicSize * 2.0f; }
+            public float get_width()                     { return Screen.width; }
+            public float get_height()                    { return Screen.height; }
 
             public bool  size_changed() {
                 if(last_aspect == camera.aspect) return false;

@@ -7,7 +7,7 @@ namespace Scripts {
         public class GravityRenderer : MonoBehaviour {
             public const int   samples        = 1024;
             public const float line_thickness = 0.15f;
-            public const float line_length    = 0.5f;
+            public const float line_length    = 0.75f;
             public const float color_factor   = 2.0f;
 
             private struct ArrowInfo {
@@ -89,14 +89,25 @@ namespace Scripts {
                 float camera_width                   = camera.get_width();
                 float camera_height                  = camera.get_height();
 
-                float length                         = Tools.magnitude(camera_width / width, camera_height / height)
-                                                     * line_length;
+                float length;
+
+                float scale;
+
+                if(camera_height < camera_width) {
+                    length                           = camera_height / (height - 1) * line_length;
+                    scale                            = 1.0f / (height - 1);
+                } else {
+                    length                           = camera_width  / (width  - 1) * line_length;
+                    scale                            = 1.0f / (width  - 1);
+                }
+
+                float actual_length = length / camera.scale * 0.25f * scale;
 
                 for(int x = 0; x < width; x++)
                     for(int y = 0; y < height; y++) {
                         Vector3 absolute = camera.get_abs_pos(new Vector3(
-                            x * camera_width  * 0.65f * camera.scale,
-                            y * camera_height * 0.65f * camera.scale * camera.get_aspect_ratio(),
+                            x * length / line_length,
+                            y * length / line_length,
                             0.0f
                         ));
 
@@ -130,16 +141,16 @@ namespace Scripts {
                         arrows[x, y].vertices[0].y   = arrows[x, y].y;
                         arrows[x, y].vertices[0].z   = 1.0f;
 
-                        arrows[x, y].vertices[1].x   = arrows[x, y].x + arrows[x, y].dirx;
-                        arrows[x, y].vertices[1].y   = arrows[x, y].y + arrows[x, y].diry;
+                        arrows[x, y].vertices[1].x   = arrows[x, y].x + arrows[x, y].dirx / camera.scale * scale;
+                        arrows[x, y].vertices[1].y   = arrows[x, y].y + arrows[x, y].diry / camera.scale * scale;
                         arrows[x, y].vertices[1].z   = 1.0f;
 
-                        arrows[x, y].vertices[2].x   = arrows[x, y].vertices[1].x + 0.25f * length * (float)Math.Cos(angle + Tools.pi - Tools.eigthpi);
-                        arrows[x, y].vertices[2].y   = arrows[x, y].vertices[1].y + 0.25f * length * (float)Math.Sin(angle + Tools.pi - Tools.eigthpi);
+                        arrows[x, y].vertices[2].x   = arrows[x, y].vertices[1].x + actual_length * (float)Math.Cos(angle + Tools.pi - Tools.eigthpi);                                                                       
+                        arrows[x, y].vertices[2].y   = arrows[x, y].vertices[1].y + actual_length * (float)Math.Sin(angle + Tools.pi - Tools.eigthpi);
                         arrows[x, y].vertices[2].z   = 1.0f;
 
-                        arrows[x, y].vertices[3].x   = arrows[x, y].vertices[1].x + 0.25f * length * (float)Math.Cos(angle + Tools.pi + Tools.eigthpi);
-                        arrows[x, y].vertices[3].y   = arrows[x, y].vertices[1].y + 0.25f * length * (float)Math.Sin(angle + Tools.pi + Tools.eigthpi);
+                        arrows[x, y].vertices[3].x   = arrows[x, y].vertices[1].x + actual_length * (float)Math.Cos(angle + Tools.pi + Tools.eigthpi);                                                                       
+                        arrows[x, y].vertices[3].y   = arrows[x, y].vertices[1].y + actual_length * (float)Math.Sin(angle + Tools.pi + Tools.eigthpi);
                         arrows[x, y].vertices[3].z   = 1.0f;
 
                         arrows[x, y].vertices[4].x   = arrows[x, y].vertices[1].x;
