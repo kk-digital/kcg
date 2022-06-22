@@ -19,7 +19,7 @@ namespace Planet.VisualEffects
                 parallaxLayer = new Planet.VisualEffects.PlanetBackgroundParallaxLayer();
 
                 starField.Initialize();
-                //parallaxLayer.Initialize();
+                parallaxLayer.Initialize();
 
                 Init = true;
             }
@@ -32,7 +32,7 @@ namespace Planet.VisualEffects
                 if(GameLoop.BackgroundDraw)
                 {
                     starField.Draw(material, transform, drawOrder);
-                    //parallaxLayer.Draw(material, transform, drawOrder);
+                    parallaxLayer.Draw(material, transform, drawOrder);
                 }
             }
         }

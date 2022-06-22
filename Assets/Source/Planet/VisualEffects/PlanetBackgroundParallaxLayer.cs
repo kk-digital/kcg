@@ -8,6 +8,8 @@ namespace Planet.VisualEffects
     {
         // Stored Properties
         private bool Init;
+
+        // For loop
         private int i = 0;
 
         // Earth
