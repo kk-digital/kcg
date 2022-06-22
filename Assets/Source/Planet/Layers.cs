@@ -72,6 +72,35 @@ namespace Planet
                                     data[index + 3] = bytes[bytesIndex + 3];
                                 }
                             }
+
+
+                            if (tile.DrawType == Tile.TileDrawType.Composited && tile.SpriteId2 >= 0)
+                            {
+                                GameState.TileSpriteAtlasManager.GetSpriteBytes(tile.SpriteId2, bytes);
+
+                                for (int j = 0; j < 32; j++)
+                                {
+                                    for (int i = 0; i < 32; i++)
+                                    {
+                                        int index = 4 * ((i + tileX) + (j + tileY) * (MapSize.X * 32));
+                                        int bytesIndex = 4 * (i + (32 - j - 1) * 32);
+                                        if (bytes[bytesIndex + 3] > 0)
+                                        {
+                                            data[index] = bytes[bytesIndex];
+                                            data[index + 1] = bytes[bytesIndex + 1];
+                                            data[index + 2] = bytes[bytesIndex + 2];
+                                            data[index + 3] = bytes[bytesIndex + 3];
+                                        }
+                                        /*else
+                                        {
+                                            data[index] = data[index] + bytes[bytesIndex];
+                                            data[index + 1] = data[index + 1] + bytes[bytesIndex + 1];
+                                            data[index + 2] = data[index + 2] + bytes[bytesIndex + 2];
+                                            data[index + 3] = data[index + 3] + bytes[bytesIndex + 3];
+                                        }*/
+                                    }
+                                }
+                            }
                         }
                     }
                 }

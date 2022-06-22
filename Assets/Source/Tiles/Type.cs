@@ -6,7 +6,8 @@
         public string Name; //later use string pool
         public string Description; //later use string pool
 
-        public bool AutoMapping;
+        public bool AutoMapping; // used for tile variants
+                                 // that means we need to map it to the correct sprite depending on its neighbors
         
         public Enums.Tile.DrawType TileDrawType; //enum, hint for how tile should be drawn
 
