@@ -27,7 +27,7 @@ namespace Scripts {
 
             public void set_position(float x, float y, float s) {
                 scale = s;
-                transform.position = new Vector3(x, y, -10);
+                transform.position = new Vector3(-x, -y, -10);
                 camera.orthographicSize = 20.0f / scale;
             }
 
