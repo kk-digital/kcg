@@ -154,30 +154,35 @@ public class GameResources
         Item.CreationApi.Instance.SetTexture(PlacementToolIcon);
         Item.CreationApi.Instance.SetInventoryTexture(PlacementToolIcon);
         Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
+        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.PlaceTilMoonAction);
         Item.CreationApi.Instance.EndItem();
 
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.RemoveTileTool, "RemoveTileTool");
         Item.CreationApi.Instance.SetTexture(RemoveToolIcon);
         Item.CreationApi.Instance.SetInventoryTexture(RemoveToolIcon);
         Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
+        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.RemoveTileAction);
         Item.CreationApi.Instance.EndItem();
 
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.SpawnEnemySlimeTool, "SpawnSlimeTool");
         Item.CreationApi.Instance.SetTexture(SlimeIcon);
         Item.CreationApi.Instance.SetInventoryTexture(SlimeIcon);
         Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
+        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.EnemySpawnAction);
         Item.CreationApi.Instance.EndItem();
 
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.MiningLaserTool, "MiningLaserTool");
         Item.CreationApi.Instance.SetTexture(MiningLaserToolIcon);
         Item.CreationApi.Instance.SetInventoryTexture(MiningLaserToolIcon);
         Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
+        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.MiningLaserAction);
         Item.CreationApi.Instance.EndItem();
 
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.PipePlacementTool, "PipePlacementTool");
         Item.CreationApi.Instance.SetTexture(PipePlacementToolIcon);
         Item.CreationApi.Instance.SetInventoryTexture(PipePlacementToolIcon);
         Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
+        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.PlaceTilPipeAction);
         Item.CreationApi.Instance.EndItem();
     }
 

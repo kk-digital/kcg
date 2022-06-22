@@ -11,7 +11,7 @@ namespace Action
     {
         public struct Data
         {
-            public Tile.Tile tile;
+            public Tile.TileEnum tileType;
         }
 
         Data data;
@@ -26,7 +26,7 @@ namespace Action
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             int x = (int)worldPosition.x;
             int y = (int)worldPosition.y;
-            ActionAttributeEntity.actionAttributePlanetState.Planet.TileMap.PlaceTile(x, y, data.tile, MapLayerType.Front);
+            ActionAttributeEntity.actionAttributePlanetState.Planet.PlaceTile(x, y, (int)data.tileType, MapLayerType.Front);
             
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
         }

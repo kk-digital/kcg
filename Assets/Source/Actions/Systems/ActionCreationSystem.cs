@@ -13,9 +13,9 @@ namespace Action
 
         private static int ActionID;
 
-        public ActionCreationSystem(Contexts entitasContext)
+        public ActionCreationSystem()
         {
-            EntitasContext = entitasContext;
+            EntitasContext = Contexts.sharedInstance;
         }
 
         public int CreateAction(int actionTypeID, int agentID)

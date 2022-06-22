@@ -9,18 +9,19 @@ namespace Action
     public class ActionAttributeManager
     {
         public GameEntity ActionAttributeEntity = null;
-        private int CurrentID = 0;
 
-        public void CreateActionAttributeType(string name)
+        public void CreateActionAttributeType(Enums.ActionType actionType, string name)
         {
             ActionAttributeEntity = Contexts.sharedInstance.game.CreateEntity();
-            ActionAttributeEntity.AddActionAttribute(CurrentID);
+            ActionAttributeEntity.AddActionAttribute((int)actionType);
             ActionAttributeEntity.AddActionAttributeName(name);
         }
 
-        public int GetCurrentTypeID()
+        public void CreateActionAttributeType(Enums.ActionType actionType)
         {
-            return CurrentID;
+            ActionAttributeEntity = Contexts.sharedInstance.game.CreateEntity();
+            ActionAttributeEntity.AddActionAttribute((int)actionType);
+            ActionAttributeEntity.AddActionAttributeName(actionType.ToString());
         }
 
         public int GetTypeID(string name)
@@ -49,6 +50,11 @@ namespace Action
             ActionAttributeEntity.AddActionAttributeCoolDown(coolDown);
         }
 
+        public void SetData(object data)
+        {
+            ActionAttributeEntity.AddActionAttributeData(data);
+        }
+
         public void Animation()
         { 
             ActionAttributeEntity.isActionAttributeAnimation = true;
@@ -71,7 +77,6 @@ namespace Action
         public void EndActionAttributeType()
         {
             ActionAttributeEntity = null;
-            CurrentID++;
         }
     }
 }

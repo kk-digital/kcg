@@ -14,6 +14,7 @@ public class GameState
     public static readonly Action.ActionAttributeManager    ActionAttributeManager;
     public static readonly Action.ActionCreationSystem      ActionCreationSystem;
     public static readonly Action.ActionSchedulerSystem     ActionSchedulerSystem;
+    public static readonly Action.InitializeSystem          ActionInitializeSystem;
     #endregion
 
     #region Tile
@@ -92,5 +93,6 @@ public class GameState
         ActionAttributeManager = new Action.ActionAttributeManager();
         ActionCreationSystem = new Action.ActionCreationSystem();
         ActionSchedulerSystem = new Action.ActionSchedulerSystem();
+        ActionInitializeSystem = new Action.InitializeSystem();
     }
 }

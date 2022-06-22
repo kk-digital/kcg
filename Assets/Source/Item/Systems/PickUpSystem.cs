@@ -10,8 +10,10 @@ namespace Item
         // Todo:
         //  Hash entities by their position.
         //  Only call this after an item or an agent has changed position. 
-        public void Update(GameContext gameContext)
+        public void Update()
         {
+            GameContext gameContext = Contexts.sharedInstance.game;
+
             // Get agents able to pick an object.
             var agents = gameContext.GetGroup(
                 GameMatcher.AllOf(GameMatcher.AgentActionScheduler, GameMatcher.PhysicsPosition2D).AnyOf(GameMatcher.AgentInventory, GameMatcher.AgentToolBar));
@@ -30,7 +32,8 @@ namespace Item
                     // Todo: Use action center Position.
                     if ((agent.physicsPosition2D.Value - centerPos).Magnitude <= 1.5f)
                     {
-                        GameState.ActionSchedulerSystem.ScheduleAction(agent, DefaultActions.CreatePickUpAction(agent.agentID.ID, item.itemID.ID));
+                        GameState.ActionSchedulerSystem.ScheduleAction(agent, 
+                            GameState.ActionInitializeSystem.CreatePickUpAction(agent.agentID.ID, item.itemID.ID));
                     }
                 }    
             }

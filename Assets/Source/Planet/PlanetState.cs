@@ -38,7 +38,7 @@ namespace Planet
                                 int width, int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity gameEntity = GameState.AgentSpawnerSystem.SpawnPlayer(material, spriteId, width, height, position, newEntity.AgentId,
+            GameEntity entity = GameState.AgentSpawnerSystem.SpawnPlayer(material, spriteId, width, height, position, newEntity.AgentId,
                     startingAnimation);
             newEntity.Entity = entity;
 

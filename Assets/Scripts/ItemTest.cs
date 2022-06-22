@@ -47,7 +47,8 @@ namespace Planet.Unity
 
             if (Input.GetKeyDown(KeyCode.T))
             {
-                GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity, Action.DefaultActions.CreateDropAction(Player.Entity.agentID.ID));
+                GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity, 
+                    GameState.ActionCreationSystem.CreateAction(Player.AgentId, Player.Entity.agentID.ID));
             }
 
             GameState.InventoryDrawSystem.Draw(Material, transform, 14);
@@ -116,8 +117,7 @@ namespace Planet.Unity
             GameState.AnimationManager.SetBaseSpriteID(CharacterSpriteId);
             GameState.AnimationManager.SetFrameCount(1);
             GameState.AnimationManager.EndAnimation();
-
-            Action.DefaultActions.InitializeActionsAttributes();
+            GameState.ActionInitializeSystem.Initialize(Planet, Material);
 
             // Generating the map
             Vec2i mapSize = new Vec2i(16, 16);
