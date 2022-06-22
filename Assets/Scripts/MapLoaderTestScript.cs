@@ -124,7 +124,6 @@ namespace Planet.Unity
             PhysicsMovableSystem.Update();
             AgentProcessCollisionSystem.Update(TileMap);
             TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Front, Instantiate(Material), transform, 10);
-            TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Ore, Instantiate(Material), transform, 11);
             AgentDrawSystem.Draw(Instantiate(Material), transform, 12);
         }
 
@@ -180,14 +179,11 @@ namespace Planet.Unity
                     }
 
                     TileMap.SetTile(ref frontTile, MapLayerType.Front);
-                    TileMap.SetTile(ref oreTile, MapLayerType.Ore);
                 }
             }
             
             TileMap.UpdateTileMapPositions(MapLayerType.Front);
-            TileMap.UpdateTileMapPositions(MapLayerType.Ore);
-            //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
-            //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Ore);
+
         }
     }
 }

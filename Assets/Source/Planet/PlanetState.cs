@@ -195,7 +195,6 @@ namespace Planet
 
             TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Mid, Object.Instantiate(material), transform, 9);
             TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Front, Object.Instantiate(material), transform, 10);
-            TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Ore, Object.Instantiate(material), transform, 11);
             GameState.AgentDrawSystem.Draw(Object.Instantiate(material), transform, 12);
             GameState.ItemDrawSystem.Draw(GameContext, Material.Instantiate(material), transform, 13);
             GameState.FloatingTextDrawSystem.Draw(transform, 10000);

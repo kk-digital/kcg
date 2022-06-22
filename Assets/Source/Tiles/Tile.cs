@@ -16,6 +16,8 @@ namespace Tile
         // Contains the TileProperties Ids for every layer
         public int Type;
         public int SpriteId;
+        public int SpriteId2; // for ore sprites
+        public TileDrawType DrawType; // used for drawing
 
         public AABB2D Borders;
 
@@ -28,6 +30,8 @@ namespace Tile
         {
             Type = -1;
             SpriteId = -1;
+            SpriteId2 = -1;
+            DrawType = TileDrawType.Normal;
             Borders = new AABB2D(position, Size);
         }
 

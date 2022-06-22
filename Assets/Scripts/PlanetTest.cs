@@ -96,7 +96,7 @@ namespace Planet.Unity
             GameResources.Initialize();
 
             // Generating the map
-            Vec2i mapSize = new Vec2i(32, 24);
+            Vec2i mapSize = new Vec2i(16, 16);
             Planet = new Planet.PlanetState(mapSize, EntitasContext.game);
             GenerateMap();
             SpawnStuff();
@@ -122,41 +122,6 @@ namespace Planet.Unity
             inventoryManager.AddItem(spawnEnemySlimeTool, toolBarID);
             inventoryManager.AddItem(miningLaserTool, toolBarID);
             inventoryManager.AddItem(pipePlacementTool, toolBarID);
-        }
-        
-        void GenerateOre()
-        {
-            var tileMap = Planet.TileMap;
-            var tileMapBorders = tileMap.Borders;
-            
-            for(int j = tileMapBorders.IntBottom; j < tileMapBorders.IntTop; j++)
-            {
-                for(int i = tileMapBorders.IntLeft; i < tileMapBorders.IntRight; i++)
-                {
-                    ref var tile = ref tileMap.GetTileRef(i, j, MapLayerType.Front);
-
-                    if (tile.Type == 10 && (int)KMath.Random.Mt19937.genrand_int32() % 30 == 0)
-                    {
-                        var oreTile = new Tile.Tile(new Vec2f(i, j));
-                        
-                        int type = (int)KMath.Random.Mt19937.genrand_int32() % 6;
-                        if (type == 0)
-                        {
-                            oreTile.Type = (int)Tile.TileEnum.Ore1;
-                        }
-                        else if (type is 1 or 2)
-                        {
-                            oreTile.Type = (int)Tile.TileEnum.Ore2;
-                        }
-                        else if (type is 3 or 4)
-                        {
-                            oreTile.Type = (int)Tile.TileEnum.Ore3;
-                        }
-                        
-                        tileMap.SetTile(ref oreTile, MapLayerType.Ore);
-                    }
-                }
-            }
         }
 
         void GenerateMap()
@@ -193,6 +158,24 @@ namespace Planet.Unity
                         else
                         {
                             frontTile.Type = (int)Tile.TileEnum.Moon;
+                            if (((int) KMath.Random.Mt19937.genrand_int32() % 10 == 0))
+                            {
+                                int oreRandom = (int) KMath.Random.Mt19937.genrand_int32() % 3;
+                                if (oreRandom == 0)
+                                {
+                                    frontTile.SpriteId2 = GameResources.OreSprite;
+                                }
+                                else if (oreRandom == 1)
+                                {
+                                    frontTile.SpriteId2 = GameResources.Ore2Sprite;
+                                }
+                                else
+                                {
+                                    frontTile.SpriteId2 = GameResources.Ore3Sprite;
+                                }
+
+                                frontTile.DrawType = Tile.TileDrawType.Composited;
+                            }
                         }
                     }
 
@@ -257,12 +240,7 @@ namespace Planet.Unity
             }
 
 
-            GenerateOre();
-
             tileMap.UpdateTileMapPositions(MapLayerType.Front);
-            tileMap.UpdateTileMapPositions(MapLayerType.Ore);
-            //TileMap.BuildLayerTexture(MapLayerType.Front);
-            //TileMap.BuildLayerTexture(MapLayerType.Ore);
 
         }
 
@@ -293,7 +271,7 @@ namespace Planet.Unity
 
             
             GameState.ItemSpawnSystem.SpawnItem(EntitasContext.game, Enums.ItemType.Gun, new Vec2f(6.0f, spawnHeight));
-            GameState.ItemSpawnSystem.SpawnItem(EntitasContext.game, Enums.ItemType.Ore, new Vec2f(3.0f, spawnHeight));
+            GameState.ItemSpawnSystem.SpawnItem(EntitasContext.game, Enums.ItemType.Ore, new Vec2f(10.0f, spawnHeight));
         }
         
     }
