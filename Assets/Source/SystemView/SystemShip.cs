@@ -29,10 +29,11 @@ namespace Source {
             public SpaceObject self;
 
             public float acceleration;
+            public float horizontal_acceleration;
 
             public float rotation;
 
-            public float rotational_speed_modifier = 2.0f;
+            public float torque = 2.0f;
 
             public List<ShipWeapon> weapons;
 
@@ -59,7 +60,7 @@ namespace Source {
             }
 
             public void rotate_to(float angle, float current_time) {
-                while(rotation < 0.0f) rotation  = Tools.twopi + rotation;
+                while(rotation < 0.0f)        rotation  = Tools.twopi + rotation;
                 while(rotation > Tools.twopi) rotation -= Tools.twopi;
 
                 if(rotation == angle) return;
@@ -70,8 +71,13 @@ namespace Source {
                 if(diff1 < 0.0f) diff1 = Tools.twopi + diff1;
                 if(diff2 < 0.0f) diff2 = Tools.twopi + diff2;
 
+                float acc             = (float)Math.Sqrt(torque / self.angular_inertia);
+
+                // todo: ship should slow down rotation at the halfway mark
+
                 if(diff2 < diff1) {
-                    rotation -= rotational_speed_modifier * current_time;
+                    rotation         += self.angular_vel * current_time - 0.5f * acc * current_time * current_time;
+                    self.angular_vel -= acc * current_time;
 
                     diff1 = angle - rotation;
                     diff2 = rotation - angle;
@@ -79,9 +85,10 @@ namespace Source {
                     if(diff1 < 0.0f) diff1 = Tools.twopi + diff1;
                     if(diff2 < 0.0f) diff2 = Tools.twopi + diff2;
 
-                    if(diff1 < diff2) rotation = angle;
+                    if(diff1 < diff2) { rotation = angle; self.angular_vel = 0.0f; }
                 } else {
-                    rotation += rotational_speed_modifier * current_time;
+                    rotation         += self.angular_vel * current_time + 0.5f * acc * current_time * current_time;
+                    self.angular_vel += acc * current_time;
 
                     diff1 = angle - rotation;
                     diff2 = rotation - angle;
@@ -89,7 +96,7 @@ namespace Source {
                     if(diff1 < 0.0f) diff1 = Tools.twopi + diff1;
                     if(diff2 < 0.0f) diff2 = Tools.twopi + diff2;
 
-                    if(diff2 < diff1) rotation = angle;
+                    if(diff2 < diff1) { rotation = angle; self.angular_vel = 0.0f; }
                 }
             }
 

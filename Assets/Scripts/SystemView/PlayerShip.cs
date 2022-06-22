@@ -87,8 +87,14 @@ namespace Scripts {
                 float rotation_change = ship.rotation;
 
                 if (!mouse_steering) {
-                    if (Input.GetKey("left ctrl")) horizontal_movement = Input.GetAxis("Horizontal");
-                    else ship.rotation -= Input.GetAxis("Horizontal") * current_time * ship.rotational_speed_modifier;
+                    if(Input.GetKey("left ctrl")) horizontal_movement = Input.GetAxis("Horizontal");
+                    else {
+                        ship.rotation         += ship.self.angular_vel * current_time;
+                        float acc              = (float)Math.Sqrt(ship.torque / ship.self.angular_inertia) * -Input.GetAxis("Horizontal");
+                        ship.rotation         += 0.5f * acc * current_time * current_time;
+                        ship.self.angular_vel += acc * current_time;
+                        ship.self.angular_vel *= 0.99f;
+                    }
                 } else {
                     horizontal_movement = -Input.GetAxis("Horizontal");
                     Vector3 RelPos = camera_controller.get_rel_pos(new Vector3(ship.self.posx, ship.self.posy, 0.0f));
