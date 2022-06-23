@@ -139,53 +139,112 @@ namespace Source {
             }
 
             public float get_eccentric_anomaly_at(float mean) {
-                // Eccentric anomaly is defined by Kepler's equation
+                if(eccentricity <= 1.0f) {
+                    // Eccentric anomaly is defined by Kepler's equation
 
-                // M = E - ε sin(E)
+                    // M = E - ε sin(E)
 
-                // However this does not have a closed form solution, so
-                // we use Newton's method to approximate eccentric anomaly
+                    // However this does not have a closed form solution, so
+                    // we use Newton's method to approximate eccentric anomaly
 
-                // Newton's method:
-                // 
-                //             f(xn)
-                // x    = x  - ------
-                //  n+1    n   f'(xn)
+                    // Newton's method:
+                    // 
+                    //             f(xn)
+                    // x    = x  - ------
+                    //  n+1    n   f'(xn)
 
-                // Applied to eccentric anomaly formula:
-                // 
-                //             En - ε sin(En) - M
-                // E    = E  - ------------------
-                //  n+1    n      1 - ε cos(En)
+                    // Applied to eccentric anomaly formula:
+                    // 
+                    //             En - ε sin(En) - M
+                    // E    = E  - ------------------
+                    //  n+1    n      1 - ε cos(En)
 
 
-                while(mean <        0.0f) mean  = Tools.twopi + mean;
-                while(mean > Tools.twopi) mean -= Tools.twopi;
+                    while(mean <        0.0f) mean  = Tools.twopi + mean;
+                    while(mean > Tools.twopi) mean -= Tools.twopi;
 
-                      float estimate =  mean;
-                      float result   =  0.0f;
-                const float delta    = 1E-5f;
+                    float estimate                  =  mean;
+                    float result                    =  0.0f;
+                    const float delta               = 1E-5f;
 
-                do {
-                    estimate = estimate -(estimate - eccentricity * (float)Math.Sin(estimate) - mean) / (1.0f - eccentricity * (float)Math.Cos(estimate));
+                    do {
+                        estimate -= (estimate - eccentricity * (float)Math.Sin(estimate) - mean) / (1.0f - eccentricity * (float)Math.Cos(estimate));
 
-                    while(estimate <        0.0f) estimate  = Tools.twopi + estimate;
-                    while(estimate > Tools.twopi) estimate -= Tools.twopi;
+                        while(estimate <        0.0f) estimate  = Tools.twopi + estimate;
+                        while(estimate > Tools.twopi) estimate -= Tools.twopi;
 
-                    result = estimate  - eccentricity * (float)Math.Sin(estimate);
-                } while(result - mean > delta || result - mean < -delta);
+                        result = estimate  - eccentricity * (float)Math.Sin(estimate);
+                    } while(result - mean > delta || result - mean < -delta);
 
-                return estimate;
+                    return estimate;
+                } else {
+                    // Eccentric anomaly is defined by Kepler's equation
+
+                    // M = ε sinh(E) - E
+
+                    // However this does not have a closed form solution, so
+                    // we use Newton's method to approximate eccentric anomaly
+
+                    // Newton's method:
+                    // 
+                    //             f(xn)
+                    // x    = x  - ------
+                    //  n+1    n   f'(xn)
+
+                    // Applied to eccentric anomaly formula:
+                    // 
+                    //             ε sinh(En) - En - M
+                    // E    = E  - -------------------
+                    //  n+1    n      ε cosh(En) - 1
+
+
+                    while(mean <        0.0f) mean  = Tools.twopi + mean;
+                    while(mean > Tools.twopi) mean -= Tools.twopi;
+
+                    float estimate                  =  mean;
+                    float result                    =  0.0f;
+                    const float delta               = 1E-2f;
+
+                    do {
+                        estimate -= (eccentricity * (float)Math.Sinh(estimate) - estimate - mean) / (eccentricity * (float)Math.Cosh(estimate) - 1.0f);
+                        
+                        while(estimate <        0.0f) estimate  = Tools.twopi + estimate;
+                        while(estimate > Tools.twopi) estimate -= Tools.twopi;
+
+                        result = eccentricity * (float)Math.Sinh(estimate) - estimate;
+
+                        while(result   <        0.0f) result    = Tools.twopi + result;
+                        while(result   > Tools.twopi) result   -= Tools.twopi;
+                    } while(result - mean > delta || result - mean < -delta);
+
+                    return estimate;
+                }
             }
 
             public float get_eccentric_anomaly() { return get_eccentric_anomaly_at(mean_anomaly); }
 
-            public float get_true_anomaly(float eccentric) {
-                //              1 + ε     E
-                // ν = 2 atan(√ ----- tan(-))
-                //              1 - ε     2
+            public float get_true_anomaly() { return get_true_anomaly(get_eccentric_anomaly()); }
 
-                return 2.0f * (float)Math.Atan(Math.Sqrt((1.0f + eccentricity) / (1.0f - eccentricity)) * Math.Tan(eccentric / 2.0f));
+            public float get_true_anomaly(float eccentric) {
+                if(eccentricity <= 1.0f) {
+
+                    //              1 + ε      E
+                    // ν = 2 atan(√ ----- tan(---))
+                    //              1 - ε      2
+
+                    return 2.0f * (float)Math.Atan (Math.Sqrt((1.0f + eccentricity) / (1.0f - eccentricity)) * Math.Tan (eccentric * 0.5f));
+
+                } else {
+
+                    //              ε - 1       E  
+                    // ν = 2 atan(√ ----- tanh(---) (ε + 1))
+                    //              ε + 1       2
+
+                    return 2.0f * (float)Math.Atan(
+                                         Math.Sqrt((eccentricity - 1.0f)  / (eccentricity + 1.0f))
+                                *        Math.Tanh( eccentric    * 0.5f)) * (eccentricity + 1.0f);
+
+                }
             }
 
             public float[] get_position_at(float true_anom, float radius) {
@@ -215,11 +274,23 @@ namespace Source {
             }
 
             public float get_distance_from_center_at(float true_anom) {
-                //           1 - ε²
-                // r = a --------------
-                //       1 + ε * cos(ν)
+                if(eccentricity < 1.0f) {
 
-                return semimajoraxis * (1 - eccentricity * eccentricity) / (1 + eccentricity * (float)Math.Cos(true_anom));
+                    //           1 - ε²
+                    // r = a --------------
+                    //       1 + ε * cos(ν)
+
+                    return semimajoraxis * (1 - eccentricity * eccentricity) / (1 + eccentricity * (float)Math.Cos(true_anom));
+
+                } else {
+
+                    //          (ε² - 1)
+                    // r = a --------------
+                    //       1 + ε * cos(ν) 
+
+                    return semimajoraxis * (eccentricity * eccentricity - 1) / (1 + eccentricity * (float)Math.Cos(true_anom));
+
+                }
             }
 
             public float get_distance_from_center() {
@@ -434,7 +505,7 @@ namespace Source {
                 Debug.Log("x: " + Self.PosX + " y: " + Self.PosX + " vx: " + Self.VelX + " vy: " + Self.VelY);
             }*/
 
-            public void change_frame_of_reference(SpaceObject new_frame_of_reference) {
+                public void change_frame_of_reference(SpaceObject new_frame_of_reference) {
                 float posx = self.posx - central_body.posx;
                 float posy = self.posy - central_body.posy;
 
@@ -472,29 +543,47 @@ namespace Source {
 
                 semimajoraxis = angular_momentum * angular_momentum / (standard_gravitational_parameter * (1.0f - eccentricity * eccentricity));
 
-                //            b²
-                // ε = √ (1 - -)   =>    b = a √ (1 - ε²)
-                //            a²
+                if(eccentricity <= 1.0f) {
 
-                semiminoraxis = semimajoraxis * (float)Math.Sqrt(1.0f - eccentricity * eccentricity);
+                    //            b²
+                    // ε = √ (1 - -)   =>    b = a √ (1 - ε²)
+                    //            a²
 
-                //           e
-                //            y
-                // ω = atan( -- )
-                //           e
-                //            x
+                    semiminoraxis = semimajoraxis * (float)Math.Sqrt(1.0f - eccentricity * eccentricity);
 
-                rotation = (float)Math.Atan(eccentricity_vector[1] / eccentricity_vector[0]);
+                    //           e
+                    //            y
+                    // ω = atan( -- )
+                    //           e
+                    //            x
 
-                //        μ
-                // n = √ --
-                //       a³
+                    rotation = (float)Math.Atan(eccentricity_vector[1] / eccentricity_vector[0]);
 
-                mean_motion = (float)Math.Sqrt(standard_gravitational_parameter / (semimajoraxis * semimajoraxis * semimajoraxis));
+                    //        μ
+                    // n = √ ---
+                    //        a³
 
-                //     2*π
-                // P = ---
-                //      n
+                    mean_motion = (float)Math.Sqrt(standard_gravitational_parameter / (semimajoraxis * semimajoraxis * semimajoraxis));
+
+                } else {
+
+                    // 
+                    // b = -a  √ (e² - 1)
+                    //
+
+                    semiminoraxis = -semimajoraxis * (float)Math.Sqrt(eccentricity * eccentricity - 1.0f);
+
+                    //        μ
+                    // n = √ ---
+                    //       -a³
+
+                    mean_motion = (float)Math.Sqrt(standard_gravitational_parameter / (-semimajoraxis * semimajoraxis * semimajoraxis));
+
+                }
+
+                //     2 * π
+                // P = -----
+                //       n
 
                 orbital_period = Tools.twopi / mean_motion;
 
@@ -502,7 +591,7 @@ namespace Source {
                 apoapsis  = get_distance_from_center_at(Tools.pi);
 
                 linear_eccentricity = semimajoraxis - periapsis;
-            
+
                 if(eccentricity_vector[0] < 0.0f) rotation += Tools.pi;
 
                 //                                      r            r
@@ -513,26 +602,49 @@ namespace Source {
 
                 true_anomaly = (float)Math.Atan2(posy, posx) - rotation;
 
-                //                                                 1 + ε             ν
-                //              1 + ε     E                      √ -----(1 - ε) tan(-)
-                // ν = 2 atan(√ ----- tan(-))   =>   ε = 2 atan(   1 - ε             2  )
-                //              1 - ε     2                      ---------------------- 
-                //                                                        1 + ε
+                if(eccentricity <= 1.0f) {
 
-                float one_plus_ecc  = 1 + eccentricity;
-                float one_minus_ecc = 1 - eccentricity;
+                    //                                                 1 + ε             ν
+                    //              1 + ε     E                      √ ----- (1 - ε) tan(-)
+                    // ν = 2 atan(√ ----- tan(-))   =>   E = 2 atan(   1 - ε             2  )
+                    //              1 - ε     2                      ---------------------- 
+                    //                                                        1 + ε
 
-                eccentric_anomaly   = 2.0f * (float)Math.Atan((Math.Sqrt(one_plus_ecc / one_minus_ecc)
-                                           * one_minus_ecc
-                                           * Math.Tan(true_anomaly / 2)) / one_plus_ecc);
+                    float one_plus_ecc  = 1 + eccentricity;
+                    float one_minus_ecc = 1 - eccentricity;
 
-                // M = E - ε sin(E)
+                    eccentric_anomaly   = 2.0f * (float)Math.Atan((Math.Sqrt(one_plus_ecc / one_minus_ecc)
+                                               * one_minus_ecc
+                                               * Math.Tan(true_anomaly / 2)) / one_plus_ecc);
 
-                mean_anomaly = eccentric_anomaly - eccentricity * (float)Math.Sin(eccentric_anomaly);
+                    // M = E - ε sin(E)
 
-                if(mean_anomaly      < 0.0f) mean_anomaly      += Tools.twopi;
-                if(eccentric_anomaly < 0.0f) eccentric_anomaly += Tools.twopi;
-                if(true_anomaly      < 0.0f) true_anomaly      += Tools.twopi;
+                    mean_anomaly = eccentric_anomaly - eccentricity * (float)Math.Sin(eccentric_anomaly);
+
+                } else {
+
+                    //                                                    1 + ε             ν
+                    //               1 + ε      E                       √ ----- (1 - ε) tan(-)
+                    // ν = 2 atanh(√ ----- tanh(-))   =>   E = 2 atanh(   1 - ε             2  )
+                    //               1 - ε      2                       ---------------------- 
+                    //                                                           1 + ε
+
+                    float one_plus_ecc  = 1 + eccentricity;
+                    float one_minus_ecc = 1 - eccentricity;
+
+                    eccentric_anomaly   = 2.0f * (float)Math.Atanh((Math.Sqrt(one_plus_ecc / one_minus_ecc)
+                                               * one_minus_ecc
+                                               * Math.Tan(true_anomaly / 2)) / one_plus_ecc);
+
+                    // M = E - ε sinh(E)
+
+                    mean_anomaly = eccentric_anomaly - eccentricity * (float)Math.Sinh(eccentric_anomaly);
+
+                }
+
+                while(mean_anomaly      < 0.0f) mean_anomaly      += Tools.twopi;
+                while(eccentric_anomaly < 0.0f) eccentric_anomaly += Tools.twopi;
+                while(true_anomaly      < 0.0f) true_anomaly      += Tools.twopi;
             }
         }
     }

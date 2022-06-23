@@ -145,7 +145,14 @@ namespace Scripts {
                 if (!ship.path_planned) OrbitRender.descriptor = null;
                 else OrbitRender.descriptor = ship.descriptor;
 
-                OrbitRender.update_renderer(128);
+                int segments;
+
+                     if(ship.descriptor.eccentricity > 1.00f) segments = 512;
+                else if(ship.descriptor.eccentricity > 0.75f) segments = 256;
+                else if(ship.descriptor.eccentricity > 0.50f) segments = 128;
+                else                                          segments =  64;
+
+                OrbitRender.update_renderer(segments);
 
                 if(Tools.debug) {
                     // Add new weapons

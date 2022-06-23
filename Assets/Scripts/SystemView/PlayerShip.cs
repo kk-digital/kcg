@@ -24,6 +24,8 @@ namespace Scripts {
 
             public float time_scale             = 1.0f;
             public float drag_factor            = 10000.0f;
+            public float drag_cutoff            = 5.0f;
+            public bool  quadratic_drag         = false;
             public float sailing_factor         = 20.0f;
             public float system_scale           = 1.0f;
 
@@ -140,21 +142,23 @@ namespace Scripts {
                 if (gravitational_strength < 1.0f) {
                     float gravitational_factor = 1.0f / (1.0f - gravitational_strength);
 
-                    // "Air resistance" effect
-                    float drag_x = ship.self.velx * -current_time / (gravitational_factor + drag_factor);
-                    float drag_y = ship.self.vely * -current_time / (gravitational_factor + drag_factor);
-
-                    ship.self.velx *= 1.0f + drag_x;
-                    ship.self.vely *= 1.0f + drag_y;
-
-                    // "Sailing" effect
-                    float effective_accx = accx + drag_x;
-                    float effective_accy = accy + drag_y;
-                
                     float magnitude = Tools.magnitude(ship.self.velx, ship.self.vely);
 
-                    ship.self.velx = ((sailing_factor + gravitational_factor) * ship.self.velx + (float)Math.Cos(ship.rotation) * magnitude) / (1.0f + sailing_factor + gravitational_factor);
-                    ship.self.vely = ((sailing_factor + gravitational_factor) * ship.self.vely + (float)Math.Sin(ship.rotation) * magnitude) / (1.0f + sailing_factor + gravitational_factor);
+                    if(magnitude > drag_cutoff) {
+                        // "Air resistance" effect
+                        float drag_x = ship.self.velx * (quadratic_drag ? ship.self.velx : 1.0f)
+                                     * -current_time  / (gravitational_factor + drag_factor);
+                        float drag_y = ship.self.vely * (quadratic_drag ? ship.self.vely : 1.0f)
+                                     * -current_time  / (gravitational_factor + drag_factor);
+
+                        ship.self.velx *= 1.0f + drag_x;
+                        ship.self.vely *= 1.0f + drag_y;
+
+                        magnitude = Tools.magnitude(ship.self.velx, ship.self.vely);
+                    }
+
+                    // "Sailing" effect                
+
                 }
 
                 renderer.shipColor.b = (float) ship.health / ship.max_health;
@@ -188,10 +192,7 @@ namespace Scripts {
                     if (strongest_gravity_object != null)
                         ship.descriptor.change_frame_of_reference(strongest_gravity_object);
 
-                    if (ship.descriptor.eccentricity <= 1.0f)
-                        ship.path_planned = true;
-                    else
-                        ship.path_planned = false;
+                    ship.path_planned = true;
                 }
 
                      if(Input.GetKey(main_weapon_key)) selectedWeapon = SelectedWeaponType.MAIN_WEAPONS;

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Source.SystemView;
 
@@ -24,43 +25,37 @@ namespace Scripts {
                     return;
                 }
 
-                Vector3[] vertices = new Vector3[segments];
-
-                float angle = Tools.twopi / (float)segments;
-
-                // sine and cosine of the relative angle between each segment
-                float sin = (float)Math.Sin(angle);
-                float cos = (float)Math.Cos(angle);
-
-                // sine and cosine of the rotation
-                float rotsin = (float)Math.Sin(descriptor.rotation);
-                float rotcos = (float)Math.Cos(descriptor.rotation);
-
-                float x = 1.0f;
-                float y = 0.0f;
-
+                List<Vector3> vertices = new();
+                
                 for(int i = 0; i < segments; i++) {
-                    float vx = x * descriptor.semimajoraxis - descriptor.linear_eccentricity;
-                    float vy = y * descriptor.semiminoraxis;
+                    float true_anomaly;
 
-                    vertices[i] = new Vector3(
-                        rotcos * vx - rotsin * vy + descriptor.central_body.posx,
-                        rotsin * vx + rotcos * vy + descriptor.central_body.posy,
-                        0.0f
+                    if(descriptor.eccentricity >= 1.0f)
+                        true_anomaly = i * Tools.pi / segments - Tools.halfpi;
+                    else
+                        true_anomaly = descriptor.get_true_anomaly(
+                            descriptor.get_eccentric_anomaly_at(
+                                i * Tools.twopi / segments
+                            )
+                        );
+
+                    float[] pos = descriptor.get_position_at(
+                        true_anomaly,
+                        descriptor.get_distance_from_center_at(true_anomaly)
                     );
 
-                    if(!float.IsFinite(vertices[i].x) || !float.IsFinite(vertices[i].y)) {
-                        line_renderer.startWidth = line_renderer.endWidth = 0.0f;
-                        return;
-                    }
-
-                    (x, y) = (cos * x - sin * y, sin * x + cos * y);
+                    vertices.Add(new Vector3(pos[0], pos[1], 0.0f));
                 }
 
-                line_renderer.startWidth = line_renderer.endWidth = line_width == 0.1f ? line_width / camera.scale : line_width;
-                line_renderer.startColor = line_renderer.endColor = color;
-                line_renderer.SetPositions(vertices);
-                line_renderer.positionCount = segments;
+                line_renderer.startWidth    =
+                line_renderer.endWidth      = line_width == 0.1f ? line_width / camera.scale : line_width;
+                line_renderer.startColor    =
+                line_renderer.endColor      = color;
+
+                line_renderer.SetPositions(vertices.ToArray());
+
+                line_renderer.positionCount = vertices.Count;
+                line_renderer.loop          = descriptor.eccentricity < 1.0f;
             }
 
             // Start is called before the first frame update
@@ -87,8 +82,6 @@ namespace Scripts {
                 line_renderer.material = mat;
 
                 line_renderer.useWorldSpace = true;
-
-                line_renderer.loop = true;
             }
 
             void OnDestroy() {
