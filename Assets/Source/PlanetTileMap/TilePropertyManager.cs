@@ -2,7 +2,7 @@ using Enums.Tile;
 
 namespace PlanetTileMap
 {
-    public struct TilePropertyManager
+    public class TilePropertyManager
     {
         /// <summary>
         /// Array that maps and index value to a struct. Storing tile property information for each tile
@@ -15,8 +15,8 @@ namespace PlanetTileMap
 
             for (int i = 0; i < tilePropertyArray.Length; i++)
             {
-                tilePropertyArray[i].TileID = TileID.Empty;
-                tilePropertyArray[i].SpriteId = TileSpriteID.Error;
+                tilePropertyArray[i].TileID = TileID.Air;
+                tilePropertyArray[i].BaseSpriteId = -1;
             }
 
             TilePropertyArray = tilePropertyArray;
@@ -27,9 +27,9 @@ namespace PlanetTileMap
             
         }
         
-        public TileProperty GetTileProperty(TileID tileId)
+        public ref TileProperty GetTileProperty(TileID tileId)
         {
-            return TilePropertyArray[(int) tileId];
+            return ref TilePropertyArray[(int) tileId];
         }
     }
 }

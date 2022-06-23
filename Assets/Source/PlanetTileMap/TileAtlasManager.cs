@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Enums.Tile;
+using UnityEngine;
 
 namespace PlanetTileMap
 {
@@ -82,12 +83,12 @@ namespace PlanetTileMap
             return sprite;
         }
 
-        public void GetSpriteBytes(int id, byte[] data, int type = 0)
+        public void GetSpriteBytes(int spriteID, byte[] data, int type = 0)
         {
             ref Sprites.SpriteAtlas atlas = ref SpritesArray[type];
 
-            int xOffset = (id % atlas.Width) * 32;
-            int yOffset = (id / atlas.Height) * 32;
+            int xOffset = (spriteID % atlas.Width) * 32;
+            int yOffset = (spriteID / atlas.Height) * 32;
 
             for(int y = 0; y < 32; y++)
             {

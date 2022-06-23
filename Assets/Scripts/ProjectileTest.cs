@@ -30,7 +30,7 @@ public class ProjectileTest : MonoBehaviour
     // Projectile Properties
     private Vec2f startPos;
     Vector3 worldPosition;
-    private PlanetTileMap.ChunkList chunkList;
+    Planet.PlanetState planetState;
     private Vec2f projectilePosition;
     private Vec2f worldPosition;
     private Vec2f diff;
@@ -40,6 +40,9 @@ public class ProjectileTest : MonoBehaviour
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
     void Start()
     {
+        // Create Tile Map
+        planetState = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().PlanetState;
+        
         // Initialize Projectile Draw System
         projectileDrawSystem = new Projectile.DrawSystem();
 
@@ -130,7 +133,7 @@ public class ProjectileTest : MonoBehaviour
             projectileVelocitySystem.Update(new Vec3f(diff.X, diff.Y), Contexts.sharedInstance);
 
             // Process Collision System
-            projectileCollisionSystem.Update(tileMap);
+            projectileCollisionSystem.Update(ref planetState.TileMap);
 
             // Draw Initialized Projectile
             projectileDrawSystem.Draw(Instantiate(Material), transform, 12);

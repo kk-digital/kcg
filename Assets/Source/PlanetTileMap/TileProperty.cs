@@ -14,7 +14,7 @@ namespace PlanetTileMap
     public struct TileProperty
     {
         public TileID TileID;
-        public TileSpriteID SpriteId;
+        public int BaseSpriteId;
         
         public string Name; //later use string pool
         public string Description; //later use string pool
@@ -29,14 +29,14 @@ namespace PlanetTileMap
         
         public bool IsSolid => TileCollisionType == CollisionType.Solid;
 
-        public TileProperty(TileID tileID, TileSpriteID tileSpriteID) : this()
+        public TileProperty(TileID tileID, int baseSpriteId) : this()
         {
             TileID = tileID;
-            SpriteId = tileSpriteID;
+            BaseSpriteId = baseSpriteId;
         }
 
         // TODO: Refactor
-        public int CheckTile(int[] neighbors, TilePosition rules, int tileId)
+        public int CheckTile(TileID[] neighbors, TilePosition rules, TileID tileId)
         {
             // 16 different values can be stored
             // using only 4 bits for the
@@ -65,10 +65,10 @@ namespace PlanetTileMap
         }
 
         // TODO: Refactor
-        public TilePosition GetTilePosition(int[] neighbors, int tileId)
+        public TilePosition GetTilePosition(TileID[] neighbors, TileID tileId)
         {
             int biggestMatch = 0;
-            TilePosition tileTilePosition = 0;
+            TilePosition tilePosition = 0;
 
             // we have 16 different values for the spriteId
             foreach(var position in (TilePosition[])Enum.GetValues(typeof(TilePosition)))
@@ -79,11 +79,11 @@ namespace PlanetTileMap
                 if (match > biggestMatch)
                 {
                     biggestMatch = match;
-                    tileTilePosition = position;
+                    tilePosition = position;
                 }
             }
 
-            return tileTilePosition;
+            return tilePosition;
         }
     }
 }

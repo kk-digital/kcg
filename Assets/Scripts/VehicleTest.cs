@@ -1,6 +1,6 @@
 using Entitas;
 using KMath;
-using Physics;
+using Planet;
 using UnityEngine;
 
 public class VehicleTest : MonoBehaviour
@@ -16,6 +16,9 @@ public class VehicleTest : MonoBehaviour
 
     // Vehicle Physics
     public Vehicle.ProcessVelocitySystem vehiclePhysics;
+    
+    // Planet Tile Map
+    private PlanetState planet;
 
     // Rendering Material
     [SerializeField]
@@ -43,6 +46,9 @@ public class VehicleTest : MonoBehaviour
 
         // Loading Image
         vehicleSpawnerSystem.SpawnVehicle(Material, image, 128, 96, new Vec2f(-5.0f, 0));
+        
+        // Initialize Planet Tile Map
+        planet = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().PlanetState;
     }
     
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
@@ -72,7 +78,7 @@ public class VehicleTest : MonoBehaviour
           vehiclePhysics.UpdateGravity(Contexts.sharedInstance);
 
         // Update Collision Physics
-        vehicleCollisionSystem.Update(tileMap);
+        vehicleCollisionSystem.Update(ref planet.TileMap);
 
         // Draw Vehicle
         vehicleDrawSystem.Draw(Instantiate(Material), transform, 17);

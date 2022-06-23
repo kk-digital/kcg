@@ -37,9 +37,9 @@ namespace PlanetTileMap
                 return;
             }
 
-            Tiles = new Tile[Layer.Count][];
+            Tiles = new Tile[TileMap.LayerCount][];
 
-            for (int planetLayer = 0; planetLayer < Layer.Count; planetLayer++)
+            for (int planetLayer = 0; planetLayer < TileMap.LayerCount; planetLayer++)
             {
                 // 256 == 0001 0000 0000 == 16 * 16
                 Tiles[planetLayer] = Enumerable.Repeat(new Tile(), 256).ToArray();

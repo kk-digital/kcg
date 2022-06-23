@@ -130,30 +130,30 @@ namespace Planet.Unity
         {
             KMath.Random.Mt19937.init_genrand((ulong) System.DateTime.Now.Ticks);
             
-            TileMap tileMap = Planet.TileMap;
+            ref var tileMap = ref Planet.TileMap;
 
             for (int j = 0; j < tileMap.MapSize.Y; j++)
             {
                 for (int i = 0; i < tileMap.MapSize.X; i++)
                 {
-                    var frontTile = new Tile.Tile(new Vec2f(i, j));
+                    var frontTileID = TileID.Air;
 
                     if (i >= tileMap.MapSize.X / 2)
                     {
                         if (j % 2 == 0 && i == tileMap.MapSize.X / 2)
                         {
-                            frontTile.Property = (int)Tile.TileProperty.Moon;
+                            frontTileID = TileID.Moon;
                         }
                         else
                         {
-                            frontTile.Property = (int)Tile.TileProperty.Glass;
+                            frontTileID = TileID.Glass;
                         }
                     }
                     else
                     {
                         if (j % 3 == 0 && i == tileMap.MapSize.X / 2 + 1)
                         {
-                            frontTile.Property = (int)Tile.TileProperty.Glass;
+                            frontTileID = TileID.Glass;
                         }
                         else
                         {
@@ -180,7 +180,7 @@ namespace Planet.Unity
                     }
 
 
-                    tileMap.SetTile(ref frontTile, i, j, MapLayerType.Front);
+                    tileMap.SetTile(i, j, frontTileID, MapLayerType.Front);
                 }
             }
 
@@ -188,8 +188,7 @@ namespace Planet.Unity
             {
                 for (int j = tileMap.MapSize.Y - 10; j < tileMap.MapSize.Y; j++)
                 {
-                    var tile = new Tile.Tile(new Vec2f(i, j));
-                    tileMap.SetTile(ref tile, i, j, MapLayerType.Front);
+                    tileMap.SetTile(i, j, TileID.Air, MapLayerType.Front);
                 }
             }
 
@@ -211,8 +210,7 @@ namespace Planet.Unity
 
                 for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
-                    var tile = new Tile.Tile(new Vec2f(i, j));
-                    tileMap.SetTile(ref tile, i, j, MapLayerType.Front);
+                    tileMap.SetTile(i, j, TileID.Air, MapLayerType.Front);
                 }
             }
 
@@ -234,8 +232,7 @@ namespace Planet.Unity
 
                 for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
-                    var tile = new Tile.Tile(new Vec2f(i, j));
-                    tileMap.SetTile(ref tile, i, j, MapLayerType.Front);
+                    tileMap.SetTile(i, j, TileID.Air, MapLayerType.Front);
                 }
             }
 
@@ -246,7 +243,7 @@ namespace Planet.Unity
 
         void SpawnStuff()
         {
-            TileMap tileMap = Planet.TileMap;
+            ref var tileMap = ref Planet.TileMap;
             System.Random random = new System.Random((int)System.DateTime.Now.Ticks);
 
             var borders = tileMap.Borders;

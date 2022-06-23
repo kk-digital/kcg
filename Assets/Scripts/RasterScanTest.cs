@@ -4,9 +4,13 @@ using UnityEngine;
 using KMath;
 using Planet;
 using Entitas;
+using Enums.Tile;
 
 public class RasterScanTest : MonoBehaviour
 {
+    // Tile Map
+    PlanetState testTiles;
+    
     // Collision Block to test line
     public GameObject CollisionBlock;
 
@@ -27,6 +31,9 @@ public class RasterScanTest : MonoBehaviour
     {
         // Assign Game Context to get players position
         gameContext = Contexts.sharedInstance.game;
+        
+        // Assign Test Tiles
+        testTiles = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().PlanetState;
 
         // Creatae the blocks array
         blocks = new GameObject[100];
@@ -76,8 +83,8 @@ public class RasterScanTest : MonoBehaviour
             {
                 Debug.Log($"({cell.x},{cell.y})");
 
-                ref var tile = ref testTiles.GetTileRef(cell.x, cell.y, Enums.Tile.MapLayerType.Front);
-                if (tile.Property >= 0)
+                ref var tile = ref testTiles.TileMap.GetTileRef(cell.x, cell.y, MapLayerType.Front);
+                if (tile.ID != TileID.Error)
                 {
                     GameObject Temp = CollisionBlock;
                     Temp = Instantiate(Temp);

@@ -8,7 +8,7 @@ namespace Agent
     public class AgentSpawnerSystem
     {
         public GameEntity SpawnPlayer(Material material, int spriteId, int width, int height, Vec2f position,
-        int AgentId, int startingAnimation)
+        int agentId, int startingAnimation)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
@@ -18,7 +18,7 @@ namespace Agent
             entity.isECSInput = true;
             entity.AddECSInputXY(new Vec2f(0, 0), false);
 
-            entity.AddAgentID(AgentId);
+            entity.AddAgentID(agentId);
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
             entity.AddAgentSprite2D(spriteId, spriteSize); // adds the sprite  component to the entity
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);

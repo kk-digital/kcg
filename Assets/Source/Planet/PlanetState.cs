@@ -11,7 +11,7 @@ namespace Planet
     public struct PlanetState
     {
         public int Index;
-        TimeState TimeState;
+        public TimeState TimeState;
 
         public PlanetTileMap.TileMap TileMap;
         public AgentList AgentList;
@@ -189,7 +189,7 @@ namespace Planet
 
             GameState.InputProcessSystem.Update();
             GameState.PhysicsMovableSystem.Update();
-            GameState.PhysicsProcessCollisionSystem.Update(TileMap);
+            GameState.PhysicsProcessCollisionSystem.Update(ref TileMap);
             GameState.EnemyAiSystem.Update(this);
             GameState.FloatingTextUpdateSystem.Update(this, frameTime);
             GameState.AnimationUpdateSystem.Update(frameTime);

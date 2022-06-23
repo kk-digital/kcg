@@ -4,11 +4,11 @@ namespace Enums.Tile
     {
         Error = 0,
         Air,
-        Ore1,
+        Ore1, // 8
         Ore2,
         Ore3,
-        Glass,
-        Moon,
+        Glass, // 9
+        Moon, // 10
         Pipe,
     }
 }

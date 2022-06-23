@@ -1,11 +1,13 @@
+using Scripts.SystemView;
 using UnityEngine;
 
 // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.html
 
 public class GameManager : MonoBehaviour
 {
+    public SystemState CurrentSystemState;
 
-    public string filePath = "/SimpleSpriteSheet/Table1.png";
+    public static bool BackgroundDraw = true;
 
     //Documentation: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Awake.html
     //Awake is called when the script instance is being loaded.
@@ -98,6 +100,10 @@ public class GameManager : MonoBehaviour
         //TODO: Intialize all managers here
         //Setup ECS system
         GameState.TilePropertyManager.InitStage1();
+        if (SceneManager.Instance != null)
+        {
+            SceneManager.Instance.Register(this, Enums.SceneObjectType.SceneObjectTypeUtilityScript);
+        }
     }
 
     //Load settings from files and other init, that requires systems to be intialized

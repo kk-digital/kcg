@@ -24,28 +24,20 @@ namespace Planet.Unity
         //public string TileMap = "Moonbunker/Moon Bunker.tmx";
         [SerializeField] Material Material;
 
-        public static string BaseDir => Application.streamingAssetsPath;
-
-        List<int> triangles = new();
-        List<Vector2> uvs = new();
-        List<Vector3> verticies = new();
-
         int SortingOrder = 0;
 
         int PlayerSpriteID;
         int PlayerSprite2ID;
-        const float TileSize = 1.0f;
-
-        readonly Vector2 MapOffset = new(-3.0f, 4.0f);
 
         static bool InitTiles;
 
-
+        public PlanetState PlanetState;
+        
         ECSInput.InputProcessSystem InputProcessSystems;
         Agent.AgentSpawnerSystem AgentSpawnerSystem;
-        Physics.PhysicsMovableSystem PhysicsMovableSystem;
+        PhysicsMovableSystem PhysicsMovableSystem;
         Agent.AgentDrawSystem AgentDrawSystem;
-        Physics.PhysicsProcessCollisionSystem AgentProcessCollisionSystem;
+        PhysicsProcessCollisionSystem AgentProcessCollisionSystem;
 
         public void Start()
         {
@@ -96,7 +88,7 @@ namespace Planet.Unity
                 int y = (int)worldPosition.y;
                 
                 var xChunkIndex = x >> 4;
-                var yChunkIndex = y * TileMap.MapSize.X;
+                var yChunkIndex = y * PlanetState.TileMap.MapSize.X;
                 var chunkIndex = xChunkIndex + (yChunkIndex >> 4);
                 
                 var xTileIndex = x & 0x0f;
@@ -112,7 +104,7 @@ namespace Planet.Unity
                 int x = (int)worldPosition.x;
                 int y = (int)worldPosition.y;
                 Debug.Log(x + " " + y);
-                TileMap.RemoveTile(x, y, Enums.Tile.MapLayerType.Front);
+                PlanetState.TileMap.RemoveTile(x, y, Enums.Tile.MapLayerType.Front);
                 //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
                 
             }
@@ -143,12 +135,12 @@ namespace Planet.Unity
             GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
 
 
-            GameState.TileCreationApi.CreateTile(8);
+            GameState.TileCreationApi.CreateTile(TileID.Ore1);
             GameState.TileCreationApi.SetTileName("ore_1");
             GameState.TileCreationApi.SetTileTexture16(oreTileSheet, 0, 0);
             GameState.TileCreationApi.EndTile();
 
-            GameState.TileCreationApi.CreateTile(9);
+            GameState.TileCreationApi.CreateTile(TileID.Glass);
             GameState.TileCreationApi.SetTileName("glass");
             GameState.TileCreationApi.SetTileSpriteSheet16(tilesMoon, 11, 10);
             GameState.TileCreationApi.EndTile();
@@ -158,27 +150,27 @@ namespace Planet.Unity
             // Generating the map
             Vec2i mapSize = new Vec2i(16, 16);
 
-            var tileMap = new PlanetTileMap.TileMap(mapSize);
+            PlanetState = new PlanetState(mapSize, Contexts.sharedInstance.game);
+            ref var tileMap = ref PlanetState.TileMap;
 
             for(int j = 0; j < tileMap.MapSize.Y; j++)
             {
                 for(int i = 0; i < tileMap.MapSize.X; i++)
                 {
-                    var ore1Tile = TileID.Empty;
-                    var glassTile = TileID.Empty;
+                    var oreTile = TileID.Air;
+                    var frontTile = TileID.Air;
 
-                    glassTile = TileID.Glass;
-
-
+                    frontTile = TileID.Glass;
+                    
                     if (i % 10 == 0)
                     {
-                        ore1Tile = TileID.Ore1;
+                        oreTile = TileID.Ore1;
                     }
 
                     if (j is > 1 and < 6 || (j > (8 + i)))
                     {
-                       glassTile = TileID.Empty; 
-                       ore1Tile = TileID.Empty;
+                       frontTile = TileID.Air; 
+                       oreTile = TileID.Air;
                     }
 
                     TileMap.SetTile(ref frontTile, MapLayerType.Front);
