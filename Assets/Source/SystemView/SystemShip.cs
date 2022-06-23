@@ -60,8 +60,8 @@ namespace Source {
             }
 
             public void rotate_to(float angle, float current_time) {
-                while(rotation < 0.0f)        rotation  = Tools.twopi + rotation;
                 while(rotation > Tools.twopi) rotation -= Tools.twopi;
+                while(rotation < 0.0f)        rotation  = Tools.twopi + rotation;
 
                 if(rotation == angle) return;
 
@@ -71,33 +71,47 @@ namespace Source {
                 if(diff1 < 0.0f) diff1 = Tools.twopi + diff1;
                 if(diff2 < 0.0f) diff2 = Tools.twopi + diff2;
 
-                float acc             = (float)Math.Sqrt(torque / self.angular_inertia);
-
-                // todo: ship should slow down rotation at the halfway mark
+                float acc              = (float)Math.Sqrt(torque / self.angular_inertia);
+                float time_to_angle;
+                float time_to_brake;
 
                 if(diff2 < diff1) {
-                    rotation         += self.angular_vel * current_time - 0.5f * acc * current_time * current_time;
-                    self.angular_vel -= acc * current_time;
+                    //      1                        v - √ (2 a d + v²)
+                    // d = --- a t² - v t   =>   t = ------------------
+                    //      2                                a
 
-                    diff1 = angle - rotation;
-                    diff2 = rotation - angle;
+                    //                                 d
+                    // d = v t               =>   t = ---
+                    //                                 v
 
-                    if(diff1 < 0.0f) diff1 = Tools.twopi + diff1;
-                    if(diff2 < 0.0f) diff2 = Tools.twopi + diff2;
-
-                    if(diff1 < diff2) { rotation = angle; self.angular_vel = 0.0f; }
+                    time_to_angle      = diff2 / self.angular_vel;
+                    time_to_brake      = 0.25f * (self.angular_vel - (float)Math.Sqrt(2.0f * acc * diff2 + self.angular_vel * self.angular_vel)) / acc;
                 } else {
-                    rotation         += self.angular_vel * current_time + 0.5f * acc * current_time * current_time;
-                    self.angular_vel += acc * current_time;
+                    //      1                        v + √ (2 a d + v²)
+                    // d = --- a t² - v t   =>   t = ------------------
+                    //      2                                a
 
-                    diff1 = angle - rotation;
-                    diff2 = rotation - angle;
+                    //                                 d
+                    // d = v t               =>   t = ---
+                    //                                 v
 
-                    if(diff1 < 0.0f) diff1 = Tools.twopi + diff1;
-                    if(diff2 < 0.0f) diff2 = Tools.twopi + diff2;
-
-                    if(diff2 < diff1) { rotation = angle; self.angular_vel = 0.0f; }
+                    time_to_angle      = diff1 / self.angular_vel;
+                    time_to_brake      = 0.25f * (self.angular_vel + (float)Math.Sqrt(2.0f * acc * diff1 + self.angular_vel * self.angular_vel)) / acc;
                 }
+
+                if(time_to_angle < 0.0f) time_to_angle *= -1.0f;
+                if(time_to_brake < 0.0f) time_to_brake *= -1.0f;
+
+                if((diff2 < diff1 && time_to_angle >  time_to_brake)
+                || (diff1 < diff2 && time_to_angle <= time_to_brake)) {
+                    rotation              += self.angular_vel * current_time - 0.5f * acc * current_time * current_time;
+                    self.angular_vel      -= acc * current_time;
+                } else {
+                    rotation              += self.angular_vel * current_time + 0.5f * acc * current_time * current_time;
+                    self.angular_vel      += acc * current_time;
+                }
+
+                if(rotation - 0.005f < angle && rotation + 0.005f > angle) { rotation = angle; self.angular_vel = 0.0f; }
             }
 
             public void accelerate(float current_time) {

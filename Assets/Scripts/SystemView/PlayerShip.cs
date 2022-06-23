@@ -210,8 +210,6 @@ namespace Scripts {
                         Vector3 mouse_position = camera_controller.get_abs_pos(Input.mousePosition);
 
                         foreach(ShipWeapon weapon in ship.weapons) {
-                            Debug.Log((int)selectedWeapon + " & " + (int)weapon.flags + " = " + ((int)selectedWeapon & (int)weapon.flags));
-
                             if(((int)selectedWeapon & (int)weapon.flags) == 0) continue;
 
                             if(weapon.try_targeting(mouse_position.x, mouse_position.y, current_time))
@@ -221,8 +219,6 @@ namespace Scripts {
                 } else {
                     if(Input.GetKey("space"))
                         foreach(ShipWeapon weapon in ship.weapons) {
-                            Debug.Log((int)selectedWeapon + " & " + (int)weapon.flags + " = " + ((int)selectedWeapon & (int)weapon.flags));
-
                             if(((int)selectedWeapon & (int)weapon.flags) == 0) continue;
 
                             float x = ship.self.posx + (float)Math.Cos(ship.rotation) * weapon.range;
