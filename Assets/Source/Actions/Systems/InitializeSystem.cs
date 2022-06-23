@@ -50,7 +50,6 @@ namespace Action
             GameState.ActionAttributeManager.SetPlanet(planetState);
             EnemySpawnToolAction.Data data = new EnemySpawnToolAction.Data();
             data.CharacterSpriteId = GameResources.SlimeSpriteSheet;
-            data.Material = material;
             GameState.ActionAttributeManager.SetData(data);
             GameState.ActionAttributeManager.EndActionAttributeType();
 

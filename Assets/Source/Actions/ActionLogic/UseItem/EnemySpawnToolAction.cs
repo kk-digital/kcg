@@ -18,7 +18,6 @@ namespace Action
         public struct Data
         {
             public int CharacterSpriteId;
-            public Material Material;
         }
 
         Data data;
@@ -33,7 +32,7 @@ namespace Action
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float x = worldPosition.x;
             float y = worldPosition.y;
-            ActionAttributeEntity.actionAttributePlanetState.Planet.AddEnemy(Object.Instantiate(data.Material), data.CharacterSpriteId, 32, 32, new Vec2f(x, y), 2);
+            ActionAttributeEntity.actionAttributePlanetState.Planet.AddEnemy(data.CharacterSpriteId, 32, 32, new Vec2f(x, y), 2);
 
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
         }
