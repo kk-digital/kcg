@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Entitas;
 using Enums;
+using Enums.Tile;
 using KMath;
 
 namespace Projectile
@@ -12,7 +13,7 @@ namespace Projectile
         private static int projectileID;
 
         public Entity SpawnProjectile(Material material, int spriteID, int witdh, int height, Vec2f startPos,
-            ProjectileType projectileType, ProjectileDrawType projectileDrawType)
+            Cell start, Cell end, Planet.ChunkList chunks, ProjectileType projectileType, ProjectileDrawType projectileDrawType)
         {
             // Create Entity
             var entity = Contexts.sharedInstance.game.CreateEntity();
@@ -51,8 +52,25 @@ namespace Projectile
             // Add Physics Box Collider Component
             entity.AddPhysicsBox2DCollider(spriteSize, Vec2f.Zero);
 
+            bool isFirstSolid = false;
+            // Log Places Shooted Ray Go Through
+            foreach (var cell in start.LineTo(end))
+            {
+                // Get Chunks because it's faster
+                ref var chunk = ref chunks[cell.x, cell.y];
+                if (chunk.Type is not (MapChunkType.Empty or MapChunkType.Error))
+                {
+                    isFirstSolid = true;
+                }
+            }
+
+#if UNITY_EDITOR
+            // Draw Debug Line to see shooted ray
+            Debug.DrawLine(new Vector3(start.x, start.y, 0.0f), new Vector3(end.x, end.y), Color.red);
+#endif
+
             // Add Physics Collider Component
-            entity.AddProjectileCollider(false, false);
+            entity.AddProjectileCollider(isFirstSolid, false);
 
             // Add Projectile Type
             entity.AddProjectileType(projectileType, projectileDrawType);
