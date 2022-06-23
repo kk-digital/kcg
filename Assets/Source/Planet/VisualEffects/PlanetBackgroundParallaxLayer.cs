@@ -430,6 +430,7 @@ namespace Planet.VisualEffects
 
         }
 
+        // Generates Perlin Map
         private float[,] GenPerlin(int width, int height, int contrast, int scale)
         {
             float[,] grid = new float[width, height];
