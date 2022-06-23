@@ -13,7 +13,7 @@ namespace Projectile
         private static int projectileID;
 
         public Entity SpawnProjectile(int spriteID, int witdh, int height, Vec2f startPos,
-            ProjectileType projectileType, ProjectileDrawType projectileDrawType)
+            Cell start, Cell end, ProjectileType projectileType, ProjectileDrawType projectileDrawType)
         {
             // Create Entity
             var entity = Contexts.sharedInstance.game.CreateEntity();
