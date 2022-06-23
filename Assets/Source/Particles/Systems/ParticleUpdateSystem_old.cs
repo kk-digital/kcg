@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Particle
 {
-     public class ParticleUpdateSystem
+     public class ParticleUpdateSystem_old
     {
         List<ParticleEntity> ToDestroy = new List<ParticleEntity>();
 
 
-        public void Update(Planet.PlanetState planetState, ParticleContext particleContext)
+        public void Execute(ParticleContext particleContext)
         {
             ToDestroy.Clear();
 
@@ -30,8 +30,8 @@ namespace Particle
                 Vector2 newPosition = pos.Position + displacement;
                 gameEntity.ReplaceParticlePosition2D(newPosition, pos.Acceleration, newVelocity);
 
-                /*state.GameObject.transform.position = new Vector3(newPosition.x, newPosition.y, 0.0f);
-                state.GameObject.transform.Rotate(0.0f, 0.0f, state.DeltaRotation, Space.Self);*/
+                state.GameObject.transform.position = new Vector3(newPosition.x, newPosition.y, 0.0f);
+                state.GameObject.transform.Rotate(0.0f, 0.0f, state.DeltaRotation, Space.Self);
                 
                 if (newHealth <= 0)
                 {
@@ -41,7 +41,7 @@ namespace Particle
 
             foreach(var gameEntity in ToDestroy)
             {
-                //Object.Destroy(gameEntity.particleState.GameObject);
+                Object.Destroy(gameEntity.particleState.GameObject);
                 gameEntity.Destroy();
             }
         }

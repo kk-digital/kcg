@@ -2,6 +2,7 @@ using Agent;
 using Vehicle;
 using Projectile;
 using FloatingText;
+using Particle;
 using KMath;
 using UnityEngine;
 
@@ -17,20 +18,24 @@ namespace Planet
         public VehicleList VehicleList;
         public ProjectileList ProjectileList;
         public FloatingTextList FloatingTextList;
+        public ParticleEmitterList ParticleEmitterList;
 
 
         public GameContext GameContext;
+        public ParticleContext ParticleContext;
 
 
-        public PlanetState(Vec2i mapSize, GameContext gameContext)
+        public PlanetState(Vec2i mapSize, GameContext gameContext, ParticleContext particleContext)
         {
             TileMap = new TileMap(mapSize);
             AgentList = new AgentList();
             VehicleList = new VehicleList();
             ProjectileList = new ProjectileList();
             FloatingTextList = new FloatingTextList();
+            ParticleEmitterList = new ParticleEmitterList();
 
             GameContext = gameContext;
+            ParticleContext = particleContext;
         }
 
 
@@ -95,14 +100,23 @@ namespace Planet
             FloatingTextList.Remove(entity);
         }
 
-        public void AddParticle()
+        public ParticleEmitterEntity AddParticleEmitter(UnityEngine.Material material, 
+                                    Vec2f position, Vec2f size, int spriteId)
         {
+            ref ParticleEmitterEntity newEntity = ref ParticleEmitterList.Add();
+            ParticleEntity entity = GameState.ParticleEmitterSpawnerSystem.Spawn(ParticleContext, material, position, 
+                        size, spriteId, newEntity.ParticleEmitterId);
+            newEntity.Entity = entity;
 
+
+            return newEntity;
         }
 
-        public void RemoveParticle()
+        public void RemoveParticleEmitter()
         {
-
+            ref ParticleEmitterEntity entity = ref ParticleEmitterList.Get(Index);
+            entity.Entity.Destroy();
+            ParticleEmitterList.Remove(entity);
         }
 
         public ProjectileEntity AddProjectile(UnityEngine.Material material, Vector2 position)
@@ -192,12 +206,15 @@ namespace Planet
             GameState.AnimationUpdateSystem.Update(frameTime);
             GameState.ItemPickUpSystem.Update();
             GameState.ActionSchedulerSystem.Update(frameTime);
+            GameState.ParticleEmitterUpdateSystem.Update(ParticleContext);
+            GameState.ParticleUpdateSystem.Update(this, ParticleContext);
 
             TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Mid, Object.Instantiate(material), transform, 9);
             TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Front, Object.Instantiate(material), transform, 10);
             GameState.AgentDrawSystem.Draw(Object.Instantiate(material), transform, 12);
             GameState.ItemDrawSystem.Draw(GameContext, Material.Instantiate(material), transform, 13);
             GameState.FloatingTextDrawSystem.Draw(transform, 10000);
+            GameState.ParticleDrawSystem.Draw(ParticleContext, Material.Instantiate(material), transform, 50);
 
             #region Gui drawing systems
             //GameState.InventoryDrawSystem.Draw(material, transform, 1000);

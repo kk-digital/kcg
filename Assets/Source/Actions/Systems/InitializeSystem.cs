@@ -52,6 +52,14 @@ namespace Action
             GameState.ActionAttributeManager.SetData(data);
             GameState.ActionAttributeManager.EndActionAttributeType();
 
+            GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.PlaceParticleEmitterAction);
+            GameState.ActionAttributeManager.SetLogicFactory(new PlaceParticleEmitterActionCreator());
+            GameState.ActionAttributeManager.SetPlanet(planetState);
+            PlaceParticleEmitterToolAction.Data placeParticleEmitterData = new PlaceParticleEmitterToolAction.Data();
+            placeParticleEmitterData.Material = material;
+            GameState.ActionAttributeManager.SetData(placeParticleEmitterData);
+            GameState.ActionAttributeManager.EndActionAttributeType();
+
             GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.MiningLaserAction);
             GameState.ActionAttributeManager.SetLogicFactory(new MiningLaserActionCreator());
             GameState.ActionAttributeManager.SetPlanet(planetState);

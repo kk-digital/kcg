@@ -96,8 +96,8 @@ namespace Planet.Unity
             GameResources.Initialize();
 
             // Generating the map
-            Vec2i mapSize = new Vec2i(16, 16);
-            Planet = new Planet.PlanetState(mapSize, EntitasContext.game);
+            Vec2i mapSize = new Vec2i(32, 24);
+            Planet = new Planet.PlanetState(mapSize, EntitasContext.game, EntitasContext.particle);
             GenerateMap();
             SpawnStuff();
 
@@ -115,6 +115,7 @@ namespace Planet.Unity
             GameEntity spawnEnemySlimeTool = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.SpawnEnemySlimeTool);
             GameEntity miningLaserTool = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.MiningLaserTool);
             GameEntity pipePlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.PipePlacementTool);
+            GameEntity particleEmitterPlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.ParticleEmitterPlacementTool);
 
 
             inventoryManager.AddItem(placementTool, toolBarID);
@@ -122,6 +123,7 @@ namespace Planet.Unity
             inventoryManager.AddItem(spawnEnemySlimeTool, toolBarID);
             inventoryManager.AddItem(miningLaserTool, toolBarID);
             inventoryManager.AddItem(pipePlacementTool, toolBarID);
+            inventoryManager.AddItem(particleEmitterPlacementTool, toolBarID);
         }
 
         void GenerateMap()

@@ -11,7 +11,7 @@ public partial class ParticleEntity {
     public Particle.EmitterStateComponent particleEmitterState { get { return (Particle.EmitterStateComponent)GetComponent(ParticleComponentsLookup.ParticleEmitterState); } }
     public bool hasParticleEmitterState { get { return HasComponent(ParticleComponentsLookup.ParticleEmitterState); } }
 
-    public void AddParticleEmitterState(UnityEngine.GameObject newGameObject, UnityEngine.GameObject newPrefab, float newParticleDecayRate, UnityEngine.Vector2 newParticleAcceleration, float newParticleDeltaRotation, float newParticleDeltaScale, int[] newSpriteIds, UnityEngine.Vector2 newParticleStartingVelocity, float newParticleStartingRotation, float newParticleStartingScale, UnityEngine.Color newParticleStartingColor, float newParticleAnimationSpeed, float newDuration, bool newLoop, int newParticleCount, float newTimeBetweenEmissions, float newCurrentTime) {
+    public void AddParticleEmitterState(UnityEngine.GameObject newGameObject, UnityEngine.GameObject newPrefab, float newParticleDecayRate, UnityEngine.Vector2 newParticleAcceleration, float newParticleDeltaRotation, float newParticleDeltaScale, int[] newSpriteIds, KMath.Vec2f newParticleSize, UnityEngine.Vector2 newParticleStartingVelocity, float newParticleStartingRotation, float newParticleStartingScale, UnityEngine.Color newParticleStartingColor, float newParticleAnimationSpeed, float newDuration, bool newLoop, int newParticleCount, float newTimeBetweenEmissions, float newCurrentTime) {
         var index = ParticleComponentsLookup.ParticleEmitterState;
         var component = (Particle.EmitterStateComponent)CreateComponent(index, typeof(Particle.EmitterStateComponent));
         component.GameObject = newGameObject;
@@ -21,6 +21,7 @@ public partial class ParticleEntity {
         component.ParticleDeltaRotation = newParticleDeltaRotation;
         component.ParticleDeltaScale = newParticleDeltaScale;
         component.SpriteIds = newSpriteIds;
+        component.ParticleSize = newParticleSize;
         component.ParticleStartingVelocity = newParticleStartingVelocity;
         component.ParticleStartingRotation = newParticleStartingRotation;
         component.ParticleStartingScale = newParticleStartingScale;
@@ -34,7 +35,7 @@ public partial class ParticleEntity {
         AddComponent(index, component);
     }
 
-    public void ReplaceParticleEmitterState(UnityEngine.GameObject newGameObject, UnityEngine.GameObject newPrefab, float newParticleDecayRate, UnityEngine.Vector2 newParticleAcceleration, float newParticleDeltaRotation, float newParticleDeltaScale, int[] newSpriteIds, UnityEngine.Vector2 newParticleStartingVelocity, float newParticleStartingRotation, float newParticleStartingScale, UnityEngine.Color newParticleStartingColor, float newParticleAnimationSpeed, float newDuration, bool newLoop, int newParticleCount, float newTimeBetweenEmissions, float newCurrentTime) {
+    public void ReplaceParticleEmitterState(UnityEngine.GameObject newGameObject, UnityEngine.GameObject newPrefab, float newParticleDecayRate, UnityEngine.Vector2 newParticleAcceleration, float newParticleDeltaRotation, float newParticleDeltaScale, int[] newSpriteIds, KMath.Vec2f newParticleSize, UnityEngine.Vector2 newParticleStartingVelocity, float newParticleStartingRotation, float newParticleStartingScale, UnityEngine.Color newParticleStartingColor, float newParticleAnimationSpeed, float newDuration, bool newLoop, int newParticleCount, float newTimeBetweenEmissions, float newCurrentTime) {
         var index = ParticleComponentsLookup.ParticleEmitterState;
         var component = (Particle.EmitterStateComponent)CreateComponent(index, typeof(Particle.EmitterStateComponent));
         component.GameObject = newGameObject;
@@ -44,6 +45,7 @@ public partial class ParticleEntity {
         component.ParticleDeltaRotation = newParticleDeltaRotation;
         component.ParticleDeltaScale = newParticleDeltaScale;
         component.SpriteIds = newSpriteIds;
+        component.ParticleSize = newParticleSize;
         component.ParticleStartingVelocity = newParticleStartingVelocity;
         component.ParticleStartingRotation = newParticleStartingRotation;
         component.ParticleStartingScale = newParticleStartingScale;
