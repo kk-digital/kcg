@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace Particle
 {
-    public class ParticleEmitterUpdateSystem
+    public class ParticleEmitterUpdateSystem_old
     {
         List<ParticleEntity> ToDestroy = new List<ParticleEntity>();
 
-        public void Update(ParticleContext context)
+        public void Execute(ParticleContext context)
         {
             ToDestroy.Clear();
 
@@ -28,10 +28,9 @@ namespace Particle
                         float randomX = (float)random.NextDouble() * 2.0f - 1.0f;
 
                         var e = context.CreateEntity();
-                        //var gameObject = Object.Instantiate(state.Prefab);
-                        e.AddParticleState(null, 1.0f, state.ParticleDecayRate, state.ParticleDeltaRotation, state.ParticleDeltaScale);
+                        var gameObject = Object.Instantiate(state.Prefab);
+                        e.AddParticleState(gameObject, 1.0f, state.ParticleDecayRate, state.ParticleDeltaRotation, state.ParticleDeltaScale);
                         e.AddParticlePosition2D(position.Position, state.ParticleAcceleration, new Vector2(state.ParticleStartingVelocity.x + randomX, state.ParticleStartingVelocity.y));
-                        e.AddParticleSprite2D(state.SpriteIds[0], state.ParticleSize);
                     }
 
                     state.CurrentTime = state.TimeBetweenEmissions;
@@ -50,9 +49,8 @@ namespace Particle
 
             foreach(var gameEntity in ToDestroy)
             {
-                //Object.Destroy(gameEntity.particleState.GameObject);
-                //gameEntity.Destroy();
-                //planetState.RemoveParticleEmitter(entity.floatingTextID.Index);
+                Object.Destroy(gameEntity.particleState.GameObject);
+                gameEntity.Destroy();
             }
         }
     }

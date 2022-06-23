@@ -193,6 +193,13 @@ public class GameResources
         Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
         Item.CreationApi.Instance.SetAction((int)Enums.ActionType.PlaceTilPipeAction);
         Item.CreationApi.Instance.EndItem();
+
+        Item.CreationApi.Instance.CreateItem(Enums.ItemType.ParticleEmitterPlacementTool, "ParticleEmitterPlacementTool");
+        Item.CreationApi.Instance.SetTexture(OreIcon);
+        Item.CreationApi.Instance.SetInventoryTexture(OreIcon);
+        Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
+        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.PlaceParticleEmitterAction);
+        Item.CreationApi.Instance.EndItem();
     }
 
 

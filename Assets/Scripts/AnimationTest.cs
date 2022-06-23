@@ -146,12 +146,13 @@ namespace Planet.Unity
 
             // Generating the map
             Vec2i mapSize = new Vec2i(16, 16);
-            Planet = new Planet.PlanetState(mapSize, EntitasContext.game);
+            Planet = new Planet.PlanetState(mapSize, EntitasContext.game, EntitasContext.particle);
             GenerateMap();
 
             Planet.AddAgent(Instantiate(Material), 0, 16, 16, new Vec2f(6.0f, 3.0f), particleAnimation);
             Planet.AddAgent(Instantiate(Material), 0, 32, 32, new Vec2f(2.0f, 3.0f), slimeIdle);
             Planet.AddAgent(Instantiate(Material), 0, 32, 32, new Vec2f(4.0f, 3.0f), slimeJump);
+            
         }
 
 

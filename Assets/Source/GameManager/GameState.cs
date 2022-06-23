@@ -64,6 +64,11 @@ public class GameState
     public static readonly Utility.FileLoadingManager FileLoadingManager;
     public static readonly ECSInput.InputProcessSystem InputProcessSystem;
 
+    public static readonly Particle.ParticleDrawSystem ParticleDrawSystem;
+    public static readonly Particle.ParticleEmitterUpdateSystem ParticleEmitterUpdateSystem;
+    public static readonly Particle.ParticleUpdateSystem ParticleUpdateSystem;
+    public static readonly Particle.ParticleEmitterSpawnerSystem ParticleEmitterSpawnerSystem;
+
     static GameState()
     {
         Contexts entitasContext = Contexts.sharedInstance;
@@ -94,5 +99,9 @@ public class GameState
         ActionCreationSystem = new Action.ActionCreationSystem();
         ActionSchedulerSystem = new Action.ActionSchedulerSystem();
         ActionInitializeSystem = new Action.InitializeSystem();
+        ParticleDrawSystem = new Particle.ParticleDrawSystem();
+        ParticleEmitterUpdateSystem = new Particle.ParticleEmitterUpdateSystem();
+        ParticleUpdateSystem = new Particle.ParticleUpdateSystem();
+        ParticleEmitterSpawnerSystem = new Particle.ParticleEmitterSpawnerSystem();
     }
 }

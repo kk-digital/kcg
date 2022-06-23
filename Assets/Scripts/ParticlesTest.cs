@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using KMath;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -30,8 +31,8 @@ namespace Planet.Unity
 
         Texture2D VentSprite;
         
-        Particle.ParticleUpdateSystem ParticleUpdateSystem;
-        Particle.ParticleEmitterUpdateSystem ParticleEmitterUpdateSystem;
+        Particle.ParticleUpdateSystem_old ParticleUpdateSystem;
+        Particle.ParticleEmitterUpdateSystem_old ParticleEmitterUpdateSystem;
 
         GameObject PipePrefab;
         GameObject OrePrefab;
@@ -63,8 +64,8 @@ namespace Planet.Unity
         {
             
             Contexts entitasContext = Contexts.sharedInstance;
-            ParticleUpdateSystem = new Particle.ParticleUpdateSystem();
-            ParticleEmitterUpdateSystem = new Particle.ParticleEmitterUpdateSystem();
+            ParticleUpdateSystem = new Particle.ParticleUpdateSystem_old();
+            ParticleEmitterUpdateSystem = new Particle.ParticleEmitterUpdateSystem_old();
 
             // we load the sprite sheets here
             int pipeTileSheet = 
@@ -197,7 +198,7 @@ namespace Planet.Unity
                 
             e.AddParticleEmitter2dPosition(position, new Vector2(), new Vector2());
             e.AddParticleEmitterState(gameObject, prefab, decayRate, acceleration, deltaRotation,
-            deltaScale, spriteIds, startingVelocity, startingRotation, startingScale, startingColor,
+            deltaScale, spriteIds, new Vec2f(16, 16), startingVelocity, startingRotation, startingScale, startingColor,
             animationSpeed, duration, loop, particleCount, timeBetweenEmissions, 0.0f);
         }
 
