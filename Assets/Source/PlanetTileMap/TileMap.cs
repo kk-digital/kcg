@@ -25,7 +25,14 @@ namespace PlanetTileMap
         public TileMap(Vec2i mapSize)
         {
             ChunkArrayLength = 0;
-            ChunkArrayCapacity = (mapSize.X >> 4) * (mapSize.Y >> 4);
+            
+            var chunkSizeX = mapSize.X >> 4;
+            var chunkSizeY = mapSize.Y >> 4;
+
+            if ((chunkSizeX & 0x0f) != 0) chunkSizeX++;
+            if ((chunkSizeY & 0x0f) != 0) chunkSizeY++;
+            
+            ChunkArrayCapacity = chunkSizeX + chunkSizeY;
             ChunkIndexLookup = new int[ChunkArrayCapacity];
             ChunkArray = new Chunk[ChunkArrayCapacity];
 
