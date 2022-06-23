@@ -1,14 +1,13 @@
 ﻿using System;
 using Enums.Tile;
 using KMath;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace PlanetTileMap
 {
     public struct TileMap
     {
-        public static readonly int LayerCount = Enum.GetNames(typeof(Enums.Tile.MapLayerType)).Length;
+        public static readonly int LayerCount = Enum.GetNames(typeof(MapLayerType)).Length;
         public Texture2D[] LayerTextures;
         public bool[] NeedsUpdate;
         
@@ -21,21 +20,13 @@ namespace PlanetTileMap
 
             MapSize = mapSize;
             
-            Layer = new Layer
-            {
-                LayerTextures = new Texture2D[Layer.Count],
-                NeedsUpdate = new bool[Layer.Count],
-                MapSize = mapSize
-            };
-
-            for(int layerIndex = 0; layerIndex < Layers.Count; layerIndex++)
-            {
-                Layers.NeedsUpdate[layerIndex] = true;
-            }
-        }
-
             LayerTextures = new Texture2D[LayerCount];
             NeedsUpdate = new bool[LayerCount];
+
+            for(int layerIndex = 0; layerIndex < LayerCount; layerIndex++)
+            {
+                NeedsUpdate[layerIndex] = true;
+            }
         }
 
         #region TileApi

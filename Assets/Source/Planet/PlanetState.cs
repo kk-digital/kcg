@@ -1,4 +1,5 @@
 using Agent;
+using Enums.Tile;
 using Vehicle;
 using Projectile;
 using FloatingText;
@@ -198,8 +199,8 @@ namespace Planet
             GameState.ParticleEmitterUpdateSystem.Update(ParticleContext);
             GameState.ParticleUpdateSystem.Update(this, ParticleContext);
 
-            TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Mid, Object.Instantiate(material), transform, 9);
-            TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Front, Object.Instantiate(material), transform, 10);
+            TileMap.DrawLayer(MapLayerType.Mid, Object.Instantiate(material), transform, 9);
+            TileMap.DrawLayer(MapLayerType.Front, Object.Instantiate(material), transform, 10);
             GameState.AgentDrawSystem.Draw(Object.Instantiate(material), transform, 12);
             GameState.ItemDrawSystem.Draw(GameContext, Material.Instantiate(material), transform, 13);
             GameState.FloatingTextDrawSystem.Draw(transform, 10000);

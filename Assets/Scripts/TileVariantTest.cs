@@ -41,7 +41,7 @@ namespace Planet.Unity
                 else
                     DestroyImmediate(mr.gameObject);
 
-            TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Front, Instantiate(Material), transform, 10);
+            Planet.TileMap.DrawLayer(MapLayerType.Front, Instantiate(Material), transform, 10);
         }
 
         // create the sprite atlas for testing purposes
@@ -117,11 +117,11 @@ namespace Planet.Unity
                     }
 
 
-                    TileMap.SetTile(ref frontTile, MapLayerType.Front);
+                    Planet.TileMap.SetTile(i,j, frontTile, MapLayerType.Front);
                 }
             }
 
-            TileMap.UpdateTileMapPositions(Enums.Tile.MapLayerType.Front);
+            Planet.TileMap.UpdateTileMapPositions(Enums.Tile.MapLayerType.Front);
 
             //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
             //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Ore);

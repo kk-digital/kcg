@@ -140,8 +140,7 @@ namespace Planet.Unity
             {
                 for (int i = 0; i < tileMap.MapSize.X; i++)
                 {
-                    var frontTile = TileID.Air;
-                    var oreTile = TileID.Air;
+                    TileID frontTile;
 
                     if (i >= tileMap.MapSize.X / 2)
                     {
@@ -166,20 +165,13 @@ namespace Planet.Unity
                         }
                     }
 
-
-                    if (i % 10 == 0)
-                    {
-                        oreTile = TileID.Ore1;
-                    }
-
                     if (j is > 1 and < 6 || (j > 8 + i))
                     {
                         frontTile = TileID.Air;
-                        oreTile= TileID.Air;
                     }
 
 
-                    tileMap.SetTile(ref frontTile, MapLayerType.Front);
+                    tileMap.SetTile(i, j, frontTile, MapLayerType.Front);
                 }
             }
 

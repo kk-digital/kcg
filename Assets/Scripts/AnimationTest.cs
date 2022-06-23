@@ -205,7 +205,7 @@ namespace Planet.Unity
                     }
 
 
-                    tileMap.SetTile(ref frontTile, MapLayerType.Front);
+                    tileMap.SetTile(i, j, frontTile, MapLayerType.Front);
                 }
             }
 

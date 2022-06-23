@@ -117,8 +117,8 @@ namespace Planet.Unity
 
             InputProcessSystems.Update();
             PhysicsMovableSystem.Update();
-            AgentProcessCollisionSystem.Update(TileMap);
-            TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Front, Instantiate(Material), transform, 10);
+            AgentProcessCollisionSystem.Update(ref PlanetState.TileMap);
+            PlanetState.TileMap.DrawLayer(MapLayerType.Front, Instantiate(Material), transform, 10);
             AgentDrawSystem.Draw(Instantiate(Material), transform, 12);
         }
 
@@ -157,27 +157,18 @@ namespace Planet.Unity
             {
                 for(int i = 0; i < tileMap.MapSize.X; i++)
                 {
-                    var oreTile = TileID.Air;
-                    var frontTile = TileID.Air;
-
-                    frontTile = TileID.Glass;
-                    
-                    if (i % 10 == 0)
-                    {
-                        oreTile = TileID.Ore1;
-                    }
+                    var frontTile = TileID.Glass;
 
                     if (j is > 1 and < 6 || (j > (8 + i)))
                     {
-                       frontTile = TileID.Air; 
-                       oreTile = TileID.Air;
+                       frontTile = TileID.Air;
                     }
 
-                    TileMap.SetTile(ref frontTile, MapLayerType.Front);
+                    PlanetState.TileMap.SetTile(i, j, frontTile, MapLayerType.Front);
                 }
             }
             
-            TileMap.UpdateTileMapPositions(MapLayerType.Front);
+            PlanetState.TileMap.UpdateTileMapPositions(MapLayerType.Front);
 
         }
     }

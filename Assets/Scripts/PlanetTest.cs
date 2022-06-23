@@ -157,8 +157,8 @@ namespace Planet.Unity
                         }
                         else
                         {
-                            frontTile.Type = (int)Tile.TileEnum.Moon;
-                            if (((int) KMath.Random.Mt19937.genrand_int32() % 10 == 0))
+                            frontTileID = TileID.Moon;
+                            /*if ((int) KMath.Random.Mt19937.genrand_int32() % 10 == 0)
                             {
                                 int oreRandom = (int) KMath.Random.Mt19937.genrand_int32() % 3;
                                 if (oreRandom == 0)
@@ -174,8 +174,8 @@ namespace Planet.Unity
                                     frontTile.SpriteId2 = GameResources.Ore3Sprite;
                                 }
 
-                                frontTile.DrawType = Tile.TileDrawType.Composited;
-                            }
+                                frontTile.DrawType = TileDrawType.Composited;
+                            }*/
                         }
                     }
 
@@ -246,9 +246,7 @@ namespace Planet.Unity
             ref var tileMap = ref Planet.TileMap;
             System.Random random = new System.Random((int)System.DateTime.Now.Ticks);
 
-            var borders = tileMap.Borders;
-
-            float spawnHeight = borders.Top - 2f;
+            float spawnHeight = tileMap.MapSize.Y - 2;
 
             Player = Planet.AddPlayer(Instantiate(Material), CharacterSpriteId, 32, 48, 
                     new Vec2f(3.0f, spawnHeight), 0);
