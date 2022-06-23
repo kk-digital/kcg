@@ -179,6 +179,35 @@ namespace Planet.VisualEffects
             // Add created sprite to stars list
             stars.Add(star5Sprite);
 
+            // Set Width and Height
+            int star6Width = 16;
+            int star6Height = 16;
+            Vector2Int star6PngSize = new Vector2Int(star6Width, star6Height);
+
+            // Load image from file
+            var star6Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\starfield_test_16x16_tiles_8x8_tile_grid_128x128.png", star6Width, star6Height);
+
+            // Set Sprite ID from Sprite Atlas
+            int star6ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(star6Sheet, 1, 3, Enums.AtlasType.Particle);
+
+            // Set Sprite Data
+            byte[] star6spriteData = new byte[star6PngSize.x * star6PngSize.y * 4];
+
+            // Get Sprite Bytes
+            GameState.SpriteAtlasManager.GetSpriteBytes(star6ID, star6spriteData, Enums.AtlasType.Particle);
+
+            // Set Texture
+            Texture2D star6Tex = Utility.Texture.CreateTextureFromRGBA(star6spriteData, star6PngSize.x, star6PngSize.y);
+
+            // Create the sprite
+            var star6Sprite = new Sprites.Sprite
+            {
+                Texture = star6Tex,
+                TextureCoords = new Vector4(0, 0, 1, 1)
+            };
+            // Add created sprite to stars list
+            stars.Add(star6Sprite);
+
             // Create Perlin Field
             perlinField = new PerlinField2D();
 
@@ -194,6 +223,7 @@ namespace Planet.VisualEffects
             starParallaxDepth.Add(0.01f * Time.deltaTime);
             starParallaxDepth.Add(0.01f * Time.deltaTime);
             starParallaxDepth.Add(0.01f * Time.deltaTime);
+            starParallaxDepth.Add(0.01f * Time.deltaTime);
 
             Init = true;
         }
@@ -202,7 +232,7 @@ namespace Planet.VisualEffects
         {
             if (Init)
             {
-                for (; i < 30; i++)
+                for (; i < 50; i++)
                 {
                     perlinGrid = GenPerlin(256, 256, 2, 20);
 
@@ -227,6 +257,9 @@ namespace Planet.VisualEffects
                             break;
                         case 4:
                             sprite = stars[4];
+                            break;
+                        case 5:
+                            sprite = stars[5];
                             break;
                     }
 
