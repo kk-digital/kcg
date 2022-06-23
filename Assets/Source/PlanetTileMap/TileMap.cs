@@ -25,7 +25,7 @@ namespace PlanetTileMap
         public TileMap(Vec2i mapSize)
         {
             ChunkArrayLength = 0;
-            ChunkArrayCapacity = 4096;
+            ChunkArrayCapacity = (mapSize.X >> 4) * (mapSize.Y >> 4);
             ChunkIndexLookup = new int[ChunkArrayCapacity];
             ChunkArray = new Chunk[ChunkArrayCapacity];
 
@@ -132,16 +132,6 @@ namespace PlanetTileMap
 
         public int NewEmptyChunk(int chunkArrayIndex) 
         {
-            //array needs more space, expand
-            if (ChunkArrayLength == ChunkArrayCapacity)
-            {
-                var newChunkArrayCapacity = ChunkArrayCapacity + 4096;
-                Array.Resize(ref ChunkArray, newChunkArrayCapacity);
-                Array.Resize(ref ChunkIndexLookup, newChunkArrayCapacity);
-
-                ChunkArrayCapacity = newChunkArrayCapacity;
-            }
-
             int chunkIndex = chunkArrayIndex;
             ChunkArray[chunkIndex].Type = MapChunkType.Empty;
             ChunkArray[chunkIndex].TileArray = new Tile[LayerCount][];
