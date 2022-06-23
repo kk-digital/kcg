@@ -17,29 +17,29 @@ namespace Action
             AgentEntity = Contexts.sharedInstance.game.GetEntityWithAgentID(agentID);    
         }
 
-        public virtual void OnEnter()
+        public virtual void OnEnter(ref Planet.PlanetState planet)
         {
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
         }
 
-        public virtual void OnUpdate(float deltaTime)
+        public virtual void OnUpdate(float deltaTime, ref Planet.PlanetState planet)
         {      
         }
 
         /// <summary>
         /// We should alweys delete actions after executed.
         /// </summary>
-        public virtual void OnExit()
+        public virtual void OnExit(ref Planet.PlanetState planet)
         {
             ActionEntity.Destroy();
         }
 
-        public virtual void CheckProceduralPrecondition(Planet.PlanetState planetState)
+        public virtual void CheckProceduralPrecondition(ref Planet.PlanetState planet)
         {
 
         }
 
-        public virtual void ProceduralEffects()
+        public virtual void ProceduralEffects(ref Planet.PlanetState planet)
         { 
         }
     }

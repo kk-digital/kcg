@@ -16,9 +16,9 @@ namespace Action
 
         private static void CreatePlaceTileAction(TileID tileID, Planet.PlanetState planetState)
         {
-            GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.PlaceTilOre1Action + (int)tileID);
+            // Todo: Shit code is gonna break all the time. Fix this.
+            GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.PlaceTilOre1Action + (int)tileID - (int)TileID.Ore1);
             GameState.ActionAttributeManager.SetLogicFactory(new PlaceTileActionCreator());
-            GameState.ActionAttributeManager.SetPlanet(planetState);
             var data = new PlaceTileToolAction.Data
             {
                 TileID = tileID
@@ -47,7 +47,6 @@ namespace Action
 
             GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.EnemySpawnAction);
             GameState.ActionAttributeManager.SetLogicFactory(new EnemySpawnActionCreator());
-            GameState.ActionAttributeManager.SetPlanet(planetState);
             EnemySpawnToolAction.Data data = new EnemySpawnToolAction.Data();
             data.CharacterSpriteId = GameResources.SlimeSpriteSheet;
             GameState.ActionAttributeManager.SetData(data);
@@ -55,7 +54,6 @@ namespace Action
 
             GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.PlaceParticleEmitterAction);
             GameState.ActionAttributeManager.SetLogicFactory(new PlaceParticleEmitterActionCreator());
-            GameState.ActionAttributeManager.SetPlanet(planetState);
             PlaceParticleEmitterToolAction.Data placeParticleEmitterData = new PlaceParticleEmitterToolAction.Data();
             placeParticleEmitterData.Material = material;
             GameState.ActionAttributeManager.SetData(placeParticleEmitterData);
@@ -63,12 +61,10 @@ namespace Action
 
             GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.MiningLaserAction);
             GameState.ActionAttributeManager.SetLogicFactory(new MiningLaserActionCreator());
-            GameState.ActionAttributeManager.SetPlanet(planetState);
             GameState.ActionAttributeManager.EndActionAttributeType();
 
             GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.RemoveTileAction);
             GameState.ActionAttributeManager.SetLogicFactory(new RemoveTileActionCreator());
-            GameState.ActionAttributeManager.SetPlanet(planetState);
             GameState.ActionAttributeManager.EndActionAttributeType();
         }
     }

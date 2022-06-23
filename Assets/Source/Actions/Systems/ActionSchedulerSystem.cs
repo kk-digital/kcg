@@ -8,7 +8,7 @@ namespace Action
     // 
     public class ActionSchedulerSystem
     {
-        public void Update(float deltaTime)
+        public void Update(float deltaTime, ref Planet.PlanetState planet)
         {
             var group = Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentActionScheduler);
 
@@ -20,11 +20,11 @@ namespace Action
                         continue;
                     ScheduleAction(entity);
                 }
-                ExcuteActions(entity, deltaTime);
+                ExcuteActions(entity, deltaTime, ref planet);
             }
         }
 
-        private void ExcuteActions(GameEntity actorEntity, float deltaTime)
+        private void ExcuteActions(GameEntity actorEntity, float deltaTime, ref Planet.PlanetState planet)
         {
             for (int i = 0; i < actorEntity.agentActionScheduler.ActiveActionIDs.Count; i++)
             {
@@ -36,17 +36,17 @@ namespace Action
                     switch (actionEntity.actionExecution.State)
                     {
                         case Enums.ActionState.Entry:
-                            actionEntity.actionExecution.Logic.OnEnter();
+                            actionEntity.actionExecution.Logic.OnEnter(ref planet);
                             break;
                         case Enums.ActionState.Running:
-                            actionEntity.actionExecution.Logic.OnUpdate(deltaTime);
+                            actionEntity.actionExecution.Logic.OnUpdate(deltaTime, ref planet);
                             break;
                         case Enums.ActionState.Success:
-                            actionEntity.actionExecution.Logic.OnExit();
+                            actionEntity.actionExecution.Logic.OnExit(ref planet);
                             actorEntity.agentActionScheduler.ActiveActionIDs.RemoveAt(i--);
                             break;
                         case Enums.ActionState.Fail:
-                            actionEntity.actionExecution.Logic.OnExit();
+                            actionEntity.actionExecution.Logic.OnExit(ref planet);
                             actorEntity.agentActionScheduler.ActiveActionIDs.RemoveAt(i--);
                             break;
                         default:

@@ -7,7 +7,7 @@ namespace Agent
     public class AgentSpawnerSystem
     {
         public GameEntity SpawnPlayer(int spriteId, int width, int height, Vec2f position,
-        int AgentId, int startingAnimation)
+        int agentId, int startingAnimation)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
@@ -34,7 +34,7 @@ namespace Agent
         }
 
         public GameEntity SpawnAgent(int spriteId, int width, int height, Vec2f position,
-        int AgentId, int startingAnimation)
+        int agentId, int startingAnimation)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
@@ -53,7 +53,7 @@ namespace Agent
         }
 
         public GameEntity SpawnEnemy(int spriteId, int width, int height, Vec2f position,
-        int AgentId, int startingAnimation)
+        int agentId, int startingAnimation)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
             

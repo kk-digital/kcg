@@ -1,4 +1,4 @@
-using Agent;
+ using Agent;
 using Enums.Tile;
 using Vehicle;
 using Projectile;
@@ -193,7 +193,7 @@ namespace Planet
             GameState.FloatingTextUpdateSystem.Update(this, frameTime);
             GameState.AnimationUpdateSystem.Update(frameTime);
             GameState.ItemPickUpSystem.Update();
-            GameState.ActionSchedulerSystem.Update(frameTime);
+            GameState.ActionSchedulerSystem.Update(frameTime, ref this);
             GameState.ParticleEmitterUpdateSystem.Update(ParticleContext);
             GameState.ParticleUpdateSystem.Update(this, ParticleContext);
 
