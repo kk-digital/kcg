@@ -190,11 +190,11 @@ namespace Planet.VisualEffects
             planetParallaxDepth = new List<float>(planets.Count);
 
             // Set Parallax Value of every star
+            planetParallaxDepth.Add(0.01f * Time.deltaTime);
             planetParallaxDepth.Add(0.05f * Time.deltaTime);
-            planetParallaxDepth.Add(0.30f * Time.deltaTime);
-            planetParallaxDepth.Add(0.20f * Time.deltaTime);
-            planetParallaxDepth.Add(0.25f * Time.deltaTime);
-            planetParallaxDepth.Add(0.10f * Time.deltaTime);
+            planetParallaxDepth.Add(0.05f * Time.deltaTime);
+            planetParallaxDepth.Add(0.05f * Time.deltaTime);
+            planetParallaxDepth.Add(0.05f * Time.deltaTime);
 
             // Set Width and Height
             int spaceWidth = 32;
@@ -263,11 +263,12 @@ namespace Planet.VisualEffects
                     else
                         Utility.Render.DrawSprite(Random.Range(-100, 100), Random.Range(-100, 100), 1, 1, sprite, Material, transform, 1);
 
-
-                    if(!transform.GetChild(i).gameObject.GetComponent<Parallax>())
-                            transform.GetChild(i).gameObject.AddComponent<Parallax>();
-
-                    transform.GetChild(i).gameObject.GetComponent<Parallax>().parallaxEffect += planetParallaxDepth[spriteRandom];
+                    for(int k = 0; k < transform.childCount; k++)
+                    {
+                        if (!transform.GetChild(k).gameObject.GetComponent<Parallax>())
+                            transform.GetChild(k).gameObject.AddComponent<Parallax>();
+                        transform.GetChild(k).gameObject.GetComponent<Parallax>().parallaxEffect += planetParallaxDepth[spriteRandom];
+                    }
                 }
 
                 for (; j < 1; j++)
