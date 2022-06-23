@@ -7,21 +7,15 @@ namespace PlanetTileMap
     {
         private Sprites.SpriteLoader SpriteLoader;
         private Sprites.SpriteAtlas[] SpritesArray;
-        private int[] Count;
+        private int[] SpriteCount;
 
-        public int Length
-        {
-            get
-            {
-                return SpritesArray.Length;
-            }
-        }
+        public int Length => SpritesArray.Length;
 
         public TileAtlasManager(Sprites.SpriteLoader spriteLoader)
         {
             SpriteLoader = spriteLoader;
             SpritesArray = new Sprites.SpriteAtlas[1];
-            Count = new int[1];
+            SpriteCount = new int[1];
 
             var atlas = new Sprites.SpriteAtlas
             {
@@ -114,7 +108,7 @@ namespace PlanetTileMap
         {
             ref Sprites.SpriteSheet sheet = ref SpriteLoader.SpriteSheets[spriteSheetID];
             ref Sprites.SpriteAtlas atlas = ref SpritesArray[atlasId];
-            ref int count = ref Count[atlasId];
+            ref int count = ref SpriteCount[atlasId];
             
             int xOffset = (count % atlas.Width) * 32;
             int yOffset = (count / atlas.Height) * 32;
@@ -151,7 +145,7 @@ namespace PlanetTileMap
         {
             ref Sprites.SpriteSheet sheet = ref SpriteLoader.SpriteSheets[spriteSheetID];
             ref Sprites.SpriteAtlas atlas = ref SpritesArray[atlasId];
-            ref int count = ref Count[atlasId];
+            ref int count = ref SpriteCount[atlasId];
             
             int xOffset = (count % atlas.Width) * 32;
             int yOffset = (count / atlas.Height) * 32;
@@ -192,7 +186,7 @@ namespace PlanetTileMap
         {
             ref Sprites.SpriteSheet sheet = ref SpriteLoader.SpriteSheets[spriteSheetID];
             ref Sprites.SpriteAtlas atlas = ref SpritesArray[atlasId];
-            ref int count = ref Count[atlasId];
+            ref int count = ref SpriteCount[atlasId];
             
             int xOffset = (count % atlas.Width) * 32;
             int yOffset = (count / atlas.Height) * 32;

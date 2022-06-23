@@ -11,7 +11,7 @@ namespace Sprites
 
         public SpriteLoader()
         {
-            SpriteSheets = new SpriteSheet[0];
+            SpriteSheets = Array.Empty<SpriteSheet>();
             SpriteSheetID = new Dictionary<string, int>();
         }
 

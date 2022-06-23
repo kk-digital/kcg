@@ -15,7 +15,7 @@ namespace PlanetTileMap
 
             for (int i = 0; i < tilePropertyArray.Length; i++)
             {
-                tilePropertyArray[i].TileID = TileID.Air;
+                tilePropertyArray[i].TileID = TileID.Error;
                 tilePropertyArray[i].BaseSpriteId = -1;
             }
 

@@ -1,9 +1,6 @@
 using UnityEngine;
-using System.Collections.Generic;
-using Entitas;
 using Enums.Tile;
 using KMath;
-using Enums;
 
 namespace Planet.Unity
 {

@@ -7,16 +7,27 @@ namespace PlanetTileMap
 {
     public struct TileMap
     {
+        public static Tile AirTile = new() {ID = TileID.Air, SpriteID = -1};
         public static readonly int LayerCount = Enum.GetNames(typeof(MapLayerType)).Length;
+        
         public Texture2D[] LayerTextures;
         public bool[] NeedsUpdate;
         
         public Vec2i MapSize;
-        public ChunkList ChunkList;
+        
+        //Array that maps to Chunk List
+        public int[] ChunkIndexLookup;
+        //Store Chunks
+        public Chunk[] ChunkArray;
+        public int ChunkArrayLength;
+        public int ChunkArrayCapacity;
 
         public TileMap(Vec2i mapSize)
         {
-            ChunkList = new ChunkList(4096);
+            ChunkArrayLength = 0;
+            ChunkArrayCapacity = 4096;
+            ChunkIndexLookup = new int[ChunkArrayCapacity];
+            ChunkArray = new Chunk[ChunkArrayCapacity];
 
             MapSize = mapSize;
             
@@ -28,9 +39,7 @@ namespace PlanetTileMap
                 NeedsUpdate[layerIndex] = true;
             }
         }
-
-        #region TileApi
-
+        
         /// <summary>
         /// Checks if position is inside Map Size
         /// </summary>
@@ -42,26 +51,29 @@ namespace PlanetTileMap
                    y >= 0 && y < MapSize.Y;
         }
 
+        #region Tiles
+        
         public void SetTile(int x, int y, TileID tileID, MapLayerType planetLayer)
         {
             if (!IsValid(x, y)) return;
 
             var xChunkIndex = x >> 4;
             var yChunkIndex = ((y >> 4) * MapSize.X) >> 4;
-            var chunkIndex = (xChunkIndex + yChunkIndex);
+            var chunkIndex = xChunkIndex + yChunkIndex;
 
-            ref var chunk = ref ChunkList.chunkList[chunkIndex];
+            ref var chunk = ref ChunkArray[chunkIndex];
             
             if (chunk.Type == MapChunkType.Error)
             {
-                chunk.Init(MapChunkType.Explored);
+                NewEmptyChunk(chunkIndex);
+                if (tileID != TileID.Air) chunk.Type = MapChunkType.NotEmpty;
             }
-            
+
             var xTileIndex = x & 0x0f;
             var yTileIndex = y & 0x0f;
             var tileIndex = xTileIndex + (yTileIndex << 4);
 
-            chunk.Tiles[(int) planetLayer][tileIndex].ID = tileID;
+            chunk.TileArray[(int) planetLayer][tileIndex].ID = tileID;
             chunk.Sequence++;
             UpdateTile(x, y, planetLayer);
         }
@@ -70,18 +82,18 @@ namespace PlanetTileMap
         {
             if (!IsValid(x, y))
             {
-                return ref Tile.Air;
+                return ref AirTile;
             }
             
             var xChunkIndex = x >> 4;
             var yChunkIndex = ((y >> 4) * MapSize.X) >> 4;
             var chunkIndex = (xChunkIndex + yChunkIndex);
 
-            ref var chunk = ref ChunkList.chunkList[chunkIndex];
+            ref var chunk = ref ChunkArray[chunkIndex];
             
             if (chunk.Type == MapChunkType.Error)
             {
-                return ref Tile.Air;
+                return ref AirTile;
             }
             
             var xIndex = x & 0x0f;
@@ -90,14 +102,14 @@ namespace PlanetTileMap
             
             chunk.ReadCount++;
             
-            return ref chunk.Tiles[(int) planetLayer][tileIndex];
+            return ref chunk.TileArray[(int) planetLayer][tileIndex];
         }
 
         public void RemoveTile(int x, int y, MapLayerType planetLayer)
         {
             ref var tile = ref GetTileRef(x, y, planetLayer);
             tile.ID = TileID.Air;
-            tile.SpriteID = -1;
+            tile.SpriteID = 0;
             UpdateTile(x, y, planetLayer);
         }
 
@@ -112,6 +124,44 @@ namespace PlanetTileMap
                     UpdateTilesOnPosition(i, j, planetLayer);
                 }
             }
+        }
+
+        #endregion
+        
+        #region Chunks
+
+        public int NewEmptyChunk(int chunkArrayIndex) 
+        {
+            //array needs more space, expand
+            if (ChunkArrayLength == ChunkArrayCapacity)
+            {
+                var newChunkArrayCapacity = ChunkArrayCapacity + 4096;
+                Array.Resize(ref ChunkArray, newChunkArrayCapacity);
+                Array.Resize(ref ChunkIndexLookup, newChunkArrayCapacity);
+
+                ChunkArrayCapacity = newChunkArrayCapacity;
+            }
+
+            int chunkIndex = chunkArrayIndex;
+            ChunkArray[chunkIndex].Type = MapChunkType.Empty;
+            ChunkArray[chunkIndex].TileArray = new Tile[LayerCount][];
+
+            // For each layer...
+            for (int layerIndex = 0; layerIndex < ChunkArray[chunkIndex].TileArray.Length; layerIndex++)
+            {
+                // ... create new tile array and...
+                ChunkArray[chunkIndex].TileArray[layerIndex] = new Tile[256];
+                // ... for each tile in tile array...
+                for (int tileIndex = 0; tileIndex < ChunkArray[chunkIndex].TileArray[layerIndex].Length; tileIndex++)
+                {
+                    // ... set tile to Air
+                    ChunkArray[chunkIndex].TileArray[layerIndex][tileIndex].ID = TileID.Air;
+                    ChunkArray[chunkIndex].TileArray[layerIndex][tileIndex].SpriteID = -1;
+                }
+            }
+            
+            ChunkArrayLength++; //increment
+            return chunkIndex;
         }
 
         #endregion
