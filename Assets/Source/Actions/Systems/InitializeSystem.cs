@@ -1,11 +1,11 @@
 ﻿using Entitas;
+using Enums.Tile;
 using UnityEngine;
 
 namespace Action
 { 
-    public struct InitializeSystem
+    public class InitializeSystem
     {
-
         public int CreatePickUpAction(int agentID, int itemID)
         {
             // Pick Up action.
@@ -14,13 +14,15 @@ namespace Action
             return actionID;
         }
 
-        private static void CreatePlaceTileAction(Tile.TileEnum tileType, Planet.PlanetState planetState)
+        private static void CreatePlaceTileAction(TileID tileID, Planet.PlanetState planetState)
         {
-            GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.PlaceTilOre1Action + (int)tileType);
+            GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.PlaceTilOre1Action + (int)tileID);
             GameState.ActionAttributeManager.SetLogicFactory(new PlaceTileActionCreator());
             GameState.ActionAttributeManager.SetPlanet(planetState);
-            PlaceTileToolAction.Data data = new PlaceTileToolAction.Data();
-            data.tileType = tileType;
+            var data = new PlaceTileToolAction.Data
+            {
+                TileID = tileID
+            };
             GameState.ActionAttributeManager.SetData(data);
             GameState.ActionAttributeManager.EndActionAttributeType();
         }
@@ -36,12 +38,12 @@ namespace Action
             GameState.ActionAttributeManager.SetLogicFactory(new PickUpActionCreator());
             GameState.ActionAttributeManager.EndActionAttributeType();
 
-            CreatePlaceTileAction(Tile.TileEnum.Ore1, planetState);
-            CreatePlaceTileAction(Tile.TileEnum.Ore2, planetState);
-            CreatePlaceTileAction(Tile.TileEnum.Ore3, planetState);
-            CreatePlaceTileAction(Tile.TileEnum.Glass, planetState);
-            CreatePlaceTileAction(Tile.TileEnum.Moon, planetState);
-            CreatePlaceTileAction(Tile.TileEnum.Pipe, planetState);
+            CreatePlaceTileAction(TileID.Ore1, planetState);
+            CreatePlaceTileAction(TileID.Ore2, planetState);
+            CreatePlaceTileAction(TileID.Ore3, planetState);
+            CreatePlaceTileAction(TileID.Glass, planetState);
+            CreatePlaceTileAction(TileID.Moon, planetState);
+            CreatePlaceTileAction(TileID.Pipe, planetState);
 
             GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.EnemySpawnAction);
             GameState.ActionAttributeManager.SetLogicFactory(new EnemySpawnActionCreator());

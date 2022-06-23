@@ -7,10 +7,10 @@ namespace Utility
     {
         public static void DrawBox(this AABB2D aabb2D)
         {
-            var bottomLeft = new Vector3(aabb2D.LeftBottom.X, aabb2D.LeftBottom.Y, 0f);
-            var bottomRight = new Vector3(aabb2D.RightBottom.X, aabb2D.RightBottom.Y, 0f);
-            var topLeft = new Vector3(aabb2D.LeftTop.X, aabb2D.LeftTop.Y, 0f);
-            var topRight = new Vector3(aabb2D.RightTop.X, aabb2D.RightTop.Y, 0f);
+            var bottomLeft = new Vector3(aabb2D.LeftX, aabb2D.BottomY, 0f);
+            var bottomRight = new Vector3(aabb2D.RightX, aabb2D.BottomY, 0f);
+            var topLeft = new Vector3(aabb2D.LeftX, aabb2D.TopY, 0f);
+            var topRight = new Vector3(aabb2D.RightX, aabb2D.TopY, 0f);
             
             Debug.DrawLine(bottomLeft, bottomRight, Color.red);
             Debug.DrawLine(bottomRight, topRight, Color.red);

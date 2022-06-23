@@ -1,8 +1,5 @@
-namespace Tile
+namespace Enums.Tile
 {
-
-
-
     public enum TileDrawType
     {
         Normal, 

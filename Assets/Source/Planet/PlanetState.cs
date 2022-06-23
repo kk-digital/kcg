@@ -1,4 +1,5 @@
 using Agent;
+using Enums.Tile;
 using Vehicle;
 using Projectile;
 using FloatingText;
@@ -8,12 +9,12 @@ using UnityEngine;
 
 namespace Planet
 {
-    public class PlanetState
+    public struct PlanetState
     {
         public int Index;
-        TimeState TimeState;
+        public TimeState TimeState;
 
-        public Planet.TileMap TileMap;
+        public PlanetTileMap.TileMap TileMap;
         public AgentList AgentList;
         public VehicleList VehicleList;
         public ProjectileList ProjectileList;
@@ -25,9 +26,9 @@ namespace Planet
         public ParticleContext ParticleContext;
 
 
-        public PlanetState(Vec2i mapSize, GameContext gameContext, ParticleContext particleContext)
+        public PlanetState(Vec2i mapSize, GameContext gameContext, ParticleContext particleContext) : this()
         {
-            TileMap = new TileMap(mapSize);
+            TileMap = new PlanetTileMap.TileMap(mapSize);
             AgentList = new AgentList();
             VehicleList = new VehicleList();
             ProjectileList = new ProjectileList();
@@ -139,17 +140,6 @@ namespace Planet
             VehicleList.Remove(entity);
         }
 
-        // used to place a tile into the tile map
-        // x, y is the position in the tile map
-        public void PlaceTile(int x, int y, int tileType, Enums.Tile.MapLayerType layer)
-        {
-            var tile = new Tile.Tile(new Vec2f(x, y))
-            {
-                Type = tileType
-            };
-            TileMap.SetTile(ref tile, layer);
-        }
-
 
         // updates the entities, must call the systems and so on ..
         public void Update(float deltaTime, Material material, Transform transform)
@@ -200,7 +190,7 @@ namespace Planet
 
             GameState.InputProcessSystem.Update();
             GameState.PhysicsMovableSystem.Update();
-            GameState.PhysicsProcessCollisionSystem.Update(TileMap);
+            GameState.PhysicsProcessCollisionSystem.Update(ref TileMap);
             GameState.EnemyAiSystem.Update(this);
             GameState.FloatingTextUpdateSystem.Update(this, frameTime);
             GameState.AnimationUpdateSystem.Update(frameTime);
@@ -209,8 +199,8 @@ namespace Planet
             GameState.ParticleEmitterUpdateSystem.Update(ParticleContext);
             GameState.ParticleUpdateSystem.Update(this, ParticleContext);
 
-            TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Mid, Object.Instantiate(material), transform, 9);
-            TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Front, Object.Instantiate(material), transform, 10);
+            TileMap.DrawLayer(MapLayerType.Mid, Object.Instantiate(material), transform, 9);
+            TileMap.DrawLayer(MapLayerType.Front, Object.Instantiate(material), transform, 10);
             GameState.AgentDrawSystem.Draw(Object.Instantiate(material), transform, 12);
             GameState.ItemDrawSystem.Draw(GameContext, Material.Instantiate(material), transform, 13);
             GameState.FloatingTextDrawSystem.Draw(transform, 10000);

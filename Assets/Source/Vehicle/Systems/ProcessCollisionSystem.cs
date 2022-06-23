@@ -6,7 +6,7 @@ namespace Vehicle
 {
     public class ProcessCollisionSystem
     {
-        public void Update(Planet.TileMap tileMap)
+        public void Update(ref PlanetTileMap.TileMap tileMap)
         {
             // Get Delta Time
             float deltaTime = Time.deltaTime;

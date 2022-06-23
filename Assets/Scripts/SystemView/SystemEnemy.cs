@@ -28,7 +28,7 @@ namespace Scripts {
                 ship.descriptor.rotation      = (float)Rand.NextDouble() * 2.0f * 3.1415926f;
                 ship.descriptor.mean_anomaly   = (float)Rand.NextDouble() * 2.0f * 3.1415926f;
 
-                GameLoop gl = GetComponent<GameLoop>();
+                GameManager gl = GetComponent<GameManager>();
 
                 SystemState State = gl.CurrentSystemState;
 

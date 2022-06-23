@@ -13,7 +13,7 @@ namespace Action
 
         public override void OnEnter()
         {
-            Planet.TileMap tileMap = ActionAttributeEntity.actionAttributePlanetState.Planet.TileMap;
+            var tileMap = ActionAttributeEntity.actionAttributePlanetState.Planet.TileMap;
 
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             int x = (int)worldPosition.x;

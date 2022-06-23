@@ -1,9 +1,7 @@
 using UnityEngine;
 using Enums;
 using Entitas;
-using Enums.Tile;
 using KMath;
-using Physics;
 
 public class ProjectileTest : MonoBehaviour
 {
@@ -31,8 +29,7 @@ public class ProjectileTest : MonoBehaviour
 
     // Projectile Properties
     private Vec2f startPos;
-    private Planet.TileMap tileMap;
-    private Planet.ChunkList chunkList;
+    Planet.PlanetState planetState;
     private Vec2f projectilePosition;
     private Vec2f worldPosition;
     private Vec2f diff;
@@ -43,11 +40,8 @@ public class ProjectileTest : MonoBehaviour
     void Start()
     {
         // Create Tile Map
-        tileMap = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().TileMap;
-
-        // Create Chunk List
-        chunkList = tileMap.Chunks;
-
+        planetState = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().PlanetState;
+        
         // Initialize Projectile Draw System
         projectileDrawSystem = new Projectile.DrawSystem();
 
@@ -132,13 +126,13 @@ public class ProjectileTest : MonoBehaviour
 
                 // Loading Image
                 projectileSpawnerSystem.SpawnProjectile(Material, image, 16, 16, startPos,
-                    start, end, chunkList, ProjectileType.Grenade, ProjectileDrawType.Standard);
+                    start, end, ProjectileType.Grenade, ProjectileDrawType.Standard);
             }
 
             projectileVelocitySystem.Update(new Vec3f(diff.X, diff.Y), Contexts.sharedInstance);
 
             // Process Collision System
-            projectileCollisionSystem.Update(tileMap);
+            projectileCollisionSystem.Update(ref planetState.TileMap);
 
             // Draw Initialized Projectile
             projectileDrawSystem.Draw(Instantiate(Material), transform, 12);

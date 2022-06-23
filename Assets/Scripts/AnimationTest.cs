@@ -27,7 +27,7 @@ namespace Planet.Unity
 
         public void Update()
         {
-            Planet.TileMap TileMap = Planet.TileMap;
+            ref var tileMap = ref Planet.TileMap;
             Material material = Material;
 
             if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -35,7 +35,7 @@ namespace Planet.Unity
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 int x = (int)worldPosition.x;
                 int y = (int)worldPosition.y;
-                Planet.PlaceTile(x, y, 10, MapLayerType.Front);
+                Planet.TileMap.SetTile(x, y, TileID.Moon, MapLayerType.Front);
                 //TileMap.BuildLayerTexture(MapLayerType.Front);
                 
             }
@@ -45,7 +45,7 @@ namespace Planet.Unity
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 int x = (int)worldPosition.x;
                 int y = (int)worldPosition.y;
-                TileMap.RemoveTile(x, y, MapLayerType.Front);
+                tileMap.RemoveTile(x, y, MapLayerType.Front);
                 //TileMap.BuildLayerTexture(MapLayerType.Front);
                 
             }
@@ -102,17 +102,17 @@ namespace Planet.Unity
             int SlimeJumpBaseSpriteId = GameState.SpriteAtlasManager.CopySpritesToAtlas(SlimeSpriteSheet, 0, 2, 1, 3, Enums.AtlasType.Agent);
 
 
-            GameState.TileCreationApi.CreateTile(8);
+            GameState.TileCreationApi.CreateTile(TileID.Ore1);
             GameState.TileCreationApi.SetTileName("ore_1");
             GameState.TileCreationApi.SetTileTexture16(OreTileSheet, 0, 0);
             GameState.TileCreationApi.EndTile();
 
-            GameState.TileCreationApi.CreateTile(9);
+            GameState.TileCreationApi.CreateTile(TileID.Glass);
             GameState.TileCreationApi.SetTileName("glass");
             GameState.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 11, 10);
             GameState.TileCreationApi.EndTile();
 
-            GameState.TileCreationApi.CreateTile(10);
+            GameState.TileCreationApi.CreateTile(TileID.Moon);
             GameState.TileCreationApi.SetTileName("moon");
             GameState.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 0, 0);
             GameState.TileCreationApi.EndTile();
@@ -160,52 +160,52 @@ namespace Planet.Unity
 
         void GenerateMap()
         {
-            TileMap tileMap = Planet.TileMap;
+            ref var tileMap = ref Planet.TileMap;
 
-            for (int j = tileMap.Borders.IntLeft; j < tileMap.Borders.IntTop; j++)
+            for (int j = 0; j < tileMap.MapSize.Y; j++)
             {
-                for (int i = tileMap.Borders.IntRight; i < tileMap.Borders.IntRight; i++)
+                for (int i = 0; i < tileMap.MapSize.Y; i++)
                 {
-                    var frontTile = new Tile.Tile(new Vec2f(i, j));
-                    var oreTile = new Tile.Tile(new Vec2f(i, j));
+                    var frontTile = TileID.Air;
+                    var oreTile = TileID.Air;
 
-                    if (i >= tileMap.Borders.IntRight / 2)
+                    if (i >= tileMap.MapSize.X / 2)
                     {
-                        if (j % 2 == 0 && i == tileMap.Borders.IntRight / 2)
+                        if (j % 2 == 0 && i == tileMap.MapSize.X / 2)
                         {
-                            frontTile.Type = 10;
+                            frontTile = TileID.Moon;
                         }
                         else
                         {
-                            frontTile.Type = 9;
+                            frontTile = TileID.Glass;
                         }
                     }
                     else
                     {
-                        if (j % 3 == 0 && i == tileMap.Borders.IntRight / 2 + 1)
+                        if (j % 3 == 0 && i == tileMap.MapSize.X / 2 + 1)
                         {
-                            frontTile.Type = 9;
+                            frontTile = TileID.Glass;
                         }
                         else
                         {
-                            frontTile.Type = 10;
+                            frontTile = TileID.Moon;
                         }
                     }
 
 
                     if (i % 10 == 0)
                     {
-                        oreTile.Type = 8;
+                        oreTile = TileID.Ore1;
                     }
 
                     if (j is > 1 and < 6 || (j > 8 + i))
                     {
-                        frontTile.Type = -1;
-                        oreTile.Type = -1;
+                        frontTile = TileID.Air;
+                        oreTile = TileID.Air;
                     }
 
 
-                    tileMap.SetTile(ref frontTile, MapLayerType.Front);
+                    tileMap.SetTile(i, j, frontTile, MapLayerType.Front);
                 }
             }
 

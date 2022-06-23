@@ -21,4 +21,3 @@ namespace Projectile
         public Vec2f centerOfRotation = Vec2f.One;
     }
 }
-

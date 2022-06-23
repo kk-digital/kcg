@@ -13,7 +13,7 @@ namespace Planet.VisualEffects
 
         public void Initialize()
         {
-            if(GameLoop.BackgroundDraw)
+            if(GameManager.BackgroundDraw)
             {
                 starField = new Planet.VisualEffects.PlanetBackgroundStarField();
                 parallaxLayer = new Planet.VisualEffects.PlanetBackgroundParallaxLayer();
@@ -29,7 +29,7 @@ namespace Planet.VisualEffects
         {
             if(Init)
             {
-                if(GameLoop.BackgroundDraw)
+                if(GameManager.BackgroundDraw)
                 {
                     starField.Draw(material, transform, drawOrder);
                     parallaxLayer.Draw(material, transform, drawOrder);

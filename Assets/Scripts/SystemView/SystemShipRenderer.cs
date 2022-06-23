@@ -55,7 +55,7 @@ namespace Scripts {
 
             // Start is called before the first frame update
             void Start() {
-                State = GameObject.FindWithTag("SystemController").GetComponent<GameLoop>().CurrentSystemState;
+                State = GameObject.FindWithTag("SystemController").GetComponent<GameManager>().CurrentSystemState;
                 OrbitRender = gameObject.AddComponent<OrbitRenderer>();
                 ShipRender = gameObject.AddComponent<SpriteRenderer>();
 

@@ -1,7 +1,7 @@
 namespace Enums.Tile
 {
     // we have 16 different values in the tileset
-    public enum Position
+    public enum TilePosition
     {
         UDLR_0000 = 0,
         UDLR_0001 = 1,
