@@ -31,11 +31,13 @@ public class ProjectileTest : MonoBehaviour
 
     // Projectile Properties
     private Vec2f startPos;
-    Vector3 worldPosition;
     private Planet.TileMap tileMap;
     private Planet.ChunkList chunkList;
-    Vec3f difference;
     private Vec2f projectilePosition;
+    private Vec2f worldPosition;
+    private Vec2f diff;
+    Cell start;
+    Cell end;
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
     void Start()
@@ -66,14 +68,6 @@ public class ProjectileTest : MonoBehaviour
 
         // Init is done, now all updates ready to work
         init = true;
-    }
-
-    // Spawn Projectiles
-    private void SpawnProjectile(Vec2f startPos)
-    {
-        // Loading Image
-        projectileSpawnerSystem.SpawnProjectile(Material, image, 16, 16, startPos,
-            ProjectileType.Grenade, ProjectileDrawType.Standard);
     }
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
@@ -115,54 +109,33 @@ public class ProjectileTest : MonoBehaviour
                 projectilePosition = entity.projectilePhysicsState2D.Position;
             }
 
-            // Call Right Click Down Event
+            start = new Cell
+            {
+                x = (int)startPos.X,
+                y = (int)startPos.Y
+            };
+
+            end = new Cell
+            {
+                x = (int)projectilePosition.X,
+                y = (int)projectilePosition.Y
+            };
+
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                // Calculate cursor position
                 Vector3 mousePos = Input.mousePosition;
                 mousePos.z = Camera.main.nearClipPlane;
-                worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
+                worldPosition = new Vec2f(Camera.main.ScreenToWorldPoint(mousePos).x,
+                    Camera.main.ScreenToWorldPoint(mousePos).y);
 
-                // Calculate difference
-                var diff = new Vec2f(worldPosition.x, worldPosition.y) - startPos;
-                difference = new Vec3f(diff.X, diff.Y);
+                diff = worldPosition - startPos;
 
-                Cell start = new Cell
-                {
-                    x = (int)startPos.X,
-                    y = (int)startPos.Y
-                };
-
-                Cell end = new Cell
-                {
-                    x = (int)projectilePosition.X,
-                    y = (int)projectilePosition.Y
-                };
-
-                // Spawn Projectile
-                SpawnProjectile(startPos);
-
-                // Log Places Shooted Ray Go Through
-                foreach (var cell in start.LineTo(end))
-                {
-                    // Get Chunks because it's faster
-                    ref var chunk = ref chunkList[cell.x, cell.y];
-                    if (chunk.Type is not (MapChunkType.Empty or MapChunkType.Error))
-                    {
-                        IGroup<GameEntity> cEntities = Contexts.sharedInstance.game.GetGroup(GameMatcher.ProjectileCollider);
-                        foreach (var entity in cEntities)
-                        {
-                            entity.projectileCollider.isFirstSolid = true;
-                        }
-                    }
-                }
-
-                // Draw Debug Line to see shooted ray
-                Debug.DrawLine(new Vector3(start.x, start.y, 0.0f), new Vector3(end.x, end.y), Color.red);
+                // Loading Image
+                projectileSpawnerSystem.SpawnProjectile(Material, image, 16, 16, startPos,
+                    start, end, chunkList, ProjectileType.Grenade, ProjectileDrawType.Standard);
             }
 
-            // Process Physics
-            projectileVelocitySystem.Update(difference, Contexts.sharedInstance);
+            projectileVelocitySystem.Update(new Vec3f(diff.X, diff.Y), Contexts.sharedInstance);
 
             // Process Collision System
             projectileCollisionSystem.Update(tileMap);

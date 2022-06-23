@@ -15,9 +15,9 @@ public class Parallax : MonoBehaviour
     }
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
-    void Update()
+    void LateUpdate()
     {
-        float temp = Camera.main.transform.position.x * (1 - parallaxEffect);
+        float temp = (Camera.main.transform.position.x * (1 - parallaxEffect));
         float dist = (Camera.main.transform.position.x * parallaxEffect);
         transform.position = new Vector3(startPos * dist, transform.position.y, transform.position.z);
 

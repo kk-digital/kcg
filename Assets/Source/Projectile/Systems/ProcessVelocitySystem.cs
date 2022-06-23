@@ -59,27 +59,20 @@ namespace Projectile
                 // Get position from component
                 var position = projectile.projectilePhysicsState2D;
                 position.TempPosition = position.Position;
-
                 if (!projectile.projectileCollider.isFired)
                 {
                     // Calculate distance
                     distance = difference.Magnitude;
-
                     // Calculate direction
                     direction = (Vec2f)difference / distance;
-
                     // Normalize the Direction
                     direction.Normalize();
-
                     // Set Angular velocity with new direciton
                     position.angularVelocity = (direction * 3000.0f) * Time.deltaTime;
                 }
-
                 projectile.projectileCollider.isFired = true;
-
                 // Process the velocity
                 position.Position += projectile.projectilePhysicsState2D.angularVelocity * Time.deltaTime;
-
                 // Update the position
                 projectile.ReplaceProjectilePhysicsState2D(position.Position, position.TempPosition, position.angularVelocity, position.angularMass, position.angularAcceleration, position.centerOfGravity, position.centerOfRotation);
             }
