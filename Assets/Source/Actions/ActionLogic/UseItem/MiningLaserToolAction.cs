@@ -46,7 +46,6 @@ namespace Action
                 if (tile.Type >= 0)
                 {
                     tileMap.RemoveTile(cell.x, cell.y, Enums.Tile.MapLayerType.Front);
-                    tileMap.RemoveTile(cell.x, cell.y, Enums.Tile.MapLayerType.Ore);
                 }
                     Debug.DrawLine(new Vector3(agentPosition.X, agentPosition.Y, 0.0f),
                              new Vector3(worldPosition.x, worldPosition.y, 0.0f), Color.red);

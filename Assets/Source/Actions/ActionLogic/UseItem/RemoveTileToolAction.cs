@@ -19,10 +19,9 @@ namespace Action
             int x = (int)worldPosition.x;
             int y = (int)worldPosition.y;
             tileMap.RemoveTile(x, y, MapLayerType.Front);
-            tileMap.RemoveTile(x, y, MapLayerType.Ore);
 
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
-;        }
+        }
     }
 
     // Factory Method

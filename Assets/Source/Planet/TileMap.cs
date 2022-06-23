@@ -24,6 +24,11 @@ namespace Planet
                 NeedsUpdate = new bool[Layers.Count],
                 MapSize = mapSize
             };
+
+            for(int layerIndex = 0; layerIndex < Layers.Count; layerIndex++)
+            {
+                Layers.NeedsUpdate[layerIndex] = true;
+            }
         }
 
         private void BuildLayerTexture(MapLayerType planetLayer)

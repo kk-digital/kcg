@@ -205,14 +205,10 @@ namespace Planet.Unity
 
 
                     tileMap.SetTile(ref frontTile, MapLayerType.Front);
-                    tileMap.SetTile(ref oreTile, MapLayerType.Ore);
                 }
             }
 
             tileMap.UpdateTileMapPositions(MapLayerType.Front);
-            tileMap.UpdateTileMapPositions(MapLayerType.Ore);
-            //TileMap.BuildLayerTexture(MapLayerType.Front);
-            //TileMap.BuildLayerTexture(MapLayerType.Ore);
 
         }
 
