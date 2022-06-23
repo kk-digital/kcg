@@ -26,7 +26,7 @@ namespace Planet
         public ParticleContext ParticleContext;
 
 
-        public PlanetState(Vec2i mapSize, GameContext gameContext, ParticleContext particleContext)
+        public PlanetState(Vec2i mapSize, GameContext gameContext, ParticleContext particleContext) : this()
         {
             TileMap = new PlanetTileMap.TileMap(mapSize);
             AgentList = new AgentList();

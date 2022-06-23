@@ -150,7 +150,7 @@ namespace Planet.Unity
             // Generating the map
             Vec2i mapSize = new Vec2i(16, 16);
 
-            PlanetState = new PlanetState(mapSize, Contexts.sharedInstance.game);
+            PlanetState = new PlanetState(mapSize, Contexts.sharedInstance.game, Contexts.sharedInstance.particle);
             ref var tileMap = ref PlanetState.TileMap;
 
             for(int j = 0; j < tileMap.MapSize.Y; j++)

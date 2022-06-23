@@ -29,7 +29,6 @@ public class ProjectileTest : MonoBehaviour
 
     // Projectile Properties
     private Vec2f startPos;
-    Vector3 worldPosition;
     Planet.PlanetState planetState;
     private Vec2f projectilePosition;
     private Vec2f worldPosition;
@@ -127,7 +126,7 @@ public class ProjectileTest : MonoBehaviour
 
                 // Loading Image
                 projectileSpawnerSystem.SpawnProjectile(Material, image, 16, 16, startPos,
-                    start, end, chunkList, ProjectileType.Grenade, ProjectileDrawType.Standard);
+                    start, end, ProjectileType.Grenade, ProjectileDrawType.Standard);
             }
 
             projectileVelocitySystem.Update(new Vec3f(diff.X, diff.Y), Contexts.sharedInstance);

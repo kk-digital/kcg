@@ -13,7 +13,7 @@ namespace Projectile
         private static int projectileID;
 
         public Entity SpawnProjectile(Material material, int spriteID, int witdh, int height, Vec2f startPos,
-            Cell start, Cell end, Planet.ChunkList chunks, ProjectileType projectileType, ProjectileDrawType projectileDrawType)
+            Cell start, Cell end, ProjectileType projectileType, ProjectileDrawType projectileDrawType)
         {
             // Create Entity
             var entity = Contexts.sharedInstance.game.CreateEntity();
@@ -57,11 +57,7 @@ namespace Projectile
             foreach (var cell in start.LineTo(end))
             {
                 // Get Chunks because it's faster
-                ref var chunk = ref chunks[cell.x, cell.y];
-                if (chunk.Type is not (MapChunkType.Empty or MapChunkType.Error))
-                {
-                    isFirstSolid = true;
-                }
+                isFirstSolid = true;
             }
 
 #if UNITY_EDITOR
