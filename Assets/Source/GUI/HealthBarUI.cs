@@ -108,7 +108,7 @@ namespace KGUI
             // Set Width and Height
             int BarDiv1Width = 1;
             int BarDiv1Height = 6;
-            Vector2Int BarDiv1PngSize = new Vector2Int(BarBorderWidth, BarBorderHeight);
+            Vector2Int BarDiv1PngSize = new Vector2Int(BarDiv1Width, BarDiv1Height);
 
             // Load image from file
             var BarDiv1Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\interface\\hud_hp_bar_div1.png", BarDiv1Width, BarDiv1Height);
@@ -157,11 +157,14 @@ namespace KGUI
                 float BarBorderx = Camera.main.ScreenToWorldPoint(new Vector3(45.0f, 0, Camera.main.nearClipPlane)).x;
                 float BarBordery = Camera.main.ScreenToWorldPoint(new Vector3(0, Camera.main.pixelHeight - 53.5f, Camera.main.nearClipPlane)).y;
 
-                float BarDiv1x = Camera.main.ScreenToWorldPoint(new Vector3(115.0f, 0, Camera.main.nearClipPlane)).x;
-                float BarDiv1y = Camera.main.ScreenToWorldPoint(new Vector3(0, Camera.main.pixelHeight - 156, Camera.main.nearClipPlane)).y;
+                float BarDiv1x = Camera.main.ScreenToWorldPoint(new Vector3(105.0f, 0, Camera.main.nearClipPlane)).x;
+                float BarDiv1y = Camera.main.ScreenToWorldPoint(new Vector3(0, Camera.main.pixelHeight - 53.5f, Camera.main.nearClipPlane)).y;
 
-                float BarDiv1_2x = Camera.main.ScreenToWorldPoint(new Vector3(215.0f, 0, Camera.main.nearClipPlane)).x;
-                float BarDiv1_2y = Camera.main.ScreenToWorldPoint(new Vector3(0, Camera.main.pixelHeight - 156, Camera.main.nearClipPlane)).y;
+                float BarDiv1_2x = Camera.main.ScreenToWorldPoint(new Vector3(163.0f, 0, Camera.main.nearClipPlane)).x;
+                float BarDiv1_2y = Camera.main.ScreenToWorldPoint(new Vector3(0, Camera.main.pixelHeight - 53.5f, Camera.main.nearClipPlane)).y;
+
+                float BarDiv1_3x = Camera.main.ScreenToWorldPoint(new Vector3(220.0f, 0, Camera.main.nearClipPlane)).x;
+                float BarDiv1_3y = Camera.main.ScreenToWorldPoint(new Vector3(0, Camera.main.pixelHeight - 53.5f, Camera.main.nearClipPlane)).y;
 
                 Utility.Render.DrawSprite(Iconx, Icony, 0.5f, 0.5f, icon, material, transform, drawOrder);
                 
@@ -172,9 +175,13 @@ namespace KGUI
                 Utility.Render.DrawSprite(BarFillx, BarFilly, 3.5941875f, 0.22574003f, barFill, material, transform, 5001);
 
                 // Health Bar Div 1 Draw
-                Utility.Render.DrawSprite(BarDiv1x, BarDiv1y, 1, 1, 270, barDiv1, material, transform, 5002);
+                Utility.Render.DrawSprite(BarDiv1x, BarDiv1y, 0.06f, 0.30f, barDiv1, material, transform, 5002);
 
-                Utility.Render.DrawSprite(BarDiv1_2x, BarDiv1_2y, 1, 1, 270, barDiv1, material, transform, 5002);
+                // Health Bar Div 2 Draw
+                Utility.Render.DrawSprite(BarDiv1_2x, BarDiv1_2y, 0.06f, 0.30f, barDiv1, material, transform, 5002);
+
+                // Health Bar Div 3 Draw
+                Utility.Render.DrawSprite(BarDiv1_3x, BarDiv1_3y, 0.06f, 0.30f, barDiv1, material, transform, 5002);
 
             }
         }
