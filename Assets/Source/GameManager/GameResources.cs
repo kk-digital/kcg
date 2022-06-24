@@ -1,5 +1,5 @@
 using KMath;
-
+using UnityEngine;
 
 public class GameResources
 {
@@ -83,6 +83,8 @@ public class GameResources
             CreateAnimations();
             CreateItems();
             CreateAgents();
+            CreateParticles();
+            CreateParticleEmitters();
         }
     }
 
@@ -229,6 +231,39 @@ public class GameResources
         GameState.AgentCreationApi.SetHealth(100.0f);
         GameState.AgentCreationApi.SetAttackCooldown(0.8f);
         GameState.AgentCreationApi.End();
+    }
+
+    private static void CreateParticles()
+    {
+        GameState.ParticleCreationApi.Create((int)Particle.ParticleType.Ore);
+        GameState.ParticleCreationApi.SetName("Ore");
+        GameState.ParticleCreationApi.SetDecayRate(1.0f);
+        GameState.ParticleCreationApi.SetAcceleration(new Vector2(0.0f, -20.0f));
+        GameState.ParticleCreationApi.SetDeltaRotation(1.7f);
+        GameState.ParticleCreationApi.SetDeltaScale(0.0f);
+        GameState.ParticleCreationApi.SetSpriteId(OreSprite);
+        GameState.ParticleCreationApi.SetSize(new Vec2f(0.5f, 0.5f));
+        GameState.ParticleCreationApi.SetStartingVelocity(new Vector2(1.0f, 10.0f));
+        GameState.ParticleCreationApi.SetStartingRotation(0.0f);
+        GameState.ParticleCreationApi.SetStartingScale(1.0f);
+        GameState.ParticleCreationApi.SetStartingColor(new Color(255.0f, 255.0f, 255.0f, 255.0f));
+        GameState.ParticleCreationApi.End();
+    }
+
+    private static void CreateParticleEmitters()
+    {
+       /* GameState.
+                public int PropertiesId;
+        public string Name;
+        
+        public ParticleType ParticleType;
+
+        public float Duration;
+        public bool Loop;
+        public int ParticleCount;
+        public float TimeBetweenEmissions;
+
+        public float CurrentTime;*/
     }
 
 

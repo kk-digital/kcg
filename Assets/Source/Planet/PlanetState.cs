@@ -129,9 +129,9 @@ namespace Planet
             return newEntity;
         }
 
-        public void RemoveFloatingText(int Index)
+        public void RemoveFloatingText(int floatingTextId)
         {
-            ref FloatingTextEntity entity = ref FloatingTextList.Get(Index);
+            ref FloatingTextEntity entity = ref FloatingTextList.Get(floatingTextId);
             entity.Entity.Destroy();
             FloatingTextList.Remove(entity);
         }
@@ -148,9 +148,9 @@ namespace Planet
             return newEntity;
         }
 
-        public void RemoveParticleEmitter()
+        public void RemoveParticleEmitter(int particleEmitterId)
         {
-            ref ParticleEmitterEntity entity = ref ParticleEmitterList.Get(Index);
+            ref ParticleEmitterEntity entity = ref ParticleEmitterList.Get(particleEmitterId);
             entity.Entity.Destroy();
             ParticleEmitterList.Remove(entity);
         }
@@ -242,7 +242,7 @@ namespace Planet
             GameState.AnimationUpdateSystem.Update(frameTime);
             GameState.ItemPickUpSystem.Update();
             GameState.ActionSchedulerSystem.Update(frameTime);
-            GameState.ParticleEmitterUpdateSystem.Update(ParticleContext);
+            GameState.ParticleEmitterUpdateSystem.Update(this);
             GameState.ParticleUpdateSystem.Update(this, ParticleContext);
 
             TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Mid, Object.Instantiate(material), transform, 9);

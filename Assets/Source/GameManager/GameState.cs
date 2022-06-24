@@ -64,10 +64,15 @@ public class GameState
     public static readonly Utility.FileLoadingManager FileLoadingManager;
     public static readonly ECSInput.InputProcessSystem InputProcessSystem;
 
+
+    #region Particle
+    public static readonly Particle.ParticleCreationApi ParticleCreationApi;
+    public static readonly Particle.ParticleEmitterCreationApi ParticleEmitterCreationApi;
     public static readonly Particle.ParticleDrawSystem ParticleDrawSystem;
     public static readonly Particle.ParticleEmitterUpdateSystem ParticleEmitterUpdateSystem;
     public static readonly Particle.ParticleUpdateSystem ParticleUpdateSystem;
     public static readonly Particle.ParticleEmitterSpawnerSystem ParticleEmitterSpawnerSystem;
+    #endregion
 
     static GameState()
     {
@@ -100,6 +105,8 @@ public class GameState
         ActionCreationSystem = new Action.ActionCreationSystem();
         ActionSchedulerSystem = new Action.ActionSchedulerSystem();
         ActionInitializeSystem = new Action.InitializeSystem();
+        ParticleCreationApi = new Particle.ParticleCreationApi();
+        ParticleEmitterCreationApi = new Particle.ParticleEmitterCreationApi();
         ParticleDrawSystem = new Particle.ParticleDrawSystem();
         ParticleEmitterUpdateSystem = new Particle.ParticleEmitterUpdateSystem();
         ParticleUpdateSystem = new Particle.ParticleUpdateSystem();

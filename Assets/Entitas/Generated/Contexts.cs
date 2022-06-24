@@ -74,6 +74,7 @@ public partial class Contexts {
     public const string ItemAttributes = "ItemAttributes";
     public const string ItemIDID = "ItemIDID";
     public const string ItemIDItemType = "ItemIDItemType";
+    public const string ParticleEmitterID = "ParticleEmitterID";
     public const string ProjectileID = "ProjectileID";
     public const string VehicleID = "VehicleID";
 
@@ -149,6 +150,11 @@ public partial class Contexts {
             game.GetGroup(GameMatcher.ItemID),
             (e, c) => ((Item.IDComponent)c).ItemType));
 
+        particle.AddEntityIndex(new Entitas.PrimaryEntityIndex<ParticleEntity, int>(
+            ParticleEmitterID,
+            particle.GetGroup(ParticleMatcher.ParticleEmitterID),
+            (e, c) => ((Particle.EmitterIDComponent)c).ParticleEmitterId));
+
         game.AddEntityIndex(new Entitas.PrimaryEntityIndex<GameEntity, int>(
             ProjectileID,
             game.GetGroup(GameMatcher.ProjectileID),
@@ -217,6 +223,10 @@ public static class ContextsExtensions {
 
     public static System.Collections.Generic.HashSet<GameEntity> GetEntitiesWithItemIDItemType(this GameContext context, Enums.ItemType ItemType) {
         return ((Entitas.EntityIndex<GameEntity, Enums.ItemType>)context.GetEntityIndex(Contexts.ItemIDItemType)).GetEntities(ItemType);
+    }
+
+    public static ParticleEntity GetEntityWithParticleEmitterID(this ParticleContext context, int ParticleEmitterId) {
+        return ((Entitas.PrimaryEntityIndex<ParticleEntity, int>)context.GetEntityIndex(Contexts.ParticleEmitterID)).GetEntity(ParticleEmitterId);
     }
 
     public static GameEntity GetEntityWithProjectileID(this GameContext context, int ID) {
