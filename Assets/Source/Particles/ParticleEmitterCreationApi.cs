@@ -78,6 +78,46 @@ namespace Particle
             PropertiesArray[CurrentIndex].Name = name;
         }
 
+        public void SetParticleType(ParticleType particleType)
+        {
+            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
+            {
+                PropertiesArray[CurrentIndex].ParticleType = particleType;
+            }
+        }
+
+        public void SetDuration(float duration)
+        {
+            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
+            {
+                PropertiesArray[CurrentIndex].Duration = duration;
+            }
+        }
+
+        public void SetLoop(bool loop)
+        {
+            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
+            {
+                PropertiesArray[CurrentIndex].Loop = loop;
+            }
+        }
+
+        public void SetParticleCount(int particleCount)
+        {
+            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
+            {
+                PropertiesArray[CurrentIndex].ParticleCount = particleCount;
+            }
+        }
+
+        public void SetTimeBetweenEmissions(float timeBetweenEmissions)
+        {
+            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
+            {
+                PropertiesArray[CurrentIndex].TimeBetweenEmissions = timeBetweenEmissions;
+            }
+        }
+
 
         public void End()
         {

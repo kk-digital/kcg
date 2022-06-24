@@ -7,32 +7,53 @@ namespace Particle
 {
     public class ParticleEmitterSpawnerSystem
     {
+
+        ParticleEmitterCreationApi ParticleEmitterCreationApi;
+        ParticleCreationApi ParticleCreationApi;
+        public ParticleEmitterSpawnerSystem(ParticleEmitterCreationApi particleEmitterCreationApi,
+                                            ParticleCreationApi particleCreationApi)
+        {
+            ParticleEmitterCreationApi = particleEmitterCreationApi;
+            ParticleCreationApi = particleCreationApi;
+        }
+
+        //Note(Mahdi): Deprecated will be removed later
         public ParticleEntity Spawn(ParticleContext context, Material material, Vec2f position, Vec2f size,
                                      int spriteId, int particleEmitterId)
         {
             // use an api to create different emitter entities
-            ParticleEntity entity = CreateParticleEmitterEntity(context, particleEmitterId, new Vector2(position.X, position.Y),
-             1.0f, new Vector2(0, -20.0f), 1.7f, 0.0f, new int[]{spriteId}, size, 
-                new Vector2(1.0f, 10.0f),
-            0.0f, 1.0f, new Color(255.0f, 255.0f, 255.0f, 255.0f),
-            0.2f, 0.5f, true, 1, 0.05f);
+            ParticleEntity entity = CreateParticleEmitterEntity(context, Particle.ParticleEmitterType.OreFountain, 
+                                            position,
+                                            particleEmitterId);
 
             return entity;
         }
 
-        private ParticleEntity CreateParticleEmitterEntity(ParticleContext context, int particleEmitterId, Vector2 position, float decayRate,
-            Vector2 acceleration, float deltaRotation, float deltaScale,
-            int[] spriteIds, Vec2f size, Vector2 startingVelocity,
-            float startingRotation, float startingScale, Color startingColor,
-            float animationSpeed, float duration, bool loop, int particleCount, 
-            float timeBetweenEmissions)
+        public ParticleEntity Spawn(ParticleContext context, Particle.ParticleEmitterType type, 
+                                        Vec2f position, int particleEmitterId)
         {
+            ParticleEntity entity = CreateParticleEmitterEntity(context, type, position, particleEmitterId);
+
+            return entity;
+        }
+
+        private ParticleEntity CreateParticleEmitterEntity(ParticleContext context, 
+                                Particle.ParticleEmitterType type, Vec2f position, int particleEmitterId)
+        {
+            ParticleEmitterProperties emitterProperties = 
+                        ParticleEmitterCreationApi.Get((int)type);
+            ParticleProperties particleProperties = 
+                        ParticleCreationApi.Get((int)emitterProperties.ParticleType);
             var e = context.CreateEntity();
             e.AddParticleEmitterID(particleEmitterId);
-            e.AddParticleEmitter2dPosition(position, new Vector2(), new Vector2());
-            e.AddParticleEmitterState(null, null, decayRate, acceleration, deltaRotation,
-            deltaScale, spriteIds, size, startingVelocity, startingRotation, startingScale, startingColor,
-            animationSpeed, duration, loop, particleCount, timeBetweenEmissions, 0.0f);
+            e.AddParticleEmitter2dPosition(new Vector2(position.X, position.Y), new Vector2(), new Vector2());
+            e.AddParticleEmitterState(null, null, particleProperties.DecayRate, particleProperties.Acceleration,
+            particleProperties.DeltaRotation, particleProperties.DeltaScale, 
+            new int []{particleProperties.SpriteId}, particleProperties.Size, particleProperties.StartingVelocity,
+                 particleProperties.StartingRotation, particleProperties.StartingScale, particleProperties.StartingColor,
+            particleProperties.AnimationSpeed, emitterProperties.Duration,
+            emitterProperties.Loop, emitterProperties.ParticleCount,
+            emitterProperties.TimeBetweenEmissions, 0.0f);
 
             return e;
         }

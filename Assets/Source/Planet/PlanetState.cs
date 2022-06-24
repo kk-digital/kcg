@@ -137,12 +137,11 @@ namespace Planet
             FloatingTextList.Remove(entity);
         }
 
-        public ParticleEmitterEntity AddParticleEmitter(UnityEngine.Material material, 
-                                    Vec2f position, Vec2f size, int spriteId)
+        public ParticleEmitterEntity AddParticleEmitter(Vec2f position, Particle.ParticleEmitterType type)
         {
             ref ParticleEmitterEntity newEntity = ref ParticleEmitterList.Add();
-            ParticleEntity entity = GameState.ParticleEmitterSpawnerSystem.Spawn(ParticleContext, material, position, 
-                        size, spriteId, newEntity.ParticleEmitterId);
+            ParticleEntity entity = GameState.ParticleEmitterSpawnerSystem.Spawn(ParticleContext, type, position, 
+                        newEntity.ParticleEmitterId);
             newEntity.Entity = entity;
 
 

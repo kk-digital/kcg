@@ -120,7 +120,7 @@ public class GameState
         ParticleDrawSystem = new Particle.ParticleDrawSystem();
         ParticleEmitterUpdateSystem = new Particle.ParticleEmitterUpdateSystem();
         ParticleUpdateSystem = new Particle.ParticleUpdateSystem();
-        ParticleEmitterSpawnerSystem = new Particle.ParticleEmitterSpawnerSystem();
+        ParticleEmitterSpawnerSystem = new Particle.ParticleEmitterSpawnerSystem(ParticleEmitterCreationApi, ParticleCreationApi);
         ProjectileCollisionSystem = new Projectile.ProcessCollisionSystem();
         ProjectileMovementSystem = new Projectile.MovementSystem();
         ProjectileSpawnerSystem = new Projectile.SpawnerSystem();
