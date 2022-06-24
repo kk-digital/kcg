@@ -134,8 +134,8 @@ namespace Inventory
                 }
 
                 // Draw sprites.
-                ItemPropertiesEntity itemAttributeEntity = EntitasContext.itemProperties.GetEntityWithItemAttributes(itemEntity.itemID.ItemType);
-                int SpriteID = itemAttributeEntity.itemAttributeInventorySprite.ID;
+                ItemPropertiesEntity itemPropertyEntity = EntitasContext.itemProperties.GetEntityWithItemProperty(itemEntity.itemID.ItemType);
+                int SpriteID = itemPropertyEntity.itemPropertyInventorySprite.ID;
 
                 Sprites.Sprite sprite = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle);
 

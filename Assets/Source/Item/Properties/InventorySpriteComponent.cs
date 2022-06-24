@@ -1,7 +1,7 @@
 ﻿using Entitas;
 using UnityEngine;
 
-namespace Item.Attribute
+namespace Item.Property
 {
     [ItemProperties]
     public struct InventorySpriteComponent : IComponent

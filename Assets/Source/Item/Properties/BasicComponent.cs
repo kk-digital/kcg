@@ -2,7 +2,7 @@
 using Entitas.CodeGeneration.Attributes;
 using Enums;
 
-namespace Item.Attributes
+namespace Item.Property
 {
     [ItemProperties]
     public struct Component : IComponent

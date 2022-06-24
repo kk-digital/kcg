@@ -47,7 +47,7 @@ namespace Action
             // Update item pos.
 
             // Center position Item.
-            Vec2f itemSize = Contexts.sharedInstance.itemProperties.GetEntityWithItemAttributes(ItemEntity.itemID.ItemType).itemAttributeSize.Size;
+            Vec2f itemSize = Contexts.sharedInstance.itemProperties.GetEntityWithItemProperty(ItemEntity.itemID.ItemType).itemPropertySize.Size;
             Vec2f itemCenterPos = ItemEntity.itemDrawPosition2D.Value + itemSize / 2.0f;
             Vec2f agentCenterPos = AgentEntity.physicsPosition2D.Value + new Vec2f(1.0f, 1.5f)/2f; // Todo: Add agentSizeCompenent
 

@@ -59,13 +59,13 @@ namespace Planet.Unity
             GameEntity item = GameState.InventoryManager.GetItemInSlot(toolBarID, selectedSlot);
             if (item != null)
             {
-                ItemPropertiesEntity itemAttribute = EntitasContext.itemProperties.GetEntityWithItemAttributes(item.itemID.ItemType);
-                if (itemAttribute.hasItemAttributeAction)
+                ItemPropertiesEntity itemProperty = EntitasContext.itemProperties.GetEntityWithItemProperty(item.itemID.ItemType);
+                if (itemProperty.hasItemPropertyAction)
                 {
                     if (Input.GetKeyDown(KeyCode.Mouse0))
                     {
                         GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity,
-                            GameState.ActionCreationSystem.CreateAction(itemAttribute.itemAttributeAction.ActionTypeID, Player.AgentId));
+                            GameState.ActionCreationSystem.CreateAction(itemProperty.itemPropertyAction.ActionTypeID, Player.AgentId));
                     }
                 }
             }

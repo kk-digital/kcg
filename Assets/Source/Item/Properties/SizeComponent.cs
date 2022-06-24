@@ -2,7 +2,7 @@
 using KMath;
 using UnityEngine;
 
-namespace Item.Attribute
+namespace Item.Property
 {
     [ItemProperties]
     public struct SizeComponent : IComponent

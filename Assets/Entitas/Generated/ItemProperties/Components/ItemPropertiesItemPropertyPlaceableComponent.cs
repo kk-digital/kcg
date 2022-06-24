@@ -8,18 +8,18 @@
 //------------------------------------------------------------------------------
 public partial class ItemPropertiesEntity {
 
-    static readonly Item.Attribute.EquipamentComponent itemAttributeEquipamentComponent = new Item.Attribute.EquipamentComponent();
+    static readonly Item.Property.PlaceableComponent itemPropertyPlaceableComponent = new Item.Property.PlaceableComponent();
 
-    public bool isItemAttributeEquipament {
-        get { return HasComponent(ItemPropertiesComponentsLookup.ItemAttributeEquipament); }
+    public bool isItemPropertyPlaceable {
+        get { return HasComponent(ItemPropertiesComponentsLookup.ItemPropertyPlaceable); }
         set {
-            if (value != isItemAttributeEquipament) {
-                var index = ItemPropertiesComponentsLookup.ItemAttributeEquipament;
+            if (value != isItemPropertyPlaceable) {
+                var index = ItemPropertiesComponentsLookup.ItemPropertyPlaceable;
                 if (value) {
                     var componentPool = GetComponentPool(index);
                     var component = componentPool.Count > 0
                             ? componentPool.Pop()
-                            : itemAttributeEquipamentComponent;
+                            : itemPropertyPlaceableComponent;
 
                     AddComponent(index, component);
                 } else {
@@ -40,17 +40,17 @@ public partial class ItemPropertiesEntity {
 //------------------------------------------------------------------------------
 public sealed partial class ItemPropertiesMatcher {
 
-    static Entitas.IMatcher<ItemPropertiesEntity> _matcherItemAttributeEquipament;
+    static Entitas.IMatcher<ItemPropertiesEntity> _matcherItemPropertyPlaceable;
 
-    public static Entitas.IMatcher<ItemPropertiesEntity> ItemAttributeEquipament {
+    public static Entitas.IMatcher<ItemPropertiesEntity> ItemPropertyPlaceable {
         get {
-            if (_matcherItemAttributeEquipament == null) {
-                var matcher = (Entitas.Matcher<ItemPropertiesEntity>)Entitas.Matcher<ItemPropertiesEntity>.AllOf(ItemPropertiesComponentsLookup.ItemAttributeEquipament);
+            if (_matcherItemPropertyPlaceable == null) {
+                var matcher = (Entitas.Matcher<ItemPropertiesEntity>)Entitas.Matcher<ItemPropertiesEntity>.AllOf(ItemPropertiesComponentsLookup.ItemPropertyPlaceable);
                 matcher.componentNames = ItemPropertiesComponentsLookup.componentNames;
-                _matcherItemAttributeEquipament = matcher;
+                _matcherItemPropertyPlaceable = matcher;
             }
 
-            return _matcherItemAttributeEquipament;
+            return _matcherItemPropertyPlaceable;
         }
     }
 }

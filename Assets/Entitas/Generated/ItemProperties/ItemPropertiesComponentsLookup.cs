@@ -8,39 +8,39 @@
 //------------------------------------------------------------------------------
 public static class ItemPropertiesComponentsLookup {
 
-    public const int ItemAttributeAction = 0;
-    public const int ItemAttributeConsumable = 1;
-    public const int ItemAttributeEquipament = 2;
-    public const int ItemAttributeInventorySprite = 3;
-    public const int ItemAttributePlaceable = 4;
-    public const int ItemAttributeSize = 5;
-    public const int ItemAttributeSprite = 6;
-    public const int ItemAttributeStackable = 7;
-    public const int ItemAttributes = 8;
+    public const int ItemPropertyAction = 0;
+    public const int ItemProperty = 1;
+    public const int ItemPropertyConsumable = 2;
+    public const int ItemPropertyEquipament = 3;
+    public const int ItemPropertyInventorySprite = 4;
+    public const int ItemPropertyPlaceable = 5;
+    public const int ItemPropertySize = 6;
+    public const int ItemPropertySprite = 7;
+    public const int ItemPropertyStackable = 8;
 
     public const int TotalComponents = 9;
 
     public static readonly string[] componentNames = {
-        "ItemAttributeAction",
-        "ItemAttributeConsumable",
-        "ItemAttributeEquipament",
-        "ItemAttributeInventorySprite",
-        "ItemAttributePlaceable",
-        "ItemAttributeSize",
-        "ItemAttributeSprite",
-        "ItemAttributeStackable",
-        "ItemAttributes"
+        "ItemPropertyAction",
+        "ItemProperty",
+        "ItemPropertyConsumable",
+        "ItemPropertyEquipament",
+        "ItemPropertyInventorySprite",
+        "ItemPropertyPlaceable",
+        "ItemPropertySize",
+        "ItemPropertySprite",
+        "ItemPropertyStackable"
     };
 
     public static readonly System.Type[] componentTypes = {
-        typeof(Item.Attribute.ActionComponent),
-        typeof(Item.Attribute.ConsumableComponent),
-        typeof(Item.Attribute.EquipamentComponent),
-        typeof(Item.Attribute.InventorySpriteComponent),
-        typeof(Item.Attribute.PlaceableComponent),
-        typeof(Item.Attribute.SizeComponent),
-        typeof(Item.Attribute.SpriteComponent),
-        typeof(Item.Attribute.StackableComponent),
-        typeof(Item.Attributes.Component)
+        typeof(Item.Property.ActionComponent),
+        typeof(Item.Property.Component),
+        typeof(Item.Property.ConsumableComponent),
+        typeof(Item.Property.EquipamentComponent),
+        typeof(Item.Property.InventorySpriteComponent),
+        typeof(Item.Property.PlaceableComponent),
+        typeof(Item.Property.SizeComponent),
+        typeof(Item.Property.SpriteComponent),
+        typeof(Item.Property.StackableComponent)
     };
 }

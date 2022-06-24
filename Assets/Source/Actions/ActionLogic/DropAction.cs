@@ -33,7 +33,7 @@ namespace Action
                 GameState.InventoryManager.RemoveItem(ItemEntity, selected);
              
                 Vec2f pos = AgentEntity.physicsPosition2D.Value;
-                Vec2f size = Contexts.sharedInstance.itemProperties.GetEntityWithItemAttributes(ItemEntity.itemID.ItemType).itemAttributeSize.Size;
+                Vec2f size = Contexts.sharedInstance.itemProperties.GetEntityWithItemProperty(ItemEntity.itemID.ItemType).itemPropertySize.Size;
 
                 ItemEntity.AddPhysicsPosition2D(pos, pos);
                 ItemEntity.AddPhysicsBox2DCollider(size, Vec2f.Zero);

@@ -8,18 +8,18 @@
 //------------------------------------------------------------------------------
 public partial class ItemPropertiesEntity {
 
-    static readonly Item.Attribute.ConsumableComponent itemAttributeConsumableComponent = new Item.Attribute.ConsumableComponent();
+    static readonly Item.Property.EquipamentComponent itemPropertyEquipamentComponent = new Item.Property.EquipamentComponent();
 
-    public bool isItemAttributeConsumable {
-        get { return HasComponent(ItemPropertiesComponentsLookup.ItemAttributeConsumable); }
+    public bool isItemPropertyEquipament {
+        get { return HasComponent(ItemPropertiesComponentsLookup.ItemPropertyEquipament); }
         set {
-            if (value != isItemAttributeConsumable) {
-                var index = ItemPropertiesComponentsLookup.ItemAttributeConsumable;
+            if (value != isItemPropertyEquipament) {
+                var index = ItemPropertiesComponentsLookup.ItemPropertyEquipament;
                 if (value) {
                     var componentPool = GetComponentPool(index);
                     var component = componentPool.Count > 0
                             ? componentPool.Pop()
-                            : itemAttributeConsumableComponent;
+                            : itemPropertyEquipamentComponent;
 
                     AddComponent(index, component);
                 } else {
@@ -40,17 +40,17 @@ public partial class ItemPropertiesEntity {
 //------------------------------------------------------------------------------
 public sealed partial class ItemPropertiesMatcher {
 
-    static Entitas.IMatcher<ItemPropertiesEntity> _matcherItemAttributeConsumable;
+    static Entitas.IMatcher<ItemPropertiesEntity> _matcherItemPropertyEquipament;
 
-    public static Entitas.IMatcher<ItemPropertiesEntity> ItemAttributeConsumable {
+    public static Entitas.IMatcher<ItemPropertiesEntity> ItemPropertyEquipament {
         get {
-            if (_matcherItemAttributeConsumable == null) {
-                var matcher = (Entitas.Matcher<ItemPropertiesEntity>)Entitas.Matcher<ItemPropertiesEntity>.AllOf(ItemPropertiesComponentsLookup.ItemAttributeConsumable);
+            if (_matcherItemPropertyEquipament == null) {
+                var matcher = (Entitas.Matcher<ItemPropertiesEntity>)Entitas.Matcher<ItemPropertiesEntity>.AllOf(ItemPropertiesComponentsLookup.ItemPropertyEquipament);
                 matcher.componentNames = ItemPropertiesComponentsLookup.componentNames;
-                _matcherItemAttributeConsumable = matcher;
+                _matcherItemPropertyEquipament = matcher;
             }
 
-            return _matcherItemAttributeConsumable;
+            return _matcherItemPropertyEquipament;
         }
     }
 }

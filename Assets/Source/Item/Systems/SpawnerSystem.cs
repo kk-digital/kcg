@@ -12,8 +12,8 @@ namespace Item
 
         public GameEntity SpawnItem(Contexts entitasContext, ItemType itemType, Vec2f position)
         {
-            ItemPropertiesEntity entityAttribute = entitasContext.itemProperties.GetEntityWithItemAttributes(itemType);
-            Vec2f size = entityAttribute.itemAttributeSize.Size;
+            ItemPropertiesEntity entityAttribute = entitasContext.itemProperties.GetEntityWithItemProperty(itemType);
+            Vec2f size = entityAttribute.itemPropertySize.Size;
 
             var entity = entitasContext.game.CreateEntity();
             entity.AddItemID(ItemID, itemType);

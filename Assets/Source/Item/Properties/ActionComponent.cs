@@ -1,7 +1,7 @@
 ﻿using Entitas;
 using Entitas.CodeGeneration.Attributes;
 
-namespace Item.Attribute
+namespace Item.Property
 {
     [ItemProperties]
     public struct ActionComponent : IComponent

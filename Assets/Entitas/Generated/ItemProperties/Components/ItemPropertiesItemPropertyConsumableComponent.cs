@@ -8,18 +8,18 @@
 //------------------------------------------------------------------------------
 public partial class ItemPropertiesEntity {
 
-    static readonly Item.Attribute.PlaceableComponent itemAttributePlaceableComponent = new Item.Attribute.PlaceableComponent();
+    static readonly Item.Property.ConsumableComponent itemPropertyConsumableComponent = new Item.Property.ConsumableComponent();
 
-    public bool isItemAttributePlaceable {
-        get { return HasComponent(ItemPropertiesComponentsLookup.ItemAttributePlaceable); }
+    public bool isItemPropertyConsumable {
+        get { return HasComponent(ItemPropertiesComponentsLookup.ItemPropertyConsumable); }
         set {
-            if (value != isItemAttributePlaceable) {
-                var index = ItemPropertiesComponentsLookup.ItemAttributePlaceable;
+            if (value != isItemPropertyConsumable) {
+                var index = ItemPropertiesComponentsLookup.ItemPropertyConsumable;
                 if (value) {
                     var componentPool = GetComponentPool(index);
                     var component = componentPool.Count > 0
                             ? componentPool.Pop()
-                            : itemAttributePlaceableComponent;
+                            : itemPropertyConsumableComponent;
 
                     AddComponent(index, component);
                 } else {
@@ -40,17 +40,17 @@ public partial class ItemPropertiesEntity {
 //------------------------------------------------------------------------------
 public sealed partial class ItemPropertiesMatcher {
 
-    static Entitas.IMatcher<ItemPropertiesEntity> _matcherItemAttributePlaceable;
+    static Entitas.IMatcher<ItemPropertiesEntity> _matcherItemPropertyConsumable;
 
-    public static Entitas.IMatcher<ItemPropertiesEntity> ItemAttributePlaceable {
+    public static Entitas.IMatcher<ItemPropertiesEntity> ItemPropertyConsumable {
         get {
-            if (_matcherItemAttributePlaceable == null) {
-                var matcher = (Entitas.Matcher<ItemPropertiesEntity>)Entitas.Matcher<ItemPropertiesEntity>.AllOf(ItemPropertiesComponentsLookup.ItemAttributePlaceable);
+            if (_matcherItemPropertyConsumable == null) {
+                var matcher = (Entitas.Matcher<ItemPropertiesEntity>)Entitas.Matcher<ItemPropertiesEntity>.AllOf(ItemPropertiesComponentsLookup.ItemPropertyConsumable);
                 matcher.componentNames = ItemPropertiesComponentsLookup.componentNames;
-                _matcherItemAttributePlaceable = matcher;
+                _matcherItemPropertyConsumable = matcher;
             }
 
-            return _matcherItemAttributePlaceable;
+            return _matcherItemPropertyConsumable;
         }
     }
 }
