@@ -1,17 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Planet;
 using KMath;
 using Entitas;
+using Enums.Tile;
 
 public class MiningLaser : MonoBehaviour
 {
     // ATLAS
     [SerializeField] Material Material;
-
+    
     // Planet Tile Map
-    Planet.TileMap tileMap;
+    PlanetState planet;
 
     // Entitas Contexts
     Contexts contexts;
@@ -47,8 +46,8 @@ public class MiningLaser : MonoBehaviour
 
         // Laser Position
         laserPosition = new Vec2f(2.0f, 2.5f);
-
-        tileMap = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().TileMap;
+        
+        planet = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().PlanetState;
 
         // Assign Contexts
         contexts = Contexts.sharedInstance;
@@ -219,10 +218,10 @@ public class MiningLaser : MonoBehaviour
                 {
                     Debug.Log($"({cell.x},{cell.y})");
 
-                    ref var tile = ref tileMap.GetTileRef(cell.x, cell.y, Enums.Tile.MapLayerType.Front);
-                    if (tile.Type >= 0)
+                    ref var tile = ref planet.TileMap.GetTileRef(cell.x, cell.y, MapLayerType.Front);
+                    if (tile.ID != TileID.Error)
                     {
-                        tileMap.RemoveTile(cell.x, cell.y, Enums.Tile.MapLayerType.Front);
+                        planet.TileMap.RemoveTile(cell.x, cell.y, MapLayerType.Front);
                         //tileMap.BuildLayerTexture(Enums.Tile.MapLayerType.Front);
                     }
 

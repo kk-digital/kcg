@@ -1,4 +1,5 @@
-using Agent;
+ using Agent;
+using Enums.Tile;
 using Vehicle;
 using Projectile;
 using FloatingText;
@@ -8,12 +9,12 @@ using UnityEngine;
 
 namespace Planet
 {
-    public class PlanetState
+    public struct PlanetState
     {
         public int Index;
-        TimeState TimeState;
+        public TimeState TimeState;
 
-        public Planet.TileMap TileMap;
+        public PlanetTileMap.TileMap TileMap;
         public AgentList AgentList;
         public VehicleList VehicleList;
         public ProjectileList ProjectileList;
@@ -25,9 +26,9 @@ namespace Planet
         public ParticleContext ParticleContext;
 
 
-        public PlanetState(Vec2i mapSize, GameContext gameContext, ParticleContext particleContext)
+        public PlanetState(Vec2i mapSize, GameContext gameContext, ParticleContext particleContext) : this()
         {
-            TileMap = new TileMap(mapSize);
+            TileMap = new PlanetTileMap.TileMap(mapSize);
             AgentList = new AgentList();
             VehicleList = new VehicleList();
             ProjectileList = new ProjectileList();
@@ -40,11 +41,11 @@ namespace Planet
 
 
         // Note(Mahdi): Deprecated will be removed soon
-        public AgentEntity AddPlayer(UnityEngine.Material material, int spriteId,
+        public AgentEntity AddPlayer(int spriteId,
                                 int width, int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity entity = GameState.AgentSpawnerSystem.SpawnPlayer(material, spriteId, width, height, position, newEntity.AgentId,
+            GameEntity entity = GameState.AgentSpawnerSystem.SpawnPlayer(spriteId, width, height, position, newEntity.AgentId,
                     startingAnimation);
             newEntity.Entity = entity;
 
@@ -63,11 +64,11 @@ namespace Planet
         }
 
         // Note(Mahdi): Deprecated will be removed soon
-        public AgentEntity AddAgent(UnityEngine.Material material, int spriteId, int width,
+        public AgentEntity AddAgent(int spriteId, int width,
                      int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity entity = GameState.AgentSpawnerSystem.SpawnAgent(material, spriteId, width, height, position,
+            GameEntity entity = GameState.AgentSpawnerSystem.SpawnAgent(spriteId, width, height, position,
                                                                     newEntity.AgentId, startingAnimation);
             newEntity.Entity = entity;
 
@@ -87,11 +88,11 @@ namespace Planet
         }
 
         // Note(Mahdi): Deprecated will be removed soon
-        public AgentEntity AddEnemy(UnityEngine.Material material, int spriteId,
+        public AgentEntity AddEnemy(int spriteId,
                         int width, int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity entity = GameState.AgentSpawnerSystem.SpawnEnemy(material, spriteId, width, height, position,
+            GameEntity entity = GameState.AgentSpawnerSystem.SpawnEnemy(spriteId, width, height, position,
             newEntity.AgentId, startingAnimation);
 
             newEntity.Entity = entity;
@@ -175,17 +176,6 @@ namespace Planet
             VehicleList.Remove(entity);
         }
 
-        // used to place a tile into the tile map
-        // x, y is the position in the tile map
-        public void PlaceTile(int x, int y, int tileType, Enums.Tile.MapLayerType layer)
-        {
-            var tile = new Tile.Tile(new Vec2f(x, y))
-            {
-                Type = tileType
-            };
-            TileMap.SetTile(ref tile, layer);
-        }
-
 
         // updates the entities, must call the systems and so on ..
         public void Update(float deltaTime, Material material, Transform transform)
@@ -236,22 +226,24 @@ namespace Planet
 
             GameState.InputProcessSystem.Update();
             GameState.PhysicsMovableSystem.Update();
-            GameState.PhysicsProcessCollisionSystem.Update(TileMap);
+            GameState.PhysicsProcessCollisionSystem.Update(ref TileMap);
             GameState.EnemyAiSystem.Update(this);
             GameState.FloatingTextUpdateSystem.Update(this, frameTime);
             GameState.AnimationUpdateSystem.Update(frameTime);
             GameState.ItemPickUpSystem.Update();
-            GameState.ActionSchedulerSystem.Update(frameTime);
+            GameState.ActionSchedulerSystem.Update(frameTime, ref this);
             GameState.ParticleEmitterUpdateSystem.Update(this);
             GameState.ParticleUpdateSystem.Update(this, ParticleContext);
+            GameState.ProjectileMovementSystem.Update();
+            GameState.ProjectileCollisionSystem.Update(ref TileMap);
 
-            TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Mid, Object.Instantiate(material), transform, 9);
-            TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Front, Object.Instantiate(material), transform, 10);
+            TileMap.DrawLayer(MapLayerType.Mid, Object.Instantiate(material), transform, 9);
+            TileMap.DrawLayer(MapLayerType.Front, Object.Instantiate(material), transform, 10);
             GameState.AgentDrawSystem.Draw(Object.Instantiate(material), transform, 12);
             GameState.ItemDrawSystem.Draw(GameContext, Material.Instantiate(material), transform, 13);
+            GameState.ProjectileDrawSystem.Draw(Material.Instantiate(material), transform, 20);
             GameState.FloatingTextDrawSystem.Draw(transform, 10000);
             GameState.ParticleDrawSystem.Draw(ParticleContext, Material.Instantiate(material), transform, 50);
-
             #region Gui drawing systems
             //GameState.InventoryDrawSystem.Draw(material, transform, 1000);
             #endregion

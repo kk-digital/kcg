@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Entitas;
 using KMath;
 using UnityEngine;
 
@@ -15,8 +14,8 @@ namespace Agent
         }
 
         //NOTE(Mahdi): Deprecated, will be removed soon
-        public GameEntity SpawnPlayer(Material material, int spriteId, int width, int height, Vec2f position,
-        int AgentId, int startingAnimation)
+        public GameEntity SpawnPlayer(int spriteId, int width, int height, Vec2f position,
+        int agentId, int startingAnimation)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
@@ -26,7 +25,7 @@ namespace Agent
             entity.isECSInput = true;
             entity.AddECSInputXY(new Vec2f(0, 0), false);
 
-            entity.AddAgentID(AgentId);
+            entity.AddAgentID(agentId);
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
             entity.AddAgentSprite2D(spriteId, spriteSize); // adds the sprite  component to the entity
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
@@ -37,8 +36,8 @@ namespace Agent
 
             // Add Inventory and toolbar.
             var attacher = Inventory.InventoryAttacher.Instance;
-            attacher.AttachInventoryToAgent(6, 5, AgentId);
-            attacher.AttachToolBarToPlayer(10, AgentId);
+            attacher.AttachInventoryToAgent(6, 5, agentId);
+            attacher.AttachToolBarToPlayer(10, agentId);
             return entity;
         }
 
@@ -84,14 +83,15 @@ namespace Agent
             return entity;
         }
 
-        public GameEntity SpawnAgent(Material material, int spriteId, int width, int height, Vec2f position,
-        int AgentId, int startingAnimation)
+        //NOTE(Mahdi): Deprecated, will be removed soon
+        public GameEntity SpawnAgent(int spriteId, int width, int height, Vec2f position,
+        int agentId, int startingAnimation)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
 
             var spriteSize = new Vec2f(width / 32f, height / 32f);
 
-            entity.AddAgentID(AgentId);
+            entity.AddAgentID(agentId);
 
             Vec2f box2dCollider = new Vec2f(0.5f, 1.5f);
             entity.AddPhysicsBox2DCollider(box2dCollider, new Vec2f(0.25f, 0.0f));
@@ -103,14 +103,15 @@ namespace Agent
             return entity;
         }
 
-        public GameEntity SpawnEnemy(Material material, int spriteId, int width, int height, Vec2f position,
-        int AgentId, int startingAnimation)
+        //NOTE(Mahdi): Deprecated, will be removed soon
+        public GameEntity SpawnEnemy(int spriteId, int width, int height, Vec2f position,
+        int agentId, int startingAnimation)
         {
             var entity = Contexts.sharedInstance.game.CreateEntity();
             
             var spriteSize = new Vec2f(width / 32f, height / 32f);
             
-            entity.AddAgentID(AgentId);
+            entity.AddAgentID(agentId);
 
             Vec2f box2dCollider = new Vec2f(0.75f, 0.5f);
             entity.AddPhysicsBox2DCollider(box2dCollider, new Vec2f(0.125f, 0.0f));

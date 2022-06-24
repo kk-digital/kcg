@@ -1,9 +1,9 @@
+using Enums.Tile;
 using KMath;
 using UnityEngine;
 
 public class GameResources
 {
-
     // sprite sheets ids
     public static int MoonSpriteSheet;
     public static int OreSpriteSheet;
@@ -91,32 +91,32 @@ public class GameResources
 
     private static void CreateTiles()
     {
-        GameState.TileCreationApi.CreateTile((int)Tile.TileEnum.Ore1);
+        GameState.TileCreationApi.CreateTile(TileID.Ore1);
         GameState.TileCreationApi.SetTileName("ore_1");
         GameState.TileCreationApi.SetTileTexture16(OreSpriteSheet, 0, 0);
         GameState.TileCreationApi.EndTile();
 
-        GameState.TileCreationApi.CreateTile((int)Tile.TileEnum.Glass);
+        GameState.TileCreationApi.CreateTile(TileID.Glass);
         GameState.TileCreationApi.SetTileName("glass");
         GameState.TileCreationApi.SetTileSpriteSheet16(MoonSpriteSheet, 11, 10);
         GameState.TileCreationApi.EndTile();
 
-        GameState.TileCreationApi.CreateTile((int)Tile.TileEnum.Moon);
+        GameState.TileCreationApi.CreateTile(TileID.Moon);
         GameState.TileCreationApi.SetTileName("moon");
         GameState.TileCreationApi.SetTileSpriteSheet16(MoonSpriteSheet, 0, 0);
         GameState.TileCreationApi.EndTile();
 
-        GameState.TileCreationApi.CreateTile((int)Tile.TileEnum.Ore2);
+        GameState.TileCreationApi.CreateTile(TileID.Ore2);
         GameState.TileCreationApi.SetTileName("ore_2");
         GameState.TileCreationApi.SetTileTexture16(Ore2SpriteSheet, 0, 0);
         GameState.TileCreationApi.EndTile();
 
-        GameState.TileCreationApi.CreateTile((int)Tile.TileEnum.Ore3);
+        GameState.TileCreationApi.CreateTile(TileID.Ore3);
         GameState.TileCreationApi.SetTileName("ore_3");
         GameState.TileCreationApi.SetTileTexture16(Ore3SpriteSheet, 0, 0);
         GameState.TileCreationApi.EndTile();
 
-        GameState.TileCreationApi.CreateTile((int)Tile.TileEnum.Pipe);
+        GameState.TileCreationApi.CreateTile(TileID.Pipe);
         GameState.TileCreationApi.SetTileName("pipe");
         GameState.TileCreationApi.SetTileSpriteSheet16(PipeSpriteSheet, 0, 0);
         GameState.TileCreationApi.EndTile();
@@ -153,6 +153,7 @@ public class GameResources
         Item.CreationApi.Instance.SetTexture(GunIcon);
         Item.CreationApi.Instance.SetInventoryTexture(GunIcon);
         Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
+        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.FireWeaponAction);
         Item.CreationApi.Instance.EndItem();
 
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.Ore, "Ore");

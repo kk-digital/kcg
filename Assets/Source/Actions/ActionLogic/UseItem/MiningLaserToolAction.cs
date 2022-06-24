@@ -1,6 +1,7 @@
 ﻿
 using KMath;
 using System.Web.UI.WebControls;
+using Enums.Tile;
 using UnityEngine;
 
 namespace Action
@@ -12,10 +13,9 @@ namespace Action
         
         }
 
-        public override void OnEnter()
+        public override void OnEnter(ref Planet.PlanetState planet)
         {
             Vec2f   agentPosition = AgentEntity.physicsPosition2D.Value;
-            Planet.TileMap tileMap = ActionAttributeEntity.actionAttributePlanetState.Planet.TileMap;
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
             int fromX = (int)agentPosition.X;
@@ -42,13 +42,8 @@ namespace Action
             {
                 Debug.Log($"({cell.x},{cell.y})");
 
-                ref var tile = ref tileMap.GetTileRef(cell.x, cell.y, Enums.Tile.MapLayerType.Front);
-                if (tile.Type >= 0)
-                {
-                    tileMap.RemoveTile(cell.x, cell.y, Enums.Tile.MapLayerType.Front);
-                }
-                    Debug.DrawLine(new Vector3(agentPosition.X, agentPosition.Y, 0.0f),
-                             new Vector3(worldPosition.x, worldPosition.y, 0.0f), Color.red);
+                planet.TileMap.RemoveTile(cell.x, cell.y, MapLayerType.Front);
+                Debug.DrawLine(new Vector3(agentPosition.X, agentPosition.Y, 0.0f), new Vector3(worldPosition.x, worldPosition.y, 0.0f), Color.red);
             }
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
         }

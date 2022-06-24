@@ -24,30 +24,20 @@ namespace Planet.Unity
         //public string TileMap = "Moonbunker/Moon Bunker.tmx";
         [SerializeField] Material Material;
 
-        public static string BaseDir => Application.streamingAssetsPath;
-
-        List<int> triangles = new();
-        List<Vector2> uvs = new();
-        List<Vector3> verticies = new();
-        
-        public Planet.TileMap TileMap;
-
         int SortingOrder = 0;
 
         int PlayerSpriteID;
         int PlayerSprite2ID;
-        const float TileSize = 1.0f;
-
-        readonly Vector2 MapOffset = new(-3.0f, 4.0f);
 
         static bool InitTiles;
 
-
+        public PlanetState PlanetState;
+        
         ECSInput.InputProcessSystem InputProcessSystems;
         Agent.AgentSpawnerSystem AgentSpawnerSystem;
-        Physics.PhysicsMovableSystem PhysicsMovableSystem;
+        PhysicsMovableSystem PhysicsMovableSystem;
         Agent.AgentDrawSystem AgentDrawSystem;
-        Physics.PhysicsProcessCollisionSystem AgentProcessCollisionSystem;
+        PhysicsProcessCollisionSystem AgentProcessCollisionSystem;
 
         public void Start()
         {
@@ -73,7 +63,7 @@ namespace Planet.Unity
             AgentDrawSystem = new Agent.AgentDrawSystem();
             AgentProcessCollisionSystem = new Physics.PhysicsProcessCollisionSystem();
 
-            GameState.AgentSpawnerSystem.SpawnPlayer(Material, CharacterSpriteId, 32, 48, new Vec2f(3.0f, 2.0f), 0, 0);
+            GameState.AgentSpawnerSystem.SpawnPlayer(CharacterSpriteId, 32, 48, new Vec2f(3.0f, 2.0f), 0, 0);
         }
 
         public void Update()
@@ -96,8 +86,13 @@ namespace Planet.Unity
                 int x = (int)worldPosition.x;
                 int y = (int)worldPosition.y;
                 
-                var chunkIndex = TileMap.Chunks.GetChunkIndex(x, y);
-                var tileIndex = TileMap.GetTileIndex(x, y);
+                var xChunkIndex = x >> 4;
+                var yChunkIndex = y * PlanetState.TileMap.MapSize.X;
+                var chunkIndex = xChunkIndex + (yChunkIndex >> 4);
+                
+                var xTileIndex = x & 0x0f;
+                var yTileIndex = y & 0x0f;
+                var tileIndex = xTileIndex + (yTileIndex << 4);
                 
                 Debug.Log($"{x} {y} ChunkIndex: {chunkIndex} TileIndex: {tileIndex}");
             }
@@ -108,7 +103,7 @@ namespace Planet.Unity
                 int x = (int)worldPosition.x;
                 int y = (int)worldPosition.y;
                 Debug.Log(x + " " + y);
-                TileMap.RemoveTile(x, y, Enums.Tile.MapLayerType.Front);
+                PlanetState.TileMap.RemoveTile(x, y, Enums.Tile.MapLayerType.Front);
                 //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
                 
             }
@@ -121,8 +116,8 @@ namespace Planet.Unity
 
             InputProcessSystems.Update();
             PhysicsMovableSystem.Update();
-            AgentProcessCollisionSystem.Update(TileMap);
-            TileMap.Layers.DrawLayer(TileMap, Enums.Tile.MapLayerType.Front, Instantiate(Material), transform, 10);
+            AgentProcessCollisionSystem.Update(ref PlanetState.TileMap);
+            PlanetState.TileMap.DrawLayer(MapLayerType.Front, Instantiate(Material), transform, 10);
             AgentDrawSystem.Draw(Instantiate(Material), transform, 12);
         }
 
@@ -139,12 +134,12 @@ namespace Planet.Unity
             GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
 
 
-            GameState.TileCreationApi.CreateTile(8);
+            GameState.TileCreationApi.CreateTile(TileID.Ore1);
             GameState.TileCreationApi.SetTileName("ore_1");
             GameState.TileCreationApi.SetTileTexture16(oreTileSheet, 0, 0);
             GameState.TileCreationApi.EndTile();
 
-            GameState.TileCreationApi.CreateTile(9);
+            GameState.TileCreationApi.CreateTile(TileID.Glass);
             GameState.TileCreationApi.SetTileName("glass");
             GameState.TileCreationApi.SetTileSpriteSheet16(tilesMoon, 11, 10);
             GameState.TileCreationApi.EndTile();
@@ -154,34 +149,25 @@ namespace Planet.Unity
             // Generating the map
             Vec2i mapSize = new Vec2i(16, 16);
 
-            TileMap = new TileMap(mapSize);
+            PlanetState = new PlanetState(mapSize, Contexts.sharedInstance.game, Contexts.sharedInstance.particle);
+            ref var tileMap = ref PlanetState.TileMap;
 
-            for(int j = TileMap.Borders.IntBottom; j < TileMap.Borders.IntTop; j++)
+            for(int j = 0; j < tileMap.MapSize.Y; j++)
             {
-                for(int i = TileMap.Borders.IntLeft; i < TileMap.Borders.IntRight; i++)
+                for(int i = 0; i < tileMap.MapSize.X; i++)
                 {
-                    var frontTile = new Tile.Tile(new Vec2f(i, j));
-                    var oreTile = new Tile.Tile(new Vec2f(i, j));
-
-                    frontTile.Type = 9;
-
-
-                    if (i % 10 == 0)
-                    {
-                        oreTile.Type = 8;
-                    }
+                    var frontTile = TileID.Glass;
 
                     if (j is > 1 and < 6 || (j > (8 + i)))
                     {
-                       frontTile.Type = -1; 
-                       oreTile.Type = -1;
+                       frontTile = TileID.Air;
                     }
 
-                    TileMap.SetTile(ref frontTile, MapLayerType.Front);
+                    PlanetState.TileMap.SetTile(i, j, frontTile, MapLayerType.Front);
                 }
             }
             
-            TileMap.UpdateTileMapPositions(MapLayerType.Front);
+            PlanetState.TileMap.UpdateTileMapPositions(MapLayerType.Front);
 
         }
     }

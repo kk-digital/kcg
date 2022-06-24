@@ -11,7 +11,7 @@ namespace Action
     {
         public struct Data
         {
-            public Tile.TileEnum tileType;
+            public TileID TileID;
         }
 
         Data data;
@@ -21,12 +21,12 @@ namespace Action
             data = (Data)ActionAttributeEntity.actionAttributeData.Data;
         }
 
-        public override void OnEnter()
+        public override void OnEnter(ref Planet.PlanetState planet)
         {
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             int x = (int)worldPosition.x;
             int y = (int)worldPosition.y;
-            ActionAttributeEntity.actionAttributePlanetState.Planet.PlaceTile(x, y, (int)data.tileType, MapLayerType.Front);
+            planet.TileMap.SetTile(x, y, data.TileID, MapLayerType.Front);
             
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
         }

@@ -15,7 +15,7 @@ namespace Action
         {
         }
 
-        public override void OnEnter()
+        public override void OnEnter(ref Planet.PlanetState planet)
         {
             ItemEntity = Contexts.sharedInstance.game.GetEntityWithItemIDID(ActionEntity.actionItem.ItemID);
 
@@ -42,7 +42,7 @@ namespace Action
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Running);
         }
 
-        public override void OnUpdate(float deltaTime)
+        public override void OnUpdate(float deltaTime, ref Planet.PlanetState planet)
         {
             // Update item pos.
 
@@ -91,10 +91,10 @@ namespace Action
             ItemEntity.ReplaceItemDrawPosition2D(ItemEntity.itemDrawPosition2D.Value + mov, ItemEntity.itemDrawPosition2D.Value);
         }
 
-        public override void OnExit()
+        public override void OnExit(ref Planet.PlanetState planet)
         {
             ItemEntity.RemoveItemDrawPosition2D();
-            base.OnExit();
+            base.OnExit(ref planet);
         }
     }
 

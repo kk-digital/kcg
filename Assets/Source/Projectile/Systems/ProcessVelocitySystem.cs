@@ -36,52 +36,50 @@ namespace Projectile
             foreach (var projectile in entities)
             {
                 // Get position from component
-                var position = projectile.projectilePhysicsState2D;
-                position.TempPosition = position.Position;
+                var position = projectile.projectilePosition2D;
+                var physicsState = projectile.projectilePhysicsState2D;
+                position.PreviousValue = position.Value;
 
                 // Accelerate the vehicle
-                position.Position += projectile.projectilePhysicsState2D.angularVelocity * Time.deltaTime;
+                position.Value += projectile.projectilePhysicsState2D.angularVelocity * Time.deltaTime;
 
                 // Update the position
-                projectile.ReplaceProjectilePhysicsState2D(position.Position, position.TempPosition, position.angularVelocity, position.angularMass, 
-                    position.angularAcceleration, position.centerOfGravity, position.centerOfRotation);
+                projectile.ReplaceProjectilePosition2D(position.Value, position.PreviousValue);
+                projectile.ReplaceProjectilePhysicsState2D(physicsState.angularVelocity, physicsState.angularMass,
+                    physicsState.angularAcceleration, physicsState.centerOfGravity, physicsState.centerOfRotation);
             }
         }
 
         // Physics Tick
-        public void Update(Vec3f difference, Contexts contexts)
+        public void Update(Vec3f difference)
         {
             // Get Projectile Entites
             IGroup<GameEntity> entities =
-            contexts.game.GetGroup(GameMatcher.ProjectilePhysicsState2D);
+            Contexts.sharedInstance.game.GetGroup(GameMatcher.ProjectilePhysicsState2D);
             foreach (var projectile in entities)
             {
                 // Get position from component
-                var position = projectile.projectilePhysicsState2D;
-                position.TempPosition = position.Position;
+                var position = projectile.projectilePosition2D;
+                var physicsState = projectile.projectilePhysicsState2D;
 
+                position.PreviousValue = position.Value;
                 if (!projectile.projectileCollider.isFired)
                 {
                     // Calculate distance
                     distance = difference.Magnitude;
-
                     // Calculate direction
                     direction = (Vec2f)difference / distance;
-
                     // Normalize the Direction
                     direction.Normalize();
-
                     // Set Angular velocity with new direciton
-                    position.angularVelocity = (direction * 3000.0f) * Time.deltaTime;
+                    physicsState.angularVelocity = (direction * 3000.0f) * Time.deltaTime;
                 }
-
                 projectile.projectileCollider.isFired = true;
-
                 // Process the velocity
-                position.Position += projectile.projectilePhysicsState2D.angularVelocity * Time.deltaTime;
-
+                position.Value += projectile.projectilePhysicsState2D.angularVelocity * Time.deltaTime;
                 // Update the position
-                projectile.ReplaceProjectilePhysicsState2D(position.Position, position.TempPosition, position.angularVelocity, position.angularMass, position.angularAcceleration, position.centerOfGravity, position.centerOfRotation);
+                projectile.ReplaceProjectilePosition2D(position.Value, position.PreviousValue);
+                projectile.ReplaceProjectilePhysicsState2D(physicsState.angularVelocity, physicsState.angularMass, physicsState.angularAcceleration, physicsState.centerOfGravity, physicsState.centerOfRotation);
             }
         }
     }

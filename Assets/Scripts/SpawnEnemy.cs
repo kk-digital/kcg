@@ -107,7 +107,7 @@ public class SpawnEnemy : MonoBehaviour
     private void SpawnEnemySlime(Vec2f pos)
     {
         // Add Enemy to Enemy list
-        planetState.AddEnemy(Material, SlimeMoveLeftBaseSpriteId, 32, 32, pos, 1);
+        planetState.AddEnemy(SlimeMoveLeftBaseSpriteId, 32, 32, pos, 1);
     }
 
     private void InitializeItems()

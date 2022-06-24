@@ -1,9 +1,7 @@
 using UnityEngine;
 using Enums;
 using Entitas;
-using Enums.Tile;
 using KMath;
-using Physics;
 
 public class ProjectileTest : MonoBehaviour
 {
@@ -31,21 +29,18 @@ public class ProjectileTest : MonoBehaviour
 
     // Projectile Properties
     private Vec2f startPos;
-    Vector3 worldPosition;
-    private Planet.TileMap tileMap;
-    private Planet.ChunkList chunkList;
-    Vec3f difference;
+    Planet.PlanetState planetState;
     private Vec2f projectilePosition;
+    private Vec2f worldPosition;
+    private Vec2f diff;
+    Cell start;
+    Cell end;
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
     void Start()
     {
         // Create Tile Map
-        tileMap = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().TileMap;
-
-        // Create Chunk List
-        chunkList = tileMap.Chunks;
-
+        planetState = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().PlanetState;
         // Initialize Projectile Draw System
         projectileDrawSystem = new Projectile.DrawSystem();
 
@@ -57,7 +52,7 @@ public class ProjectileTest : MonoBehaviour
 
         // Initialize Projectile Spawner System
         projectileSpawnerSystem = new Projectile.SpawnerSystem();
-        
+
         // Initialize Projectile Collision System
         projectileCollisionSystem = new Projectile.ProcessCollisionSystem();
 
@@ -68,30 +63,22 @@ public class ProjectileTest : MonoBehaviour
         init = true;
     }
 
-    // Spawn Projectiles
-    private void SpawnProjectile(Vec2f startPos)
-    {
-        // Loading Image
-        projectileSpawnerSystem.SpawnProjectile(Material, image, 16, 16, startPos,
-            ProjectileType.Grenade, ProjectileDrawType.Standard);
-    }
-
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
     private void Update()
     {
         // check if the sprite atlas textures needs to be updated
-        for(int type = 0; type < GameState.SpriteAtlasManager.Length; type++)
+        for (int type = 0; type < GameState.SpriteAtlasManager.Length; type++)
         {
             GameState.SpriteAtlasManager.UpdateAtlasTexture(type);
         }
 
         // check if the tile sprite atlas textures needs to be updated
-        for(int type = 0; type < GameState.TileSpriteAtlasManager.Length; type++)
+        for (int type = 0; type < GameState.TileSpriteAtlasManager.Length; type++)
         {
             GameState.TileSpriteAtlasManager.UpdateAtlasTexture(type);
         }
 
-        if(init)
+        if (init)
         {
             // Clear last frame
             foreach (var mr in GetComponentsInChildren<MeshRenderer>())
@@ -112,60 +99,39 @@ public class ProjectileTest : MonoBehaviour
             Contexts.sharedInstance.game.GetGroup(GameMatcher.ProjectilePhysicsState2D);
             foreach (var entity in Pentities)
             {
-                projectilePosition = entity.projectilePhysicsState2D.Position;
+                projectilePosition = entity.projectilePosition2D.Value;
             }
 
-            // Call Right Click Down Event
+            start = new Cell
+            {
+                x = (int)startPos.X,
+                y = (int)startPos.Y
+            };
+
+            end = new Cell
+            {
+                x = (int)projectilePosition.X,
+                y = (int)projectilePosition.Y
+            };
+
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                // Calculate cursor position
                 Vector3 mousePos = Input.mousePosition;
                 mousePos.z = Camera.main.nearClipPlane;
-                worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
+                worldPosition = new Vec2f(Camera.main.ScreenToWorldPoint(mousePos).x,
+                    Camera.main.ScreenToWorldPoint(mousePos).y);
 
-                // Calculate difference
-                var diff = new Vec2f(worldPosition.x, worldPosition.y) - startPos;
-                difference = new Vec3f(diff.X, diff.Y);
+                diff = worldPosition - startPos;
 
-                Cell start = new Cell
-                {
-                    x = (int)startPos.X,
-                    y = (int)startPos.Y
-                };
-
-                Cell end = new Cell
-                {
-                    x = (int)projectilePosition.X,
-                    y = (int)projectilePosition.Y
-                };
-
-                // Spawn Projectile
-                SpawnProjectile(startPos);
-
-                // Log Places Shooted Ray Go Through
-                foreach (var cell in start.LineTo(end))
-                {
-                    // Get Chunks because it's faster
-                    ref var chunk = ref chunkList[cell.x, cell.y];
-                    if (chunk.Type is not (MapChunkType.Empty or MapChunkType.Error))
-                    {
-                        IGroup<GameEntity> cEntities = Contexts.sharedInstance.game.GetGroup(GameMatcher.ProjectileCollider);
-                        foreach (var entity in cEntities)
-                        {
-                            entity.projectileCollider.isFirstSolid = true;
-                        }
-                    }
-                }
-
-                // Draw Debug Line to see shooted ray
-                Debug.DrawLine(new Vector3(start.x, start.y, 0.0f), new Vector3(end.x, end.y), Color.red);
+                // Loading Image
+                projectileSpawnerSystem.SpawnProjectile(image, 16, 16, startPos,
+                    start, end, ProjectileType.Grenade, ProjectileDrawType.Standard);
             }
 
-            // Process Physics
-            projectileVelocitySystem.Update(difference, Contexts.sharedInstance);
+            projectileVelocitySystem.Update(new Vec3f(diff.X, diff.Y));
 
             // Process Collision System
-            projectileCollisionSystem.Update(tileMap);
+            projectileCollisionSystem.Update(ref planetState.TileMap);
 
             // Draw Initialized Projectile
             projectileDrawSystem.Draw(Instantiate(Material), transform, 12);

@@ -1,3 +1,4 @@
+using Projectile;
 /// <summary>
 /// <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/static-constructors">Static Constructor</a>
 /// </summary>
@@ -19,8 +20,9 @@ public class GameState
 
     #region Tile
 
-    public static readonly Tile.TileAtlasManager TileSpriteAtlasManager;
-    public static readonly Tile.TileCreationApi TileCreationApi;
+    public static readonly PlanetTileMap.TileAtlasManager TileSpriteAtlasManager;
+    public static readonly PlanetTileMap.TileCreationApi TileCreationApi;
+    public static readonly PlanetTileMap.TilePropertyManager TilePropertyManager;
 
     #endregion
     
@@ -39,7 +41,7 @@ public class GameState
 
     #endregion
 
-    #region
+    #region Physics
     public static readonly Physics.PhysicsMovableSystem PhysicsMovableSystem;
     public static readonly Physics.PhysicsProcessCollisionSystem PhysicsProcessCollisionSystem;
     #endregion
@@ -53,6 +55,13 @@ public class GameState
     public static readonly Item.SpawnerSystem ItemSpawnSystem;
     public static readonly Item.DrawSystem ItemDrawSystem;
     public static readonly Item.PickUpSystem ItemPickUpSystem;
+    #endregion
+
+    #region Projectile
+    public static readonly Projectile.ProcessCollisionSystem ProjectileCollisionSystem;
+    public static readonly Projectile.MovementSystem ProjectileMovementSystem;
+    public static readonly Projectile.SpawnerSystem ProjectileSpawnerSystem;
+    public static readonly Projectile.DrawSystem ProjectileDrawSystem;
     #endregion
 
     #region FloatingText
@@ -79,9 +88,10 @@ public class GameState
         Contexts entitasContext = Contexts.sharedInstance;
 
         SpriteLoader = new Sprites.SpriteLoader();
-        TileSpriteAtlasManager = new Tile.TileAtlasManager(SpriteLoader);
+        TileSpriteAtlasManager = new PlanetTileMap.TileAtlasManager(SpriteLoader);
+        TilePropertyManager = new PlanetTileMap.TilePropertyManager();
         SpriteAtlasManager = new Sprites.SpriteAtlasManager(SpriteLoader);
-        TileCreationApi = new Tile.TileCreationApi();
+        TileCreationApi = new PlanetTileMap.TileCreationApi();
         FileLoadingManager = new Utility.FileLoadingManager();
         InputProcessSystem = new ECSInput.InputProcessSystem();
         AgentCreationApi = new Agent.AgentCreationApi();
@@ -111,5 +121,9 @@ public class GameState
         ParticleEmitterUpdateSystem = new Particle.ParticleEmitterUpdateSystem();
         ParticleUpdateSystem = new Particle.ParticleUpdateSystem();
         ParticleEmitterSpawnerSystem = new Particle.ParticleEmitterSpawnerSystem();
+        ProjectileCollisionSystem = new Projectile.ProcessCollisionSystem();
+        ProjectileMovementSystem = new Projectile.MovementSystem();
+        ProjectileSpawnerSystem = new Projectile.SpawnerSystem();
+        ProjectileDrawSystem = new Projectile.DrawSystem();
     }
 }
