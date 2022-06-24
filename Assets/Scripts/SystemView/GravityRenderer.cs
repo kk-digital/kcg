@@ -145,12 +145,12 @@ namespace Scripts {
                         arrows[x, y].vertices[1].y   = arrows[x, y].y + arrows[x, y].diry / camera.scale * scale;
                         arrows[x, y].vertices[1].z   = 1.0f;
 
-                        arrows[x, y].vertices[2].x   = arrows[x, y].vertices[1].x + actual_length * (float)Math.Cos(angle + Tools.pi - Tools.eigthpi);                                                                       
-                        arrows[x, y].vertices[2].y   = arrows[x, y].vertices[1].y + actual_length * (float)Math.Sin(angle + Tools.pi - Tools.eigthpi);
+                        arrows[x, y].vertices[2].x   = arrows[x, y].vertices[1].x + actual_length * (float)Math.Cos(angle + Tools.pi - Tools.sixthpi);                                                                       
+                        arrows[x, y].vertices[2].y   = arrows[x, y].vertices[1].y + actual_length * (float)Math.Sin(angle + Tools.pi - Tools.sixthpi);
                         arrows[x, y].vertices[2].z   = 1.0f;
 
-                        arrows[x, y].vertices[3].x   = arrows[x, y].vertices[1].x + actual_length * (float)Math.Cos(angle + Tools.pi + Tools.eigthpi);                                                                       
-                        arrows[x, y].vertices[3].y   = arrows[x, y].vertices[1].y + actual_length * (float)Math.Sin(angle + Tools.pi + Tools.eigthpi);
+                        arrows[x, y].vertices[3].x   = arrows[x, y].vertices[1].x + actual_length * (float)Math.Cos(angle + Tools.pi + Tools.sixthpi);                                                                       
+                        arrows[x, y].vertices[3].y   = arrows[x, y].vertices[1].y + actual_length * (float)Math.Sin(angle + Tools.pi + Tools.sixthpi);
                         arrows[x, y].vertices[3].z   = 1.0f;
 
                         arrows[x, y].vertices[4].x   = arrows[x, y].vertices[1].x;
@@ -163,7 +163,7 @@ namespace Scripts {
                         arrows[x, y].line.startColor =
                         arrows[x, y].line.endColor   = new Color(2.0f * (1.0f - 1.0f / (color_factor * magnitude)),
                                                                  2.0f * (       1.0f / (color_factor * magnitude)),
-                                                                 0.0f, 0.5f);
+                                                                 0.0f, 1.0f);
                     }
             }
 

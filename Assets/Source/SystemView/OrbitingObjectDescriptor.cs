@@ -248,15 +248,31 @@ namespace Source {
             }
 
             public float[] get_position_at(float true_anom, float radius) {
-                // →          cos(ν)
-                // r = r  * ( sin(ν) )
-                //      c       0
+                float posx;
+                float posy;
 
-                float posx = (float)Math.Cos(true_anom) * radius;
-                float posy = (float)Math.Sin(true_anom) * radius;
+                if(eccentricity < 1.0f) {
+
+                    // →          cos(ν)
+                    // r = r  * ( sin(ν) )
+                    //      c       0
+
+                    posx = (float)Math.Cos(true_anom) * radius;
+                    posy = (float)Math.Sin(true_anom) * radius;
+
+                } else {
+
+                    // →          cosh(ν)
+                    // r = r  * ( sinh(ν) )
+                    //      c        0
+
+                    posx = (float)Math.Cosh(true_anom) * radius;
+                    posy = (float)Math.Sinh(true_anom) * radius;
+
+                }
 
                 // Rotate the position along the orbit's rotational offset
-            
+
                 // Sine and cosine of the rotational offset
                 float rotsin = (float)Math.Sin(rotation);
                 float rotcos = (float)Math.Cos(rotation);
@@ -505,7 +521,7 @@ namespace Source {
                 Debug.Log("x: " + Self.PosX + " y: " + Self.PosX + " vx: " + Self.VelX + " vy: " + Self.VelY);
             }*/
 
-                public void change_frame_of_reference(SpaceObject new_frame_of_reference) {
+            public void change_frame_of_reference(SpaceObject new_frame_of_reference) {
                 float posx = self.posx - central_body.posx;
                 float posy = self.posy - central_body.posy;
 

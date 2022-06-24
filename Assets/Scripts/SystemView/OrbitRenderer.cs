@@ -31,7 +31,7 @@ namespace Scripts {
                     float true_anomaly;
 
                     if(descriptor.eccentricity >= 1.0f)
-                        true_anomaly = i * Tools.pi / segments - Tools.halfpi;
+                        true_anomaly = i * Tools.twopi / segments;
                     else
                         true_anomaly = descriptor.get_true_anomaly(
                             descriptor.get_eccentric_anomaly_at(
