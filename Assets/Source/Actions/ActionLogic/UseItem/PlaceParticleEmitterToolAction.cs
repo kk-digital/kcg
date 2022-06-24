@@ -27,13 +27,12 @@ namespace Action
             data = (Data)ActionAttributeEntity.actionAttributeData.Data;
         }
 
-        public override void OnEnter()
+        public override void OnEnter(ref Planet.PlanetState planet)
         {
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float x = worldPosition.x;
             float y = worldPosition.y;
-            ActionAttributeEntity.actionAttributePlanetState.Planet.AddParticleEmitter(
-                                            Material.Instantiate(data.Material), new Vec2f(x, y), new Vec2f(0.5f, 0.5f), 
+            planet.AddParticleEmitter(Material.Instantiate(data.Material), new Vec2f(x, y), new Vec2f(0.5f, 0.5f), 
                                                 GameResources.OreIcon);
 
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);

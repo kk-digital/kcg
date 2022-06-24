@@ -11,14 +11,12 @@ namespace Action
         {
         }
 
-        public override void OnEnter()
+        public override void OnEnter(ref Planet.PlanetState planet)
         {
-            var tileMap = ActionAttributeEntity.actionAttributePlanetState.Planet.TileMap;
-
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             int x = (int)worldPosition.x;
             int y = (int)worldPosition.y;
-            tileMap.RemoveTile(x, y, MapLayerType.Front);
+            planet.TileMap.RemoveTile(x, y, MapLayerType.Front);
 
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
         }

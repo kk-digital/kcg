@@ -13,10 +13,9 @@ namespace Action
         
         }
 
-        public override void OnEnter()
+        public override void OnEnter(ref Planet.PlanetState planet)
         {
             Vec2f   agentPosition = AgentEntity.physicsPosition2D.Value;
-            var tileMap = ActionAttributeEntity.actionAttributePlanetState.Planet.TileMap;
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
             int fromX = (int)agentPosition.X;
@@ -42,8 +41,8 @@ namespace Action
             foreach (var cell in start.LineTo(end))
             {
                 Debug.Log($"({cell.x},{cell.y})");
-                
-                tileMap.RemoveTile(cell.x, cell.y, MapLayerType.Front);
+
+                planet.TileMap.RemoveTile(cell.x, cell.y, MapLayerType.Front);
                 Debug.DrawLine(new Vector3(agentPosition.X, agentPosition.Y, 0.0f), new Vector3(worldPosition.x, worldPosition.y, 0.0f), Color.red);
             }
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);

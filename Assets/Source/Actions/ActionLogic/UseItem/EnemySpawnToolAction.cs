@@ -18,7 +18,6 @@ namespace Action
         public struct Data
         {
             public int CharacterSpriteId;
-            public Material Material;
         }
 
         Data data;
@@ -28,12 +27,12 @@ namespace Action
             data = (Data)ActionAttributeEntity.actionAttributeData.Data;
         }
 
-        public override void OnEnter()
+        public override void OnEnter(ref Planet.PlanetState planet)
         {
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float x = worldPosition.x;
             float y = worldPosition.y;
-            ActionAttributeEntity.actionAttributePlanetState.Planet.AddEnemy(Object.Instantiate(data.Material), data.CharacterSpriteId, 32, 32, new Vec2f(x, y), 2);
+            planet.AddEnemy(data.CharacterSpriteId, 32, 32, new Vec2f(x, y), 2);
 
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
         }

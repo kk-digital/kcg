@@ -12,7 +12,7 @@ namespace Action
         {
         }
 
-        public override void OnEnter()
+        public override void OnEnter(ref Planet.PlanetState planet)
         {
             var gameContext = Contexts.sharedInstance.game;
 
@@ -46,7 +46,7 @@ namespace Action
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
         }
 
-        public override void OnUpdate(float deltaTime)
+        public override void OnUpdate(float deltaTime, ref Planet.PlanetState planet)
         {
             ActionEntity.ReplaceActionTime(ActionEntity.actionTime.StartTime + deltaTime);
             if (ActionEntity.actionTime.StartTime < ActionAttributeEntity.actionAttributeTime.Duration)
@@ -57,11 +57,11 @@ namespace Action
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
         }
 
-        public override void OnExit()
+        public override void OnExit(ref Planet.PlanetState planet)
         {
             if(ActionEntity.actionExecution.State == Enums.ActionState.Success)
                 ItemEntity.isItemUnpickable = false;
-            base.OnExit();
+            base.OnExit(ref planet);
         }
     }
     // Factory Method

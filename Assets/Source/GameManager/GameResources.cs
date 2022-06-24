@@ -4,7 +4,6 @@ using KMath;
 
 public class GameResources
 {
-
     // sprite sheets ids
     public static int MoonSpriteSheet;
     public static int OreSpriteSheet;
@@ -151,6 +150,7 @@ public class GameResources
         Item.CreationApi.Instance.SetTexture(GunIcon);
         Item.CreationApi.Instance.SetInventoryTexture(GunIcon);
         Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
+        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.FireWeaponAction);
         Item.CreationApi.Instance.EndItem();
 
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.Ore, "Ore");
@@ -202,6 +202,4 @@ public class GameResources
         Item.CreationApi.Instance.SetAction((int)Enums.ActionType.PlaceParticleEmitterAction);
         Item.CreationApi.Instance.EndItem();
     }
-
-
 }
