@@ -11,22 +11,22 @@ namespace Inventory
 
         public void OpenInventory(int inventoryID)
         {
-            var inventory = Contexts.sharedInstance.game.GetEntityWithInventoryID(inventoryID);
+            var inventory = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(inventoryID);
             inventory.isInventoryDrawable = true;
         }
 
         public void CloseInventory(int inventoryID)
         {
-            var inventory = Contexts.sharedInstance.game.GetEntityWithInventoryID(inventoryID);
+            var inventory = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(inventoryID);
 
             inventory.isInventoryDrawable = false;
         }
 
         public void AddItem(GameEntity entity, int inventoryID)
         {
-            var inventory = Contexts.sharedInstance.game.GetEntityWithInventoryID(inventoryID);
+            var inventory = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(inventoryID);
 
-            var EntityAttribute = Contexts.sharedInstance.game.GetEntityWithItemAttributes(entity.itemID.ItemType);
+            var EntityAttribute = Contexts.sharedInstance.itemProperties.GetEntityWithItemAttributes(entity.itemID.ItemType);
 
             // If stackable check if there are any available stack in the inventory.
             if (EntityAttribute.hasItemAttributeStackable)
@@ -82,14 +82,14 @@ namespace Inventory
 
         public void RemoveItem(GameEntity entity, int slot)
         {
-            var inventoryEntity = Contexts.sharedInstance.game.GetEntityWithInventoryID(entity.itemAttachedInventory.InventoryID);
+            var inventoryEntity = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(entity.itemAttachedInventory.InventoryID);
             inventoryEntity.inventorySlots.Values.Set(slot, false);
             entity.RemoveItemAttachedInventory();
         }
         
         public void ChangeSlot(int newSelectedSlot, int inventoryID)
         {
-            var inventory = Contexts.sharedInstance.game.GetEntityWithInventoryID(inventoryID);
+            var inventory = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(inventoryID);
             var SlotComponent = inventory.inventorySlots;
 
             inventory.ReplaceInventorySlots(SlotComponent.Values, newSelectedSlot);
@@ -97,7 +97,7 @@ namespace Inventory
 
         public bool IsFull(int inventoryID)
         {
-            GameEntity inventoryEntity = Contexts.sharedInstance.game.GetEntityWithInventoryID(inventoryID);
+            InventoryEntity inventoryEntity = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(inventoryID);
             BitArray Slots = inventoryEntity.inventorySlots.Values;
             if (IsFull(Slots)) // Test if all bits are set to one.
                 return true;

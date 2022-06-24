@@ -18,7 +18,7 @@ namespace Action
 
         public PlaceTileToolAction(int actionID, int agentID) : base(actionID, agentID)
         {
-            data = (Data)ActionAttributeEntity.actionAttributeData.Data;
+            data = (Data)ActionPropertyEntity.actionPropertyData.Data;
         }
 
         public override void OnEnter(ref Planet.PlanetState planet)

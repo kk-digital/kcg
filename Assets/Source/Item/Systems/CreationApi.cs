@@ -21,11 +21,11 @@ namespace Item
 
         private Contexts EntitasContext = Contexts.sharedInstance;
 
-        private GameEntity ItemType = null;
+        private ItemPropertiesEntity ItemType = null;
 
         public void CreateItem(Enums.ItemType itemType, string name)
         {
-            ItemType = EntitasContext.game.CreateEntity();
+            ItemType = EntitasContext.itemProperties.CreateEntity();
             ItemType.AddItemAttributes(itemType, name);
         }
 

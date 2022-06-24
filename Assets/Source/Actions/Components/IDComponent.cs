@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Action
 {
+    [Action]
     public class IDComponent : IComponent
     {
         [PrimaryEntityIndex]

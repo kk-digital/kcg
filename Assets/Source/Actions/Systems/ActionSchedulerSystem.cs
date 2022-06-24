@@ -29,7 +29,7 @@ namespace Action
             for (int i = 0; i < actorEntity.agentActionScheduler.ActiveActionIDs.Count; i++)
             {
                 int actionID = actorEntity.agentActionScheduler.ActiveActionIDs[i];
-                GameEntity actionEntity = Contexts.sharedInstance.game.GetEntityWithActionIDID(actionID);
+                ActionEntity actionEntity = Contexts.sharedInstance.action.GetEntityWithActionIDID(actionID);
 
                 if (actionEntity.hasActionExecution)
                 {

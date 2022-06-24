@@ -7,16 +7,16 @@ namespace Item
     public class DrawSystem
     {
         
-        public void Draw(GameContext gameContext, Material material, Transform transform, int drawOrder)
+        public void Draw(Contexts contexts, Material material, Transform transform, int drawOrder)
         {
-            var ItemAttributesWithSprite = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.ItemAttributeSprite));
+            var ItemAttributesWithSprite = contexts.itemProperties.GetGroup(ItemPropertiesMatcher.AllOf(ItemPropertiesMatcher.ItemAttributeSprite));
             foreach (var ItemTypeEntity in ItemAttributesWithSprite)
             {
                 int SpriteID = ItemTypeEntity.itemAttributeSprite.ID;
                 Sprites.Sprite sprite = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle);
                 
                 // Draw all items with same sprite.
-                var ItemsOfType = gameContext.GetEntitiesWithItemIDItemType(ItemTypeEntity.itemAttributes.ItemType);
+                var ItemsOfType = contexts.game.GetEntitiesWithItemIDItemType(ItemTypeEntity.itemAttributes.ItemType);
                 foreach (var entity in ItemsOfType)
                 {
                     // Test if Item is Drawable.

@@ -6,72 +6,72 @@ using UnityEngine;
 
 namespace Action
 {
-    public class ActionAttributeManager
+    public class ActionPropertyManager
     {
-        public GameEntity ActionAttributeEntity = null;
+        public ActionPropertiesEntity ActionPropertyEntity = null;
 
-        public void CreateActionAttributeType(Enums.ActionType actionType, string name)
+        public void CreateActionPropertyType(Enums.ActionType actionType, string name)
         {
-            ActionAttributeEntity = Contexts.sharedInstance.game.CreateEntity();
-            ActionAttributeEntity.AddActionAttribute((int)actionType);
-            ActionAttributeEntity.AddActionAttributeName(name);
+            ActionPropertyEntity = Contexts.sharedInstance.actionProperties.CreateEntity();
+            ActionPropertyEntity.AddActionProperty((int)actionType);
+            ActionPropertyEntity.AddActionPropertyName(name);
         }
 
-        public void CreateActionAttributeType(Enums.ActionType actionType)
+        public void CreateActionPropertyType(Enums.ActionType actionType)
         {
-            ActionAttributeEntity = Contexts.sharedInstance.game.CreateEntity();
-            ActionAttributeEntity.AddActionAttribute((int)actionType);
-            ActionAttributeEntity.AddActionAttributeName(actionType.ToString());
+            ActionPropertyEntity = Contexts.sharedInstance.actionProperties.CreateEntity();
+            ActionPropertyEntity.AddActionProperty((int)actionType);
+            ActionPropertyEntity.AddActionPropertyName(actionType.ToString());
         }
 
         public int GetTypeID(string name)
 {
-            GameEntity entity = Contexts.sharedInstance.game.GetEntityWithActionAttributeName(name);
-            return entity.actionAttribute.TypeID;
+            ActionPropertiesEntity entity = Contexts.sharedInstance.actionProperties.GetEntityWithActionPropertyName(name);
+            return entity.actionProperty.TypeID;
         }
 
         public void SetLogicFactory(Action.ActionCreator actionFactory)
         {
-            ActionAttributeEntity.AddActionAttributeFactory(actionFactory);
+            ActionPropertyEntity.AddActionPropertyFactory(actionFactory);
         }
 
         public void SetTime(float duration)
         {
-            ActionAttributeEntity.AddActionAttributeTime(duration);
+            ActionPropertyEntity.AddActionPropertyTime(duration);
         }
 
         public void SetCoolDown(float coolDown)
         {
-            ActionAttributeEntity.AddActionAttributeCoolDown(coolDown);
+            ActionPropertyEntity.AddActionPropertyCoolDown(coolDown);
         }
 
         public void SetData(object data)
         {
-            ActionAttributeEntity.AddActionAttributeData(data);
+            ActionPropertyEntity.AddActionPropertyData(data);
         }
 
         public void Animation()
         { 
-            ActionAttributeEntity.isActionAttributeAnimation = true;
+            ActionPropertyEntity.isActionPropertyAnimation = true;
         }
 
         /// <summary>
         /// Todo: Data should be in component instead of attributes. This should be an empty component.
-        /// ActionAttribute that are or causes movement. Exemple: take cover.
+        /// ActionProperty that are or causes movement. Exemple: take cover.
         /// </summary>
         public void SetMoveTo(Vector2Int goalPosition)
         {
-            ActionAttributeEntity.AddActionAttributeMoveTo(goalPosition);
+            ActionPropertyEntity.AddActionPropertyMoveTo(goalPosition);
         }
 
         public void SetGoap(AI.GoapState preCondition, AI.GoapState effects, int cost)
         {
-            ActionAttributeEntity.AddActionAttributeGoap(preCondition, effects, cost);
+            ActionPropertyEntity.AddActionPropertyGoap(preCondition, effects, cost);
         }
 
-        public void EndActionAttributeType()
+        public void EndActionPropertyType()
         {
-            ActionAttributeEntity = null;
+            ActionPropertyEntity = null;
         }
     }
 }

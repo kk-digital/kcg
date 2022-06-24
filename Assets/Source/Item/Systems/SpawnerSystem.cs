@@ -10,12 +10,12 @@ namespace Item
     {
         private static int ItemID;
 
-        public GameEntity SpawnItem(GameContext gameContext, ItemType itemType, Vec2f position)
+        public GameEntity SpawnItem(Contexts entitasContext, ItemType itemType, Vec2f position)
         {
-            var entityAttribute = gameContext.GetEntityWithItemAttributes(itemType);
+            ItemPropertiesEntity entityAttribute = entitasContext.itemProperties.GetEntityWithItemAttributes(itemType);
             Vec2f size = entityAttribute.itemAttributeSize.Size;
 
-            var entity = gameContext.CreateEntity();
+            var entity = entitasContext.game.CreateEntity();
             entity.AddItemID(ItemID, itemType);
             entity.AddPhysicsPosition2D(position, Vec2f.Zero);
             entity.AddPhysicsBox2DCollider(size, Vec2f.Zero);
