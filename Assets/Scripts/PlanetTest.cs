@@ -101,7 +101,7 @@ namespace Planet.Unity
             GenerateMap();
             SpawnStuff();
 
-            GameState.ActionInitializeSystem.Initialize(Planet, Material);
+            GameState.ActionInitializeSystem.Initialize(Material);
 
             var inventoryAttacher = Inventory.InventoryAttacher.Instance;
 

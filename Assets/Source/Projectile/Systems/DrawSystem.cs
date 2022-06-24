@@ -15,10 +15,10 @@ namespace Projectile
             var VehiclesWithSprite = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.ProjectileSprite2D));
             foreach (var entity in VehiclesWithSprite)
             {
-                Sprites.Sprite sprite = GameState.SpriteAtlasManager.GetSprite(entity.projectileSprite2D.SpriteId, Enums.AtlasType.Agent);
+                Sprites.Sprite sprite = GameState.SpriteAtlasManager.GetSprite(entity.projectileSprite2D.SpriteId, Enums.AtlasType.Particle);
 
-                var x = entity.projectilePhysicsState2D.Position.X;
-                var y = entity.projectilePhysicsState2D.Position.Y;
+                var x = entity.projectilePosition2D.Value.X;
+                var y = entity.projectilePosition2D.Value.Y; 
                 var width = entity.projectileSprite2D.Size.X;
                 var height = entity.projectileSprite2D.Size.Y;
 

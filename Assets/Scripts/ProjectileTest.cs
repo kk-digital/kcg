@@ -99,7 +99,7 @@ public class ProjectileTest : MonoBehaviour
             Contexts.sharedInstance.game.GetGroup(GameMatcher.ProjectilePhysicsState2D);
             foreach (var entity in Pentities)
             {
-                projectilePosition = entity.projectilePhysicsState2D.Position;
+                projectilePosition = entity.projectilePosition2D.Value;
             }
 
             start = new Cell
@@ -128,7 +128,7 @@ public class ProjectileTest : MonoBehaviour
                     start, end, ProjectileType.Grenade, ProjectileDrawType.Standard);
             }
 
-            projectileVelocitySystem.Update(new Vec3f(diff.X, diff.Y), Contexts.sharedInstance);
+            projectileVelocitySystem.Update(new Vec3f(diff.X, diff.Y));
 
             // Process Collision System
             projectileCollisionSystem.Update(ref planetState.TileMap);

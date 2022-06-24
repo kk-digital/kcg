@@ -1,3 +1,4 @@
+using Projectile;
 /// <summary>
 /// <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/static-constructors">Static Constructor</a>
 /// </summary>
@@ -58,8 +59,9 @@ public class GameState
 
     #region Projectile
     public static readonly Projectile.ProcessCollisionSystem ProjectileCollisionSystem;
-    public static readonly Projectile.ProcessVelocitySystem ProjectileVelocitySystem;
+    public static readonly Projectile.MovementSystem ProjectileMovementSystem;
     public static readonly Projectile.SpawnerSystem ProjectileSpawnerSystem;
+    public static readonly Projectile.DrawSystem ProjectileDrawSystem;
     #endregion
 
     #region FloatingText
@@ -112,7 +114,8 @@ public class GameState
         ParticleUpdateSystem = new Particle.ParticleUpdateSystem();
         ParticleEmitterSpawnerSystem = new Particle.ParticleEmitterSpawnerSystem();
         ProjectileCollisionSystem = new Projectile.ProcessCollisionSystem();
-        ProjectileVelocitySystem = new Projectile.ProcessVelocitySystem();
+        ProjectileMovementSystem = new Projectile.MovementSystem();
         ProjectileSpawnerSystem = new Projectile.SpawnerSystem();
+        ProjectileDrawSystem = new Projectile.DrawSystem();
     }
 }

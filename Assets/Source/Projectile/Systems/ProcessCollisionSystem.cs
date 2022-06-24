@@ -17,13 +17,14 @@ namespace Projectile
             foreach (var entity in entities)
             {
                 // Set Vehicle Physics to variable
-                var pos = entity.projectilePhysicsState2D;
+                var pos = entity.projectilePosition2D;
+                var physicsState = entity.projectilePhysicsState2D;
 
                 // Create Box Borders
-                var entityBoxBorders = new AABB2D(new Vec2f(pos.TempPosition.X, pos.Position.Y), entity.projectileSprite2D.Size);
+                var entityBoxBorders = new AABB2D(new Vec2f(pos.PreviousValue.X, pos.Value.Y), entity.projectileSprite2D.Size);
 
                 // If is colliding bottom-top stop y movement
-                if (entityBoxBorders.IsCollidingBottom(tileMap, pos.angularVelocity))
+                if (entityBoxBorders.IsCollidingBottom(tileMap, physicsState.angularVelocity))
                 {
                     if (entity.projectileCollider.isFirstSolid)
                     {
@@ -31,7 +32,7 @@ namespace Projectile
                         return;
                     }
                 }
-                else if (entityBoxBorders.IsCollidingTop(tileMap, pos.angularVelocity))
+                else if (entityBoxBorders.IsCollidingTop(tileMap, physicsState.angularVelocity))
                 {
                     if(entity.projectileCollider.isFirstSolid)
                     {
@@ -40,11 +41,10 @@ namespace Projectile
                     }
                 }
 
-                pos = entity.projectilePhysicsState2D;
-                entityBoxBorders = new AABB2D(new Vec2f(pos.Position.X, pos.TempPosition.Y), entity.projectileSprite2D.Size);
+                entityBoxBorders = new AABB2D(new Vec2f(pos.Value.X, pos.PreviousValue.Y), entity.projectileSprite2D.Size);
 
                 // If is colliding left-right stop x movement
-                if (entityBoxBorders.IsCollidingLeft(tileMap, pos.angularVelocity))
+                if (entityBoxBorders.IsCollidingLeft(tileMap, physicsState.angularVelocity))
                 {
                     if (entity.projectileCollider.isFirstSolid)
                     {
@@ -52,7 +52,7 @@ namespace Projectile
                         return;
                     }
                 }
-                else if (entityBoxBorders.IsCollidingRight(tileMap, pos.angularVelocity))
+                else if (entityBoxBorders.IsCollidingRight(tileMap, physicsState.angularVelocity))
                 {
                     if (entity.projectileCollider.isFirstSolid)
                     {

@@ -65,14 +65,16 @@ public static class GameComponentsLookup {
     public const int PhysicsSphere2DCollider = 54;
     public const int ProjectileCollider = 55;
     public const int ProjectileID = 56;
-    public const int ProjectilePhysicsState2D = 57;
-    public const int ProjectileSprite2D = 58;
-    public const int ProjectileType = 59;
-    public const int VehicleID = 60;
-    public const int VehiclePhysicsState2D = 61;
-    public const int VehicleSprite2D = 62;
+    public const int ProjectileMovable = 57;
+    public const int ProjectilePhysicsState2D = 58;
+    public const int ProjectilePosition2D = 59;
+    public const int ProjectileSprite2D = 60;
+    public const int ProjectileType = 61;
+    public const int VehicleID = 62;
+    public const int VehiclePhysicsState2D = 63;
+    public const int VehicleSprite2D = 64;
 
-    public const int TotalComponents = 63;
+    public const int TotalComponents = 65;
 
     public static readonly string[] componentNames = {
         "ActionAttributeAnimation",
@@ -132,7 +134,9 @@ public static class GameComponentsLookup {
         "PhysicsSphere2DCollider",
         "ProjectileCollider",
         "ProjectileID",
+        "ProjectileMovable",
         "ProjectilePhysicsState2D",
+        "ProjectilePosition2D",
         "ProjectileSprite2D",
         "ProjectileType",
         "VehicleID",
@@ -198,7 +202,9 @@ public static class GameComponentsLookup {
         typeof(Physics.Sphere2DColliderComponent),
         typeof(Projectile.ColliderComponent),
         typeof(Projectile.IDComponent),
+        typeof(Projectile.MovableComponent),
         typeof(Projectile.PhysicsState2DComponent),
+        typeof(Projectile.Position2DComponent),
         typeof(Projectile.Sprite2DComponent),
         typeof(Projectile.TypeComponent),
         typeof(Vehicle.IDComponent),
