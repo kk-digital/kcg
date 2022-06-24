@@ -22,7 +22,7 @@ namespace KGUI
         // Player Health
         float playerHealth;
 
-        public void Initialize()
+        public void Initialize(Material material, Transform transform)
         {
             // Set Width and Height
             int IconWidth = 19;
@@ -172,9 +172,9 @@ namespace KGUI
                 Utility.Render.DrawSprite(BarFillx, BarFilly, 3.5941875f, 0.22574003f, barFill, material, transform, 5001);
 
                 // Health Bar Div 1 Draw
-                Utility.Render.DrawSprite(BarDiv1x, BarDiv1y, 0.0725592077f, 1.88125002f, barDiv1, material, transform, 5002);
+                Utility.Render.DrawSprite(BarDiv1x, BarDiv1y, 1, 1, 270, barDiv1, material, transform, 5002);
 
-                Utility.Render.DrawSprite(BarDiv1_2x, BarDiv1_2y, 0.0725592077f, 1.88125002f, barDiv1, material, transform, 5002);
+                Utility.Render.DrawSprite(BarDiv1_2x, BarDiv1_2y, 1, 1, 270, barDiv1, material, transform, 5002);
 
             }
         }
