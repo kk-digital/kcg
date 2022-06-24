@@ -32,7 +32,7 @@ public class GameState
     #endregion
 
     #region Agent
-
+    public static readonly Agent.AgentCreationApi AgentCreationApi;
     public static readonly Agent.AgentSpawnerSystem AgentSpawnerSystem;
     public static readonly Agent.AgentDrawSystem AgentDrawSystem;
     public static readonly Agent.EnemyAiSystem EnemyAiSystem;
@@ -79,7 +79,8 @@ public class GameState
         TileCreationApi = new Tile.TileCreationApi();
         FileLoadingManager = new Utility.FileLoadingManager();
         InputProcessSystem = new ECSInput.InputProcessSystem();
-        AgentSpawnerSystem = new Agent.AgentSpawnerSystem();
+        AgentCreationApi = new Agent.AgentCreationApi();
+        AgentSpawnerSystem = new Agent.AgentSpawnerSystem(AgentCreationApi);
         PhysicsMovableSystem = new Physics.PhysicsMovableSystem();
         AgentDrawSystem = new Agent.AgentDrawSystem();
         InventoryDrawSystem = new Inventory.DrawSystem();

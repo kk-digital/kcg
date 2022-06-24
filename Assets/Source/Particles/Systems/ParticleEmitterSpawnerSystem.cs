@@ -10,6 +10,7 @@ namespace Particle
         public ParticleEntity Spawn(ParticleContext context, Material material, Vec2f position, Vec2f size,
                                      int spriteId, int particleEmitterId)
         {
+            // use an api to create different emitter entities
             ParticleEntity entity = CreateParticleEmitterEntity(context, null, new Vector2(position.X, position.Y),
              1.0f, new Vector2(0, -20.0f), 1.7f, 0.0f, new int[]{spriteId}, size, 
                 new Vector2(1.0f, 10.0f),

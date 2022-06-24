@@ -39,6 +39,7 @@ namespace Planet
         }
 
 
+        // Note(Mahdi): Deprecated will be removed soon
         public AgentEntity AddPlayer(UnityEngine.Material material, int spriteId,
                                 int width, int height, Vec2f position, int startingAnimation)
         {
@@ -50,6 +51,18 @@ namespace Planet
             return newEntity;
         }
 
+        public AgentEntity AddPlayer(Vec2f position)
+        {
+            ref AgentEntity newEntity = ref AgentList.Add();
+            GameEntity entity = GameState.AgentSpawnerSystem.Spawn(position,
+                    newEntity.AgentId,
+                    Agent.AgentType.Player);
+            newEntity.Entity = entity;
+
+            return newEntity;
+        }
+
+        // Note(Mahdi): Deprecated will be removed soon
         public AgentEntity AddAgent(UnityEngine.Material material, int spriteId, int width,
                      int height, Vec2f position, int startingAnimation)
         {
@@ -62,6 +75,18 @@ namespace Planet
             return newEntity;
         }
 
+        public AgentEntity AddAgent(Vec2f position)
+        {
+            ref AgentEntity newEntity = ref AgentList.Add();
+            GameEntity entity = GameState.AgentSpawnerSystem.Spawn(position,
+                    newEntity.AgentId,
+                    Agent.AgentType.Agent);
+            newEntity.Entity = entity;
+
+            return newEntity;
+        }
+
+        // Note(Mahdi): Deprecated will be removed soon
         public AgentEntity AddEnemy(UnityEngine.Material material, int spriteId,
                         int width, int height, Vec2f position, int startingAnimation)
         {
@@ -71,6 +96,17 @@ namespace Planet
 
             newEntity.Entity = entity;
 
+
+            return newEntity;
+        }
+
+        public AgentEntity AddEnemy(Vec2f position)
+        {
+            ref AgentEntity newEntity = ref AgentList.Add();
+            GameEntity entity = GameState.AgentSpawnerSystem.Spawn(position,
+                    newEntity.AgentId,
+                    Agent.AgentType.Enemy);
+            newEntity.Entity = entity;
 
             return newEntity;
         }

@@ -82,6 +82,7 @@ public class GameResources
             CreateTiles();
             CreateAnimations();
             CreateItems();
+            CreateAgents();
         }
     }
 
@@ -121,21 +122,21 @@ public class GameResources
 
     private static void CreateAnimations()
     {
-        GameState.AnimationManager.CreateAnimation(0);
+        GameState.AnimationManager.CreateAnimation((int)Animation.AnimationType.CharacterMoveLeft);
         GameState.AnimationManager.SetName("character-move-left");
         GameState.AnimationManager.SetTimePerFrame(0.15f);
         GameState.AnimationManager.SetBaseSpriteID(GameResources.CharacterSpriteId);
         GameState.AnimationManager.SetFrameCount(1);
         GameState.AnimationManager.EndAnimation();
 
-        GameState.AnimationManager.CreateAnimation(1);
+        GameState.AnimationManager.CreateAnimation((int)Animation.AnimationType.CharacterMoveLeft);
         GameState.AnimationManager.SetName("character-move-right");
         GameState.AnimationManager.SetTimePerFrame(0.15f);
         GameState.AnimationManager.SetBaseSpriteID(GameResources.CharacterSpriteId);
         GameState.AnimationManager.SetFrameCount(1);
         GameState.AnimationManager.EndAnimation();
 
-        GameState.AnimationManager.CreateAnimation(2);
+        GameState.AnimationManager.CreateAnimation((int)Animation.AnimationType.SlimeMoveLeft);
         GameState.AnimationManager.SetName("slime-move-left");
         GameState.AnimationManager.SetTimePerFrame(0.35f);
         GameState.AnimationManager.SetBaseSpriteID(GameResources.SlimeMoveLeftBaseSpriteId);
@@ -200,6 +201,34 @@ public class GameResources
         Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
         Item.CreationApi.Instance.SetAction((int)Enums.ActionType.PlaceParticleEmitterAction);
         Item.CreationApi.Instance.EndItem();
+    }
+
+    private static void CreateAgents()
+    {
+        GameState.AgentCreationApi.Create((int)Agent.AgentType.Player);
+        GameState.AgentCreationApi.SetName("player");
+        GameState.AgentCreationApi.SetSpriteSize(new Vec2f(1.0f, 1.5f));
+        GameState.AgentCreationApi.SetCollisionBox(new Vec2f(0.25f, 0.0f), new Vec2f(0.5f, 1.5f));
+        GameState.AgentCreationApi.SetStartingAnimation((int)Animation.AnimationType.CharacterMoveLeft);
+        GameState.AgentCreationApi.End();
+
+        GameState.AgentCreationApi.Create((int)Agent.AgentType.Agent);
+        GameState.AgentCreationApi.SetName("agent");
+        GameState.AgentCreationApi.SetSpriteSize(new Vec2f(1.0f, 1.5f));
+        GameState.AgentCreationApi.SetCollisionBox(new Vec2f(0.25f, 0.0f), new Vec2f(0.5f, 1.5f));
+        GameState.AgentCreationApi.SetStartingAnimation((int)Animation.AnimationType.CharacterMoveLeft);
+        GameState.AgentCreationApi.End();
+
+        GameState.AgentCreationApi.Create((int)Agent.AgentType.Enemy);
+        GameState.AgentCreationApi.SetName("enemy");
+        GameState.AgentCreationApi.SetSpriteSize(new Vec2f(1.0f, 1.0f));
+        GameState.AgentCreationApi.SetCollisionBox(new Vec2f(0.125f, 0.0f), new Vec2f(0.75f, 0.5f));
+        GameState.AgentCreationApi.SetStartingAnimation((int)Animation.AnimationType.SlimeMoveLeft);
+        GameState.AgentCreationApi.SetEnemyBehaviour(0);
+        GameState.AgentCreationApi.SetDetectionRadius(4.0f);
+        GameState.AgentCreationApi.SetHealth(100.0f);
+        GameState.AgentCreationApi.SetAttackCooldown(0.8f);
+        GameState.AgentCreationApi.End();
     }
 
 
