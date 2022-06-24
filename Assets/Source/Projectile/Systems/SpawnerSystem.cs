@@ -4,6 +4,8 @@ using Entitas;
 using Enums;
 using Enums.Tile;
 using KMath;
+using Unity.VisualScripting;
+using Sprites;
 
 namespace Projectile
 {
@@ -12,7 +14,44 @@ namespace Projectile
         // Projectile ID
         private static int projectileID;
 
-        public Entity SpawnProjectile(int spriteID, int witdh, int height, Vec2f startPos,
+
+        public GameEntity SpawnBullet(int spriteID, int width, int height, Vec2f startPos,
+            Vec2f velocity, Vec2f acceleration, ProjectileType projectileType, 
+            ProjectileDrawType projectileDrawType)
+        {
+            GameEntity entity = Contexts.sharedInstance.game.CreateEntity();
+            // Increase ID per object statically
+            projectileID++;
+
+            // Set Png Size
+            var pngSize = new Vector2Int(width, height);
+            var spriteSize = new Vec2f(pngSize.x / 32f, pngSize.y / 32f);
+            
+            // Add ID Component
+            entity.AddProjectileID(projectileID);
+
+            // Add Sprite Component
+            entity.AddProjectileSprite2D(spriteID, spriteSize);
+
+            // Add Position Component
+            entity.AddProjectilePosition2D(startPos, startPos);
+            // Add Moviment Component
+            entity.AddProjectileMovable(velocity, acceleration);
+
+            // Add Physics Box Collider Component
+            entity.AddPhysicsBox2DCollider(spriteSize, Vec2f.Zero);
+
+            // Add Physics Collider Component
+            entity.AddProjectileCollider(true, true);
+            entity.AddProjectilePhysicsState2D(Vec2f.Zero, 1.0f, 1.0f, 0.5f, Vec2f.Zero);
+
+            // Add Projectile Type
+            entity.AddProjectileType(projectileType, projectileDrawType);
+
+            return entity;
+        }
+
+        public Entity SpawnProjectile(int spriteID, int width, int height, Vec2f startPos,
             Cell start, Cell end, ProjectileType projectileType, ProjectileDrawType projectileDrawType)
         {
             // Create Entity
@@ -22,10 +61,10 @@ namespace Projectile
             projectileID++;
 
             // Set Png Size
-            var pngSize = new Vector2Int(witdh, height);
+            var pngSize = new Vector2Int(width, height);
 
             // Set Sprite ID from Sprite Atlas
-            var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
+            var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Particle);
 
             // Set Sprite Size
             var spriteSize = new Vec2f(pngSize.x / 32f, pngSize.y / 32f);
@@ -37,7 +76,8 @@ namespace Projectile
             entity.AddProjectileSprite2D(spriteId, spriteSize);
 
             // Add Physics State 2D Component
-            entity.AddProjectilePhysicsState2D(startPos, startPos, Vec2f.Zero, 1.0f, 1.0f, 0.5f,
+            entity.AddProjectilePosition2D(startPos, startPos);
+            entity.AddProjectilePhysicsState2D(Vec2f.Zero, 1.0f, 1.0f, 0.5f,
                 Vec2f.Zero);
 
             // Add Physics Box Collider Component

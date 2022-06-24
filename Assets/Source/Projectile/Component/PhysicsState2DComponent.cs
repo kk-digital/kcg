@@ -8,9 +8,6 @@ namespace Projectile
 {
     public class PhysicsState2DComponent : IComponent
     {
-        public Vec2f Position = Vec2f.Zero;
-        public Vec2f TempPosition = Vec2f.Zero;
-
         [Range(-1.0f, 1.0f)]
         public Vec2f angularVelocity = Vec2f.Zero;
 

@@ -14,7 +14,7 @@ namespace Action
             return actionID;
         }
 
-        private static void CreatePlaceTileAction(TileID tileID, Planet.PlanetState planetState)
+        private static void CreatePlaceTileAction(TileID tileID)
         {
             // Todo: Shit code is gonna break all the time. Fix this.
             GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.PlaceTilOre1Action + (int)tileID - (int)TileID.Ore1);
@@ -27,7 +27,7 @@ namespace Action
             GameState.ActionAttributeManager.EndActionAttributeType();
         }
 
-        public void Initialize(Planet.PlanetState planetState, Material material)
+        public void Initialize(Material material)
         {
             GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.DropAction);
             GameState.ActionAttributeManager.SetLogicFactory(new DropActionCreator());
@@ -38,18 +38,15 @@ namespace Action
             GameState.ActionAttributeManager.SetLogicFactory(new PickUpActionCreator());
             GameState.ActionAttributeManager.EndActionAttributeType();
 
-            CreatePlaceTileAction(TileID.Ore1, planetState);
-            CreatePlaceTileAction(TileID.Ore2, planetState);
-            CreatePlaceTileAction(TileID.Ore3, planetState);
-            CreatePlaceTileAction(TileID.Glass, planetState);
-            CreatePlaceTileAction(TileID.Moon, planetState);
-            CreatePlaceTileAction(TileID.Pipe, planetState);
+            CreatePlaceTileAction(TileID.Ore1);
+            CreatePlaceTileAction(TileID.Ore2);
+            CreatePlaceTileAction(TileID.Ore3);
+            CreatePlaceTileAction(TileID.Glass);
+            CreatePlaceTileAction(TileID.Moon);
+            CreatePlaceTileAction(TileID.Pipe);
 
-            GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.EnemySpawnAction);
-            GameState.ActionAttributeManager.SetLogicFactory(new EnemySpawnActionCreator());
-            EnemySpawnToolAction.Data data = new EnemySpawnToolAction.Data();
-            data.CharacterSpriteId = GameResources.SlimeSpriteSheet;
-            GameState.ActionAttributeManager.SetData(data);
+            GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.FireWeaponAction);
+            GameState.ActionAttributeManager.SetLogicFactory(new FireWeaponActionCreator());
             GameState.ActionAttributeManager.EndActionAttributeType();
 
             GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.PlaceParticleEmitterAction);
@@ -57,6 +54,13 @@ namespace Action
             PlaceParticleEmitterToolAction.Data placeParticleEmitterData = new PlaceParticleEmitterToolAction.Data();
             placeParticleEmitterData.Material = material;
             GameState.ActionAttributeManager.SetData(placeParticleEmitterData);
+            GameState.ActionAttributeManager.EndActionAttributeType();
+
+            GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.EnemySpawnAction);
+            GameState.ActionAttributeManager.SetLogicFactory(new EnemySpawnActionCreator());
+            EnemySpawnToolAction.Data data = new EnemySpawnToolAction.Data();
+            data.CharacterSpriteId = GameResources.SlimeSpriteSheet;
+            GameState.ActionAttributeManager.SetData(data);
             GameState.ActionAttributeManager.EndActionAttributeType();
 
             GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.MiningLaserAction);

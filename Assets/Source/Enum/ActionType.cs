@@ -23,6 +23,7 @@
         /// <summary>
         /// Others tools actions
         /// </summary>
+        FireWeaponAction,
         PlaceParticleEmitterAction,
         EnemySpawnAction,
         MiningLaserAction,

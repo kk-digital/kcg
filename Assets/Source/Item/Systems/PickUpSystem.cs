@@ -30,7 +30,7 @@ namespace Item
                 foreach (var agent in agents)
                 {
                     // Todo: Use action center Position.
-                    if ((agent.physicsPosition2D.Value - centerPos).Magnitude <= 1.5f)
+                    if ((agent.physicsPosition2D.Value - centerPos).Magnitude <= 1.25f)
                     {
                         GameState.ActionSchedulerSystem.ScheduleAction(agent, 
                             GameState.ActionInitializeSystem.CreatePickUpAction(agent.agentID.ID, item.itemID.ID));
