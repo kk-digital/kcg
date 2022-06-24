@@ -32,8 +32,7 @@ namespace Action
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float x = worldPosition.x;
             float y = worldPosition.y;
-            planet.AddParticleEmitter(Material.Instantiate(data.Material), new Vec2f(x, y), new Vec2f(0.5f, 0.5f), 
-                                                GameResources.OreIcon);
+            planet.AddParticleEmitter(new Vec2f(x, y), Particle.ParticleEmitterType.OreFountain);
 
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
         }

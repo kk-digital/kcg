@@ -253,18 +253,13 @@ public class GameResources
 
     private static void CreateParticleEmitters()
     {
-       /* GameState.
-                public int PropertiesId;
-        public string Name;
-        
-        public ParticleType ParticleType;
-
-        public float Duration;
-        public bool Loop;
-        public int ParticleCount;
-        public float TimeBetweenEmissions;
-
-        public float CurrentTime;*/
+        GameState.ParticleEmitterCreationApi.Create((int)Particle.ParticleEmitterType.OreFountain);
+        GameState.ParticleEmitterCreationApi.SetName("ore-fountain");
+        GameState.ParticleEmitterCreationApi.SetParticleType(Particle.ParticleType.Ore);
+        GameState.ParticleEmitterCreationApi.SetDuration(0.5f);
+        GameState.ParticleEmitterCreationApi.SetParticleCount(1);
+        GameState.ParticleEmitterCreationApi.SetTimeBetweenEmissions(0.05f);
+        GameState.ParticleEmitterCreationApi.End();
     }
 
 
