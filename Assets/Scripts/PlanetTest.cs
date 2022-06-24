@@ -38,11 +38,11 @@ namespace Planet.Unity
         public void Update()
         {
             int toolBarID = Player.Entity.agentToolBar.ToolBarID;
-            GameEntity Inventory = EntitasContext.game.GetEntityWithInventoryID(toolBarID);
+            InventoryEntity Inventory = EntitasContext.inventory.GetEntityWithInventoryID(toolBarID);
             int selectedSlot = Inventory.inventorySlots.Selected;
 
             GameEntity item = GameState.InventoryManager.GetItemInSlot(toolBarID, selectedSlot);
-            GameEntity itemAttribute = EntitasContext.game.GetEntityWithItemAttributes(item.itemID.ItemType);
+            ItemPropertiesEntity itemAttribute = EntitasContext.itemProperties.GetEntityWithItemAttributes(item.itemID.ItemType);
             if (itemAttribute.hasItemAttributeAction)
             {
                 if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -264,8 +264,8 @@ namespace Planet.Unity
 
 
             
-            GameState.ItemSpawnSystem.SpawnItem(EntitasContext.game, Enums.ItemType.Gun, new Vec2f(6.0f, spawnHeight));
-            GameState.ItemSpawnSystem.SpawnItem(EntitasContext.game, Enums.ItemType.Ore, new Vec2f(10.0f, spawnHeight));
+            GameState.ItemSpawnSystem.SpawnItem(EntitasContext, Enums.ItemType.Gun, new Vec2f(6.0f, spawnHeight));
+            GameState.ItemSpawnSystem.SpawnItem(EntitasContext, Enums.ItemType.Ore, new Vec2f(10.0f, spawnHeight));
         }
         
     }

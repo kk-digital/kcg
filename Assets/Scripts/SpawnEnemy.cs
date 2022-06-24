@@ -145,8 +145,8 @@ public class SpawnEnemy : MonoBehaviour
         if (Init)
         {
             // Get Slot Entites
-            IGroup<GameEntity> entities =
-            contexts.game.GetGroup(GameMatcher.InventorySlots);
+            IGroup<InventoryEntity> entities =
+            contexts.inventory.GetGroup(InventoryMatcher.InventorySlots);
             // Detect if spawner helded or not
             foreach (var slots in entities)
             {

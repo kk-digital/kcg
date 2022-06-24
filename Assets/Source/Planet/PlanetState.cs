@@ -239,7 +239,7 @@ namespace Planet
             TileMap.DrawLayer(MapLayerType.Mid, Object.Instantiate(material), transform, 9);
             TileMap.DrawLayer(MapLayerType.Front, Object.Instantiate(material), transform, 10);
             GameState.AgentDrawSystem.Draw(Object.Instantiate(material), transform, 12);
-            GameState.ItemDrawSystem.Draw(GameContext, Material.Instantiate(material), transform, 13);
+            GameState.ItemDrawSystem.Draw(Contexts.sharedInstance, Material.Instantiate(material), transform, 13);
             GameState.ProjectileDrawSystem.Draw(Material.Instantiate(material), transform, 20);
             GameState.FloatingTextDrawSystem.Draw(transform, 10000);
             GameState.ParticleDrawSystem.Draw(ParticleContext, Material.Instantiate(material), transform, 50);
