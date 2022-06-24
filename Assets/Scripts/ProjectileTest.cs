@@ -87,14 +87,6 @@ public class ProjectileTest : MonoBehaviour
                 else
                     DestroyImmediate(mr.gameObject);
 
-            // Get Vehicle Entites
-            IGroup<GameEntity> entities =
-            Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentPlayer);
-            foreach (var entity in entities)
-            {
-                startPos = new Vec2f(entity.physicsPosition2D.Value.Y, entity.physicsPosition2D.Value.Y);
-            }
-
             IGroup<GameEntity> Pentities =
             Contexts.sharedInstance.game.GetGroup(GameMatcher.ProjectilePhysicsState2D);
             foreach (var entity in Pentities)

@@ -15,7 +15,7 @@ public class GUIStatusTest : MonoBehaviour
     {
         healthBarUI = new KGUI.HealthBarUI();
 
-        healthBarUI.Initialize();
+        healthBarUI.Initialize(material, transform);
     }
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
