@@ -9,15 +9,17 @@
 public static class ParticleComponentsLookup {
 
     public const int ParticleEmitter2dPosition = 0;
-    public const int ParticleEmitterState = 1;
-    public const int ParticlePosition2D = 2;
-    public const int ParticleSprite2D = 3;
-    public const int ParticleState = 4;
+    public const int ParticleEmitterID = 1;
+    public const int ParticleEmitterState = 2;
+    public const int ParticlePosition2D = 3;
+    public const int ParticleSprite2D = 4;
+    public const int ParticleState = 5;
 
-    public const int TotalComponents = 5;
+    public const int TotalComponents = 6;
 
     public static readonly string[] componentNames = {
         "ParticleEmitter2dPosition",
+        "ParticleEmitterID",
         "ParticleEmitterState",
         "ParticlePosition2D",
         "ParticleSprite2D",
@@ -26,6 +28,7 @@ public static class ParticleComponentsLookup {
 
     public static readonly System.Type[] componentTypes = {
         typeof(Particle.Emitter2dPositionComponent),
+        typeof(Particle.EmitterIDComponent),
         typeof(Particle.EmitterStateComponent),
         typeof(Particle.Position2DComponent),
         typeof(Particle.Sprite2DComponent),

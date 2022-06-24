@@ -40,7 +40,9 @@ namespace Planet
         }
 
 
-        public AgentEntity AddPlayer(int spriteId, int width, int height, Vec2f position, int startingAnimation)
+        // Note(Mahdi): Deprecated will be removed soon
+        public AgentEntity AddPlayer(int spriteId,
+                                int width, int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.AgentSpawnerSystem.SpawnPlayer(spriteId, width, height, position, newEntity.AgentId,
@@ -50,6 +52,18 @@ namespace Planet
             return newEntity;
         }
 
+        public AgentEntity AddPlayer(Vec2f position)
+        {
+            ref AgentEntity newEntity = ref AgentList.Add();
+            GameEntity entity = GameState.AgentSpawnerSystem.Spawn(position,
+                    newEntity.AgentId,
+                    Agent.AgentType.Player);
+            newEntity.Entity = entity;
+
+            return newEntity;
+        }
+
+        // Note(Mahdi): Deprecated will be removed soon
         public AgentEntity AddAgent(int spriteId, int width,
                      int height, Vec2f position, int startingAnimation)
         {
@@ -62,7 +76,20 @@ namespace Planet
             return newEntity;
         }
 
-        public AgentEntity AddEnemy(int spriteId, int width, int height, Vec2f position, int startingAnimation)
+        public AgentEntity AddAgent(Vec2f position)
+        {
+            ref AgentEntity newEntity = ref AgentList.Add();
+            GameEntity entity = GameState.AgentSpawnerSystem.Spawn(position,
+                    newEntity.AgentId,
+                    Agent.AgentType.Agent);
+            newEntity.Entity = entity;
+
+            return newEntity;
+        }
+
+        // Note(Mahdi): Deprecated will be removed soon
+        public AgentEntity AddEnemy(int spriteId,
+                        int width, int height, Vec2f position, int startingAnimation)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.AgentSpawnerSystem.SpawnEnemy(spriteId, width, height, position,
@@ -70,6 +97,17 @@ namespace Planet
 
             newEntity.Entity = entity;
 
+
+            return newEntity;
+        }
+
+        public AgentEntity AddEnemy(Vec2f position)
+        {
+            ref AgentEntity newEntity = ref AgentList.Add();
+            GameEntity entity = GameState.AgentSpawnerSystem.Spawn(position,
+                    newEntity.AgentId,
+                    Agent.AgentType.Enemy);
+            newEntity.Entity = entity;
 
             return newEntity;
         }
@@ -92,9 +130,9 @@ namespace Planet
             return newEntity;
         }
 
-        public void RemoveFloatingText(int Index)
+        public void RemoveFloatingText(int floatingTextId)
         {
-            ref FloatingTextEntity entity = ref FloatingTextList.Get(Index);
+            ref FloatingTextEntity entity = ref FloatingTextList.Get(floatingTextId);
             entity.Entity.Destroy();
             FloatingTextList.Remove(entity);
         }
@@ -111,9 +149,9 @@ namespace Planet
             return newEntity;
         }
 
-        public void RemoveParticleEmitter()
+        public void RemoveParticleEmitter(int particleEmitterId)
         {
-            ref ParticleEmitterEntity entity = ref ParticleEmitterList.Get(Index);
+            ref ParticleEmitterEntity entity = ref ParticleEmitterList.Get(particleEmitterId);
             entity.Entity.Destroy();
             ParticleEmitterList.Remove(entity);
         }
@@ -194,7 +232,7 @@ namespace Planet
             GameState.AnimationUpdateSystem.Update(frameTime);
             GameState.ItemPickUpSystem.Update();
             GameState.ActionSchedulerSystem.Update(frameTime, ref this);
-            GameState.ParticleEmitterUpdateSystem.Update(ParticleContext);
+            GameState.ParticleEmitterUpdateSystem.Update(this);
             GameState.ParticleUpdateSystem.Update(this, ParticleContext);
             GameState.ProjectileMovementSystem.Update();
             GameState.ProjectileCollisionSystem.Update(ref TileMap);

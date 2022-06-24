@@ -248,18 +248,17 @@ namespace Planet.Unity
 
             float spawnHeight = tileMap.MapSize.Y - 2;
 
-            Player = Planet.AddPlayer(CharacterSpriteId, 32, 48, 
-                    new Vec2f(3.0f, spawnHeight), 0);
+            Player = Planet.AddPlayer(new Vec2f(3.0f, spawnHeight));
             PlayerID = Player.Entity.agentID.ID;
 
-            Planet.AddAgent( CharacterSpriteId, 32, 48, new Vec2f(6.0f, spawnHeight), 0);
-            Planet.AddAgent(CharacterSpriteId, 32, 48, new Vec2f(1.0f, spawnHeight), 0);
+            Planet.AddAgent(new Vec2f(6.0f, spawnHeight));
+            Planet.AddAgent(new Vec2f(1.0f, spawnHeight));
 
             for(int i = 0; i < tileMap.MapSize.X; i++)
             {
                 if (random.Next() % 5 == 0)
                 {
-                    Planet.AddEnemy(CharacterSpriteId, 32, 32, new Vec2f((float)i, spawnHeight), 2);    
+                    Planet.AddEnemy(new Vec2f((float)i, spawnHeight));    
                 }
             }
 

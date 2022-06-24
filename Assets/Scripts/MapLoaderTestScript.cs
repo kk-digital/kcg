@@ -59,12 +59,11 @@ namespace Planet.Unity
 
 
             InputProcessSystems = new ECSInput.InputProcessSystem();
-            AgentSpawnerSystem = new Agent.AgentSpawnerSystem();
             PhysicsMovableSystem = new Physics.PhysicsMovableSystem();
             AgentDrawSystem = new Agent.AgentDrawSystem();
             AgentProcessCollisionSystem = new Physics.PhysicsProcessCollisionSystem();
 
-            AgentSpawnerSystem.SpawnPlayer(CharacterSpriteId, 32, 48, new Vec2f(3.0f, 2.0f), 0, 0);
+            GameState.AgentSpawnerSystem.SpawnPlayer(CharacterSpriteId, 32, 48, new Vec2f(3.0f, 2.0f), 0, 0);
         }
 
         public void Update()

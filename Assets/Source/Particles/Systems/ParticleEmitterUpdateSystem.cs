@@ -8,9 +8,11 @@ namespace Particle
     {
         List<ParticleEntity> ToDestroy = new List<ParticleEntity>();
 
-        public void Update(ParticleContext context)
+        public void Update(Planet.PlanetState planetState)
         {
             ToDestroy.Clear();
+
+            ParticleContext context = planetState.ParticleContext;
 
             float deltaTime = Time.deltaTime;
             IGroup<ParticleEntity> entities = context.GetGroup(ParticleMatcher.ParticleEmitterState);
@@ -18,41 +20,47 @@ namespace Particle
             {
                 var state = gameEntity.particleEmitterState;
                 var position = gameEntity.particleEmitter2dPosition;
+                state.Duration -= Time.deltaTime;
 
-                if (state.CurrentTime <= 0.0f)
+                if (state.Duration >= 0)
                 {
-                    for(int i = 0; i < state.ParticleCount; i++)
+                    if (state.CurrentTime <= 0.0f)
                     {
-                        System.Random random = new System.Random(); 
-                        int spriteId = state.SpriteIds[(random.Next() % state.SpriteIds.Length)];
-                        float randomX = (float)random.NextDouble() * 2.0f - 1.0f;
+                        for(int i = 0; i < state.ParticleCount; i++)
+                        {
+                            System.Random random = new System.Random(); 
+                            int spriteId = state.SpriteIds[(random.Next() % state.SpriteIds.Length)];
+                            float randomX = (float)random.NextDouble() * 2.0f - 1.0f;
 
-                        var e = context.CreateEntity();
-                        //var gameObject = Object.Instantiate(state.Prefab);
-                        e.AddParticleState(null, 1.0f, state.ParticleDecayRate, state.ParticleDeltaRotation, state.ParticleDeltaScale);
-                        e.AddParticlePosition2D(position.Position, state.ParticleAcceleration, new Vector2(state.ParticleStartingVelocity.x + randomX, state.ParticleStartingVelocity.y));
-                        e.AddParticleSprite2D(state.SpriteIds[0], state.ParticleSize);
+                            var e = context.CreateEntity();
+                            //var gameObject = Object.Instantiate(state.Prefab);
+                            e.AddParticleState(null, 1.0f, state.ParticleDecayRate, state.ParticleDeltaRotation, state.ParticleDeltaScale);
+                            e.AddParticlePosition2D(position.Position, state.ParticleAcceleration, new Vector2(state.ParticleStartingVelocity.x + randomX, state.ParticleStartingVelocity.y));
+                            e.AddParticleSprite2D(state.SpriteIds[0], state.ParticleSize);
+                        }
+
+                        state.CurrentTime = state.TimeBetweenEmissions;
+                    }
+                    else
+                    {
+                        state.CurrentTime -= Time.deltaTime;
                     }
 
-                    state.CurrentTime = state.TimeBetweenEmissions;
+                    gameEntity.ReplaceParticleEmitterState(state.GameObject, state.Prefab, 
+                    state.ParticleDecayRate, state.ParticleAcceleration, state.ParticleDeltaRotation, state.ParticleDeltaScale,
+                    state.SpriteIds, state.ParticleSize, state.ParticleStartingVelocity, state.ParticleStartingRotation, state.ParticleStartingScale, 
+                    state.ParticleStartingColor, state.ParticleAnimationSpeed, state.Duration, state.Loop,
+                    state.ParticleCount, state.TimeBetweenEmissions, state.CurrentTime);
                 }
                 else
                 {
-                    state.CurrentTime -= Time.deltaTime;
+                    ToDestroy.Add(gameEntity);
                 }
-
-                gameEntity.ReplaceParticleEmitterState(state.GameObject, state.Prefab, 
-                state.ParticleDecayRate, state.ParticleAcceleration, state.ParticleDeltaRotation, state.ParticleDeltaScale,
-                state.SpriteIds, state.ParticleSize, state.ParticleStartingVelocity, state.ParticleStartingRotation, state.ParticleStartingScale, 
-                state.ParticleStartingColor, state.ParticleAnimationSpeed, state.Duration, state.Loop,
-                state.ParticleCount, state.TimeBetweenEmissions, state.CurrentTime);
             }
 
-            foreach(var gameEntity in ToDestroy)
+            foreach(var entity in ToDestroy)
             {
-                //Object.Destroy(gameEntity.particleState.GameObject);
-                //gameEntity.Destroy();
-                //planetState.RemoveParticleEmitter(entity.floatingTextID.Index);
+                planetState.RemoveParticleEmitter(entity.particleEmitterID.ParticleEmitterId);
             }
         }
     }
