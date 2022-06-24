@@ -94,6 +94,13 @@ public class ProjectileTest : MonoBehaviour
                 projectilePosition = entity.projectilePosition2D.Value;
             }
 
+            IGroup<GameEntity> Playerentities =
+            Contexts.sharedInstance.game.GetGroup(GameMatcher.PhysicsPosition2D);
+            foreach (var entity in Playerentities)
+            {
+                startPos = entity.physicsPosition2D.Value;
+            }
+
             start = new Cell
             {
                 x = (int)startPos.X,
