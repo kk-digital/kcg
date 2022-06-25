@@ -197,11 +197,17 @@ namespace Scripts {
 
                     float magnitude = Tools.magnitude(ship.self.velx, ship.self.vely);
 
+                    // "Air resistance" effect
                     if(magnitude > drag_cutoff) {
-                        // "Air resistance" effect
-                        float drag_x = ship.self.velx * (quadratic_drag ? ship.self.velx : 1.0f)
+                        float cutoff_x = drag_cutoff * ship.self.velx / magnitude;
+                        float cutoff_y = drag_cutoff * ship.self.vely / magnitude;
+
+                        float effective_vel_x = ship.self.velx - cutoff_x;
+                        float effective_vel_y = ship.self.vely - cutoff_y;
+
+                        float drag_x = effective_vel_x * (quadratic_drag ? effective_vel_x : 1.0f)
                                      * -current_time  / (gravitational_factor + drag_factor);
-                        float drag_y = ship.self.vely * (quadratic_drag ? ship.self.vely : 1.0f)
+                        float drag_y = effective_vel_y * (quadratic_drag ? effective_vel_y : 1.0f)
                                      * -current_time  / (gravitational_factor + drag_factor);
 
                         ship.self.velx *= 1.0f + drag_x;
