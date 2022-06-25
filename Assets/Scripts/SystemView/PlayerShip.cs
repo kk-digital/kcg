@@ -30,6 +30,7 @@ namespace Scripts {
             public float system_scale           = 1.0f;
             public float sail_angle             = 0.0f;
             public float sail_speed             = 0.5f;
+            public bool  rudder_enabled         = true;
 
             public bool  mouse_steering         = false;
 
@@ -112,16 +113,25 @@ namespace Scripts {
                 float rotation_change = ship.rotation;
 
                 Vector3[] vertices = new Vector3[2];
-                vertices[0] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
-                vertices[1] = new Vector3(ship.self.posx + (float)Math.Cos(ship.rotation + sail_angle) * 5.0f,
-                                          ship.self.posy + (float)Math.Sin(ship.rotation + sail_angle) * 5.0f,
-                                          0.0f);
 
-                rudder_renderer.SetPositions(vertices);
-                rudder_renderer.positionCount  = 2;
+                if(rudder_enabled) {
+                    vertices[0] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
+                    vertices[1] = new Vector3(ship.self.posx + (float)Math.Cos(ship.rotation + sail_angle) * 5.0f,
+                                              ship.self.posy + (float)Math.Sin(ship.rotation + sail_angle) * 5.0f,
+                                              0.0f);
 
-                rudder_renderer.startWidth     =
-                rudder_renderer.endWidth       = 0.1f / camera_controller.scale;
+                    rudder_renderer.SetPositions(vertices);
+                    rudder_renderer.positionCount  = 2;
+
+                    rudder_renderer.startWidth     =
+                    rudder_renderer.endWidth       = 0.1f / camera_controller.scale;
+                } else {
+                    vertices[0] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
+                    vertices[1] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
+
+                    rudder_renderer.SetPositions(vertices);
+                    rudder_renderer.positionCount  = 0;
+                }
 
                 if (!mouse_steering) {
                     ship.rotation         += ship.self.angular_vel * current_time;
@@ -201,7 +211,7 @@ namespace Scripts {
                     }
 
                     // "Sailing" effect
-                    if(ship.self.velx != 0.0f && ship.self.vely != 0.0f) {
+                    if(ship.self.velx != 0.0f && ship.self.vely != 0.0f && rudder_enabled) {
                         float sail_x = magnitude * current_time * (float)Math.Cos(ship.rotation + sail_angle);
                         float sail_y = magnitude * current_time * (float)Math.Sin(ship.rotation + sail_angle);
 
