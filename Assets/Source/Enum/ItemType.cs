@@ -1,10 +1,17 @@
-﻿
-namespace Enums
+﻿namespace Enums
 {
     public enum ItemType
     {
+        Error,
         Gun,
         Rock,
-        RockDust
+        RockDust,
+        Ore,
+        PlacementTool,
+        RemoveTileTool,
+        MiningLaserTool,
+        SpawnEnemySlimeTool,
+        PipePlacementTool,
+        ParticleEmitterPlacementTool
     }
 }

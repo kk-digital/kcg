@@ -11,18 +11,18 @@ public partial class GameEntity {
     public Agent.Sprite2DComponent agentSprite2D { get { return (Agent.Sprite2DComponent)GetComponent(GameComponentsLookup.AgentSprite2D); } }
     public bool hasAgentSprite2D { get { return HasComponent(GameComponentsLookup.AgentSprite2D); } }
 
-    public void AddAgentSprite2D(UnityEngine.Texture2D newTexture, UnityEngine.Vector2 newSize) {
+    public void AddAgentSprite2D(int newSpriteId, KMath.Vec2f newSize) {
         var index = GameComponentsLookup.AgentSprite2D;
         var component = (Agent.Sprite2DComponent)CreateComponent(index, typeof(Agent.Sprite2DComponent));
-        component.Texture = newTexture;
+        component.SpriteId = newSpriteId;
         component.Size = newSize;
         AddComponent(index, component);
     }
 
-    public void ReplaceAgentSprite2D(UnityEngine.Texture2D newTexture, UnityEngine.Vector2 newSize) {
+    public void ReplaceAgentSprite2D(int newSpriteId, KMath.Vec2f newSize) {
         var index = GameComponentsLookup.AgentSprite2D;
         var component = (Agent.Sprite2DComponent)CreateComponent(index, typeof(Agent.Sprite2DComponent));
-        component.Texture = newTexture;
+        component.SpriteId = newSpriteId;
         component.Size = newSize;
         ReplaceComponent(index, component);
     }

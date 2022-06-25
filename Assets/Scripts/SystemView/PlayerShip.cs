@@ -48,7 +48,7 @@ namespace Scripts {
             private void Start() {
                 camera_controller  = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
-                state              = GetComponent<GameLoop>().CurrentSystemState;
+                state              = GetComponent<GameManager>().CurrentSystemState;
                 rudder_renderer    = gameObject.AddComponent<LineRenderer>();
 
                 last_time          = Time.time * 1000.0f;

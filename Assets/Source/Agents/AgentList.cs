@@ -6,7 +6,7 @@ namespace Agent
 {
     public class AgentList
     {
-        
+
         // array for storing entities
         public AgentEntity[] List;
 
@@ -30,7 +30,7 @@ namespace Agent
         }
 
 
-        public AgentEntity Add(Entity entity)
+        public ref AgentEntity Add()
         {
             // if we dont have enough space we expand
             // the capacity
@@ -43,7 +43,7 @@ namespace Agent
             // trying to find an empty index
             // we use LastFreeIndex for a faster insertion
             int Found = -1;
-            for(int index = LastFreeIndex; index < Capacity; index++)
+            for (int index = LastFreeIndex; index < Capacity; index++)
             {
                 ref AgentEntity thisEntity = ref List[index];
 
@@ -55,7 +55,7 @@ namespace Agent
             }
             if (Found == -1)
             {
-                for(int index = 0; index < LastFreeIndex; index++)
+                for (int index = 0; index < LastFreeIndex; index++)
                 {
                     ref AgentEntity thisEntity = ref List[index];
 
@@ -73,14 +73,19 @@ namespace Agent
 
             // creating the Entity and initializing it
             AgentEntity NewEntity = new AgentEntity();
-            NewEntity.Index = Found;
+            NewEntity.AgentId = Found;
             NewEntity.IsInitialized = true;
-            NewEntity.Entity = entity;
 
             List[Found] = NewEntity;
             Size++;
 
-             return NewEntity;
+            return ref List[Found];
+        }
+
+
+        public ref AgentEntity Get(int Index)
+        {
+            return ref List[Index];
         }
 
 
@@ -111,7 +116,7 @@ namespace Agent
                 System.Array.Resize(ref List, Capacity);
             }
         }
-        
+
 
         // We use this to determine 
         // the new size based off the old one.

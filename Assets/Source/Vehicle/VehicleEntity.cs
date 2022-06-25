@@ -5,8 +5,8 @@ namespace Vehicle
 
     public struct VehicleEntity
     {
-        public int Index;
+        public int VehicleId;
         public bool IsInitialized;
-        public Entity Entity;
+        public GameEntity Entity;
     }
 }

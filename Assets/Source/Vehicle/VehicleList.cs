@@ -30,7 +30,7 @@ namespace Vehicle
         }
 
 
-        public VehicleEntity Add(Entity entity)
+        public ref VehicleEntity Add()
         {
             // if we dont have enough space we expand
             // the capacity
@@ -73,14 +73,13 @@ namespace Vehicle
 
             // creating the Entity and initializing it
             VehicleEntity NewEntity = new VehicleEntity();
-            NewEntity.Index = Found;
+            NewEntity.VehicleId = Found;
             NewEntity.IsInitialized = true;
-            NewEntity.Entity = entity;
 
             List[Found] = NewEntity;
             Size++;
 
-             return NewEntity;
+             return ref List[Found];
         }
 
 

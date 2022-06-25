@@ -1,6 +1,6 @@
 using UnityEngine;
-using System.Collections.Generic;
 using Enums.Tile;
+using KMath;
 
 namespace Planet.Unity
 {
@@ -8,7 +8,19 @@ namespace Planet.Unity
     {
         [SerializeField] Material Material;
 
-        Planet.PlanetState Planet;
+        PlanetState Planet;
+        Inventory.InventoryManager inventoryManager;
+        Inventory.DrawSystem    inventoryDrawSystem;
+
+        Contexts EntitasContext;
+
+
+        Agent.AgentEntity Player;
+        int PlayerID;
+
+        int CharacterSpriteId;
+        int inventoryID;
+        int toolBarID;
 
         static bool Init = false;
   
@@ -25,135 +37,236 @@ namespace Planet.Unity
 
         public void Update()
         {
-            TileMap.Model TileMap = Planet.TileMap;
+            int toolBarID = Player.Entity.agentToolBar.ToolBarID;
+            GameEntity Inventory = EntitasContext.game.GetEntityWithInventoryID(toolBarID);
+            int selectedSlot = Inventory.inventorySlots.Selected;
 
-            if (Input.GetKeyDown(KeyCode.Mouse1))
+            GameEntity item = GameState.InventoryManager.GetItemInSlot(toolBarID, selectedSlot);
+            GameEntity itemAttribute = EntitasContext.game.GetEntityWithItemAttributes(item.itemID.ItemType);
+            if (itemAttribute.hasItemAttributeAction)
             {
-                Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                int x = (int)worldPosition.x;
-                int y = (int)worldPosition.y;
-                TileMap.RemoveTile(x, y, MapLayerType.Front);
-                TileMap.BuildLayerTexture(MapLayerType.Front);
+                if (Input.GetKeyDown(KeyCode.Mouse0))
+                {
+                    GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity,
+                        GameState.ActionCreationSystem.CreateAction(itemAttribute.itemAttributeAction.ActionTypeID, Player.AgentId));
+                }
+            }
                 
+            // unity rendering stuff
+            // will be removed layer
+            foreach(var mr in GetComponentsInChildren<MeshRenderer>())
+            {
+                if (Application.isPlaying)
+                {
+                    Destroy(mr.gameObject);
+                }
+                else
+                {
+                    DestroyImmediate(mr.gameObject);
+                }
             }
 
-            foreach(var mr in GetComponentsInChildren<MeshRenderer>())
-                if (Application.isPlaying)
-                    Destroy(mr.gameObject);
-                else
-                    DestroyImmediate(mr.gameObject);
+            inventoryDrawSystem.Draw(Instantiate(Material), transform, 1000);
+            Planet.Update(Time.deltaTime, Material, transform);
 
-            GameState.ProcessSystem.Update();
-            GameState.MovableSystem.Update();
-            GameState.CollisionSystem.Update(TileMap);
-            
-            TileMap.Layers.DrawLayer(MapLayerType.Front, Instantiate(Material), transform, 10);
-            TileMap.Layers.DrawLayer(MapLayerType.Ore, Instantiate(Material), transform, 11);
-            GameState.DrawSystem.Draw(Instantiate(Material), transform, 12);
+         //   Vector2 playerPosition = Player.Entity.physicsPosition2D.Value;
+
+           // transform.position = new Vector3(playerPosition.x - 6.0f, playerPosition.y - 6.0f, -10.0f);
+        }
+
+        void DrawSpriteAtlas()
+        {
+            ref Sprites.SpriteAtlas atlas = ref GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Agent);
+            Sprites.Sprite sprite = new Sprites.Sprite
+            {
+                Texture = atlas.Texture,
+                TextureCoords = new Vector4(0, 0, 1, 1)
+            };
+            Utility.Render.DrawSprite(-3, -1, atlas.Width / 32.0f, atlas.Height / 32.0f, sprite, Instantiate(Material), transform);
         }
 
         // create the sprite atlas for testing purposes
         public void Initialize()
         {
-            int TilesMoon = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png");
-            int OreTileSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
-            
-            GameState.CreationApi.CreateTile(8);
-            GameState.CreationApi.SetTileName("ore_1");
-            GameState.CreationApi.SetTileTexture16(OreTileSheet, 0, 0);
-            GameState.CreationApi.EndTile();
+            EntitasContext = Contexts.sharedInstance;
 
-            GameState.CreationApi.CreateTile(9);
-            GameState.CreationApi.SetTileName("glass");
-            GameState.CreationApi.SetTileSpriteSheet16(TilesMoon, 11, 10);
-            GameState.CreationApi.EndTile();
+            inventoryManager = new Inventory.InventoryManager();
+            inventoryDrawSystem = new Inventory.DrawSystem(EntitasContext);
 
-            GameState.CreationApi.CreateTile(10);
-            GameState.CreationApi.SetTileName("moon");
-            GameState.CreationApi.SetTileSpriteSheet16(TilesMoon, 0, 0);
-            GameState.CreationApi.EndTile();
-
-
+            GameResources.Initialize();
 
             // Generating the map
-            Vector2Int mapSize = new Vector2Int(16, 16);
-            Planet = new Planet.PlanetState(mapSize);
+            Vec2i mapSize = new Vec2i(32, 24);
+            Planet = new Planet.PlanetState(mapSize, EntitasContext.game, EntitasContext.particle);
             GenerateMap();
+            SpawnStuff();
+
+            GameState.ActionInitializeSystem.Initialize(Material);
+
+            var inventoryAttacher = Inventory.InventoryAttacher.Instance;
+
+            inventoryID = Player.Entity.agentInventory.InventoryID;
+            toolBarID = Player.Entity.agentToolBar.ToolBarID;
+
+            GameEntity gun = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.Gun);
+            GameEntity ore = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.Ore);
+            GameEntity placementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.PlacementTool);
+            GameEntity removeTileTool = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.RemoveTileTool);
+            GameEntity spawnEnemySlimeTool = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.SpawnEnemySlimeTool);
+            GameEntity miningLaserTool = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.MiningLaserTool);
+            GameEntity pipePlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.PipePlacementTool);
+            GameEntity particleEmitterPlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(EntitasContext.game, Enums.ItemType.ParticleEmitterPlacementTool);
 
 
-            Planet.AddPlayer(Instantiate(Material), new Vector2(3.0f, 3.0f));
-            Planet.AddAgent(Instantiate(Material), new Vector2(6.0f, 2.0f));
+            inventoryManager.AddItem(placementTool, toolBarID);
+            inventoryManager.AddItem(removeTileTool, toolBarID);
+            inventoryManager.AddItem(spawnEnemySlimeTool, toolBarID);
+            inventoryManager.AddItem(miningLaserTool, toolBarID);
+            inventoryManager.AddItem(pipePlacementTool, toolBarID);
+            inventoryManager.AddItem(particleEmitterPlacementTool, toolBarID);
         }
-
-
-
 
         void GenerateMap()
         {
-            TileMap.Model TileMap = Planet.TileMap;
+            KMath.Random.Mt19937.init_genrand((ulong) System.DateTime.Now.Ticks);
+            
+            ref var tileMap = ref Planet.TileMap;
 
-           Vector2Int mapSize = TileMap.MapSize;
-
-           for(int j = 0; j < mapSize.y; j++)
+            for (int j = 0; j < tileMap.MapSize.Y; j++)
             {
-                for(int i = 0; i < mapSize.x; i++)
+                for (int i = 0; i < tileMap.MapSize.X; i++)
                 {
-                    Tile.Model frontTile = Tile.Model.EmptyTile;
-                    Tile.Model oreTile = Tile.Model.EmptyTile;
+                    var frontTileID = TileID.Air;
 
-                    if (i >= mapSize.x / 2)
+                    if (i >= tileMap.MapSize.X / 2)
                     {
-                        if (j % 2 == 0 && i == mapSize.x / 2)
+                        if (j % 2 == 0 && i == tileMap.MapSize.X / 2)
                         {
-                            frontTile.Type = 10;
+                            frontTileID = TileID.Moon;
                         }
                         else
                         {
-                            frontTile.Type = 9;
+                            frontTileID = TileID.Glass;
                         }
                     }
                     else
                     {
-                        if (j % 3 == 0 && i == mapSize.x / 2 + 1)
+                        if (j % 3 == 0 && i == tileMap.MapSize.X / 2 + 1)
                         {
-                            frontTile.Type = 9;
+                            frontTileID = TileID.Glass;
                         }
                         else
                         {
-                            frontTile.Type = 10;
+                            frontTileID = TileID.Moon;
+                            /*if ((int) KMath.Random.Mt19937.genrand_int32() % 10 == 0)
+                            {
+                                int oreRandom = (int) KMath.Random.Mt19937.genrand_int32() % 3;
+                                if (oreRandom == 0)
+                                {
+                                    frontTile.SpriteId2 = GameResources.OreSprite;
+                                }
+                                else if (oreRandom == 1)
+                                {
+                                    frontTile.SpriteId2 = GameResources.Ore2Sprite;
+                                }
+                                else
+                                {
+                                    frontTile.SpriteId2 = GameResources.Ore3Sprite;
+                                }
+
+                                frontTile.DrawType = TileDrawType.Composited;
+                            }*/
                         }
                     }
 
 
-                    if (i % 10 == 0)
-                    {
-                        oreTile.Type = 8;
-                    }
-
-                    if ((j > 1 && j < 6) || (j > (8 + i)))
-                    {
-                       frontTile.Type = -1; 
-                       oreTile.Type = -1;
-                    }
-
-                    
-                    TileMap.SetTile(i, j, frontTile, MapLayerType.Front);
-                    TileMap.SetTile(i, j, oreTile, MapLayerType.Ore);
+                    tileMap.SetTile(i, j, frontTileID, MapLayerType.Front);
                 }
             }
 
-            TileMap.HeightMap.UpdateTopTilesMap(ref TileMap);
+            for (int i = 0; i < tileMap.MapSize.X; i++)
+            {
+                for (int j = tileMap.MapSize.Y - 10; j < tileMap.MapSize.Y; j++)
+                {
+                    tileMap.SetTile(i, j, TileID.Air, MapLayerType.Front);
+                }
+            }
 
-            TileMap.UpdateTileMapPositions(MapLayerType.Front);
-            TileMap.UpdateTileMapPositions(MapLayerType.Ore);
-            TileMap.BuildLayerTexture(MapLayerType.Front);
-            TileMap.BuildLayerTexture(MapLayerType.Ore);
-        
+            int carveHeight = tileMap.MapSize.Y - 10;
+
+            for (int i = 0; i < tileMap.MapSize.X; i++)
+            {
+                int move = ((int) KMath.Random.Mt19937.genrand_int32() % 3) - 1;
+                if (((int) KMath.Random.Mt19937.genrand_int32() % 5) <= 3)
+                {
+                    move = 0;
+                }
+
+                carveHeight += move;
+                if (carveHeight >= tileMap.MapSize.Y)
+                {
+                    carveHeight = tileMap.MapSize.Y - 1;
+                }
+
+                for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
+                {
+                    tileMap.SetTile(i, j, TileID.Air, MapLayerType.Front);
+                }
+            }
+
+            carveHeight = 5;
+
+            for (int i = tileMap.MapSize.X - 1; i >= 0; i--)
+            {
+                int move = ((int) KMath.Random.Mt19937.genrand_int32() % 3) - 1;
+                if (((int) KMath.Random.Mt19937.genrand_int32() % 10) <= 3)
+                {
+                    move = 1;
+                }
+
+                carveHeight += move;
+                if (carveHeight >= tileMap.MapSize.Y)
+                {
+                    carveHeight = tileMap.MapSize.Y - 1;
+                }
+
+                for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
+                {
+                    tileMap.SetTile(i, j, TileID.Air, MapLayerType.Front);
+                }
+            }
+
+
+            tileMap.UpdateTileMapPositions(MapLayerType.Front);
+
+        }
+
+        void SpawnStuff()
+        {
+            ref var tileMap = ref Planet.TileMap;
+            System.Random random = new System.Random((int)System.DateTime.Now.Ticks);
+
+            float spawnHeight = tileMap.MapSize.Y - 2;
+
+            Player = Planet.AddPlayer(new Vec2f(3.0f, spawnHeight));
+            PlayerID = Player.Entity.agentID.ID;
+
+            Planet.AddAgent(new Vec2f(6.0f, spawnHeight));
+            Planet.AddAgent(new Vec2f(1.0f, spawnHeight));
+
+            for(int i = 0; i < tileMap.MapSize.X; i++)
+            {
+                if (random.Next() % 5 == 0)
+                {
+                    Planet.AddEnemy(new Vec2f((float)i, spawnHeight));    
+                }
+            }
+
+
+            
+            GameState.ItemSpawnSystem.SpawnItem(EntitasContext.game, Enums.ItemType.Gun, new Vec2f(6.0f, spawnHeight));
+            GameState.ItemSpawnSystem.SpawnItem(EntitasContext.game, Enums.ItemType.Ore, new Vec2f(10.0f, spawnHeight));
         }
         
     }
 }
-
-

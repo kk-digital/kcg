@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using KMath;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -29,10 +30,9 @@ namespace Planet.Unity
         Texture2D OreSprite;
 
         Texture2D VentSprite;
-
-        Contexts EntitasContext = Contexts.sharedInstance;
-        Particle.UpdateSystem ParticleUpdateSystem;
-        Particle.EmitterUpdateSystem ParticleEmitterUpdateSystem;
+        
+        Particle.ParticleUpdateSystem_old ParticleUpdateSystem;
+        Particle.ParticleEmitterUpdateSystem_old ParticleEmitterUpdateSystem;
 
         GameObject PipePrefab;
         GameObject OrePrefab;
@@ -53,25 +53,28 @@ namespace Planet.Unity
 
         public void Update()
         {
-            ParticleUpdateSystem.Execute();
-            ParticleEmitterUpdateSystem.Execute();
+            Contexts entitasContext = Contexts.sharedInstance;
+
+            ParticleUpdateSystem.Execute(entitasContext.particle);
+            ParticleEmitterUpdateSystem.Execute(entitasContext.particle);
         }
 
         // create the sprite atlas for testing purposes
         public void Initialize()
         {
             
-            ParticleUpdateSystem = new Particle.UpdateSystem(EntitasContext);
-            ParticleEmitterUpdateSystem = new Particle.EmitterUpdateSystem(EntitasContext);
+            Contexts entitasContext = Contexts.sharedInstance;
+            ParticleUpdateSystem = new Particle.ParticleUpdateSystem_old();
+            ParticleEmitterUpdateSystem = new Particle.ParticleEmitterUpdateSystem_old();
 
             // we load the sprite sheets here
             int pipeTileSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\sprite\\item\\admin_icon_pipesim.png");
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\sprite\\item\\admin_icon_pipesim.png", 16, 16);
 
             int oreTileSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png");
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
 
-            int ventTileSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Objects\\vent1.png");
+            int ventTileSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Objects\\vent1.png", 16, 16);
 
 
             int pipeSpriteIndex = GameState.SpriteAtlasManager.CopySpriteToAtlas(pipeTileSheet, 0, 0, Enums.AtlasType.Particle);
@@ -95,12 +98,12 @@ namespace Planet.Unity
             VentPrefab = CreateParticlePrefab(0, 0, 0.5f, 0.5f, VentSprite);
 
 
-            CreateParticleEmitterEntity(VentPrefab, new Vector2(-4.0f, 0),
+            CreateParticleEmitterEntity(entitasContext.particle, VentPrefab, new Vector2(-4.0f, 0),
              1.0f, new Vector2(0, -20.0f), 1.7f, 0.0f, new int[]{0}, new Vector2(1.0f, 10.0f),
             0.0f, 1.0f, new Color(255.0f, 255.0f, 255.0f, 255.0f),
             0.2f, 3.0f, true, 1, 0.05f, PipePrefab);
 
-            CreateParticleEmitterEntity(VentPrefab, new Vector2(2.0f, 0),
+            CreateParticleEmitterEntity(entitasContext.particle, VentPrefab, new Vector2(2.0f, 0),
              1.0f, new Vector2(0, -20.0f), 3.5f, 0.0f, new int[]{0}, new Vector2(1.0f, 10.0f),
             0.0f, 1.0f, new Color(255.0f, 255.0f, 255.0f, 255.0f),
             0.2f, 3.0f, true, 20, 0.5f, OrePrefab);
@@ -182,20 +185,20 @@ namespace Planet.Unity
             return go;
         }
 
-        private void CreateParticleEmitterEntity(GameObject emitterPrefab, Vector2 position, float decayRate,
+        private void CreateParticleEmitterEntity(ParticleContext context, GameObject emitterPrefab, Vector2 position, float decayRate,
             Vector2 acceleration, float deltaRotation, float deltaScale,
             int[] spriteIds, Vector2 startingVelocity,
             float startingRotation, float startingScale, Color startingColor,
             float animationSpeed, float duration, bool loop, int particleCount, 
             float timeBetweenEmissions, GameObject prefab)
         {
-            var e = EntitasContext.game.CreateEntity();
+            var e = context.CreateEntity();
             var gameObject = UnityEngine.Object.Instantiate(emitterPrefab);
             gameObject.transform.position = new Vector3(position.x, position.y, 0.0f);
                 
             e.AddParticleEmitter2dPosition(position, new Vector2(), new Vector2());
             e.AddParticleEmitterState(gameObject, prefab, decayRate, acceleration, deltaRotation,
-            deltaScale, spriteIds, startingVelocity, startingRotation, startingScale, startingColor,
+            deltaScale, spriteIds, new Vec2f(16, 16), startingVelocity, startingRotation, startingScale, startingColor,
             animationSpeed, duration, loop, particleCount, timeBetweenEmissions, 0.0f);
         }
 

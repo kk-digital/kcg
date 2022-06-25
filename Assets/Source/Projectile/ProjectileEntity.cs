@@ -5,8 +5,8 @@ namespace Projectile
 
     public struct ProjectileEntity
     {
-        public int Index;
+        public int ProjectileId;
         public bool IsInitialized;
-        public Entity Entity;
+        public GameEntity Entity;
     }
 }

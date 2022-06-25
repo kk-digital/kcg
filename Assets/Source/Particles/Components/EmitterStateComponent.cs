@@ -1,9 +1,11 @@
 using Entitas;
 using Entitas.CodeGeneration.Attributes;
 using UnityEngine;
+using KMath;
 
 namespace Particle
 {
+    [Particle]
     public struct EmitterStateComponent : IComponent
     {
         public GameObject GameObject;
@@ -19,6 +21,7 @@ namespace Particle
         public int[] SpriteIds;
 
         // the starting properties of the particles
+        public Vec2f ParticleSize;
         public Vector2 ParticleStartingVelocity;
         public float ParticleStartingRotation;
         public float ParticleStartingScale;

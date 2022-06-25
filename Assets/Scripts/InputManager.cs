@@ -20,12 +20,6 @@ public class InputManager : MonoBehaviour
     // Currently Active Key
     public Key activeKey;
 
-    // Note: This is temporarily
-    private Vehicle.ProcessVelocitySystem vehilcePhysics;
-    private VehicleTest vehicleTest;
-    private Contexts contexts;
-    private GameEntity vehicleEntity;
-
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Awake.html
     void Awake()
     {
@@ -34,15 +28,6 @@ public class InputManager : MonoBehaviour
         {
             SceneManager.Instance.Register(this, Enums.SceneObjectType.SceneObjectTypeUtilityScript);
         }
-
-        // Set Vehicle Physics
-        vehilcePhysics = new Vehicle.ProcessVelocitySystem();
-
-        // Set Vehicle Test Obj
-        //vehicleTest = GameObject.Find("VehicleTest").GetComponent<VehicleTest>();
-
-        // Set Contexts obj
-        contexts = Contexts.sharedInstance;
     }
 
     public void Controls()
@@ -84,126 +69,6 @@ public class InputManager : MonoBehaviour
                     pixelCam.targetCameraHalfWidth += 1.0f;
                 // Update Zoomed ortho pixel perfect calculation
                 pixelCam.adjustCameraFOV();
-            }
-        }
-        else if (playerState == Enums.PlayerState.Vehicle)
-        {
-            if (Input.GetKey(KeyCode.A))
-            {
-                // Get Vehicle Entites
-                IGroup<GameEntity> entities =
-                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
-                foreach (var vehicle in entities)
-                {
-                    vehicleEntity = vehicle;
-
-                    // Get scale from component
-                    vehicle.ReplaceVehiclePhysicsState2D(vehicle.vehiclePhysicsState2D.Position, vehicle.vehiclePhysicsState2D.TempPosition, new Vector2(-vehicle.vehiclePhysicsState2D.Scale.x, vehicle.vehiclePhysicsState2D.Scale.y), vehicle.vehiclePhysicsState2D.Scale, vehicle.vehiclePhysicsState2D.angularVelocity, vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
-                         vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
-                }
-
-                float velocity = Mathf.Lerp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, -1.0f, vehicleEntity.vehiclePhysicsState2D.angularAcceleration * Time.deltaTime);
-
-                vehilcePhysics.ProcessMovement(new Vector2(velocity, vehicleEntity.vehiclePhysicsState2D.angularVelocity.y), contexts);
-            }
-            else if(Input.GetKeyUp(KeyCode.A))
-            {
-                // Get Vehicle Entites
-                IGroup<GameEntity> entities =
-                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
-                foreach (var vehicle in entities)
-                {
-                    vehicleEntity = vehicle;
-
-                    StartCoroutine(vehilcePhysics.Break(true, vehicleEntity.vehiclePhysicsState2D.angularVelocity, contexts));
-                }
-            }
-
-            if (Input.GetKey(KeyCode.D))
-            {
-                // Get Vehicle Entites
-                IGroup<GameEntity> entities =
-                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
-                foreach (var vehicle in entities)
-                {
-                    vehicleEntity = vehicle;
-                    // Get scale from component
-                    vehicle.ReplaceVehiclePhysicsState2D(vehicle.vehiclePhysicsState2D.Position, vehicle.vehiclePhysicsState2D.TempPosition, new Vector2(vehicle.vehiclePhysicsState2D.Scale.x, vehicle.vehiclePhysicsState2D.Scale.y), vehicle.vehiclePhysicsState2D.Scale, vehicle.vehiclePhysicsState2D.angularVelocity, vehicle.vehiclePhysicsState2D.angularMass, vehicle.vehiclePhysicsState2D.angularAcceleration,
-                         vehicle.vehiclePhysicsState2D.centerOfGravity, vehicle.vehiclePhysicsState2D.centerOfRotation);
-                }
-
-                float velocity = Mathf.Lerp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, 1.0f, vehicleEntity.vehiclePhysicsState2D.angularAcceleration * Time.deltaTime);
-
-                vehilcePhysics.ProcessMovement(new Vector2(velocity, vehicleEntity.vehiclePhysicsState2D.angularVelocity.y), contexts);
-            }
-            else if (Input.GetKeyUp(KeyCode.D))
-            {
-                // Get Vehicle Entites
-                IGroup<GameEntity> entities =
-                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
-                foreach (var vehicle in entities)
-                {
-                    vehicleEntity = vehicle;
-
-                    StartCoroutine(vehilcePhysics.Break(true, vehicleEntity.vehiclePhysicsState2D.angularVelocity, contexts));
-                }
-            }
-
-            if (Input.GetKey(KeyCode.W))
-            {
-                vehicleTest.canUpdateGravity = false;
-                // Get Vehicle Entites
-                IGroup<GameEntity> entities =
-                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
-                foreach (var vehicle in entities)
-                {
-                    vehicleEntity = vehicle;
-                }
-
-                float velocity = Mathf.Lerp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.y, 1.0f, vehicleEntity.vehiclePhysicsState2D.angularAcceleration * Time.deltaTime);
-                vehilcePhysics.ProcessMovement(new Vector2(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, velocity), contexts);
-            }
-            else if (Input.GetKeyUp(KeyCode.W))
-            {
-                vehicleTest.canUpdateGravity = true;
-                // Get Vehicle Entites
-                IGroup<GameEntity> entities =
-                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
-                foreach (var vehicle in entities)
-                {
-                    vehicleEntity = vehicle;
-
-                    StartCoroutine(vehilcePhysics.Break(false, vehicleEntity.vehiclePhysicsState2D.angularVelocity, contexts));
-                }
-            }
-
-            if (Input.GetKey(KeyCode.S))
-            {
-                vehicleTest.canUpdateGravity = false;
-                // Get Vehicle Entites
-                IGroup<GameEntity> entities =
-                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
-                foreach (var vehicle in entities)
-                {
-                    vehicleEntity = vehicle;
-                }
-
-                float velocity = Mathf.Lerp(vehicleEntity.vehiclePhysicsState2D.angularVelocity.y, -1.0f, vehicleEntity.vehiclePhysicsState2D.angularAcceleration * Time.deltaTime);
-
-                vehilcePhysics.ProcessMovement(new Vector2(vehicleEntity.vehiclePhysicsState2D.angularVelocity.x, velocity), contexts);
-            }
-            else if (Input.GetKeyUp(KeyCode.S))
-            {
-                vehicleTest.canUpdateGravity = true;
-                // Get Vehicle Entites
-                IGroup<GameEntity> entities =
-                contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
-                foreach (var vehicle in entities)
-                {
-                    vehicleEntity = vehicle;
-
-                    StartCoroutine(vehilcePhysics.Break(false, vehicleEntity.vehiclePhysicsState2D.angularVelocity, contexts));
-                }
             }
         }
 
@@ -272,4 +137,3 @@ public class InputManager : MonoBehaviour
         return Enums.eInputDevice.Invalid;
     }
 }
-

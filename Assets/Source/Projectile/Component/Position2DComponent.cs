@@ -1,14 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Entitas;
+using KMath;
+using UnityEngine;
 
 namespace Projectile
 {
-    public class Position2DComponent : IComponent
+    public struct Position2DComponent : IComponent
     {
-        public Vector2 Position = Vector2.zero;
-        public Vector2 TempPosition = Vector2.zero;
+        public Vec2f Value;
+        public Vec2f PreviousValue;
+        
+        public static Vec2f operator +(Position2DComponent velocity, Vec2f other) => velocity.Value + other;
     }
 }
-

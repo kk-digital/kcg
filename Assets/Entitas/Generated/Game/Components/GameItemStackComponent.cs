@@ -11,19 +11,17 @@ public partial class GameEntity {
     public Item.StackComponent itemStack { get { return (Item.StackComponent)GetComponent(GameComponentsLookup.ItemStack); } }
     public bool hasItemStack { get { return HasComponent(GameComponentsLookup.ItemStack); } }
 
-    public void AddItemStack(int newStackCount, int newMaxStackSize) {
+    public void AddItemStack(int newCount) {
         var index = GameComponentsLookup.ItemStack;
         var component = (Item.StackComponent)CreateComponent(index, typeof(Item.StackComponent));
-        component.StackCount = newStackCount;
-        component.MaxStackSize = newMaxStackSize;
+        component.Count = newCount;
         AddComponent(index, component);
     }
 
-    public void ReplaceItemStack(int newStackCount, int newMaxStackSize) {
+    public void ReplaceItemStack(int newCount) {
         var index = GameComponentsLookup.ItemStack;
         var component = (Item.StackComponent)CreateComponent(index, typeof(Item.StackComponent));
-        component.StackCount = newStackCount;
-        component.MaxStackSize = newMaxStackSize;
+        component.Count = newCount;
         ReplaceComponent(index, component);
     }
 

@@ -26,7 +26,9 @@ namespace AI
         public int                  HeuristicCost;
         public int                  TotalCost;
     }
+    // Todo: update this for new action system.
 
+    /*
     public class GoapAStar
     {
         List<Node> OpenList = new List<Node>();
@@ -49,7 +51,7 @@ namespace AI
 
             for (int i = 0; i < ActionsList.Length; i++)
             {
-                if (!ActionsList[i].aIAction.Effects.MatchCondition(Parent.WorldState))
+                if (!ActionsList[i].actionGoap.Effects.MatchCondition(Parent.WorldState))
                 {
                     continue;
                 }
@@ -61,12 +63,12 @@ namespace AI
             foreach (GameEntity action in NeighborActions)
             {
                 GoapState NewWorldState = new GoapState(new Dictionary<string, object>());
-                NewWorldState = GoapState.ApplyEffect(Parent.WorldState, action.aIAction.PreConditions);
+                NewWorldState = GoapState.ApplyEffect(Parent.WorldState, action.actionGoap.PreConditions);
 
                 // Check If goal was reached.
                 if (GoalState.MatchCondition(NewWorldState))
                 {
-                    ListofActions.Enqueue(action.aIAction.ActionID);
+                    ListofActions.Enqueue(action.actionID.ID);
                     Node node = Parent;
                     while (node != RootNode)
                     {
@@ -76,15 +78,15 @@ namespace AI
                     return true;
                 }
 
-                int NewPathCost = Parent.PathCost + action.aIAction.Cost;
+                int NewPathCost = Parent.PathCost + action.actionGoap.Cost;
 
-                if (IsNodeOnList(OpenList, NewWorldState, NewPathCost, action.aIAction.ActionID))
+                if (IsNodeOnList(OpenList, NewWorldState, NewPathCost, action.actionID.ID))
                     continue;
-                if (IsNodeOnList(ClosedList, NewWorldState, NewPathCost, action.aIAction.ActionID))
+                if (IsNodeOnList(ClosedList, NewWorldState, NewPathCost, action.actionID.ID))
                     continue;
 
                 // Add new node to OpenList.
-                OpenList.Add(new Node(Parent, NewWorldState, action.aIAction.ActionID,
+                OpenList.Add(new Node(Parent, NewWorldState, action.actionID.ID,
                         NewPathCost, GetHeuristicWeight(NewWorldState, GoalState)));
             }
 
@@ -153,5 +155,5 @@ namespace AI
             }
             return cost;
         }
-    }   
+    }  */
 }

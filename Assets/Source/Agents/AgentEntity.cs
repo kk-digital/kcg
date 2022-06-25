@@ -5,8 +5,8 @@ namespace Agent
 
     public struct AgentEntity
     {
-        public int Index;
+        public int AgentId;
         public bool IsInitialized;
-        public Entity Entity;
+        public GameEntity Entity;
     }
 }
