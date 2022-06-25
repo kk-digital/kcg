@@ -24,6 +24,8 @@ namespace Source {
             public float   heliocentric_distance;                // r                    Distance from central body at current position
                                                                  //  c
 
+            public float   true_anomaly_asymptote;               // ν∞                   True anomaly for the asymptote of the orbit (Hyperbolic orbits only)
+
             public SpaceObject central_body;
             public SpaceObject self;
 
@@ -136,6 +138,9 @@ namespace Source {
 
                 eccentricity_vector[0] = eccentricity_vector[0] / magnitude * eccentricity;
                 eccentricity_vector[1] = eccentricity_vector[1] / magnitude * eccentricity;
+
+                if(eccentricity < 1.0f) true_anomaly_asymptote = Tools.pi;
+                else                    true_anomaly_asymptote = (float)Math.Acos(-1.0f / eccentricity);
             }
 
             public float get_eccentric_anomaly_at(float mean) {
@@ -251,25 +256,12 @@ namespace Source {
                 float posx;
                 float posy;
 
-                if(eccentricity < 1.0f) {
+                // →          cos(ν)
+                // r = r  * ( sin(ν) )
+                //      c       0
 
-                    // →          cos(ν)
-                    // r = r  * ( sin(ν) )
-                    //      c       0
-
-                    posx = (float)Math.Cos(true_anom) * radius;
-                    posy = (float)Math.Sin(true_anom) * radius;
-
-                } else {
-
-                    // →          cosh(ν)
-                    // r = r  * ( sinh(ν) )
-                    //      c        0
-
-                    posx = (float)Math.Cosh(true_anom) * radius;
-                    posy = (float)Math.Sinh(true_anom) * radius;
-
-                }
+                posx = (float)Math.Cos(true_anom) * radius;
+                posy = (float)Math.Sin(true_anom) * radius;
 
                 // Rotate the position along the orbit's rotational offset
 
@@ -661,6 +653,9 @@ namespace Source {
                 while(mean_anomaly      < 0.0f) mean_anomaly      += Tools.twopi;
                 while(eccentric_anomaly < 0.0f) eccentric_anomaly += Tools.twopi;
                 while(true_anomaly      < 0.0f) true_anomaly      += Tools.twopi;
+
+                if(eccentricity < 1.0f) true_anomaly_asymptote = Tools.pi;
+                else                    true_anomaly_asymptote = (float)Math.Acos(-1.0f / eccentricity);
             }
         }
     }
