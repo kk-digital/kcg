@@ -26,8 +26,10 @@ namespace Scripts {
             public float drag_factor            = 10000.0f;
             public float drag_cutoff            = 5.0f;
             public bool  quadratic_drag         = false;
-            public float sailing_factor         = 20.0f;
+            public float sailing_factor         = 5.0f;
             public float system_scale           = 1.0f;
+            public float sail_angle             = 0.0f;
+            public float sail_speed             = 0.5f;
 
             public bool  mouse_steering         = false;
 
@@ -40,10 +42,13 @@ namespace Scripts {
             public CameraController camera_controller;
             public SystemState state;
 
+            public LineRenderer rudder_renderer;
+
             private void Start() {
                 camera_controller  = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
                 state              = GetComponent<GameLoop>().CurrentSystemState;
+                rudder_renderer    = gameObject.AddComponent<LineRenderer>();
 
                 last_time          = Time.time * 1000.0f;
 
@@ -55,6 +60,7 @@ namespace Scripts {
                 ship.self.posx     = 0.0f;
                 ship.self.posy     = 0.0f;
                 ship.acceleration  = 5.0f;
+                ship.horizontal_acceleration = 2.5f;
 
                 ship.self.mass     = 1.0f;
 
@@ -69,6 +75,23 @@ namespace Scripts {
                 ship.max_shield    = 50000;
 
                 ship.shield_regeneration_rate = 3;
+
+                Shader shader = Shader.Find("Hidden/Internal-Colored");
+                Material mat  = new Material(shader);
+                mat.hideFlags = HideFlags.HideAndDontSave;
+
+                mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+
+                // Turn off backface culling, depth writes, depth test.
+                mat.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
+                mat.SetInt("_ZWrite", 0);
+                mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
+
+                rudder_renderer.material      = mat;
+                rudder_renderer.useWorldSpace = true;
+                rudder_renderer.startColor    =
+                rudder_renderer.endColor      = Color.white;
             }
 
             private void Update() {
@@ -88,10 +111,22 @@ namespace Scripts {
 
                 float rotation_change = ship.rotation;
 
+                Vector3[] vertices = new Vector3[2];
+                vertices[0] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
+                vertices[1] = new Vector3(ship.self.posx + (float)Math.Cos(ship.rotation + sail_angle) * 5.0f,
+                                          ship.self.posy + (float)Math.Sin(ship.rotation + sail_angle) * 5.0f,
+                                          0.0f);
+
+                rudder_renderer.SetPositions(vertices);
+                rudder_renderer.positionCount  = 2;
+
+                rudder_renderer.startWidth     =
+                rudder_renderer.endWidth       = 0.1f / camera_controller.scale;
+
                 if (!mouse_steering) {
+                    ship.rotation         += ship.self.angular_vel * current_time;
                     if(Input.GetKey("left ctrl")) horizontal_movement = Input.GetAxis("Horizontal");
                     else {
-                        ship.rotation         += ship.self.angular_vel * current_time;
                         float acc              = (float)Math.Sqrt(ship.torque / ship.self.angular_inertia) * -Input.GetAxis("Horizontal");
                         ship.rotation         += 0.5f * acc * current_time * current_time;
                         ship.self.angular_vel += acc * current_time;
@@ -113,22 +148,30 @@ namespace Scripts {
                     ship.rotate_to(angle, current_time);
                 }
 
+                if(Input.GetKey("q")) sail_angle += sail_speed * current_time;
+                if(Input.GetKey("e")) sail_angle -= sail_speed * current_time;
+
                 rotation_change -= ship.rotation;
 
                 float movement = Input.GetAxis("Vertical");
                 if (movement == 0.0f && Input.GetKey("w")) movement =  1.0f;
                 if (movement == 0.0f && Input.GetKey("s")) movement = -1.0f;
 
-                float accx = (float)Math.Cos(ship.rotation) * movement - (float)Math.Sin(ship.rotation) * horizontal_movement;
-                float accy = (float)Math.Sin(ship.rotation) * movement + (float)Math.Cos(ship.rotation) * horizontal_movement;
+                float accx = (float)Math.Cos(ship.rotation) * movement * ship.acceleration;
+                float accy = (float)Math.Sin(ship.rotation) * movement * ship.acceleration;
 
-                accx *= current_time * ship.acceleration;
-                accy *= current_time * ship.acceleration;
+                accx += (float)Math.Sin(ship.rotation) * horizontal_movement * ship.horizontal_acceleration;
+                accy -= (float)Math.Cos(ship.rotation) * horizontal_movement * ship.horizontal_acceleration;
+
+                accx *= current_time;
+                accy *= current_time;
             
-                if (horizontal_movement != 0.0f && movement != 0.0f) {
-                    accx *= Tools.rsqrt2;
-                    accy *= Tools.rsqrt2;
-                }
+                /*
+                 * if (horizontal_movement != 0.0f && movement != 0.0f) {
+                 *     accx *= Tools.rsqrt2;
+                 *     accy *= Tools.rsqrt2;
+                 * }
+                */
 
                 ship.self.posx += ship.self.velx * current_time + accx / 2.0f * current_time;
                 ship.self.posy += ship.self.vely * current_time + accy / 2.0f * current_time;
@@ -157,8 +200,14 @@ namespace Scripts {
                         magnitude = Tools.magnitude(ship.self.velx, ship.self.vely);
                     }
 
-                    // "Sailing" effect                
+                    // "Sailing" effect
+                    if(ship.self.velx != 0.0f && ship.self.vely != 0.0f) {
+                        float sail_x = magnitude * current_time * (float)Math.Cos(ship.rotation + sail_angle);
+                        float sail_y = magnitude * current_time * (float)Math.Sin(ship.rotation + sail_angle);
 
+                        ship.self.velx = (sailing_factor * ship.self.velx + sail_x) / (sailing_factor + current_time);
+                        ship.self.vely = (sailing_factor * ship.self.vely + sail_y) / (sailing_factor + current_time);
+                    }
                 }
 
                 renderer.shipColor.b = (float) ship.health / ship.max_health;
