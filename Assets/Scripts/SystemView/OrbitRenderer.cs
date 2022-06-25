@@ -20,7 +20,8 @@ namespace Scripts {
 
             public void update_renderer(int segments) {
                 if(line_renderer == null) return;
-                if(descriptor == null) {
+                if(descriptor == null || descriptor.eccentricity >= 1.0f) {
+                    line_renderer.positionCount = 0;
                     line_renderer.startWidth = line_renderer.endWidth = 0.0f;
                     return;
                 }
