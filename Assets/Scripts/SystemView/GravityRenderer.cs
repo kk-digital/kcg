@@ -118,6 +118,8 @@ namespace Scripts {
                         arrows[x, y].line.startWidth =
                         arrows[x, y].line.endWidth   = line_thickness / camera.scale;
 
+                        float maxg = 0.0f;
+
                         foreach(SpaceObject Body in state.objects) {
                             float dx                 = Body.posx - absolute.x;
                             float dy                 = Body.posy - absolute.y;
@@ -127,8 +129,19 @@ namespace Scripts {
 
                             float g                  = Tools.gravitational_constant * Body.mass / d2;
 
+                            if(g > maxg) {
+                                maxg = g;
+
+                                arrows[x, y].dirx    = g * dx / d;
+                                arrows[x, y].diry    = g * dy / d;
+                            }
+
+                            /*
+                             * Gravity should only work for strongest object?
+                             * 
                             arrows[x, y].dirx       += g * dx / d;
                             arrows[x, y].diry       += g * dy / d;
+                             */
                         }
 
                         float magnitude              = Tools.magnitude(arrows[x, y].dirx, arrows[x, y].diry);
