@@ -40,6 +40,25 @@ namespace Scripts {
             public Button   UpdateEnemyButton;
             public Button   DeleteEnemyButton;
 
+            public float    rudder_speed;
+            public float    rudder_strength;
+            public bool     rudder_enabled = true;
+
+            public void set_rudder_speed(float f) {
+                rudder_speed = f;
+                if(Player != null) Player.sail_speed = f;
+            }
+
+            public void set_rudder_strength(float f) {
+                rudder_strength = f;
+                if(Player != null) Player.sailing_factor = 50 - f;
+            }
+
+            public void toggle_rudder(bool b) {
+                rudder_enabled = b;
+                if(Player != null) Player.rudder_enabled = rudder_enabled;
+            }
+
             void Start() {
                 LastTime = (int)(Time.time * 1000.0f);
 

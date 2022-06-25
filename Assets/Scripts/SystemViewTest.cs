@@ -49,7 +49,7 @@ namespace Scripts {
             private float CachedPlanetMass =   100000000000000.0f;
             private float CachedMoonMass   =    20000000000000.0f;
 
-            private int   CurrentCycle     =                    0;
+            public  bool TrackingPlayer    =                false;
 
             public  CameraController Camera;
 
@@ -85,7 +85,11 @@ namespace Scripts {
             }
 
             public void CenterCamera() {
-                Camera.setPosition(-State.player.ship.self.posx, -State.player.ship.self.posy, 0.25f / system_scale);
+                Camera.set_position(-State.player.ship.self.posx, -State.player.ship.self.posy, 0.25f / system_scale);
+            }
+
+            public void TogglePlayerTracking() {
+                if(TrackingPlayer = !TrackingPlayer) CenterCamera();                
             }
 
             public void RegenerateSystem() {
@@ -355,7 +359,7 @@ namespace Scripts {
                     Stations.Add(Station, StationInfo);
                 }
 
-                for(int i = 0; i < State.planets.Count; i++)
+                /*for(int i = 0; i < State.planets.Count; i++)
                     if(State.planets[i].descriptor.central_body == State.star)
                         for(int j = 0; j < State.planets.Count; j++)
                             if(i != j && State.planets[j].descriptor.central_body == State.star) {
@@ -375,7 +379,31 @@ namespace Scripts {
                                 ShipInfo.Renderer.ship = ship;
 
                                 Ships.Add(ship, ShipInfo);
-                            }
+                            }*/
+
+                foreach(SystemPlanet planet in State.planets) {
+                    planet.descriptor.update_position(0.0f);
+
+                    // Exactly as expected, it is impossible to orbit a planet when you make the planet not move around the star
+                    // and when you disable the star's impact on the player when he's orbiting the planet
+
+                    // While this was expected, this janky and ugly solution makes it at least kind of work. It would however
+                    // be much easier and more intuitive to just have everything orbit, you know, as you would expect it. A much
+                    // better way of achieving the same effect of "simplicity" would be to either make the system astronomically
+                    // large, or to make the gravity of all objects a lot smaller.
+
+                    planet.descriptor.self.velx =
+                    planet.descriptor.self.vely = 0.0f;
+                }
+
+                foreach(SpaceStation station in State.stations) {
+                    station.descriptor.update_position(0.0f);
+
+                    // See above
+
+                    station.descriptor.self.velx =
+                    station.descriptor.self.vely = 0.0f;
+                }
 
                 State.player = gameObject.AddComponent<PlayerShip>();
                 State.player.system_scale = system_scale;
@@ -411,13 +439,17 @@ namespace Scripts {
                     for(int i = 0; i < Moons.Count; i++)
                         Moons.ElementAt(i).Key.descriptor.self.mass = MoonMass;
                 }
-
+                
+                /*
+                 * Disabled planet movement as requested
+                 * 
                 foreach(SystemPlanet p in State.planets)
                     p.descriptor.update_position(CurrentTime);
 
                 foreach(SpaceStation s in State.stations)
                     s.descriptor.update_position(CurrentTime);
-
+                */
+                
                 foreach(SystemShip s in State.ships) {
                     if(!s.path_planned)
                         s.path_planned = s.descriptor.plan_path(s.destination, 0.1f * system_scale);
@@ -430,6 +462,7 @@ namespace Scripts {
                     s.descriptor.update_position(CurrentTime);
                 }
 
+                float maxg = 0.0f;
                 float GravVelX = 0.0f;
                 float GravVelY = 0.0f;
 
@@ -441,12 +474,24 @@ namespace Scripts {
                     float d2 = dx * dx + dy * dy;
                     float d = (float)Math.Sqrt(d2);
 
-                    float g = 6.67408E-11f * Body.mass / d2;
+                    float g = Tools.gravitational_constant * Body.mass / d2;
+                    
+                    if(g > maxg) {
+                        maxg = g;
+                        float vel = g * CurrentTime;
 
+                        GravVelX = vel * dx / d;
+                        GravVelY = vel * dy / d;
+                    }
+
+                    /*
+                     * Only apply gravity for strongest object
+                     * 
                     float Velocity = g * CurrentTime;
 
                     GravVelX += Velocity * dx / d;
                     GravVelY += Velocity * dy / d;
+                    */
                 }
 
                 State.player.gravitational_strength = (float)Math.Sqrt(GravVelX * GravVelX + GravVelY * GravVelY) * 0.4f / CurrentTime;
@@ -466,7 +511,11 @@ namespace Scripts {
 
                 UpdateDropdownMenu();
 
-                CurrentCycle++;
+                if(TrackingPlayer) {
+                    if(Input.GetMouseButton(1)) TrackingPlayer = false; // Disable camera tracking if user is manually moving camera
+                    else
+                        Camera.set_position(-State.player.ship.self.posx, -State.player.ship.self.posy, Camera.scale);
+                }
             }
 
             private void UpdateDropdownMenu() {

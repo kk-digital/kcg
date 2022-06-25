@@ -37,7 +37,7 @@ namespace Scripts {
                 sr.color = planetColor;
                 or.color = orbitColor;
 
-                or.UpdateRenderer(128);
+                or.update_renderer(128);
             }
 
             void OnDestroy() {

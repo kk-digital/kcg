@@ -5,6 +5,12 @@ using Source.SystemView;
 namespace Scripts {
     namespace SystemView {
         public class PlayerShip : MonoBehaviour {
+            private enum SelectedWeaponType {
+                MAIN_WEAPONS = 1 << 1,
+                BROADSIDES   = 1 << 2,
+                TURRETS      = 1 << 3
+            };
+
             public SystemShip ship;
 
             public GameObject o;
@@ -12,24 +18,38 @@ namespace Scripts {
 
             public float last_time;
 
-            public bool render_orbit = true;
+            public bool  render_orbit           = true;
 
             public float gravitational_strength = 0.0f;
 
-            public float time_scale = 1.0f;
-            public float drag_factor = 10000.0f;
-            public float sailing_factor = 20.0f;
-            public float system_scale = 1.0f;
+            public float time_scale             = 1.0f;
+            public float drag_factor            = 10000.0f;
+            public float drag_cutoff            = 5.0f;
+            public bool  quadratic_drag         = false;
+            public float sailing_factor         = 5.0f;
+            public float system_scale           = 1.0f;
+            public float sail_angle             = 0.0f;
+            public float sail_speed             = 0.5f;
+            public bool  rudder_enabled         = true;
 
-            public bool  mouse_steering = false;
+            public bool  mouse_steering         = false;
+
+            public const string main_weapon_key = "1";
+            public const string broadsides_key  = "2";
+            public const string turrets_key     = "3";
+
+            private SelectedWeaponType selectedWeapon = SelectedWeaponType.MAIN_WEAPONS;
+
             public CameraController camera_controller;
-
             public SystemState state;
+
+            public LineRenderer rudder_renderer;
 
             private void Start() {
                 camera_controller  = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
                 state              = GetComponent<GameManager>().CurrentSystemState;
+                rudder_renderer    = gameObject.AddComponent<LineRenderer>();
 
                 last_time          = Time.time * 1000.0f;
 
@@ -41,6 +61,7 @@ namespace Scripts {
                 ship.self.posx     = 0.0f;
                 ship.self.posy     = 0.0f;
                 ship.acceleration  = 5.0f;
+                ship.horizontal_acceleration = 2.5f;
 
                 ship.self.mass     = 1.0f;
 
@@ -49,10 +70,29 @@ namespace Scripts {
                 renderer.shipColor = Color.blue;
                 renderer.width     = 3.0f;
 
-                ship.health = ship.max_health = 25000;
-                ship.shield = ship.max_shield = 50000;
+                ship.health        =
+                ship.max_health    = 25000;
+                ship.shield        =
+                ship.max_shield    = 50000;
 
                 ship.shield_regeneration_rate = 3;
+
+                Shader shader = Shader.Find("Hidden/Internal-Colored");
+                Material mat  = new Material(shader);
+                mat.hideFlags = HideFlags.HideAndDontSave;
+
+                mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+
+                // Turn off backface culling, depth writes, depth test.
+                mat.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
+                mat.SetInt("_ZWrite", 0);
+                mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
+
+                rudder_renderer.material      = mat;
+                rudder_renderer.useWorldSpace = true;
+                rudder_renderer.startColor    =
+                rudder_renderer.endColor      = Color.white;
             }
 
             private void Update() {
@@ -72,12 +112,39 @@ namespace Scripts {
 
                 float rotation_change = ship.rotation;
 
+                Vector3[] vertices = new Vector3[2];
+
+                if(rudder_enabled) {
+                    vertices[0] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
+                    vertices[1] = new Vector3(ship.self.posx + (float)Math.Cos(ship.rotation + sail_angle) * 5.0f,
+                                              ship.self.posy + (float)Math.Sin(ship.rotation + sail_angle) * 5.0f,
+                                              0.0f);
+
+                    rudder_renderer.SetPositions(vertices);
+                    rudder_renderer.positionCount  = 2;
+
+                    rudder_renderer.startWidth     =
+                    rudder_renderer.endWidth       = 0.1f / camera_controller.scale;
+                } else {
+                    vertices[0] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
+                    vertices[1] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
+
+                    rudder_renderer.SetPositions(vertices);
+                    rudder_renderer.positionCount  = 0;
+                }
+
                 if (!mouse_steering) {
-                    if (Input.GetKey("left ctrl")) horizontal_movement = Input.GetAxis("Horizontal");
-                    else ship.rotation -= Input.GetAxis("Horizontal") * current_time * ship.rotational_speed_modifier;
+                    ship.rotation         += ship.self.angular_vel * current_time;
+                    if(Input.GetKey("left ctrl")) horizontal_movement = Input.GetAxis("Horizontal");
+                    else {
+                        float acc              = (float)Math.Sqrt(ship.torque / ship.self.angular_inertia) * -Input.GetAxis("Horizontal");
+                        ship.rotation         += 0.5f * acc * current_time * current_time;
+                        ship.self.angular_vel += acc * current_time;
+                        ship.self.angular_vel *= 0.99f;
+                    }
                 } else {
                     horizontal_movement = -Input.GetAxis("Horizontal");
-                    Vector3 RelPos = camera_controller.GetRelPos(new Vector3(ship.self.posx, ship.self.posy, 0.0f));
+                    Vector3 RelPos = camera_controller.get_rel_pos(new Vector3(ship.self.posx, ship.self.posy, 0.0f));
 
                     float dx = Input.mousePosition.x - RelPos.x;
                     float dy = Input.mousePosition.y - RelPos.y;
@@ -91,22 +158,30 @@ namespace Scripts {
                     ship.rotate_to(angle, current_time);
                 }
 
+                if(Input.GetKey("q")) sail_angle += sail_speed * current_time;
+                if(Input.GetKey("e")) sail_angle -= sail_speed * current_time;
+
                 rotation_change -= ship.rotation;
 
                 float movement = Input.GetAxis("Vertical");
                 if (movement == 0.0f && Input.GetKey("w")) movement =  1.0f;
                 if (movement == 0.0f && Input.GetKey("s")) movement = -1.0f;
 
-                float accx = (float)Math.Cos(ship.rotation) * movement - (float)Math.Sin(ship.rotation) * horizontal_movement;
-                float accy = (float)Math.Sin(ship.rotation) * movement + (float)Math.Cos(ship.rotation) * horizontal_movement;
+                float accx = (float)Math.Cos(ship.rotation) * movement * ship.acceleration;
+                float accy = (float)Math.Sin(ship.rotation) * movement * ship.acceleration;
 
-                accx *= current_time * ship.acceleration;
-                accy *= current_time * ship.acceleration;
+                accx += (float)Math.Sin(ship.rotation) * horizontal_movement * ship.horizontal_acceleration;
+                accy -= (float)Math.Cos(ship.rotation) * horizontal_movement * ship.horizontal_acceleration;
+
+                accx *= current_time;
+                accy *= current_time;
             
-                if (horizontal_movement != 0.0f && movement != 0.0f) {
-                    accx *= Tools.rsqrt2;
-                    accy *= Tools.rsqrt2;
-                }
+                /*
+                 * if (horizontal_movement != 0.0f && movement != 0.0f) {
+                 *     accx *= Tools.rsqrt2;
+                 *     accy *= Tools.rsqrt2;
+                 * }
+                */
 
                 ship.self.posx += ship.self.velx * current_time + accx / 2.0f * current_time;
                 ship.self.posy += ship.self.vely * current_time + accy / 2.0f * current_time;
@@ -120,21 +195,35 @@ namespace Scripts {
                 if (gravitational_strength < 1.0f) {
                     float gravitational_factor = 1.0f / (1.0f - gravitational_strength);
 
-                    // "Air resistance" effect
-                    float drag_x = ship.self.velx * -current_time / (gravitational_factor + drag_factor);
-                    float drag_y = ship.self.vely * -current_time / (gravitational_factor + drag_factor);
-
-                    ship.self.velx *= 1.0f + drag_x;
-                    ship.self.vely *= 1.0f + drag_y;
-
-                    // "Sailing" effect
-                    float effective_accx = accx + drag_x;
-                    float effective_accy = accy + drag_y;
-                
                     float magnitude = Tools.magnitude(ship.self.velx, ship.self.vely);
 
-                    ship.self.velx = ((sailing_factor + gravitational_factor) * ship.self.velx + (float)Math.Cos(ship.rotation) * magnitude) / (1.0f + sailing_factor + gravitational_factor);
-                    ship.self.vely = ((sailing_factor + gravitational_factor) * ship.self.vely + (float)Math.Sin(ship.rotation) * magnitude) / (1.0f + sailing_factor + gravitational_factor);
+                    // "Air resistance" effect
+                    if(magnitude > drag_cutoff) {
+                        float cutoff_x = drag_cutoff * ship.self.velx / magnitude;
+                        float cutoff_y = drag_cutoff * ship.self.vely / magnitude;
+
+                        float effective_vel_x = ship.self.velx - cutoff_x;
+                        float effective_vel_y = ship.self.vely - cutoff_y;
+
+                        float drag_x = effective_vel_x * (quadratic_drag ? effective_vel_x : 1.0f)
+                                     * -current_time  / (gravitational_factor + drag_factor);
+                        float drag_y = effective_vel_y * (quadratic_drag ? effective_vel_y : 1.0f)
+                                     * -current_time  / (gravitational_factor + drag_factor);
+
+                        ship.self.velx *= 1.0f + drag_x;
+                        ship.self.vely *= 1.0f + drag_y;
+
+                        magnitude = Tools.magnitude(ship.self.velx, ship.self.vely);
+                    }
+
+                    // "Sailing" effect
+                    if(ship.self.velx != 0.0f && ship.self.vely != 0.0f && rudder_enabled) {
+                        float sail_x = magnitude * current_time * (float)Math.Cos(ship.rotation + sail_angle);
+                        float sail_y = magnitude * current_time * (float)Math.Sin(ship.rotation + sail_angle);
+
+                        ship.self.velx = (sailing_factor * ship.self.velx + sail_x) / (sailing_factor + current_time);
+                        ship.self.vely = (sailing_factor * ship.self.vely + sail_y) / (sailing_factor + current_time);
+                    }
                 }
 
                 renderer.shipColor.b = (float) ship.health / ship.max_health;
@@ -168,11 +257,12 @@ namespace Scripts {
                     if (strongest_gravity_object != null)
                         ship.descriptor.change_frame_of_reference(strongest_gravity_object);
 
-                    if (ship.descriptor.eccentricity <= 1.0f)
-                        ship.path_planned = true;
-                    else
-                        ship.path_planned = false;
+                    ship.path_planned = true;
                 }
+
+                     if(Input.GetKey(main_weapon_key)) selectedWeapon = SelectedWeaponType.MAIN_WEAPONS;
+                else if(Input.GetKey( broadsides_key)) selectedWeapon = SelectedWeaponType.BROADSIDES;
+                else if(Input.GetKey(    turrets_key)) selectedWeapon = SelectedWeaponType.TURRETS;
 
                 foreach(ShipWeapon weapon in ship.weapons) {
                     weapon.update();
@@ -183,15 +273,20 @@ namespace Scripts {
 
                 if(!mouse_steering) {
                     if(Input.GetKey("space") || Input.GetMouseButton(0)) {
-                        Vector3 mouse_position = camera_controller.GetAbsPos(Input.mousePosition);
+                        Vector3 mouse_position = camera_controller.get_abs_pos(Input.mousePosition);
 
-                        foreach(ShipWeapon weapon in ship.weapons)
+                        foreach(ShipWeapon weapon in ship.weapons) {
+                            if(((int)selectedWeapon & (int)weapon.flags) == 0) continue;
+
                             if(weapon.try_targeting(mouse_position.x, mouse_position.y, current_time))
                                 weapon.fire(mouse_position.x, mouse_position.y);
+                        }
                     }
                 } else {
                     if(Input.GetKey("space"))
                         foreach(ShipWeapon weapon in ship.weapons) {
+                            if(((int)selectedWeapon & (int)weapon.flags) == 0) continue;
+
                             float x = ship.self.posx + (float)Math.Cos(ship.rotation) * weapon.range;
                             float y = ship.self.posy + (float)Math.Sin(ship.rotation) * weapon.range;
 

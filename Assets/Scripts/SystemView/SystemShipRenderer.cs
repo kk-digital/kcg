@@ -121,7 +121,7 @@ namespace Scripts {
                     ShieldRender.color = new Color(shieldColor.r, shieldColor.g, shieldColor.b, shieldColor.a * ship.shield / ship.max_shield);
 
                 float v = Tools.magnitude(ship.self.velx, ship.self.vely);
-                if(ship.weapons.Count > 0 || ship == State.player.ship) {
+                if(ship.weapons.Count > 0 || (State.player != null && ship == State.player.ship)) {
                     Vector3[] vertices = new Vector3[2];
                     vertices[0] = new Vector3(ship.self.posx, ship.self.posy, -0.075f);
                     vertices[1] = new Vector3(ship.self.posx + (float)Math.Cos(ship.rotation) * 10.0f / camera_controller.scale, ship.self.posy + (float)Math.Sin(ship.rotation) * 10.0f / camera_controller.scale, -0.075f);
@@ -145,7 +145,14 @@ namespace Scripts {
                 if (!ship.path_planned) OrbitRender.descriptor = null;
                 else OrbitRender.descriptor = ship.descriptor;
 
-                OrbitRender.UpdateRenderer(128);
+                int segments;
+
+                     if(ship.descriptor.eccentricity > 1.00f) segments = 512;
+                else if(ship.descriptor.eccentricity > 0.75f) segments = 256;
+                else if(ship.descriptor.eccentricity > 0.50f) segments = 128;
+                else                                          segments =  64;
+
+                OrbitRender.update_renderer(segments);
 
                 if(Tools.debug) {
                     // Add new weapons
