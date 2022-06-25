@@ -32,14 +32,14 @@ namespace Inventory
         {
             GameEntity playerEntity = EntitasContext.game.GetEntityWithAgentID(AgentID);
             playerEntity.AddAgentToolBar(InventoryID);
-            GameEntity entity = MakeInventoryEntity(size, 1);
+            InventoryEntity entity = MakeInventoryEntity(size, 1);
             entity.isInventoryToolBar = true;
             entity.isInventoryDrawable = true;
         }
 
-        private GameEntity MakeInventoryEntity(int width, int height)
+        private InventoryEntity MakeInventoryEntity(int width, int height)
         {
-            GameEntity entity = EntitasContext.game.CreateEntity();
+            InventoryEntity entity = EntitasContext.inventory.CreateEntity();
             entity.AddInventoryID(InventoryID++);
             entity.AddInventorySize(width, height);
             BitArray bitArray = new BitArray(width* height, false);

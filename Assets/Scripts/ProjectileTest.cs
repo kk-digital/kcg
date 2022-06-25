@@ -47,9 +47,6 @@ public class ProjectileTest : MonoBehaviour
         // Initialize Projectile Velocity System
         projectileVelocitySystem = new Projectile.ProcessVelocitySystem();
 
-        // Initialize Projectile Collision System
-        projectileVelocitySystem = new Projectile.ProcessVelocitySystem();
-
         // Initialize Projectile Spawner System
         projectileSpawnerSystem = new Projectile.SpawnerSystem();
 
@@ -87,11 +84,10 @@ public class ProjectileTest : MonoBehaviour
                 else
                     DestroyImmediate(mr.gameObject);
 
-            IGroup<GameEntity> Pentities =
-            Contexts.sharedInstance.game.GetGroup(GameMatcher.ProjectilePhysicsState2D);
-            foreach (var entity in Pentities)
+            var test = Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentPlayer);
+            foreach (var entity in test)
             {
-                projectilePosition = entity.projectilePosition2D.Value;
+                startPos = entity.physicsPosition2D.Value;
             }
 
             IGroup<GameEntity> Playerentities =

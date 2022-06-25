@@ -26,16 +26,16 @@ namespace Inventory
         /// <param name="drawOrder"></param>
         public void Draw(Material material, Transform transform, int drawOrder)
         {
-            var openInventories = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.InventoryDrawable, GameMatcher.InventoryID));
+            var openInventories = Contexts.sharedInstance.inventory.GetGroup(InventoryMatcher.AllOf(InventoryMatcher.InventoryDrawable, InventoryMatcher.InventoryID));
             // If empty Draw ToolBar.
 
-            foreach (GameEntity inventoryEntity in openInventories)
+            foreach (InventoryEntity inventoryEntity in openInventories)
             {
                 DrawInventory(material, transform, inventoryEntity, drawOrder);
             }
         }
 
-        private void DrawInventory(Material material, Transform transform, GameEntity inventoryEntity, int drawOrder)
+        private void DrawInventory(Material material, Transform transform, InventoryEntity inventoryEntity, int drawOrder)
         {
             // Todo: Add scrool bar.
             // Todo: allow user to move inventory position?
@@ -79,7 +79,7 @@ namespace Inventory
             Utility.Render.DrawQuadColor(x, y, w, h, backGround, Object.Instantiate(material), transform, drawOrder);
         }
 
-        void DrawCells(float x, float y, int width, int height, float tileSize, float slotSize, Material material, Transform transform, GameEntity inventoryEntity, int drawOrder)
+        void DrawCells(float x, float y, int width, int height, float tileSize, float slotSize, Material material, Transform transform, InventoryEntity inventoryEntity, int drawOrder)
         {
             Color borderColor = Color.grey;
             Color selectedBorderColor = Color.yellow;
@@ -134,8 +134,8 @@ namespace Inventory
                 }
 
                 // Draw sprites.
-                GameEntity itemAttributeEntity = EntitasContext.game.GetEntityWithItemAttributes(itemEntity.itemID.ItemType);
-                int SpriteID = itemAttributeEntity.itemAttributeInventorySprite.ID;
+                ItemPropertiesEntity itemPropertyEntity = EntitasContext.itemProperties.GetEntityWithItemProperty(itemEntity.itemID.ItemType);
+                int SpriteID = itemPropertyEntity.itemPropertyInventorySprite.ID;
 
                 Sprites.Sprite sprite = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle);
 

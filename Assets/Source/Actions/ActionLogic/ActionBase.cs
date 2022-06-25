@@ -5,14 +5,14 @@ namespace Action
 { 
     public class ActionBase
     {
-        protected GameEntity ActionEntity;
-        protected GameEntity ActionAttributeEntity;
+        protected ActionEntity ActionEntity;
+        protected ActionPropertiesEntity ActionPropertyEntity;
         protected GameEntity AgentEntity;
 
         public ActionBase(int actionID, int agentID)
         {   
-            ActionEntity = Contexts.sharedInstance.game.GetEntityWithActionIDID(actionID);
-            ActionAttributeEntity = Contexts.sharedInstance.game.GetEntityWithActionAttribute(
+            ActionEntity = Contexts.sharedInstance.action.GetEntityWithActionIDID(actionID);
+            ActionPropertyEntity = Contexts.sharedInstance.actionProperties.GetEntityWithActionProperty(
                 ActionEntity.actionID.TypeID);
             AgentEntity = Contexts.sharedInstance.game.GetEntityWithAgentID(agentID);    
         }

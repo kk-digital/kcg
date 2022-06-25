@@ -2,6 +2,7 @@
 
 namespace Action
 {
+    [Action]
     public struct ExecutionComponent: IComponent
     {
         public ActionBase           Logic;

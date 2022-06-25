@@ -127,7 +127,7 @@ public class MiningLaser : MonoBehaviour
     private void InitializeLaser()
     {
         // Spawn the created item
-        itemSpawnSystem.SpawnItem(contexts.game, Enums.ItemType.Gun, laserPosition);
+        itemSpawnSystem.SpawnItem(contexts, Enums.ItemType.Gun, laserPosition);
 
         // Initializon done
         Init = true;
@@ -151,8 +151,8 @@ public class MiningLaser : MonoBehaviour
         if (Init)
         {
             // Get Slot Entites
-            IGroup<GameEntity> entities =
-            contexts.game.GetGroup(GameMatcher.InventorySlots);
+            IGroup<InventoryEntity> entities =
+            contexts.inventory.GetGroup(InventoryMatcher.InventorySlots);
             foreach (var slots in entities)
             {
                 if (slots.inventorySlots.Selected == 1)
@@ -192,7 +192,7 @@ public class MiningLaser : MonoBehaviour
 
             // If laser held, draw it.
             if(isHeld)
-                DrawSystem.Draw(contexts.game, Instantiate(Material), transform, 16);
+                DrawSystem.Draw(contexts, Instantiate(Material), transform, 16);
 
             if (Input.GetKey(KeyCode.Mouse0) && isHeld)
             {

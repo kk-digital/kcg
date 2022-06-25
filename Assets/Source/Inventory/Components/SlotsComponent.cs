@@ -3,6 +3,7 @@ using Entitas;
 
 namespace Inventory
 {
+    [Inventory]
     public struct SlotsComponent : IComponent
     {
         /// <summary>

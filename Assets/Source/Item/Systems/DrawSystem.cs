@@ -7,20 +7,20 @@ namespace Item
     public class DrawSystem
     {
         
-        public void Draw(GameContext gameContext, Material material, Transform transform, int drawOrder)
+        public void Draw(Contexts contexts, Material material, Transform transform, int drawOrder)
         {
-            var ItemAttributesWithSprite = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.ItemAttributeSprite));
-            foreach (var ItemTypeEntity in ItemAttributesWithSprite)
+            var ItemPropertyWithSprite = contexts.itemProperties.GetGroup(ItemPropertiesMatcher.AllOf(ItemPropertiesMatcher.ItemPropertySprite));
+            foreach (var ItemTypeEntity in ItemPropertyWithSprite)
             {
-                int SpriteID = ItemTypeEntity.itemAttributeSprite.ID;
+                int SpriteID = ItemTypeEntity.itemPropertySprite.ID;
                 Sprites.Sprite sprite = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle);
                 
                 // Draw all items with same sprite.
-                var ItemsOfType = gameContext.GetEntitiesWithItemIDItemType(ItemTypeEntity.itemAttributes.ItemType);
+                var ItemsOfType = contexts.game.GetEntitiesWithItemIDItemType(ItemTypeEntity.itemProperty.ItemType);
                 foreach (var entity in ItemsOfType)
                 {
                     // Test if Item is Drawable.
-                    if (!ItemTypeEntity.hasItemAttributeSize) // Test if Item is Drawable.
+                    if (!ItemTypeEntity.hasItemPropertySize) // Test if Item is Drawable.
                         continue;
                     
                     float x, y;
@@ -42,8 +42,8 @@ namespace Item
                         }
                     }
                     
-                    float w = ItemTypeEntity.itemAttributeSize.Size.X;
-                    float h = ItemTypeEntity.itemAttributeSize.Size.Y;
+                    float w = ItemTypeEntity.itemPropertySize.Size.X;
+                    float h = ItemTypeEntity.itemPropertySize.Size.Y;
                     Utility.Render.DrawSprite(x, y, w, h, sprite, Object.Instantiate(material), transform, drawOrder);
                 }
                 

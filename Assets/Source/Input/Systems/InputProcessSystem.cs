@@ -45,7 +45,7 @@ namespace ECSInput
             foreach (var entity in PlayerWithInventory)
             {
                 int inventoryID = entity.agentInventory.InventoryID;
-                GameEntity inventoryEntity = Contexts.sharedInstance.game.GetEntityWithInventoryID(inventoryID);
+                InventoryEntity inventoryEntity = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(inventoryID);
 
                 if (Input.GetKeyDown(KeyCode.Tab))
                 {
@@ -58,7 +58,7 @@ namespace ECSInput
             foreach (var entity in PlayerWithInventory)
             {
                 int inventoryID = entity.agentToolBar.ToolBarID;
-                GameEntity inventoryEntity = Contexts.sharedInstance.game.GetEntityWithInventoryID(inventoryID);
+                InventoryEntity inventoryEntity = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(inventoryID);
                 var SlotComponent = inventoryEntity.inventorySlots;
 
                 if (Input.GetKeyDown(KeyCode.Alpha1))

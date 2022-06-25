@@ -14,12 +14,12 @@ namespace Action
 
         public override void OnEnter(ref Planet.PlanetState planet)
         {
-            var gameContext = Contexts.sharedInstance.game;
+            var EntitasContext = Contexts.sharedInstance;
 
             if (AgentEntity.hasAgentToolBar)
             {
                 int toolBarID = AgentEntity.agentToolBar.ToolBarID;
-                GameEntity toolBarEntity = gameContext.GetEntityWithInventoryID(toolBarID);
+                InventoryEntity toolBarEntity = EntitasContext.inventory.GetEntityWithInventoryID(toolBarID);
 
                 int selected = toolBarEntity.inventorySlots.Selected;
 
@@ -33,7 +33,7 @@ namespace Action
                 GameState.InventoryManager.RemoveItem(ItemEntity, selected);
              
                 Vec2f pos = AgentEntity.physicsPosition2D.Value;
-                Vec2f size = Contexts.sharedInstance.game.GetEntityWithItemAttributes(ItemEntity.itemID.ItemType).itemAttributeSize.Size;
+                Vec2f size = Contexts.sharedInstance.itemProperties.GetEntityWithItemProperty(ItemEntity.itemID.ItemType).itemPropertySize.Size;
 
                 ItemEntity.AddPhysicsPosition2D(pos, pos);
                 ItemEntity.AddPhysicsBox2DCollider(size, Vec2f.Zero);
@@ -49,7 +49,7 @@ namespace Action
         public override void OnUpdate(float deltaTime, ref Planet.PlanetState planet)
         {
             ActionEntity.ReplaceActionTime(ActionEntity.actionTime.StartTime + deltaTime);
-            if (ActionEntity.actionTime.StartTime < ActionAttributeEntity.actionAttributeTime.Duration)
+            if (ActionEntity.actionTime.StartTime < ActionPropertyEntity.actionPropertyTime.Duration)
             {
                 return;
             }

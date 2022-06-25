@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Inventory
 {
+    [Inventory]
     public struct DrawableComponent : IComponent
     {
         // Todo: add position and allow player to move Inventory around.
