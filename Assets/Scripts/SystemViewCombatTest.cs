@@ -40,8 +40,8 @@ namespace Scripts {
             public Button   UpdateEnemyButton;
             public Button   DeleteEnemyButton;
 
-            public float    rudder_speed;
-            public float    rudder_strength;
+            public float    rudder_speed;               // Speed at which rudder/sail turns
+            public float    rudder_strength;            // Strength with which rudder/sail rotates ship movement vector
             public bool     rudder_enabled = true;
 
             public void set_rudder_speed(float f) {

@@ -38,6 +38,8 @@ namespace Scripts {
             public const string broadsides_key  = "2";
             public const string turrets_key     = "3";
 
+            public bool  turn_towards_mouse     = false;
+
             private SelectedWeaponType selectedWeapon = SelectedWeaponType.MAIN_WEAPONS;
 
             public CameraController camera_controller;
@@ -133,6 +135,9 @@ namespace Scripts {
                     rudder_renderer.positionCount  = 0;
                 }
 
+                float direction = ship.rotation;
+                float movement = Input.GetAxis("Vertical");
+
                 if (!mouse_steering) {
                     ship.rotation         += ship.self.angular_vel * current_time;
                     if(Input.GetKey("left ctrl")) horizontal_movement = Input.GetAxis("Horizontal");
@@ -146,16 +151,16 @@ namespace Scripts {
                     horizontal_movement = -Input.GetAxis("Horizontal");
                     Vector3 RelPos = camera_controller.get_rel_pos(new Vector3(ship.self.posx, ship.self.posy, 0.0f));
 
-                    float dx = Input.mousePosition.x - RelPos.x;
-                    float dy = Input.mousePosition.y - RelPos.y;
+                    float dx    = Input.mousePosition.x - RelPos.x;
+                    float dy    = Input.mousePosition.y - RelPos.y;
 
-                    float d  = (float)Math.Sqrt(dx * dx + dy * dy);
+                    float angle = Tools.get_angle(dx, dy);
 
-                    float angle = (float)Math.Acos(dx / d);
-
-                    if (dy < 0.0f) angle = 2.0f * 3.1415926f - angle;
-
-                    ship.rotate_to(angle, current_time);
+                    if(turn_towards_mouse) ship.rotate_to(angle, current_time);
+                    else if(Input.GetMouseButton(0)) {
+                        direction = angle;
+                        movement  = 1.0f;
+                    }
                 }
 
                 if(Input.GetKey("q")) sail_angle += sail_speed * current_time;
@@ -163,19 +168,20 @@ namespace Scripts {
 
                 rotation_change -= ship.rotation;
 
-                float movement = Input.GetAxis("Vertical");
                 if (movement == 0.0f && Input.GetKey("w")) movement =  1.0f;
                 if (movement == 0.0f && Input.GetKey("s")) movement = -1.0f;
 
-                float accx = (float)Math.Cos(ship.rotation) * movement * ship.acceleration;
-                float accy = (float)Math.Sin(ship.rotation) * movement * ship.acceleration;
+                float cos    = (float)Math.Cos(ship.rotation);
+                float sin    = (float)Math.Sin(ship.rotation);
 
-                accx += (float)Math.Sin(ship.rotation) * horizontal_movement * ship.horizontal_acceleration;
-                accy -= (float)Math.Cos(ship.rotation) * horizontal_movement * ship.horizontal_acceleration;
+                float dircos = (float)Math.Cos(direction);
+                float dirsin = (float)Math.Sin(direction);
 
-                accx *= current_time;
-                accy *= current_time;
-            
+                float accx = (cos * movement * ship.acceleration + sin * horizontal_movement * ship.horizontal_acceleration) * current_time;
+                float accy = (sin * movement * ship.acceleration + cos * horizontal_movement * ship.horizontal_acceleration) * current_time;
+
+                (accx, accy) = (dircos * accx - dirsin * accy, dirsin * accx + dircos * accy);
+
                 /*
                  * if (horizontal_movement != 0.0f && movement != 0.0f) {
                  *     accx *= Tools.rsqrt2;
