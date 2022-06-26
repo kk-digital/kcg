@@ -199,16 +199,22 @@ namespace Scripts {
 
                     // "Air resistance" effect
                     if(magnitude > drag_cutoff) {
+                        // Drag cutoff as a vector facing the same direction as velocity
                         float cutoff_x = drag_cutoff * ship.self.velx / magnitude;
                         float cutoff_y = drag_cutoff * ship.self.vely / magnitude;
-
+                        
+                        // Effective velocity = velocity - drag cutoff, this is the part of the velocity
+                        // that we care about for calculating the drag;
                         float effective_vel_x = ship.self.velx - cutoff_x;
                         float effective_vel_y = ship.self.vely - cutoff_y;
 
-                        float drag_x = effective_vel_x * (quadratic_drag ? effective_vel_x : 1.0f)
-                                     * -current_time  / (gravitational_factor + drag_factor);
-                        float drag_y = effective_vel_y * (quadratic_drag ? effective_vel_y : 1.0f)
-                                     * -current_time  / (gravitational_factor + drag_factor);
+                        float drag_x = effective_vel_x * -current_time / (gravitational_factor + drag_factor);
+                        float drag_y = effective_vel_y * -current_time / (gravitational_factor + drag_factor);
+
+                        if(quadratic_drag) {
+                            drag_x *= effective_vel_x;
+                            drag_y *= effective_vel_y;
+                        }
 
                         ship.self.velx *= 1.0f + drag_x;
                         ship.self.vely *= 1.0f + drag_y;
