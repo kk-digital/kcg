@@ -147,7 +147,7 @@ namespace Scripts {
 
                 int segments;
 
-                     if(ship.descriptor.eccentricity > 1.00f) segments = 512;
+                     if(ship.descriptor.eccentricity > 0.90f) segments = 512;
                 else if(ship.descriptor.eccentricity > 0.75f) segments = 256;
                 else if(ship.descriptor.eccentricity > 0.50f) segments = 128;
                 else                                          segments =  64;

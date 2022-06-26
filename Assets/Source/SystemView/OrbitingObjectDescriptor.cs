@@ -559,11 +559,11 @@ namespace Source {
 
                     semiminoraxis = semimajoraxis * (float)Math.Sqrt(1.0f - eccentricity * eccentricity);
 
-                    //           e
-                    //            y
-                    // ω = atan( -- )
-                    //           e
-                    //            x
+                    //            e
+                    //             y
+                    // ω = atan( --- )
+                    //            e
+                    //             x
 
                     rotation = (float)Math.Atan(eccentricity_vector[1] / eccentricity_vector[0]);
 
@@ -580,6 +580,15 @@ namespace Source {
                     //
 
                     semiminoraxis = -semimajoraxis * (float)Math.Sqrt(eccentricity * eccentricity - 1.0f);
+
+                    //                e
+                    //                 y
+                    // ω = π + atan( --- )
+                    //                e
+                    //                 x
+
+                    rotation = Tools.pi + (float)Math.Atan(eccentricity_vector[1] / eccentricity_vector[0]);
+
 
                     //        μ
                     // n = √ ---
