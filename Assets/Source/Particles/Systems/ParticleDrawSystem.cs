@@ -32,6 +32,34 @@ namespace Particle
                 Utility.Render.DrawSprite(x, y, width, height, sprite, Material.Instantiate(material), transform, drawOrder++);
             }
         }
+
+        public void DrawEx(ParticleContext context, Material material, int drawOrder)
+        {
+            var entities = context.GetGroup(ParticleMatcher.AllOf(ParticleMatcher.ParticleSprite2D));
+
+            foreach (var entity in entities)
+            {
+                int spriteId = entity.particleSprite2D.SpriteId;
+                GameObject gameObject = entity.particleSprite2D.GameObject;
+
+                /*if (entity.hasAnimationState)
+                {
+                    var animation = entity.animationState;
+                    spriteId = animation.State.GetSpriteId();
+                }*/
+
+                Sprites.Sprite sprite = GameState.SpriteAtlasManager.GetSprite(spriteId, Enums.AtlasType.Particle);
+
+                var pos = entity.particlePosition2D.Position;
+
+                var x = pos.x;
+                var y = pos.y;
+                var width = entity.particleSprite2D.Size.X;
+                var height = entity.particleSprite2D.Size.Y;
+
+                Utility.Render.DrawSpriteEx(gameObject, x, y, width, height, sprite, Material.Instantiate(material), drawOrder++);
+            }
+        }
     }
 }
 

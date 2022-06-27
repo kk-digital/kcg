@@ -8,5 +8,6 @@ namespace Projectile
     {
         public int SpriteId;
         public Vec2f Size;
+        public GameObject GameObject;
     }
 }

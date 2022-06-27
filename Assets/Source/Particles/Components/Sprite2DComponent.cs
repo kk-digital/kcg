@@ -9,5 +9,6 @@ namespace Particle
     {
         public int SpriteId;
         public Vec2f Size;
+        public GameObject GameObject; // used for unity rendering
     }
 }

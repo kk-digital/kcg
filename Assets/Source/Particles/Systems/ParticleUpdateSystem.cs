@@ -41,7 +41,8 @@ namespace Particle
 
             foreach(var gameEntity in ToDestroy)
             {
-                //Object.Destroy(gameEntity.particleState.GameObject);
+                //Object.Destroy(gameEntity.particleState.GameObject);     
+                GameObject.Destroy(gameEntity.particleSprite2D.GameObject);
                 gameEntity.Destroy();
             }
         }

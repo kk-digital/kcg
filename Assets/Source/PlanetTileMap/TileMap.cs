@@ -11,6 +11,7 @@ namespace PlanetTileMap
         public static readonly int LayerCount = Enum.GetNames(typeof(MapLayerType)).Length;
         
         public Texture2D[] LayerTextures;
+        public GameObject[] LayerObjects; // used for unity rendering
         public bool[] NeedsUpdate;
         
         public Vec2i MapSize;
@@ -39,11 +40,14 @@ namespace PlanetTileMap
             MapSize = mapSize;
             
             LayerTextures = new Texture2D[LayerCount];
+            LayerObjects = new GameObject[LayerCount];
             NeedsUpdate = new bool[LayerCount];
 
             for(int layerIndex = 0; layerIndex < LayerCount; layerIndex++)
             {
                 NeedsUpdate[layerIndex] = true;
+                LayerObjects[layerIndex] = 
+                    Utility.Render.CreateEmptyGameObject();
             }
         }
         
@@ -276,6 +280,15 @@ namespace PlanetTileMap
 
             Utility.Render.DrawSprite(0, 0, 1.0f * MapSize.X, 1.0f * MapSize.Y, sprite, material, transform, drawOrder);
         }
+
+        public void DrawLayerEx(MapLayerType planetLayer, Material material, Transform transform, int drawOrder)
+        {
+            BuildLayerTexture(planetLayer);
+            var sprite = new Sprites.Sprite(LayerTextures[(int) planetLayer]);
+
+            Utility.Render.DrawSpriteEx(LayerObjects[(int)planetLayer],
+                 0, 0, 1.0f * MapSize.X, 1.0f * MapSize.Y, sprite, material, drawOrder);
+        }
         
         private void BuildLayerTexture(MapLayerType planetLayer)
         {
@@ -319,6 +332,7 @@ namespace PlanetTileMap
 
                 LayerTextures[(int) planetLayer] = 
                     Utility.Texture.CreateTextureFromRGBA(data, MapSize.X * 32, MapSize.Y * 32);
+
             }
         }
 

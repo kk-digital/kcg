@@ -48,7 +48,7 @@ namespace Item
             if (ItemType == null)
                 return;
 
-            ItemType.AddItemPropertySprite(spriteId);
+            ItemType.AddItemPropertySprite(spriteId, Utility.Render.CreateEmptyGameObject());
         }
 
 

@@ -36,7 +36,7 @@ namespace Particle
                             //var gameObject = Object.Instantiate(state.Prefab);
                             e.AddParticleState(null, 1.0f, state.ParticleDecayRate, state.ParticleDeltaRotation, state.ParticleDeltaScale);
                             e.AddParticlePosition2D(position.Position, state.ParticleAcceleration, new Vector2(state.ParticleStartingVelocity.x + randomX, state.ParticleStartingVelocity.y));
-                            e.AddParticleSprite2D(state.SpriteIds[0], state.ParticleSize);
+                            e.AddParticleSprite2D(state.SpriteIds[0], state.ParticleSize, Utility.Render.CreateEmptyGameObject());
                         }
 
                         state.CurrentTime = state.TimeBetweenEmissions;

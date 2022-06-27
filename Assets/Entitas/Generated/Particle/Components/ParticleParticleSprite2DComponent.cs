@@ -11,19 +11,21 @@ public partial class ParticleEntity {
     public Particle.Sprite2DComponent particleSprite2D { get { return (Particle.Sprite2DComponent)GetComponent(ParticleComponentsLookup.ParticleSprite2D); } }
     public bool hasParticleSprite2D { get { return HasComponent(ParticleComponentsLookup.ParticleSprite2D); } }
 
-    public void AddParticleSprite2D(int newSpriteId, KMath.Vec2f newSize) {
+    public void AddParticleSprite2D(int newSpriteId, KMath.Vec2f newSize, UnityEngine.GameObject newGameObject) {
         var index = ParticleComponentsLookup.ParticleSprite2D;
         var component = (Particle.Sprite2DComponent)CreateComponent(index, typeof(Particle.Sprite2DComponent));
         component.SpriteId = newSpriteId;
         component.Size = newSize;
+        component.GameObject = newGameObject;
         AddComponent(index, component);
     }
 
-    public void ReplaceParticleSprite2D(int newSpriteId, KMath.Vec2f newSize) {
+    public void ReplaceParticleSprite2D(int newSpriteId, KMath.Vec2f newSize, UnityEngine.GameObject newGameObject) {
         var index = ParticleComponentsLookup.ParticleSprite2D;
         var component = (Particle.Sprite2DComponent)CreateComponent(index, typeof(Particle.Sprite2DComponent));
         component.SpriteId = newSpriteId;
         component.Size = newSize;
+        component.GameObject = newGameObject;
         ReplaceComponent(index, component);
     }
 

@@ -11,17 +11,19 @@ public partial class ItemPropertiesEntity {
     public Item.Property.SpriteComponent itemPropertySprite { get { return (Item.Property.SpriteComponent)GetComponent(ItemPropertiesComponentsLookup.ItemPropertySprite); } }
     public bool hasItemPropertySprite { get { return HasComponent(ItemPropertiesComponentsLookup.ItemPropertySprite); } }
 
-    public void AddItemPropertySprite(int newID) {
+    public void AddItemPropertySprite(int newID, UnityEngine.GameObject newGameObject) {
         var index = ItemPropertiesComponentsLookup.ItemPropertySprite;
         var component = (Item.Property.SpriteComponent)CreateComponent(index, typeof(Item.Property.SpriteComponent));
         component.ID = newID;
+        component.GameObject = newGameObject;
         AddComponent(index, component);
     }
 
-    public void ReplaceItemPropertySprite(int newID) {
+    public void ReplaceItemPropertySprite(int newID, UnityEngine.GameObject newGameObject) {
         var index = ItemPropertiesComponentsLookup.ItemPropertySprite;
         var component = (Item.Property.SpriteComponent)CreateComponent(index, typeof(Item.Property.SpriteComponent));
         component.ID = newID;
+        component.GameObject = newGameObject;
         ReplaceComponent(index, component);
     }
 

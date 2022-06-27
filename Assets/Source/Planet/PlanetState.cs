@@ -11,6 +11,7 @@ namespace Planet
 {
     public struct PlanetState
     {
+
         public int Index;
         public TimeState TimeState;
 
@@ -44,6 +45,11 @@ namespace Planet
         public AgentEntity AddPlayer(int spriteId,
                                 int width, int height, Vec2f position, int startingAnimation)
         {
+            if (AgentList.Size >= PlanetEntityLimits.AgentLimit)
+            {
+                return new AgentEntity();
+            }
+
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.AgentSpawnerSystem.SpawnPlayer(spriteId, width, height, position, newEntity.AgentId,
                     startingAnimation);
@@ -54,6 +60,11 @@ namespace Planet
 
         public AgentEntity AddPlayer(Vec2f position)
         {
+            if (AgentList.Size >= PlanetEntityLimits.AgentLimit)
+            {
+                return new AgentEntity();
+            }
+
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.AgentSpawnerSystem.Spawn(position,
                     newEntity.AgentId,
@@ -67,6 +78,11 @@ namespace Planet
         public AgentEntity AddAgent(int spriteId, int width,
                      int height, Vec2f position, int startingAnimation)
         {
+            if (AgentList.Size >= PlanetEntityLimits.AgentLimit)
+            {
+                return new AgentEntity();
+            }
+
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.AgentSpawnerSystem.SpawnAgent(spriteId, width, height, position,
                                                                     newEntity.AgentId, startingAnimation);
@@ -78,6 +94,11 @@ namespace Planet
 
         public AgentEntity AddAgent(Vec2f position)
         {
+            if (AgentList.Size >= PlanetEntityLimits.AgentLimit)
+            {
+                return new AgentEntity();
+            }
+
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.AgentSpawnerSystem.Spawn(position,
                     newEntity.AgentId,
@@ -91,6 +112,11 @@ namespace Planet
         public AgentEntity AddEnemy(int spriteId,
                         int width, int height, Vec2f position, int startingAnimation)
         {
+            if (AgentList.Size >= PlanetEntityLimits.AgentLimit)
+            {
+                return new AgentEntity();
+            }
+
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.AgentSpawnerSystem.SpawnEnemy(spriteId, width, height, position,
             newEntity.AgentId, startingAnimation);
@@ -103,6 +129,11 @@ namespace Planet
 
         public AgentEntity AddEnemy(Vec2f position)
         {
+            if (AgentList.Size >= PlanetEntityLimits.AgentLimit)
+            {
+                return new AgentEntity();
+            }
+            
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.AgentSpawnerSystem.Spawn(position,
                     newEntity.AgentId,
@@ -115,6 +146,10 @@ namespace Planet
         public void RemoveAgent(int Index)
         {
             ref AgentEntity entity = ref AgentList.Get(Index);
+            if (entity.Entity.hasAgentSprite2D)
+            {
+                GameObject.Destroy(entity.Entity.agentSprite2D.GameObject);
+            }
             entity.Entity.Destroy();
             AgentList.Remove(entity);
         }
@@ -133,6 +168,10 @@ namespace Planet
         public void RemoveFloatingText(int floatingTextId)
         {
             ref FloatingTextEntity entity = ref FloatingTextList.Get(floatingTextId);
+            if (entity.Entity.hasFloatingTextSprite)
+            {
+                GameObject.Destroy(entity.Entity.floatingTextSprite.GameObject);
+            }
             entity.Entity.Destroy();
             FloatingTextList.Remove(entity);
         }
@@ -191,10 +230,6 @@ namespace Planet
                 {
                     TimeState.TickTime++;
 
-
-
-
-
                     for (int index = 0; index < ProjectileList.Capacity; index++)
                     {
                         ref ProjectileEntity projectile = ref ProjectileList.List[index];
@@ -203,10 +238,7 @@ namespace Planet
                             var position = projectile.Entity.projectilePhysicsState2D;
                         }
                     }
-
-
                 }
-
             }
 
             // check if the sprite atlas textures needs to be updated
@@ -243,6 +275,71 @@ namespace Planet
             GameState.ProjectileDrawSystem.Draw(Material.Instantiate(material), transform, 20);
             GameState.FloatingTextDrawSystem.Draw(transform, 10000);
             GameState.ParticleDrawSystem.Draw(ParticleContext, Material.Instantiate(material), transform, 50);
+            #region Gui drawing systems
+            //GameState.InventoryDrawSystem.Draw(material, transform, 1000);
+            #endregion
+        }
+
+        // updates the entities, must call the systems and so on ..
+        public void UpdateNew(float deltaTime, Material material, Transform transform)
+        {
+            float targetFps = 30.0f;
+            float frameTime = 1.0f / targetFps;
+
+            TimeState.Deficit += deltaTime;
+
+            while (TimeState.Deficit >= frameTime)
+            {
+                TimeState.Deficit -= frameTime;
+                // do a server/client tick right here
+                {
+                    TimeState.TickTime++;
+
+                    for (int index = 0; index < ProjectileList.Capacity; index++)
+                    {
+                        ref ProjectileEntity projectile = ref ProjectileList.List[index];
+                        if (projectile.IsInitialized)
+                        {
+                            var position = projectile.Entity.projectilePhysicsState2D;
+                        }
+                    }
+                }
+            }
+
+            // check if the sprite atlas textures needs to be updated
+            for(int type = 0; type < GameState.SpriteAtlasManager.Length; type++)
+            {
+                GameState.SpriteAtlasManager.UpdateAtlasTexture(type);
+            }
+
+            // check if the tile sprite atlas textures needs to be updated
+            for(int type = 0; type < GameState.TileSpriteAtlasManager.Length; type++)
+            {
+                GameState.TileSpriteAtlasManager.UpdateAtlasTexture(type);
+            }
+
+            // calling all the systems we have
+
+            GameState.InputProcessSystem.Update();
+            GameState.PhysicsMovableSystem.Update();
+            GameState.PhysicsProcessCollisionSystem.Update(ref TileMap);
+            GameState.EnemyAiSystem.Update(this);
+            GameState.FloatingTextUpdateSystem.Update(this, frameTime);
+            GameState.AnimationUpdateSystem.Update(frameTime);
+            GameState.ItemPickUpSystem.Update();
+            GameState.ActionSchedulerSystem.Update(frameTime, ref this);
+            GameState.ParticleEmitterUpdateSystem.Update(this);
+            GameState.ParticleUpdateSystem.Update(this, ParticleContext);
+            GameState.ProjectileMovementSystem.Update();
+            GameState.ProjectileCollisionSystem.Update(ref TileMap);
+
+            TileMap.DrawLayerEx(MapLayerType.Mid, Object.Instantiate(material), transform, 9);
+            TileMap.DrawLayerEx(MapLayerType.Front, Object.Instantiate(material), transform, 10);
+            GameState.AgentDrawSystem.DrawEx(Object.Instantiate(material), transform, 12);
+            GameState.ItemDrawSystem.DrawEx(Contexts.sharedInstance, Material.Instantiate(material), 13);
+            GameState.ProjectileDrawSystem.DrawEx(Material.Instantiate(material), 20);
+            GameState.FloatingTextDrawSystem.DrawEx(transform, 10000);
+            GameState.ParticleDrawSystem.DrawEx(ParticleContext, Material.Instantiate(material), 50);
             #region Gui drawing systems
             //GameState.InventoryDrawSystem.Draw(material, transform, 1000);
             #endregion

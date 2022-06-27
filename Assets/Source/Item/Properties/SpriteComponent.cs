@@ -7,5 +7,6 @@ namespace Item.Property
     public struct SpriteComponent : IComponent
     {
         public int ID;
+        public GameObject GameObject;
     }
 }

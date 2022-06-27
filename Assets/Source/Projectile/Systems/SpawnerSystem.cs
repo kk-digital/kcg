@@ -31,7 +31,7 @@ namespace Projectile
             entity.AddProjectileID(projectileID);
 
             // Add Sprite Component
-            entity.AddProjectileSprite2D(spriteID, spriteSize);
+            entity.AddProjectileSprite2D(spriteID, spriteSize, Utility.Render.CreateEmptyGameObject());
 
             // Add Position Component
             entity.AddProjectilePosition2D(startPos, startPos);
@@ -73,7 +73,7 @@ namespace Projectile
             entity.AddProjectileID(projectileID);
 
             // Add Sprite Component
-            entity.AddProjectileSprite2D(spriteId, spriteSize);
+            entity.AddProjectileSprite2D(spriteId, spriteSize, Utility.Render.CreateEmptyGameObject());
 
             // Add Physics State 2D Component
             entity.AddProjectilePosition2D(startPos, startPos);
