@@ -49,7 +49,9 @@ namespace Scripts {
             private float CachedPlanetMass =   100000000000000.0f;
             private float CachedMoonMass   =    20000000000000.0f;
 
-            public  bool TrackingPlayer    =                false;
+            public  bool  TrackingPlayer   =                false;
+            public  bool  planet_movement  =                 true;
+            public  bool  n_body_gravity   =                 true;
 
             public  CameraController Camera;
 
@@ -69,8 +71,18 @@ namespace Scripts {
             public void setDragFactor(float f)      { drag_factor     = 100000.0f - f; }
             public void setSailingFactor(float f)   { sailing_factor  =   1000.0f - f; }
 
-            public Dropdown DockingTargetSelector;
+            public void toggle_planet_movement(bool b) {
+                planet_movement = b;
+            }
+
+            public void toggle_n_body_gravity(bool b) {
+                n_body_gravity = b;
+                gravity_renderer.n_body_gravity = b;
+            }
+
+            public  Dropdown DockingTargetSelector;
             private SpaceStation DockingTarget;
+            public  GravityRenderer gravity_renderer;
 
             private void Start() {
                 RegenerateSystem();
@@ -439,16 +451,14 @@ namespace Scripts {
                     for(int i = 0; i < Moons.Count; i++)
                         Moons.ElementAt(i).Key.descriptor.self.mass = MoonMass;
                 }
-                
-                /*
-                 * Disabled planet movement as requested
-                 * 
-                foreach(SystemPlanet p in State.planets)
-                    p.descriptor.update_position(CurrentTime);
 
-                foreach(SpaceStation s in State.stations)
-                    s.descriptor.update_position(CurrentTime);
-                */
+                if(planet_movement) {
+                    foreach(SystemPlanet p in State.planets)
+                        p.descriptor.update_position(CurrentTime);
+
+                    foreach(SpaceStation s in State.stations)
+                        s.descriptor.update_position(CurrentTime);
+                }
                 
                 foreach(SystemShip s in State.ships) {
                     if(!s.path_planned)
@@ -468,6 +478,7 @@ namespace Scripts {
 
                 // this behaves weird when getting really close to central body --- is float too inaccurate?
                 foreach(SpaceObject Body in State.objects) {
+
                     float dx = Body.posx - State.player.ship.self.posx;
                     float dy = Body.posy - State.player.ship.self.posy;
 
@@ -475,23 +486,26 @@ namespace Scripts {
                     float d = (float)Math.Sqrt(d2);
 
                     float g = Tools.gravitational_constant * Body.mass / d2;
-                    
-                    if(g > maxg) {
-                        maxg = g;
-                        float vel = g * CurrentTime;
 
-                        GravVelX = vel * dx / d;
-                        GravVelY = vel * dy / d;
+                    if(n_body_gravity) {
+
+                        float Velocity = g * CurrentTime;
+
+                        GravVelX += Velocity * dx / d;
+                        GravVelY += Velocity * dy / d;
+
+                    } else { 
+
+                        if(g > maxg) {
+                            maxg = g;
+                            float vel = g * CurrentTime;
+
+                            GravVelX = vel * dx / d;
+                            GravVelY = vel * dy / d;
+                        }
+
                     }
 
-                    /*
-                     * Only apply gravity for strongest object
-                     * 
-                    float Velocity = g * CurrentTime;
-
-                    GravVelX += Velocity * dx / d;
-                    GravVelY += Velocity * dy / d;
-                    */
                 }
 
                 State.player.gravitational_strength = (float)Math.Sqrt(GravVelX * GravVelX + GravVelY * GravVelY) * 0.4f / CurrentTime;
