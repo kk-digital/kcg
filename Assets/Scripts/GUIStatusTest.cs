@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GUIStatusTest : MonoBehaviour
@@ -10,24 +8,32 @@ public class GUIStatusTest : MonoBehaviour
 
     KGUI.HealthBarUI healthBarUI;
 
+    //Init
+    private bool Init;
+
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
     void Start()
     {
         healthBarUI = new KGUI.HealthBarUI();
+        healthBarUI.Initialize();
 
-        healthBarUI.Initialize(material, transform);
+        Init = true;
     }
 
-    // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
-    void Update()
+    bool a;
+    // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnGUI.html
+    private void OnGUI()
     {
-        // Clear last frame
-        foreach (var mr in GetComponentsInChildren<MeshRenderer>())
-            if (Application.isPlaying)
-                Destroy(mr.gameObject);
-            else
-                DestroyImmediate(mr.gameObject);
+        if (Init)
+        {
+            // Clear last frame
+            foreach (var mr in GetComponentsInChildren<MeshRenderer>())
+                if (Application.isPlaying)
+                    Destroy(mr.gameObject);
+                else
+                    DestroyImmediate(mr.gameObject);
 
-        healthBarUI.Draw(material, transform, 5000);
+            healthBarUI.Draw(material, transform, 5000);
+        }
     }
 }

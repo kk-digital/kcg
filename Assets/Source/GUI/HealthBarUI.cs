@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Entitas;
-using KMath;
 
 namespace KGUI
 {
@@ -15,14 +14,24 @@ namespace KGUI
         Sprites.Sprite icon;
 
         // Bar
-        Sprites.Sprite barFill;
         Sprites.Sprite barBorder;
+        private Texture2D healthBar;
+
         Sprites.Sprite barDiv1;
+        Sprites.Sprite barDiv2;
 
         // Player Health
-        float playerHealth;
+        private float playerHealth;
+        public Rect fillPosition = new Rect(78, 36, 226, 14);
+        public Rect div1Position = new Rect(130, 52, 3, -17);
+        public Rect div2Position = new Rect(190, 52, 3, -17);
+        public Rect div3Position = new Rect(250, 52, 3, -17);
+        public Rect borderPosition = new Rect(72, 54, 238, -20);
+        public Rect IconPosition = new Rect(10, 70, 50, -50);
+        public Rect TextPosition = new Rect(250, 60, 55, 22);
+        public Color color = new Color(0.6f, 0, 0, 1.0f);
 
-        public void Initialize(Material material, Transform transform)
+        public void Initialize()
         {
             // Set Width and Height
             int IconWidth = 19;
@@ -48,33 +57,6 @@ namespace KGUI
             icon = new Sprites.Sprite
             {
                 Texture = iconTex,
-                TextureCoords = new Vector4(0, 0, 1, 1)
-            };
-
-            // Set Width and Height
-            int BarFillWidth = 5;
-            int BarFillHeight = 5;
-            Vector2Int BarPngSize = new Vector2Int(BarFillWidth, BarFillHeight);
-
-            // Load image from file
-            var BarFillSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\interface\\hud_hp_bar_fill.png", BarFillWidth, BarFillHeight);
-
-            // Set Sprite ID from Sprite Atlas
-            int BarFillID = GameState.SpriteAtlasManager.CopySpriteToAtlas(BarFillSheet, 0, 0, Enums.AtlasType.Particle);
-
-            // Set Sprite Data
-            byte[] BarFillSpriteData = new byte[BarPngSize.x * BarPngSize.y * 4];
-
-            // Get Sprite Bytes
-            GameState.SpriteAtlasManager.GetSpriteBytes(BarFillID, BarFillSpriteData, Enums.AtlasType.Particle);
-
-            // Set Texture
-            Texture2D BarFillTex = Utility.Texture.CreateTextureFromRGBA(BarFillSpriteData, BarPngSize.x, BarPngSize.y);
-
-            // Create the sprite
-            barFill = new Sprites.Sprite
-            {
-                Texture = BarFillTex,
                 TextureCoords = new Vector4(0, 0, 1, 1)
             };
 
@@ -132,58 +114,110 @@ namespace KGUI
                 TextureCoords = new Vector4(0, 0, 1, 1)
             };
 
-            // Get Player Health
-            IGroup<GameEntity> entities =
+            // Set Width and Height
+            int BarDiv2Width = 1;
+            int BarDiv2Height = 6;
+            Vector2Int BarDiv2PngSize = new Vector2Int(BarDiv2Width, BarDiv2Height);
+
+            // Load image from file
+            var BarDiv2Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\interface\\hud_hp_bar_div2.png", BarDiv2Width, BarDiv2Height);
+
+            // Set Sprite ID from Sprite Atlas
+            int BarDiv2ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(BarDiv2Sheet, 0, 0, Enums.AtlasType.Particle);
+
+            // Set Sprite Data
+            byte[] BarDiv2SpriteData = new byte[BarDiv2PngSize.x * BarDiv2PngSize.y * 4];
+
+            // Get Sprite Bytes
+            GameState.SpriteAtlasManager.GetSpriteBytes(BarDiv2ID, BarDiv2SpriteData, Enums.AtlasType.Particle);
+
+            // Set Texture
+            Texture2D BarDiv2Tex = Utility.Texture.CreateTextureFromRGBA(BarDiv2SpriteData, BarDiv2PngSize.x, BarDiv2PngSize.y);
+
+            // Create the sprite
+            barDiv2 = new Sprites.Sprite
+            {
+                Texture = BarDiv2Tex,
+                TextureCoords = new Vector4(0, 0, 1, 1)
+            };
+
+            healthBar = new Texture2D(100, 1);
+
+            Init = true;
+        }
+
+        void DrawHealthBar()
+        {
+            IGroup<GameEntity> Playerentities =
             Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentStats);
-            foreach (var entity in entities)
+            foreach (var entity in Playerentities)
             {
                 playerHealth = entity.agentStats.Health;
             }
 
-            Init = true;
-        }   
+            ClearHealthBar();
+
+            UpdateHealthBar((int)playerHealth);
+        }
+
+        private void ClearHealthBar()
+        {
+            healthBar = new Texture2D(100, 1);
+        }
+
+        public void UpdateHealthBar(int percantage)
+        {
+            int j = 0;
+            for(; j < percantage; j++)
+            {
+                healthBar.SetPixel(j, 0, color);
+            }
+            healthBar.Apply();
+            GUI.skin.box.normal.background = healthBar;
+            GUI.backgroundColor = Color.white;
+            GUI.Box(fillPosition, GUIContent.none);
+        }
 
         public void Draw(Material material, Transform transform, int drawOrder)
         {
             if(Init)
             {
-                // Get Initial Positon.
-                float Iconx = Camera.main.ScreenToWorldPoint(new Vector3(0.0f, 0, Camera.main.nearClipPlane)).x;
-                float Icony = Camera.main.ScreenToWorldPoint(new Vector3(0, Camera.main.pixelHeight - 60, Camera.main.nearClipPlane)).y;
+                GUI.DrawTexture(borderPosition, barBorder.Texture);
 
-                float BarFillx = Camera.main.ScreenToWorldPoint(new Vector3(50.0f, 0, Camera.main.nearClipPlane)).x;
-                float BarFilly = Camera.main.ScreenToWorldPoint(new Vector3(0, Camera.main.pixelHeight - 50, Camera.main.nearClipPlane)).y;
+                DrawHealthBar();
 
-                float BarBorderx = Camera.main.ScreenToWorldPoint(new Vector3(45.0f, 0, Camera.main.nearClipPlane)).x;
-                float BarBordery = Camera.main.ScreenToWorldPoint(new Vector3(0, Camera.main.pixelHeight - 53.5f, Camera.main.nearClipPlane)).y;
 
-                float BarDiv1x = Camera.main.ScreenToWorldPoint(new Vector3(105.0f, 0, Camera.main.nearClipPlane)).x;
-                float BarDiv1y = Camera.main.ScreenToWorldPoint(new Vector3(0, Camera.main.pixelHeight - 53.5f, Camera.main.nearClipPlane)).y;
+                if (playerHealth < 25)
+                {
+                    GUI.DrawTexture(div1Position, barDiv2.Texture);
+                }
+                else
+                {
+                    GUI.DrawTexture(div1Position, barDiv1.Texture);
+                }
 
-                float BarDiv1_2x = Camera.main.ScreenToWorldPoint(new Vector3(163.0f, 0, Camera.main.nearClipPlane)).x;
-                float BarDiv1_2y = Camera.main.ScreenToWorldPoint(new Vector3(0, Camera.main.pixelHeight - 53.5f, Camera.main.nearClipPlane)).y;
+                if (playerHealth < 50)
+                {
+                    GUI.DrawTexture(div2Position, barDiv2.Texture);
+                }
+                else
+                {
+                    GUI.DrawTexture(div2Position, barDiv1.Texture);
+                }
 
-                float BarDiv1_3x = Camera.main.ScreenToWorldPoint(new Vector3(220.0f, 0, Camera.main.nearClipPlane)).x;
-                float BarDiv1_3y = Camera.main.ScreenToWorldPoint(new Vector3(0, Camera.main.pixelHeight - 53.5f, Camera.main.nearClipPlane)).y;
+                if (playerHealth < 75)
+                {
+                    GUI.DrawTexture(div3Position, barDiv2.Texture);
+                }
+                else
+                {
+                    GUI.DrawTexture(div3Position, barDiv1.Texture);
+                }
 
-                Utility.Render.DrawSprite(Iconx, Icony, 0.5f, 0.5f, icon, material, transform, drawOrder);
-                
-                // Health Bar Border Draw
-                Utility.Render.DrawSprite(BarBorderx, BarBordery, 3.757031f, 0.309375f, barBorder, material, transform, 5000);
-
-                // Health Bar Filled Draw
-                Utility.Render.DrawSprite(BarFillx, BarFilly, 3.5941875f, 0.22574003f, barFill, material, transform, 5001);
-
-                // Health Bar Div 1 Draw
-                Utility.Render.DrawSprite(BarDiv1x, BarDiv1y, 0.06f, 0.30f, barDiv1, material, transform, 5002);
-
-                // Health Bar Div 2 Draw
-                Utility.Render.DrawSprite(BarDiv1_2x, BarDiv1_2y, 0.06f, 0.30f, barDiv1, material, transform, 5002);
-
-                // Health Bar Div 3 Draw
-                Utility.Render.DrawSprite(BarDiv1_3x, BarDiv1_3y, 0.06f, 0.30f, barDiv1, material, transform, 5002);
-
+                GUI.DrawTexture(IconPosition, icon.Texture);
             }
+
+            GUI.TextArea(TextPosition, playerHealth + "/100");
         }
     }
 }
