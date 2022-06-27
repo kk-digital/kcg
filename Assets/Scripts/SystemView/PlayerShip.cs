@@ -38,7 +38,7 @@ namespace Scripts {
             public const string broadsides_key  = "2";
             public const string turrets_key     = "3";
 
-            public bool  turn_towards_mouse     = false;
+            public bool  turn_towards_mouse     = true;
 
             private SelectedWeaponType selectedWeapon = SelectedWeaponType.MAIN_WEAPONS;
 
@@ -135,8 +135,9 @@ namespace Scripts {
                     rudder_renderer.positionCount  = 0;
                 }
 
-                float direction = ship.rotation;
-                float movement = Input.GetAxis("Vertical");
+                float direction     = ship.rotation;
+                bool  move_to_mouse = false;
+                float movement      = Input.GetAxis("Vertical");
 
                 if (!mouse_steering) {
                     ship.rotation         += ship.self.angular_vel * current_time;
@@ -158,8 +159,8 @@ namespace Scripts {
 
                     if(turn_towards_mouse) ship.rotate_to(angle, current_time);
                     else if(Input.GetMouseButton(0)) {
-                        direction = angle;
-                        movement  = 1.0f;
+                        direction     = angle;
+                        move_to_mouse = true;
                     }
                 }
 
@@ -171,16 +172,58 @@ namespace Scripts {
                 if (movement == 0.0f && Input.GetKey("w")) movement =  1.0f;
                 if (movement == 0.0f && Input.GetKey("s")) movement = -1.0f;
 
-                float cos    = (float)Math.Cos(ship.rotation);
-                float sin    = (float)Math.Sin(ship.rotation);
+                float cos  = (float)Math.Cos(ship.rotation);
+                float sin  = (float)Math.Sin(ship.rotation);
 
-                float dircos = (float)Math.Cos(direction);
-                float dirsin = (float)Math.Sin(direction);
+                if(move_to_mouse) {
 
-                float accx = (cos * movement * ship.acceleration + sin * horizontal_movement * ship.horizontal_acceleration) * current_time;
+                    //  ax
+                    // --- = cos(dir)
+                    //  a 
+
+                    //  ay
+                    // --- = sin(dir)
+                    //  a
+
+                    // a = √(ax² + ay²)
+
+                    // ax = t * (cos(rot) * a1 * m1 - sin(rot) * a2 * m2)
+
+                    // ay = t * (sin(rot) * a1 * m1 + cos(rot) * a2 * m2)
+
+                    // m1² + m2² = 1
+
+                    // m2 = √(1 - m1²)
+
+                    //                                 t * cos(rot) * a1 * m1 - sin(rot) * a2 * √(1 - m1²)
+                    // --------------------------------------------------------------------------------------------------------------------- = cos(dir)
+                    // √((t * (cos(rot) * a1 * m1 - sin(rot) * a2 * √(1 - m1²)))² + (t * (sin(rot) * a1 * m1 + cos(rot) * a2 * √(1 - m1²)))²)
+
+                    //                        a2 * √(cos(2dir ± 2rot) + 1)
+                    // m1 = ± --------------------------------------------------------------
+                    //        √(a1² * (1 - cos(2dir ± 2rot)) + a2² * (1 + cos(2dir ± 2rot)))
+
+                    // todo: solve this optimized version later
+                    //       for now using version that only uses main thruster
+
+                    /*float dirrot = 2 * direction + 2 * ship.rotation; // could be - too
+                    float cosdirrot = (float)Math.Cos(dirrot);
+
+                    movement  = ship.horizontal_acceleration * (float)Math.Sqrt(cosdirrot + 1);
+                    movement /= (float)Math.Sqrt(ship.acceleration            * ship.acceleration            * (1 - cosdirrot)
+                             +                   ship.horizontal_acceleration * ship.horizontal_acceleration * (1 + cosdirrot));
+
+                    horizontal_movement = (float)Math.Sqrt(1 - movement * movement);*/
+
+                    movement = 1.0f;
+
+                    cos = (float)Math.Cos(direction);
+                    sin = (float)Math.Sin(direction);
+
+                }
+
+                float accx = (cos * movement * ship.acceleration - sin * horizontal_movement * ship.horizontal_acceleration) * current_time;
                 float accy = (sin * movement * ship.acceleration + cos * horizontal_movement * ship.horizontal_acceleration) * current_time;
-
-                (accx, accy) = (dircos * accx - dirsin * accy, dirsin * accx + dircos * accy);
 
                 /*
                  * if (horizontal_movement != 0.0f && movement != 0.0f) {

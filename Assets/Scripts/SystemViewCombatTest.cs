@@ -44,6 +44,11 @@ namespace Scripts {
             public float    rudder_strength;            // Strength with which rudder/sail rotates ship movement vector
             public bool     rudder_enabled = true;
 
+            public bool     mouse_movement = false;
+            public bool     turn_to_mouse  = true;
+
+            public Toggle   mouse_turning_toggle;
+
             public void set_rudder_speed(float f) {
                 rudder_speed = f;
                 if(Player != null) Player.sail_speed = f;
@@ -57,6 +62,18 @@ namespace Scripts {
             public void toggle_rudder(bool b) {
                 rudder_enabled = b;
                 if(Player != null) Player.rudder_enabled = rudder_enabled;
+            }
+
+            public void toggle_mouse_movement(bool b) {
+                mouse_movement = b;
+                if(Player != null) Player.mouse_steering = mouse_movement;
+                mouse_turning_toggle.enabled      = mouse_movement;
+                mouse_turning_toggle.interactable = mouse_movement;
+            }
+
+            public void toggle_mouse_turning(bool b) {
+                turn_to_mouse = b;
+                if(Player != null) Player.turn_towards_mouse = turn_to_mouse;
             }
 
             void Start() {
@@ -198,6 +215,12 @@ namespace Scripts {
                 }
 
                 Player = gameObject.AddComponent<PlayerShip>();
+
+                Player.sail_speed = rudder_speed;
+                Player.sailing_factor = 50 - rudder_strength;
+                Player.rudder_enabled = rudder_enabled;
+                Player.mouse_steering = mouse_movement;
+                Player.turn_towards_mouse = turn_to_mouse;
             }
 
             public void UpdatePlayerWeapons() {
