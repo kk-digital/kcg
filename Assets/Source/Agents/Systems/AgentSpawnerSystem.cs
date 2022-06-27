@@ -32,7 +32,6 @@ namespace Agent
             var size = new Vec2f(spriteSize.X - 0.5f, spriteSize.Y);
             entity.AddPhysicsBox2DCollider(size, new Vec2f(0.25f, .0f));
             entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.Zero, newAcceleration: Vec2f.Zero);
-            entity.AddAgentActionScheduler(new List<int>(), new List<int>());
             entity.AddAgentStats(playerHealth, playerFood, playerWater, playerOxygen, playerFuel, attackCoolDown);
             //entity.AddAgentInventory(0);
             // Add Inventory and toolbar.
@@ -65,8 +64,6 @@ namespace Agent
                 entity.isECSInput = true;
                 entity.AddECSInputXY(new Vec2f(0, 0), false);
    
-                entity.AddAgentActionScheduler(new List<int>(), new List<int>());
-
                 // Add Inventory and toolbar.
                 var attacher = Inventory.InventoryAttacher.Instance;
                 attacher.AttachInventoryToAgent(entitasContext, 6, 5, entity);

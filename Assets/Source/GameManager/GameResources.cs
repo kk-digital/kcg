@@ -170,7 +170,7 @@ public class GameResources
         Item.CreationApi.Instance.SetTexture(GunIcon);
         Item.CreationApi.Instance.SetInventoryTexture(GunIcon);
         Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.FireWeaponAction);
+        Item.CreationApi.Instance.SetAction(Enums.ActionType.FireWeaponAction);
         Item.CreationApi.Instance.EndItem();
 
         Item.CreationApi.Instance.CreateItem(entitasContext, Enums.ItemType.Ore, "Ore");
@@ -184,42 +184,42 @@ public class GameResources
         Item.CreationApi.Instance.SetTexture(PlacementToolIcon);
         Item.CreationApi.Instance.SetInventoryTexture(PlacementToolIcon);
         Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.PlaceTilMoonAction);
+        Item.CreationApi.Instance.SetAction(Enums.ActionType.PlaceTilMoonAction);
         Item.CreationApi.Instance.EndItem();
 
         Item.CreationApi.Instance.CreateItem(entitasContext, Enums.ItemType.RemoveTileTool, "RemoveTileTool");
         Item.CreationApi.Instance.SetTexture(RemoveToolIcon);
         Item.CreationApi.Instance.SetInventoryTexture(RemoveToolIcon);
         Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.RemoveTileAction);
+        Item.CreationApi.Instance.SetAction(Enums.ActionType.RemoveTileAction);
         Item.CreationApi.Instance.EndItem();
 
         Item.CreationApi.Instance.CreateItem(entitasContext, Enums.ItemType.SpawnEnemySlimeTool, "SpawnSlimeTool");
         Item.CreationApi.Instance.SetTexture(SlimeIcon);
         Item.CreationApi.Instance.SetInventoryTexture(SlimeIcon);
         Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.EnemySpawnAction);
+        Item.CreationApi.Instance.SetAction(Enums.ActionType.EnemySpawnAction);
         Item.CreationApi.Instance.EndItem();
 
         Item.CreationApi.Instance.CreateItem(entitasContext, Enums.ItemType.MiningLaserTool, "MiningLaserTool");
         Item.CreationApi.Instance.SetTexture(MiningLaserToolIcon);
         Item.CreationApi.Instance.SetInventoryTexture(MiningLaserToolIcon);
         Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.MiningLaserAction);
+        Item.CreationApi.Instance.SetAction(Enums.ActionType.MiningLaserAction);
         Item.CreationApi.Instance.EndItem();
 
         Item.CreationApi.Instance.CreateItem(entitasContext, Enums.ItemType.PipePlacementTool, "PipePlacementTool");
         Item.CreationApi.Instance.SetTexture(PipePlacementToolIcon);
         Item.CreationApi.Instance.SetInventoryTexture(PipePlacementToolIcon);
         Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.PlaceTilPipeAction);
+        Item.CreationApi.Instance.SetAction(Enums.ActionType.PlaceTilPipeAction);
         Item.CreationApi.Instance.EndItem();
 
         Item.CreationApi.Instance.CreateItem(entitasContext, Enums.ItemType.ParticleEmitterPlacementTool, "ParticleEmitterPlacementTool");
         Item.CreationApi.Instance.SetTexture(OreIcon);
         Item.CreationApi.Instance.SetInventoryTexture(OreIcon);
         Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.PlaceParticleEmitterAction);
+        Item.CreationApi.Instance.SetAction(Enums.ActionType.PlaceParticleEmitterAction);
         Item.CreationApi.Instance.EndItem();
     }
 

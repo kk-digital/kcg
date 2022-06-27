@@ -18,7 +18,7 @@ public static class ItemPropertiesComponentsLookup {
     public const int ItemPropertySprite = 7;
     public const int ItemPropertyStackable = 8;
 
-    public const int TotalComponents = 9;
+    public const int TotalComponents = 12;
 
     public static readonly string[] componentNames = {
         "ItemPropertyAction",
