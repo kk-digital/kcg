@@ -27,8 +27,11 @@ namespace Action
             StartPos.X += 0.3f;
             StartPos.Y += 0.5f;
 
-            ProjectileEntity = GameState.ProjectileSpawnerSystem.SpawnBullet(GameResources.OreIcon, 4, 4, StartPos, 
-                new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized * speed, Vec2f.Zero, Enums.ProjectileType.Bullet, Enums.ProjectileDrawType.Standard);
+            /*ProjectileEntity = GameState.ProjectileSpawnerSystem.SpawnBullet(GameResources.OreIcon, 4, 4, StartPos, 
+                new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized * speed, Vec2f.Zero, Enums.ProjectileType.Bullet, Enums.ProjectileDrawType.Standard);*/
+            ProjectileEntity = planet.AddProjectile(GameResources.OreIcon, 4, 4, StartPos, 
+                new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized * speed, 
+                Vec2f.Zero, Enums.ProjectileType.Bullet, Enums.ProjectileDrawType.Standard).Entity;
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Running);
         }
 

@@ -85,8 +85,9 @@ namespace Projectile
 
         // to remove an entity we just 
         // set the IsInitialized field to false
-        public void Remove(ProjectileEntity entity)
+        public void Remove(int agentId)
         {
+            ref ProjectileEntity entity = ref Get(agentId);
             entity.IsInitialized = false;
             Size--;
         }
@@ -111,6 +112,10 @@ namespace Projectile
             }
         }
         
+        public ref ProjectileEntity Get(int Index)
+        {
+            return ref List[Index];
+        }
 
         // We use this to determine 
         // the new size based off the old one.

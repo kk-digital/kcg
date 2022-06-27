@@ -11,24 +11,22 @@ namespace Projectile
 {
     public class SpawnerSystem
     {
-        // Projectile ID
-        private static int projectileID;
 
 
         public GameEntity SpawnBullet(int spriteID, int width, int height, Vec2f startPos,
             Vec2f velocity, Vec2f acceleration, ProjectileType projectileType, 
-            ProjectileDrawType projectileDrawType)
+            ProjectileDrawType projectileDrawType, int projectileId)
         {
             GameEntity entity = Contexts.sharedInstance.game.CreateEntity();
             // Increase ID per object statically
-            projectileID++;
+
 
             // Set Png Size
             var pngSize = new Vector2Int(width, height);
             var spriteSize = new Vec2f(pngSize.x / 32f, pngSize.y / 32f);
             
             // Add ID Component
-            entity.AddProjectileID(projectileID);
+            entity.AddProjectileID(projectileId);
 
             // Add Sprite Component
             entity.AddProjectileSprite2D(spriteID, spriteSize, Utility.Render.CreateEmptyGameObject());
@@ -52,13 +50,11 @@ namespace Projectile
         }
 
         public Entity SpawnProjectile(int spriteID, int width, int height, Vec2f startPos,
-            Cell start, Cell end, ProjectileType projectileType, ProjectileDrawType projectileDrawType)
+            Cell start, Cell end, ProjectileType projectileType, ProjectileDrawType projectileDrawType,
+            int projectileId)
         {
             // Create Entity
             var entity = Contexts.sharedInstance.game.CreateEntity();
-
-            // Increase ID per object statically
-            projectileID++;
 
             // Set Png Size
             var pngSize = new Vector2Int(width, height);
@@ -70,7 +66,7 @@ namespace Projectile
             var spriteSize = new Vec2f(pngSize.x / 32f, pngSize.y / 32f);
 
             // Add ID Component
-            entity.AddProjectileID(projectileID);
+            entity.AddProjectileID(projectileId);
 
             // Add Sprite Component
             entity.AddProjectileSprite2D(spriteId, spriteSize, Utility.Render.CreateEmptyGameObject());

@@ -5,6 +5,7 @@ using KMath;
 
 public class ProjectileTest : MonoBehaviour
 {
+    public static int prid = 0;
     // Projectile Draw System
     Projectile.DrawSystem projectileDrawSystem;
 
@@ -119,14 +120,14 @@ public class ProjectileTest : MonoBehaviour
                 diff = worldPosition - startPos;
 
                 // Loading Image
-                projectileSpawnerSystem.SpawnProjectile(image, 16, 16, startPos,
-                    start, end, ProjectileType.Grenade, ProjectileDrawType.Standard);
+                /*projectileSpawnerSystem.SpawnProjectile(image, 16, 16, startPos,
+                    start, end, ProjectileType.Grenade, ProjectileDrawType.Standard, prid++);*/
             }
 
             projectileVelocitySystem.Update(new Vec3f(diff.X, diff.Y));
 
             // Process Collision System
-            projectileCollisionSystem.Update(ref planetState.TileMap);
+           // projectileCollisionSystem.Update(ref this);
 
             // Draw Initialized Projectile
             projectileDrawSystem.Draw(Instantiate(Material), transform, 12);

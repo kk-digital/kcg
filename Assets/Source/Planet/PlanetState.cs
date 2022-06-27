@@ -151,7 +151,7 @@ namespace Planet
                 GameObject.Destroy(entity.Entity.agentSprite2D.GameObject);
             }
             entity.Entity.Destroy();
-            AgentList.Remove(entity);
+            AgentList.Remove(entity.AgentId);
         }
 
         public FloatingTextEntity AddFloatingText(string text, float timeToLive, Vec2f velocity, Vec2f position)
@@ -194,14 +194,27 @@ namespace Planet
             ParticleEmitterList.Remove(entity);
         }
 
-        public ProjectileEntity AddProjectile(UnityEngine.Material material, Vector2 position)
+        public ProjectileEntity AddProjectile(int spriteID, int width, int height, Vec2f startPos,
+            Vec2f velocity, Vec2f acceleration, Enums.ProjectileType projectileType, 
+            Enums.ProjectileDrawType projectileDrawType)
         {
-            return new ProjectileEntity();
+            ref ProjectileEntity newEntity = ref ProjectileList.Add();
+            GameEntity entity = GameState.ProjectileSpawnerSystem.SpawnBullet(spriteID, width, height, startPos,
+                            velocity, acceleration, projectileType, projectileDrawType, newEntity.ProjectileId);
+            newEntity.Entity = entity;
+
+            return newEntity;
         }
 
-        public void RemoveProjectile(ProjectileEntity entity)
+        public void RemoveProjectile(int projectileId)
         {
-            ProjectileList.Remove(entity);
+            ref ProjectileEntity entity = ref ProjectileList.Get(projectileId);
+            if (entity.Entity.hasProjectileSprite2D)
+            {
+                GameObject.Destroy(entity.Entity.projectileSprite2D.GameObject);
+            }
+            entity.Entity.Destroy();
+            ProjectileList.Remove(entity.ProjectileId);
         }
 
         public VehicleEntity AddVehicle(UnityEngine.Material material, Vector2 position)
@@ -266,7 +279,7 @@ namespace Planet
             GameState.ParticleEmitterUpdateSystem.Update(this);
             GameState.ParticleUpdateSystem.Update(this, ParticleContext);
             GameState.ProjectileMovementSystem.Update();
-            GameState.ProjectileCollisionSystem.Update(ref TileMap);
+            GameState.ProjectileCollisionSystem.Update(ref this);
 
             TileMap.DrawLayer(MapLayerType.Mid, Object.Instantiate(material), transform, 9);
             TileMap.DrawLayer(MapLayerType.Front, Object.Instantiate(material), transform, 10);
@@ -300,7 +313,7 @@ namespace Planet
                         ref ProjectileEntity projectile = ref ProjectileList.List[index];
                         if (projectile.IsInitialized)
                         {
-                            var position = projectile.Entity.projectilePhysicsState2D;
+                           // var position = projectile.Entity.projectilePhysicsState2D;
                         }
                     }
                 }
@@ -331,7 +344,7 @@ namespace Planet
             GameState.ParticleEmitterUpdateSystem.Update(this);
             GameState.ParticleUpdateSystem.Update(this, ParticleContext);
             GameState.ProjectileMovementSystem.Update();
-            GameState.ProjectileCollisionSystem.Update(ref TileMap);
+            GameState.ProjectileCollisionSystem.Update(ref this);
 
             TileMap.DrawLayerEx(MapLayerType.Mid, Object.Instantiate(material), transform, 9);
             TileMap.DrawLayerEx(MapLayerType.Front, Object.Instantiate(material), transform, 10);

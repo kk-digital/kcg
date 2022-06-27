@@ -1,13 +1,19 @@
 using UnityEngine;
 using Physics;
 using KMath;
+using System.Collections.Generic;
 
 namespace Projectile
 {
     public class ProcessCollisionSystem
     {
-        public void Update(ref PlanetTileMap.TileMap tileMap)
+        List<GameEntity> ToRemoveList = new List<GameEntity>();
+        public void Update(ref Planet.PlanetState planet)
         {
+            ToRemoveList.Clear();
+
+            ref PlanetTileMap.TileMap tileMap = ref planet.TileMap;
+
             // Get Delta Time
             float deltaTime = Time.deltaTime;
 
@@ -28,16 +34,18 @@ namespace Projectile
                 {
                     if (entity.projectileCollider.isFirstSolid)
                     {
-                        entity.Destroy();
-                        return;
+                        //entity.Destroy();
+                        ToRemoveList.Add(entity);
+
                     }
                 }
                 else if (entityBoxBorders.IsCollidingTop(tileMap, physicsState.angularVelocity))
                 {
                     if(entity.projectileCollider.isFirstSolid)
                     {
-                        entity.Destroy();
-                        return;
+                        //entity.Destroy();
+                        ToRemoveList.Add(entity);
+
                     }
                 }
 
@@ -48,19 +56,26 @@ namespace Projectile
                 {
                     if (entity.projectileCollider.isFirstSolid)
                     {
-                        entity.Destroy();
-                        return;
+                        //entity.Destroy();
+                        ToRemoveList.Add(entity);
                     }
                 }
                 else if (entityBoxBorders.IsCollidingRight(tileMap, physicsState.angularVelocity))
                 {
                     if (entity.projectileCollider.isFirstSolid)
                     {
-                        entity.Destroy();
-                        return;
+                        //entity.Destroy();
+                        ToRemoveList.Add(entity);
                     }
                 }
             }
+
+
+            foreach(var entity in ToRemoveList)
+            {
+                planet.RemoveProjectile(entity.projectileID.ID);
+            }
+
         }
     }
 }
