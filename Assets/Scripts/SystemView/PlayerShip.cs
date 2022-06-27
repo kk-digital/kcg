@@ -46,6 +46,11 @@ namespace Scripts {
             public SystemState state;
 
             public LineRenderer rudder_renderer;
+            public LineRenderer angular_velocity_in_direction_of_movement;
+            public LineRenderer angular_velocity_perpendicular_to_movement;
+
+            public GameObject   angular_velocity_direction_renderer;
+            public GameObject   angular_velocity_perpendicular_renderer;
 
             private void Start() {
                 camera_controller  = GameObject.Find("Main Camera").GetComponent<CameraController>();
@@ -91,10 +96,26 @@ namespace Scripts {
                 mat.SetInt("_ZWrite", 0);
                 mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
 
-                rudder_renderer.material      = mat;
-                rudder_renderer.useWorldSpace = true;
-                rudder_renderer.startColor    =
-                rudder_renderer.endColor      = Color.white;
+                rudder_renderer.material                                 = mat;
+                rudder_renderer.useWorldSpace                            = true;
+                rudder_renderer.startColor                               =
+                rudder_renderer.endColor                                 = Color.white;
+                
+                angular_velocity_direction_renderer                      = new GameObject();
+                angular_velocity_in_direction_of_movement                = angular_velocity_direction_renderer.AddComponent<LineRenderer>();
+
+                angular_velocity_perpendicular_renderer                  = new GameObject();
+                angular_velocity_perpendicular_to_movement               = angular_velocity_perpendicular_renderer.AddComponent<LineRenderer>();
+
+                angular_velocity_in_direction_of_movement.material       = mat;
+                angular_velocity_in_direction_of_movement.useWorldSpace  = true;
+                angular_velocity_in_direction_of_movement.startColor     =
+                angular_velocity_in_direction_of_movement.endColor       = Color.blue;
+
+                angular_velocity_perpendicular_to_movement.material      = mat;
+                angular_velocity_perpendicular_to_movement.useWorldSpace = true;
+                angular_velocity_perpendicular_to_movement.startColor    =
+                angular_velocity_perpendicular_to_movement.endColor      = Color.green;
             }
 
             private void Update() {
@@ -118,8 +139,8 @@ namespace Scripts {
 
                 if(rudder_enabled) {
                     vertices[0] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
-                    vertices[1] = new Vector3(ship.self.posx + (float)Math.Cos(ship.rotation + sail_angle) * 5.0f,
-                                              ship.self.posy + (float)Math.Sin(ship.rotation + sail_angle) * 5.0f,
+                    vertices[1] = new Vector3(ship.self.posx + (float)Math.Cos(ship.rotation + sail_angle) * 5.0f / camera_controller.scale,
+                                              ship.self.posy + (float)Math.Sin(ship.rotation + sail_angle) * 5.0f / camera_controller.scale,
                                               0.0f);
 
                     rudder_renderer.SetPositions(vertices);
@@ -309,8 +330,78 @@ namespace Scripts {
                         }
                     }
 
-                    if (strongest_gravity_object != null)
+                    if(strongest_gravity_object != null) {
+
                         ship.descriptor.change_frame_of_reference(strongest_gravity_object);
+
+                        float angular_velocity_x     = ship.self.velx - ship.descriptor.central_body.velx;
+                        float angular_velocity_y     = ship.self.vely - ship.descriptor.central_body.vely;
+
+                        float velocity_angle         = Tools.get_angle(angular_velocity_x,
+                                                                       angular_velocity_y);
+
+                        float angular_velocity_angle = Tools.get_angle(ship.descriptor.central_body.posx - ship.self.posx,
+                                                                       ship.descriptor.central_body.posy - ship.self.posy);
+
+                        // theta = angle between hypothetical circular orbit through ship's position
+
+                        float theta                  = angular_velocity_angle - velocity_angle;
+
+                        float costheta               = (float)Math.Cos(theta);
+                        float sintheta               = (float)Math.Sin(theta);
+
+                        (angular_velocity_x,
+                         angular_velocity_y)         = (costheta * angular_velocity_x - sintheta * angular_velocity_y,
+                                                        sintheta * angular_velocity_x + costheta * angular_velocity_x);
+
+                        float in_direction           = Tools.magnitude(sintheta * angular_velocity_x, sintheta * angular_velocity_y);
+                        float perpendicular          = Tools.magnitude(costheta * angular_velocity_x, costheta * angular_velocity_y);
+
+                        Vector3[] vertices1          = new Vector3[2];
+                        Vector3[] vertices2          = new Vector3[2];
+
+                        vertices1[0] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
+                        vertices1[1] = new Vector3(ship.self.posx + (float)Math.Cos(velocity_angle)
+                                                                  * 0.1f * in_direction / camera_controller.scale,
+                                                   ship.self.posy + (float)Math.Sin(velocity_angle)
+                                                                  * 0.1f * in_direction / camera_controller.scale,
+                                                   0.0f);
+
+                        angular_velocity_in_direction_of_movement.SetPositions(vertices1);
+                        angular_velocity_in_direction_of_movement.positionCount  = 2;
+
+                        angular_velocity_in_direction_of_movement.startWidth     =
+                        angular_velocity_in_direction_of_movement.endWidth       = 0.25f / camera_controller.scale;
+
+
+
+                        vertices2[0] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
+                        vertices2[1] = new Vector3(ship.self.posx + (float)Math.Cos(velocity_angle + Tools.halfpi)
+                                                                  * 0.1f * perpendicular / camera_controller.scale,
+                                                   ship.self.posy + (float)Math.Sin(velocity_angle + Tools.halfpi)
+                                                                  * 0.1f * perpendicular / camera_controller.scale,
+                                                   0.0f);
+
+                        angular_velocity_perpendicular_to_movement.SetPositions(vertices2);
+                        angular_velocity_perpendicular_to_movement.positionCount = 2;
+
+                        angular_velocity_perpendicular_to_movement.startWidth    =
+                        angular_velocity_perpendicular_to_movement.endWidth      = 0.25f / camera_controller.scale;
+
+                    } else {
+
+                        Vector3[] vertices1 = new Vector3[2];
+
+                        vertices1[0]        = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
+                        vertices1[1]        = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
+
+                        angular_velocity_in_direction_of_movement.SetPositions(vertices1);
+                        angular_velocity_in_direction_of_movement.positionCount  = 0;
+
+                        angular_velocity_perpendicular_to_movement.SetPositions(vertices1);
+                        angular_velocity_perpendicular_to_movement.positionCount = 0;
+
+                    }
 
                     ship.path_planned = true;
                 }
