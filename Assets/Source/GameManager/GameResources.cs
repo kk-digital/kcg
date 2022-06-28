@@ -240,7 +240,7 @@ public class GameResources
         GameState.ParticleCreationApi.SetName("Ore");
         GameState.ParticleCreationApi.SetDecayRate(1.0f);
         GameState.ParticleCreationApi.SetAcceleration(new Vector2(0.0f, -20.0f));
-        GameState.ParticleCreationApi.SetDeltaRotation(1.7f);
+        GameState.ParticleCreationApi.SetDeltaRotation(90.0f);
         GameState.ParticleCreationApi.SetDeltaScale(0.0f);
         GameState.ParticleCreationApi.SetSpriteId(OreSprite);
         GameState.ParticleCreationApi.SetSize(new Vec2f(0.5f, 0.5f));

@@ -29,7 +29,7 @@ namespace Particle
                 var width = entity.particleSprite2D.Size.X;
                 var height = entity.particleSprite2D.Size.Y;
 
-                Utility.Render.DrawSprite(x, y, width, height, sprite, Material.Instantiate(material), transform, drawOrder++);
+                Utility.Render.DrawSprite(x, y, width, height, sprite, Material.Instantiate(material), transform, drawOrder++, entity.particlePosition2D.Rotation);
             }
         }
     }
