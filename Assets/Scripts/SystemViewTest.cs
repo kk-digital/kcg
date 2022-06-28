@@ -79,6 +79,28 @@ namespace Scripts {
                 n_body_gravity = b;
                 gravity_renderer.n_body_gravity = b;
             }
+                
+            public void engage_autopilot() {
+                State.player.ship.engage_orbital_autopilot();
+            }
+
+            public void circularize() {
+                State.player.circularizing = true;
+            }
+
+            public void set_periapsis(String s) {
+                State.player.periapsis = float.Parse(s);
+            }
+
+            public void set_apoapsis(String s) {
+                State.player.apoapsis = float.Parse(s);
+            }
+
+            public void set_rotation(String s) { 
+                State.player.rotation = float.Parse(s) * Tools.pi / 180.0f;
+                while(State.player.rotation > Tools.twopi) State.player.rotation -= Tools.twopi;
+                if   (State.player.rotation <        0.0f) State.player.rotation += Tools.twopi;
+            }
 
             public  Dropdown DockingTargetSelector;
             private SpaceStation DockingTarget;

@@ -38,6 +38,11 @@ namespace Scripts {
             public const string broadsides_key  = "2";
             public const string turrets_key     = "3";
 
+            public float periapsis;
+            public float apoapsis;
+            public float rotation;
+            public bool  circularizing;
+
             public bool  turn_towards_mouse     = true;
 
             private SelectedWeaponType selectedWeapon = SelectedWeaponType.MAIN_WEAPONS;
@@ -127,7 +132,9 @@ namespace Scripts {
 
                 last_time = Time.time;
 
-                if (ship.DockingAutopilotLoop(current_time, 0.1f * system_scale)) return;
+                if(ship.docking_autopilot_tick(current_time, 0.1f * system_scale))           return;
+                if(ship.orbital_autopilot_tick(periapsis, apoapsis, rotation, current_time)) return;
+                if(circularizing)         { circularizing = !ship.circularize(current_time); return; }
 
                 if (Input.GetKeyDown("tab")) mouse_steering = !mouse_steering;
 

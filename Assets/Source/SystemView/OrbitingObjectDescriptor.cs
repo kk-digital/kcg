@@ -164,7 +164,6 @@ namespace Source {
                     // E    = E  - ------------------
                     //  n+1    n      1 - ε cos(En)
 
-
                     while(mean <        0.0f) mean  = Tools.twopi + mean;
                     while(mean > Tools.twopi) mean -= Tools.twopi;
 
@@ -201,7 +200,6 @@ namespace Source {
                     //             ε sinh(En) - En - M
                     // E    = E  - -------------------
                     //  n+1    n      ε cosh(En) - 1
-
 
                     while(mean <        0.0f) mean  = Tools.twopi + mean;
                     while(mean > Tools.twopi) mean -= Tools.twopi;
