@@ -8,6 +8,7 @@ using Enums;
 using Item;
 using KMath;
 using UnityEngine;
+using Item;
 
 namespace Planet
 {
@@ -41,6 +42,17 @@ namespace Planet
             ItemParticleList = new ItemParticleList();
 
             EntitasContext = new Contexts();
+        }
+
+        public void InitializeSystems(Material material, Transform transform)
+        {
+            GameState.ActionInitializeSystem.Initialize(material);
+
+            // Mesh builders
+            GameState.ItemMeshBuilderSystem.Initialize(material, transform, 11);
+            GameState.AgentMeshBuilderSystem.Initialize(material, transform, 12);
+            GameState.ProjectileMeshBuilderSystem.Initialize(material, transform, 13);
+            GameState.ParticleMeshBuilderSystem.Initialize(material, transform, 20);
         }
 
 
@@ -306,13 +318,28 @@ namespace Planet
             GameState.ProjectileMovementSystem.Update(EntitasContext.game);
             GameState.ProjectileCollisionSystem.UpdateEx(ref this);
 
-            TileMap.DrawLayer(MapLayerType.Mid, Object.Instantiate(material), transform, 9);
-            TileMap.DrawLayer(MapLayerType.Front, Object.Instantiate(material), transform, 10);
-            GameState.AgentDrawSystem.Draw(EntitasContext.game, Object.Instantiate(material), transform, 12);
-            GameState.ItemDrawSystem.Draw(EntitasContext, Material.Instantiate(material), transform, 13);
-            GameState.ProjectileDrawSystem.Draw(EntitasContext.game, Material.Instantiate(material), transform, 20);
-            GameState.FloatingTextDrawSystem.Draw(EntitasContext.game, transform, 10000);
-            GameState.ParticleDrawSystem.Draw(EntitasContext.particle, Material.Instantiate(material), transform, 50);
+            // Update Meshes.
+            TileMap.UpdateLayer(MapLayerType.Mid);
+            TileMap.UpdateLayer(MapLayerType.Front);
+            GameState.ItemMeshBuilderSystem.UpdateMesh();
+            GameState.AgentMeshBuilderSystem.UpdateMesh();
+            GameState.ProjectileMeshBuilderSystem.UpdateMesh();
+            GameState.ParticleMeshBuilderSystem.UpdateMesh(ParticleContext);
+
+            // Draw Frames.
+            Utility.Render.DrawFrame(ref GameState.ItemMeshBuilderSystem.Mesh, 
+                GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
+            Utility.Render.DrawFrame(ref GameState.AgentMeshBuilderSystem.Mesh,
+                GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Agent));
+            Utility.Render.DrawFrame(ref GameState.ProjectileMeshBuilderSystem.Mesh,
+                GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
+            Utility.Render.DrawFrame(ref GameState.ParticleMeshBuilderSystem.Mesh,
+                GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
+            TileMap.DrawLayer(MapLayerType.Mid);
+            TileMap.DrawLayer(MapLayerType.Front);
+
+            //GameState.FloatingTextDrawSystem.Draw(transform, 10000);
+
             #region Gui drawing systems
             //GameState.InventoryDrawSystem.Draw(material, transform, 1000);
             #endregion

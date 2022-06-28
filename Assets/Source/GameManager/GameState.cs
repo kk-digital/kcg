@@ -1,3 +1,5 @@
+using Agent;
+using Item;
 using Projectile;
 /// <summary>
 /// <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/static-constructors">Static Constructor</a>
@@ -37,6 +39,8 @@ public class GameState
     public static readonly Agent.AgentSpawnerSystem AgentSpawnerSystem;
     public static readonly Agent.AgentDrawSystem AgentDrawSystem;
     public static readonly Agent.EnemyAiSystem EnemyAiSystem;
+    public static readonly Agent.AgentMeshBuilderSystem AgentMeshBuilderSystem;
+
 
     #endregion
 
@@ -47,13 +51,14 @@ public class GameState
 
     #region Inventory
     public static readonly Inventory.InventoryManager InventoryManager;
-    public static readonly Inventory.DrawSystem InventoryDrawSystem;
+    public static readonly Inventory.InventoryDrawSystem InventoryDrawSystem;
     #endregion
 
     #region Item
     public static readonly Item.SpawnerSystem ItemSpawnSystem;
     public static readonly Item.DrawSystem ItemDrawSystem;
     public static readonly Item.PickUpSystem ItemPickUpSystem;
+    public static readonly Item.MeshBuilderSystem ItemMeshBuilderSystem;
     #endregion
 
     #region Projectile
@@ -62,6 +67,7 @@ public class GameState
     public static readonly Projectile.MovementSystem ProjectileMovementSystem;
     public static readonly Projectile.SpawnerSystem ProjectileSpawnerSystem;
     public static readonly Projectile.DrawSystem ProjectileDrawSystem;
+    public static readonly Projectile.MeshBuilderSystem ProjectileMeshBuilderSystem;
     #endregion
 
     #region FloatingText
@@ -82,6 +88,8 @@ public class GameState
     public static readonly Particle.ParticleUpdateSystem ParticleUpdateSystem;
     public static readonly Particle.ParticleEmitterSpawnerSystem ParticleEmitterSpawnerSystem;
     public static readonly Particle.ParticleSpawnerSystem ParticleSpawnerSystem;
+    public static readonly Particle.ParticleMeshBuilderSystem ParticleMeshBuilderSystem;
+
     #endregion
 
     static GameState()
@@ -96,7 +104,8 @@ public class GameState
         AgentSpawnerSystem = new Agent.AgentSpawnerSystem(AgentCreationApi);
         PhysicsMovableSystem = new Physics.PhysicsMovableSystem();
         AgentDrawSystem = new Agent.AgentDrawSystem();
-        InventoryDrawSystem = new Inventory.DrawSystem();
+        AgentMeshBuilderSystem = new Agent.AgentMeshBuilderSystem();
+        InventoryDrawSystem = new Inventory.InventoryDrawSystem();
         InventoryManager = new Inventory.InventoryManager();
         PhysicsProcessCollisionSystem = new Physics.PhysicsProcessCollisionSystem();
         EnemyAiSystem = new Agent.EnemyAiSystem();
@@ -109,6 +118,7 @@ public class GameState
         ItemSpawnSystem = new Item.SpawnerSystem();
         ItemDrawSystem = new Item.DrawSystem();
         ItemPickUpSystem = new Item.PickUpSystem();
+        ItemMeshBuilderSystem = new Item.MeshBuilderSystem();
         ActionPropertyManager = new Action.ActionPropertyManager();
         ActionCreationSystem = new Action.ActionCreationSystem();
         ActionSchedulerSystem = new Action.ActionSchedulerSystem();
@@ -117,6 +127,7 @@ public class GameState
         ParticleEmitterCreationApi = new Particle.ParticleEmitterCreationApi();
         ParticleDrawSystem = new Particle.ParticleDrawSystem();
         ParticleEmitterUpdateSystem = new Particle.ParticleEmitterUpdateSystem(ParticleEmitterCreationApi, ParticleCreationApi);
+        ParticleMeshBuilderSystem = new Particle.ParticleMeshBuilderSystem();
         ParticleUpdateSystem = new Particle.ParticleUpdateSystem();
         ParticleEmitterSpawnerSystem = new Particle.ParticleEmitterSpawnerSystem(ParticleEmitterCreationApi, ParticleCreationApi);
         ParticleSpawnerSystem = new Particle.ParticleSpawnerSystem(ParticleCreationApi);
@@ -125,5 +136,6 @@ public class GameState
         ProjectileMovementSystem = new Projectile.MovementSystem(ProjectileCreationApi);
         ProjectileSpawnerSystem = new Projectile.SpawnerSystem(ProjectileCreationApi);
         ProjectileDrawSystem = new Projectile.DrawSystem();
+        ProjectileMeshBuilderSystem = new Projectile.MeshBuilderSystem();
     }
 }

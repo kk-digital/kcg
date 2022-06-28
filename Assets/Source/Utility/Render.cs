@@ -7,6 +7,16 @@ namespace Utility
 
     internal static class Render
     {
+       public static void DrawFrame(ref FrameMesh frameMesh, Sprites.SpriteAtlas Atlassprite)
+        {
+            var tex = Atlassprite.Texture;
+            var mesh = frameMesh.obj.GetComponent<MeshFilter>().sharedMesh;
+
+            mesh.SetVertices(frameMesh.vertices);
+            mesh.SetUVs(0, frameMesh.uvs);
+            mesh.SetTriangles(frameMesh.triangles, 0);
+        }
+
         public static void DrawSprite(float x, float y, float w, float h,
             Sprites.Sprite sprite, Material material, Transform transform, 
                     int drawOrder = 0, float rotation = 0)
@@ -112,17 +122,19 @@ namespace Utility
             var mesh = CreateMesh(transform, "colorQuad", drawOrder, mat, new Vec2f(x, y), rotation);
 
             List<int> triangles = new List<int>();
-            List<Vector3> verticies = new List<Vector3>();
+            List<Vector2> uvs = new List<Vector2>();
+            List<Vector3> vertices = new List<Vector3>();
+
 
             var p0 = new Vector3(0, 0, 0);
             var p1 = new Vector3((w), (h), 0);
             var p2 = p0; p2.y = p1.y;
             var p3 = p1; p3.y = p0.y;
 
-            verticies.Add(p0);
-            verticies.Add(p1);
-            verticies.Add(p2);
-            verticies.Add(p3);
+            vertices.Add(p0);
+            vertices.Add(p1);
+            vertices.Add(p2);
+            vertices.Add(p3);
 
             triangles.Add(0);
             triangles.Add(2);
@@ -131,7 +143,7 @@ namespace Utility
             triangles.Add(1);
             triangles.Add(3);
 
-            mesh.SetVertices(verticies);
+            mesh.SetVertices(vertices);
             mesh.SetTriangles(triangles, 0);
         }
 

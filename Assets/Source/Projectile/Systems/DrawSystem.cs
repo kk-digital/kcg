@@ -6,14 +6,10 @@ namespace Projectile
 {
     public class DrawSystem
     {
-        List<int> triangles = new();
-        List<Vector2> uvs = new();
-        List<Vector3> verticies = new();
-
-        public void Draw(GameContext gameContext, Material material, Transform transform, int drawOrder)
+        public void Draw(Material material, Transform transform, int drawOrder)
         {
-            var VehiclesWithSprite = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.ProjectileSprite2D));
-            foreach (var entity in VehiclesWithSprite)
+            var projectilessWithSprite = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.ProjectileSprite2D));
+            foreach (var entity in projectilessWithSprite)
             {
                 int spriteId = entity.projectileSprite2D.SpriteId;
 

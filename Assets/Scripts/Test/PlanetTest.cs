@@ -10,7 +10,7 @@ namespace Planet.Unity
 
         public PlanetState Planet;
         Inventory.InventoryManager inventoryManager;
-        Inventory.DrawSystem    inventoryDrawSystem;
+        Inventory.InventoryDrawSystem    inventoryDrawSystem;
 
         // Health Bar
         KGUI.HealthBarUI healthBarUI;
@@ -59,20 +59,6 @@ namespace Planet.Unity
                 {
                     GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity,
                         GameState.ActionCreationSystem.CreateAction(Planet.EntitasContext, itemProperty.itemPropertyAction.ActionTypeID, Player.AgentId));
-                }
-            }
-                
-            // unity rendering stuff
-            // will be removed layer
-            foreach(var mr in GetComponentsInChildren<MeshRenderer>())
-            {
-                if (Application.isPlaying)
-                {
-                    Destroy(mr.gameObject);
-                }
-                else
-                {
-                    DestroyImmediate(mr.gameObject);
                 }
             }
 

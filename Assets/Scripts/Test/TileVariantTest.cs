@@ -41,7 +41,7 @@ namespace Planet.Unity
                 else
                     DestroyImmediate(mr.gameObject);
 
-            Planet.TileMap.DrawLayer(MapLayerType.Front, Instantiate(Material), transform, 10);
+            Planet.TileMap.DrawLayer(MapLayerType.Front);
         }
 
         // create the sprite atlas for testing purposes

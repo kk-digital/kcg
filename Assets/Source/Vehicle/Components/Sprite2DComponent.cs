@@ -6,7 +6,7 @@ namespace Vehicle
 {
     public struct Sprite2DComponent : IComponent
     {
-        public Texture2D Texture;
+        public int SpriteId;
         public Vec2f Size;
     }
 }

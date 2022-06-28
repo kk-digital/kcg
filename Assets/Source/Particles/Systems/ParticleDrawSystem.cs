@@ -5,7 +5,6 @@ namespace Particle
 {
     public class ParticleDrawSystem
     {
-        
         public void Draw(ParticleContext context, Material material, Transform transform, int drawOrder)
         {
             var entities = context.GetGroup(ParticleMatcher.AllOf(ParticleMatcher.ParticleSprite2D));

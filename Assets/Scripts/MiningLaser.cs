@@ -24,13 +24,13 @@ public class MiningLaser : MonoBehaviour
     public Vec2f offset = Vec2f.Zero;
 
     // Item Draw System
-    Item.DrawSystem DrawSystem;
+    Item.MeshBuilderSystem DrawSystem;
 
     // Inventory Manager System
     Inventory.InventoryManager inventoryManager;
 
     // Inventory Draw System
-    Inventory.DrawSystem inventoryDrawSystem;
+    Inventory.InventoryDrawSystem inventoryDrawSystem;
 
     // Item Spawner System
     Item.SpawnerSystem itemSpawnSystem;
@@ -53,7 +53,7 @@ public class MiningLaser : MonoBehaviour
         contexts = Contexts.sharedInstance;
 
         // Assign Draw System
-        DrawSystem = new Item.DrawSystem();
+        DrawSystem = new Item.MeshBuilderSystem();
 
         // Create Inventory Manager System
         inventoryManager = new Inventory.InventoryManager();
@@ -62,7 +62,7 @@ public class MiningLaser : MonoBehaviour
         itemSpawnSystem = new Item.SpawnerSystem();
 
         // Create Draw System
-        inventoryDrawSystem = new Inventory.DrawSystem();
+        inventoryDrawSystem = new Inventory.InventoryDrawSystem();
 
         // Create Input Process System
         inputProcessSystem = new ECSInput.InputProcessSystem();
@@ -192,7 +192,7 @@ public class MiningLaser : MonoBehaviour
 
             // If laser held, draw it.
             if(isHeld)
-                DrawSystem.Draw(contexts, Instantiate(Material), transform, 16);
+                //DrawSystem.Draw(contexts, Instantiate(Material), transform, 16);
 
             if (Input.GetKey(KeyCode.Mouse0) && isHeld)
             {

@@ -4,7 +4,7 @@ using Entitas;
 
 namespace Inventory
 {
-    public class DrawSystem
+    public class InventoryDrawSystem
     {
 
         /// <summary>

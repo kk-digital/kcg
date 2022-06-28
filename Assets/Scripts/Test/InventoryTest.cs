@@ -8,7 +8,7 @@ public class InventoryTest : MonoBehaviour
     Contexts context;
 
     Inventory.InventoryManager inventoryManager;
-    Inventory.DrawSystem    inventoryDrawSystem;
+    Inventory.InventoryDrawSystem    inventoryDrawSystem;
     Item.SpawnerSystem      itemSpawnSystem;
     ECSInput.InputProcessSystem  inputProcessSystem;
 
@@ -21,7 +21,7 @@ public class InventoryTest : MonoBehaviour
         context = Contexts.sharedInstance;
         inventoryManager = new Inventory.InventoryManager();
         itemSpawnSystem = new Item.SpawnerSystem();
-        inventoryDrawSystem = new Inventory.DrawSystem();
+        inventoryDrawSystem = new Inventory.InventoryDrawSystem();
         inputProcessSystem = new ECSInput.InputProcessSystem();
         var inventoryAttacher = Inventory.InventoryAttacher.Instance;
 

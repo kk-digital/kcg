@@ -11,7 +11,7 @@ public class SpawnEnemy : MonoBehaviour
     Inventory.InventoryManager InventoryManager;
 
     // Inventory Draw System
-    Inventory.DrawSystem inventoryDrawSystem;
+    Inventory.InventoryDrawSystem inventoryDrawSystem;
 
     // Item Spawner System
     Item.SpawnerSystem itemSpawnSystem;
@@ -67,7 +67,7 @@ public class SpawnEnemy : MonoBehaviour
         itemSpawnSystem = new Item.SpawnerSystem();
 
         // Create Draw System
-        inventoryDrawSystem = new Inventory.DrawSystem();
+        inventoryDrawSystem = new Inventory.InventoryDrawSystem();
 
         // Create Inventory Attacher
         var inventoryAttacher = Inventory.InventoryAttacher.Instance;
