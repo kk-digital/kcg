@@ -82,11 +82,16 @@ namespace Projectile
              return ref List[Found];
         }
 
+        public ref ProjectileEntity Get(int Index)
+        {
+            return ref List[Index];
+        }
 
         // to remove an entity we just 
         // set the IsInitialized field to false
-        public void Remove(ProjectileEntity entity)
+        public void Remove(int projectileId)
         {
+            ref ProjectileEntity entity = ref Get(projectileId);
             entity.IsInitialized = false;
             Size--;
         }

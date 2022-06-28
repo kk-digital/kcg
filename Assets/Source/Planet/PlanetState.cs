@@ -4,6 +4,8 @@ using Vehicle;
 using Projectile;
 using FloatingText;
 using Particle;
+using Enums;
+using Item;
 using KMath;
 using UnityEngine;
 
@@ -130,7 +132,7 @@ namespace Planet
         {
             ref AgentEntity entity = ref AgentList.Get(agentId);
             entity.Entity.Destroy();
-            AgentList.Remove(entity);
+            AgentList.Remove(entity.AgentId);
         }
 
         public FloatingTextEntity AddFloatingText(string text, float timeToLive, Vec2f velocity, Vec2f position)
@@ -176,9 +178,9 @@ namespace Planet
             return new ProjectileEntity();
         }
 
-        public void RemoveProjectile(ProjectileEntity entity)
+        public void RemoveProjectile(int projectileId)
         {
-            ProjectileList.Remove(entity);
+            ProjectileList.Remove(projectileId);
         }
 
         public VehicleEntity AddVehicle(UnityEngine.Material material, Vector2 position)
@@ -188,9 +190,9 @@ namespace Planet
             return new VehicleEntity();
         }
 
-        public void RemoveVehicle(VehicleEntity entity)
+        public void RemoveVehicle(int vehicleId)
         {
-            VehicleList.Remove(entity);
+            VehicleList.Remove(vehicleId);
         }
 
         public ItemParticleEntity AddItemParticle(Vec2f position, ItemType itemType)
@@ -198,7 +200,7 @@ namespace Planet
             Utils.Assert(ItemParticleList.Size < PlanetEntityLimits.ItemParticlesLimit);
 
             ref ItemParticleEntity newEntity = ref ItemParticleList.Add();
-            GameEntity entity = GameState.ItemSpawnSystem.Spawn(GameContext, itemType, position);
+            GameEntity entity = GameState.ItemSpawnSystem.SpawnItem(Contexts.sharedInstance, itemType, position);
             newEntity.Entity = entity;
 
             return newEntity;
