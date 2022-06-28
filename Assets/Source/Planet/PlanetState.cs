@@ -20,6 +20,7 @@ namespace Planet
         public ProjectileList ProjectileList;
         public FloatingTextList FloatingTextList;
         public ParticleEmitterList ParticleEmitterList;
+        public ItemParticleList ItemParticleList;
 
 
         public GameContext GameContext;
@@ -34,6 +35,7 @@ namespace Planet
             ProjectileList = new ProjectileList();
             FloatingTextList = new FloatingTextList();
             ParticleEmitterList = new ParticleEmitterList();
+            ItemParticleList = new ItemParticleList();
 
             GameContext = gameContext;
             ParticleContext = particleContext;
@@ -44,6 +46,8 @@ namespace Planet
         public AgentEntity AddPlayer(int spriteId,
                                 int width, int height, Vec2f position, int startingAnimation)
         {
+            Utils.Assert(AgentList.Size < PlanetEntityLimits.AgentLimit);
+
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.AgentSpawnerSystem.SpawnPlayer(spriteId, width, height, position, newEntity.AgentId,
                     startingAnimation);
@@ -54,6 +58,8 @@ namespace Planet
 
         public AgentEntity AddPlayer(Vec2f position)
         {
+            Utils.Assert(AgentList.Size < PlanetEntityLimits.AgentLimit);
+
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.AgentSpawnerSystem.Spawn(position,
                     newEntity.AgentId,
@@ -67,6 +73,8 @@ namespace Planet
         public AgentEntity AddAgent(int spriteId, int width,
                      int height, Vec2f position, int startingAnimation)
         {
+            Utils.Assert(AgentList.Size < PlanetEntityLimits.AgentLimit);
+
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.AgentSpawnerSystem.SpawnAgent(spriteId, width, height, position,
                                                                     newEntity.AgentId, startingAnimation);
@@ -78,6 +86,8 @@ namespace Planet
 
         public AgentEntity AddAgent(Vec2f position)
         {
+            Utils.Assert(AgentList.Size < PlanetEntityLimits.AgentLimit);
+
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.AgentSpawnerSystem.Spawn(position,
                     newEntity.AgentId,
@@ -91,6 +101,8 @@ namespace Planet
         public AgentEntity AddEnemy(int spriteId,
                         int width, int height, Vec2f position, int startingAnimation)
         {
+            Utils.Assert(AgentList.Size < PlanetEntityLimits.AgentLimit);
+
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.AgentSpawnerSystem.SpawnEnemy(spriteId, width, height, position,
             newEntity.AgentId, startingAnimation);
@@ -103,6 +115,8 @@ namespace Planet
 
         public AgentEntity AddEnemy(Vec2f position)
         {
+            Utils.Assert(AgentList.Size < PlanetEntityLimits.AgentLimit);
+
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.AgentSpawnerSystem.Spawn(position,
                     newEntity.AgentId,
@@ -112,9 +126,9 @@ namespace Planet
             return newEntity;
         }
 
-        public void RemoveAgent(int Index)
+        public void RemoveAgent(int agentId)
         {
-            ref AgentEntity entity = ref AgentList.Get(Index);
+            ref AgentEntity entity = ref AgentList.Get(agentId);
             entity.Entity.Destroy();
             AgentList.Remove(entity);
         }
@@ -157,6 +171,8 @@ namespace Planet
 
         public ProjectileEntity AddProjectile(UnityEngine.Material material, Vector2 position)
         {
+            Utils.Assert(ProjectileList.Size < PlanetEntityLimits.ProjectileLimit);
+
             return new ProjectileEntity();
         }
 
@@ -167,6 +183,8 @@ namespace Planet
 
         public VehicleEntity AddVehicle(UnityEngine.Material material, Vector2 position)
         {
+            Utils.Assert(VehicleList.Size < PlanetEntityLimits.VehicleLimit);
+
             return new VehicleEntity();
         }
 
@@ -174,6 +192,23 @@ namespace Planet
         {
             VehicleList.Remove(entity);
         }
+
+        public ItemParticleEntity AddItemParticle(Vec2f position, ItemType itemType)
+        {
+            Utils.Assert(ItemParticleList.Size < PlanetEntityLimits.ItemParticlesLimit);
+
+            ref ItemParticleEntity newEntity = ref ItemParticleList.Add();
+            GameEntity entity = GameState.ItemSpawnSystem.Spawn(GameContext, itemType, position);
+            newEntity.Entity = entity;
+
+            return newEntity;
+        }
+
+        public void RemoveItemParticle(int itemParticleId)
+        {
+            //TODO: implement this
+        }
+
 
 
         // updates the entities, must call the systems and so on ..
