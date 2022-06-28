@@ -42,11 +42,12 @@ namespace Planet
 
         // Note(Mahdi): Deprecated will be removed soon
         public AgentEntity AddPlayer(int spriteId,
-                                int width, int height, Vec2f position, int startingAnimation)
+                                int width, int height, Vec2f position, int startingAnimation, int health, int food, int water, 
+                                int oxygen, int fuel)
         {
             ref AgentEntity newEntity = ref AgentList.Add();
             GameEntity entity = GameState.AgentSpawnerSystem.SpawnPlayer(spriteId, width, height, position, newEntity.AgentId,
-                    startingAnimation, 100, 0.2f);
+                    startingAnimation, health, food, water, oxygen, fuel, 0.2f);
             newEntity.Entity = entity;
 
             return newEntity;

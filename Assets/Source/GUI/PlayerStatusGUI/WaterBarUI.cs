@@ -1,25 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Entitas;
 
 namespace KGUI
 {
-    public class FoodBarUI
+    public class WaterBarUI
     {
         // Init
         private static bool Init;
 
-        // Food Bar Icon Position
+        // Water Bar Icon Position
         public Rect iconPosition = new Rect(7, 140, 60, -60);
 
-        // Food Bar Icon Sprite
+        // Water Bar Icon Sprite
         Sprites.Sprite icon;
         Sprites.Sprite fill;
 
         // Image
-        private GameObject foodBar;
+        private GameObject waterBar;
         private GameObject iconCanvas;
 
         public void Initialize(Transform transform)
@@ -30,7 +28,7 @@ namespace KGUI
             Vector2Int iconPngSize = new Vector2Int(IconWidth, IconHeight);
 
             // Load image from file
-            var iconSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\interface\\hud_status_food.png", IconWidth, IconHeight);
+            var iconSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\interface\\hud_status_water.png", IconWidth, IconHeight);
 
             // Set Sprite ID from Sprite Atlas
             int iconID = GameState.SpriteAtlasManager.CopySpriteToAtlas(iconSheet, 0, 0, Enums.AtlasType.Particle);
@@ -78,8 +76,8 @@ namespace KGUI
                 TextureCoords = new Vector4(0, 0, 1, 1)
             };
 
-            // Food Bar Initializon
-            iconCanvas = new GameObject("Food Icon");
+            // Water Bar Initializon
+            iconCanvas = new GameObject("Water Icon");
             iconCanvas.transform.parent = transform;
             iconCanvas.AddComponent<RectTransform>();
             iconCanvas.AddComponent<Image>();
@@ -87,33 +85,33 @@ namespace KGUI
             // Add Components and setup game object
             Sprite iconBar = Sprite.Create(icon.Texture, new Rect(0.0f, 0.0f, IconWidth, IconHeight), new Vector2(0.5f, 0.5f));
             iconCanvas.GetComponent<Image>().sprite = iconBar;
-            iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-345, 537.4f, 4.873917f);
+            iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-345, 415.5f, 4.873917f);
             iconCanvas.GetComponent<RectTransform>().localScale = new Vector3(1.2f, -1.2f, 0.5203559f);
 
-            // Food Bar Initializon
-            foodBar = new GameObject("Food Bar");
-            foodBar.transform.parent = iconCanvas.transform;
-            foodBar.AddComponent<RectTransform>();
-            foodBar.AddComponent<Image>();
+            // Water Bar Initializon
+            waterBar = new GameObject("Water Bar");
+            waterBar.transform.parent = iconCanvas.transform;
+            waterBar.AddComponent<RectTransform>();
+            waterBar.AddComponent<Image>();
 
             // Add Components and setup game object
             Sprite bar = Sprite.Create(fill.Texture, new Rect(0.0f, 0.0f, FillWidth, FillHeight), new Vector2(0.5f, 0.5f));
 
-            foodBar.GetComponent<Image>().sprite = bar;
-            foodBar.GetComponent<Image>().raycastTarget = true;
-            foodBar.GetComponent<Image>().maskable = true;
-            foodBar.GetComponent<Image>().type = Image.Type.Filled;
-            foodBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
-            foodBar.GetComponent<Image>().fillOrigin = 0;
+            waterBar.GetComponent<Image>().sprite = bar;
+            waterBar.GetComponent<Image>().raycastTarget = true;
+            waterBar.GetComponent<Image>().maskable = true;
+            waterBar.GetComponent<Image>().type = Image.Type.Filled;
+            waterBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
+            waterBar.GetComponent<Image>().fillOrigin = 0;
             IGroup<GameEntity> Playerentities =
             Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentStats);
             foreach (var entity in Playerentities)
             {
-                foodBar.GetComponent<Image>().fillAmount = entity.agentStats.Food / 100;
+                waterBar.GetComponent<Image>().fillAmount = entity.agentStats.Water / 100;
             }
-            foodBar.GetComponent<Image>().fillClockwise = true;
-            foodBar.GetComponent<RectTransform>().localPosition = new Vector3(-0.4f, -0.1f, 4.873917f);
-            foodBar.GetComponent<RectTransform>().localScale = new Vector3(0.8566527f, 0.8566527f, 0.3714702f);
+            waterBar.GetComponent<Image>().fillClockwise = true;
+            waterBar.GetComponent<RectTransform>().localPosition = new Vector3(-0.4f, -0.1f, 4.873917f);
+            waterBar.GetComponent<RectTransform>().localScale = new Vector3(0.8566527f, 0.8566527f, 0.3714702f);
 
             Init = true;
         }
@@ -126,7 +124,7 @@ namespace KGUI
                 Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentStats);
                 foreach (var entity in Playerentities)
                 {
-                    foodBar.GetComponent<Image>().fillAmount = entity.agentStats.Food / 100;
+                    waterBar.GetComponent<Image>().fillAmount = entity.agentStats.Water / 100;
                 }
             }
         }

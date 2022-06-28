@@ -85,7 +85,7 @@ namespace Planet.Unity
             Planet = new Planet.PlanetState(mapSize, EntitasContext.game, EntitasContext.particle);
             GenerateMap();
 
-            Player = Planet.AddPlayer(GameResources.CharacterSpriteId, 32, 48, new Vec2f(3.0f, 3.0f), 0);
+            Player = Planet.AddPlayer(GameResources.CharacterSpriteId, 32, 48, new Vec2f(3.0f, 3.0f), 0, 100, 100, 100, 100, 100);
             int toolBarID = Player.Entity.agentToolBar.ToolBarID;
 
             // Create Action            

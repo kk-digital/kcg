@@ -1,25 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Entitas;
 
 namespace KGUI
 {
-    public class FoodBarUI
+    public class FuelBarUI
     {
         // Init
         private static bool Init;
 
-        // Food Bar Icon Position
+        // Fuel Bar Icon Position
         public Rect iconPosition = new Rect(7, 140, 60, -60);
 
-        // Food Bar Icon Sprite
+        // Fuel Bar Icon Sprite
         Sprites.Sprite icon;
         Sprites.Sprite fill;
 
         // Image
-        private GameObject foodBar;
+        private GameObject fuelBar;
         private GameObject iconCanvas;
 
         public void Initialize(Transform transform)
@@ -30,7 +28,7 @@ namespace KGUI
             Vector2Int iconPngSize = new Vector2Int(IconWidth, IconHeight);
 
             // Load image from file
-            var iconSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\interface\\hud_status_food.png", IconWidth, IconHeight);
+            var iconSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\interface\\hud_status_fuel.png", IconWidth, IconHeight);
 
             // Set Sprite ID from Sprite Atlas
             int iconID = GameState.SpriteAtlasManager.CopySpriteToAtlas(iconSheet, 0, 0, Enums.AtlasType.Particle);
@@ -78,8 +76,8 @@ namespace KGUI
                 TextureCoords = new Vector4(0, 0, 1, 1)
             };
 
-            // Food Bar Initializon
-            iconCanvas = new GameObject("Food Icon");
+            // Fuel Bar Initializon
+            iconCanvas = new GameObject("Fuel Icon");
             iconCanvas.transform.parent = transform;
             iconCanvas.AddComponent<RectTransform>();
             iconCanvas.AddComponent<Image>();
@@ -87,46 +85,45 @@ namespace KGUI
             // Add Components and setup game object
             Sprite iconBar = Sprite.Create(icon.Texture, new Rect(0.0f, 0.0f, IconWidth, IconHeight), new Vector2(0.5f, 0.5f));
             iconCanvas.GetComponent<Image>().sprite = iconBar;
-            iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-345, 537.4f, 4.873917f);
+            iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-345, 170.3f, 4.873917f);
             iconCanvas.GetComponent<RectTransform>().localScale = new Vector3(1.2f, -1.2f, 0.5203559f);
 
-            // Food Bar Initializon
-            foodBar = new GameObject("Food Bar");
-            foodBar.transform.parent = iconCanvas.transform;
-            foodBar.AddComponent<RectTransform>();
-            foodBar.AddComponent<Image>();
+            // Fuel Bar Initializon
+            fuelBar = new GameObject("Fuel Bar");
+            fuelBar.transform.parent = iconCanvas.transform;
+            fuelBar.AddComponent<RectTransform>();
+            fuelBar.AddComponent<Image>();
 
             // Add Components and setup game object
             Sprite bar = Sprite.Create(fill.Texture, new Rect(0.0f, 0.0f, FillWidth, FillHeight), new Vector2(0.5f, 0.5f));
 
-            foodBar.GetComponent<Image>().sprite = bar;
-            foodBar.GetComponent<Image>().raycastTarget = true;
-            foodBar.GetComponent<Image>().maskable = true;
-            foodBar.GetComponent<Image>().type = Image.Type.Filled;
-            foodBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
-            foodBar.GetComponent<Image>().fillOrigin = 0;
+            fuelBar.GetComponent<Image>().sprite = bar;
+            fuelBar.GetComponent<Image>().raycastTarget = true;
+            fuelBar.GetComponent<Image>().maskable = true;
+            fuelBar.GetComponent<Image>().type = Image.Type.Filled;
+            fuelBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
+            fuelBar.GetComponent<Image>().fillOrigin = 0;
             IGroup<GameEntity> Playerentities =
             Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentStats);
             foreach (var entity in Playerentities)
             {
-                foodBar.GetComponent<Image>().fillAmount = entity.agentStats.Food / 100;
+                fuelBar.GetComponent<Image>().fillAmount = entity.agentStats.Fuel / 100;
             }
-            foodBar.GetComponent<Image>().fillClockwise = true;
-            foodBar.GetComponent<RectTransform>().localPosition = new Vector3(-0.4f, -0.1f, 4.873917f);
-            foodBar.GetComponent<RectTransform>().localScale = new Vector3(0.8566527f, 0.8566527f, 0.3714702f);
+            fuelBar.GetComponent<Image>().fillClockwise = true;
+            fuelBar.GetComponent<RectTransform>().localPosition = new Vector3(-0.4f, -0.1f, 4.873917f);
+            fuelBar.GetComponent<RectTransform>().localScale = new Vector3(0.8566527f, 0.8566527f, 0.3714702f);
 
             Init = true;
         }
 
         public void Update()
         {
-            if (Init)
+            if(Init)
             {
-                IGroup<GameEntity> Playerentities =
-                Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentStats);
+                IGroup<GameEntity> Playerentities = Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentStats);
                 foreach (var entity in Playerentities)
                 {
-                    foodBar.GetComponent<Image>().fillAmount = entity.agentStats.Food / 100;
+                    fuelBar.GetComponent<Image>().fillAmount = entity.agentStats.Fuel / 100;
                 }
             }
         }

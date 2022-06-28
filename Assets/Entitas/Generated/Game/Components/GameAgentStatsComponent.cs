@@ -11,18 +11,26 @@ public partial class GameEntity {
     public Agent.StatsComponent agentStats { get { return (Agent.StatsComponent)GetComponent(GameComponentsLookup.AgentStats); } }
     public bool hasAgentStats { get { return HasComponent(GameComponentsLookup.AgentStats); } }
 
-    public void AddAgentStats(float newHealth, float newAttackCooldown) {
+    public void AddAgentStats(int newHealth, float newFood, float newWater, float newOxygen, float newFuel, float newAttackCooldown) {
         var index = GameComponentsLookup.AgentStats;
         var component = (Agent.StatsComponent)CreateComponent(index, typeof(Agent.StatsComponent));
         component.Health = newHealth;
+        component.Food = newFood;
+        component.Water = newWater;
+        component.Oxygen = newOxygen;
+        component.Fuel = newFuel;
         component.AttackCooldown = newAttackCooldown;
         AddComponent(index, component);
     }
 
-    public void ReplaceAgentStats(float newHealth, float newAttackCooldown) {
+    public void ReplaceAgentStats(int newHealth, float newFood, float newWater, float newOxygen, float newFuel, float newAttackCooldown) {
         var index = GameComponentsLookup.AgentStats;
         var component = (Agent.StatsComponent)CreateComponent(index, typeof(Agent.StatsComponent));
         component.Health = newHealth;
+        component.Food = newFood;
+        component.Water = newWater;
+        component.Oxygen = newOxygen;
+        component.Fuel = newFuel;
         component.AttackCooldown = newAttackCooldown;
         ReplaceComponent(index, component);
     }
