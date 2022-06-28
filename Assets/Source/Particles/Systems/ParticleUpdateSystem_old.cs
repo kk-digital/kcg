@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+/*using System.Collections.Generic;
 using Entitas;
 using UnityEngine;
 
@@ -46,6 +46,6 @@ namespace Particle
             }
         }
     }
-}
+}*/
 
 

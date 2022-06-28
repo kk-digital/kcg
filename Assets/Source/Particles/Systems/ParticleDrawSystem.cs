@@ -14,11 +14,11 @@ namespace Particle
             {
                 int spriteId = entity.particleSprite2D.SpriteId;
 
-                /*if (entity.hasAnimationState)
+                if (entity.hasParticleAnimation)
                 {
-                    var animation = entity.animationState;
+                    var animation = entity.particleAnimation;
                     spriteId = animation.State.GetSpriteId();
-                }*/
+                }
 
                 Sprites.Sprite sprite = GameState.SpriteAtlasManager.GetSprite(spriteId, Enums.AtlasType.Particle);
 

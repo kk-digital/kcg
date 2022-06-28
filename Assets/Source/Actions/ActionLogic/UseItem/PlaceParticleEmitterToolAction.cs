@@ -32,7 +32,8 @@ namespace Action
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float x = worldPosition.x;
             float y = worldPosition.y;
-            planet.AddParticleEmitter(new Vec2f(x, y), Particle.ParticleEmitterType.OreFountain);
+            int t = (int)KMath.Random.Mt19937.genrand_int32() %  System.Enum.GetNames(typeof(Particle.ParticleType)).Length;
+            planet.AddParticleEmitter(new Vec2f(x, y), (Particle.ParticleEmitterType)t);
 
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
         }

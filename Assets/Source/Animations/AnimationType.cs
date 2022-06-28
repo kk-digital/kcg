@@ -6,6 +6,7 @@ namespace Animation
     {
         CharacterMoveLeft,
         CharacterMoveRight,
-        SlimeMoveLeft
+        SlimeMoveLeft,
+        Dust
     }
 }

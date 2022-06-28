@@ -17,6 +17,15 @@ namespace Particle
             IGroup<ParticleEntity> entities = particleContext.GetGroup(ParticleMatcher.ParticleState);
             foreach (var gameEntity in entities)
             {
+
+                if (gameEntity.hasParticleAnimation)
+                {
+                    var animation = gameEntity.particleAnimation;
+                    animation.State.Update(deltaTime, animation.AnimationSpeed);
+
+                    gameEntity.ReplaceParticleAnimation(animation.AnimationSpeed, animation.State);
+                }
+
                 var state = gameEntity.particleState;
 
                 float newHealth = state.Health - state.DecayRate * deltaTime;

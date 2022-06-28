@@ -118,7 +118,7 @@ public class GameState
         ParticleCreationApi = new Particle.ParticleCreationApi();
         ParticleEmitterCreationApi = new Particle.ParticleEmitterCreationApi();
         ParticleDrawSystem = new Particle.ParticleDrawSystem();
-        ParticleEmitterUpdateSystem = new Particle.ParticleEmitterUpdateSystem();
+        ParticleEmitterUpdateSystem = new Particle.ParticleEmitterUpdateSystem(ParticleEmitterCreationApi, ParticleCreationApi);
         ParticleUpdateSystem = new Particle.ParticleUpdateSystem();
         ParticleEmitterSpawnerSystem = new Particle.ParticleEmitterSpawnerSystem(ParticleEmitterCreationApi, ParticleCreationApi);
         ProjectileCollisionSystem = new Projectile.ProcessCollisionSystem();

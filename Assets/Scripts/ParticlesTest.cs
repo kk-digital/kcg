@@ -20,7 +20,7 @@ namespace Planet.Unity
         //public string TileMap = "Moonbunker/Moon Bunker.tmx";
         [SerializeField] Material Material;
 
-        public static string BaseDir => Application.streamingAssetsPath;
+        /**public static string BaseDir => Application.streamingAssetsPath;
 
         List<int> triangles = new List<int>();
         List<Vector2> uvs = new List<Vector2>();
@@ -38,10 +38,10 @@ namespace Planet.Unity
         GameObject OrePrefab;
         GameObject VentPrefab;
 
-        static bool Init = false;
+        static bool Init = false;*/
         
 
-        public void Start()
+        /*public void Start()
         {
             if (!Init)
             {
@@ -253,7 +253,7 @@ namespace Planet.Unity
             res.Apply();
 
             return res;
-        }
+        }*/
         
     }
 }
