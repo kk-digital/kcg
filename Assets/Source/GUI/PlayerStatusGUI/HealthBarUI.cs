@@ -178,7 +178,7 @@ namespace KGUI
             GUI.Box(fillPosition, GUIContent.none);
         }
 
-        public void Draw(Material material, Transform transform, int drawOrder)
+        public void Draw()
         {
             if(Init)
             {

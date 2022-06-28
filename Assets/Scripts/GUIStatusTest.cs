@@ -20,7 +20,6 @@ public class GUIStatusTest : MonoBehaviour
         Init = true;
     }
 
-    bool a;
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnGUI.html
     private void OnGUI()
     {
@@ -33,7 +32,8 @@ public class GUIStatusTest : MonoBehaviour
                 else
                     DestroyImmediate(mr.gameObject);
 
-            healthBarUI.Draw(material, transform, 5000);
+            //Health Bar Draw
+            healthBarUI.Draw();
         }
     }
 }
