@@ -264,11 +264,12 @@ namespace PlanetTileMap
         {
             for (int i = 0; i < LayerCount; i++)
             {
-                LayerMeshes[i] = new Utility.FrameMesh(material, transform, drawOrder);
+                LayerMeshes[i] = new Utility.FrameMesh(("layerMesh" + i), material, transform,
+                    GameState.TileSpriteAtlasManager.GetSpriteAtlas(0), drawOrder + i);
             }
         }
 
-        public void UpdateLayer(MapLayerType planetLayer)
+        public void UpdateLayerMesh(MapLayerType planetLayer)
         {
             int index = 0;
             for (int y = 0; y < MapSize.Y; y++)
@@ -283,16 +284,14 @@ namespace PlanetTileMap
                     {
                         Vector4 textureCoords = GameState.TileSpriteAtlasManager.GetSprite(spriteId).TextureCoords;
 
-                        float tileX = x * 32;
-                        float tileY = y * 32;
-
-                        const float width = 32;
-                        const float height = 32;
+                        const float width = 1;
+                        const float height = 1;
 
                         // Update UVs
                         LayerMeshes[(int)planetLayer].UpdateUV(textureCoords, (index) * 4);
                         // Update Vertices
-                        LayerMeshes[(int)planetLayer].UpdateVertex((index++ * 4), tileX, tileY, width, height);
+                        LayerMeshes[(int)planetLayer].UpdateVertex((index * 4), x, y, width, height);
+                        index++;
                     }
                 }
             }

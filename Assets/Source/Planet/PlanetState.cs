@@ -49,6 +49,7 @@ namespace Planet
             GameState.ActionInitializeSystem.Initialize(material);
 
             // Mesh builders
+            TileMap.InitializeLayerMesh(material, transform, 7);
             GameState.ItemMeshBuilderSystem.Initialize(material, transform, 11);
             GameState.AgentMeshBuilderSystem.Initialize(material, transform, 12);
             GameState.ProjectileMeshBuilderSystem.Initialize(material, transform, 13);
@@ -319,24 +320,20 @@ namespace Planet
             GameState.ProjectileCollisionSystem.UpdateEx(ref this);
 
             // Update Meshes.
-            TileMap.UpdateLayer(MapLayerType.Mid);
-            TileMap.UpdateLayer(MapLayerType.Front);
+            TileMap.UpdateLayerMesh(MapLayerType.Mid);
+            TileMap.UpdateLayerMesh(MapLayerType.Front);
             GameState.ItemMeshBuilderSystem.UpdateMesh();
             GameState.AgentMeshBuilderSystem.UpdateMesh();
             GameState.ProjectileMeshBuilderSystem.UpdateMesh();
             GameState.ParticleMeshBuilderSystem.UpdateMesh(ParticleContext);
 
             // Draw Frames.
-            Utility.Render.DrawFrame(ref GameState.ItemMeshBuilderSystem.Mesh, 
-                GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
-            Utility.Render.DrawFrame(ref GameState.AgentMeshBuilderSystem.Mesh,
-                GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Agent));
-            Utility.Render.DrawFrame(ref GameState.ProjectileMeshBuilderSystem.Mesh,
-                GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
-            Utility.Render.DrawFrame(ref GameState.ParticleMeshBuilderSystem.Mesh,
-                GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
             TileMap.DrawLayer(MapLayerType.Mid);
             TileMap.DrawLayer(MapLayerType.Front);
+            Utility.Render.DrawFrame(ref GameState.ItemMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
+            Utility.Render.DrawFrame(ref GameState.AgentMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Agent));
+            Utility.Render.DrawFrame(ref GameState.ProjectileMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
+            Utility.Render.DrawFrame(ref GameState.ParticleMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
 
             //GameState.FloatingTextDrawSystem.Draw(transform, 10000);
 

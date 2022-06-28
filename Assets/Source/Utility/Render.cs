@@ -9,8 +9,10 @@ namespace Utility
     {
        public static void DrawFrame(ref FrameMesh frameMesh, Sprites.SpriteAtlas Atlassprite)
         {
-            var tex = Atlassprite.Texture;
             var mesh = frameMesh.obj.GetComponent<MeshFilter>().sharedMesh;
+
+            var mr = frameMesh.obj.GetComponent<MeshRenderer>();
+            mr.sharedMaterial.SetTexture("_MainTex", Atlassprite.Texture);
 
             mesh.SetVertices(frameMesh.vertices);
             mesh.SetUVs(0, frameMesh.uvs);

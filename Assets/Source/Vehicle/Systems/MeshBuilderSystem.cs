@@ -12,7 +12,8 @@ namespace Vehicle
 
         public void Initialize(Material material, Transform transform, int drawOrder = 0)
         {
-            Mesh = new Utility.FrameMesh(material, transform, drawOrder);
+            Mesh = new Utility.FrameMesh("vehiclesGameObject", material, transform,
+                GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Vehicle), drawOrder);
         }
 
         public void UpdateMesh()

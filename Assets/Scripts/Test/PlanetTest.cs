@@ -10,7 +10,7 @@ namespace Planet.Unity
 
         public PlanetState Planet;
         Inventory.InventoryManager inventoryManager;
-        Inventory.InventoryDrawSystem    inventoryDrawSystem;
+        Inventory.InventoryDrawSystem inventoryDrawSystem;
 
         // Health Bar
         KGUI.HealthBarUI healthBarUI;

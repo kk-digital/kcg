@@ -10,10 +10,18 @@ namespace Utility
     //[ Unique Inventory, Particle, Item particle, Agent, Projectiles, ...]
     public struct FrameMesh
     {
-        public FrameMesh(Material material, Transform transform, int drawOrder = 0)
+        public GameObject obj;
+        public List<Vector3> vertices;
+        public List<Vector2> uvs;
+        public List<int> triangles;
+
+        public FrameMesh(string name, Material material, Transform transform, Sprites.SpriteAtlas Atlassprite, int drawOrder = 0)
         {
-            obj = new GameObject("ItemGameObject", typeof(MeshFilter), typeof(MeshRenderer));
+            obj = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
             obj.transform.SetParent(transform);
+
+            var mat = Material.Instantiate(material);
+            mat.SetTexture("MainTex", Atlassprite.Texture);
 
             var mesh = new Mesh
             {
@@ -23,7 +31,7 @@ namespace Utility
             var mf = obj.GetComponent<MeshFilter>();
             mf.sharedMesh = mesh;
             var mr = obj.GetComponent<MeshRenderer>();
-            mr.sharedMaterial = material;
+            mr.sharedMaterial = mat;
             mr.sortingOrder = drawOrder;
 
             // Todo: prealocate lists.
@@ -32,11 +40,6 @@ namespace Utility
             uvs = new List<Vector2>();
         }
 
-        public GameObject obj;
-        public List<Vector3> vertices;
-        public List<Vector2> uvs;
-        public List<int> triangles;
-
         public void UpdateVertex(int index, float x, float y, float w, float h)
         {
             var p0 = new Vector3(x, y, 0);
@@ -44,7 +47,7 @@ namespace Utility
             var p2 = p0; p2.y = p1.y;
             var p3 = p1; p3.y = p0.y;
 
-            if (uvs.Count >= index)
+            if (vertices.Count <= index)
             {
                 AddVertex(p0, p1, p2, p3);
             }
@@ -64,7 +67,7 @@ namespace Utility
             var uv2 = uv0; uv2.y = uv1.y;
             var uv3 = uv1; uv3.y = uv0.y;
 
-            if (uvs.Count >= index)
+            if (uvs.Count <= index)
             {
                 AddUV(uv0, uv1, uv2, uv3);
             }

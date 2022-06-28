@@ -12,7 +12,8 @@ namespace Item
 
         public void Initialize(Material material, Transform transform, int drawOrder = 0)
         {
-            Mesh = new Utility.FrameMesh(material, transform, drawOrder);
+            Mesh = new Utility.FrameMesh("ItemsGameObject", material, transform,
+                GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle), drawOrder);
         }
 
         public void UpdateMesh()
@@ -58,7 +59,8 @@ namespace Item
                     // Update UVs
                     Mesh.UpdateUV(textureCoords, (index) * 4);
                     // Update Vertices
-                    Mesh.UpdateVertex((index++ * 4), x, y, w, h);
+                    Mesh.UpdateVertex((index * 4), x, y, w, h);
+                    index++;
                 }
             }
         }
