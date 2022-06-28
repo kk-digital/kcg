@@ -7,6 +7,7 @@ public class GUIStatusTest : MonoBehaviour
     private Material material;
 
     KGUI.HealthBarUI healthBarUI;
+    KGUI.FoodBarUI foodBarUI;
 
     //Init
     private bool Init;
@@ -14,8 +15,13 @@ public class GUIStatusTest : MonoBehaviour
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
     void Start()
     {
+        // Health Bar Initialize
         healthBarUI = new KGUI.HealthBarUI();
         healthBarUI.Initialize();
+
+        // Food Bar Initialize
+        foodBarUI = new KGUI.FoodBarUI();
+        foodBarUI.Initialize(transform);
 
         Init = true;
     }
@@ -34,6 +40,9 @@ public class GUIStatusTest : MonoBehaviour
 
             //Health Bar Draw
             healthBarUI.Draw();
+
+            //Food Bar Draw
+            foodBarUI.Draw();
         }
     }
 }

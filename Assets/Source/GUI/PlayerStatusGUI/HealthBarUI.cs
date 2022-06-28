@@ -27,7 +27,7 @@ namespace KGUI
         public Rect div2Position = new Rect(190, 52, 3, -17);
         public Rect div3Position = new Rect(250, 52, 3, -17);
         public Rect borderPosition = new Rect(72, 54, 238, -20);
-        public Rect IconPosition = new Rect(10, 70, 50, -50);
+        public Rect IconPosition = new Rect(10, 75, 50, -50);
         public Rect TextPosition = new Rect(250, 60, 55, 22);
         public Color color = new Color(0.6f, 0, 0, 1.0f);
 
