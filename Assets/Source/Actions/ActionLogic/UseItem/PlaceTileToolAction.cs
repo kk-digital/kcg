@@ -12,6 +12,7 @@ namespace Action
         public struct Data
         {
             public TileID TileID;
+            public MapLayerType Layer;
         }
 
         Data data;
@@ -30,7 +31,7 @@ namespace Action
             if (x >= 0 && x < planet.TileMap.MapSize.X &&
                y >= 0 && y < planet.TileMap.MapSize.Y)
             {
-                planet.TileMap.SetTile(x, y, data.TileID, MapLayerType.Front);
+                planet.TileMap.SetTile(x, y, data.TileID, data.Layer);
             }
             
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
