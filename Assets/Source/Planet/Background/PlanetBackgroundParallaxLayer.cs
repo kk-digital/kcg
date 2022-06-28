@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using KMath.PerlinNoise;
 
-namespace Planet.VisualEffects
+namespace Planet.Background
 {
     public class PlanetBackgroundParallaxLayer
     {

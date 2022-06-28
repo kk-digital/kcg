@@ -4,7 +4,7 @@ using UnityEngine;
 using KMath.PerlinNoise;
 using System.IO;
 
-namespace Planet.VisualEffects
+namespace Planet.Background
 {
     public class PlanetBackgroundStarField
     {

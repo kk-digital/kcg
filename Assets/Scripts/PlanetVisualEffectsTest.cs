@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Planet.VisualEffects;
+using Planet.Background;
 
 public class PlanetVisualEffectsTest : MonoBehaviour
 {
