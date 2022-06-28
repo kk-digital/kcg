@@ -22,6 +22,7 @@ namespace Planet
         public ProjectileList ProjectileList;
         public FloatingTextList FloatingTextList;
         public ParticleEmitterList ParticleEmitterList;
+        public ParticleList ParticleList;
         public ItemParticleList ItemParticleList;
 
 
@@ -37,6 +38,7 @@ namespace Planet
             ProjectileList = new ProjectileList();
             FloatingTextList = new FloatingTextList();
             ParticleEmitterList = new ParticleEmitterList();
+            ParticleList = new ParticleList();
             ItemParticleList = new ItemParticleList();
 
             GameContext = gameContext;
@@ -168,7 +170,28 @@ namespace Planet
         {
             ref ParticleEmitterEntity entity = ref ParticleEmitterList.Get(particleEmitterId);
             entity.Entity.Destroy();
-            ParticleEmitterList.Remove(entity);
+            ParticleEmitterList.Remove(entity.ParticleEmitterId);
+        }
+
+
+        public ParticlesEntity AddParticle(Vec2f position, Vec2f velocity, Particle.ParticleType type)
+        {
+            Utils.Assert(ParticleList.Size < PlanetEntityLimits.ParticleLimit);
+
+            ref ParticlesEntity newEntity = ref ParticleList.Add();
+            ParticleEntity entity = GameState.ParticleSpawnerSystem.Spawn(ParticleContext, type, position, 
+                        velocity, newEntity.ParticleId);
+            newEntity.Entity = entity;
+
+
+            return newEntity;
+        }
+
+        public void RemoveParticle(int particleId)
+        {
+            ref ParticlesEntity entity = ref ParticleList.Get(particleId);
+            entity.Entity.Destroy();
+            ParticleList.Remove(entity.ParticleId);
         }
 
         public ProjectileEntity AddProjectile(UnityEngine.Material material, Vector2 position)

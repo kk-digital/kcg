@@ -29,7 +29,7 @@ namespace Particle
                 var state = gameEntity.particleState;
 
                 float newHealth = state.Health - state.DecayRate * deltaTime;
-                gameEntity.ReplaceParticleState(state.GameObject, newHealth, state.DecayRate, state.DeltaRotation, state.DeltaScale);
+                gameEntity.ReplaceParticleState(newHealth, state.DecayRate, state.DeltaRotation, state.DeltaScale);
 
                 var pos = gameEntity.particlePosition2D;
                 Vector2 displacement = 
@@ -54,7 +54,8 @@ namespace Particle
             foreach(var gameEntity in ToDestroy)
             {
                 //Object.Destroy(gameEntity.particleState.GameObject);
-                gameEntity.Destroy();
+                //gameEntity.Destroy();
+                planetState.RemoveParticle(gameEntity.particleID.ID);
             }
         }
     }

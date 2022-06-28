@@ -43,7 +43,6 @@ namespace Particle
                         for(int i = 0; i < emitterProperties.ParticleCount; i++)
                         {
                             System.Random random = new System.Random(); 
-                            int spriteId = particleProperties.SpriteId;
 
                             float x = position.Position.x;
                             float y = position.Position.y;
@@ -64,16 +63,7 @@ namespace Particle
                                                    emitterProperties.VelocityIntervalBegin.Y) -
                                                         emitterProperties.VelocityIntervalEnd.Y;
 
-                            var entity = context.CreateEntity();
-                            //var gameObject = Object.Instantiate(state.Prefab);
-                            entity.AddParticleState(null, 1.0f, particleProperties.DecayRate, particleProperties.DeltaRotation, particleProperties.DeltaScale);
-                            entity.AddParticlePosition2D(new Vector2(x, y), particleProperties.Acceleration, new Vector2(Velocity.X, Velocity.Y), 0);
-                            entity.AddParticleSprite2D(spriteId, particleProperties.Size);
-
-                            if (particleProperties.HasAnimation)
-                            {
-                               entity.AddParticleAnimation(1.0f, new Animation.Animation{Type=(int)particleProperties.AnimationType});
-                            }
+                            planetState.AddParticle(new Vec2f(x, y), Velocity, state.ParticleType);
                         }
 
                         state.CurrentTime = emitterProperties.TimeBetweenEmissions;

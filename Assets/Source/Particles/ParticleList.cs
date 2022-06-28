@@ -4,11 +4,11 @@ using Entitas;
 
 namespace Particle
 {
-    public class ParticleEmitterList
+    public class ParticleList
     {
 
         // array for storing entities
-        public ParticleEmitterEntity[] List;
+        public ParticlesEntity[] List;
 
         public int Size;
         // used for tracking down an available 
@@ -24,13 +24,13 @@ namespace Particle
             }
         }
 
-        public ParticleEmitterList()
+        public ParticleList()
         {
-            List = new ParticleEmitterEntity[1024];
+            List = new ParticlesEntity[1024];
         }
 
 
-        public ref ParticleEmitterEntity Add()
+        public ref ParticlesEntity Add()
         {
             // if we dont have enough space we expand
             // the capacity
@@ -45,7 +45,7 @@ namespace Particle
             int Found = -1;
             for (int index = LastFreeIndex; index < Capacity; index++)
             {
-                ref ParticleEmitterEntity thisEntity = ref List[index];
+                ref ParticlesEntity thisEntity = ref List[index];
 
                 if (!thisEntity.IsInitialized)
                 {
@@ -57,7 +57,7 @@ namespace Particle
             {
                 for (int index = 0; index < LastFreeIndex; index++)
                 {
-                    ref ParticleEmitterEntity thisEntity = ref List[index];
+                    ref ParticlesEntity thisEntity = ref List[index];
 
                     if (!thisEntity.IsInitialized)
                     {
@@ -72,8 +72,8 @@ namespace Particle
 
 
             // creating the Entity and initializing it
-            ParticleEmitterEntity NewEntity = new ParticleEmitterEntity();
-            NewEntity.ParticleEmitterId = Found;
+            ParticlesEntity NewEntity = new ParticlesEntity();
+            NewEntity.ParticleId = Found;
             NewEntity.IsInitialized = true;
 
             List[Found] = NewEntity;
@@ -83,7 +83,7 @@ namespace Particle
         }
 
 
-        public ref ParticleEmitterEntity Get(int Index)
+        public ref ParticlesEntity Get(int Index)
         {
             return ref List[Index];
         }
@@ -91,9 +91,9 @@ namespace Particle
 
         // to remove an entity we just 
         // set the IsInitialized field to false
-        public void Remove(int particleEmitterId)
+        public void Remove(int particleId)
         {
-            ref ParticleEmitterEntity entity = ref Get(particleEmitterId);
+            ref ParticlesEntity entity = ref Get(particleId);
             entity.IsInitialized = false;
             Size--;
         }

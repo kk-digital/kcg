@@ -3,9 +3,9 @@ using Entitas;
 namespace Particle
 {
 
-    public struct ParticlesEntity
+    public struct ParticleEmitterEntity
     {
-        public int ParticleId;
+        public int ParticleEmitterId;
         public bool IsInitialized;
         public ParticleEntity Entity;
     }
