@@ -5,9 +5,9 @@ namespace ECSInput
 {
     public class InputProcessSystem
     {
-        public void Update()
+        public void Update(GameContext gameContext)
         {
-            var AgentsWithXY = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.ECSInput, GameMatcher.ECSInputXY));
+            var AgentsWithXY = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.ECSInput, GameMatcher.ECSInputXY));
 
             bool jump = Input.GetKeyDown(KeyCode.UpArrow);
             float x = 0.0f;

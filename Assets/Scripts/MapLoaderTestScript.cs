@@ -114,7 +114,7 @@ namespace Planet.Unity
                 else
                     DestroyImmediate(mr.gameObject);
 
-            InputProcessSystems.Update();
+            InputProcessSystems.Update(Contexts.sharedInstance.game);
             PhysicsMovableSystem.Update(Contexts.sharedInstance.game);
             AgentProcessCollisionSystem.Update(Contexts.sharedInstance.game, ref PlanetState.TileMap);
             PlanetState.TileMap.DrawLayer(MapLayerType.Front, Instantiate(Material), transform, 10);

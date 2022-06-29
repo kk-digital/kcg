@@ -18,7 +18,7 @@ namespace Agent
         int agentId, int startingAnimation, int playerHealth, int playerFood, int playerWater,
         int playerOxygen, int playerFuel, float attackCoolDown)
         {
-            var entity = Contexts.sharedInstance.game.CreateEntity();
+            var entity = gameContext.CreateEntity();
 
             var spriteSize = new Vec2f(width / 32f, height / 32f);
 
@@ -35,7 +35,7 @@ namespace Agent
             entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.Zero, newAcceleration: Vec2f.Zero);
             entity.AddAgentActionScheduler(new List<int>(), new List<int>());
             entity.AddAgentStats(playerHealth, playerFood, playerWater, playerOxygen, playerFuel, attackCoolDown);
-
+            //entity.AddAgentInventory(0);
             // Add Inventory and toolbar.
             var attacher = Inventory.InventoryAttacher.Instance;
             attacher.AttachInventoryToAgent(gameContext, 6, 5, agentId);
@@ -44,7 +44,8 @@ namespace Agent
         }
 
 
-        public GameEntity Spawn(GameContext gameContext, Vec2f position, int agentId, AgentType agentType)
+        public GameEntity Spawn(GameContext gameContext, Vec2f position, int agentId,
+                     AgentType agentType)
         {
             var entity = gameContext.CreateEntity();
 
@@ -59,6 +60,7 @@ namespace Agent
             entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.Zero, newAcceleration: Vec2f.Zero); // used for physics simulation
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=properties.StartingAnimation});
 
+
             if (agentType == Agent.AgentType.Player)
             {
                 entity.isAgentPlayer = true;
@@ -68,9 +70,9 @@ namespace Agent
                 entity.AddAgentActionScheduler(new List<int>(), new List<int>());
 
                 // Add Inventory and toolbar.
-                /*var attacher = Inventory.InventoryAttacher.Instance;
-                attacher.AttachInventoryToAgent(gameContext, 6, 5, agentId);
-                attacher.AttachToolBarToPlayer(gameContext, 10, agentId);*/
+                var attacher = Inventory.InventoryAttacher.Instance;
+                //attacher.AttachInventoryToAgent(gameContext, 6, 5, agentId);
+                //attacher.AttachToolBarToPlayer(gameContext, 10, agentId);
             }
             else if (agentType == Agent.AgentType.Agent)
             {

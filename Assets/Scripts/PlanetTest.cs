@@ -35,7 +35,7 @@ namespace Planet.Unity
 
         public void Update()
         {
-           /* int toolBarID = Player.Entity.agentToolBar.ToolBarID;
+            /*int toolBarID = Player.Entity.agentToolBar.ToolBarID;
             InventoryEntity Inventory = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(toolBarID);
             int selectedSlot = Inventory.inventorySlots.Selected;
 
@@ -64,7 +64,7 @@ namespace Planet.Unity
                 }
             }
 
-           // inventoryDrawSystem.Draw(Instantiate(Material), transform, 1000);
+            inventoryDrawSystem.Draw(Instantiate(Material), transform, 1000);
             Planet.Update(Time.deltaTime, Material, transform);
 
          //   Vector2 playerPosition = Player.Entity.physicsPosition2D.Value;
@@ -98,7 +98,7 @@ namespace Planet.Unity
             GenerateMap();
             SpawnStuff();
 
-            /*GameState.ActionInitializeSystem.Initialize(Material);
+            GameState.ActionInitializeSystem.Initialize(Material);
 
             /*var inventoryAttacher = Inventory.InventoryAttacher.Instance;
 
@@ -261,8 +261,8 @@ namespace Planet.Unity
 
 
             
-           // GameState.ItemSpawnSystem.SpawnItem(Contexts.sharedInstance, Enums.ItemType.Gun, new Vec2f(6.0f, spawnHeight));
-          //  GameState.ItemSpawnSystem.SpawnItem(Contexts.sharedInstance, Enums.ItemType.Ore, new Vec2f(10.0f, spawnHeight));
+            GameState.ItemSpawnSystem.SpawnItem(Contexts.sharedInstance, Enums.ItemType.Gun, new Vec2f(6.0f, spawnHeight));
+            GameState.ItemSpawnSystem.SpawnItem(Contexts.sharedInstance, Enums.ItemType.Ore, new Vec2f(10.0f, spawnHeight));
         }
         
     }
