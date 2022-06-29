@@ -66,6 +66,15 @@ namespace Source {
                 float angle = (float)Math.Acos(x / magnitude(x, y));
                 return y >= 0.0f ? angle : twopi - angle;
             }
+
+            /*
+             * Clamps an angle between 0 and 2π
+             */
+            public static float normalize_angle(float angle) {
+                while(angle > twopi) angle -= twopi;
+                if   (angle <  0.0f) angle += twopi;
+                return angle;
+            }
         }
     }
 }

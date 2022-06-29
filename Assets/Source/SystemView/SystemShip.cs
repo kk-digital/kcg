@@ -18,8 +18,9 @@ namespace Source {
         enum OrbitalAutopilotStage {
             DISENGAGED = 0,
             CIRCULARIZING,
-            WAITING_ON_ROTATION,
             SETTING_APOAPSIS,
+            SECOND_CIRCULARIZATION,
+            WAITING_ON_ROTATION,
             SETTING_PERIAPSIS
         };
 
@@ -53,6 +54,7 @@ namespace Source {
             private DockingAutopilotStage docking_stage;
             private OrbitalAutopilotStage orbital_stage;
             private SpaceStation docking_target;
+            private bool circularize_at_periapsis;
 
             public SystemShip() {
                 self            = new SpaceObject();
@@ -139,12 +141,22 @@ namespace Source {
                 descriptor.change_frame_of_reference(descriptor.central_body);
             }
 
-            public bool circularize(float current_time) {
+            public bool circularize(float current_time, bool circularize_at_apoapsis = true) {
                 if(descriptor.central_body == null) return true;
 
-                float[] vel              = descriptor.get_velocity_at(descriptor.get_distance_from_center_at(Tools.pi), Tools.pi);
+                float true_anomaly;
+
+                if(circularize_at_apoapsis)
+                    true_anomaly         = Tools.pi;
+                else
+                    true_anomaly         = 0.0f;
+
+                float[] vel              = descriptor.get_velocity_at(descriptor.get_distance_from_center_at(true_anomaly), true_anomaly);
                 float targetrotation     = Tools.get_angle(vel[0], vel[1]);
                 float velocity_direction = Tools.get_angle(self.velx, self.vely);
+
+                if(!circularize_at_apoapsis) 
+                    targetrotation       = Tools.normalize_angle(targetrotation + Tools.pi);
 
                 if(rotation == targetrotation) {
                     float diff = targetrotation - velocity_direction;
@@ -171,9 +183,6 @@ namespace Source {
 
                     while(diff1 > Tools.twopi) diff1 -= Tools.twopi;
                     while(diff2 > Tools.twopi) diff2 -= Tools.twopi;
-
-                    if   (diff1 <        0.0f) diff1 += Tools.twopi;
-                    if   (diff2 <        0.0f) diff2 += Tools.twopi;
 
                     if((diff1 > -0.4f && diff1 < 0.4f && target > descriptor.apoapsis)
                     || (diff2 > -0.4f && diff2 < 0.4f && target < descriptor.apoapsis))
@@ -204,9 +213,6 @@ namespace Source {
                     while(diff1 > Tools.twopi) diff1 -= Tools.twopi;
                     while(diff2 > Tools.twopi) diff2 -= Tools.twopi;
 
-                    if(diff1 <        0.0f) diff1 += Tools.twopi;
-                    if(diff2 <        0.0f) diff2 += Tools.twopi;
-
                     if((diff1 > -0.4f && diff1 < 0.4f && target > descriptor.periapsis)
                     || (diff2 > -0.4f && diff2 < 0.4f && target < descriptor.periapsis))
                         accelerate(current_time);
@@ -232,43 +238,55 @@ namespace Source {
                         return false;
 
                     case OrbitalAutopilotStage.CIRCULARIZING:
-                        if(circularize(current_time))
+                        if(circularize(current_time)) {
+                            orbital_stage = OrbitalAutopilotStage.SETTING_APOAPSIS;
+                            circularize_at_periapsis = descriptor.apoapsis > apoapsis;
+                        }
+                        break;
+                        
+                    case OrbitalAutopilotStage.SETTING_APOAPSIS:
+                        if(descriptor.apoapsis > apoapsis) {
+                            if(set_periapsis(apoapsis, current_time))
+                                orbital_stage = OrbitalAutopilotStage.SECOND_CIRCULARIZATION;
+                        } else {
+                            if(set_apoapsis(apoapsis, current_time))
+                                orbital_stage = OrbitalAutopilotStage.SECOND_CIRCULARIZATION;
+                        }
+                        break;
+
+                    case OrbitalAutopilotStage.SECOND_CIRCULARIZATION:
+                        if(circularize(current_time, !circularize_at_periapsis))
                             orbital_stage = OrbitalAutopilotStage.WAITING_ON_ROTATION;
                         break;
 
                     case OrbitalAutopilotStage.WAITING_ON_ROTATION:
                         descriptor.update_position(current_time);
 
-                        float target_rotation      = rot + Tools.pi;
-                        if(apoapsis > descriptor.apoapsis) target_rotation += Tools.pi;
+                        float target_rotation      = rot;
+                        if(periapsis > descriptor.periapsis) target_rotation += Tools.pi;
 
                         float target_ship_rotation = target_rotation;
-                        if(apoapsis > descriptor.apoapsis) target_ship_rotation += Tools.halfpi;
-                        else                               target_ship_rotation -= Tools.halfpi;
+                        if(periapsis > descriptor.periapsis) target_ship_rotation += Tools.halfpi;
+                        else                                 target_ship_rotation -= Tools.halfpi;
 
-                        while(target_rotation > Tools.twopi) target_rotation -= Tools.twopi;
-                        if   (target_rotation <        0.0f) target_rotation += Tools.twopi;
+                        while(target_rotation > Tools.twopi) target_rotation      -= Tools.twopi;
+                        if   (target_rotation <        0.0f) target_rotation      += Tools.twopi;
 
                         rotate_to(target_ship_rotation, current_time);
 
                         float current_rotation = descriptor.true_anomaly + descriptor.rotation;
-                        while(current_rotation > Tools.twopi) current_rotation -= Tools.twopi;
-                        if   (current_rotation <        0.0f) current_rotation += Tools.twopi;
+                        while(current_rotation > Tools.twopi) current_rotation    -= Tools.twopi;
+                        if   (current_rotation <        0.0f) current_rotation    += Tools.twopi;
 
                         if(current_rotation >= target_rotation - 0.02f
                         && current_rotation <= target_rotation + 0.02f) {
                             accelerate(current_time * 25);
-                            orbital_stage = OrbitalAutopilotStage.SETTING_APOAPSIS;
+                            orbital_stage   = OrbitalAutopilotStage.SETTING_PERIAPSIS;
                         }
                         break;
-
-                    case OrbitalAutopilotStage.SETTING_APOAPSIS:
-                        if(set_apoapsis(apoapsis, current_time))
-                            orbital_stage = OrbitalAutopilotStage.SETTING_PERIAPSIS;
-                        break;
-
+                    
                     case OrbitalAutopilotStage.SETTING_PERIAPSIS:
-                        if(set_apoapsis(periapsis, current_time))
+                        if(set_periapsis(periapsis, current_time))
                             orbital_stage = OrbitalAutopilotStage.DISENGAGED;
                         break;
                 }

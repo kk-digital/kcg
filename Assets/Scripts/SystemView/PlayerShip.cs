@@ -131,18 +131,77 @@ namespace Scripts {
                 current_time *= time_scale;
 
                 last_time = Time.time;
-
-                if(ship.docking_autopilot_tick(current_time, 0.1f * system_scale))           return;
-                if(ship.orbital_autopilot_tick(periapsis, apoapsis, rotation, current_time)) return;
-                if(circularizing)         { circularizing = !ship.circularize(current_time); return; }
-
-                if (Input.GetKeyDown("tab")) mouse_steering = !mouse_steering;
-
-                float horizontal_movement = 0.0f;
-
-                float rotation_change = ship.rotation;
-
                 Vector3[] vertices = new Vector3[2];
+
+                if(ship.descriptor.central_body != null) {
+                    float angular_velocity_x     = ship.self.velx - ship.descriptor.central_body.velx;
+                    float angular_velocity_y     = ship.self.vely - ship.descriptor.central_body.vely;
+
+                    float velocity_angle         = Tools.get_angle(angular_velocity_x,
+                                                                       angular_velocity_y);
+
+                    float angular_velocity_angle = Tools.get_angle(ship.descriptor.central_body.posx - ship.self.posx,
+                                                                       ship.descriptor.central_body.posy - ship.self.posy);
+
+                    // theta = angle between hypothetical circular orbit through ship's position
+
+                    float theta                  = angular_velocity_angle - velocity_angle;
+
+                    float costheta               = (float)Math.Cos(theta);
+                    float sintheta               = (float)Math.Sin(theta);
+
+                    (angular_velocity_x,
+                     angular_velocity_y)         = (costheta * angular_velocity_x - sintheta * angular_velocity_y,
+                                                    sintheta * angular_velocity_x + costheta * angular_velocity_x);
+
+                    float in_direction           = Tools.magnitude(sintheta * angular_velocity_x, sintheta * angular_velocity_y);
+                    float perpendicular          = Tools.magnitude(costheta * angular_velocity_x, costheta * angular_velocity_y);
+
+                    Vector3[] vertices1          = new Vector3[2];
+                    Vector3[] vertices2          = new Vector3[2];
+
+                    vertices1[0] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
+                    vertices1[1] = new Vector3(ship.self.posx + (float)Math.Cos(velocity_angle)
+                                                              * 0.1f * in_direction / camera_controller.scale,
+                                               ship.self.posy + (float)Math.Sin(velocity_angle)
+                                                              * 0.1f * in_direction / camera_controller.scale,
+                                               0.0f);
+
+                    angular_velocity_in_direction_of_movement.SetPositions(vertices1);
+                    angular_velocity_in_direction_of_movement.positionCount  = 2;
+
+                    angular_velocity_in_direction_of_movement.startWidth     =
+                    angular_velocity_in_direction_of_movement.endWidth       = 0.25f / camera_controller.scale;
+
+
+
+                    vertices2[0] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
+                    vertices2[1] = new Vector3(ship.self.posx + (float)Math.Cos(velocity_angle + Tools.halfpi)
+                                                              * 0.1f * perpendicular / camera_controller.scale,
+                                               ship.self.posy + (float)Math.Sin(velocity_angle + Tools.halfpi)
+                                                              * 0.1f * perpendicular / camera_controller.scale,
+                                               0.0f);
+
+                    angular_velocity_perpendicular_to_movement.SetPositions(vertices2);
+                    angular_velocity_perpendicular_to_movement.positionCount = 2;
+
+                    angular_velocity_perpendicular_to_movement.startWidth    =
+                    angular_velocity_perpendicular_to_movement.endWidth      = 0.25f / camera_controller.scale;
+
+                } else {
+
+                    Vector3[] vertices1 = new Vector3[2];
+
+                    vertices1[0]        = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
+                    vertices1[1]        = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
+
+                    angular_velocity_in_direction_of_movement.SetPositions(vertices1);
+                    angular_velocity_in_direction_of_movement.positionCount  = 0;
+
+                    angular_velocity_perpendicular_to_movement.SetPositions(vertices1);
+                    angular_velocity_perpendicular_to_movement.positionCount = 0;
+
+                }
 
                 if(rudder_enabled) {
                     vertices[0] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
@@ -162,6 +221,16 @@ namespace Scripts {
                     rudder_renderer.SetPositions(vertices);
                     rudder_renderer.positionCount  = 0;
                 }
+
+                if(ship.docking_autopilot_tick(current_time, 0.1f * system_scale))           return;
+                if(ship.orbital_autopilot_tick(periapsis, apoapsis, rotation, current_time)) return;
+                if(circularizing)         { circularizing = !ship.circularize(current_time); return; }
+
+                if (Input.GetKeyDown("tab")) mouse_steering = !mouse_steering;
+
+                float horizontal_movement = 0.0f;
+
+                float rotation_change = ship.rotation;
 
                 float direction     = ship.rotation;
                 bool  move_to_mouse = false;
@@ -337,78 +406,8 @@ namespace Scripts {
                         }
                     }
 
-                    if(strongest_gravity_object != null) {
-
+                    if(strongest_gravity_object != null)
                         ship.descriptor.change_frame_of_reference(strongest_gravity_object);
-
-                        float angular_velocity_x     = ship.self.velx - ship.descriptor.central_body.velx;
-                        float angular_velocity_y     = ship.self.vely - ship.descriptor.central_body.vely;
-
-                        float velocity_angle         = Tools.get_angle(angular_velocity_x,
-                                                                       angular_velocity_y);
-
-                        float angular_velocity_angle = Tools.get_angle(ship.descriptor.central_body.posx - ship.self.posx,
-                                                                       ship.descriptor.central_body.posy - ship.self.posy);
-
-                        // theta = angle between hypothetical circular orbit through ship's position
-
-                        float theta                  = angular_velocity_angle - velocity_angle;
-
-                        float costheta               = (float)Math.Cos(theta);
-                        float sintheta               = (float)Math.Sin(theta);
-
-                        (angular_velocity_x,
-                         angular_velocity_y)         = (costheta * angular_velocity_x - sintheta * angular_velocity_y,
-                                                        sintheta * angular_velocity_x + costheta * angular_velocity_x);
-
-                        float in_direction           = Tools.magnitude(sintheta * angular_velocity_x, sintheta * angular_velocity_y);
-                        float perpendicular          = Tools.magnitude(costheta * angular_velocity_x, costheta * angular_velocity_y);
-
-                        Vector3[] vertices1          = new Vector3[2];
-                        Vector3[] vertices2          = new Vector3[2];
-
-                        vertices1[0] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
-                        vertices1[1] = new Vector3(ship.self.posx + (float)Math.Cos(velocity_angle)
-                                                                  * 0.1f * in_direction / camera_controller.scale,
-                                                   ship.self.posy + (float)Math.Sin(velocity_angle)
-                                                                  * 0.1f * in_direction / camera_controller.scale,
-                                                   0.0f);
-
-                        angular_velocity_in_direction_of_movement.SetPositions(vertices1);
-                        angular_velocity_in_direction_of_movement.positionCount  = 2;
-
-                        angular_velocity_in_direction_of_movement.startWidth     =
-                        angular_velocity_in_direction_of_movement.endWidth       = 0.25f / camera_controller.scale;
-
-
-
-                        vertices2[0] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
-                        vertices2[1] = new Vector3(ship.self.posx + (float)Math.Cos(velocity_angle + Tools.halfpi)
-                                                                  * 0.1f * perpendicular / camera_controller.scale,
-                                                   ship.self.posy + (float)Math.Sin(velocity_angle + Tools.halfpi)
-                                                                  * 0.1f * perpendicular / camera_controller.scale,
-                                                   0.0f);
-
-                        angular_velocity_perpendicular_to_movement.SetPositions(vertices2);
-                        angular_velocity_perpendicular_to_movement.positionCount = 2;
-
-                        angular_velocity_perpendicular_to_movement.startWidth    =
-                        angular_velocity_perpendicular_to_movement.endWidth      = 0.25f / camera_controller.scale;
-
-                    } else {
-
-                        Vector3[] vertices1 = new Vector3[2];
-
-                        vertices1[0]        = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
-                        vertices1[1]        = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
-
-                        angular_velocity_in_direction_of_movement.SetPositions(vertices1);
-                        angular_velocity_in_direction_of_movement.positionCount  = 0;
-
-                        angular_velocity_perpendicular_to_movement.SetPositions(vertices1);
-                        angular_velocity_perpendicular_to_movement.positionCount = 0;
-
-                    }
 
                     ship.path_planned = true;
                 }
