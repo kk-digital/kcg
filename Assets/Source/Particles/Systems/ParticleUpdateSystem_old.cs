@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+/*using System.Collections.Generic;
 using Entitas;
 using UnityEngine;
 
@@ -28,7 +28,7 @@ namespace Particle
                 Vector2 newVelocity = pos.Acceleration * deltaTime + pos.Velocity;
 
                 Vector2 newPosition = pos.Position + displacement;
-                gameEntity.ReplaceParticlePosition2D(newPosition, pos.Acceleration, newVelocity);
+                gameEntity.ReplaceParticlePosition2D(newPosition, pos.Acceleration, newVelocity, 0);
 
                 state.GameObject.transform.position = new Vector3(newPosition.x, newPosition.y, 0.0f);
                 state.GameObject.transform.Rotate(0.0f, 0.0f, state.DeltaRotation, Space.Self);
@@ -46,6 +46,6 @@ namespace Particle
             }
         }
     }
-}
+}*/
 
 

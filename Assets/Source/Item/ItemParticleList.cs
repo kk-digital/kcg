@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Entitas;
 
-namespace Agent
+namespace Item
 {
-    public class AgentList
+    public class ItemParticleList
     {
 
         // array for storing entities
-        public AgentEntity[] List;
+        public ItemParticleEntity[] List;
 
         public int Size;
         // used for tracking down an available 
@@ -24,13 +24,13 @@ namespace Agent
             }
         }
 
-        public AgentList()
+        public ItemParticleList()
         {
-            List = new AgentEntity[1024];
+            List = new ItemParticleEntity[1024];
         }
 
 
-        public ref AgentEntity Add()
+        public ref ItemParticleEntity Add()
         {
             // if we dont have enough space we expand
             // the capacity
@@ -45,7 +45,7 @@ namespace Agent
             int Found = -1;
             for (int index = LastFreeIndex; index < Capacity; index++)
             {
-                ref AgentEntity thisEntity = ref List[index];
+                ref ItemParticleEntity thisEntity = ref List[index];
 
                 if (!thisEntity.IsInitialized)
                 {
@@ -57,7 +57,7 @@ namespace Agent
             {
                 for (int index = 0; index < LastFreeIndex; index++)
                 {
-                    ref AgentEntity thisEntity = ref List[index];
+                    ref ItemParticleEntity thisEntity = ref List[index];
 
                     if (!thisEntity.IsInitialized)
                     {
@@ -72,8 +72,8 @@ namespace Agent
 
 
             // creating the Entity and initializing it
-            AgentEntity NewEntity = new AgentEntity();
-            NewEntity.AgentId = Found;
+            ItemParticleEntity NewEntity = new ItemParticleEntity();
+            NewEntity.ItemParticleId = Found;
             NewEntity.IsInitialized = true;
 
             List[Found] = NewEntity;
@@ -83,7 +83,7 @@ namespace Agent
         }
 
 
-        public ref AgentEntity Get(int Index)
+        public ref ItemParticleEntity Get(int Index)
         {
             return ref List[Index];
         }
@@ -91,9 +91,9 @@ namespace Agent
 
         // to remove an entity we just 
         // set the IsInitialized field to false
-        public void Remove(int agentId)
+        public void Remove(int itemParticleId)
         {
-            ref AgentEntity entity = ref Get(agentId);
+            ref ItemParticleEntity entity = ref Get(itemParticleId);
             entity.IsInitialized = false;
             Size--;
         }

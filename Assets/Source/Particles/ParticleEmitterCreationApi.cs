@@ -86,6 +86,23 @@ namespace Particle
             }
         }
 
+        public void SetVelocityInterval(Vec2f begin, Vec2f end)
+        {
+            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
+            {
+                PropertiesArray[CurrentIndex].VelocityIntervalBegin = begin;
+                PropertiesArray[CurrentIndex].VelocityIntervalEnd = end;
+            }
+        }
+
+        public void SetSpawnRadius(float spawnRadius)
+        {
+            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
+            {
+                PropertiesArray[CurrentIndex].SpawnRadius = spawnRadius;
+            }
+        }
+
         public void SetDuration(float duration)
         {
             if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)

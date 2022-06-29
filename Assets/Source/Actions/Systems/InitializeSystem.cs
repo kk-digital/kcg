@@ -14,14 +14,15 @@ namespace Action
             return actionID;
         }
 
-        private static void CreatePlaceTileAction(TileID tileID)
+        private static void CreatePlaceTileAction(TileID tileID, MapLayerType layer)
         {
             // Todo: Shit code is gonna break all the time. Fix this.
             GameState.ActionPropertyManager.CreateActionPropertyType(Enums.ActionType.PlaceTilOre1Action + (int)tileID - (int)TileID.Ore1);
             GameState.ActionPropertyManager.SetLogicFactory(new PlaceTileActionCreator());
             var data = new PlaceTileToolAction.Data
             {
-                TileID = tileID
+                TileID = tileID,
+                Layer = layer
             };
             GameState.ActionPropertyManager.SetData(data);
             GameState.ActionPropertyManager.EndActionPropertyType();
@@ -38,12 +39,12 @@ namespace Action
             GameState.ActionPropertyManager.SetLogicFactory(new PickUpActionCreator());
             GameState.ActionPropertyManager.EndActionPropertyType();
 
-            CreatePlaceTileAction(TileID.Ore1);
-            CreatePlaceTileAction(TileID.Ore2);
-            CreatePlaceTileAction(TileID.Ore3);
-            CreatePlaceTileAction(TileID.Glass);
-            CreatePlaceTileAction(TileID.Moon);
-            CreatePlaceTileAction(TileID.Pipe);
+            CreatePlaceTileAction(TileID.Ore1, MapLayerType.Front);
+            CreatePlaceTileAction(TileID.Ore2, MapLayerType.Front);
+            CreatePlaceTileAction(TileID.Ore3, MapLayerType.Front);
+            CreatePlaceTileAction(TileID.Glass, MapLayerType.Front);
+            CreatePlaceTileAction(TileID.Moon, MapLayerType.Front);
+            CreatePlaceTileAction(TileID.Pipe, MapLayerType.Mid);
 
             GameState.ActionPropertyManager.CreateActionPropertyType(Enums.ActionType.FireWeaponAction);
             GameState.ActionPropertyManager.SetLogicFactory(new FireWeaponActionCreator());

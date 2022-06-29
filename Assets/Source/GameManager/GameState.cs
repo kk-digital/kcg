@@ -81,6 +81,7 @@ public class GameState
     public static readonly Particle.ParticleEmitterUpdateSystem ParticleEmitterUpdateSystem;
     public static readonly Particle.ParticleUpdateSystem ParticleUpdateSystem;
     public static readonly Particle.ParticleEmitterSpawnerSystem ParticleEmitterSpawnerSystem;
+    public static readonly Particle.ParticleSpawnerSystem ParticleSpawnerSystem;
     #endregion
 
     static GameState()
@@ -118,9 +119,10 @@ public class GameState
         ParticleCreationApi = new Particle.ParticleCreationApi();
         ParticleEmitterCreationApi = new Particle.ParticleEmitterCreationApi();
         ParticleDrawSystem = new Particle.ParticleDrawSystem();
-        ParticleEmitterUpdateSystem = new Particle.ParticleEmitterUpdateSystem();
+        ParticleEmitterUpdateSystem = new Particle.ParticleEmitterUpdateSystem(ParticleEmitterCreationApi, ParticleCreationApi);
         ParticleUpdateSystem = new Particle.ParticleUpdateSystem();
         ParticleEmitterSpawnerSystem = new Particle.ParticleEmitterSpawnerSystem(ParticleEmitterCreationApi, ParticleCreationApi);
+        ParticleSpawnerSystem = new Particle.ParticleSpawnerSystem(ParticleCreationApi);
         ProjectileCollisionSystem = new Projectile.ProcessCollisionSystem();
         ProjectileMovementSystem = new Projectile.MovementSystem();
         ProjectileSpawnerSystem = new Projectile.SpawnerSystem();

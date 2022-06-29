@@ -3,6 +3,8 @@ namespace Particle
 
     public enum ParticleEmitterType
     {
-        OreFountain,
+        OreFountain, 
+        OreExplosion,
+        DustEmitter
     }
 }

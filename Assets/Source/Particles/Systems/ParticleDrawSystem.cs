@@ -14,11 +14,11 @@ namespace Particle
             {
                 int spriteId = entity.particleSprite2D.SpriteId;
 
-                /*if (entity.hasAnimationState)
+                if (entity.hasParticleAnimation)
                 {
-                    var animation = entity.animationState;
+                    var animation = entity.particleAnimation;
                     spriteId = animation.State.GetSpriteId();
-                }*/
+                }
 
                 Sprites.Sprite sprite = GameState.SpriteAtlasManager.GetSprite(spriteId, Enums.AtlasType.Particle);
 
@@ -29,7 +29,7 @@ namespace Particle
                 var width = entity.particleSprite2D.Size.X;
                 var height = entity.particleSprite2D.Size.Y;
 
-                Utility.Render.DrawSprite(x, y, width, height, sprite, Material.Instantiate(material), transform, drawOrder++);
+                Utility.Render.DrawSprite(x, y, width, height, sprite, Material.Instantiate(material), transform, drawOrder++, entity.particlePosition2D.Rotation);
             }
         }
     }

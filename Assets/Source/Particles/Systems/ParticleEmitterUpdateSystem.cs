@@ -1,12 +1,23 @@
 using System.Collections.Generic;
 using Entitas;
 using UnityEngine;
+using KMath;
 
 namespace Particle
 {
+
     public class ParticleEmitterUpdateSystem
     {
         List<ParticleEntity> ToDestroy = new List<ParticleEntity>();
+
+        ParticleEmitterCreationApi ParticleEmitterCreationApi;
+        ParticleCreationApi ParticleCreationApi;
+        public ParticleEmitterUpdateSystem(ParticleEmitterCreationApi particleEmitterCreationApi,
+                                            ParticleCreationApi particleCreationApi)
+        {
+            ParticleEmitterCreationApi = particleEmitterCreationApi;
+            ParticleCreationApi = particleCreationApi;
+        }
 
         public void Update(Planet.PlanetState planetState)
         {
@@ -21,36 +32,49 @@ namespace Particle
                 var state = gameEntity.particleEmitterState;
                 var position = gameEntity.particleEmitter2dPosition;
                 state.Duration -= Time.deltaTime;
-
+                ParticleEmitterProperties emitterProperties = 
+                        ParticleEmitterCreationApi.Get((int)state.ParticleEmitterType);
+                ParticleProperties particleProperties = 
+                        ParticleCreationApi.Get((int)state.ParticleType);
                 if (state.Duration >= 0)
                 {
                     if (state.CurrentTime <= 0.0f)
                     {
-                        for(int i = 0; i < state.ParticleCount; i++)
+                        for(int i = 0; i < emitterProperties.ParticleCount; i++)
                         {
                             System.Random random = new System.Random(); 
-                            int spriteId = state.SpriteIds[(random.Next() % state.SpriteIds.Length)];
-                            float randomX = (float)random.NextDouble() * 2.0f - 1.0f;
 
-                            var e = context.CreateEntity();
-                            //var gameObject = Object.Instantiate(state.Prefab);
-                            e.AddParticleState(null, 1.0f, state.ParticleDecayRate, state.ParticleDeltaRotation, state.ParticleDeltaScale);
-                            e.AddParticlePosition2D(position.Position, state.ParticleAcceleration, new Vector2(state.ParticleStartingVelocity.x + randomX, state.ParticleStartingVelocity.y));
-                            e.AddParticleSprite2D(state.SpriteIds[0], state.ParticleSize);
+                            float x = position.Position.x;
+                            float y = position.Position.y;
+
+                            Vec2f Velocity = new Vec2f(particleProperties.StartingVelocity.x,
+                                                        particleProperties.StartingVelocity.y);
+
+                            float rand1 = KMath.Random.Mt19937.genrand_realf();
+                            float rand2 = KMath.Random.Mt19937.genrand_realf() ;
+
+                            x += rand1 * emitterProperties.SpawnRadius * 2 - emitterProperties.SpawnRadius;
+                            y += rand2 * emitterProperties.SpawnRadius * 2 - emitterProperties.SpawnRadius;
+
+                            Velocity.X += rand1 * (emitterProperties.VelocityIntervalEnd.X - 
+                                                   emitterProperties.VelocityIntervalBegin.X) -
+                                                        emitterProperties.VelocityIntervalEnd.X;
+                            Velocity.Y += rand2 * (emitterProperties.VelocityIntervalEnd.Y - 
+                                                   emitterProperties.VelocityIntervalBegin.Y) -
+                                                        emitterProperties.VelocityIntervalEnd.Y;
+
+                            planetState.AddParticle(new Vec2f(x, y), Velocity, state.ParticleType);
                         }
 
-                        state.CurrentTime = state.TimeBetweenEmissions;
+                        state.CurrentTime = emitterProperties.TimeBetweenEmissions;
                     }
                     else
                     {
                         state.CurrentTime -= Time.deltaTime;
                     }
 
-                    gameEntity.ReplaceParticleEmitterState(state.GameObject, state.Prefab, 
-                    state.ParticleDecayRate, state.ParticleAcceleration, state.ParticleDeltaRotation, state.ParticleDeltaScale,
-                    state.SpriteIds, state.ParticleSize, state.ParticleStartingVelocity, state.ParticleStartingRotation, state.ParticleStartingScale, 
-                    state.ParticleStartingColor, state.ParticleAnimationSpeed, state.Duration, state.Loop,
-                    state.ParticleCount, state.TimeBetweenEmissions, state.CurrentTime);
+                    gameEntity.ReplaceParticleEmitterState(state.ParticleType, state.ParticleEmitterType,
+                                    state.Duration, state.CurrentTime);
                 }
                 else
                 {
