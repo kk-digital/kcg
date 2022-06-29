@@ -6,10 +6,19 @@ public class GUIStatusTest : MonoBehaviour
     [SerializeField]
     private Material material;
 
+    // Health Bar
     KGUI.HealthBarUI healthBarUI;
+
+    // Food Bar
     KGUI.FoodBarUI foodBarUI;
+
+    // Water Bar
     KGUI.WaterBarUI waterBarUI;
+
+    // Oxygen Bar
     KGUI.OxygenBarUI oxygenBarUI;
+
+    // Fuel Bar
     KGUI.FuelBarUI fuelBarUI;
 
     //Init
@@ -55,9 +64,17 @@ public class GUIStatusTest : MonoBehaviour
 
             //Health Bar Draw
             healthBarUI.Draw();
+
+            // Food Bar Update
             foodBarUI.Update();
+
+            // Water Bar Update
             waterBarUI.Update();
+
+            // Fuel Bar Update
             fuelBarUI.Update();
+
+            // OxygenBar Update
             oxygenBarUI.Update();
         }
     }

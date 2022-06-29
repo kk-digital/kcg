@@ -87,7 +87,14 @@ namespace KGUI
             // Add Components and setup game object
             Sprite iconBar = Sprite.Create(icon.Texture, new Rect(0.0f, 0.0f, IconWidth, IconHeight), new Vector2(0.5f, 0.5f));
             iconCanvas.GetComponent<Image>().sprite = iconBar;
-            iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-345, 537.4f, 4.873917f);
+
+            if (Camera.main.aspect >= 1.7f)
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-345, 537.4f, 4.873917f);
+            else if (Camera.main.aspect >= 1.5f)
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-252.7f, 536.6f, 4.873917f);
+            else
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-278.3f, 660.6f, 4.873917f);
+
             iconCanvas.GetComponent<RectTransform>().localScale = new Vector3(1.2f, -1.2f, 0.5203559f);
 
             // Food Bar Initializon
@@ -113,6 +120,8 @@ namespace KGUI
             }
             foodBar.GetComponent<Image>().fillClockwise = true;
             foodBar.GetComponent<RectTransform>().localPosition = new Vector3(-0.4f, -0.1f, 4.873917f);
+
+
             foodBar.GetComponent<RectTransform>().localScale = new Vector3(0.8566527f, 0.8566527f, 0.3714702f);
 
             Init = true;
@@ -128,6 +137,13 @@ namespace KGUI
                 {
                     foodBar.GetComponent<Image>().fillAmount = entity.agentStats.Food / 100;
                 }
+
+                if (Camera.main.aspect >= 1.7f)
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-345, 537.4f, 4.873917f);
+                else if (Camera.main.aspect >= 1.5f)
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-252.7f, 536.6f, 4.873917f);
+                else
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-278.3f, 660.6f, 4.873917f);
             }
         }
     }
