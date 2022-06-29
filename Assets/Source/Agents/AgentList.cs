@@ -91,8 +91,9 @@ namespace Agent
 
         // to remove an entity we just 
         // set the IsInitialized field to false
-        public void Remove(AgentEntity entity)
+        public void Remove(int agentId)
         {
+            ref AgentEntity entity = ref Get(agentId);
             entity.IsInitialized = false;
             Size--;
         }

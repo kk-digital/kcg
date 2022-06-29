@@ -7,8 +7,6 @@ namespace Particle
     [Particle]
     public struct StateComponent : IComponent
     {
-        public GameObject GameObject;
-
         public float Health;
         public float DecayRate;
 

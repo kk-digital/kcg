@@ -11,10 +11,9 @@ public partial class ParticleEntity {
     public Particle.StateComponent particleState { get { return (Particle.StateComponent)GetComponent(ParticleComponentsLookup.ParticleState); } }
     public bool hasParticleState { get { return HasComponent(ParticleComponentsLookup.ParticleState); } }
 
-    public void AddParticleState(UnityEngine.GameObject newGameObject, float newHealth, float newDecayRate, float newDeltaRotation, float newDeltaScale) {
+    public void AddParticleState(float newHealth, float newDecayRate, float newDeltaRotation, float newDeltaScale) {
         var index = ParticleComponentsLookup.ParticleState;
         var component = (Particle.StateComponent)CreateComponent(index, typeof(Particle.StateComponent));
-        component.GameObject = newGameObject;
         component.Health = newHealth;
         component.DecayRate = newDecayRate;
         component.DeltaRotation = newDeltaRotation;
@@ -22,10 +21,9 @@ public partial class ParticleEntity {
         AddComponent(index, component);
     }
 
-    public void ReplaceParticleState(UnityEngine.GameObject newGameObject, float newHealth, float newDecayRate, float newDeltaRotation, float newDeltaScale) {
+    public void ReplaceParticleState(float newHealth, float newDecayRate, float newDeltaRotation, float newDeltaScale) {
         var index = ParticleComponentsLookup.ParticleState;
         var component = (Particle.StateComponent)CreateComponent(index, typeof(Particle.StateComponent));
-        component.GameObject = newGameObject;
         component.Health = newHealth;
         component.DecayRate = newDecayRate;
         component.DeltaRotation = newDeltaRotation;

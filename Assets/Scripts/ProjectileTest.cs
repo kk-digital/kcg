@@ -9,7 +9,7 @@ public class ProjectileTest : MonoBehaviour
     Projectile.DrawSystem projectileDrawSystem;
 
     // Projectile Physics System
-    Projectile.ProcessVelocitySystem projectileVelocitySystem;
+    //Projectile.ProcessVelocitySystem projectileVelocitySystem;
 
     // Projectile Collision System
     Projectile.ProcessCollisionSystem projectileCollisionSystem;
@@ -45,10 +45,10 @@ public class ProjectileTest : MonoBehaviour
         projectileDrawSystem = new Projectile.DrawSystem();
 
         // Initialize Projectile Velocity System
-        projectileVelocitySystem = new Projectile.ProcessVelocitySystem();
+        //projectileVelocitySystem = new Projectile.ProcessVelocitySystem();
 
         // Initialize Projectile Spawner System
-        projectileSpawnerSystem = new Projectile.SpawnerSystem();
+        projectileSpawnerSystem = new Projectile.SpawnerSystem(GameState.ProjectileCreationApi);
 
         // Initialize Projectile Collision System
         projectileCollisionSystem = new Projectile.ProcessCollisionSystem();
@@ -123,7 +123,7 @@ public class ProjectileTest : MonoBehaviour
                     start, end, ProjectileType.Grenade, ProjectileDrawType.Standard);
             }
 
-            projectileVelocitySystem.Update(new Vec3f(diff.X, diff.Y));
+            //projectileVelocitySystem.Update(new Vec3f(diff.X, diff.Y));
 
             // Process Collision System
             projectileCollisionSystem.Update(ref planetState.TileMap);

@@ -13,7 +13,51 @@ namespace Projectile
     {
         // Projectile ID
         private static int projectileID;
+        ProjectileCreationApi ProjectileCreationApi;
 
+        public SpawnerSystem(ProjectileCreationApi projectileCreationApi)
+        {
+            ProjectileCreationApi = projectileCreationApi;
+        }
+
+        public GameEntity Spawn(GameContext gameContext, Vec2f position, Vec2f direction, 
+                                Enums.ProjectileType projectileType, 
+                                int projectileId)
+        {
+            ProjectileProperties projectileProperties = 
+                                    ProjectileCreationApi.GetRef((int)projectileType);
+
+            GameEntity entity = gameContext.CreateEntity();
+            // Add ID Component
+            entity.AddProjectileID(projectileId);
+
+            // Add Sprite Component
+            entity.AddProjectileSprite2D(projectileProperties.SpriteId, projectileProperties.Size);
+            // Add Position Component
+            entity.AddProjectilePosition2D(position, position, 0.0f);
+            // Add Movement Component
+            entity.AddProjectileMovable(direction.Normalized * projectileProperties.Speed, 
+                                    projectileProperties.Acceleration);
+            
+            // Add Physics Box Collider Component
+            entity.AddPhysicsBox2DCollider(projectileProperties.Size, Vec2f.Zero);
+
+            // Add Physics Collider Component
+            entity.AddProjectileCollider(true, true);
+
+            entity.AddProjectilePhysicsState2D(Vec2f.Zero, 1.0f, 1.0f, 0.5f, Vec2f.Zero);
+
+            // Add Projectile Type
+            entity.AddProjectileType(projectileType, Enums.ProjectileDrawType.Standard);
+
+            if (projectileProperties.HasAnimation)
+            {
+                 entity.AddAnimationState(1.0f, new Animation.Animation{Type=(int)projectileProperties.AnimationType});
+            }
+
+            return entity;
+
+        }
 
         public GameEntity SpawnBullet(int spriteID, int width, int height, Vec2f startPos,
             Vec2f velocity, Vec2f acceleration, ProjectileType projectileType, 
@@ -34,7 +78,7 @@ namespace Projectile
             entity.AddProjectileSprite2D(spriteID, spriteSize);
 
             // Add Position Component
-            entity.AddProjectilePosition2D(startPos, startPos);
+            entity.AddProjectilePosition2D(startPos, startPos, 0.0f);
             // Add Moviment Component
             entity.AddProjectileMovable(velocity, acceleration);
 
@@ -76,7 +120,7 @@ namespace Projectile
             entity.AddProjectileSprite2D(spriteId, spriteSize);
 
             // Add Physics State 2D Component
-            entity.AddProjectilePosition2D(startPos, startPos);
+            entity.AddProjectilePosition2D(startPos, startPos, 0.0f);
             entity.AddProjectilePhysicsState2D(Vec2f.Zero, 1.0f, 1.0f, 0.5f,
                 Vec2f.Zero);
 

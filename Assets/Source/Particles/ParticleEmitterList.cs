@@ -91,8 +91,9 @@ namespace Particle
 
         // to remove an entity we just 
         // set the IsInitialized field to false
-        public void Remove(ParticleEmitterEntity entity)
+        public void Remove(int particleEmitterId)
         {
+            ref ParticleEmitterEntity entity = ref Get(particleEmitterId);
             entity.IsInitialized = false;
             Size--;
         }

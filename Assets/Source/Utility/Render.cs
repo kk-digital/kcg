@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using KMath;
 
 namespace Utility
 {
@@ -7,21 +8,22 @@ namespace Utility
     internal static class Render
     {
         public static void DrawSprite(float x, float y, float w, float h,
-            Sprites.Sprite sprite, Material material, Transform transform, int drawOrder = 0)
+            Sprites.Sprite sprite, Material material, Transform transform, 
+                    int drawOrder = 0, float rotation = 0)
         {
             var tex = sprite.Texture;
             var mat = Material.Instantiate(material);
             mat.SetTexture("_MainTex", tex);
             //FIX: Do UnityEngine.CreateMesh, not using UnityEngine
-            var mesh = CreateMesh(transform, "sprite", drawOrder, mat);
+            var mesh = CreateMesh(transform, "sprite", drawOrder, mat, new Vec2f(x, y), rotation);
 
             List<int> triangles = new List<int>();
             List<Vector2> uvs = new List<Vector2>();
             List<Vector3> vertices = new List<Vector3>();
 
 
-            var p0 = new Vector3(x, y, 0);
-            var p1 = new Vector3((x + w), (y + h), 0);
+            var p0 = new Vector3(0, 0, 0);
+            var p1 = new Vector3((w), (h), 0);
             var p2 = p0; p2.y = p1.y;
             var p3 = p1; p3.y = p0.y;
 
@@ -55,18 +57,18 @@ namespace Utility
         }
 
         public static void DrawQuadColor(float x, float y, float w, float h,
-            Color color, Material material, Transform transform, int drawOrder = 0)
+            Color color, Material material, Transform transform, int drawOrder = 0, float rotation = 0)
         {
             var mat = material;
             mat.color = color;
             //FIX: Do UnityEngine.CreateMesh, not using UnityEngine
-            var mesh = CreateMesh(transform, "colorQuad", drawOrder, mat);
+            var mesh = CreateMesh(transform, "colorQuad", drawOrder, mat, new Vec2f(x, y), rotation);
 
             List<int> triangles = new List<int>();
             List<Vector3> verticies = new List<Vector3>();
 
-            var p0 = new Vector3(x, y, 0);
-            var p1 = new Vector3((x + w), (y + h), 0);
+            var p0 = new Vector3(0, 0, 0);
+            var p1 = new Vector3((w), (h), 0);
             var p2 = p0; p2.y = p1.y;
             var p3 = p1; p3.y = p0.y;
 
@@ -95,10 +97,13 @@ namespace Utility
             textMesh.color = color;
         }
 
-        private static Mesh CreateMesh(Transform parent, string name, int sortingOrder, Material material)
+        private static Mesh CreateMesh(Transform parent, string name,
+                             int sortingOrder, Material material, Vec2f position, float rotation)
         {
             var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
             go.transform.SetParent(parent);
+            go.transform.position = new Vector2(position.X, position.Y);
+            go.transform.Rotate(0.0f, 0.0f, rotation, Space.Self);
 
             var mesh = new Mesh
             {

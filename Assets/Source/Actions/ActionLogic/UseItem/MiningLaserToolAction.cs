@@ -40,10 +40,12 @@ namespace Action
             // Log places drawed line go through
             foreach (var cell in start.LineTo(end))
             {
-                Debug.Log($"({cell.x},{cell.y})");
-
-                planet.TileMap.RemoveTile(cell.x, cell.y, MapLayerType.Front);
-                Debug.DrawLine(new Vector3(agentPosition.X, agentPosition.Y, 0.0f), new Vector3(worldPosition.x, worldPosition.y, 0.0f), Color.red);
+                if (cell.x >= 0 && cell.x < planet.TileMap.MapSize.X &&
+                    cell.y >= 0 && cell.y < planet.TileMap.MapSize.Y)
+                {
+                    planet.TileMap.RemoveTile(cell.x, cell.y, MapLayerType.Front);
+                    Debug.DrawLine(new Vector3(agentPosition.X, agentPosition.Y, 0.0f), new Vector3(worldPosition.x, worldPosition.y, 0.0f), Color.red);
+                }
             }
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
         }

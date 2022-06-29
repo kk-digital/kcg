@@ -12,14 +12,20 @@ namespace Physics
             
             int x = borders.LeftX < 0 ? (int) borders.LeftX - 1 : (int)borders.LeftX;
             
-            for (int y = (int)borders.BottomY; y <= (int)borders.TopY; y++)
+            if (x >= 0 && x < tileMap.MapSize.X)
             {
-                ref var tile = ref tileMap.GetTileRef(x, y, MapLayerType.Front);
-                if (tile.ID != TileID.Air)
+                for (int y = (int)borders.BottomY; y <= (int)borders.TopY; y++)
                 {
-                    var tileBorders = new AABB2D(x, y);
-                    tileBorders.DrawBox();
-                    return true;
+                    if (y >= 0 && y < tileMap.MapSize.Y)
+                    {
+                        ref var tile = ref tileMap.GetTileRef(x, y, MapLayerType.Front);
+                        if (tile.ID != TileID.Air)
+                        {
+                            var tileBorders = new AABB2D(x, y);
+                            tileBorders.DrawBox();
+                            return true;
+                        }
+                    }
                 }
             }
 
@@ -32,15 +38,21 @@ namespace Physics
             
             int x = borders.RightX < 0 ? (int) borders.RightX - 1 : (int)borders.RightX;
             
-            for (int y = (int)borders.BottomY; y <= (int)borders.TopY; y++)
+            if (x >= 0 && x < tileMap.MapSize.X)
             {
-                ref var tile = ref tileMap.GetTileRef(x, y, MapLayerType.Front);
-
-                if (tile.ID != TileID.Air)
+                for (int y = (int)borders.BottomY; y <= (int)borders.TopY; y++)
                 {
-                    var tileBorders = new AABB2D(x, y);
-                    tileBorders.DrawBox();
-                    return true;
+                    if (y >= 0 && y < tileMap.MapSize.Y)
+                    {
+                        ref var tile = ref tileMap.GetTileRef(x, y, MapLayerType.Front);
+
+                        if (tile.ID != TileID.Air)
+                        {
+                            var tileBorders = new AABB2D(x, y);
+                            tileBorders.DrawBox();
+                            return true;
+                        }
+                    }
                 }
             }
 
@@ -57,14 +69,20 @@ namespace Physics
             int leftX = borders.LeftX < 0 ? (int) borders.LeftX - 1 : (int)borders.LeftX;
             int rightX = borders.RightX < 0 ? (int) borders.RightX - 1 : (int)borders.RightX;
             
-            for (int x = leftX; x <= rightX; x++)
+            if (y >= 0 && y < tileMap.MapSize.Y)
             {
-                ref var tile = ref tileMap.GetTileRef(x, y, MapLayerType.Front);
-                if (tile.ID != TileID.Air)
+                for (int x = leftX; x <= rightX; x++)
                 {
-                    var tileBorders = new AABB2D(x, y);
-                    tileBorders.DrawBox();
-                    return true;
+                    if (x >= 0 && x < tileMap.MapSize.X)
+                    {
+                        ref var tile = ref tileMap.GetTileRef(x, y, MapLayerType.Front);
+                        if (tile.ID != TileID.Air)
+                        {
+                            var tileBorders = new AABB2D(x, y);
+                            tileBorders.DrawBox();
+                            return true;
+                        }
+                    }
                 }
             }
 
@@ -79,14 +97,20 @@ namespace Physics
             int leftX = borders.LeftX < 0 ? (int) borders.LeftX - 1 : (int)borders.LeftX;
             int rightX = borders.RightX < 0 ? (int) borders.RightX - 1 : (int)borders.RightX;
             
-            for (int x = leftX; x <= rightX; x++)
+            if (y >= 0 && y < tileMap.MapSize.Y)
             {
-                ref var tile = ref tileMap.GetTileRef(x, y, MapLayerType.Front);
-                if (tile.ID != TileID.Air)
+                for (int x = leftX; x <= rightX; x++)
                 {
-                    var tileBorders = new AABB2D(x, y);
-                    tileBorders.DrawBox();
-                    return true;
+                    if (x >= 0 && x < tileMap.MapSize.X)
+                    {
+                        ref var tile = ref tileMap.GetTileRef(x, y, MapLayerType.Front);
+                        if (tile.ID != TileID.Air)
+                        {
+                            var tileBorders = new AABB2D(x, y);
+                            tileBorders.DrawBox();
+                            return true;
+                        }
+                    }
                 }
             }
 

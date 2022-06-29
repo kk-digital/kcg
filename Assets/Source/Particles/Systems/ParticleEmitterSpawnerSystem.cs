@@ -47,13 +47,7 @@ namespace Particle
             var e = context.CreateEntity();
             e.AddParticleEmitterID(particleEmitterId);
             e.AddParticleEmitter2dPosition(new Vector2(position.X, position.Y), new Vector2(), new Vector2());
-            e.AddParticleEmitterState(null, null, particleProperties.DecayRate, particleProperties.Acceleration,
-            particleProperties.DeltaRotation, particleProperties.DeltaScale, 
-            new int []{particleProperties.SpriteId}, particleProperties.Size, particleProperties.StartingVelocity,
-                 particleProperties.StartingRotation, particleProperties.StartingScale, particleProperties.StartingColor,
-            particleProperties.AnimationSpeed, emitterProperties.Duration,
-            emitterProperties.Loop, emitterProperties.ParticleCount,
-            emitterProperties.TimeBetweenEmissions, 0.0f);
+            e.AddParticleEmitterState(emitterProperties.ParticleType, type, emitterProperties.Duration, 0.0f);
 
             return e;
         }

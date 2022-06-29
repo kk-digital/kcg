@@ -82,11 +82,16 @@ namespace Vehicle
              return ref List[Found];
         }
 
+        public ref VehicleEntity Get(int Index)
+        {
+            return ref List[Index];
+        }
 
         // to remove an entity we just 
         // set the IsInitialized field to false
-        public void Remove(VehicleEntity entity)
+        public void Remove(int vehicleId)
         {
+            ref VehicleEntity entity = ref Get(vehicleId);
             entity.IsInitialized = false;
             Size--;
         }

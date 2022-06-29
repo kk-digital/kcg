@@ -62,7 +62,9 @@ namespace PlanetTileMap
         
         public void SetTile(int x, int y, TileID tileID, MapLayerType planetLayer)
         {
-            if (!IsValid(x, y)) return;
+            //if (!IsValid(x, y)) return;
+            Utils.Assert(x >= 0 && x < MapSize.X &&
+                   y >= 0 && y < MapSize.Y);
 
             var xChunkIndex = x >> 4;
             var yChunkIndex = ((y >> 4) * MapSize.X) >> 4;
@@ -87,10 +89,13 @@ namespace PlanetTileMap
 
         public ref Tile GetTileRef(int x, int y, MapLayerType planetLayer)
         {
-            if (!IsValid(x, y))
+            /*if (!IsValid(x, y))
             {
                 return ref AirTile;
-            }
+            }*/
+
+            Utils.Assert(x >= 0 && x < MapSize.X &&
+                   y >= 0 && y < MapSize.Y);
             
             var xChunkIndex = x >> 4;
             var yChunkIndex = ((y >> 4) * MapSize.X) >> 4;
