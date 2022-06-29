@@ -8,7 +8,7 @@ namespace Planet.Unity
     {
         [SerializeField] Material Material;
 
-        PlanetState Planet;
+        public PlanetState Planet;
         Inventory.InventoryManager inventoryManager;
         Inventory.DrawSystem    inventoryDrawSystem;
 

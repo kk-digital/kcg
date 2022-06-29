@@ -70,6 +70,15 @@ public class InputManager : MonoBehaviour
                 // Update Zoomed ortho pixel perfect calculation
                 pixelCam.adjustCameraFOV();
             }
+
+            if (Input.GetKeyDown(KeyCode.F1))
+            {
+                if (KGUI.Statistics.StatisticsDisplay.canDraw)
+                    KGUI.Statistics.StatisticsDisplay.canDraw = false;
+                else if (!KGUI.Statistics.StatisticsDisplay.canDraw)
+                    KGUI.Statistics.StatisticsDisplay.canDraw = true;
+
+            }
         }
 
         if (Input.mouseScrollDelta.y > 0)
@@ -114,6 +123,9 @@ public class InputManager : MonoBehaviour
     {
         // Detect Input device to understand which device player using.
         DetectInputDevice();
+
+        if (GameObject.Find("Test") != null)
+            KGUI.Statistics.StatisticsDisplay.DrawStatistics(GameObject.Find("Test").GetComponent<Planet.Unity.PlanetTest>().Planet);
     }
 
     // Detecting Input device from input actions
