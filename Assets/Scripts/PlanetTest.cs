@@ -35,7 +35,7 @@ namespace Planet.Unity
 
         public void Update()
         {
-            /*int toolBarID = Player.Entity.agentToolBar.ToolBarID;
+            int toolBarID = Player.Entity.agentToolBar.ToolBarID;
             InventoryEntity Inventory = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(toolBarID);
             int selectedSlot = Inventory.inventorySlots.Selected;
 
@@ -48,7 +48,7 @@ namespace Planet.Unity
                     GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity,
                         GameState.ActionCreationSystem.CreateAction(itemProperty.itemPropertyAction.ActionTypeID, Player.AgentId));
                 }
-            }*/
+            }
                 
             // unity rendering stuff
             // will be removed layer
@@ -100,7 +100,7 @@ namespace Planet.Unity
 
             GameState.ActionInitializeSystem.Initialize(Material);
 
-            /*var inventoryAttacher = Inventory.InventoryAttacher.Instance;
+            var inventoryAttacher = Inventory.InventoryAttacher.Instance;
 
             inventoryID = Player.Entity.agentInventory.InventoryID;
             toolBarID = Player.Entity.agentToolBar.ToolBarID;
@@ -120,7 +120,7 @@ namespace Planet.Unity
             inventoryManager.AddItem(spawnEnemySlimeTool, toolBarID);
             inventoryManager.AddItem(miningLaserTool, toolBarID);
             inventoryManager.AddItem(pipePlacementTool, toolBarID);
-            inventoryManager.AddItem(particleEmitterPlacementTool, toolBarID);*/
+            inventoryManager.AddItem(particleEmitterPlacementTool, toolBarID);
         }
 
         void GenerateMap()
