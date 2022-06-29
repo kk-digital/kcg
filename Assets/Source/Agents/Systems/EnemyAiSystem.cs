@@ -35,7 +35,8 @@ namespace Agent
                         Vector2 oppositeDirection = new Vector2(-direction.X, -direction.Y);
                         var stats = entity.agentStats;
                         float damage = 20.0f;
-                        entity.ReplaceAgentStats(stats.Health - damage, stats.AttackCooldown);
+                        entity.ReplaceAgentStats(stats.Health - (int)damage, stats.Food, stats.Water, stats.Oxygen,
+                            stats.Fuel, stats.AttackCooldown);
 
                         // spawns a debug floating text for damage 
                         planetState.AddFloatingText("" + damage, 0.5f, new Vec2f(oppositeDirection.x * 0.05f, oppositeDirection.y * 0.05f), new Vec2f(pos.Value.X, pos.Value.Y + 0.35f));

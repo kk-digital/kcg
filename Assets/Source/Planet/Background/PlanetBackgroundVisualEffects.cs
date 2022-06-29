@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Planet.VisualEffects
+namespace Planet.Background
 {
     public class PlanetBackgroundVisualEffects
     {
@@ -15,8 +15,8 @@ namespace Planet.VisualEffects
         {
             if(GameManager.BackgroundDraw)
             {
-                starField = new Planet.VisualEffects.PlanetBackgroundStarField();
-                parallaxLayer = new Planet.VisualEffects.PlanetBackgroundParallaxLayer();
+                starField = new Planet.Background.PlanetBackgroundStarField();
+                parallaxLayer = new Planet.Background.PlanetBackgroundParallaxLayer();
 
                 starField.Initialize();
                 parallaxLayer.Initialize();
