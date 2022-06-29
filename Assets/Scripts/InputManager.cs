@@ -71,6 +71,7 @@ public class InputManager : MonoBehaviour
                 pixelCam.adjustCameraFOV();
             }
 
+            // Open or close statistics
             if (Input.GetKeyDown(KeyCode.F1))
             {
                 if (KGUI.Statistics.StatisticsDisplay.canDraw)
