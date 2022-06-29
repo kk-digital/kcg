@@ -36,7 +36,7 @@ namespace Planet.Unity
         ECSInput.InputProcessSystem InputProcessSystems;
         Agent.AgentSpawnerSystem AgentSpawnerSystem;
         PhysicsMovableSystem PhysicsMovableSystem;
-        Agent.AgentDrawSystem AgentDrawSystem;
+        //Agent.AgentDrawSystem AgentDrawSystem;
         PhysicsProcessCollisionSystem AgentProcessCollisionSystem;
 
         public void Start()
@@ -60,7 +60,7 @@ namespace Planet.Unity
 
             InputProcessSystems = new ECSInput.InputProcessSystem();
             PhysicsMovableSystem = new Physics.PhysicsMovableSystem();
-            AgentDrawSystem = new Agent.AgentDrawSystem();
+            //AgentDrawSystem = new Agent.AgentDrawSystem();
             AgentProcessCollisionSystem = new Physics.PhysicsProcessCollisionSystem();
 
             GameState.AgentSpawnerSystem.SpawnPlayer(Contexts.sharedInstance, CharacterSpriteId, 32, 48, new Vec2f(3.0f, 2.0f), 0, 0, 100, 100, 100, 100, 100, 0.2f);
@@ -118,7 +118,7 @@ namespace Planet.Unity
             PhysicsMovableSystem.Update();
             AgentProcessCollisionSystem.Update(ref PlanetState.TileMap);
             PlanetState.TileMap.DrawLayer(MapLayerType.Front);
-            AgentDrawSystem.Draw(Instantiate(Material), transform, 12);
+            //AgentDrawSystem.Draw(Instantiate(Material), transform, 12);
         }
 
         public void CreateDefaultTiles()

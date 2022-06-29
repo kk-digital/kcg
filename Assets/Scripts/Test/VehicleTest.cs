@@ -6,7 +6,7 @@ using UnityEngine;
 public class VehicleTest : MonoBehaviour
 {
     // Vehilce Draw System
-    Vehicle.DrawSystem vehicleDrawSystem;
+    //Vehicle.DrawSystem vehicleDrawSystem;
 
     // Vehicle Collision System
     Vehicle.ProcessCollisionSystem vehicleCollisionSystem;
@@ -36,7 +36,7 @@ public class VehicleTest : MonoBehaviour
         vehiclePhysics = new Vehicle.ProcessVelocitySystem();
 
         // Initialize Vehicle Draw System
-        vehicleDrawSystem = new Vehicle.DrawSystem();
+        //vehicleDrawSystem = new Vehicle.DrawSystem();
 
         // Initialize Vehicle Collision System
         vehicleCollisionSystem = new Vehicle.ProcessCollisionSystem();
@@ -81,7 +81,7 @@ public class VehicleTest : MonoBehaviour
         vehicleCollisionSystem.Update(ref planet.TileMap);
 
         // Draw Vehicle
-        vehicleDrawSystem.Draw(Instantiate(Material), transform, 17);
+        //vehicleDrawSystem.Draw(Instantiate(Material), transform, 17);
 
         Controls();
     }

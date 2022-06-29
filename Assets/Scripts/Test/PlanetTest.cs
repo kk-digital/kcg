@@ -62,12 +62,12 @@ namespace Planet.Unity
                 }
             }
 
-            inventoryDrawSystem.Draw(Planet.EntitasContext, Instantiate(Material), transform, 1000);
             Planet.Update(Time.deltaTime, Material, transform);
+            inventoryDrawSystem.Draw(Material, transform, 1000);
 
-         //   Vector2 playerPosition = Player.Entity.physicsPosition2D.Value;
+            //   Vector2 playerPosition = Player.Entity.physicsPosition2D.Value;
 
-           // transform.position = new Vector3(playerPosition.x - 6.0f, playerPosition.y - 6.0f, -10.0f);
+            // transform.position = new Vector3(playerPosition.x - 6.0f, playerPosition.y - 6.0f, -10.0f);
         }
 
         private void OnGUI()
@@ -99,7 +99,7 @@ namespace Planet.Unity
                 Texture = atlas.Texture,
                 TextureCoords = new Vector4(0, 0, 1, 1)
             };
-            Utility.Render.DrawSprite(-3, -1, atlas.Width / 32.0f, atlas.Height / 32.0f, sprite, Instantiate(Material), transform);
+            Utility.Render.DrawSprite(-3, -1, atlas.Width / 32.0f, atlas.Height / 32.0f, sprite, Material);
         }
 
         // create the sprite atlas for testing purposes
@@ -306,8 +306,6 @@ namespace Planet.Unity
                     Planet.AddEnemy(new Vec2f((float)i, spawnHeight));    
                 }
             }
-
-
             
             GameState.ItemSpawnSystem.SpawnItem(Planet.EntitasContext, Enums.ItemType.Gun, new Vec2f(6.0f, spawnHeight));
             GameState.ItemSpawnSystem.SpawnItem(Planet.EntitasContext, Enums.ItemType.Ore, new Vec2f(10.0f, spawnHeight));

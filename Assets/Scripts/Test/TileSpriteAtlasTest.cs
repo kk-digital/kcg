@@ -80,14 +80,14 @@ namespace Planet.Unity
             sprite.Texture = atlas.Texture;
             sprite.TextureCoords = new Vector4(0, 0, 1, 1);
             Utility.Render.DrawSprite(-3, -1, 
-                  atlas.Width, atlas.Height, sprite, Instantiate(Material), transform);
+                  atlas.Width, atlas.Height, sprite, Material);
         }
 
         void DrawSprite(float x, float y, float w, float h, int spriteId)
         {
             var sprite = GameState.TileSpriteAtlasManager.GetSprite(spriteId);
 
-            Utility.Render.DrawSprite(x, y, w, h, sprite, Instantiate(Material), transform);
+            Utility.Render.DrawSprite(x, y, w, h, sprite, Material);
         }
 
         public struct R

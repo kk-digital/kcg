@@ -21,7 +21,8 @@ namespace Particle
         public void UpdateMesh(ParticleContext context)
         {
             var entities = context.GetGroup(ParticleMatcher.AllOf(ParticleMatcher.ParticleSprite2D));
-
+            
+            Mesh.Clear();
             int index = 0;
             foreach (var entity in entities)
             {

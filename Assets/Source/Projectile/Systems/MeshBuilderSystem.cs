@@ -21,6 +21,7 @@ namespace Projectile
         {
             var projectilessWithSprite = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.ProjectileSprite2D));
 
+            Mesh.Clear();
             int index = 0;
             foreach (var entity in projectilessWithSprite)
             {

@@ -6,7 +6,7 @@ using KMath;
 public class ProjectileTest : MonoBehaviour
 {
     // Projectile Draw System
-    Projectile.DrawSystem projectileDrawSystem;
+    //Projectile.DrawSystem projectileDrawSystem;
 
     // Projectile Physics System
     //Projectile.ProcessVelocitySystem projectileVelocitySystem;
@@ -42,7 +42,7 @@ public class ProjectileTest : MonoBehaviour
         // Create Tile Map
         planetState = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().PlanetState;
         // Initialize Projectile Draw System
-        projectileDrawSystem = new Projectile.DrawSystem();
+        //projectileDrawSystem = new Projectile.DrawSystem();
 
         // Initialize Projectile Velocity System
         //projectileVelocitySystem = new Projectile.ProcessVelocitySystem();
@@ -129,7 +129,7 @@ public class ProjectileTest : MonoBehaviour
             projectileCollisionSystem.Update(ref planetState.TileMap);
 
             // Draw Initialized Projectile
-            projectileDrawSystem.Draw(Contexts.sharedInstance.game, Instantiate(Material), transform, 12);
+            //projectileDrawSystem.Draw(Material, transform, 12);
         }
     }
 }

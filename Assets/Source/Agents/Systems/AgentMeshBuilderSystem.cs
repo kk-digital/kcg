@@ -22,7 +22,9 @@ namespace Agent
         {
             var AgentsWithSprite = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentSprite2D));
 
+
             int index = 0;
+            Mesh.Clear();
             foreach (var entity in AgentsWithSprite)
             {
                 int spriteId = entity.agentSprite2D.SpriteId;

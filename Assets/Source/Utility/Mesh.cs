@@ -40,6 +40,13 @@ namespace Utility
             uvs = new List<Vector2>();
         }
 
+        public void Clear()
+        {
+            vertices.Clear();
+            uvs.Clear();
+            triangles.Clear();
+        }
+
         public void UpdateVertex(int index, float x, float y, float w, float h)
         {
             var p0 = new Vector3(x, y, 0);
@@ -47,41 +54,6 @@ namespace Utility
             var p2 = p0; p2.y = p1.y;
             var p3 = p1; p3.y = p0.y;
 
-            if (vertices.Count <= index)
-            {
-                AddVertex(p0, p1, p2, p3);
-            }
-            else
-            {
-                vertices[index++] = p0;
-                vertices[index++] = p1;
-                vertices[index++] = p2;
-                vertices[index] = p3;
-            }
-        }
-
-        public void UpdateUV(Vector4 textureCoords, int index)
-        {
-            var uv0 = new Vector2(textureCoords.x, textureCoords.y + textureCoords.w);
-            var uv1 = new Vector2(textureCoords.x + textureCoords.z, textureCoords.y);
-            var uv2 = uv0; uv2.y = uv1.y;
-            var uv3 = uv1; uv3.y = uv0.y;
-
-            if (uvs.Count <= index)
-            {
-                AddUV(uv0, uv1, uv2, uv3);
-            }
-            else
-            {
-                uvs[index++] = uv0;
-                uvs[index++] = uv1;
-                uvs[index++] = uv2;
-                uvs[index] = uv3;
-            }
-        }
-
-        private void AddVertex(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
-        {
             int triangleIndex = vertices.Count;
 
             vertices.Add(p0);
@@ -97,8 +69,13 @@ namespace Utility
             triangles.Add(triangleIndex + 3);
         }
 
-        void AddUV(Vector2 uv0, Vector2 uv1, Vector2 uv2, Vector2 uv3)
+        public void UpdateUV(Vector4 textureCoords, int index)
         {
+            var uv0 = new Vector2(textureCoords.x, textureCoords.y + textureCoords.w);
+            var uv1 = new Vector2(textureCoords.x + textureCoords.z, textureCoords.y);
+            var uv2 = uv0; uv2.y = uv1.y;
+            var uv3 = uv1; uv3.y = uv0.y;
+
             uvs.Add(uv0);
             uvs.Add(uv1);
             uvs.Add(uv2);

@@ -187,7 +187,7 @@ public class SpawnEnemy : MonoBehaviour
             planetState.Update(Time.deltaTime, Material, transform);
 
             // Inventory Draw System
-            inventoryDrawSystem.Draw(Contexts.sharedInstance, Instantiate(Material), transform, 100);
+            inventoryDrawSystem.Draw(Material, transform, 1000);
 
         }
 

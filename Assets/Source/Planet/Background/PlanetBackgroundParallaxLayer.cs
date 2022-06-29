@@ -379,9 +379,9 @@ namespace Planet.Background
                     }
 
                     if (rand1 >= .5)
-                        Utility.Render.DrawBackground(Random.Range(-10, 10), Random.Range(-10, 10), 1, 1, sprite, Material, transform, 1);
+                        //Utility.Render.DrawBackground(Random.Range(-10, 10), Random.Range(-10, 10), 1, 1, sprite, Material, transform, 1);
                     else
-                        Utility.Render.DrawBackground(Random.Range(-100, 100), Random.Range(-100, 100), 1, 1, sprite, Material, transform, 1);
+                       // Utility.Render.DrawBackground(Random.Range(-100, 100), Random.Range(-100, 100), 1, 1, sprite, Material, transform, 1);
 
                     for(int k = 0; k < transform.childCount; k++)
                     {
@@ -394,7 +394,7 @@ namespace Planet.Background
 
                 for (; j < 1; j++)
                 {
-                    Utility.Render.DrawQuadColor(-1000000, -1000000, 9999999, 9999999, new Color(0.02745f, 0.03137f, 0.09804f, 1), Material, transform, 0);
+                    //Utility.Render.DrawQuadColor(-1000000, -1000000, 9999999, 9999999, new Color(0.02745f, 0.03137f, 0.09804f, 1), Material, transform, 0);
                 }
             }
 

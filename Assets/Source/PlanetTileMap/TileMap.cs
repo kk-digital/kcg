@@ -271,6 +271,7 @@ namespace PlanetTileMap
 
         public void UpdateLayerMesh(MapLayerType planetLayer)
         {
+            LayerMeshes[(int)planetLayer].Clear();
             int index = 0;
             for (int y = 0; y < MapSize.Y; y++)
             {

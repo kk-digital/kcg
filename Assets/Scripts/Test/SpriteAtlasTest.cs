@@ -96,14 +96,14 @@ namespace Planet.Unity
                 Texture = atlas.Texture,
                 TextureCoords = new Vector4(0, 0, 1, 1)
             };
-            Utility.Render.DrawSprite(-3, -1, atlas.Width / 32.0f, atlas.Height / 32.0f, sprite, Instantiate(Material), transform);
+            Utility.Render.DrawSprite(-3, -1, atlas.Width / 32.0f, atlas.Height / 32.0f, sprite, Material);
         }
 
         void DrawSprite(float x, float y, float w, float h, int spriteId)
         {
             var sprite = GameState.SpriteAtlasManager.GetSprite(spriteId, Enums.AtlasType.Generic);
 
-            Utility.Render.DrawSprite(x, y, w, h, sprite, Instantiate(Material), transform);
+            Utility.Render.DrawSprite(x, y, w, h, sprite, Material);
         }
 
         public struct R

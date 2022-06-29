@@ -67,7 +67,7 @@ namespace Inventory
         void DrawBackGround(float x, float y, float w, float h, Material material, Transform transform, int drawOrder)
         {
             Color backGround = new Color(0.2f, 0.2f, 0.2f, 1.0f);
-            Utility.Render.DrawQuadColor(x, y, w, h, backGround, Object.Instantiate(material), transform, drawOrder);
+            Utility.Render.DrawQuadColor(x, y, w, h, backGround, material);
         }
 
         void DrawCells(float x, float y, int width, int height, float tileSize, float slotSize, Material material, Transform transform, InventoryEntity inventoryEntity, int drawOrder)
@@ -103,10 +103,9 @@ namespace Inventory
                     float slotX = x + i * tileSize;
                     float slotY = y + j * tileSize;
 
-                    Utility.Render.DrawQuadColor(slotX + (tileSize - slotSize) / 2.0f, 
-                                slotY + (tileSize - slotSize) / 2.0f, slotSize, slotSize, quadColor, Object.Instantiate(material), transform, drawOrder + 1);
+                    Utility.Render.DrawQuadColor(slotX + (tileSize - slotSize) / 2.0f, slotY + (tileSize - slotSize) / 2.0f, slotSize, slotSize, quadColor, material);
                     float spriteSize = slotSize * 0.8f;
-                    Utility.Render.DrawQuadColor(slotX + (tileSize - spriteSize) / 2.0f, slotY + (tileSize - spriteSize) / 2.0f, spriteSize, spriteSize, borderColor, Object.Instantiate(material), transform, drawOrder + 2);
+                    Utility.Render.DrawQuadColor(slotX + (tileSize - spriteSize) / 2.0f, slotY + (tileSize - spriteSize) / 2.0f, spriteSize, spriteSize, borderColor, material);
 
                 }
             }
@@ -145,7 +144,7 @@ namespace Inventory
                 float spriteSize = slotSize * 0.8f;
                 slotX = slotX + (tileSize - spriteSize) / 2.0f;
                 slotY = slotY + (tileSize - spriteSize) / 2.0f;
-                Utility.Render.DrawSprite(slotX, slotY, spriteSize, spriteSize, sprite, Object.Instantiate(material), transform, drawOrder + 3);
+                Utility.Render.DrawSprite(slotX, slotY, spriteSize, spriteSize, sprite, material);
             }
         }
     }

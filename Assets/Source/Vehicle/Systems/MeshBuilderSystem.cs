@@ -20,6 +20,7 @@ namespace Vehicle
         {
             var VehiclesWithSprite = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.VehicleSprite2D));
 
+            Mesh.Clear();
             int index = 0;
             foreach (var entity in VehiclesWithSprite)
             {

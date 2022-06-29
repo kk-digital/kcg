@@ -19,6 +19,7 @@ namespace Item
         public void UpdateMesh()
         {
             var ItemPropertyWithSprite = Contexts.sharedInstance.itemProperties.GetGroup(ItemPropertiesMatcher.AllOf(ItemPropertiesMatcher.ItemPropertySprite));
+            Mesh.Clear();
             int index = 0;
             foreach (var ItemTypeEntity in ItemPropertyWithSprite)
             {

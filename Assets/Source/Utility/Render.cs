@@ -20,52 +20,32 @@ namespace Utility
         }
 
         public static void DrawSprite(float x, float y, float w, float h,
-            Sprites.Sprite sprite, Material material, Transform transform, 
-                    int drawOrder = 0, float rotation = 0)
+            Sprites.Sprite sprite, Material material)
         {
-            var tex = sprite.Texture;
             var mat = Material.Instantiate(material);
-            mat.SetTexture("_MainTex", tex);
-            //FIX: Do UnityEngine.CreateMesh, not using UnityEngine
-            var mesh = CreateMesh(transform, "sprite", drawOrder, mat, new Vec2f(x, y), rotation);
 
-            List<int> triangles = new List<int>();
-            List<Vector2> uvs = new List<Vector2>();
-            List<Vector3> vertices = new List<Vector3>();
+            mat.SetTexture("_MainTex", sprite.Texture);
+            mat.SetPass(0);
 
+            GL.PushMatrix();
+            GL.LoadOrtho();
 
-            var p0 = new Vector3(0, 0, 0);
-            var p1 = new Vector3((w), (h), 0);
-            var p2 = p0; p2.y = p1.y;
-            var p3 = p1; p3.y = p0.y;
+            GL.Begin(GL.QUADS);
 
-            vertices.Add(p0);
-            vertices.Add(p1);
-            vertices.Add(p2);
-            vertices.Add(p3);
+            GL.TexCoord2(0, 1);
+            GL.Vertex3(x, y, 0);
 
-            triangles.Add(0);
-            triangles.Add(2);
-            triangles.Add(1);
-            triangles.Add(0);
-            triangles.Add(1);
-            triangles.Add(3);
+            GL.TexCoord2(0, 0);
+            GL.Vertex3(x + w, y + h, 0);
 
-            var uv0 = new Vector2(sprite.TextureCoords.x, sprite.TextureCoords.y + sprite.TextureCoords.w);
-            var uv1 = new Vector2(sprite.TextureCoords.x + sprite.TextureCoords.z, sprite.TextureCoords.y);
-            var uv2 = uv0; uv2.y = uv1.y;
-            var uv3 = uv1; uv3.y = uv0.y;
+            GL.TexCoord2(1, 0);
+            GL.Vertex3(x, (y + h), 0);
 
+            GL.TexCoord2(1, 1);
+            GL.Vertex3((x + w), y, 0);
 
-            uvs.Add(uv0);
-            uvs.Add(uv1);
-            uvs.Add(uv2);
-            uvs.Add(uv3);
-
-
-            mesh.SetVertices(vertices);
-            mesh.SetUVs(0, uvs);
-            mesh.SetTriangles(triangles, 0);
+            GL.End();
+            GL.PopMatrix();
         }
 
         public static void DrawBackground(float x, float y, float w, float h,
@@ -116,37 +96,21 @@ namespace Utility
         }
 
         public static void DrawQuadColor(float x, float y, float w, float h,
-            Color color, Material material, Transform transform, int drawOrder = 0, float rotation = 0)
+            Color color, Material material)
         {
-            var mat = material;
-            mat.color = color;
-            //FIX: Do UnityEngine.CreateMesh, not using UnityEngine
-            var mesh = CreateMesh(transform, "colorQuad", drawOrder, mat, new Vec2f(x, y), rotation);
+            var mat = Material.Instantiate(material);
+            mat.SetPass(0);
 
-            List<int> triangles = new List<int>();
-            List<Vector2> uvs = new List<Vector2>();
-            List<Vector3> vertices = new List<Vector3>();
-
-
-            var p0 = new Vector3(0, 0, 0);
-            var p1 = new Vector3((w), (h), 0);
-            var p2 = p0; p2.y = p1.y;
-            var p3 = p1; p3.y = p0.y;
-
-            vertices.Add(p0);
-            vertices.Add(p1);
-            vertices.Add(p2);
-            vertices.Add(p3);
-
-            triangles.Add(0);
-            triangles.Add(2);
-            triangles.Add(1);
-            triangles.Add(0);
-            triangles.Add(1);
-            triangles.Add(3);
-
-            mesh.SetVertices(vertices);
-            mesh.SetTriangles(triangles, 0);
+            GL.PushMatrix();
+            GL.LoadOrtho();
+            GL.Begin(GL.QUADS);
+            GL.Color(color);
+            GL.Vertex3(x, y, 0);
+            GL.Vertex3(x + w, y + h, 0);
+            GL.Vertex3(x, (y + h), 0);
+            GL.Vertex3((x + w), y, 0);
+            GL.End();
+            GL.PopMatrix();
         }
 
         public static void DrawString(float x, float y, float characterSize, string label, int fontSize, Color color, Transform parent, int sortOrder)
