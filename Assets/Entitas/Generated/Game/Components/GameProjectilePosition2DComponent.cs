@@ -11,19 +11,21 @@ public partial class GameEntity {
     public Projectile.Position2DComponent projectilePosition2D { get { return (Projectile.Position2DComponent)GetComponent(GameComponentsLookup.ProjectilePosition2D); } }
     public bool hasProjectilePosition2D { get { return HasComponent(GameComponentsLookup.ProjectilePosition2D); } }
 
-    public void AddProjectilePosition2D(KMath.Vec2f newValue, KMath.Vec2f newPreviousValue) {
+    public void AddProjectilePosition2D(KMath.Vec2f newValue, KMath.Vec2f newPreviousValue, float newRotation) {
         var index = GameComponentsLookup.ProjectilePosition2D;
         var component = (Projectile.Position2DComponent)CreateComponent(index, typeof(Projectile.Position2DComponent));
         component.Value = newValue;
         component.PreviousValue = newPreviousValue;
+        component.Rotation = newRotation;
         AddComponent(index, component);
     }
 
-    public void ReplaceProjectilePosition2D(KMath.Vec2f newValue, KMath.Vec2f newPreviousValue) {
+    public void ReplaceProjectilePosition2D(KMath.Vec2f newValue, KMath.Vec2f newPreviousValue, float newRotation) {
         var index = GameComponentsLookup.ProjectilePosition2D;
         var component = (Projectile.Position2DComponent)CreateComponent(index, typeof(Projectile.Position2DComponent));
         component.Value = newValue;
         component.PreviousValue = newPreviousValue;
+        component.Rotation = newRotation;
         ReplaceComponent(index, component);
     }
 

@@ -133,6 +133,7 @@ namespace Planet
         public void RemoveAgent(int agentId)
         {
             ref AgentEntity entity = ref AgentList.Get(agentId);
+            Utils.Assert(entity.IsInitialized);
             entity.Entity.Destroy();
             AgentList.Remove(entity.AgentId);
         }
@@ -151,6 +152,7 @@ namespace Planet
         public void RemoveFloatingText(int floatingTextId)
         {
             ref FloatingTextEntity entity = ref FloatingTextList.Get(floatingTextId);
+            Utils.Assert(entity.IsInitialized);
             entity.Entity.Destroy();
             FloatingTextList.Remove(entity);
         }
@@ -169,6 +171,7 @@ namespace Planet
         public void RemoveParticleEmitter(int particleEmitterId)
         {
             ref ParticleEmitterEntity entity = ref ParticleEmitterList.Get(particleEmitterId);
+            Utils.Assert(entity.IsInitialized);
             entity.Entity.Destroy();
             ParticleEmitterList.Remove(entity.ParticleEmitterId);
         }
@@ -194,16 +197,24 @@ namespace Planet
             ParticleList.Remove(entity.ParticleId);
         }
 
-        public ProjectileEntity AddProjectile(UnityEngine.Material material, Vector2 position)
+        public ProjectileEntity AddProjectile(Vec2f position, Vec2f direction, Enums.ProjectileType projectileType)
         {
             Utils.Assert(ProjectileList.Size < PlanetEntityLimits.ProjectileLimit);
 
-            return new ProjectileEntity();
+            ref ProjectileEntity newEntity = ref ProjectileList.Add();
+            GameEntity entity = GameState.ProjectileSpawnerSystem.Spawn(GameContext,
+                         position, direction, projectileType, newEntity.ProjectileId);
+            newEntity.Entity = entity;
+
+            return newEntity;
         }
 
         public void RemoveProjectile(int projectileId)
         {
-            ProjectileList.Remove(projectileId);
+            ref ProjectileEntity entity = ref ProjectileList.Get(projectileId);
+            Utils.Assert(entity.IsInitialized);
+            entity.Entity.Destroy();
+            ProjectileList.Remove(entity.ProjectileId);
         }
 
         public VehicleEntity AddVehicle(UnityEngine.Material material, Vector2 position)
@@ -260,7 +271,7 @@ namespace Planet
                         ref ProjectileEntity projectile = ref ProjectileList.List[index];
                         if (projectile.IsInitialized)
                         {
-                            var position = projectile.Entity.projectilePhysicsState2D;
+                            //var position = projectile.Entity.projectilePhysicsState2D;
                         }
                     }
 
@@ -294,7 +305,7 @@ namespace Planet
             GameState.ParticleEmitterUpdateSystem.Update(this);
             GameState.ParticleUpdateSystem.Update(this, ParticleContext);
             GameState.ProjectileMovementSystem.Update();
-            GameState.ProjectileCollisionSystem.Update(ref TileMap);
+            GameState.ProjectileCollisionSystem.UpdateEx(ref this);
 
             TileMap.DrawLayer(MapLayerType.Mid, Object.Instantiate(material), transform, 9);
             TileMap.DrawLayer(MapLayerType.Front, Object.Instantiate(material), transform, 10);

@@ -58,6 +58,7 @@ public class GameState
     #endregion
 
     #region Projectile
+    public static readonly Projectile.ProjectileCreationApi ProjectileCreationApi;
     public static readonly Projectile.ProcessCollisionSystem ProjectileCollisionSystem;
     public static readonly Projectile.MovementSystem ProjectileMovementSystem;
     public static readonly Projectile.SpawnerSystem ProjectileSpawnerSystem;
@@ -123,9 +124,10 @@ public class GameState
         ParticleUpdateSystem = new Particle.ParticleUpdateSystem();
         ParticleEmitterSpawnerSystem = new Particle.ParticleEmitterSpawnerSystem(ParticleEmitterCreationApi, ParticleCreationApi);
         ParticleSpawnerSystem = new Particle.ParticleSpawnerSystem(ParticleCreationApi);
+        ProjectileCreationApi = new Projectile.ProjectileCreationApi();
         ProjectileCollisionSystem = new Projectile.ProcessCollisionSystem();
-        ProjectileMovementSystem = new Projectile.MovementSystem();
-        ProjectileSpawnerSystem = new Projectile.SpawnerSystem();
+        ProjectileMovementSystem = new Projectile.MovementSystem(ProjectileCreationApi);
+        ProjectileSpawnerSystem = new Projectile.SpawnerSystem(ProjectileCreationApi);
         ProjectileDrawSystem = new Projectile.DrawSystem();
     }
 }

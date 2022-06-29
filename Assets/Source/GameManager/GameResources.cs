@@ -18,6 +18,7 @@ public class GameResources
     public static int PipeSpriteSheet;
     public static int pipeIconSpriteSheet;
     public static int DustSpriteSheet;
+    public static int GrenadeSpriteSheet;
 
 
     public static int OreSprite;
@@ -27,6 +28,8 @@ public class GameResources
     //agent sprite ids
     public static int SlimeMoveLeftBaseSpriteId;
     public static int CharacterSpriteId;
+
+    public static int GrenadeSpriteId;
 
 
     // particle sprite ids used for icons
@@ -63,6 +66,7 @@ public class GameResources
             PipeSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\pipesim\\pipe.png", 16, 16);
             pipeIconSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\sprite\\item\\admin_icon_pipesim.png", 16, 16);
             DustSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\particles\\dust1.png", 16, 16);
+            GrenadeSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\grenades\\Grenades1.png", 16, 16);
 
 
             OreSprite = GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(OreSpriteSheet, 0, 0, 0);
@@ -73,6 +77,7 @@ public class GameResources
             SlimeMoveLeftBaseSpriteId = GameState.SpriteAtlasManager.CopySpritesToAtlas(SlimeSpriteSheet, 0, 0, 3, 0, Enums.AtlasType.Agent);
             CharacterSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(CharacterSpriteSheet, 0, 0, Enums.AtlasType.Agent);
 
+            GrenadeSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(GrenadeSpriteSheet, 0, 0, Enums.AtlasType.Particle);
             // particle sprite atlas
             OreIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(OreSpriteSheet, 0, 0, Enums.AtlasType.Particle);
             GunIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(GunSpriteSheet, 0, 0, Enums.AtlasType.Particle);
@@ -90,6 +95,7 @@ public class GameResources
             CreateAgents();
             CreateParticles();
             CreateParticleEmitters();
+            CreateProjectiles();
         }
     }
 
@@ -321,6 +327,27 @@ public class GameResources
         GameState.ParticleEmitterCreationApi.SetTimeBetweenEmissions(0.02f);
         GameState.ParticleEmitterCreationApi.SetVelocityInterval(new Vec2f(2.0f, 0), new Vec2f(4.0f, 0));
         GameState.ParticleEmitterCreationApi.End();
+    }
+
+
+    private static void CreateProjectiles()
+    {
+        GameState.ProjectileCreationApi.Create((int)Enums.ProjectileType.Bullet);
+        GameState.ProjectileCreationApi.SetName("bullet");
+        GameState.ProjectileCreationApi.SetSpriteId(OreIcon);
+        GameState.ProjectileCreationApi.SetSize(new Vec2f(0.5f, 0.5f));
+        GameState.ProjectileCreationApi.SetSpeed(20.0f);
+        GameState.ProjectileCreationApi.SetAcceleration(new Vec2f());
+        GameState.ProjectileCreationApi.End();
+
+        GameState.ProjectileCreationApi.Create((int)Enums.ProjectileType.Grenade);
+        GameState.ProjectileCreationApi.SetName("grenade");
+        GameState.ProjectileCreationApi.SetSpriteId(GrenadeSpriteId);
+        GameState.ProjectileCreationApi.SetDeltaRotation(180.0f);
+        GameState.ProjectileCreationApi.SetSize(new Vec2f(0.5f, 0.5f));
+        GameState.ProjectileCreationApi.SetSpeed(10.0f);
+        GameState.ProjectileCreationApi.SetAcceleration(new Vec2f(0.0f, -10.0f));
+        GameState.ProjectileCreationApi.End();
     }
 
 
