@@ -135,6 +135,7 @@ namespace KGUI
                     fuelBar.GetComponent<Image>().fillAmount = entity.agentStats.Fuel / 100;
                 }
 
+                // Calculate position using aspect ratio
                 if (Camera.main.aspect >= 1.7f)
                     iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-345, 170.3f, 4.873917f);
                 else if (Camera.main.aspect >= 1.5f)
