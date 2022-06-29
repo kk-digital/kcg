@@ -260,7 +260,7 @@ public class GameResources
         GameState.ParticleCreationApi.SetAcceleration(new Vector2(0.0f, -20.0f));
         GameState.ParticleCreationApi.SetDeltaRotation(90.0f);
         GameState.ParticleCreationApi.SetDeltaScale(0.0f);
-        GameState.ParticleCreationApi.SetSpriteId(OreSprite);
+        GameState.ParticleCreationApi.SetSpriteId(OreIcon);
         GameState.ParticleCreationApi.SetSize(new Vec2f(0.5f, 0.5f));
         GameState.ParticleCreationApi.SetStartingVelocity(new Vector2(1.0f, 10.0f));
         GameState.ParticleCreationApi.SetStartingRotation(0.0f);
@@ -274,7 +274,7 @@ public class GameResources
         GameState.ParticleCreationApi.SetAcceleration(new Vector2(0.0f, 0.0f));
         GameState.ParticleCreationApi.SetDeltaRotation(130.0f);
         GameState.ParticleCreationApi.SetDeltaScale(-1.0f);
-        GameState.ParticleCreationApi.SetSpriteId(OreSprite);
+        GameState.ParticleCreationApi.SetSpriteId(OreIcon);
         GameState.ParticleCreationApi.SetSize(new Vec2f(0.5f, 0.5f));
         GameState.ParticleCreationApi.SetStartingVelocity(new Vector2(0.0f, 0.0f));
         GameState.ParticleCreationApi.SetStartingRotation(0.0f);
