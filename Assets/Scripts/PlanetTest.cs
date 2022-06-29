@@ -14,6 +14,20 @@ namespace Planet.Unity
 
         Contexts EntitasContext;
 
+        // Health Bar
+        KGUI.HealthBarUI healthBarUI;
+
+        // Food Bar
+        KGUI.FoodBarUI foodBarUI;
+
+        // Water Bar
+        KGUI.WaterBarUI waterBarUI;
+
+        // Oxygen Bar
+        KGUI.OxygenBarUI oxygenBarUI;
+
+        // Fuel Bar
+        KGUI.FuelBarUI fuelBarUI;
 
         Agent.AgentEntity Player;
         int PlayerID;
@@ -74,6 +88,27 @@ namespace Planet.Unity
            // transform.position = new Vector3(playerPosition.x - 6.0f, playerPosition.y - 6.0f, -10.0f);
         }
 
+        private void OnGUI()
+        {
+            if(Init)
+            {
+                //Health Bar Draw
+                healthBarUI.Draw();
+
+                // Food Bar Update
+                foodBarUI.Update();
+
+                // Water Bar Update
+                waterBarUI.Update();
+
+                // Fuel Bar Update
+                fuelBarUI.Update();
+
+                // OxygenBar Update
+                oxygenBarUI.Update();
+            }
+        }
+
         void DrawSpriteAtlas()
         {
             ref Sprites.SpriteAtlas atlas = ref GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Agent);
@@ -124,6 +159,26 @@ namespace Planet.Unity
             inventoryManager.AddItem(miningLaserTool, toolBarID);
             inventoryManager.AddItem(pipePlacementTool, toolBarID);
             inventoryManager.AddItem(particleEmitterPlacementTool, toolBarID);
+
+            // Health Bar Initialize
+            healthBarUI = new KGUI.HealthBarUI();
+            healthBarUI.Initialize();
+
+            // Food Bar Initialize
+            foodBarUI = new KGUI.FoodBarUI();
+            foodBarUI.Initialize();
+
+            // Water Bar Initialize
+            waterBarUI = new KGUI.WaterBarUI();
+            waterBarUI.Initialize();
+
+            // Oxygen Bar Initialize
+            oxygenBarUI = new KGUI.OxygenBarUI();
+            oxygenBarUI.Initialize();
+
+            // Oxygen Bar Initialize
+            fuelBarUI = new KGUI.FuelBarUI();
+            fuelBarUI.Initialize();
         }
 
         void GenerateMap()

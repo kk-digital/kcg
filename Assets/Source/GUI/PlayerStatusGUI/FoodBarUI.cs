@@ -22,7 +22,7 @@ namespace KGUI
         private GameObject foodBar;
         private GameObject iconCanvas;
 
-        public void Initialize(Transform transform)
+        public void Initialize()
         {
             // Set Width and Height
             int IconWidth = 19;
@@ -80,7 +80,7 @@ namespace KGUI
 
             // Food Bar Initializon
             iconCanvas = new GameObject("Food Icon");
-            iconCanvas.transform.parent = transform;
+            iconCanvas.transform.parent = GameObject.Find("Canvas").transform;
             iconCanvas.AddComponent<RectTransform>();
             iconCanvas.AddComponent<Image>();
 
@@ -89,13 +89,13 @@ namespace KGUI
             iconCanvas.GetComponent<Image>().sprite = iconBar;
 
             if (Camera.main.aspect >= 1.7f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-345, 537.4f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-402.6f, 138.2f, 4.873917f);
             else if (Camera.main.aspect >= 1.5f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-252.7f, 536.6f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-359.9f, 137f, 4.873917f);
             else
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-278.3f, 660.6f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 193.4f, 4.873917f);
 
-            iconCanvas.GetComponent<RectTransform>().localScale = new Vector3(1.2f, -1.2f, 0.5203559f);
+            iconCanvas.GetComponent<RectTransform>().localScale = new Vector3(0.6f, -0.6f, 0.5203559f);
 
             // Food Bar Initializon
             foodBar = new GameObject("Food Bar");
@@ -139,11 +139,11 @@ namespace KGUI
                 }
 
                 if (Camera.main.aspect >= 1.7f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-345, 537.4f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-402.6f, 138.2f, 4.873917f);
                 else if (Camera.main.aspect >= 1.5f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-252.7f, 536.6f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-359.9f, 137f, 4.873917f);
                 else
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-278.3f, 660.6f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 193.4f, 4.873917f);
             }
         }
     }

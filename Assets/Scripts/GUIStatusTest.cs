@@ -33,19 +33,19 @@ public class GUIStatusTest : MonoBehaviour
 
         // Food Bar Initialize
         foodBarUI = new KGUI.FoodBarUI();
-        foodBarUI.Initialize(transform);
+        foodBarUI.Initialize();
 
         // Water Bar Initialize
         waterBarUI = new KGUI.WaterBarUI();
-        waterBarUI.Initialize(transform);
+        waterBarUI.Initialize();
 
         // Oxygen Bar Initialize
         oxygenBarUI = new KGUI.OxygenBarUI();
-        oxygenBarUI.Initialize(transform);
+        oxygenBarUI.Initialize();
 
         // Oxygen Bar Initialize
         fuelBarUI = new KGUI.FuelBarUI();
-        fuelBarUI.Initialize(transform);
+        fuelBarUI.Initialize();
 
         Init = true;
     }
