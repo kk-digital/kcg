@@ -134,6 +134,8 @@ namespace Projectile
 
             foreach (var entity in ToRemoveList)
             {
+                var pos = entity.projectilePosition2D;
+                planet.AddParticleEmitter(pos.Value, Particle.ParticleEmitterType.DustEmitter);
                 planet.RemoveProjectile(entity.projectileID.ID);
             }
         }
