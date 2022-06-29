@@ -14,7 +14,7 @@ namespace Agent
         }
 
         //NOTE(Mahdi): Deprecated, will be removed soon
-        public GameEntity SpawnPlayer(int spriteId, int width, int height, Vec2f position,
+        public GameEntity SpawnPlayer(GameContext gameContext, int spriteId, int width, int height, Vec2f position,
         int agentId, int startingAnimation, int playerHealth, int playerFood, int playerWater,
         int playerOxygen, int playerFuel, float attackCoolDown)
         {
@@ -38,15 +38,15 @@ namespace Agent
 
             // Add Inventory and toolbar.
             var attacher = Inventory.InventoryAttacher.Instance;
-            attacher.AttachInventoryToAgent(6, 5, agentId);
-            attacher.AttachToolBarToPlayer(10, agentId);
+            attacher.AttachInventoryToAgent(gameContext, 6, 5, agentId);
+            attacher.AttachToolBarToPlayer(gameContext, 10, agentId);
             return entity;
         }
 
 
-        public GameEntity Spawn(Vec2f position, int agentId, AgentType agentType)
+        public GameEntity Spawn(GameContext gameContext, Vec2f position, int agentId, AgentType agentType)
         {
-            var entity = Contexts.sharedInstance.game.CreateEntity();
+            var entity = gameContext.CreateEntity();
 
             ref Agent.AgentProperties properties = ref AgentCreationApi.GetRef((int)agentType);
 
@@ -68,9 +68,9 @@ namespace Agent
                 entity.AddAgentActionScheduler(new List<int>(), new List<int>());
 
                 // Add Inventory and toolbar.
-                var attacher = Inventory.InventoryAttacher.Instance;
-                attacher.AttachInventoryToAgent(6, 5, agentId);
-                attacher.AttachToolBarToPlayer(10, agentId);
+                /*var attacher = Inventory.InventoryAttacher.Instance;
+                attacher.AttachInventoryToAgent(gameContext, 6, 5, agentId);
+                attacher.AttachToolBarToPlayer(gameContext, 10, agentId);*/
             }
             else if (agentType == Agent.AgentType.Agent)
             {

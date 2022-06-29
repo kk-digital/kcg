@@ -14,10 +14,10 @@ namespace Physics
     // http://www.cs.yorku.ca/~amana/research/grid.pdf
     public class PhysicsProcessCollisionSystem
     {
-        public void Update(ref PlanetTileMap.TileMap tileMap)
+        public void Update(GameContext gameContext, ref PlanetTileMap.TileMap tileMap)
         {
             float deltaTime = Time.deltaTime;
-            var entitiesWithBox = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsBox2DCollider, GameMatcher.PhysicsPosition2D));
+            var entitiesWithBox = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsBox2DCollider, GameMatcher.PhysicsPosition2D));
 
             foreach (var entity in entitiesWithBox)
             {

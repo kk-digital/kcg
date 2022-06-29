@@ -79,8 +79,8 @@ public class MiningLaser : MonoBehaviour
         GameEntity playerEntity = contexts.game.CreateEntity();
         playerEntity.ReplaceAgentID(agentID);
         playerEntity.isAgentPlayer = true;
-        inventoryAttacher.AttachInventoryToAgent(inventoryWidth, inventoryHeight, agentID);
-        inventoryAttacher.AttachToolBarToPlayer(toolBarSize, agentID);
+        inventoryAttacher.AttachInventoryToAgent(contexts.game, inventoryWidth, inventoryHeight, agentID);
+        inventoryAttacher.AttachToolBarToPlayer(contexts.game, toolBarSize, agentID);
 
         int inventoryID = playerEntity.agentInventory.InventoryID;
         int toolBarID = playerEntity.agentToolBar.ToolBarID;

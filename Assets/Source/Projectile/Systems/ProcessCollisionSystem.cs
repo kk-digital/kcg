@@ -77,7 +77,7 @@ namespace Projectile
             ref PlanetTileMap.TileMap tileMap = ref planet.TileMap;
 
             // Get Vehicle Physics Entity
-            var entities = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsBox2DCollider, GameMatcher.ProjectilePhysicsState2D));
+            var entities = planet.GameContext.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsBox2DCollider, GameMatcher.ProjectilePhysicsState2D));
 
             foreach (var entity in entities)
             {
