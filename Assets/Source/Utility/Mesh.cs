@@ -1,13 +1,11 @@
 ﻿using Entitas;
 using Entitas.CodeGeneration.Attributes;
+using KMath;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Utility
 {
-    // todo: This should be unique entitas context.
-    // We need every system to have a separate context for that.
-    //[ Unique Inventory, Particle, Item particle, Agent, Projectiles, ...]
     public struct FrameMesh
     {
         public GameObject obj;
@@ -80,6 +78,78 @@ namespace Utility
             uvs.Add(uv1);
             uvs.Add(uv2);
             uvs.Add(uv3);
+        }
+    }
+
+
+    internal static class ObjectMesh
+    {
+        private static GameObject CreateObjectMesh(Transform parent, string name,
+                     int sortingOrder, Material material, Vec2f position, float rotation)
+        {
+            var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
+            go.transform.SetParent(parent);
+            go.transform.position = new Vector2(position.X, position.Y);
+            go.transform.Rotate(0.0f, 0.0f, rotation, Space.Self);
+
+            var mesh = new Mesh
+            {
+                indexFormat = UnityEngine.Rendering.IndexFormat.UInt32
+            };
+
+            var mf = go.GetComponent<MeshFilter>();
+            mf.sharedMesh = mesh;
+
+            return go;
+        }
+
+        public static GameObject CreateEmptyObjectMesh()
+        {
+            var go = new GameObject("sprite", typeof(MeshFilter), typeof(MeshRenderer));
+
+            var mesh = new Mesh
+            {
+                indexFormat = UnityEngine.Rendering.IndexFormat.UInt32
+            };
+
+            var mf = go.GetComponent<MeshFilter>();
+            mf.sharedMesh = mesh;
+            var mr = go.GetComponent<MeshRenderer>();
+
+            return go;
+        }
+
+        public static GameObject CreateObjectText(Transform parent, Vector2 pos, string name, int sortingOrder)
+        {
+            var go = new GameObject(name, typeof(TextMesh));
+            go.transform.SetParent(parent);
+            go.GetComponent<Transform>().position = pos;
+
+            var textMesh = go.GetComponent<TextMesh>();
+            textMesh.anchor = TextAnchor.LowerLeft;
+            Font ArialFont = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+            textMesh.font = ArialFont;
+
+            var mr = go.GetComponent<MeshRenderer>();
+            mr.sharedMaterial = ArialFont.material;
+            mr.sortingOrder = sortingOrder;
+
+            return go;
+        }
+
+        public static GameObject CreateEmptyTextGameObject(string name = "sprite")
+        {
+            var go = new GameObject(name, typeof(TextMesh));
+
+            var textMesh = go.GetComponent<TextMesh>();
+            textMesh.anchor = TextAnchor.LowerLeft;
+            Font ArialFont = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+            textMesh.font = ArialFont;
+
+            var mr = go.GetComponent<MeshRenderer>();
+            mr.sharedMaterial = ArialFont.material;
+
+            return go;
         }
     }
 }

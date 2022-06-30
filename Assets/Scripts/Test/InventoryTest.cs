@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class InventoryTest : MonoBehaviour
@@ -77,16 +78,12 @@ public class InventoryTest : MonoBehaviour
             GameState.TileSpriteAtlasManager.UpdateAtlasTexture(type);
         }
 
-        //remove all children MeshRenderer
-        foreach (var mr in GetComponentsInChildren<MeshRenderer>())
-            if (Application.isPlaying)
-                Destroy(mr.gameObject);
-            else
-                DestroyImmediate(mr.gameObject);
+        inputProcessSystem.Update();
+    }
 
-        inputProcessSystem.Update(Contexts.sharedInstance);
-        inventoryDrawSystem.Draw(Contexts.sharedInstance, material, transform, 0);
-
+    private void OnRenderObject()
+    {
+        inventoryDrawSystem.Draw(Contexts.sharedInstance, material, transform);
     }
 
     private void Initialize()

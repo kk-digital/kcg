@@ -14,6 +14,7 @@ namespace FloatingText
             entity.AddFloatingTextID(Index);
             entity.AddFloatingTextState(timeToLive, text);
             entity.AddFloatingTextMovable(velocity, position);
+            entity.AddFloatingTextSprite(Utility.ObjectMesh.CreateEmptyTextGameObject("FloatingText"));
 
             return entity;
         }

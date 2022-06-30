@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class VehicleTest : MonoBehaviour
 {
-    // Vehilce Draw System
-    //Vehicle.DrawSystem vehicleDrawSystem;
+    // Vehilce Mesh 
+    Vehicle.MeshBuilderSystem MeshBuilderSystem ;
 
     // Vehicle Collision System
     Vehicle.ProcessCollisionSystem vehicleCollisionSystem;
@@ -35,8 +35,8 @@ public class VehicleTest : MonoBehaviour
         // Initialize Vehicle Physics System
         vehiclePhysics = new Vehicle.ProcessVelocitySystem();
 
-        // Initialize Vehicle Draw System
-        //vehicleDrawSystem = new Vehicle.DrawSystem();
+        // Initialize Vehicle Mesh
+        MeshBuilderSystem = new Vehicle.MeshBuilderSystem();
 
         // Initialize Vehicle Collision System
         vehicleCollisionSystem = new Vehicle.ProcessCollisionSystem();
@@ -66,13 +66,6 @@ public class VehicleTest : MonoBehaviour
             GameState.TileSpriteAtlasManager.UpdateAtlasTexture(type);
         }
 
-        // Clear last frame
-        foreach (var mr in GetComponentsInChildren<MeshRenderer>())
-            if (Application.isPlaying)
-                Destroy(mr.gameObject);
-            else
-                DestroyImmediate(mr.gameObject);
-
         // Update Gravity
         if (canUpdateGravity)
           vehiclePhysics.UpdateGravity(Contexts.sharedInstance);
@@ -80,8 +73,9 @@ public class VehicleTest : MonoBehaviour
         // Update Collision Physics
         vehicleCollisionSystem.Update(ref planet.TileMap);
 
+        MeshBuilderSystem.UpdateMesh();
         // Draw Vehicle
-        //vehicleDrawSystem.Draw(Instantiate(Material), transform, 17);
+        Utility.Render.DrawFrame(ref GameState.ItemMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
 
         Controls();
     }

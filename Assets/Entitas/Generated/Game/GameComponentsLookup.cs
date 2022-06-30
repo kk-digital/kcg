@@ -23,29 +23,30 @@ public static class GameComponentsLookup {
     public const int ECSInputXY = 12;
     public const int FloatingTextID = 13;
     public const int FloatingTextMovable = 14;
-    public const int FloatingTextState = 15;
-    public const int ItemAttachedInventory = 16;
-    public const int ItemDrawPosition2D = 17;
-    public const int ItemID = 18;
-    public const int ItemLabel = 19;
-    public const int ItemStack = 20;
-    public const int ItemUnpickable = 21;
-    public const int PhysicsBox2DCollider = 22;
-    public const int PhysicsMovable = 23;
-    public const int PhysicsPosition2D = 24;
-    public const int PhysicsSphere2DCollider = 25;
-    public const int ProjectileCollider = 26;
-    public const int ProjectileID = 27;
-    public const int ProjectileMovable = 28;
-    public const int ProjectilePhysicsState2D = 29;
-    public const int ProjectilePosition2D = 30;
-    public const int ProjectileSprite2D = 31;
-    public const int ProjectileType = 32;
-    public const int VehicleID = 33;
-    public const int VehiclePhysicsState2D = 34;
-    public const int VehicleSprite2D = 35;
+    public const int FloatingTextSprite = 15;
+    public const int FloatingTextState = 16;
+    public const int ItemAttachedInventory = 17;
+    public const int ItemDrawPosition2D = 18;
+    public const int ItemID = 19;
+    public const int ItemLabel = 20;
+    public const int ItemStack = 21;
+    public const int ItemUnpickable = 22;
+    public const int PhysicsBox2DCollider = 23;
+    public const int PhysicsMovable = 24;
+    public const int PhysicsPosition2D = 25;
+    public const int PhysicsSphere2DCollider = 26;
+    public const int ProjectileCollider = 27;
+    public const int ProjectileID = 28;
+    public const int ProjectileMovable = 29;
+    public const int ProjectilePhysicsState2D = 30;
+    public const int ProjectilePosition2D = 31;
+    public const int ProjectileSprite2D = 32;
+    public const int ProjectileType = 33;
+    public const int VehicleID = 34;
+    public const int VehiclePhysicsState2D = 35;
+    public const int VehicleSprite2D = 36;
 
-    public const int TotalComponents = 36;
+    public const int TotalComponents = 37;
 
     public static readonly string[] componentNames = {
         "AgentActionScheduler",
@@ -63,6 +64,7 @@ public static class GameComponentsLookup {
         "ECSInputXY",
         "FloatingTextID",
         "FloatingTextMovable",
+        "FloatingTextSprite",
         "FloatingTextState",
         "ItemAttachedInventory",
         "ItemDrawPosition2D",
@@ -102,6 +104,7 @@ public static class GameComponentsLookup {
         typeof(ECSInput.XYComponent),
         typeof(FloatingText.IDComponent),
         typeof(FloatingText.MovableComponent),
+        typeof(FloatingText.SpriteComponent),
         typeof(FloatingText.StateComponent),
         typeof(Item.AttachedInventoryComponent),
         typeof(Item.DrawPosition2DComponent),

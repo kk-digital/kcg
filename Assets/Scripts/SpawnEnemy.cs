@@ -42,7 +42,7 @@ public class SpawnEnemy : MonoBehaviour
         var mapSize = new Vec2i(16, 16);
         planetState = new Planet.PlanetState();
         planetState.Init(mapSize);
-
+        planetState.InitializeSystems(Material, transform);
 
         // Enemy Sprite Sheet ID
         int EnemySpriteSheetID = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Enemies\\Slime\\slime.png", 32, 32);
@@ -131,18 +131,6 @@ public class SpawnEnemy : MonoBehaviour
 
     void Update()
     {
-        // check if the sprite atlas textures needs to be updated
-        for(int type = 0; type < GameState.SpriteAtlasManager.Length; type++)
-        {
-            GameState.SpriteAtlasManager.UpdateAtlasTexture(type);
-        }
-
-        // check if the tile sprite atlas textures needs to be updated
-        for(int type = 0; type < GameState.TileSpriteAtlasManager.Length; type++)
-        {
-            GameState.TileSpriteAtlasManager.UpdateAtlasTexture(type);
-        }
-
         if (Init)
         {
             // Get Slot Entites
@@ -170,26 +158,12 @@ public class SpawnEnemy : MonoBehaviour
                 SpawnEnemySlime(new Vec2f(worldPosition.x, worldPosition.y));
             }
 
-            // Delete the old one
-            foreach (var mr in GetComponentsInChildren<MeshRenderer>())
-            {
-                if (Application.isPlaying)
-                {
-                    Destroy(mr.gameObject);
-                }
-                else
-                {
-                    DestroyImmediate(mr.gameObject);
-                }
-            }
-
             // Update Inventory Draw System
             planetState.Update(Time.deltaTime, Material, transform);
-
-            // Inventory Draw System
-            inventoryDrawSystem.Draw(Material, transform, 1000);
-
         }
-
+    }
+    private void OnRenderObject()
+    {
+        inventoryDrawSystem.Draw(Instantiate(Material), transform);
     }
 }

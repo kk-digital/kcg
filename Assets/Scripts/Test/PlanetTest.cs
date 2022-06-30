@@ -63,8 +63,6 @@ namespace Planet.Unity
             }
 
             Planet.Update(Time.deltaTime, Material, transform);
-            inventoryDrawSystem.Draw(Material, transform, 1000);
-
             //   Vector2 playerPosition = Player.Entity.physicsPosition2D.Value;
 
             // transform.position = new Vector3(playerPosition.x - 6.0f, playerPosition.y - 6.0f, -10.0f);
@@ -90,6 +88,11 @@ namespace Planet.Unity
                 oxygenBarUI.Update();
             }
         }
+        
+        private void OnRenderObject()
+        {
+            inventoryDrawSystem.Draw(Material, transform);
+        }
 
         void DrawSpriteAtlas()
         {
@@ -99,7 +102,7 @@ namespace Planet.Unity
                 Texture = atlas.Texture,
                 TextureCoords = new Vector4(0, 0, 1, 1)
             };
-            Utility.Render.DrawSprite(-3, -1, atlas.Width / 32.0f, atlas.Height / 32.0f, sprite, Material);
+            Utility.Render.DrawSpriteNow(-3, -1, atlas.Width / 32.0f, atlas.Height / 32.0f, sprite, Material);
         }
 
         // create the sprite atlas for testing purposes

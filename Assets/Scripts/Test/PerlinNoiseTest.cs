@@ -53,17 +53,10 @@ public class PerlinNoiseTest : MonoBehaviour
     {
         if(Init)
         {
-            // Clear last frame
-            foreach (var mr in GetComponentsInChildren<MeshRenderer>())
-                if (Application.isPlaying)
-                    Destroy(mr.gameObject);
-                else
-                    DestroyImmediate(mr.gameObject);
-
-            Utility.Render.DrawSprite(-7, 1, 5, 5, MathfNoiseTex, Unlit, transform, 5000);
+            Utility.Render.DrawSpriteNow(-7, 1, 5, 5, MathfNoiseTex, Unlit);
 
 
-            Utility.Render.DrawSprite(1.5f, 1, 5, 5, KMathNoiseTex, Unlit, transform, 5000);
+            Utility.Render.DrawSpriteNow(1.5f, 1, 5, 5, KMathNoiseTex, Unlit);
         }
     }
 

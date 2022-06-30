@@ -5,9 +5,6 @@ using KMath;
 
 public class ProjectileTest : MonoBehaviour
 {
-    // Projectile Draw System
-    //Projectile.DrawSystem projectileDrawSystem;
-
     // Projectile Physics System
     //Projectile.ProcessVelocitySystem projectileVelocitySystem;
 
@@ -16,6 +13,9 @@ public class ProjectileTest : MonoBehaviour
 
     // Projectile Spawner System
     Projectile.SpawnerSystem projectileSpawnerSystem;
+
+    // Projectile Mesh Builder System.
+    Projectile.MeshBuilderSystem projectileMeshBuilderSystem;
 
     // Rendering Material
     [SerializeField]
@@ -53,6 +53,10 @@ public class ProjectileTest : MonoBehaviour
         // Initialize Projectile Collision System
         projectileCollisionSystem = new Projectile.ProcessCollisionSystem();
 
+        // Initialize Projectile Mesh Builder System.
+        projectileMeshBuilderSystem = new Projectile.MeshBuilderSystem();
+        projectileMeshBuilderSystem.Initialize(Material, transform, 12);
+
         // Initialize Image
         image = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Projectiles\\Grenades\\Grenade\\Grenades7.png", 16, 16);
 
@@ -77,13 +81,6 @@ public class ProjectileTest : MonoBehaviour
 
         if (init)
         {
-            // Clear last frame
-            foreach (var mr in GetComponentsInChildren<MeshRenderer>())
-                if (Application.isPlaying)
-                    Destroy(mr.gameObject);
-                else
-                    DestroyImmediate(mr.gameObject);
-
             var test = Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentPlayer);
             foreach (var entity in test)
             {
@@ -129,7 +126,9 @@ public class ProjectileTest : MonoBehaviour
             projectileCollisionSystem.Update(ref planetState.TileMap);
 
             // Draw Initialized Projectile
-            //projectileDrawSystem.Draw(Material, transform, 12);
+            projectileMeshBuilderSystem.UpdateMesh();
+            Utility.Render.DrawFrame(ref projectileMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
+
         }
     }
 }

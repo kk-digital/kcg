@@ -30,20 +30,6 @@ namespace Planet.Unity
             ref var tileMap = ref Planet.TileMap;
             Material material = Material;
 
-            // unity rendering stuff
-            // will be removed later
-            foreach (var mr in GetComponentsInChildren<MeshRenderer>())
-            {
-                if (Application.isPlaying)
-                {
-                    Destroy(mr.gameObject);
-                }
-                else
-                {
-                    DestroyImmediate(mr.gameObject);
-                }
-            }
-
             if (Input.GetKeyDown(KeyCode.T))
             {
                 GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity, 
@@ -67,9 +53,12 @@ namespace Planet.Unity
                     }
                 }
             }
-
-            GameState.InventoryDrawSystem.Draw(Planet.EntitasContext, Material, transform, 14);
             Planet.Update(Time.deltaTime, Material, transform);
+        }
+
+        private void OnRenderObject()
+        {
+            GameState.InventoryDrawSystem.Draw(Planet.EntitasContex, Material, transform);
         }
 
         // create the sprite atlas for testing purposes
@@ -82,6 +71,7 @@ namespace Planet.Unity
             Vec2i mapSize = new Vec2i(16, 16);
             Planet = new Planet.PlanetState();
             Planet.Init(mapSize);
+            Planet.InitializeSystems(Material, transform);
 
             GameState.ActionInitializeSystem.Initialize(Planet.EntitasContext, Material);
             GameResources.CreateItems(Planet.EntitasContext);

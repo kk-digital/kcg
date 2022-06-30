@@ -24,12 +24,12 @@ public class PlanetVisualEffectsTest : MonoBehaviour
     }
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
-    void Update()
+    void OnRenderObject()
     {
         if(Init)
         {
-            // Draw The Visual Effects
-            planetVisualEffects.Draw(Instantiate(Material), transform, 1);
+           // Draw The Visual Effects
+            planetVisualEffects.Draw(Material, transform, 1);
         }
     }
 }

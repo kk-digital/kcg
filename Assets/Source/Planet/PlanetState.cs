@@ -165,6 +165,7 @@ namespace Planet
         {
             ref FloatingTextEntity entity = ref FloatingTextList.Get(floatingTextId);
             Utils.Assert(entity.IsInitialized);
+            GameObject.Destroy(entity.Entity.floatingTextSprite.GameObject);
             entity.Entity.Destroy();
             FloatingTextList.Remove(entity);
         }
@@ -335,11 +336,7 @@ namespace Planet
             Utility.Render.DrawFrame(ref GameState.ProjectileMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
             Utility.Render.DrawFrame(ref GameState.ParticleMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
 
-            //GameState.FloatingTextDrawSystem.Draw(transform, 10000);
-
-            #region Gui drawing systems
-            //GameState.InventoryDrawSystem.Draw(material, transform, 1000);
-            #endregion
+            GameState.FloatingTextDrawSystem.Draw(transform, 10000);
         }
     }
 }

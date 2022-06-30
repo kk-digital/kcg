@@ -57,13 +57,6 @@ public class GUIStatusTest : MonoBehaviour
         Contexts entitasContext = Contexts.sharedInstance;
         if (Init)
         {
-            // Clear last frame
-            foreach (var mr in GetComponentsInChildren<MeshRenderer>())
-                if (Application.isPlaying)
-                    Destroy(mr.gameObject);
-                else
-                    DestroyImmediate(mr.gameObject);
-
             //Health Bar Draw
             healthBarUI.Draw(entitasContext);
 

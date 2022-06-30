@@ -188,7 +188,6 @@ public class MiningLaser : MonoBehaviour
 
             // Draw System Update
             inputProcessSystem.Update(Contexts.sharedInstance);
-            inventoryDrawSystem.Draw(Contexts.sharedInstance, Instantiate(Material), transform, 100);
 
             // If laser held, draw it.
             if(isHeld)
@@ -229,5 +228,10 @@ public class MiningLaser : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void OnRenderObject()
+    {
+        inventoryDrawSystem.Draw(Instantiate(Material), transform);
     }
 }

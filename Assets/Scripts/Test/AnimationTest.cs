@@ -47,20 +47,6 @@ namespace Planet.Unity
                 //TileMap.BuildLayerTexture(MapLayerType.Front);
                 
             }
-                
-            // unity rendering stuff
-            // will be removed layer
-            foreach(var mr in GetComponentsInChildren<MeshRenderer>())
-            {
-                if (Application.isPlaying)
-                {
-                    Destroy(mr.gameObject);
-                }
-                else
-                {
-                    DestroyImmediate(mr.gameObject);
-                }
-            }
 
             Planet.Update(Time.deltaTime, Material, transform);
         }
@@ -137,6 +123,8 @@ namespace Planet.Unity
             Planet.AddAgent(0, 16, 16, new Vec2f(6.0f, 3.0f), particleAnimation);
             Planet.AddAgent(0, 32, 32, new Vec2f(2.0f, 3.0f), slimeIdle);
             Planet.AddAgent(0, 32, 32, new Vec2f(4.0f, 3.0f), slimeJump);
+
+            Planet.InitializeSystems(Material, transform);
         }
 
         void GenerateMap()

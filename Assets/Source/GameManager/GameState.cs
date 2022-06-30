@@ -120,7 +120,6 @@ public class GameState
         ActionInitializeSystem = new Action.InitializeSystem();
         ParticleCreationApi = new Particle.ParticleCreationApi();
         ParticleEmitterCreationApi = new Particle.ParticleEmitterCreationApi();
-        ParticleDrawSystem = new Particle.ParticleDrawSystem();
         ParticleEmitterUpdateSystem = new Particle.ParticleEmitterUpdateSystem(ParticleEmitterCreationApi, ParticleCreationApi);
         ParticleMeshBuilderSystem = new Particle.ParticleMeshBuilderSystem();
         ParticleUpdateSystem = new Particle.ParticleUpdateSystem();
@@ -130,7 +129,6 @@ public class GameState
         ProjectileCollisionSystem = new Projectile.ProcessCollisionSystem();
         ProjectileMovementSystem = new Projectile.MovementSystem(ProjectileCreationApi);
         ProjectileSpawnerSystem = new Projectile.SpawnerSystem(ProjectileCreationApi);
-        ProjectileDrawSystem = new Projectile.DrawSystem();
         ProjectileMeshBuilderSystem = new Projectile.MeshBuilderSystem();
     }
 }
