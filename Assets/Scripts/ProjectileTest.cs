@@ -129,7 +129,7 @@ public class ProjectileTest : MonoBehaviour
             projectileCollisionSystem.Update(ref planetState.TileMap);
 
             // Draw Initialized Projectile
-            projectileDrawSystem.Draw(Instantiate(Material), transform, 12);
+            projectileDrawSystem.Draw(Contexts.sharedInstance.game, Instantiate(Material), transform, 12);
         }
     }
 }

@@ -40,7 +40,7 @@ public class SpawnEnemy : MonoBehaviour
 
         // Generating the map
         var mapSize = new Vec2i(16, 16);
-        planetState = new Planet.PlanetState(mapSize, entitasContext.game, entitasContext.particle);
+        planetState = new Planet.PlanetState(mapSize);
 
 
         // Enemy Sprite Sheet ID
@@ -80,8 +80,8 @@ public class SpawnEnemy : MonoBehaviour
         GameEntity playerEntity = contexts.game.CreateEntity();
         playerEntity.ReplaceAgentID(agentID);
         playerEntity.isAgentPlayer = true;
-        inventoryAttacher.AttachInventoryToAgent(inventoryWidth, inventoryHeight, agentID);
-        inventoryAttacher.AttachToolBarToPlayer(toolBarSize, agentID);
+        inventoryAttacher.AttachInventoryToAgent(Contexts.sharedInstance.game, inventoryWidth, inventoryHeight, agentID);
+        inventoryAttacher.AttachToolBarToPlayer(Contexts.sharedInstance.game, toolBarSize, agentID);
 
         int inventoryID = playerEntity.agentInventory.InventoryID;
         int toolBarID = playerEntity.agentToolBar.ToolBarID;

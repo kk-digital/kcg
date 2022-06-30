@@ -146,7 +146,7 @@ namespace Planet.Unity
 
             // Generating the map
             Vec2i mapSize = new Vec2i(16, 16);
-            Planet = new Planet.PlanetState(mapSize, EntitasContext.game, EntitasContext.particle);
+            Planet = new Planet.PlanetState(mapSize);
             GenerateMap();
 
             Planet.AddAgent(0, 16, 16, new Vec2f(6.0f, 3.0f), particleAnimation);

@@ -10,9 +10,9 @@ namespace Projectile
         List<Vector2> uvs = new();
         List<Vector3> verticies = new();
 
-        public void Draw(Material material, Transform transform, int drawOrder)
+        public void Draw(GameContext gameContext, Material material, Transform transform, int drawOrder)
         {
-            var VehiclesWithSprite = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.ProjectileSprite2D));
+            var VehiclesWithSprite = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.ProjectileSprite2D));
             foreach (var entity in VehiclesWithSprite)
             {
                 int spriteId = entity.projectileSprite2D.SpriteId;
