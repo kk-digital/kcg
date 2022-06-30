@@ -28,6 +28,13 @@ namespace Source {
             SETTING_PERIAPSIS           = 5
         };
 
+        public enum ShipClass {
+            FIGHTER,
+            FREIGHTER,
+            DESTROYER,
+            CAPITAL_SHIP
+        };
+
         public class SystemShip {
             public  OrbitingObjectDescriptor descriptor;
             public  OrbitingObjectDescriptor start, destination;
@@ -56,6 +63,7 @@ namespace Source {
             public  bool destroyed = false;
             public  bool docked;
             public  SpaceStation docked_at;
+            public  ShipClass ship_class;
 
             private DockingAutopilotStage docking_stage;
             private OrbitalAutopilotStage orbital_stage;
