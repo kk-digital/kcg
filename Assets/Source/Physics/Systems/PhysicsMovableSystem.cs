@@ -6,10 +6,10 @@ namespace Physics
 {
     public class PhysicsMovableSystem
     {
-        public void Update()
+        public void Update(GameContext gameContext)
         {
             float deltaTime = Time.deltaTime;
-            var EntitiesWithVelocity = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsMovable, GameMatcher.PhysicsPosition2D));
+            var EntitiesWithVelocity = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsMovable, GameMatcher.PhysicsPosition2D));
             foreach (var entity in EntitiesWithVelocity)
             {
 
