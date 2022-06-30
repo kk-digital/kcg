@@ -53,7 +53,7 @@ namespace Planet.Unity
         void InitializeSystems()
         {
             int CharacterSpriteSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\character\\character.png", 32, 48);
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Tiles\\Tilesets\\Tilesets\\Sprites\\character\\character.png", 32, 48);
 
             int CharacterSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(CharacterSpriteSheet, 0, 0, Enums.AtlasType.Agent);
 
@@ -121,17 +121,16 @@ namespace Planet.Unity
             AgentDrawSystem.Draw(Contexts.sharedInstance.game, Instantiate(Material), transform, 12);
         }
 
-
         public void CreateDefaultTiles()
         {
             int metalSlabsTileSheet = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png", 16, 16);
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Tiles\\Tilesets\\Tilesets\\Sprites\\Tiles_metal_slabs\\Tiles_metal_slabs.png", 16, 16);
             int stoneBulkheads = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tile_wallbase\\Tiles_stone_bulkheads.png", 16, 16);
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Tiles\\Tilesets\\Tilesets\\Sprites\\tile_wallbase\\Tiles_stone_bulkheads.png", 16, 16);
             int tilesMoon = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png", 16, 16);
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Tiles\\Tilesets\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png", 16, 16);
             int oreTileSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Assets\\Items\\Ores\\Gems\\Hexagon\\gem_hexagon_1.png", 16, 16);
 
 
             GameState.TileCreationApi.CreateTile(TileID.Ore1);
