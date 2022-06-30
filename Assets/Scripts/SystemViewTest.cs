@@ -494,51 +494,55 @@ namespace Scripts {
                     s.descriptor.update_position(CurrentTime);
                 }
 
-                float maxg = 0.0f;
-                float GravVelX = 0.0f;
-                float GravVelY = 0.0f;
+                State.player.stations_orbiting = planet_movement;
 
-                // this behaves weird when getting really close to central body --- is float too inaccurate?
-                foreach(SpaceObject Body in State.objects) {
+                if(!State.player.ship.ignore_gravity) {
+                    float maxg = 0.0f;
+                    float GravVelX = 0.0f;
+                    float GravVelY = 0.0f;
 
-                    float dx = Body.posx - State.player.ship.self.posx;
-                    float dy = Body.posy - State.player.ship.self.posy;
+                    // this behaves weird when getting really close to central body --- is float too inaccurate?
+                    foreach(SpaceObject Body in State.objects) {
 
-                    float d2 = dx * dx + dy * dy;
-                    float d = (float)Math.Sqrt(d2);
+                        float dx = Body.posx - State.player.ship.self.posx;
+                        float dy = Body.posy - State.player.ship.self.posy;
 
-                    float g = Tools.gravitational_constant * Body.mass / d2;
+                        float d2 = dx * dx + dy * dy;
+                        float d = (float)Math.Sqrt(d2);
 
-                    if(n_body_gravity) {
+                        float g = Tools.gravitational_constant * Body.mass / d2;
 
-                        float Velocity = g * CurrentTime;
+                        if(n_body_gravity) {
 
-                        GravVelX += Velocity * dx / d;
-                        GravVelY += Velocity * dy / d;
+                            float Velocity = g * CurrentTime;
 
-                    } else { 
+                            GravVelX += Velocity * dx / d;
+                            GravVelY += Velocity * dy / d;
 
-                        if(g > maxg) {
-                            maxg = g;
-                            float vel = g * CurrentTime;
+                        } else {
 
-                            GravVelX = vel * dx / d;
-                            GravVelY = vel * dy / d;
+                            if(g > maxg) {
+                                maxg = g;
+                                float vel = g * CurrentTime;
+
+                                GravVelX = vel * dx / d;
+                                GravVelY = vel * dy / d;
+                            }
+
                         }
 
                     }
 
+                    State.player.gravitational_strength = (float)Math.Sqrt(GravVelX * GravVelX + GravVelY * GravVelY) * 0.4f / CurrentTime;
+
+                    State.player.ship.self.velx   += GravVelX;
+                    State.player.ship.self.vely   += GravVelY;
+
+                    // For some reason this messes stuff up?!
+
+                    //State.Player.ship.self.posx   += GravVelX * CurrentTime * 0.5f;
+                    //State.Player.ship.self.posy   += GravVelY * CurrentTime * 0.5f;
                 }
-
-                State.player.gravitational_strength = (float)Math.Sqrt(GravVelX * GravVelX + GravVelY * GravVelY) * 0.4f / CurrentTime;
-
-                State.player.ship.self.velx   += GravVelX;
-                State.player.ship.self.vely   += GravVelY;
-
-                // For some reason this messes stuff up?!
-
-                //State.Player.ship.self.posx   += GravVelX * CurrentTime * 0.5f;
-                //State.Player.ship.self.posy   += GravVelY * CurrentTime * 0.5f;
 
                 State.player.ship.acceleration = acceleration;
                 State.player.drag_factor       = drag_factor;

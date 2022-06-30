@@ -6,55 +6,64 @@ using Scripts.SystemView;
 namespace Source {
     namespace SystemView {
         enum DockingAutopilotStage {
-            DISENGAGED = 0,
-            CIRCULARIZING,
-            PLANNING_TRAJECTORY,
-            TRANSITIONING,
-            IN_TRANSIT,
-            MATCHING_ORBIT,
-            DOCKING
+            DISENGAGED                  = 0,
+            CIRCULARIZING               = 1,
+            PLANNING_TRAJECTORY         = 2,
+            TRANSITIONING               = 3,
+            IN_TRANSIT                  = 4,
+            MATCHING_ORBIT              = 5,
+            DOCKING                     = 6,
+
+            CANCELLING_VELOCITY         = 1,
+            ACCELERATING                = 2,
+            DECCELERATING               = 3
         };
 
         enum OrbitalAutopilotStage {
-            DISENGAGED = 0,
-            CIRCULARIZING,
-            SETTING_APOAPSIS,
-            SECOND_CIRCULARIZATION,
-            WAITING_ON_ROTATION,
-            SETTING_PERIAPSIS
+            DISENGAGED                  = 0,
+            CIRCULARIZING               = 1,
+            SETTING_APOAPSIS            = 2,
+            SECOND_CIRCULARIZATION      = 3,
+            WAITING_ON_ROTATION         = 4,
+            SETTING_PERIAPSIS           = 5
         };
 
         public class SystemShip {
-            public OrbitingObjectDescriptor descriptor;
-            public OrbitingObjectDescriptor start, destination;
+            public  OrbitingObjectDescriptor descriptor;
+            public  OrbitingObjectDescriptor start, destination;
 
-            public bool path_planned = false;
+            public  bool path_planned = false;
 
-            public int health, max_health;
-            public int shield, max_shield;
+            public  int health, max_health;
+            public  int shield, max_shield;
 
-            public int shield_regeneration_rate;
+            public  int shield_regeneration_rate;
 
-            public SpaceObject self;
+            public  SpaceObject self;
 
-            public float acceleration;
-            public float horizontal_acceleration;
+            public  float acceleration;
+            public  float horizontal_acceleration;
 
-            public float rotation;
+            public  float rotation;
 
-            public float torque = 2.0f;
+            public  float torque = 2.0f;
 
-            public List<ShipWeapon> weapons;
+            public  List<ShipWeapon> weapons;
 
             private float[] autopilot_time_required;
             private float[] autopilot_delta_v;
 
-            public bool destroyed = false;
+            public  bool destroyed = false;
+            public  bool docked;
+            public  SpaceStation docked_at;
 
             private DockingAutopilotStage docking_stage;
             private OrbitalAutopilotStage orbital_stage;
             private SpaceStation docking_target;
             private bool circularize_at_periapsis;
+            private float distance;
+
+            public  bool ignore_gravity;
 
             public SystemShip() {
                 self            = new SpaceObject();
@@ -137,6 +146,13 @@ namespace Source {
 
                 self.velx += accx;
                 self.vely += accy;
+
+                descriptor.change_frame_of_reference(descriptor.central_body);
+            }
+
+            public void transition(float current_time) {
+                self.posx += self.velx * current_time;
+                self.posy += self.vely * current_time;
 
                 descriptor.change_frame_of_reference(descriptor.central_body);
             }
@@ -306,96 +322,157 @@ namespace Source {
             public void disengage_docking_autopilot() {
                 docking_stage = DockingAutopilotStage.DISENGAGED;
                 docking_target = null;
+                if(docked_at != null) docked_at.undock(this);
             }
 
-            public bool docking_autopilot_tick(float CurrentTime, float AcceptedDeviation) {
+            public bool docking_autopilot_tick(float current_time, float AcceptedDeviation, bool station_orbiting) {
                 if(docking_stage != DockingAutopilotStage.DISENGAGED) Debug.Log(docking_stage);
 
-                switch(docking_stage) {
-                    case DockingAutopilotStage.DISENGAGED:
-                        return false;
+                if(station_orbiting) {
+                    switch(docking_stage) {
+                        case DockingAutopilotStage.DISENGAGED:
+                            return false;
 
-                    case DockingAutopilotStage.CIRCULARIZING:
-                        if(circularize(CurrentTime)) docking_stage = DockingAutopilotStage.PLANNING_TRAJECTORY;
-                        break;
+                        case DockingAutopilotStage.CIRCULARIZING:
+                            if(circularize(current_time)) docking_stage = DockingAutopilotStage.PLANNING_TRAJECTORY;
+                            break;
 
-                    case DockingAutopilotStage.PLANNING_TRAJECTORY:
-                        descriptor.update_position(CurrentTime);
-                        autopilot_time_required = descriptor.calculate_required_deltav(docking_target.descriptor, acceleration, 20.0f);
-                        if(autopilot_time_required != null) docking_stage = DockingAutopilotStage.TRANSITIONING;
-                        break;
+                        case DockingAutopilotStage.PLANNING_TRAJECTORY:
+                            descriptor.update_position(current_time);
+                            autopilot_time_required = descriptor.calculate_required_deltav(docking_target.descriptor, acceleration, 20.0f);
+                            if(autopilot_time_required != null) docking_stage = DockingAutopilotStage.TRANSITIONING;
+                            break;
 
-                    case DockingAutopilotStage.TRANSITIONING: {
-                        float tx = autopilot_time_required[0];
-                        float ty = autopilot_time_required[1];
+                        case DockingAutopilotStage.TRANSITIONING: {
+                            float tx = autopilot_time_required[0];
+                            float ty = autopilot_time_required[1];
 
-                        float target_rotation = Tools.get_angle(tx, ty);
+                            float target_rotation = Tools.get_angle(tx, ty);
 
-                        if(rotation != target_rotation) rotate_to(target_rotation, CurrentTime);
-                        else {
-                            accelerate(CurrentTime);
-                            autopilot_time_required[0] -= (float)Math.Cos(target_rotation) * CurrentTime;
-                            autopilot_time_required[1] -= (float)Math.Sin(target_rotation) * CurrentTime;
+                            if(rotation != target_rotation) rotate_to(target_rotation, current_time);
+                            else {
+                                accelerate(current_time);
+                                autopilot_time_required[0] -= (float)Math.Cos(target_rotation) * current_time;
+                                autopilot_time_required[1] -= (float)Math.Sin(target_rotation) * current_time;
 
-                            if((tx > 0.0f && autopilot_time_required[0] < 0.0f)
-                            || (tx < 0.0f && autopilot_time_required[0] > 0.0f)
-                            || (ty > 0.0f && autopilot_time_required[1] < 0.0f)
-                            || (ty < 0.0f && autopilot_time_required[1] > 0.0f)) docking_stage = DockingAutopilotStage.IN_TRANSIT;
+                                if((tx > 0.0f && autopilot_time_required[0] < 0.0f)
+                                || (tx < 0.0f && autopilot_time_required[0] > 0.0f)
+                                || (ty > 0.0f && autopilot_time_required[1] < 0.0f)
+                                || (ty < 0.0f && autopilot_time_required[1] > 0.0f)) docking_stage = DockingAutopilotStage.IN_TRANSIT;
+                            }
+                            break;
                         }
-                        break;
-                    }
 
-                    case DockingAutopilotStage.IN_TRANSIT:
-                        descriptor.update_position(CurrentTime);
+                        case DockingAutopilotStage.IN_TRANSIT:
+                            descriptor.update_position(current_time);
 
-                        float dx = docking_target.Self.posx - self.posx;
-                        float dy = docking_target.Self.posy - self.posy;
-                        float d  = (float)Math.Sqrt(dx * dx + dy * dy);
+                            float dx = docking_target.self.posx - self.posx;
+                            float dy = docking_target.self.posy - self.posy;
+                            float d  = (float)Math.Sqrt(dx * dx + dy * dy);
 
-                        float targetMeanAnomaly;
-                        if(descriptor.get_distance_from_center() > docking_target.descriptor.get_distance_from_center()) targetMeanAnomaly =       0.0f;
-                        else targetMeanAnomaly = Tools.pi;
+                            float targetMeanAnomaly;
+                            if(descriptor.get_distance_from_center() > docking_target.descriptor.get_distance_from_center()) targetMeanAnomaly =       0.0f;
+                            else targetMeanAnomaly = Tools.pi;
 
-                        float eta = descriptor.orbital_period * (targetMeanAnomaly - descriptor.mean_anomaly) * 0.5f;
-                        if(eta < 0.0f) eta *= -1;
+                            float eta = descriptor.orbital_period * (targetMeanAnomaly - descriptor.mean_anomaly) * 0.5f;
+                            if(eta < 0.0f) eta *= -1;
 
-                        float[] vel = descriptor.get_velocity_at(descriptor.get_distance_from_center_at(targetMeanAnomaly), targetMeanAnomaly);
+                            float[] vel = descriptor.get_velocity_at(descriptor.get_distance_from_center_at(targetMeanAnomaly), targetMeanAnomaly);
 
-                        autopilot_delta_v[0] = vel[0] - self.velx;
-                        autopilot_delta_v[1] = vel[1] - self.vely;
+                            autopilot_delta_v[0] = vel[0] - self.velx;
+                            autopilot_delta_v[1] = vel[1] - self.vely;
 
-                        float timeToSlowDown = Tools.magnitude(autopilot_delta_v) / acceleration;
+                            float timeToSlowDown = Tools.magnitude(autopilot_delta_v) / acceleration;
 
-                        float dt = eta - timeToSlowDown;
+                            float dt = eta - timeToSlowDown;
 
-                        if(dt < 5.0f) docking_stage = DockingAutopilotStage.MATCHING_ORBIT;
-                        break;
+                            if(dt < 5.0f) docking_stage = DockingAutopilotStage.MATCHING_ORBIT;
+                            break;
 
-                    case DockingAutopilotStage.MATCHING_ORBIT: {
-                        float dvx = autopilot_delta_v[0];
-                        float dvy = autopilot_delta_v[1];
+                        case DockingAutopilotStage.MATCHING_ORBIT: {
+                            float dvx = autopilot_delta_v[0];
+                            float dvy = autopilot_delta_v[1];
 
-                        float target_rotation = Tools.get_angle(dvx, dvy);
+                            float target_rotation = Tools.get_angle(dvx, dvy);
 
-                        if(rotation != target_rotation) rotate_to(target_rotation, CurrentTime);
-                        else {
-                            accelerate(CurrentTime);
-                            autopilot_delta_v[0] -= (float)Math.Cos(target_rotation) * CurrentTime * acceleration;
-                            autopilot_delta_v[1] -= (float)Math.Sin(target_rotation) * CurrentTime * acceleration;
+                            if(rotation != target_rotation) rotate_to(target_rotation, current_time);
+                            else {
+                                accelerate(current_time);
+                                autopilot_delta_v[0] -= (float)Math.Cos(target_rotation) * current_time * acceleration;
+                                autopilot_delta_v[1] -= (float)Math.Sin(target_rotation) * current_time * acceleration;
 
-                            if((dvx > 0.0f && autopilot_delta_v[0] < 0.0f)
-                            || (dvx < 0.0f && autopilot_delta_v[0] > 0.0f)
-                            || (dvy > 0.0f && autopilot_delta_v[1] < 0.0f)
-                            || (dvy < 0.0f && autopilot_delta_v[1] > 0.0f)) docking_stage = DockingAutopilotStage.DOCKING;
+                                if((dvx > 0.0f && autopilot_delta_v[0] < 0.0f)
+                                || (dvx < 0.0f && autopilot_delta_v[0] > 0.0f)
+                                || (dvy > 0.0f && autopilot_delta_v[1] < 0.0f)
+                                || (dvy < 0.0f && autopilot_delta_v[1] > 0.0f)) docking_stage = DockingAutopilotStage.DOCKING;
+                            }
+                            break;
                         }
-                        break;
+
+                        case DockingAutopilotStage.DOCKING:
+                            // todo
+                            break;
                     }
+                } else
+                    switch(docking_stage) {
+                        case DockingAutopilotStage.DISENGAGED:
+                            return false;
 
-                    case DockingAutopilotStage.DOCKING:
-                        // todo
-                        break;
-                }
+                        case DockingAutopilotStage.CANCELLING_VELOCITY: {
+                            ignore_gravity = true;
 
+                            float angle = Tools.normalize_angle(Tools.pi + Tools.get_angle(self.velx, self.vely));
+                            rotate_to(angle, current_time);
+                            float velx = self.velx;
+                            float vely = self.vely;
+                            if(rotation == angle) {
+                                accelerate(current_time);
+                                if((velx > 0.0f && self.velx < 0.0f)
+                                || (vely > 0.0f && self.vely < 0.0f)
+                                || (velx < 0.0f && self.velx > 0.0f)
+                                || (vely < 0.0f && self.vely > 0.0f)) {
+                                    self.velx = 0.0f;
+                                    self.vely = 0.0f;
+                                    docking_stage = DockingAutopilotStage.ACCELERATING;
+                                    distance = Tools.get_distance(self.posx, self.posy, docking_target.self.posx, docking_target.self.posy);
+                                }
+                            } else descriptor.update_position(current_time);
+                            break;
+                        }
+
+                        case DockingAutopilotStage.ACCELERATING: {
+                            float angle = Tools.get_angle(docking_target.self.posx - self.posx, docking_target.self.posy - self.posy);
+                            rotate_to(angle, current_time);
+                            if(rotation == angle) {
+                                accelerate(current_time);
+                                if(Tools.get_distance(self.posx, self.posy, docking_target.self.posx, docking_target.self.posy) <= distance * 0.75f)
+                                    docking_stage = DockingAutopilotStage.DECCELERATING;
+                            }
+                            break;
+                        }
+
+                        case DockingAutopilotStage.DECCELERATING: {
+                            float angle = Tools.normalize_angle(
+                                Tools.pi +
+                                Tools.get_angle(docking_target.self.posx - self.posx, docking_target.self.posy - self.posy)
+                            );
+
+                            rotate_to(angle, current_time);
+
+                            if(rotation == angle) {
+                                if(Tools.get_distance(self.posx, self.posy, docking_target.self.posx, docking_target.self.posy) <= distance * 0.25f) {
+                                    accelerate(current_time);
+                                    if(docking_target.dock(this)) {
+                                        docking_stage = DockingAutopilotStage.DISENGAGED;
+                                        docking_target = null;
+                                        ignore_gravity = false;
+                                    }
+                                } else transition(current_time);
+                            } else transition(current_time);
+                            break;
+                        }
+                    }
+                
                 return true;
             }
         }

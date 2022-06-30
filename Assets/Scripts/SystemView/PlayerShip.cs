@@ -44,6 +44,7 @@ namespace Scripts {
             public bool  circularizing;
 
             public bool  turn_towards_mouse     = true;
+            public bool  stations_orbiting;
 
             private SelectedWeaponType selectedWeapon = SelectedWeaponType.MAIN_WEAPONS;
 
@@ -138,10 +139,10 @@ namespace Scripts {
                     float angular_velocity_y     = ship.self.vely - ship.descriptor.central_body.vely;
 
                     float velocity_angle         = Tools.get_angle(angular_velocity_x,
-                                                                       angular_velocity_y);
+                                                                   angular_velocity_y);
 
                     float angular_velocity_angle = Tools.get_angle(ship.descriptor.central_body.posx - ship.self.posx,
-                                                                       ship.descriptor.central_body.posy - ship.self.posy);
+                                                                   ship.descriptor.central_body.posy - ship.self.posy);
 
                     // theta = angle between hypothetical circular orbit through ship's position
 
@@ -222,9 +223,9 @@ namespace Scripts {
                     rudder_renderer.positionCount  = 0;
                 }
 
-                if(ship.docking_autopilot_tick(current_time, 0.1f * system_scale))           return;
-                if(ship.orbital_autopilot_tick(periapsis, apoapsis, rotation, current_time)) return;
-                if(circularizing)         { circularizing = !ship.circularize(current_time); return; }
+                if(ship.docking_autopilot_tick(current_time, 0.1f * system_scale, stations_orbiting)) return;
+                if(ship.orbital_autopilot_tick(periapsis, apoapsis, rotation, current_time))          return;
+                if(circularizing) { circularizing = !ship.circularize(current_time);                  return; }
 
                 if (Input.GetKeyDown("tab")) mouse_steering = !mouse_steering;
 

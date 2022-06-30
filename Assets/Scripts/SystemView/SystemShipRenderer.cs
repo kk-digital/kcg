@@ -25,7 +25,7 @@ namespace Scripts {
         public class SystemShipRenderer : MonoBehaviour {
             public SystemShip ship;
 
-            public SpriteRenderer ShipRender;
+            public SpriteRenderer ShipRenderer;
             public SpriteRenderer ShieldRender;
             public OrbitRenderer OrbitRender;
             public LineRenderer DirectionRenderer;
@@ -57,7 +57,7 @@ namespace Scripts {
             void Start() {
                 State = GameObject.FindWithTag("SystemController").GetComponent<GameManager>().CurrentSystemState;
                 OrbitRender = gameObject.AddComponent<OrbitRenderer>();
-                ShipRender = gameObject.AddComponent<SpriteRenderer>();
+                ShipRenderer = gameObject.AddComponent<SpriteRenderer>();
 
                 ShieldObject = new GameObject();
                 ShieldObject.name = "Shield Renderer";
@@ -69,7 +69,7 @@ namespace Scripts {
                 camera_controller = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
                 // Temporary sprites
-                ShipRender.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
+                ShipRenderer.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
                 ShieldRender.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
 
                 Shader shader = Shader.Find("Hidden/Internal-Colored");
@@ -101,10 +101,12 @@ namespace Scripts {
 
             // Update is called once per frame
             void Update() {
-                ShipRender.transform.position     = new Vector3(ship.self.posx, ship.self.posy, -0.1f);
-                ShipRender.transform.localScale   = new Vector3(5.0f * width / camera_controller.scale, 5.0f / camera_controller.scale, 1.0f);
+                enabled = !ship.docked;
 
-                ShipRender.transform.Rotate(new Vector3(0.0f, 0.0f, (ship.rotation - LastRotation) * 180.0f / 3.1415926f));
+                ShipRenderer.transform.position     = new Vector3(ship.self.posx, ship.self.posy, -0.1f);
+                ShipRenderer.transform.localScale   = new Vector3(5.0f * width / camera_controller.scale, 5.0f / camera_controller.scale, 1.0f);
+
+                ShipRenderer.transform.Rotate(new Vector3(0.0f, 0.0f, (ship.rotation - LastRotation) * 180.0f / 3.1415926f));
 
                 ShieldRender.transform.position   = new Vector3(ship.self.posx, ship.self.posy, -0.05f);
                 ShieldRender.transform.localScale = new Vector3(20.0f / camera_controller.scale, 15.0f / camera_controller.scale, 1.0f);
@@ -112,7 +114,7 @@ namespace Scripts {
                 ShieldRender.transform.Rotate(new Vector3(0.0f, 0.0f, (ship.rotation - LastRotation) * 180.0f / 3.1415926f));
 
                 LastRotation       = ship.rotation;
-                ShipRender.color   = shipColor;
+                ShipRenderer.color   = shipColor;
                 OrbitRender.color  = orbitColor;
 
                 if (ship.max_shield == 0)
@@ -233,7 +235,7 @@ namespace Scripts {
             }
 
             void OnDestroy() {
-                GameObject.Destroy(ShipRender);
+                GameObject.Destroy(ShipRenderer);
                 GameObject.Destroy(ShieldRender);
                 GameObject.Destroy(OrbitRender);
                 GameObject.Destroy(DirectionRenderer);
