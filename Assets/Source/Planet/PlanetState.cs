@@ -30,7 +30,12 @@ namespace Planet
         public ParticleContext ParticleContext;
 
 
-        public PlanetState(Vec2i mapSize) : this()
+        public PlanetState() : this()
+        {
+ 
+        }
+
+        public void Init(Vec2i mapSize)
         {
             TileMap = new PlanetTileMap.TileMap(mapSize);
             AgentList = new AgentList();
@@ -41,8 +46,8 @@ namespace Planet
             ParticleList = new ParticleList();
             ItemParticleList = new ItemParticleList();
 
-            GameContext = Contexts.sharedInstance.game;//new GameContext();
-            ParticleContext = Contexts.sharedInstance.particle;//new ParticleContext();
+            GameContext = new GameContext(); // Contexts.sharedInstance.game;
+            ParticleContext = new ParticleContext(); // Contexts.sharedInstance.particle;
         }
 
 
