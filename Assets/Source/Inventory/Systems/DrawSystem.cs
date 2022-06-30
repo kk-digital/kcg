@@ -63,7 +63,9 @@ namespace Inventory
 
             // If is tool bar draw at the botton of the screen.
             if (inventoryEntity.isInventoryToolBar)
+            {
                 y = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0f, 0f)).y + tileSize / 2f;
+            }
 
             DrawBackGround(x, y, w, h, material, transform, drawOrder);
 
@@ -90,6 +92,17 @@ namespace Inventory
 
             for (int i = 0; i < width; i++)
             {
+                if (inventoryEntity.isInventoryToolBar)
+                {
+                    // Get Quad Position
+                    float slotX = x + i * tileSize + slotSize * 0.5f - 0.125f;
+                    float slotY = y - slotSize * 0.5f;
+
+                    Utility.Render.DrawString(slotX + (tileSize - slotSize) / 2.0f, 
+                                slotY + (tileSize - slotSize) / 2.0f, 0.25f, "" + (i + 1), 16, new Color(255, 255, 255, 255),
+                                             transform, drawOrder + 2);
+                }
+
                 for (int j = 0; j < height; j++)
                 {
                     // Assign Border Color.
@@ -101,7 +114,8 @@ namespace Inventory
                     float slotX = x + i * tileSize;
                     float slotY = y + j * tileSize;
 
-                    Utility.Render.DrawQuadColor(slotX + (tileSize - slotSize) / 2.0f, slotY + (tileSize - slotSize) / 2.0f, slotSize, slotSize, quadColor, Object.Instantiate(material), transform, drawOrder + 1);
+                    Utility.Render.DrawQuadColor(slotX + (tileSize - slotSize) / 2.0f, 
+                                slotY + (tileSize - slotSize) / 2.0f, slotSize, slotSize, quadColor, Object.Instantiate(material), transform, drawOrder + 1);
                     float spriteSize = slotSize * 0.8f;
                     Utility.Render.DrawQuadColor(slotX + (tileSize - spriteSize) / 2.0f, slotY + (tileSize - spriteSize) / 2.0f, spriteSize, spriteSize, borderColor, Object.Instantiate(material), transform, drawOrder + 2);
 

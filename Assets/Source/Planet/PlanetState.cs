@@ -41,8 +41,8 @@ namespace Planet
             ParticleList = new ParticleList();
             ItemParticleList = new ItemParticleList();
 
-            GameContext = new GameContext(); // Contexts.sharedInstance.game;
-            ParticleContext = new ParticleContext(); // Contexts.sharedInstance.particle;
+            GameContext = Contexts.sharedInstance.game; //new GameContext();  
+            ParticleContext = Contexts.sharedInstance.particle; //new ParticleContext(); // 
         }
 
 

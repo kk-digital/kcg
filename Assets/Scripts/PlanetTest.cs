@@ -35,7 +35,7 @@ namespace Planet.Unity
 
         public void Update()
         {
-           /* int toolBarID = Player.Entity.agentToolBar.ToolBarID;
+            int toolBarID = Player.Entity.agentToolBar.ToolBarID;
             InventoryEntity Inventory = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(toolBarID);
             int selectedSlot = Inventory.inventorySlots.Selected;
 
@@ -48,7 +48,7 @@ namespace Planet.Unity
                     GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity,
                         GameState.ActionCreationSystem.CreateAction(itemProperty.itemPropertyAction.ActionTypeID, Player.AgentId));
                 }
-            }*/
+            }
                 
             // unity rendering stuff
             // will be removed layer
@@ -64,7 +64,7 @@ namespace Planet.Unity
                 }
             }
 
-            //inventoryDrawSystem.Draw(Instantiate(Material), transform, 1000);
+            inventoryDrawSystem.Draw(Instantiate(Material), transform, 1000);
             Planet.Update(Time.deltaTime, Material, transform);
 
          //   Vector2 playerPosition = Player.Entity.physicsPosition2D.Value;
@@ -99,7 +99,7 @@ namespace Planet.Unity
             GenerateMap();
             SpawnStuff();
 
-            /*GameState.ActionInitializeSystem.Initialize(Material);
+            GameState.ActionInitializeSystem.Initialize(Material);
 
             var inventoryAttacher = Inventory.InventoryAttacher.Instance;
 
@@ -121,7 +121,7 @@ namespace Planet.Unity
             inventoryManager.AddItem(spawnEnemySlimeTool, toolBarID);
             inventoryManager.AddItem(miningLaserTool, toolBarID);
             inventoryManager.AddItem(pipePlacementTool, toolBarID);
-            inventoryManager.AddItem(particleEmitterPlacementTool, toolBarID);*/
+            inventoryManager.AddItem(particleEmitterPlacementTool, toolBarID);
         }
 
         void GenerateMap()
@@ -228,6 +228,11 @@ namespace Planet.Unity
                     carveHeight = tileMap.MapSize.Y - 1;
                 }
 
+                if (carveHeight < 0)
+                {
+                    carveHeight = 0;
+                }
+
                 for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
                     tileMap.SetTile(i, j, TileID.Air, MapLayerType.Front);
@@ -262,8 +267,8 @@ namespace Planet.Unity
 
 
             
-            /*GameState.ItemSpawnSystem.SpawnItem(Contexts.sharedInstance, Enums.ItemType.Gun, new Vec2f(6.0f, spawnHeight));
-            GameState.ItemSpawnSystem.SpawnItem(Contexts.sharedInstance, Enums.ItemType.Ore, new Vec2f(10.0f, spawnHeight));*/
+            GameState.ItemSpawnSystem.SpawnItem(Contexts.sharedInstance, Enums.ItemType.Gun, new Vec2f(6.0f, spawnHeight));
+            GameState.ItemSpawnSystem.SpawnItem(Contexts.sharedInstance, Enums.ItemType.Ore, new Vec2f(10.0f, spawnHeight));
         }
         
     }
