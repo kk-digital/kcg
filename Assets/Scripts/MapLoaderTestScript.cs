@@ -63,7 +63,7 @@ namespace Planet.Unity
             AgentDrawSystem = new Agent.AgentDrawSystem();
             AgentProcessCollisionSystem = new Physics.PhysicsProcessCollisionSystem();
 
-            GameState.AgentSpawnerSystem.SpawnPlayer(Contexts.sharedInstance.game, CharacterSpriteId, 32, 48, new Vec2f(3.0f, 2.0f), 0, 0, 100, 100, 100, 100, 100, 0.2f);
+            GameState.AgentSpawnerSystem.SpawnPlayer(Contexts.sharedInstance, CharacterSpriteId, 32, 48, new Vec2f(3.0f, 2.0f), 0, 0, 100, 100, 100, 100, 100, 0.2f);
         }
 
         public void Update()
@@ -114,7 +114,7 @@ namespace Planet.Unity
                 else
                     DestroyImmediate(mr.gameObject);
 
-            InputProcessSystems.Update(Contexts.sharedInstance.game);
+            InputProcessSystems.Update(Contexts.sharedInstance);
             PhysicsMovableSystem.Update(Contexts.sharedInstance.game);
             AgentProcessCollisionSystem.Update(Contexts.sharedInstance.game, ref PlanetState.TileMap);
             PlanetState.TileMap.DrawLayer(MapLayerType.Front, Instantiate(Material), transform, 10);

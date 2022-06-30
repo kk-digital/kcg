@@ -19,13 +19,12 @@ namespace Item
         private static CreationApi instance;
         public static CreationApi Instance => instance ??= new CreationApi();
 
-        private Contexts EntitasContext = Contexts.sharedInstance;
 
         private ItemPropertiesEntity ItemType = null;
 
-        public void CreateItem(Enums.ItemType itemType, string name)
+        public void CreateItem(Contexts entitasContext, Enums.ItemType itemType, string name)
         {
-            ItemType = EntitasContext.itemProperties.CreateEntity();
+            ItemType = entitasContext.itemProperties.CreateEntity();
             ItemType.AddItemProperty(itemType, name);
         }
 

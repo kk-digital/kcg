@@ -4,7 +4,7 @@ using Entitas;
 
 namespace KGUI
 {
-    public class OxygenBarUI : MonoBehaviour
+    public class OxygenBarUI
     {
         // Init
         private static bool Init;
@@ -20,8 +20,11 @@ namespace KGUI
         private GameObject oxygenBar;
         private GameObject iconCanvas;
 
-        public void Initialize()
+        Contexts EntitasContext;
+
+        public void Initialize(Contexts entitasContext)
         {
+            EntitasContext = entitasContext;
             // Set Width and Height
             int IconWidth = 19;
             int IconHeight = 19;
@@ -111,7 +114,7 @@ namespace KGUI
             oxygenBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
             oxygenBar.GetComponent<Image>().fillOrigin = 0;
             IGroup<GameEntity> Playerentities =
-            Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentStats);
+            EntitasContext.game.GetGroup(GameMatcher.AgentStats);
             foreach (var entity in Playerentities)
             {
                 oxygenBar.GetComponent<Image>().fillAmount = entity.agentStats.Oxygen / 100;
@@ -129,7 +132,7 @@ namespace KGUI
             if (Init)
             {
                 IGroup<GameEntity> Playerentities =
-                Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentStats);
+                EntitasContext.game.GetGroup(GameMatcher.AgentStats);
                 foreach (var entity in Playerentities)
                 {
                     oxygenBar.GetComponent<Image>().fillAmount = entity.agentStats.Oxygen / 100;

@@ -27,25 +27,26 @@ public class GUIStatusTest : MonoBehaviour
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
     void Start()
     {
+        Contexts entitasContext = Contexts.sharedInstance;
         // Health Bar Initialize
         healthBarUI = new KGUI.HealthBarUI();
         healthBarUI.Initialize();
 
         // Food Bar Initialize
         foodBarUI = new KGUI.FoodBarUI();
-        foodBarUI.Initialize();
+        foodBarUI.Initialize(entitasContext);
 
         // Water Bar Initialize
         waterBarUI = new KGUI.WaterBarUI();
-        waterBarUI.Initialize();
+        waterBarUI.Initialize(entitasContext);
 
         // Oxygen Bar Initialize
         oxygenBarUI = new KGUI.OxygenBarUI();
-        oxygenBarUI.Initialize();
+        oxygenBarUI.Initialize(entitasContext);
 
         // Oxygen Bar Initialize
         fuelBarUI = new KGUI.FuelBarUI();
-        fuelBarUI.Initialize();
+        fuelBarUI.Initialize(entitasContext);
 
         Init = true;
     }
@@ -53,6 +54,7 @@ public class GUIStatusTest : MonoBehaviour
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnGUI.html
     private void OnGUI()
     {
+        Contexts entitasContext = Contexts.sharedInstance;
         if (Init)
         {
             // Clear last frame
@@ -63,7 +65,7 @@ public class GUIStatusTest : MonoBehaviour
                     DestroyImmediate(mr.gameObject);
 
             //Health Bar Draw
-            healthBarUI.Draw();
+            healthBarUI.Draw(entitasContext);
 
             // Food Bar Update
             foodBarUI.Update();

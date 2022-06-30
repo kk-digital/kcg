@@ -10,23 +10,23 @@ namespace Action
     {
         public ActionPropertiesEntity ActionPropertyEntity = null;
 
-        public void CreateActionPropertyType(Enums.ActionType actionType, string name)
+        public void CreateActionPropertyType(Contexts contexts, Enums.ActionType actionType, string name)
         {
-            ActionPropertyEntity = Contexts.sharedInstance.actionProperties.CreateEntity();
+            ActionPropertyEntity = contexts.actionProperties.CreateEntity();
             ActionPropertyEntity.AddActionProperty((int)actionType);
             ActionPropertyEntity.AddActionPropertyName(name);
         }
 
-        public void CreateActionPropertyType(Enums.ActionType actionType)
+        public void CreateActionPropertyType(Contexts contexts, Enums.ActionType actionType)
         {
-            ActionPropertyEntity = Contexts.sharedInstance.actionProperties.CreateEntity();
+            ActionPropertyEntity = contexts.actionProperties.CreateEntity();
             ActionPropertyEntity.AddActionProperty((int)actionType);
             ActionPropertyEntity.AddActionPropertyName(actionType.ToString());
         }
 
-        public int GetTypeID(string name)
+        public int GetTypeID(Contexts contexts, string name)
 {
-            ActionPropertiesEntity entity = Contexts.sharedInstance.actionProperties.GetEntityWithActionPropertyName(name);
+            ActionPropertiesEntity entity = contexts.actionProperties.GetEntityWithActionPropertyName(name);
             return entity.actionProperty.TypeID;
         }
 

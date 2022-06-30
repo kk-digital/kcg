@@ -21,9 +21,11 @@ namespace KGUI
         // Image
         private GameObject foodBar;
         private GameObject iconCanvas;
+        Contexts EntitasContext;
 
-        public void Initialize()
+        public void Initialize(Contexts entitasContext)
         {
+            EntitasContext = entitasContext;
             // Set Width and Height
             int IconWidth = 19;
             int IconHeight = 19;
@@ -113,7 +115,7 @@ namespace KGUI
             foodBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
             foodBar.GetComponent<Image>().fillOrigin = 0;
             IGroup<GameEntity> Playerentities =
-            Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentStats);
+            EntitasContext.game.GetGroup(GameMatcher.AgentStats);
             foreach (var entity in Playerentities)
             {
                 foodBar.GetComponent<Image>().fillAmount = entity.agentStats.Food / 100;
@@ -132,7 +134,7 @@ namespace KGUI
             if (Init)
             {
                 IGroup<GameEntity> Playerentities =
-                Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentStats);
+                EntitasContext.game.GetGroup(GameMatcher.AgentStats);
                 foreach (var entity in Playerentities)
                 {
                     foodBar.GetComponent<Image>().fillAmount = entity.agentStats.Food / 100;

@@ -5,16 +5,18 @@ namespace Action
 { 
     public class ActionBase
     {
+        protected Contexts EntitasContext;
         protected ActionEntity ActionEntity;
         protected ActionPropertiesEntity ActionPropertyEntity;
         protected GameEntity AgentEntity;
 
-        public ActionBase(int actionID, int agentID)
+        public ActionBase(Contexts entitasContext, int actionID, int agentID)
         {   
-            ActionEntity = Contexts.sharedInstance.action.GetEntityWithActionIDID(actionID);
-            ActionPropertyEntity = Contexts.sharedInstance.actionProperties.GetEntityWithActionProperty(
+            EntitasContext = entitasContext;
+            ActionEntity = entitasContext.action.GetEntityWithActionIDID(actionID);
+            ActionPropertyEntity = entitasContext.actionProperties.GetEntityWithActionProperty(
                 ActionEntity.actionID.TypeID);
-            AgentEntity = Contexts.sharedInstance.game.GetEntityWithAgentID(agentID);    
+            AgentEntity = entitasContext.game.GetEntityWithAgentID(agentID);    
         }
 
         public virtual void OnEnter(ref Planet.PlanetState planet)
@@ -47,9 +49,9 @@ namespace Action
     // Factory Method
     public class ActionCreator
     {
-        public virtual ActionBase CreateAction(int actionID, int agentID)
+        public virtual ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
         { 
-            return new ActionBase(actionID, agentID);
+            return new ActionBase(entitasContext, actionID, agentID);
         }
     }
 }

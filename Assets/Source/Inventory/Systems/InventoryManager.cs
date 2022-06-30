@@ -9,29 +9,29 @@ namespace Inventory
         {
         }
 
-        public void OpenInventory(int inventoryID)
+        public void OpenInventory(Contexts contexts, int inventoryID)
         {
-            var inventory = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(inventoryID);
+            var inventory = contexts.inventory.GetEntityWithInventoryID(inventoryID);
             inventory.isInventoryDrawable = true;
         }
 
-        public void CloseInventory(int inventoryID)
+        public void CloseInventory(Contexts entitasContext, int inventoryID)
         {
-            var inventory = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(inventoryID);
+            var inventory = entitasContext.inventory.GetEntityWithInventoryID(inventoryID);
 
             inventory.isInventoryDrawable = false;
         }
 
-        public void AddItem(GameEntity entity, int inventoryID)
+        public void AddItem(Contexts contexts, GameEntity entity, int inventoryID)
         {
-            var inventory = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(inventoryID);
+            var inventory = contexts.inventory.GetEntityWithInventoryID(inventoryID);
 
-            var EntityAttribute = Contexts.sharedInstance.itemProperties.GetEntityWithItemProperty(entity.itemID.ItemType);
+            var EntityAttribute = contexts.itemProperties.GetEntityWithItemProperty(entity.itemID.ItemType);
 
             // If stackable check if there are any available stack in the inventory.
             if (EntityAttribute.hasItemPropertyStackable)
             {
-                var Group = Contexts.sharedInstance.game.GetEntitiesWithItemAttachedInventory(inventoryID); // Todo: Use multiple Entity Index. To narrow down the search with item type.
+                var Group = contexts.game.GetEntitiesWithItemAttachedInventory(inventoryID); // Todo: Use multiple Entity Index. To narrow down the search with item type.
 
                 int NewEntityCount = 1;
                 if (entity.hasItemStack)
@@ -72,32 +72,32 @@ namespace Inventory
             inventory.inventorySlots.Values.Set(fistEmptySlot, true);
         }
 
-        public void PickUp(GameEntity entity, int inventoryID)
+        public void PickUp(Contexts entitasContext, GameEntity entity, int inventoryID)
         {
             entity.RemovePhysicsPosition2D();
             entity.RemovePhysicsMovable();
             entity.RemovePhysicsBox2DCollider();
-            AddItem(entity, inventoryID);
+            AddItem(entitasContext, entity, inventoryID);
         }
 
-        public void RemoveItem(GameEntity entity, int slot)
+        public void RemoveItem(Contexts contexts, GameEntity entity, int slot)
         {
-            var inventoryEntity = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(entity.itemAttachedInventory.InventoryID);
+            var inventoryEntity = contexts.inventory.GetEntityWithInventoryID(entity.itemAttachedInventory.InventoryID);
             inventoryEntity.inventorySlots.Values.Set(slot, false);
             entity.RemoveItemAttachedInventory();
         }
         
-        public void ChangeSlot(int newSelectedSlot, int inventoryID)
+        public void ChangeSlot(Contexts contexts, int newSelectedSlot, int inventoryID)
         {
-            var inventory = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(inventoryID);
+            var inventory = contexts.inventory.GetEntityWithInventoryID(inventoryID);
             var SlotComponent = inventory.inventorySlots;
 
             inventory.ReplaceInventorySlots(SlotComponent.Values, newSelectedSlot);
         }
 
-        public bool IsFull(int inventoryID)
+        public bool IsFull(Contexts contexts, int inventoryID)
         {
-            InventoryEntity inventoryEntity = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(inventoryID);
+            InventoryEntity inventoryEntity = contexts.inventory.GetEntityWithInventoryID(inventoryID);
             BitArray Slots = inventoryEntity.inventorySlots.Values;
             if (IsFull(Slots)) // Test if all bits are set to one.
                 return true;
@@ -115,9 +115,9 @@ namespace Inventory
             return false;
         }
 
-        public GameEntity GetItemInSlot(int inventoryID, int slot)
+        public GameEntity GetItemInSlot(GameContext gameContext, int inventoryID, int slot)
         {
-            var items = Contexts.sharedInstance.game.GetEntitiesWithItemAttachedInventory(inventoryID);
+            var items = gameContext.GetEntitiesWithItemAttachedInventory(inventoryID);
 
             foreach (var item in items)
             {

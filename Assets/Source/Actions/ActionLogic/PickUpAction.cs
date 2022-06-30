@@ -11,13 +11,13 @@ namespace Action
         private float Speed = 3.0f;
         private float aceleration = 0.5f;
 
-        public PickUpAction(int actionID, int agentID) : base(actionID, agentID)
+        public PickUpAction(Contexts entitasContext, int actionID, int agentID) : base(entitasContext, actionID, agentID)
         {
         }
 
         public override void OnEnter(ref Planet.PlanetState planet)
         {
-            ItemEntity = Contexts.sharedInstance.game.GetEntityWithItemIDID(ActionEntity.actionItem.ItemID);
+            ItemEntity = EntitasContext.game.GetEntityWithItemIDID(ActionEntity.actionItem.ItemID);
 
 #if DEBUG
             // Item Doesnt Exist
@@ -47,7 +47,7 @@ namespace Action
             // Update item pos.
 
             // Center position Item.
-            Vec2f itemSize = Contexts.sharedInstance.itemProperties.GetEntityWithItemProperty(ItemEntity.itemID.ItemType).itemPropertySize.Size;
+            Vec2f itemSize = EntitasContext.itemProperties.GetEntityWithItemProperty(ItemEntity.itemID.ItemType).itemPropertySize.Size;
             Vec2f itemCenterPos = ItemEntity.itemDrawPosition2D.Value + itemSize / 2.0f;
             Vec2f agentCenterPos = AgentEntity.physicsPosition2D.Value + new Vec2f(1.0f, 1.5f)/2f; // Todo: Add agentSizeCompenent
 
@@ -58,9 +58,9 @@ namespace Action
                     int toolBarID = AgentEntity.agentToolBar.ToolBarID;
 
                     // Try ading item to toolBar.
-                    if (!GameState.InventoryManager.IsFull(toolBarID))
+                    if (!GameState.InventoryManager.IsFull(EntitasContext, toolBarID))
                     {
-                        GameState.InventoryManager.PickUp(ItemEntity, toolBarID);
+                        GameState.InventoryManager.PickUp(EntitasContext, ItemEntity, toolBarID);
                         ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
                         return;
                     }
@@ -71,9 +71,9 @@ namespace Action
                     int inventoryID = AgentEntity.agentInventory.InventoryID;
 
                     // Try ading item to Inventory.
-                    if (!GameState.InventoryManager.IsFull(inventoryID))
+                    if (!GameState.InventoryManager.IsFull(EntitasContext, inventoryID))
                     {
-                        GameState.InventoryManager.PickUp(ItemEntity, inventoryID);
+                        GameState.InventoryManager.PickUp(EntitasContext, ItemEntity, inventoryID);
                         ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
                         return;
                     }
@@ -100,9 +100,9 @@ namespace Action
 
     public class PickUpActionCreator : ActionCreator
     {
-        public override ActionBase CreateAction(int actionID, int agentID)
+        public override ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
         {
-            return new PickUpAction(actionID, agentID);
+            return new PickUpAction(entitasContext, actionID, agentID);
         }
     }
 }

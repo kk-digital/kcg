@@ -59,11 +59,11 @@ namespace Projectile
 
         }
 
-        public GameEntity SpawnBullet(int spriteID, int width, int height, Vec2f startPos,
+        public GameEntity SpawnBullet(Contexts entitasContext, int spriteID, int width, int height, Vec2f startPos,
             Vec2f velocity, Vec2f acceleration, ProjectileType projectileType, 
             ProjectileDrawType projectileDrawType)
         {
-            GameEntity entity = Contexts.sharedInstance.game.CreateEntity();
+            GameEntity entity = entitasContext.game.CreateEntity();
             // Increase ID per object statically
             projectileID++;
 
@@ -95,11 +95,11 @@ namespace Projectile
             return entity;
         }
 
-        public Entity SpawnProjectile(int spriteID, int width, int height, Vec2f startPos,
+        public Entity SpawnProjectile(Contexts entitasContext, int spriteID, int width, int height, Vec2f startPos,
             Cell start, Cell end, ProjectileType projectileType, ProjectileDrawType projectileDrawType)
         {
             // Create Entity
-            var entity = Contexts.sharedInstance.game.CreateEntity();
+            var entity = entitasContext.game.CreateEntity();
 
             // Increase ID per object statically
             projectileID++;
