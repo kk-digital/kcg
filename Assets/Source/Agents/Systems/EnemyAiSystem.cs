@@ -10,8 +10,8 @@ namespace Agent
         List<GameEntity> ToRemoveAgents = new List<GameEntity>();
         public void Update(Planet.PlanetState planetState)
         {
-            var players = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentPlayer));
-            var entities = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentEnemy));
+            var players = planetState.GameContext.GetGroup(GameMatcher.AllOf(GameMatcher.AgentPlayer));
+            var entities = planetState.GameContext.GetGroup(GameMatcher.AllOf(GameMatcher.AgentEnemy));
 
 
             if (players.count > 0)

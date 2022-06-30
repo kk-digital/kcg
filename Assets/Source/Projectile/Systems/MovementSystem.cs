@@ -12,10 +12,10 @@ namespace Projectile
             ProjectileCreationApi = projectileCreationApi;
         }
 
-        public void Update()
+        public void Update(GameContext gameContext)
         {
             float deltaTime = Time.deltaTime;
-            var projectiles = Contexts.sharedInstance.game.GetGroup(GameMatcher.ProjectileMovable);
+            var projectiles = gameContext.GetGroup(GameMatcher.ProjectileMovable);
             foreach (var projectile in projectiles)
             {
                 var pos = projectile.projectilePosition2D;

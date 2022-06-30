@@ -77,7 +77,7 @@ namespace Projectile
             ref PlanetTileMap.TileMap tileMap = ref planet.TileMap;
 
             // Get Vehicle Physics Entity
-            var entities = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsBox2DCollider, GameMatcher.ProjectilePhysicsState2D));
+            var entities = planet.GameContext.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsBox2DCollider, GameMatcher.ProjectilePhysicsState2D));
 
             foreach (var entity in entities)
             {
@@ -134,6 +134,8 @@ namespace Projectile
 
             foreach (var entity in ToRemoveList)
             {
+                var pos = entity.projectilePosition2D;
+                planet.AddParticleEmitter(pos.Value, Particle.ParticleEmitterType.DustEmitter);
                 planet.RemoveProjectile(entity.projectileID.ID);
             }
         }

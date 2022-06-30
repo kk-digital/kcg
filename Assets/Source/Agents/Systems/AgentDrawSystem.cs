@@ -9,9 +9,9 @@ namespace Agent
         List<Vector2> uvs = new();
         List<Vector3> verticies = new();
         
-        public void Draw(Material material, Transform transform, int drawOrder)
+        public void Draw(GameContext gameContext, Material material, Transform transform, int drawOrder)
         {
-            var AgentsWithSprite = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentSprite2D));
+            var AgentsWithSprite = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.AgentSprite2D));
 
             foreach (var entity in AgentsWithSprite)
             {

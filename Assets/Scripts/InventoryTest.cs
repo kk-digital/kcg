@@ -34,8 +34,8 @@ public class InventoryTest : MonoBehaviour
         GameEntity playerEntity = context.game.CreateEntity();
         playerEntity.AddAgentID(agnetID);
         playerEntity.isAgentPlayer = true;
-        inventoryAttacher.AttachInventoryToAgent(inventoryWidth, inventoryHeight, agnetID);
-        inventoryAttacher.AttachToolBarToPlayer(toolBarSize, agnetID);
+        inventoryAttacher.AttachInventoryToAgent(Contexts.sharedInstance.game, inventoryWidth, inventoryHeight, agnetID);
+        inventoryAttacher.AttachToolBarToPlayer(Contexts.sharedInstance.game, toolBarSize, agnetID);
 
         int inventoryID = playerEntity.agentInventory.InventoryID;
         int toolBarID = playerEntity.agentToolBar.ToolBarID;
@@ -84,7 +84,7 @@ public class InventoryTest : MonoBehaviour
             else
                 DestroyImmediate(mr.gameObject);
 
-        inputProcessSystem.Update();
+        inputProcessSystem.Update(Contexts.sharedInstance.game);
         inventoryDrawSystem.Draw(material, transform, 0);
 
     }

@@ -6,9 +6,9 @@ namespace FloatingText
 {
     public class FloatingTextDrawSystem
     {
-        public void Draw(Transform transform, int drawOrder)
+        public void Draw(GameContext gameContext, Transform transform, int drawOrder)
         {
-            var entities = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.FloatingTextState));
+            var entities = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.FloatingTextState));
 
             foreach (var entity in entities)
             {
