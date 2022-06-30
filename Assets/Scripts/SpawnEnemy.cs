@@ -81,8 +81,8 @@ public class SpawnEnemy : MonoBehaviour
         GameEntity playerEntity = contexts.game.CreateEntity();
         playerEntity.ReplaceAgentID(agentID);
         playerEntity.isAgentPlayer = true;
-        inventoryAttacher.AttachInventoryToAgent(Contexts.sharedInstance.game, inventoryWidth, inventoryHeight, playerEntity);
-        inventoryAttacher.AttachToolBarToPlayer(Contexts.sharedInstance.game, toolBarSize, playerEntity);
+        inventoryAttacher.AttachInventoryToAgent(Contexts.sharedInstance, inventoryWidth, inventoryHeight, playerEntity);
+        inventoryAttacher.AttachToolBarToPlayer(Contexts.sharedInstance, toolBarSize, playerEntity);
 
         int inventoryID = playerEntity.agentInventory.InventoryID;
         int toolBarID = playerEntity.agentToolBar.ToolBarID;
@@ -90,14 +90,14 @@ public class SpawnEnemy : MonoBehaviour
         // Add item to tool bar.
         {
             GameEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.game, Enums.ItemType.PlacementTool);
-            InventoryManager.AddItem(entity, toolBarID);
+            InventoryManager.AddItem(contexts, entity, toolBarID);
         }
 
         // Test not stackable items.
         for (uint i = 0; i < 10; i++)
         {
             GameEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.game, Enums.ItemType.PlacementTool);
-            InventoryManager.AddItem(entity, inventoryID);
+            InventoryManager.AddItem(contexts, entity, inventoryID);
         }
 
         // Init finished
@@ -117,7 +117,7 @@ public class SpawnEnemy : MonoBehaviour
         int slimeSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
         int slimeIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(slimeSpriteSheet, 0, 0, Enums.AtlasType.Particle);
         // Create Item
-        Item.CreationApi.Instance.CreateItem(Enums.ItemType.PlacementTool, "Slime");
+        Item.CreationApi.Instance.CreateItem(contexts, Enums.ItemType.PlacementTool, "Slime");
 
         // Set texture of item
         Item.CreationApi.Instance.SetTexture(slimeIcon);
@@ -187,7 +187,7 @@ public class SpawnEnemy : MonoBehaviour
             planetState.Update(Time.deltaTime, Material, transform);
 
             // Inventory Draw System
-            inventoryDrawSystem.Draw(Instantiate(Material), transform, 100);
+            inventoryDrawSystem.Draw(Contexts.sharedInstance, Instantiate(Material), transform, 100);
 
         }
 

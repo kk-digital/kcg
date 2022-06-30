@@ -14,11 +14,11 @@ namespace Agent
         }
 
         //NOTE(Mahdi): Deprecated, will be removed soon
-        public GameEntity SpawnPlayer(GameContext gameContext, int spriteId, int width, int height, Vec2f position,
+        public GameEntity SpawnPlayer(Contexts entitasContext, int spriteId, int width, int height, Vec2f position,
         int agentId, int startingAnimation, int playerHealth, int playerFood, int playerWater,
         int playerOxygen, int playerFuel, float attackCoolDown)
         {
-            var entity = gameContext.CreateEntity();
+            var entity = entitasContext.game.CreateEntity();
 
             var spriteSize = new Vec2f(width / 32f, height / 32f);
 
@@ -38,16 +38,16 @@ namespace Agent
             //entity.AddAgentInventory(0);
             // Add Inventory and toolbar.
             var attacher = Inventory.InventoryAttacher.Instance;
-            attacher.AttachInventoryToAgent(gameContext, 6, 5, entity);
-            attacher.AttachToolBarToPlayer(gameContext, 10, entity);
+            attacher.AttachInventoryToAgent(entitasContext, 6, 5, entity);
+            attacher.AttachToolBarToPlayer(entitasContext, 10, entity);
             return entity;
         }
 
 
-        public GameEntity Spawn(GameContext gameContext, Vec2f position, int agentId,
+        public GameEntity Spawn(Contexts entitasContext, Vec2f position, int agentId,
                      AgentType agentType)
         {
-            var entity = gameContext.CreateEntity();
+            var entity = entitasContext.game.CreateEntity();
 
             ref Agent.AgentProperties properties = ref AgentCreationApi.GetRef((int)agentType);
 
@@ -71,8 +71,8 @@ namespace Agent
 
                 // Add Inventory and toolbar.
                 var attacher = Inventory.InventoryAttacher.Instance;
-                attacher.AttachInventoryToAgent(gameContext, 6, 5, entity);
-                attacher.AttachToolBarToPlayer(gameContext, 10, entity);
+                attacher.AttachInventoryToAgent(entitasContext, 6, 5, entity);
+                attacher.AttachToolBarToPlayer(entitasContext, 10, entity);
             }
             else if (agentType == Agent.AgentType.Agent)
             {
@@ -88,10 +88,10 @@ namespace Agent
         }
 
         //NOTE(Mahdi): Deprecated, will be removed soon
-        public GameEntity SpawnAgent(int spriteId, int width, int height, Vec2f position,
+        public GameEntity SpawnAgent(Contexts contexts, int spriteId, int width, int height, Vec2f position,
         int agentId, int startingAnimation)
         {
-            var entity = Contexts.sharedInstance.game.CreateEntity();
+            var entity = contexts.game.CreateEntity();
 
             var spriteSize = new Vec2f(width / 32f, height / 32f);
 

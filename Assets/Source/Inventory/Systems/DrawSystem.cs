@@ -1,22 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Entitas;
 
 namespace Inventory
 {
     public class DrawSystem
     {
-
-        Contexts EntitasContext;
-
-        public DrawSystem(Contexts entitasContext)
-        {
-            EntitasContext = entitasContext;
-        }
-
-        public DrawSystem()
-        {
-            EntitasContext = Contexts.sharedInstance;
-        }
 
         /// <summary>
         /// DrawCall will use form drawOrder to drawOrder + 3.
@@ -24,18 +13,18 @@ namespace Inventory
         /// <param name="material"></param>
         /// <param name="transform"></param>
         /// <param name="drawOrder"></param>
-        public void Draw(Material material, Transform transform, int drawOrder)
+        public void Draw(Contexts contexts, Material material, Transform transform, int drawOrder)
         {
-            var openInventories = Contexts.sharedInstance.inventory.GetGroup(InventoryMatcher.AllOf(InventoryMatcher.InventoryDrawable, InventoryMatcher.InventoryID));
+            var openInventories = contexts.inventory.GetGroup(InventoryMatcher.AllOf(InventoryMatcher.InventoryDrawable, InventoryMatcher.InventoryID));
             // If empty Draw ToolBar.
 
             foreach (InventoryEntity inventoryEntity in openInventories)
             {
-                DrawInventory(material, transform, inventoryEntity, drawOrder);
+                DrawInventory(contexts, material, transform, inventoryEntity, drawOrder);
             }
         }
 
-        private void DrawInventory(Material material, Transform transform, InventoryEntity inventoryEntity, int drawOrder)
+        private void DrawInventory(Contexts entitasContext, Material material, Transform transform, InventoryEntity inventoryEntity, int drawOrder)
         {
             // Todo: Add scrool bar.
             // Todo: allow user to move inventory position?
@@ -71,8 +60,8 @@ namespace Inventory
 
             DrawCells(x, y, width, height, tileSize, slotSize, material, transform, inventoryEntity, drawOrder);
 
-            var itemInInventory = EntitasContext.game.GetEntitiesWithItemAttachedInventory(inventoryEntity.inventoryID.ID);
-            DrawIcons(x, y, width, height, tileSize, slotSize, material, transform, itemInInventory, drawOrder);
+            var itemInInventory = entitasContext.game.GetEntitiesWithItemAttachedInventory(inventoryEntity.inventoryID.ID);
+            DrawIcons(entitasContext, x, y, width, height, tileSize, slotSize, material, transform, itemInInventory, drawOrder);
         }
 
         void DrawBackGround(float x, float y, float w, float h, Material material, Transform transform, int drawOrder)
@@ -123,7 +112,7 @@ namespace Inventory
             }
         }
 
-        void DrawIcons(float x, float y, int width, int height, float tileSize, float slotSize, Material material, Transform transform, HashSet<GameEntity> itemInInventory, int drawOrder)
+        void DrawIcons(Contexts entitasContext, float x, float y, int width, int height, float tileSize, float slotSize, Material material, Transform transform, HashSet<GameEntity> itemInInventory, int drawOrder)
         {
             foreach (GameEntity itemEntity in itemInInventory)
             {
@@ -148,7 +137,7 @@ namespace Inventory
                 }
 
                 // Draw sprites.
-                ItemPropertiesEntity itemPropertyEntity = EntitasContext.itemProperties.GetEntityWithItemProperty(itemEntity.itemID.ItemType);
+                ItemPropertiesEntity itemPropertyEntity = entitasContext.itemProperties.GetEntityWithItemProperty(itemEntity.itemID.ItemType);
                 int SpriteID = itemPropertyEntity.itemPropertyInventorySprite.ID;
 
                 Sprites.Sprite sprite = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle);

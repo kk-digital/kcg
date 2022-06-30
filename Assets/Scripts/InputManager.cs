@@ -28,6 +28,11 @@ public class InputManager : MonoBehaviour
         {
             SceneManager.Instance.Register(this, Enums.SceneObjectType.SceneObjectTypeUtilityScript);
         }
+
+        if (Camera.main.gameObject.GetComponent<CameraMove>().enabled == true)
+        {
+            Camera.main.gameObject.GetComponent<CameraFollow>().enabled = false;
+        }
     }
 
     public void Controls()
@@ -70,6 +75,30 @@ public class InputManager : MonoBehaviour
                 // Update Zoomed ortho pixel perfect calculation
                 pixelCam.adjustCameraFOV();
             }
+
+            // Open or close statistics
+            if (Input.GetKeyDown(KeyCode.F1))
+            {
+                if (KGUI.Statistics.StatisticsDisplay.canDraw)
+                    KGUI.Statistics.StatisticsDisplay.canDraw = false;
+                else if (!KGUI.Statistics.StatisticsDisplay.canDraw)
+                    KGUI.Statistics.StatisticsDisplay.canDraw = true;
+
+            }
+
+            if(Input.GetKeyDown(KeyCode.LeftAlt))
+            {
+                if(Camera.main.gameObject.GetComponent<CameraFollow>().enabled == true)
+                {
+                    Camera.main.gameObject.GetComponent<CameraFollow>().enabled = false;
+                    Camera.main.gameObject.GetComponent<CameraMove>().enabled = true;
+                }
+                else
+                {
+                    Camera.main.gameObject.GetComponent<CameraFollow>().enabled = true;
+                    Camera.main.gameObject.GetComponent<CameraMove>().enabled = false;
+                }
+            }
         }
 
         if (Input.mouseScrollDelta.y > 0)
@@ -90,7 +119,7 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html
+    // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
     private void Update()
     {
         // Detect Key Call
@@ -114,6 +143,9 @@ public class InputManager : MonoBehaviour
     {
         // Detect Input device to understand which device player using.
         DetectInputDevice();
+
+        if (GameObject.Find("Test") != null)
+            KGUI.Statistics.StatisticsDisplay.DrawStatistics(GameObject.Find("Test").GetComponent<Planet.Unity.PlanetTest>().Planet);
     }
 
     // Detecting Input device from input actions

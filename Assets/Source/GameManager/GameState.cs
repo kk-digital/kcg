@@ -87,8 +87,6 @@ public class GameState
 
     static GameState()
     {
-        Contexts entitasContext = Contexts.sharedInstance;
-
         SpriteLoader = new Sprites.SpriteLoader();
         TileSpriteAtlasManager = new PlanetTileMap.TileAtlasManager(SpriteLoader);
         TilePropertyManager = new PlanetTileMap.TilePropertyManager();

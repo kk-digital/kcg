@@ -7,9 +7,9 @@ namespace Animation
     public class UpdateSystem
     {
 
-        public void Update(float deltaTime)
+        public void Update(Contexts contexts, float deltaTime)
         {
-            var entities = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AnimationState));
+            var entities = contexts.game.GetGroup(GameMatcher.AllOf(GameMatcher.AnimationState));
 
             foreach (var entity in entities)
             {

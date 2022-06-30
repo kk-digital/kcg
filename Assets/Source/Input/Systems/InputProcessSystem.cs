@@ -5,9 +5,9 @@ namespace ECSInput
 {
     public class InputProcessSystem
     {
-        public void Update(GameContext gameContext)
+        public void Update(Contexts contexts)
         {
-            var AgentsWithXY = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.ECSInput, GameMatcher.ECSInputXY));
+            var AgentsWithXY = contexts.game.GetGroup(GameMatcher.AllOf(GameMatcher.ECSInput, GameMatcher.ECSInputXY));
 
             bool jump = Input.GetKeyDown(KeyCode.UpArrow);
             float x = 0.0f;
@@ -41,11 +41,11 @@ namespace ECSInput
 
 
             //  Open Inventory with Tab.
-            var PlayerWithInventory = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentInventory, GameMatcher.AgentPlayer));
+            var PlayerWithInventory = contexts.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentInventory, GameMatcher.AgentPlayer));
             foreach (var entity in PlayerWithInventory)
             {
                 int inventoryID = entity.agentInventory.InventoryID;
-                InventoryEntity inventoryEntity = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(inventoryID);
+                InventoryEntity inventoryEntity = contexts.inventory.GetEntityWithInventoryID(inventoryID);
 
                 if (Input.GetKeyDown(KeyCode.Tab))
                 {
@@ -54,11 +54,11 @@ namespace ECSInput
             }
 
             // Change Item Selection with nums.
-            var PlayerWithToolBar = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentPlayer, GameMatcher.AgentToolBar));
+            var PlayerWithToolBar = contexts.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentPlayer, GameMatcher.AgentToolBar));
             foreach (var entity in PlayerWithInventory)
             {
                 int inventoryID = entity.agentToolBar.ToolBarID;
-                InventoryEntity inventoryEntity = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(inventoryID);
+                InventoryEntity inventoryEntity = contexts.inventory.GetEntityWithInventoryID(inventoryID);
                 var SlotComponent = inventoryEntity.inventorySlots;
 
                 if (Input.GetKeyDown(KeyCode.Alpha1))

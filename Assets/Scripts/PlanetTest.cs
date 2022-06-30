@@ -8,10 +8,24 @@ namespace Planet.Unity
     {
         [SerializeField] Material Material;
 
-        PlanetState Planet;
+        public PlanetState Planet;
         Inventory.InventoryManager inventoryManager;
         Inventory.DrawSystem    inventoryDrawSystem;
 
+        // Health Bar
+        KGUI.HealthBarUI healthBarUI;
+
+        // Food Bar
+        KGUI.FoodBarUI foodBarUI;
+
+        // Water Bar
+        KGUI.WaterBarUI waterBarUI;
+
+        // Oxygen Bar
+        KGUI.OxygenBarUI oxygenBarUI;
+
+        // Fuel Bar
+        KGUI.FuelBarUI fuelBarUI;
 
         Agent.AgentEntity Player;
         int PlayerID;
@@ -21,7 +35,6 @@ namespace Planet.Unity
         int toolBarID;
 
         static bool Init = false;
-  
 
         public void Start()
         {
@@ -36,17 +49,17 @@ namespace Planet.Unity
         public void Update()
         {
             int toolBarID = Player.Entity.agentToolBar.ToolBarID;
-            InventoryEntity Inventory = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(toolBarID);
+            InventoryEntity Inventory = Planet.EntitasContext.inventory.GetEntityWithInventoryID(toolBarID);
             int selectedSlot = Inventory.inventorySlots.Selected;
 
             GameEntity item = GameState.InventoryManager.GetItemInSlot(Planet.EntitasContext.game, toolBarID, selectedSlot);
-            ItemPropertiesEntity itemProperty = Contexts.sharedInstance.itemProperties.GetEntityWithItemProperty(item.itemID.ItemType);
+            ItemPropertiesEntity itemProperty = Planet.EntitasContext.itemProperties.GetEntityWithItemProperty(item.itemID.ItemType);
             if (itemProperty.hasItemPropertyAction)
             {
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
                     GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity,
-                        GameState.ActionCreationSystem.CreateAction(itemProperty.itemPropertyAction.ActionTypeID, Player.AgentId));
+                        GameState.ActionCreationSystem.CreateAction(Planet.EntitasContext, itemProperty.itemPropertyAction.ActionTypeID, Player.AgentId));
                 }
             }
                 
@@ -64,12 +77,33 @@ namespace Planet.Unity
                 }
             }
 
-            inventoryDrawSystem.Draw(Instantiate(Material), transform, 1000);
+            inventoryDrawSystem.Draw(Planet.EntitasContext, Instantiate(Material), transform, 1000);
             Planet.Update(Time.deltaTime, Material, transform);
 
          //   Vector2 playerPosition = Player.Entity.physicsPosition2D.Value;
 
            // transform.position = new Vector3(playerPosition.x - 6.0f, playerPosition.y - 6.0f, -10.0f);
+        }
+
+        private void OnGUI()
+        {
+            if(Init)
+            {
+                //Health Bar Draw
+                healthBarUI.Draw(Planet.EntitasContext);
+
+                // Food Bar Update
+                foodBarUI.Update();
+
+                // Water Bar Update
+                waterBarUI.Update();
+
+                // Fuel Bar Update
+                fuelBarUI.Update();
+
+                // OxygenBar Update
+                oxygenBarUI.Update();
+            }
         }
 
         void DrawSpriteAtlas()
@@ -88,7 +122,7 @@ namespace Planet.Unity
         {
 
             inventoryManager = new Inventory.InventoryManager();
-            inventoryDrawSystem = new Inventory.DrawSystem(Contexts.sharedInstance);
+            inventoryDrawSystem = new Inventory.DrawSystem();
 
             GameResources.Initialize();
 
@@ -96,10 +130,13 @@ namespace Planet.Unity
             Vec2i mapSize = new Vec2i(32, 24);
             Planet = new Planet.PlanetState();
             Planet.Init(mapSize);
+
+            GameResources.CreateItems(Planet.EntitasContext);
+
             GenerateMap();
             SpawnStuff();
 
-            GameState.ActionInitializeSystem.Initialize(Material);
+            GameState.ActionInitializeSystem.Initialize(Planet.EntitasContext, Material);
 
             var inventoryAttacher = Inventory.InventoryAttacher.Instance;
 
@@ -116,12 +153,34 @@ namespace Planet.Unity
             GameEntity particleEmitterPlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.game, Enums.ItemType.ParticleEmitterPlacementTool);
 
 
-            inventoryManager.AddItem(placementTool, toolBarID);
-            inventoryManager.AddItem(removeTileTool, toolBarID);
-            inventoryManager.AddItem(spawnEnemySlimeTool, toolBarID);
-            inventoryManager.AddItem(miningLaserTool, toolBarID);
-            inventoryManager.AddItem(pipePlacementTool, toolBarID);
-            inventoryManager.AddItem(particleEmitterPlacementTool, toolBarID);
+            inventoryManager.AddItem(Planet.EntitasContext, placementTool, toolBarID);
+            inventoryManager.AddItem(Planet.EntitasContext, removeTileTool, toolBarID);
+            inventoryManager.AddItem(Planet.EntitasContext, spawnEnemySlimeTool, toolBarID);
+            inventoryManager.AddItem(Planet.EntitasContext, miningLaserTool, toolBarID);
+            inventoryManager.AddItem(Planet.EntitasContext, pipePlacementTool, toolBarID);
+            inventoryManager.AddItem(Planet.EntitasContext, particleEmitterPlacementTool, toolBarID);
+
+
+
+            // Health Bar Initialize
+            healthBarUI = new KGUI.HealthBarUI();
+            healthBarUI.Initialize();
+
+            // Food Bar Initialize
+            foodBarUI = new KGUI.FoodBarUI();
+            foodBarUI.Initialize(Planet.EntitasContext);
+
+            // Water Bar Initialize
+            waterBarUI = new KGUI.WaterBarUI();
+            waterBarUI.Initialize(Planet.EntitasContext);
+
+            // Oxygen Bar Initialize
+            oxygenBarUI = new KGUI.OxygenBarUI();
+            oxygenBarUI.Initialize(Planet.EntitasContext);
+
+            // Oxygen Bar Initialize
+            fuelBarUI = new KGUI.FuelBarUI();
+            fuelBarUI.Initialize(Planet.EntitasContext);
         }
 
         void GenerateMap()
@@ -267,8 +326,8 @@ namespace Planet.Unity
 
 
             
-            GameState.ItemSpawnSystem.SpawnItem(Contexts.sharedInstance, Enums.ItemType.Gun, new Vec2f(6.0f, spawnHeight));
-            GameState.ItemSpawnSystem.SpawnItem(Contexts.sharedInstance, Enums.ItemType.Ore, new Vec2f(10.0f, spawnHeight));
+            GameState.ItemSpawnSystem.SpawnItem(Planet.EntitasContext, Enums.ItemType.Gun, new Vec2f(6.0f, spawnHeight));
+            GameState.ItemSpawnSystem.SpawnItem(Planet.EntitasContext, Enums.ItemType.Ore, new Vec2f(10.0f, spawnHeight));
         }
         
     }

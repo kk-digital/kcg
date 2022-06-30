@@ -20,7 +20,7 @@ namespace KGUI
         private GameObject waterBar;
         private GameObject iconCanvas;
 
-        public void Initialize(Transform transform)
+        public void Initialize(Contexts contexts)
         {
             // Set Width and Height
             int IconWidth = 19;
@@ -78,7 +78,7 @@ namespace KGUI
 
             // Water Bar Initializon
             iconCanvas = new GameObject("Water Icon");
-            iconCanvas.transform.parent = transform;
+            iconCanvas.transform.parent = GameObject.Find("Canvas").transform;
             iconCanvas.AddComponent<RectTransform>();
             iconCanvas.AddComponent<Image>();
 
@@ -87,14 +87,14 @@ namespace KGUI
             iconCanvas.GetComponent<Image>().sprite = iconBar;
 
             if (Camera.main.aspect >= 1.7f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-345, 415.5f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-402.6f, 78.6f, 4.873917f);
             else if (Camera.main.aspect >= 1.5f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-252.4f, 415.5f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-359.9f, 75f, 4.873917f);
             else
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-278.3f, 540.2f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 134.2f, 4.873917f);
 
 
-            iconCanvas.GetComponent<RectTransform>().localScale = new Vector3(1.2f, -1.2f, 0.5203559f);
+            iconCanvas.GetComponent<RectTransform>().localScale = new Vector3(0.6f, -0.6f, 0.5203559f);
 
             // Water Bar Initializon
             waterBar = new GameObject("Water Bar");
@@ -112,7 +112,7 @@ namespace KGUI
             waterBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
             waterBar.GetComponent<Image>().fillOrigin = 0;
             IGroup<GameEntity> Playerentities =
-            Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentStats);
+            contexts.game.GetGroup(GameMatcher.AgentStats);
             foreach (var entity in Playerentities)
             {
                 waterBar.GetComponent<Image>().fillAmount = entity.agentStats.Water / 100;
@@ -138,11 +138,11 @@ namespace KGUI
                 }
 
                 if (Camera.main.aspect >= 1.7f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-345, 415.5f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-402.6f, 78.6f, 4.873917f);
                 else if (Camera.main.aspect >= 1.5f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-252.4f, 415.5f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-359.9f, 75f, 4.873917f);
                 else
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-278.3f, 540.2f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 134.2f, 4.873917f);
             }
         }
     }

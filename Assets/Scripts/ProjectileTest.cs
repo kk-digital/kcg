@@ -119,7 +119,7 @@ public class ProjectileTest : MonoBehaviour
                 diff = worldPosition - startPos;
 
                 // Loading Image
-                projectileSpawnerSystem.SpawnProjectile(image, 16, 16, startPos,
+                projectileSpawnerSystem.SpawnProjectile(Contexts.sharedInstance, image, 16, 16, startPos,
                     start, end, ProjectileType.Grenade, ProjectileDrawType.Standard);
             }
 

@@ -4,7 +4,7 @@ using Entitas;
 
 namespace KGUI
 {
-    public class OxygenBarUI : MonoBehaviour
+    public class OxygenBarUI
     {
         // Init
         private static bool Init;
@@ -20,8 +20,11 @@ namespace KGUI
         private GameObject oxygenBar;
         private GameObject iconCanvas;
 
-        public void Initialize(Transform transform)
+        Contexts EntitasContext;
+
+        public void Initialize(Contexts entitasContext)
         {
+            EntitasContext = entitasContext;
             // Set Width and Height
             int IconWidth = 19;
             int IconHeight = 19;
@@ -78,7 +81,7 @@ namespace KGUI
 
             // Oxygen Bar Initializon
             iconCanvas = new GameObject("Oxygen Icon");
-            iconCanvas.transform.parent = transform;
+            iconCanvas.transform.parent = GameObject.Find("Canvas").transform;
             iconCanvas.AddComponent<RectTransform>();
             iconCanvas.AddComponent<Image>();
 
@@ -87,13 +90,13 @@ namespace KGUI
             iconCanvas.GetComponent<Image>().sprite = iconBar;
 
             if (Camera.main.aspect >= 1.7f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-345, 291.8f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-402.6f, 19f, 4.873917f);
             else if (Camera.main.aspect >= 1.5f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-253.2f, 291.8f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-359.9f, 13f, 4.873917f);
             else
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-278.3f, 417.4f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 75.3f, 4.873917f);
 
-            iconCanvas.GetComponent<RectTransform>().localScale = new Vector3(1.2f, -1.2f, 0.5203559f);
+            iconCanvas.GetComponent<RectTransform>().localScale = new Vector3(0.6f, -0.6f, 0.5203559f);
 
             // Oxygen Bar Initializon
             oxygenBar = new GameObject("Oxygen Bar");
@@ -111,7 +114,7 @@ namespace KGUI
             oxygenBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
             oxygenBar.GetComponent<Image>().fillOrigin = 0;
             IGroup<GameEntity> Playerentities =
-            Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentStats);
+            EntitasContext.game.GetGroup(GameMatcher.AgentStats);
             foreach (var entity in Playerentities)
             {
                 oxygenBar.GetComponent<Image>().fillAmount = entity.agentStats.Oxygen / 100;
@@ -129,18 +132,18 @@ namespace KGUI
             if (Init)
             {
                 IGroup<GameEntity> Playerentities =
-                Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentStats);
+                EntitasContext.game.GetGroup(GameMatcher.AgentStats);
                 foreach (var entity in Playerentities)
                 {
                     oxygenBar.GetComponent<Image>().fillAmount = entity.agentStats.Oxygen / 100;
                 }
 
                 if (Camera.main.aspect >= 1.7f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-345, 291.8f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-402.6f, 19f, 4.873917f);
                 else if (Camera.main.aspect >= 1.5f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-253.2f, 291.8f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-359.9f, 13f, 4.873917f);
                 else
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-278.3f, 417.4f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 75.3f, 4.873917f);
             }
         }
     }

@@ -10,7 +10,7 @@ namespace Action
         GameEntity ProjectileEntity;
         Vec2f StartPos;
 
-        public FireWeaponAction(int actionID, int agentID) : base(actionID, agentID)
+        public FireWeaponAction(Contexts entitasContext, int actionID, int agentID) : base(entitasContext, actionID, agentID)
         {
         }
 
@@ -52,7 +52,7 @@ namespace Action
             }
 
             // Check if projectile has hit a enemy.
-            var entities = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentID));
+            var entities = EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentID));
 
             // Todo: Create a agent colision system?
             foreach (var entity in entities)
@@ -98,9 +98,9 @@ namespace Action
     // Factory Method
     public class FireWeaponActionCreator : ActionCreator
     {
-        public override ActionBase CreateAction(int actionID, int agentID)
+        public override ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
         {
-            return new FireWeaponAction(actionID, agentID);
+            return new FireWeaponAction(entitasContext, actionID, agentID);
         }
     }
 }
