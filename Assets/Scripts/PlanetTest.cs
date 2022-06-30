@@ -37,7 +37,6 @@ namespace Planet.Unity
         int toolBarID;
 
         static bool Init = false;
-  
 
         public void Start()
         {
