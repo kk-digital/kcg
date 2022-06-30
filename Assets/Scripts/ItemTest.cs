@@ -56,7 +56,7 @@ namespace Planet.Unity
             InventoryEntity Inventory = EntitasContext.inventory.GetEntityWithInventoryID(toolBarID);
             int selectedSlot = Inventory.inventorySlots.Selected;
        
-            GameEntity item = GameState.InventoryManager.GetItemInSlot(toolBarID, selectedSlot);
+            GameEntity item = GameState.InventoryManager.GetItemInSlot(Contexts.sharedInstance.game, toolBarID, selectedSlot);
             if (item != null)
             {
                 ItemPropertiesEntity itemProperty = EntitasContext.itemProperties.GetEntityWithItemProperty(item.itemID.ItemType);

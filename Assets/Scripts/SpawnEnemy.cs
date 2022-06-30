@@ -81,8 +81,8 @@ public class SpawnEnemy : MonoBehaviour
         GameEntity playerEntity = contexts.game.CreateEntity();
         playerEntity.ReplaceAgentID(agentID);
         playerEntity.isAgentPlayer = true;
-        inventoryAttacher.AttachInventoryToAgent(Contexts.sharedInstance.game, inventoryWidth, inventoryHeight, agentID);
-        inventoryAttacher.AttachToolBarToPlayer(Contexts.sharedInstance.game, toolBarSize, agentID);
+        inventoryAttacher.AttachInventoryToAgent(Contexts.sharedInstance.game, inventoryWidth, inventoryHeight, playerEntity);
+        inventoryAttacher.AttachToolBarToPlayer(Contexts.sharedInstance.game, toolBarSize, playerEntity);
 
         int inventoryID = playerEntity.agentInventory.InventoryID;
         int toolBarID = playerEntity.agentToolBar.ToolBarID;

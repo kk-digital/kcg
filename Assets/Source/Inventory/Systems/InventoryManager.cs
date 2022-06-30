@@ -115,9 +115,9 @@ namespace Inventory
             return false;
         }
 
-        public GameEntity GetItemInSlot(int inventoryID, int slot)
+        public GameEntity GetItemInSlot(GameContext gameContext, int inventoryID, int slot)
         {
-            var items = Contexts.sharedInstance.game.GetEntitiesWithItemAttachedInventory(inventoryID);
+            var items = gameContext.GetEntitiesWithItemAttachedInventory(inventoryID);
 
             foreach (var item in items)
             {

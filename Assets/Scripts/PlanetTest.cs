@@ -39,7 +39,7 @@ namespace Planet.Unity
             InventoryEntity Inventory = Contexts.sharedInstance.inventory.GetEntityWithInventoryID(toolBarID);
             int selectedSlot = Inventory.inventorySlots.Selected;
 
-            GameEntity item = GameState.InventoryManager.GetItemInSlot(toolBarID, selectedSlot);
+            GameEntity item = GameState.InventoryManager.GetItemInSlot(Planet.EntitasContext.game, toolBarID, selectedSlot);
             ItemPropertiesEntity itemProperty = Contexts.sharedInstance.itemProperties.GetEntityWithItemProperty(item.itemID.ItemType);
             if (itemProperty.hasItemPropertyAction)
             {
@@ -106,14 +106,14 @@ namespace Planet.Unity
             inventoryID = Player.Entity.agentInventory.InventoryID;
             toolBarID = Player.Entity.agentToolBar.ToolBarID;
 
-            GameEntity gun = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.GameContext, Enums.ItemType.Gun);
-            GameEntity ore = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.GameContext, Enums.ItemType.Ore);
-            GameEntity placementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.GameContext, Enums.ItemType.PlacementTool);
-            GameEntity removeTileTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.GameContext, Enums.ItemType.RemoveTileTool);
-            GameEntity spawnEnemySlimeTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.GameContext, Enums.ItemType.SpawnEnemySlimeTool);
-            GameEntity miningLaserTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.GameContext, Enums.ItemType.MiningLaserTool);
-            GameEntity pipePlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.GameContext, Enums.ItemType.PipePlacementTool);
-            GameEntity particleEmitterPlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.GameContext, Enums.ItemType.ParticleEmitterPlacementTool);
+            GameEntity gun = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.game, Enums.ItemType.Gun);
+            GameEntity ore = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.game, Enums.ItemType.Ore);
+            GameEntity placementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.game, Enums.ItemType.PlacementTool);
+            GameEntity removeTileTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.game, Enums.ItemType.RemoveTileTool);
+            GameEntity spawnEnemySlimeTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.game, Enums.ItemType.SpawnEnemySlimeTool);
+            GameEntity miningLaserTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.game, Enums.ItemType.MiningLaserTool);
+            GameEntity pipePlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.game, Enums.ItemType.PipePlacementTool);
+            GameEntity particleEmitterPlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.game, Enums.ItemType.ParticleEmitterPlacementTool);
 
 
             inventoryManager.AddItem(placementTool, toolBarID);

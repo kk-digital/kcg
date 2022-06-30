@@ -38,8 +38,8 @@ namespace Agent
             //entity.AddAgentInventory(0);
             // Add Inventory and toolbar.
             var attacher = Inventory.InventoryAttacher.Instance;
-            attacher.AttachInventoryToAgent(gameContext, 6, 5, agentId);
-            attacher.AttachToolBarToPlayer(gameContext, 10, agentId);
+            attacher.AttachInventoryToAgent(gameContext, 6, 5, entity);
+            attacher.AttachToolBarToPlayer(gameContext, 10, entity);
             return entity;
         }
 
@@ -71,8 +71,8 @@ namespace Agent
 
                 // Add Inventory and toolbar.
                 var attacher = Inventory.InventoryAttacher.Instance;
-                attacher.AttachInventoryToAgent(gameContext, 6, 5, agentId);
-                attacher.AttachToolBarToPlayer(gameContext, 10, agentId);
+                attacher.AttachInventoryToAgent(gameContext, 6, 5, entity);
+                attacher.AttachToolBarToPlayer(gameContext, 10, entity);
             }
             else if (agentType == Agent.AgentType.Agent)
             {

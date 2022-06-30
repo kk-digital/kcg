@@ -14,9 +14,9 @@ namespace Inventory
 
         private static int InventoryID = 0;
 
-        public void AttachInventoryToAgent(GameContext gameContext, int width, int height, int AgentID)
+        public void AttachInventoryToAgent(GameContext gameContext, int width, int height, GameEntity agentEntity)
         {
-            GameEntity entity = gameContext.GetEntityWithAgentID(AgentID);
+            GameEntity entity = agentEntity;
             entity.AddAgentInventory(InventoryID);
             MakeInventoryEntity(width, height);
         }
@@ -28,9 +28,9 @@ namespace Inventory
             MakeInventoryEntity(width, height);
         }
 
-        public void AttachToolBarToPlayer(GameContext gameContext, int size, int AgentID)
+        public void AttachToolBarToPlayer(GameContext gameContext, int size, GameEntity agentEntity)
         {
-            GameEntity playerEntity = gameContext.GetEntityWithAgentID(AgentID);
+            GameEntity playerEntity = agentEntity;
             playerEntity.AddAgentToolBar(InventoryID);
             InventoryEntity entity = MakeInventoryEntity(size, 1);
             entity.isInventoryToolBar = true;

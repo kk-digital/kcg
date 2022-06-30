@@ -24,7 +24,7 @@ namespace Action
                 int selected = toolBarEntity.inventorySlots.Selected;
 
 
-                ItemEntity = GameState.InventoryManager.GetItemInSlot(toolBarID, selected);
+                ItemEntity = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.game, toolBarID, selected);
                 if (ItemEntity == null)
                 {
                     ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);

@@ -34,8 +34,8 @@ public class InventoryTest : MonoBehaviour
         GameEntity playerEntity = context.game.CreateEntity();
         playerEntity.AddAgentID(agnetID);
         playerEntity.isAgentPlayer = true;
-        inventoryAttacher.AttachInventoryToAgent(Contexts.sharedInstance.game, inventoryWidth, inventoryHeight, agnetID);
-        inventoryAttacher.AttachToolBarToPlayer(Contexts.sharedInstance.game, toolBarSize, agnetID);
+        inventoryAttacher.AttachInventoryToAgent(Contexts.sharedInstance.game, inventoryWidth, inventoryHeight, playerEntity);
+        inventoryAttacher.AttachToolBarToPlayer(Contexts.sharedInstance.game, toolBarSize, playerEntity);
 
         int inventoryID = playerEntity.agentInventory.InventoryID;
         int toolBarID = playerEntity.agentToolBar.ToolBarID;
