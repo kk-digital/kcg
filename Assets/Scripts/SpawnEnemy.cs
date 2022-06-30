@@ -40,7 +40,8 @@ public class SpawnEnemy : MonoBehaviour
 
         // Generating the map
         var mapSize = new Vec2i(16, 16);
-        planetState = new Planet.PlanetState(mapSize);
+        planetState = new Planet.PlanetState();
+        planetState.Init(mapSize);
 
 
         // Enemy Sprite Sheet ID
