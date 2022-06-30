@@ -30,11 +30,6 @@ namespace Planet
         public ParticleContext ParticleContext;
 
 
-        public PlanetState() : this()
-        {
- 
-        }
-
         public void Init(Vec2i mapSize)
         {
             TileMap = new PlanetTileMap.TileMap(mapSize);

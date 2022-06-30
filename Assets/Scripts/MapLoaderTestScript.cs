@@ -149,7 +149,8 @@ namespace Planet.Unity
             // Generating the map
             Vec2i mapSize = new Vec2i(16, 16);
 
-            PlanetState = new PlanetState(mapSize);
+            PlanetState = new PlanetState();
+            PlanetState.Init(mapSize);
             ref var tileMap = ref PlanetState.TileMap;
 
             for(int j = 0; j < tileMap.MapSize.Y; j++)
