@@ -5,8 +5,10 @@ namespace ECSInput
 {
     public class InputProcessSystem
     {
-        public void Update(Contexts contexts)
+        public void Update(ref Planet.PlanetState planet)
         {
+            Contexts contexts = planet.EntitasContext;
+
             var AgentsWithXY = contexts.game.GetGroup(GameMatcher.AllOf(GameMatcher.ECSInput, GameMatcher.ECSInputXY));
 
             bool jump = Input.GetKeyDown(KeyCode.UpArrow);
@@ -25,9 +27,7 @@ namespace ECSInput
             {
                 entity.ReplaceECSInputXY(new Vec2f(x, 0.0f), jump, dash);
 
-            
-                
-
+                var pos = entity.physicsPosition2D;
                 var input = entity.eCSInputXY;
                 var movable = entity.physicsMovable;
 
@@ -39,13 +39,10 @@ namespace ECSInput
 
                 if (!movementState.Jumping)
                 {
-                    movementState.Dashing = false;
-                    movementState.Jumping = false;
-
                     if (dash && movementState.DashCooldown <= 0.0f)
                     {
                         movable.Acceleration.X += 500.0f * x;
-                        movable.Velocity.X = 30.0f * x;
+                        movable.Velocity.X = 60.0f * x;
                         movementState.Dashing = true;
                         movementState.DashCooldown = 1.5f;
                     }
@@ -68,11 +65,19 @@ namespace ECSInput
                     }
                 }
 
+                if (System.Math.Abs(movable.Velocity.X) <= 3.0f)
+                {
+                    movementState.Dashing = false;
+                }
                 if (movable.Landed)
                 {
                     movementState.DoubleJumping = false;
                     movementState.Jumping = false;
-                    movementState.Dashing = false;
+                }
+
+                if (movementState.Dashing)
+                {
+                    planet.AddParticleEmitter(pos.Value, Particle.ParticleEmitterType.DustEmitter);
                 }
 
                 entity.ReplaceAgentMovementState(movementState.Jumping, movementState.DoubleJumping,

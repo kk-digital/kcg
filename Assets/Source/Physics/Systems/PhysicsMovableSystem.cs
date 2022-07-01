@@ -10,7 +10,8 @@ namespace Physics
         {
             float Gravity = 800.0f;
             float MaxAcceleration = 300.0f;
-            float MaxVelocity = 30.0f;
+            // maximum Y velocity
+            float MaxVelocityY = 15.0f;
 
 
             float deltaTime = Time.deltaTime;
@@ -36,13 +37,13 @@ namespace Physics
 
 
                 // maximum velocity in the game
-                if (movable.Velocity.Y > MaxVelocity)
+                if (movable.Velocity.Y > MaxVelocityY)
                 {
-                    movable.Velocity.Y = MaxVelocity;
+                    movable.Velocity.Y = MaxVelocityY;
                 }
-                if (movable.Velocity.Y < -MaxVelocity)
+                if (movable.Velocity.Y < -MaxVelocityY)
                 {
-                    movable.Velocity.Y = -MaxVelocity;
+                    movable.Velocity.Y = -MaxVelocityY;
                 }
 
                 Vec2f displacement = 
@@ -52,13 +53,13 @@ namespace Physics
 
 
                 // maximum velocity in the game
-                if (newVelocity.Y > MaxVelocity)
+                if (newVelocity.Y > MaxVelocityY)
                 {
-                    newVelocity.Y = MaxVelocity;
+                    newVelocity.Y = MaxVelocityY;
                 }
-                if (newVelocity.Y < -MaxVelocity)
+                if (newVelocity.Y < -MaxVelocityY)
                 {
-                    newVelocity.Y = -MaxVelocity;
+                    newVelocity.Y = -MaxVelocityY;
                 }
 
 

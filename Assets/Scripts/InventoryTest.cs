@@ -84,7 +84,7 @@ public class InventoryTest : MonoBehaviour
             else
                 DestroyImmediate(mr.gameObject);
 
-        inputProcessSystem.Update(Contexts.sharedInstance);
+       // inputProcessSystem.Update(Contexts.sharedInstance);
         inventoryDrawSystem.Draw(Contexts.sharedInstance, material, transform, 0);
 
     }

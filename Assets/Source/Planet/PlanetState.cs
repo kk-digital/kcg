@@ -296,7 +296,7 @@ namespace Planet
 
             // calling all the systems we have
 
-            GameState.InputProcessSystem.Update(EntitasContext);
+            GameState.InputProcessSystem.Update(ref this);
             GameState.PhysicsMovableSystem.Update(EntitasContext.game);
             GameState.PhysicsProcessCollisionSystem.Update(EntitasContext.game, ref TileMap);
             GameState.EnemyAiSystem.Update(this);

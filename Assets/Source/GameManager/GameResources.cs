@@ -285,7 +285,7 @@ public class GameResources
         GameState.ParticleCreationApi.SetName("dust-particle");
         GameState.ParticleCreationApi.SetDecayRate(4.0f);
         GameState.ParticleCreationApi.SetAcceleration(new Vector2(0.0f, 0.0f));
-        GameState.ParticleCreationApi.SetDeltaRotation(130.0f);
+        GameState.ParticleCreationApi.SetDeltaRotation(0);
         GameState.ParticleCreationApi.SetDeltaScale(-1.0f);
         GameState.ParticleCreationApi.SetAnimationType(Animation.AnimationType.Dust);
         GameState.ParticleCreationApi.SetSize(new Vec2f(0.5f, 0.5f));
@@ -323,8 +323,8 @@ public class GameResources
         GameState.ParticleEmitterCreationApi.SetDuration(0.1f);
         GameState.ParticleEmitterCreationApi.SetSpawnRadius(0.1f);
         GameState.ParticleEmitterCreationApi.SetParticleCount(1);
-        GameState.ParticleEmitterCreationApi.SetTimeBetweenEmissions(0.02f);
-        GameState.ParticleEmitterCreationApi.SetVelocityInterval(new Vec2f(2.0f, 0), new Vec2f(4.0f, 0));
+        GameState.ParticleEmitterCreationApi.SetTimeBetweenEmissions(1.02f);
+        GameState.ParticleEmitterCreationApi.SetVelocityInterval(new Vec2f(0.0f, 0), new Vec2f(0.0f, 0));
         GameState.ParticleEmitterCreationApi.End();
     }
 
