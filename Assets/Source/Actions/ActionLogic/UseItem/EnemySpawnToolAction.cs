@@ -32,7 +32,7 @@ namespace Action
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float x = worldPosition.x;
             float y = worldPosition.y;
-            planet.AddEnemy(data.CharacterSpriteId, 32, 32, new Vec2f(x, y), 2);
+            planet.AddEnemy(new Vec2f(x, y));
 
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
         }

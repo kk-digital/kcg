@@ -22,7 +22,6 @@ public class GameState
 
     public static readonly PlanetTileMap.TileAtlasManager TileSpriteAtlasManager;
     public static readonly PlanetTileMap.TileCreationApi TileCreationApi;
-    public static readonly PlanetTileMap.TilePropertyManager TilePropertyManager;
 
     #endregion
     
@@ -89,7 +88,6 @@ public class GameState
     {
         SpriteLoader = new Sprites.SpriteLoader();
         TileSpriteAtlasManager = new PlanetTileMap.TileAtlasManager(SpriteLoader);
-        TilePropertyManager = new PlanetTileMap.TilePropertyManager();
         SpriteAtlasManager = new Sprites.SpriteAtlasManager(SpriteLoader);
         TileCreationApi = new PlanetTileMap.TileCreationApi();
         FileLoadingManager = new Utility.FileLoadingManager();
