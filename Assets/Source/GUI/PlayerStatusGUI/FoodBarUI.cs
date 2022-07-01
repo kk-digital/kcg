@@ -91,9 +91,9 @@ namespace KGUI
             iconCanvas.GetComponent<Image>().sprite = iconBar;
 
             if (Camera.main.aspect >= 1.7f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-402.6f, 138.2f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 123.8f, 4.873917f);
             else if (Camera.main.aspect >= 1.5f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-359.9f, 137f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, 125.4f, 4.873917f);
             else
                 iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 193.4f, 4.873917f);
 
@@ -141,9 +141,9 @@ namespace KGUI
                 }
 
                 if (Camera.main.aspect >= 1.7f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-402.6f, 138.2f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 123.8f, 4.873917f);
                 else if (Camera.main.aspect >= 1.5f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-359.9f, 137f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, 125.4f, 4.873917f);
                 else
                     iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 193.4f, 4.873917f);
             }

@@ -25,9 +25,6 @@ namespace Planet.Background
         // Generated Perlin Grid
         float[,] perlinGrid;
 
-        // Space Sprite
-        Sprites.Sprite spaceSprite;
-
         // Space Loop
         int j = 0;
 
@@ -331,33 +328,6 @@ namespace Planet.Background
             // Initialzie Perlin Field
             perlinField.init(256, 256);
 
-            // Set Width and Height
-            int spaceWidth = 32;
-            int spaceHeight = 32;
-            Vector2Int space1PngSize = new Vector2Int(spaceWidth, spaceWidth);
-
-            // Load image from file
-            var space1Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\PlanetBackground\\StarField\\Stars\\galaxy_256x256.png", spaceWidth, spaceHeight);
-
-            // Set Sprite ID from Sprite Atlas
-            int space1ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(space1Sheet, 0, 0, Enums.AtlasType.Particle);
-
-            // Set Sprite Data
-            byte[] space1spriteData = new byte[space1PngSize.x * space1PngSize.y * 4];
-
-            // Get Sprite Bytes
-            GameState.SpriteAtlasManager.GetSpriteBytes(space1ID, space1spriteData, Enums.AtlasType.Particle);
-
-            // Set Texture
-            Texture2D space1Tex = Utility.Texture.CreateTextureFromRGBA(space1spriteData, space1PngSize.x, space1PngSize.y);
-
-            // Create the sprite
-            spaceSprite = new Sprites.Sprite
-            {
-                Texture = space1Tex,
-                TextureCoords = new Vector4(0, 0, 1, 1)
-            };
-
             Init = true;
         }
 
@@ -424,7 +394,7 @@ namespace Planet.Background
 
                 for (; j < 1; j++)
                 {
-                    Utility.Render.DrawSprite(-1000000, -1000000, 9999999, 9999999, spaceSprite, Material, transform, 0);
+                    Utility.Render.DrawQuadColor(-1000000, -1000000, 9999999, 9999999, new Color(0.02745f, 0.03137f, 0.09804f, 1), Material, transform, 0);
                 }
             }
 

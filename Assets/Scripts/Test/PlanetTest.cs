@@ -45,7 +45,6 @@ namespace Planet.Unity
             }
         }
 
-
         public void Update()
         {
             int toolBarID = Player.Entity.agentToolBar.ToolBarID;
@@ -120,7 +119,6 @@ namespace Planet.Unity
         // create the sprite atlas for testing purposes
         public void Initialize()
         {
-
             inventoryManager = new Inventory.InventoryManager();
             inventoryDrawSystem = new Inventory.DrawSystem();
 
@@ -159,7 +157,6 @@ namespace Planet.Unity
             inventoryManager.AddItem(Planet.EntitasContext, miningLaserTool, toolBarID);
             inventoryManager.AddItem(Planet.EntitasContext, pipePlacementTool, toolBarID);
             inventoryManager.AddItem(Planet.EntitasContext, particleEmitterPlacementTool, toolBarID);
-
 
 
             // Health Bar Initialize

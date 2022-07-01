@@ -86,10 +86,11 @@ namespace KGUI
             Sprite iconBar = Sprite.Create(icon.Texture, new Rect(0.0f, 0.0f, IconWidth, IconHeight), new Vector2(0.5f, 0.5f));
             iconCanvas.GetComponent<Image>().sprite = iconBar;
 
+            // Calculate position using aspect ratio
             if (Camera.main.aspect >= 1.7f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-402.6f, -40.6f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, -52.6f, 4.873917f);
             else if (Camera.main.aspect >= 1.5f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-359.9f, -49f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, -49.2f, 4.873917f);
             else
                 iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 16.6f, 4.873917f);
 
@@ -137,9 +138,9 @@ namespace KGUI
 
                 // Calculate position using aspect ratio
                 if (Camera.main.aspect >= 1.7f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-402.6f, -40.6f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, -52.6f, 4.873917f);
                 else if (Camera.main.aspect >= 1.5f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-359.9f, -49f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, -49.2f, 4.873917f);
                 else
                     iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 16.6f, 4.873917f);
             }
