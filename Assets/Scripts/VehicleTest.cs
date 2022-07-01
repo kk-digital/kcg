@@ -42,7 +42,7 @@ public class VehicleTest : MonoBehaviour
         vehicleCollisionSystem = new Vehicle.ProcessCollisionSystem();
 
         // Initialize Image
-        int image = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\vehicles\\Speeder_chassis.png", 128, 96);
+        int image = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Vehicles\\Speeder\\Chassis\\Speeder_chassis.png", 128, 96);
 
         // Loading Image
         vehicleSpawnerSystem.SpawnVehicle(Material, image, 128, 96, new Vec2f(-5.0f, 0));

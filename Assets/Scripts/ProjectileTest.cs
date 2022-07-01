@@ -54,7 +54,7 @@ public class ProjectileTest : MonoBehaviour
         projectileCollisionSystem = new Projectile.ProcessCollisionSystem();
 
         // Initialize Image
-        image = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\grenades\\Grenades7.png", 16, 16);
+        image = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Projectiles\\Grenades\\Grenade\\Grenades7.png", 16, 16);
 
         // Init is done, now all updates ready to work
         init = true;

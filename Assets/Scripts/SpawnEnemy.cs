@@ -45,7 +45,7 @@ public class SpawnEnemy : MonoBehaviour
 
 
         // Enemy Sprite Sheet ID
-        int EnemySpriteSheetID = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
+        int EnemySpriteSheetID = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Enemies\\Slime\\slime.png", 32, 32);
 
         // Slime Animation Slice Tiles
         SlimeMoveLeftBaseSpriteId = GameState.SpriteAtlasManager.CopySpritesToAtlas(EnemySpriteSheetID, 0, 0, 3, 0, Enums.AtlasType.Agent);
@@ -114,7 +114,7 @@ public class SpawnEnemy : MonoBehaviour
     private void InitializeItems()
     {
         // Get Sheet ID
-        int slimeSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
+        int slimeSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Enemies\\Slime\\slime.png", 32, 32);
         int slimeIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(slimeSpriteSheet, 0, 0, Enums.AtlasType.Particle);
         // Create Item
         Item.CreationApi.Instance.CreateItem(Enums.ItemType.PlacementTool, "Slime");

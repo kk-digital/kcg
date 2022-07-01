@@ -37,7 +37,7 @@ namespace Planet.Background
             Vector2Int star1PngSize = new Vector2Int(star1Width, star1Height);
 
             // Load image from fil
-            var star1Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\starfield_test_16x16_tiles_8x8_tile_grid_128x128.png", star1Width, star1Height);
+            var star1Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\PlanetBackground\\StarField\\Stars\\starfield_test_16x16_tiles_8x8_tile_grid_128x128.png", star1Width, star1Height);
 
             // Set Sprite ID from Sprite Atlas
             int star1ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(star1Sheet, 0, 0, Enums.AtlasType.Particle);
@@ -69,7 +69,7 @@ namespace Planet.Background
             Vector2Int star2PngSize = new Vector2Int(star2Width, star2Height);
 
             // Load image from fil
-            var star2Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\starfield_test_16x16_tiles_8x8_tile_grid_128x128.png", star2Width, star2Height);
+            var star2Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\PlanetBackground\\StarField\\Stars\\starfield_test_16x16_tiles_8x8_tile_grid_128x128.png", star2Width, star2Height);
 
             // Set Sprite ID from Sprite Atlas
             int star2ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(star2Sheet, 0, 0, Enums.AtlasType.Particle);
@@ -98,7 +98,7 @@ namespace Planet.Background
             Vector2Int star3PngSize = new Vector2Int(star3Width, star3Height);
 
             // Load image from fil
-            var star3Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\starfield_test_16x16_tiles_8x8_tile_grid_128x128.png", star3Width, star3Height);
+            var star3Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\PlanetBackground\\StarField\\Stars\\starfield_test_16x16_tiles_8x8_tile_grid_128x128.png", star3Width, star3Height);
 
             // Set Sprite ID from Sprite Atlas
             int star3ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(star3Sheet, 0, 2, Enums.AtlasType.Particle);
@@ -127,7 +127,7 @@ namespace Planet.Background
             Vector2Int star4PngSize = new Vector2Int(star4Width, star4Height);
 
             // Load image from fil
-            var star4Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\starfield_test_16x16_tiles_8x8_tile_grid_128x128.png", star4Width, star4Height);
+            var star4Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\PlanetBackground\\StarField\\Stars\\starfield_test_16x16_tiles_8x8_tile_grid_128x128.png", star4Width, star4Height);
 
             // Set Sprite ID from Sprite Atlas
             int star4ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(star4Sheet, 2, 2, Enums.AtlasType.Particle);
@@ -156,7 +156,7 @@ namespace Planet.Background
             Vector2Int star5PngSize = new Vector2Int(star5Width, star5Height);
 
             // Load image from file
-            var star5Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\starfield_test_16x16_tiles_8x8_tile_grid_128x128.png", star5Width, star5Height);
+            var star5Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\PlanetBackground\\StarField\\Stars\\starfield_test_16x16_tiles_8x8_tile_grid_128x128.png", star5Width, star5Height);
 
             // Set Sprite ID from Sprite Atlas
             int star5ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(star5Sheet, 3, 2, Enums.AtlasType.Particle);
@@ -185,7 +185,7 @@ namespace Planet.Background
             Vector2Int star6PngSize = new Vector2Int(star6Width, star6Height);
 
             // Load image from file
-            var star6Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\starfield_test_16x16_tiles_8x8_tile_grid_128x128.png", star6Width, star6Height);
+            var star6Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\PlanetBackground\\StarField\\Stars\\starfield_test_16x16_tiles_8x8_tile_grid_128x128.png", star6Width, star6Height);
 
             // Set Sprite ID from Sprite Atlas
             int star6ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(star6Sheet, 1, 3, Enums.AtlasType.Particle);

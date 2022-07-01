@@ -105,7 +105,7 @@ public class MiningLaser : MonoBehaviour
     private void Initialize()
     {
         // Get Sheet ID
-        int laserSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\lasergun-temp.png", 195, 79);
+        int laserSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Items\\RailGun\\lasergun-temp.png", 195, 79);
         int LaserIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(laserSpriteSheet, 0, 0, Enums.AtlasType.Particle);
    
         // Create Item

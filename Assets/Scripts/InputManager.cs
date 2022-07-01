@@ -31,7 +31,10 @@ public class InputManager : MonoBehaviour
 
         if (Camera.main.gameObject.GetComponent<CameraMove>().enabled == true)
         {
-            Camera.main.gameObject.GetComponent<CameraFollow>().enabled = false;
+            if (Camera.main.gameObject.GetComponent<CameraFollow>() != null)
+                Camera.main.gameObject.GetComponent<CameraFollow>().enabled = false;
+            else
+                Camera.main.gameObject.AddComponent<CameraFollow>();
         }
     }
 

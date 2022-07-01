@@ -13,7 +13,6 @@ namespace Planet.Unity
 
         Contexts EntitasContext;
         static bool Init = false;
-  
 
         public void Start()
         {
@@ -23,7 +22,6 @@ namespace Planet.Unity
                 Init = true;
             }
         }
-
 
         public void Update()
         {
@@ -49,9 +47,6 @@ namespace Planet.Unity
                 //TileMap.BuildLayerTexture(MapLayerType.Front);
                 
             }
-
-
-
                 
             // unity rendering stuff
             // will be removed layer
@@ -75,24 +70,15 @@ namespace Planet.Unity
         {
             EntitasContext = Contexts.sharedInstance;
 
-
-
             int TilesMoon = 
-                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Moonbunker\\Tilesets\\Sprites\\tiles_moon\\Tiles_Moon.png", 16, 16);
+                        GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Tiles\\Terrains\\Tiles_Moon.png", 16, 16);
             int OreTileSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\ores\\gem_hexagon_1.png", 16, 16);
-            int GunSpriteSheet =
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\gun-temp.png", 44, 25);
-
-            int RockSpriteSheet =
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1.png", 16, 16);
-            int RockDustSpriteSheet =
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\item\\rock1_dust.png", 16, 16);
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Items\\Ores\\Gems\\Hexagon\\gem_hexagon_1.png", 16, 16);
 
             int DustSpriteSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\particles\\dust1.png", 16, 16);
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Particles\\Dust\\dust1.png", 16, 16);
             int SlimeSpriteSheet = 
-            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
+            GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Enemies\\Slime\\slime.png", 32, 32);
 
     
             int DustBaseSpriteId = GameState.SpriteAtlasManager.CopySpritesToAtlas(DustSpriteSheet, 0, 0, 5, 0, Enums.AtlasType.Agent);
@@ -142,8 +128,6 @@ namespace Planet.Unity
             GameState.AnimationManager.SetFrameCount(4);
             GameState.AnimationManager.EndAnimation();
 
-
-
             // Generating the map
             Vec2i mapSize = new Vec2i(16, 16);
             Planet = new Planet.PlanetState();
@@ -154,9 +138,6 @@ namespace Planet.Unity
             Planet.AddAgent(0, 32, 32, new Vec2f(2.0f, 3.0f), slimeIdle);
             Planet.AddAgent(0, 32, 32, new Vec2f(4.0f, 3.0f), slimeJump);
         }
-
-
-
 
         void GenerateMap()
         {
@@ -212,8 +193,6 @@ namespace Planet.Unity
             tileMap.UpdateTileMapPositions(MapLayerType.Front);
 
         }
-
     }
 }
-
 

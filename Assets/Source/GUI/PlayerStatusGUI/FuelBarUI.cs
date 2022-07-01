@@ -28,7 +28,7 @@ namespace KGUI
             Vector2Int iconPngSize = new Vector2Int(IconWidth, IconHeight);
 
             // Load image from file
-            var iconSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\interface\\hud_status_fuel.png", IconWidth, IconHeight);
+            var iconSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\UserInterface\\Icons\\Fuel\\hud_status_fuel.png", IconWidth, IconHeight);
 
             // Set Sprite ID from Sprite Atlas
             int iconID = GameState.SpriteAtlasManager.CopySpriteToAtlas(iconSheet, 0, 0, Enums.AtlasType.Particle);
@@ -55,7 +55,7 @@ namespace KGUI
             Vector2Int FillPngSize = new Vector2Int(FillWidth, FillHeight);
 
             // Load image from file
-            var FillSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\interface\\hud_status_fill.png", FillWidth, FillHeight);
+            var FillSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\UserInterface\\Bars\\CircleBar\\hud_status_fill.png", FillWidth, FillHeight);
 
             // Set Sprite ID from Sprite Atlas
             int FillID = GameState.SpriteAtlasManager.CopySpriteToAtlas(FillSheet, 0, 0, Enums.AtlasType.Particle);
