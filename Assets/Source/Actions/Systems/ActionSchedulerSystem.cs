@@ -8,9 +8,9 @@ namespace Action
     // 
     public class ActionSchedulerSystem
     {
-        public void Update(float deltaTime, ref Planet.PlanetState planet)
+        public void Update(Contexts contexts, float deltaTime, ref Planet.PlanetState planet)
         {
-            var group = Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentActionScheduler);
+            var group = contexts.game.GetGroup(GameMatcher.AgentActionScheduler);
 
             foreach (GameEntity entity in group)
             {
@@ -20,16 +20,16 @@ namespace Action
                         continue;
                     ScheduleAction(entity);
                 }
-                ExcuteActions(entity, deltaTime, ref planet);
+                ExcuteActions(contexts, entity, deltaTime, ref planet);
             }
         }
 
-        private void ExcuteActions(GameEntity actorEntity, float deltaTime, ref Planet.PlanetState planet)
+        private void ExcuteActions(Contexts contexts, GameEntity actorEntity, float deltaTime, ref Planet.PlanetState planet)
         {
             for (int i = 0; i < actorEntity.agentActionScheduler.ActiveActionIDs.Count; i++)
             {
                 int actionID = actorEntity.agentActionScheduler.ActiveActionIDs[i];
-                ActionEntity actionEntity = Contexts.sharedInstance.action.GetEntityWithActionIDID(actionID);
+                ActionEntity actionEntity = contexts.action.GetEntityWithActionIDID(actionID);
 
                 if (actionEntity.hasActionExecution)
                 {

@@ -99,7 +99,6 @@ public class GameManager : MonoBehaviour
     {
         //TODO: Intialize all managers here
         //Setup ECS system
-        GameState.TilePropertyManager.InitStage1();
         if (SceneManager.Instance != null)
         {
             SceneManager.Instance.Register(this, Enums.SceneObjectType.SceneObjectTypeUtilityScript);

@@ -1,22 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Entitas;
 
 namespace Inventory
 {
     public class DrawSystem
     {
-
-        Contexts EntitasContext;
-
-        public DrawSystem(Contexts entitasContext)
-        {
-            EntitasContext = entitasContext;
-        }
-
-        public DrawSystem()
-        {
-            EntitasContext = Contexts.sharedInstance;
-        }
 
         /// <summary>
         /// DrawCall will use form drawOrder to drawOrder + 3.
@@ -24,18 +13,18 @@ namespace Inventory
         /// <param name="material"></param>
         /// <param name="transform"></param>
         /// <param name="drawOrder"></param>
-        public void Draw(Material material, Transform transform, int drawOrder)
+        public void Draw(Contexts contexts, Material material, Transform transform, int drawOrder)
         {
-            var openInventories = Contexts.sharedInstance.inventory.GetGroup(InventoryMatcher.AllOf(InventoryMatcher.InventoryDrawable, InventoryMatcher.InventoryID));
+            var openInventories = contexts.inventory.GetGroup(InventoryMatcher.AllOf(InventoryMatcher.InventoryDrawable, InventoryMatcher.InventoryID));
             // If empty Draw ToolBar.
 
             foreach (InventoryEntity inventoryEntity in openInventories)
             {
-                DrawInventory(material, transform, inventoryEntity, drawOrder);
+                DrawInventory(contexts, material, transform, inventoryEntity, drawOrder);
             }
         }
 
-        private void DrawInventory(Material material, Transform transform, InventoryEntity inventoryEntity, int drawOrder)
+        private void DrawInventory(Contexts entitasContext, Material material, Transform transform, InventoryEntity inventoryEntity, int drawOrder)
         {
             // Todo: Add scrool bar.
             // Todo: allow user to move inventory position?
@@ -63,14 +52,16 @@ namespace Inventory
 
             // If is tool bar draw at the botton of the screen.
             if (inventoryEntity.isInventoryToolBar)
+            {
                 y = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0f, 0f)).y + tileSize / 2f;
+            }
 
             DrawBackGround(x, y, w, h, material, transform, drawOrder);
 
             DrawCells(x, y, width, height, tileSize, slotSize, material, transform, inventoryEntity, drawOrder);
 
-            var itemInInventory = EntitasContext.game.GetEntitiesWithItemAttachedInventory(inventoryEntity.inventoryID.ID);
-            DrawIcons(x, y, width, height, tileSize, slotSize, material, transform, itemInInventory, drawOrder);
+            var itemInInventory = entitasContext.game.GetEntitiesWithItemAttachedInventory(inventoryEntity.inventoryID.ID);
+            DrawIcons(entitasContext, x, y, width, height, tileSize, slotSize, material, transform, itemInInventory, drawOrder);
         }
 
         void DrawBackGround(float x, float y, float w, float h, Material material, Transform transform, int drawOrder)
@@ -90,6 +81,17 @@ namespace Inventory
 
             for (int i = 0; i < width; i++)
             {
+                if (inventoryEntity.isInventoryToolBar)
+                {
+                    // Get Quad Position
+                    float slotX = x + i * tileSize + slotSize * 0.5f - 0.125f;
+                    float slotY = y - slotSize * 0.5f;
+
+                    Utility.Render.DrawString(slotX + (tileSize - slotSize) / 2.0f, 
+                                slotY + (tileSize - slotSize) / 2.0f, 0.25f, "" + (i + 1), 16, new Color(255, 255, 255, 255),
+                                             transform, drawOrder + 2);
+                }
+
                 for (int j = 0; j < height; j++)
                 {
                     // Assign Border Color.
@@ -101,7 +103,8 @@ namespace Inventory
                     float slotX = x + i * tileSize;
                     float slotY = y + j * tileSize;
 
-                    Utility.Render.DrawQuadColor(slotX + (tileSize - slotSize) / 2.0f, slotY + (tileSize - slotSize) / 2.0f, slotSize, slotSize, quadColor, Object.Instantiate(material), transform, drawOrder + 1);
+                    Utility.Render.DrawQuadColor(slotX + (tileSize - slotSize) / 2.0f, 
+                                slotY + (tileSize - slotSize) / 2.0f, slotSize, slotSize, quadColor, Object.Instantiate(material), transform, drawOrder + 1);
                     float spriteSize = slotSize * 0.8f;
                     Utility.Render.DrawQuadColor(slotX + (tileSize - spriteSize) / 2.0f, slotY + (tileSize - spriteSize) / 2.0f, spriteSize, spriteSize, borderColor, Object.Instantiate(material), transform, drawOrder + 2);
 
@@ -109,7 +112,7 @@ namespace Inventory
             }
         }
 
-        void DrawIcons(float x, float y, int width, int height, float tileSize, float slotSize, Material material, Transform transform, HashSet<GameEntity> itemInInventory, int drawOrder)
+        void DrawIcons(Contexts entitasContext, float x, float y, int width, int height, float tileSize, float slotSize, Material material, Transform transform, HashSet<GameEntity> itemInInventory, int drawOrder)
         {
             foreach (GameEntity itemEntity in itemInInventory)
             {
@@ -134,7 +137,7 @@ namespace Inventory
                 }
 
                 // Draw sprites.
-                ItemPropertiesEntity itemPropertyEntity = EntitasContext.itemProperties.GetEntityWithItemProperty(itemEntity.itemID.ItemType);
+                ItemPropertiesEntity itemPropertyEntity = entitasContext.itemProperties.GetEntityWithItemProperty(itemEntity.itemID.ItemType);
                 int SpriteID = itemPropertyEntity.itemPropertyInventorySprite.ID;
 
                 Sprites.Sprite sprite = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle);

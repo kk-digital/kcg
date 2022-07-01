@@ -22,7 +22,7 @@ namespace Action
 
         Data data;
 
-        public EnemySpawnToolAction(int actionID, int agentID) : base(actionID, agentID)
+        public EnemySpawnToolAction(Contexts entitasContext, int actionID, int agentID) : base(entitasContext, actionID, agentID)
         {
             data = (Data)ActionPropertyEntity.actionPropertyData.Data;
         }
@@ -32,7 +32,7 @@ namespace Action
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float x = worldPosition.x;
             float y = worldPosition.y;
-            planet.AddEnemy(data.CharacterSpriteId, 32, 32, new Vec2f(x, y), 2);
+            planet.AddEnemy(new Vec2f(x, y));
 
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
         }
@@ -41,9 +41,9 @@ namespace Action
     // Factory Method
     public class EnemySpawnActionCreator : ActionCreator
     {
-        public override ActionBase CreateAction(int actionID, int agentID)
+        public override ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
         {
-            return new EnemySpawnToolAction(actionID, agentID);
+            return new EnemySpawnToolAction(entitasContext, actionID, agentID);
         }
     }
 }

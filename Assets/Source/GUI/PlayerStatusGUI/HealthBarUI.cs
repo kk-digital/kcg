@@ -146,10 +146,10 @@ namespace KGUI
             Init = true;
         }
 
-        void DrawHealthBar()
+        void DrawHealthBar(Contexts contexts)
         {
             IGroup<GameEntity> Playerentities =
-            Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentStats);
+            contexts.game.GetGroup(GameMatcher.AgentStats);
             foreach (var entity in Playerentities)
             {
                 playerHealth = entity.agentStats.Health;
@@ -178,13 +178,13 @@ namespace KGUI
             GUI.Box(fillPosition, GUIContent.none);
         }
 
-        public void Draw()
+        public void Draw(Contexts entitasContext)
         {
             if(Init)
             {
                 GUI.DrawTexture(borderPosition, barBorder.Texture);
 
-                DrawHealthBar();
+                DrawHealthBar(entitasContext);
 
 
                 if (playerHealth < 25)

@@ -8,7 +8,7 @@ namespace Action
 {
     public class MiningLaserToolAction : ActionBase
     {
-        public MiningLaserToolAction(int actionID, int agentID) : base(actionID, agentID)
+        public MiningLaserToolAction(Contexts entitasContext, int actionID, int agentID) : base(entitasContext, actionID, agentID)
         { 
         
         }
@@ -54,9 +54,9 @@ namespace Action
     // Factory Method
     public class MiningLaserActionCreator : ActionCreator
     {
-        public override ActionBase CreateAction(int actionID, int agentID)
+        public override ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
         {
-            return new MiningLaserToolAction(actionID, agentID);
+            return new MiningLaserToolAction(entitasContext, actionID, agentID);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Particle
         {
             ToDestroy.Clear();
 
-            ParticleContext context = planetState.ParticleContext;
+            ParticleContext context = planetState.EntitasContext.particle;
 
             float deltaTime = Time.deltaTime;
             IGroup<ParticleEntity> entities = context.GetGroup(ParticleMatcher.ParticleEmitterState);

@@ -188,7 +188,7 @@ namespace Utility
 
         private static TextMesh CreateText(Transform parent, Vector2 pos, string name, int sortingOrder)
         {
-            var go = new GameObject(name, typeof(TextMesh), typeof(MeshRenderer));
+            var go = new GameObject(name, typeof(TextMesh));
             go.transform.SetParent(parent);
             go.GetComponent<Transform>().position = pos;
 

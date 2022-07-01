@@ -10,7 +10,7 @@ namespace FloatingText
 
         public void Update(Planet.PlanetState planetState, float deltaTime)
         {
-            var entities = planetState.GameContext.GetGroup(GameMatcher.AllOf(GameMatcher.FloatingTextState));
+            var entities = planetState.EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.FloatingTextState));
 
             foreach (var entity in entities)
             {

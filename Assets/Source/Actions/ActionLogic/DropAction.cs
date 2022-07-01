@@ -8,14 +8,12 @@ namespace Action
     {
         private GameEntity ItemEntity;
 
-        public DropAction(int actionID, int agentID) : base(actionID, agentID)
+        public DropAction(Contexts entitasContext, int actionID, int agentID) : base(entitasContext, actionID, agentID)
         {
         }
 
         public override void OnEnter(ref Planet.PlanetState planet)
         {
-            var EntitasContext = Contexts.sharedInstance;
-
             if (AgentEntity.hasAgentToolBar)
             {
                 int toolBarID = AgentEntity.agentToolBar.ToolBarID;
@@ -24,16 +22,16 @@ namespace Action
                 int selected = toolBarEntity.inventorySlots.Selected;
 
 
-                ItemEntity = GameState.InventoryManager.GetItemInSlot(toolBarID, selected);
+                ItemEntity = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.game, toolBarID, selected);
                 if (ItemEntity == null)
                 {
                     ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
                     return;
                 }
-                GameState.InventoryManager.RemoveItem(ItemEntity, selected);
+                GameState.InventoryManager.RemoveItem(planet.EntitasContext, ItemEntity, selected);
              
                 Vec2f pos = AgentEntity.physicsPosition2D.Value;
-                Vec2f size = Contexts.sharedInstance.itemProperties.GetEntityWithItemProperty(ItemEntity.itemID.ItemType).itemPropertySize.Size;
+                Vec2f size = EntitasContext.itemProperties.GetEntityWithItemProperty(ItemEntity.itemID.ItemType).itemPropertySize.Size;
 
                 ItemEntity.AddPhysicsPosition2D(pos, pos);
                 ItemEntity.AddPhysicsBox2DCollider(size, Vec2f.Zero);
@@ -67,9 +65,9 @@ namespace Action
     // Factory Method
     public class DropActionCreator : ActionCreator
     {
-        public override ActionBase CreateAction(int actionID, int agentID)
+        public override ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
         {
-            return new DropAction(actionID, agentID);
+            return new DropAction(entitasContext, actionID, agentID);
         }
     }
 }

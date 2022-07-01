@@ -20,7 +20,7 @@ namespace KGUI
         private GameObject fuelBar;
         private GameObject iconCanvas;
 
-        public void Initialize()
+        public void Initialize(Contexts contexts)
         {
             // Set Width and Height
             int IconWidth = 19;
@@ -111,7 +111,7 @@ namespace KGUI
             fuelBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
             fuelBar.GetComponent<Image>().fillOrigin = 0;
             IGroup<GameEntity> Playerentities =
-            Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentStats);
+            contexts.game.GetGroup(GameMatcher.AgentStats);
             foreach (var entity in Playerentities)
             {
                 fuelBar.GetComponent<Image>().fillAmount = entity.agentStats.Fuel / 100;

@@ -34,8 +34,8 @@ public class InventoryTest : MonoBehaviour
         GameEntity playerEntity = context.game.CreateEntity();
         playerEntity.AddAgentID(agnetID);
         playerEntity.isAgentPlayer = true;
-        inventoryAttacher.AttachInventoryToAgent(Contexts.sharedInstance.game, inventoryWidth, inventoryHeight, agnetID);
-        inventoryAttacher.AttachToolBarToPlayer(Contexts.sharedInstance.game, toolBarSize, agnetID);
+        inventoryAttacher.AttachInventoryToAgent(Contexts.sharedInstance, inventoryWidth, inventoryHeight, playerEntity);
+        inventoryAttacher.AttachToolBarToPlayer(Contexts.sharedInstance, toolBarSize, playerEntity);
 
         int inventoryID = playerEntity.agentInventory.InventoryID;
         int toolBarID = playerEntity.agentToolBar.ToolBarID;
@@ -43,23 +43,23 @@ public class InventoryTest : MonoBehaviour
         // Add item to tool bar.
         {
             GameEntity entity = itemSpawnSystem.SpawnInventoryItem(context.game, Enums.ItemType.Gun);
-            inventoryManager.AddItem(entity, toolBarID);
+            inventoryManager.AddItem(context, entity, toolBarID);
         }
 
         // Test not stackable items.
         for (uint i = 0; i < 10; i++)
         {
             GameEntity entity = itemSpawnSystem.SpawnInventoryItem(context.game, Enums.ItemType.Gun);
-            inventoryManager.AddItem(entity, inventoryID);
+            inventoryManager.AddItem(context, entity, inventoryID);
         }
 
         // Testing stackable items.
         for (uint i = 0; i < 10; i++)
         {
             GameEntity entity = itemSpawnSystem.SpawnInventoryItem(context.game, Enums.ItemType.Rock);
-            inventoryManager.AddItem(entity, inventoryID);
+            inventoryManager.AddItem(context, entity, inventoryID);
             entity = itemSpawnSystem.SpawnInventoryItem(context.game, Enums.ItemType.RockDust);
-            inventoryManager.AddItem(entity, inventoryID);
+            inventoryManager.AddItem(context, entity, inventoryID);
         }
     }
 
@@ -84,8 +84,8 @@ public class InventoryTest : MonoBehaviour
             else
                 DestroyImmediate(mr.gameObject);
 
-        inputProcessSystem.Update(Contexts.sharedInstance.game);
-        inventoryDrawSystem.Draw(material, transform, 0);
+        inputProcessSystem.Update(Contexts.sharedInstance);
+        inventoryDrawSystem.Draw(Contexts.sharedInstance, material, transform, 0);
 
     }
 
@@ -102,18 +102,18 @@ public class InventoryTest : MonoBehaviour
         int RockIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(RockSpriteSheet, 0, 0, Enums.AtlasType.Particle);
         int RockDustIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(RockDustSpriteSheet, 0, 0, Enums.AtlasType.Particle);
 
-        Item.CreationApi.Instance.CreateItem(Enums.ItemType.Gun, "Gun");
+        Item.CreationApi.Instance.CreateItem(context, Enums.ItemType.Gun, "Gun");
         Item.CreationApi.Instance.SetTexture(GunIcon);
         Item.CreationApi.Instance.SetInventoryTexture(GunIcon);
         Item.CreationApi.Instance.EndItem();
 
-        Item.CreationApi.Instance.CreateItem(Enums.ItemType.Rock, "Rock");
+        Item.CreationApi.Instance.CreateItem(context, Enums.ItemType.Rock, "Rock");
         Item.CreationApi.Instance.SetTexture(RockIcon);
         Item.CreationApi.Instance.SetInventoryTexture(RockIcon);
         Item.CreationApi.Instance.SetStackable(99);
         Item.CreationApi.Instance.EndItem();
 
-        Item.CreationApi.Instance.CreateItem(Enums.ItemType.RockDust, "RockDust");
+        Item.CreationApi.Instance.CreateItem(context, Enums.ItemType.RockDust, "RockDust");
         Item.CreationApi.Instance.SetTexture(RockDustIcon);
         Item.CreationApi.Instance.SetInventoryTexture(RockDustIcon);
         Item.CreationApi.Instance.SetStackable(99);

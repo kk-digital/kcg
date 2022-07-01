@@ -20,7 +20,7 @@ namespace KGUI
         private GameObject waterBar;
         private GameObject iconCanvas;
 
-        public void Initialize()
+        public void Initialize(Contexts contexts)
         {
             // Set Width and Height
             int IconWidth = 19;
@@ -112,7 +112,7 @@ namespace KGUI
             waterBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
             waterBar.GetComponent<Image>().fillOrigin = 0;
             IGroup<GameEntity> Playerentities =
-            Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentStats);
+            contexts.game.GetGroup(GameMatcher.AgentStats);
             foreach (var entity in Playerentities)
             {
                 waterBar.GetComponent<Image>().fillAmount = entity.agentStats.Water / 100;

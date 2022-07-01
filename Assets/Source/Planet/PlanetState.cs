@@ -26,8 +26,7 @@ namespace Planet
         public ItemParticleList ItemParticleList;
 
 
-        public GameContext GameContext;
-        public ParticleContext ParticleContext;
+        public Contexts EntitasContext;
 
 
         public void Init(Vec2i mapSize)
@@ -41,8 +40,7 @@ namespace Planet
             ParticleList = new ParticleList();
             ItemParticleList = new ItemParticleList();
 
-            GameContext = new GameContext(); // Contexts.sharedInstance.game;
-            ParticleContext = new ParticleContext(); // Contexts.sharedInstance.particle;
+            EntitasContext = new Contexts();
         }
 
 
@@ -54,7 +52,7 @@ namespace Planet
             Utils.Assert(AgentList.Size < PlanetEntityLimits.AgentLimit);
 
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity entity = GameState.AgentSpawnerSystem.SpawnPlayer(GameContext, spriteId, width, height, position, newEntity.AgentId,
+            GameEntity entity = GameState.AgentSpawnerSystem.SpawnPlayer(EntitasContext, spriteId, width, height, position, newEntity.AgentId,
                     startingAnimation, health, food, water, oxygen, fuel, 0.2f);
             newEntity.Entity = entity;
 
@@ -66,7 +64,7 @@ namespace Planet
             Utils.Assert(AgentList.Size < PlanetEntityLimits.AgentLimit);
 
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity entity = GameState.AgentSpawnerSystem.Spawn(GameContext, position,
+            GameEntity entity = GameState.AgentSpawnerSystem.Spawn(EntitasContext, position,
                     newEntity.AgentId,
                     Agent.AgentType.Player);
             newEntity.Entity = entity;
@@ -81,7 +79,7 @@ namespace Planet
             Utils.Assert(AgentList.Size < PlanetEntityLimits.AgentLimit);
 
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity entity = GameState.AgentSpawnerSystem.SpawnAgent(spriteId, width, height, position,
+            GameEntity entity = GameState.AgentSpawnerSystem.SpawnAgent(EntitasContext, spriteId, width, height, position,
                                                                     newEntity.AgentId, startingAnimation);
             newEntity.Entity = entity;
 
@@ -94,7 +92,7 @@ namespace Planet
             Utils.Assert(AgentList.Size < PlanetEntityLimits.AgentLimit);
 
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity entity = GameState.AgentSpawnerSystem.Spawn(GameContext, position,
+            GameEntity entity = GameState.AgentSpawnerSystem.Spawn(EntitasContext, position,
                     newEntity.AgentId,
                     Agent.AgentType.Agent);
             newEntity.Entity = entity;
@@ -123,7 +121,7 @@ namespace Planet
             Utils.Assert(AgentList.Size < PlanetEntityLimits.AgentLimit);
 
             ref AgentEntity newEntity = ref AgentList.Add();
-            GameEntity entity = GameState.AgentSpawnerSystem.Spawn(GameContext, position,
+            GameEntity entity = GameState.AgentSpawnerSystem.Spawn(EntitasContext, position,
                     newEntity.AgentId,
                     Agent.AgentType.Enemy);
             newEntity.Entity = entity;
@@ -142,7 +140,7 @@ namespace Planet
         public FloatingTextEntity AddFloatingText(string text, float timeToLive, Vec2f velocity, Vec2f position)
         {
             ref FloatingTextEntity newEntity = ref FloatingTextList.Add();
-            GameEntity entity = GameState.FloatingTextSpawnerSystem.SpawnFloatingText(GameContext, text, timeToLive, velocity, position,
+            GameEntity entity = GameState.FloatingTextSpawnerSystem.SpawnFloatingText(EntitasContext.game, text, timeToLive, velocity, position,
                          newEntity.FloatingTextId);
 
             newEntity.Entity = entity;
@@ -161,7 +159,7 @@ namespace Planet
         public ParticleEmitterEntity AddParticleEmitter(Vec2f position, Particle.ParticleEmitterType type)
         {
             ref ParticleEmitterEntity newEntity = ref ParticleEmitterList.Add();
-            ParticleEntity entity = GameState.ParticleEmitterSpawnerSystem.Spawn(ParticleContext, type, position, 
+            ParticleEntity entity = GameState.ParticleEmitterSpawnerSystem.Spawn(EntitasContext.particle, type, position, 
                         newEntity.ParticleEmitterId);
             newEntity.Entity = entity;
 
@@ -183,7 +181,7 @@ namespace Planet
             Utils.Assert(ParticleList.Size < PlanetEntityLimits.ParticleLimit);
 
             ref ParticlesEntity newEntity = ref ParticleList.Add();
-            ParticleEntity entity = GameState.ParticleSpawnerSystem.Spawn(ParticleContext, type, position, 
+            ParticleEntity entity = GameState.ParticleSpawnerSystem.Spawn(EntitasContext.particle, type, position, 
                         velocity, newEntity.ParticleId);
             newEntity.Entity = entity;
 
@@ -203,7 +201,7 @@ namespace Planet
             Utils.Assert(ProjectileList.Size < PlanetEntityLimits.ProjectileLimit);
 
             ref ProjectileEntity newEntity = ref ProjectileList.Add();
-            GameEntity entity = GameState.ProjectileSpawnerSystem.Spawn(GameContext,
+            GameEntity entity = GameState.ProjectileSpawnerSystem.Spawn(EntitasContext.game,
                          position, direction, projectileType, newEntity.ProjectileId);
             newEntity.Entity = entity;
 
@@ -235,7 +233,7 @@ namespace Planet
             Utils.Assert(ItemParticleList.Size < PlanetEntityLimits.ItemParticlesLimit);
 
             ref ItemParticleEntity newEntity = ref ItemParticleList.Add();
-            GameEntity entity = GameState.ItemSpawnSystem.SpawnItem(Contexts.sharedInstance, itemType, position);
+            GameEntity entity = GameState.ItemSpawnSystem.SpawnItem(EntitasContext, itemType, position);
             newEntity.Entity = entity;
 
             return newEntity;
@@ -295,26 +293,26 @@ namespace Planet
 
             // calling all the systems we have
 
-            GameState.InputProcessSystem.Update(GameContext);
-            GameState.PhysicsMovableSystem.Update(GameContext);
-            GameState.PhysicsProcessCollisionSystem.Update(GameContext, ref TileMap);
+            GameState.InputProcessSystem.Update(EntitasContext);
+            GameState.PhysicsMovableSystem.Update(EntitasContext.game);
+            GameState.PhysicsProcessCollisionSystem.Update(EntitasContext.game, ref TileMap);
             GameState.EnemyAiSystem.Update(this);
             GameState.FloatingTextUpdateSystem.Update(this, frameTime);
-            GameState.AnimationUpdateSystem.Update(frameTime);
-            GameState.ItemPickUpSystem.Update();
-            GameState.ActionSchedulerSystem.Update(frameTime, ref this);
+            GameState.AnimationUpdateSystem.Update(EntitasContext, frameTime);
+            GameState.ItemPickUpSystem.Update(EntitasContext);
+            GameState.ActionSchedulerSystem.Update(EntitasContext, frameTime, ref this);
             GameState.ParticleEmitterUpdateSystem.Update(this);
-            GameState.ParticleUpdateSystem.Update(this, ParticleContext);
-            GameState.ProjectileMovementSystem.Update(GameContext);
+            GameState.ParticleUpdateSystem.Update(this, EntitasContext.particle);
+            GameState.ProjectileMovementSystem.Update(EntitasContext.game);
             GameState.ProjectileCollisionSystem.UpdateEx(ref this);
 
             TileMap.DrawLayer(MapLayerType.Mid, Object.Instantiate(material), transform, 9);
             TileMap.DrawLayer(MapLayerType.Front, Object.Instantiate(material), transform, 10);
-            GameState.AgentDrawSystem.Draw(GameContext, Object.Instantiate(material), transform, 12);
-            GameState.ItemDrawSystem.Draw(Contexts.sharedInstance, Material.Instantiate(material), transform, 13);
-            GameState.ProjectileDrawSystem.Draw(GameContext, Material.Instantiate(material), transform, 20);
-            GameState.FloatingTextDrawSystem.Draw(GameContext, transform, 10000);
-            GameState.ParticleDrawSystem.Draw(ParticleContext, Material.Instantiate(material), transform, 50);
+            GameState.AgentDrawSystem.Draw(EntitasContext.game, Object.Instantiate(material), transform, 12);
+            GameState.ItemDrawSystem.Draw(EntitasContext, Material.Instantiate(material), transform, 13);
+            GameState.ProjectileDrawSystem.Draw(EntitasContext.game, Material.Instantiate(material), transform, 20);
+            GameState.FloatingTextDrawSystem.Draw(EntitasContext.game, transform, 10000);
+            GameState.ParticleDrawSystem.Draw(EntitasContext.particle, Material.Instantiate(material), transform, 50);
             #region Gui drawing systems
             //GameState.InventoryDrawSystem.Draw(material, transform, 1000);
             #endregion

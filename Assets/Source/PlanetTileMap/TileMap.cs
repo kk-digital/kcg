@@ -185,7 +185,7 @@ namespace PlanetTileMap
             
             if (tile.ID != TileID.Error)
             {
-                ref var property = ref GameState.TilePropertyManager.GetTileProperty(tile.ID);
+                ref var property = ref GameState.TileCreationApi.Get((int)tile.ID);
                 if (property.IsAutoMapping)
                 {
                     // we have 4 neighbors per tile

@@ -50,17 +50,35 @@ namespace PlanetTileMap
     {
         // Start is called before the first frame update
         private TileID CurrentTileIndex;
+        public TileProperty[] TilePropertyArray;
 
         public TileCreationApi()
         {
+            var tilePropertyArray = new TileProperty[4096];
+
+            for (int i = 0; i < tilePropertyArray.Length; i++)
+            {
+                tilePropertyArray[i].TileID = TileID.Error;
+                tilePropertyArray[i].BaseSpriteId = -1;
+            }
+
+            TilePropertyArray = tilePropertyArray;
+            
             CurrentTileIndex = TileID.Error;
+        }
+
+        public ref TileProperty Get(int index)
+        {
+            Utils.Assert(index >= 0 && index < TilePropertyArray.Length);
+
+            return ref TilePropertyArray[index];
         }
 
         public void CreateTile(TileID tileID)
         {
             if (tileID == TileID.Error) return;
 
-            GameState.TilePropertyManager.TilePropertyArray[(int)CurrentTileIndex].TileID = tileID;
+            TilePropertyArray[(int)CurrentTileIndex].TileID = tileID;
             CurrentTileIndex = tileID;
         }
 
@@ -68,7 +86,7 @@ namespace PlanetTileMap
         {
             if (CurrentTileIndex == TileID.Error) return;
 
-            GameState.TilePropertyManager.TilePropertyArray[(int)CurrentTileIndex].Name = name;
+            TilePropertyArray[(int)CurrentTileIndex].Name = name;
         }
 
         public void SetTileSpriteSheet16(int spriteSheetId, int row, int column)
@@ -92,8 +110,8 @@ namespace PlanetTileMap
                 }
             }
                 
-            GameState.TilePropertyManager.TilePropertyArray[(int)CurrentTileIndex].BaseSpriteId = baseId;
-            GameState.TilePropertyManager.TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = true;
+            TilePropertyArray[(int)CurrentTileIndex].BaseSpriteId = baseId;
+            TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = true;
         }
 
         public void SetTileSpriteSheet(int spriteSheetId, int row, int column)
@@ -112,8 +130,8 @@ namespace PlanetTileMap
                     }
                 }
             }
-            GameState.TilePropertyManager.TilePropertyArray[(int)CurrentTileIndex].BaseSpriteId = baseId;
-            GameState.TilePropertyManager.TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = true;
+            TilePropertyArray[(int)CurrentTileIndex].BaseSpriteId = baseId;
+            TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = true;
         }
 
         public void SetTileTexture(int spriteSheetId, int row, int column)
@@ -123,8 +141,8 @@ namespace PlanetTileMap
             //FIX: Dont import GameState, make a method?
             //TileAtlas is imported by GameState, so TileAtlas should not import GameState
             int atlasSpriteId = GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas(spriteSheetId, row, column, 0);
-            GameState.TilePropertyManager.TilePropertyArray[(int)CurrentTileIndex].BaseSpriteId = atlasSpriteId;
-            GameState.TilePropertyManager.TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = false;
+            TilePropertyArray[(int)CurrentTileIndex].BaseSpriteId = atlasSpriteId;
+            TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = false;
         }
 
         public void SetTileTexture16(int spriteSheetId, int row, int column)
@@ -132,22 +150,22 @@ namespace PlanetTileMap
             if (CurrentTileIndex == TileID.Error) return;
             
             int atlasSpriteId = GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(spriteSheetId, row, column, 0);
-            GameState.TilePropertyManager.TilePropertyArray[(int)CurrentTileIndex].BaseSpriteId = atlasSpriteId;
-            GameState.TilePropertyManager.TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = false;
+            TilePropertyArray[(int)CurrentTileIndex].BaseSpriteId = atlasSpriteId;
+            TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = false;
         }
 
         public void SetTilePropertyIsExplosive(bool isExplosive)
         {
             if (CurrentTileIndex == TileID.Error) return;
             
-            GameState.TilePropertyManager.TilePropertyArray[(int)CurrentTileIndex].IsExplosive = isExplosive;
+            TilePropertyArray[(int)CurrentTileIndex].IsExplosive = isExplosive;
         }
 
         public void SetTileCollisionType(CollisionType type)
         {
             if (CurrentTileIndex == TileID.Error) return;
 
-            GameState.TilePropertyManager.TilePropertyArray[(int)CurrentTileIndex].TileCollisionType = type;
+            TilePropertyArray[(int)CurrentTileIndex].TileCollisionType = type;
         }
 
         
@@ -155,14 +173,14 @@ namespace PlanetTileMap
         {
             if (CurrentTileIndex == TileID.Error) return;
 
-            GameState.TilePropertyManager.TilePropertyArray[(int)CurrentTileIndex].Durability = durability;
+            TilePropertyArray[(int)CurrentTileIndex].Durability = durability;
         }
 
         public void SetTileDescription(byte durability)
         {
             if (CurrentTileIndex == TileID.Error) return;
             
-            GameState.TilePropertyManager.TilePropertyArray[(int)CurrentTileIndex].Durability = durability;
+            TilePropertyArray[(int)CurrentTileIndex].Durability = durability;
         }
 
        /* public void SetTileVariant(int spriteSheetId, int row, int column, PlanetTileMap.TilePosition variant)

@@ -79,8 +79,8 @@ public class MiningLaser : MonoBehaviour
         GameEntity playerEntity = contexts.game.CreateEntity();
         playerEntity.ReplaceAgentID(agentID);
         playerEntity.isAgentPlayer = true;
-        inventoryAttacher.AttachInventoryToAgent(contexts.game, inventoryWidth, inventoryHeight, agentID);
-        inventoryAttacher.AttachToolBarToPlayer(contexts.game, toolBarSize, agentID);
+        inventoryAttacher.AttachInventoryToAgent(contexts, inventoryWidth, inventoryHeight, playerEntity);
+        inventoryAttacher.AttachToolBarToPlayer(contexts, toolBarSize, playerEntity);
 
         int inventoryID = playerEntity.agentInventory.InventoryID;
         int toolBarID = playerEntity.agentToolBar.ToolBarID;
@@ -88,14 +88,14 @@ public class MiningLaser : MonoBehaviour
         // Add item to tool bar.
         {
             GameEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.game, Enums.ItemType.Gun);
-            inventoryManager.AddItem(entity, toolBarID);
+            inventoryManager.AddItem(contexts, entity, toolBarID);
         }
 
         // Test not stackable items.
         for (uint i = 0; i < 10; i++)
         {
             GameEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.game, Enums.ItemType.Gun);
-            inventoryManager.AddItem(entity, inventoryID);
+            inventoryManager.AddItem(contexts, entity, inventoryID);
         }
 
         // Initialize Laser Object
@@ -109,7 +109,7 @@ public class MiningLaser : MonoBehaviour
         int LaserIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(laserSpriteSheet, 0, 0, Enums.AtlasType.Particle);
    
         // Create Item
-        Item.CreationApi.Instance.CreateItem(Enums.ItemType.Gun, "LaserItem");
+        Item.CreationApi.Instance.CreateItem(contexts, Enums.ItemType.Gun, "LaserItem");
 
         // Set texture of item
         Item.CreationApi.Instance.SetTexture(LaserIcon);
@@ -187,8 +187,8 @@ public class MiningLaser : MonoBehaviour
             }
 
             // Draw System Update
-            inputProcessSystem.Update(Contexts.sharedInstance.game);
-            inventoryDrawSystem.Draw(Instantiate(Material), transform, 100);
+            inputProcessSystem.Update(Contexts.sharedInstance);
+            inventoryDrawSystem.Draw(Contexts.sharedInstance, Instantiate(Material), transform, 100);
 
             // If laser held, draw it.
             if(isHeld)

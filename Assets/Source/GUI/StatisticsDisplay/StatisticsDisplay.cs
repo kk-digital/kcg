@@ -50,7 +50,7 @@ namespace KGUI.Statistics
                 }
 
                 // Get Player Position Info
-                IGroup<GameEntity> Playerentities = Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentPlayer);
+                IGroup<GameEntity> Playerentities = planet.EntitasContext.game.GetGroup(GameMatcher.AgentPlayer);
                 foreach (var entity in Playerentities)
                 {
                     playerPosition = entity.physicsPosition2D.Value;
