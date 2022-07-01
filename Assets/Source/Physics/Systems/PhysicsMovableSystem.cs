@@ -8,6 +8,11 @@ namespace Physics
     {
         public void Update(GameContext gameContext)
         {
+            float Gravity = 800.0f;
+            float MaxAcceleration = 300.0f;
+            float MaxVelocity = 30.0f;
+
+
             float deltaTime = Time.deltaTime;
             var EntitiesWithVelocity = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsMovable, GameMatcher.PhysicsPosition2D));
             foreach (var entity in EntitiesWithVelocity)
@@ -16,16 +21,28 @@ namespace Physics
                 var pos = entity.physicsPosition2D;
                 var movable = entity.physicsMovable;
 
-                movable.Acceleration.Y -= 400.0f * deltaTime;
+                movable.Acceleration.Y -= Gravity * deltaTime;
 
-                if (movable.Acceleration.Y <= -30.0f)
+                // maximum acceleration in the game
+                if (movable.Acceleration.Y <= -MaxAcceleration)
                 {
-                    movable.Acceleration.Y = -30.0f;
+                    movable.Acceleration.Y = -MaxAcceleration;
                 }
 
-                if (movable.Acceleration.Y >= 30.0f)
+                if (movable.Acceleration.Y >= MaxAcceleration)
                 {
-                    movable.Acceleration.Y = 30.0f;
+                    movable.Acceleration.Y = MaxAcceleration;
+                }
+
+
+                // maximum velocity in the game
+                if (movable.Velocity.Y > MaxVelocity)
+                {
+                    movable.Velocity.Y = MaxVelocity;
+                }
+                if (movable.Velocity.Y < -MaxVelocity)
+                {
+                    movable.Velocity.Y = -MaxVelocity;
                 }
 
                 Vec2f displacement = 
@@ -33,19 +50,21 @@ namespace Physics
                 Vec2f newVelocity = movable.Acceleration * deltaTime + movable.Velocity;
                 newVelocity.X *= 0.7f;
 
-                if (newVelocity.Y > 5.0f)
+
+                // maximum velocity in the game
+                if (newVelocity.Y > MaxVelocity)
                 {
-                    newVelocity.Y = 5.0f;
+                    newVelocity.Y = MaxVelocity;
                 }
-                if (newVelocity.Y < -5.0f)
+                if (newVelocity.Y < -MaxVelocity)
                 {
-                    newVelocity.Y = -5.0f;
+                    newVelocity.Y = -MaxVelocity;
                 }
 
 
                 Vec2f newPosition = pos.Value + displacement;
 
-                entity.ReplacePhysicsMovable(entity.physicsMovable.Speed, newVelocity, movable.Acceleration);
+                entity.ReplacePhysicsMovable(entity.physicsMovable.Speed, newVelocity, movable.Acceleration, movable.Landed);
                 entity.ReplacePhysicsPosition2D(newPosition, pos.Value);
             }
         }

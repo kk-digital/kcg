@@ -1,2 +1,2 @@
-call Jenny-Server.bat
-call Jenny\\Jenny client gen
+start Jenny-Server.bat
+start Jenny\\Jenny client gen

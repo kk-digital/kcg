@@ -19,6 +19,7 @@ namespace Physics
         public float Speed;
         public Vec2f Velocity;
         public Vec2f Acceleration;
+        public bool Landed;
     }
 }
 

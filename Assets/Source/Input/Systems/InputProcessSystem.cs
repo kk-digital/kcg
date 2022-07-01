@@ -10,6 +10,7 @@ namespace ECSInput
             var AgentsWithXY = contexts.game.GetGroup(GameMatcher.AllOf(GameMatcher.ECSInput, GameMatcher.ECSInputXY));
 
             bool jump = Input.GetKeyDown(KeyCode.UpArrow);
+            bool dash = Input.GetKeyDown(KeyCode.LeftShift);
             float x = 0.0f;
             if (Input.GetKey(KeyCode.RightArrow))
             {
@@ -22,19 +23,61 @@ namespace ECSInput
 
             foreach (var entity in AgentsWithXY)
             {
-                entity.ReplaceECSInputXY(new Vec2f(x, 0.0f), jump);
+                entity.ReplaceECSInputXY(new Vec2f(x, 0.0f), jump, dash);
+
+            
+                
 
                 var input = entity.eCSInputXY;
                 var movable = entity.physicsMovable;
 
                 movable.Acceleration = input.Value * movable.Speed * 50.0f;
-                if (jump)
+
+                var movementState = entity.agentMovementState;
+
+                movementState.DashCooldown -= Time.deltaTime;
+
+                if (!movementState.Jumping)
                 {
-                    movable.Acceleration.Y += 100.0f;
-                    movable.Velocity.Y = 5.0f;
+                    movementState.Dashing = false;
+                    movementState.Jumping = false;
+
+                    if (dash && movementState.DashCooldown <= 0.0f)
+                    {
+                        movable.Acceleration.X += 500.0f * x;
+                        movable.Velocity.X = 30.0f * x;
+                        movementState.Dashing = true;
+                        movementState.DashCooldown = 1.5f;
+                    }
+                    else if (jump)
+                    {
+                        movable.Landed = false;
+                        movable.Acceleration.Y += 0.0f;
+                        movable.Velocity.Y = 8.5f;
+                        movementState.Jumping = true;
+                    }
+
+                }
+                else
+                {
+                    if (jump && !movementState.DoubleJumping)
+                    {
+                        movable.Acceleration.Y += 0.0f;
+                        movable.Velocity.Y = 6.5f;
+                        movementState.DoubleJumping = true;
+                    }
                 }
 
-                entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration);
+                if (movable.Landed)
+                {
+                    movementState.DoubleJumping = false;
+                    movementState.Jumping = false;
+                    movementState.Dashing = false;
+                }
+
+                entity.ReplaceAgentMovementState(movementState.Jumping, movementState.DoubleJumping,
+                                    movementState.Dashing, movementState.Flying, movementState.DashCooldown);
+                entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration, movable.Landed);
 
             }
 
