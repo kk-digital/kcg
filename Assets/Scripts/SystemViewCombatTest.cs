@@ -79,9 +79,10 @@ namespace Scripts {
             void Start() {
                 LastTime = (int)(Time.time * 1000.0f);
 
-                State.star.mass = 5000000.0f;
-                State.star.posx = -5.0f;
-                State.star.posy = 0.0f;
+                State.stars.Add(new SystemStar());
+                State.stars[0].self.mass = 5000000.0f;
+                State.stars[0].self.posx = -5.0f;
+                State.stars[0].self.posy = 0.0f;
 
                 RespawnPlayer();
 
@@ -89,7 +90,7 @@ namespace Scripts {
                 StarObject.name = "Star Renderer";
 
                 SystemStarRenderer starRenderer = StarObject.AddComponent<SystemStarRenderer>();
-                starRenderer.Star = State.star;
+                starRenderer.Star = State.stars[0];
             }
 
             void LateUpdate() {
@@ -297,7 +298,7 @@ namespace Scripts {
 
                 turret.range                     = 20.0f;
                 turret.shield_penetration        = 0.1f;
-                turret.projectile_velocity       = 8.0f;
+                turret.projectile_velocity       = 12.0f;
                 turret.damage                    = 200;
                 turret.attack_speed              = 50;
                 turret.cooldown                  = 0;
@@ -305,9 +306,12 @@ namespace Scripts {
                 turret.rotation                  = Tools.pi;
                 turret.rotation_rate             = 2.0f;
                 turret.self                      = Player.ship;
+                turret.state                     = State;
+                turret.acc                       = 25.0f;
 
                 turret.flags                     = (int)WeaponFlags.WEAPON_PROJECTILE
-                                                 | (int)WeaponFlags.WEAPON_TURRET;
+                                                 | (int)WeaponFlags.WEAPON_TURRET
+                                                 | (int)WeaponFlags.WEAPON_SEEKING;
 
                 ShipWeapon laser                 = new ShipWeapon();
 

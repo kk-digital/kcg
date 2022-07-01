@@ -388,7 +388,7 @@ namespace Scripts {
 
                 if (render_orbit) {
                     if (ship.descriptor.central_body == null)
-                        ship.descriptor.central_body = state.star;
+                        ship.descriptor.central_body = state.stars[0].self;
 
                     SpaceObject strongest_gravity_object = null;
                     float g = 0.0f;

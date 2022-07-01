@@ -1,8 +1,8 @@
 ﻿using System;
 using UnityEngine; // For color
-using Scripts.SystemView;
+using Source.SystemView;
 
-namespace Source {
+namespace Scripts {
     namespace SystemView {
         public class ShipWeaponProjectile {
             // todo: is this even needed?        v
@@ -23,6 +23,10 @@ namespace Source {
             public float ShieldDamageMultiplier;
             public float HullDamageMultiplier;
 
+            public float acc;
+            public bool  seeking;
+            public SystemState state;
+
             public int Damage;
 
             public ShipWeaponProjectile() {
@@ -34,6 +38,37 @@ namespace Source {
                 if((TimeElapsed += dt) > LifeSpan) {
                     Weapon.projectiles_fired.Remove(this);
                     return false;
+                }
+
+                if(seeking) {
+                    SystemShip target          = null;
+                    float      target_distance = 0.0f;
+
+                    foreach(SystemShip ship in state.ships)
+                        if(ship != Self) {
+                            float distance = Tools.get_distance(Body.posx, Body.posy, ship.self.posx, ship.self.posy);
+
+                            if(target == null || target_distance > distance) {
+                                target_distance = distance;
+                                target = ship;
+                            }
+                        }
+
+                    if(target != null) {
+                        float dx   = target.self.posx - Body.posx;
+                        float dy   = target.self.posy - Body.posy;
+
+                        float accx = acc * dx / target_distance;
+                        float accy = acc * dy / target_distance;
+
+                        float vel  = Tools.magnitude(Body.velx, Body.vely);
+
+                        Body.velx -= acc * dt * 0.5f * Body.velx / vel;
+                        Body.vely -= acc * dt * 0.5f * Body.vely / vel;
+
+                        Body.velx += accx * dt;
+                        Body.vely += accy * dt;
+                    }
                 }
 
                 if(Descriptor == null) // Linear trajectory

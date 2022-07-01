@@ -113,7 +113,7 @@ namespace Scripts {
                 StarObject.name = "Star Renderer";
 
                 SystemStarRenderer starRenderer = StarObject.AddComponent<SystemStarRenderer>();
-                starRenderer.Star = State.star;
+                starRenderer.Star = State.stars[0];
 
                 Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
             }
@@ -129,9 +129,12 @@ namespace Scripts {
             public void RegenerateSystem() {
                 LastTime = Time.time;
 
-                State.star.mass = SunMass;
-                State.star.posx = ((float)rnd.NextDouble() * 8.0f - 64.0f) * system_scale;
-                State.star.posy = ((float)rnd.NextDouble() * 8.0f - 4.0f)  * system_scale;
+                State.stars.Clear();
+                State.stars.Add(new SystemStar());
+
+                State.stars[0].self.mass = SunMass;
+                State.stars[0].self.posx = ((float)rnd.NextDouble() * 8.0f - 64.0f) * system_scale;
+                State.stars[0].self.posy = ((float)rnd.NextDouble() * 8.0f - 4.0f)  * system_scale;
 
                 // delete previous system
 
@@ -174,7 +177,7 @@ namespace Scripts {
                 for(int i = 0; i < InnerPlanets; i++) {
                     SystemPlanet Planet = new SystemPlanet();
 
-                    Planet.descriptor.central_body = State.star;
+                    Planet.descriptor.central_body = State.stars[0].self;
 
                     Planet.descriptor.semiminoraxis = (30.0f + (i + 1) * (i + 1) * 10) * system_scale;
                     Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + ((float)rnd.NextDouble() * (i + 5) * system_scale);
@@ -238,7 +241,7 @@ namespace Scripts {
                 for(int i = 0; i < OuterPlanets; i++) {
                     SystemPlanet Planet = new SystemPlanet();
 
-                    Planet.descriptor.central_body = State.star;
+                    Planet.descriptor.central_body = State.stars[0].self;
 
                     //Planet.descriptor.semiminoraxis = InnerAsteroidBeltDescriptor.semimajoraxis + (i + 3) * (i + 3);
                     //Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + (float)rnd.NextDouble() * i / 2.0f;
@@ -334,7 +337,7 @@ namespace Scripts {
                 for(int i = 0; i < FarOrbitPlanets; i++) {
                     SystemPlanet Planet = new SystemPlanet();
 
-                    Planet.descriptor.central_body = State.star;
+                    Planet.descriptor.central_body = State.stars[0].self;
 
                     //Planet.descriptor.semiminoraxis = InnerAsteroidBeltDescriptor.semimajoraxis + (i + 3) * (i + 3);
                     //Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + (float)rnd.NextDouble() * i / 2.0f;
@@ -364,12 +367,12 @@ namespace Scripts {
                 foreach(SystemPlanet Planet in State.planets) {
                     State.objects.Add(Planet.descriptor.self);
                 }
-                State.objects.Add(State.star);
+                State.objects.Add(State.stars[0].self);
 
                 for(int i = 0; i < SpaceStations; i++) {
                     SpaceStation Station = new();
 
-                    Station.descriptor.central_body   = State.star;
+                    Station.descriptor.central_body  = State.stars[0].self;
 
                     Station.descriptor.semiminoraxis = ((float)rnd.NextDouble() * State.planets[InnerPlanets + OuterPlanets - 1].descriptor.semimajoraxis + 4.0f);
                     Station.descriptor.semimajoraxis =  (float)rnd.NextDouble() * system_scale + Station.descriptor.semiminoraxis;
@@ -448,7 +451,7 @@ namespace Scripts {
                 LastTime = Time.time;
 
                 if(CachedSunMass != SunMass) {
-                    State.star.mass = CachedSunMass = SunMass;
+                    State.stars[0].self.mass = CachedSunMass = SunMass;
 
                     for(int i = 0; i < Planets.Count; i++)
                         Planets.ElementAt(i).Key.descriptor.compute();
