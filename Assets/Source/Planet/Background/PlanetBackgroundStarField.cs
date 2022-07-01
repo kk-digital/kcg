@@ -240,7 +240,7 @@ namespace Planet.Background
                     int spriteRandom = Random.Range(0, stars.Count);
                     Sprites.Sprite sprite = new Sprites.Sprite();
                     float rand1 = perlinGrid[random, random];
-                    
+
                     switch(spriteRandom)
                     {
                         case 0:
@@ -263,10 +263,10 @@ namespace Planet.Background
                             break;
                     }
 
-                    if (rand1 >= .5)
-                        Utility.Render.DrawSprite(Random.Range(-10, 10), Random.Range(-10, 10), 0.5f, 0.5f, sprite, Material, transform, 2);
+                    if (rand1 >= 0.5)
+                        Utility.Render.DrawBackground(Random.Range(-10, 10), Random.Range(-10, 10), 0.5f, 0.5f, sprite, Material, transform, 2);
                     else
-                        Utility.Render.DrawSprite(Random.Range(-100, 100), Random.Range(-100, 100), 0.5f, 0.5f, sprite, Material, transform, 2);
+                        Utility.Render.DrawBackground(Random.Range(-100, 100), Random.Range(-100, 100), 0.5f, 0.5f, sprite, Material, transform, 2);
 
                     for (int k = 0; k < transform.childCount; k++)
                     {

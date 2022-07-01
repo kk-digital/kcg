@@ -409,9 +409,9 @@ namespace Planet.Background
                     }
 
                     if (rand1 >= .5)
-                        Utility.Render.DrawSprite(Random.Range(-10, 10), Random.Range(-10, 10), 1, 1, sprite, Material, transform, 1);
+                        Utility.Render.DrawBackground(Random.Range(-10, 10), Random.Range(-10, 10), 1, 1, sprite, Material, transform, 1);
                     else
-                        Utility.Render.DrawSprite(Random.Range(-100, 100), Random.Range(-100, 100), 1, 1, sprite, Material, transform, 1);
+                        Utility.Render.DrawBackground(Random.Range(-100, 100), Random.Range(-100, 100), 1, 1, sprite, Material, transform, 1);
 
                     for(int k = 0; k < transform.childCount; k++)
                     {
