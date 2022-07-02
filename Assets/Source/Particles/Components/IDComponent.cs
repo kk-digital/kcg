@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Particle
 {
     [Particle]
-    public struct IDComponent : IComponent
+    public class IDComponent : IComponent
     {
         public int ID;
     }

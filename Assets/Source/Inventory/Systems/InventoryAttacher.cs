@@ -12,25 +12,27 @@ namespace Inventory
 
         private static int InventoryID = 0;
 
-        public void AttachInventoryToAgent(Contexts entitasContext, int width, int height, GameEntity agentEntity)
+        public void AttachInventoryToAgent(Contexts entitasContext, int width, int height, AgentEntity agentEntity)
         {
-            GameEntity entity = agentEntity;
+            AgentEntity entity = agentEntity;
             entity.AddAgentInventory(InventoryID);
             MakeInventoryEntity(entitasContext, width, height);
         }
 
         public void AttachInventorytoItem(Contexts entitasContext, int width, int height, int ItemID)
         {
-            GameEntity entity = entitasContext.game.GetEntityWithItemIDID(ItemID);
-            entity.AddAgentInventory(InventoryID);
+            ItemEntity entity = entitasContext.item.GetEntityWithItemID(ItemID);
+            entity.AddItemInventory(InventoryID);
             MakeInventoryEntity(entitasContext, width, height);
         }
 
-        public void AttachToolBarToPlayer(Contexts entitasContext, int size, GameEntity agentEntity)
+        public void AttachToolBarToPlayer(Contexts entitasContext, int size, AgentEntity agentEntity)
         {
-            GameEntity playerEntity = agentEntity;
+            AgentEntity playerEntity = agentEntity;
             playerEntity.AddAgentToolBar(InventoryID);
             InventoryEntity entity = MakeInventoryEntity(entitasContext, size, 1);
+            entity.inventorySize.Width = 5;
+
             entity.isInventoryToolBar = true;
             entity.isInventoryDrawable = true;
         }
@@ -42,6 +44,8 @@ namespace Inventory
             entity.AddInventorySize(width, height);
             BitArray bitArray = new BitArray(width* height, false);
             entity.AddInventorySlots(bitArray, 0);
+
+
             
             return entity;
         }

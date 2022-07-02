@@ -5,11 +5,11 @@ namespace FloatingText
     public class FloatingTextSpawnerSystem
     {
 
-        public GameEntity SpawnFloatingText(GameContext gameContext, string text, 
+        public FloatingTextEntity SpawnFloatingText(FloatingTextContext floatingTextContext, string text, 
                                     float timeToLive, Vec2f velocity, Vec2f position,
                                     int Index)
         {
-            var entity = gameContext.CreateEntity();
+            var entity = floatingTextContext.CreateEntity();
 
             entity.AddFloatingTextID(Index);
             entity.AddFloatingTextState(timeToLive, text);

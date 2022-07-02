@@ -4,7 +4,8 @@ using UnityEngine;
 
 namespace Vehicle
 {
-    public struct Sprite2DComponent : IComponent
+    [Vehicle]
+    public class Sprite2DComponent : IComponent
     {
         public int SpriteId;
         public Vec2f Size;

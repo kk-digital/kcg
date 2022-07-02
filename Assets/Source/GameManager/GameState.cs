@@ -39,7 +39,7 @@ public class GameState
     public static readonly Agent.AgentCreationApi AgentCreationApi;
     public static readonly Agent.AgentSpawnerSystem AgentSpawnerSystem;
     public static readonly Agent.EnemyAiSystem EnemyAiSystem;
-    public static readonly Agent.AgentMeshBuilderSystem AgentMeshBuilderSystem;
+    public static readonly Agent.MeshBuilderSystem AgentMeshBuilderSystem;
 
 
     #endregion
@@ -51,7 +51,7 @@ public class GameState
 
     #region Inventory
     public static readonly Inventory.InventoryManager InventoryManager;
-    public static readonly Inventory.InventoryDrawSystem InventoryDrawSystem;
+    public static readonly Inventory.DrawSystem InventoryDrawSystem;
     #endregion
 
     #region Item
@@ -77,7 +77,6 @@ public class GameState
     public static readonly Utility.FileLoadingManager FileLoadingManager;
     public static readonly ECSInput.InputProcessSystem InputProcessSystem;
 
-
     #region Particle
     public static readonly Particle.ParticleCreationApi ParticleCreationApi;
     public static readonly Particle.ParticleEmitterCreationApi ParticleEmitterCreationApi;
@@ -85,8 +84,7 @@ public class GameState
     public static readonly Particle.ParticleUpdateSystem ParticleUpdateSystem;
     public static readonly Particle.ParticleEmitterSpawnerSystem ParticleEmitterSpawnerSystem;
     public static readonly Particle.ParticleSpawnerSystem ParticleSpawnerSystem;
-    public static readonly Particle.ParticleMeshBuilderSystem ParticleMeshBuilderSystem;
-
+    public static readonly Particle.MeshBuilderSystem ParticleMeshBuilderSystem;
     #endregion
 
     static GameState()
@@ -100,9 +98,9 @@ public class GameState
         AgentCreationApi = new Agent.AgentCreationApi();
         AgentSpawnerSystem = new Agent.AgentSpawnerSystem(AgentCreationApi);
         PhysicsMovableSystem = new Physics.PhysicsMovableSystem();
-        AgentMeshBuilderSystem = new Agent.AgentMeshBuilderSystem();
+        AgentMeshBuilderSystem = new Agent.MeshBuilderSystem();
         InventoryManager = new Inventory.InventoryManager();
-        InventoryDrawSystem = new Inventory.InventoryDrawSystem();
+        InventoryDrawSystem = new Inventory.DrawSystem();
         PhysicsProcessCollisionSystem = new Physics.PhysicsProcessCollisionSystem();
         EnemyAiSystem = new Agent.EnemyAiSystem();
         AnimationManager = new Animation.AnimationManager();
@@ -121,7 +119,7 @@ public class GameState
         ParticleCreationApi = new Particle.ParticleCreationApi();
         ParticleEmitterCreationApi = new Particle.ParticleEmitterCreationApi();
         ParticleEmitterUpdateSystem = new Particle.ParticleEmitterUpdateSystem(ParticleEmitterCreationApi, ParticleCreationApi);
-        ParticleMeshBuilderSystem = new Particle.ParticleMeshBuilderSystem();
+        ParticleMeshBuilderSystem = new Particle.MeshBuilderSystem();
         ParticleUpdateSystem = new Particle.ParticleUpdateSystem();
         ParticleEmitterSpawnerSystem = new Particle.ParticleEmitterSpawnerSystem(ParticleEmitterCreationApi, ParticleCreationApi);
         ParticleSpawnerSystem = new Particle.ParticleSpawnerSystem(ParticleCreationApi);

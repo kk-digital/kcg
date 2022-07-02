@@ -8,7 +8,7 @@ namespace Item
     {
 
         // array for storing entities
-        public ItemParticleEntity[] List;
+        public ItemEntity[] List;
 
         public int Size;
         // used for tracking down an available 
@@ -26,11 +26,11 @@ namespace Item
 
         public ItemParticleList()
         {
-            List = new ItemParticleEntity[1024];
+            List = new ItemEntity[1024];
         }
 
 
-        public ref ItemParticleEntity Add()
+        public ItemEntity Add(ItemEntity entity)
         {
             // if we dont have enough space we expand
             // the capacity
@@ -45,9 +45,9 @@ namespace Item
             int Found = -1;
             for (int index = LastFreeIndex; index < Capacity; index++)
             {
-                ref ItemParticleEntity thisEntity = ref List[index];
+                ref ItemEntity thisEntity = ref List[index];
 
-                if (!thisEntity.IsInitialized)
+                if (!thisEntity.isEnabled)
                 {
                     Found = index;
                     break;
@@ -57,9 +57,9 @@ namespace Item
             {
                 for (int index = 0; index < LastFreeIndex; index++)
                 {
-                    ref ItemParticleEntity thisEntity = ref List[index];
+                    ref ItemEntity thisEntity = ref List[index];
 
-                    if (!thisEntity.IsInitialized)
+                    if (!thisEntity.isEnabled)
                     {
                         Found = index;
                         break;
@@ -72,20 +72,18 @@ namespace Item
 
 
             // creating the Entity and initializing it
-            ItemParticleEntity NewEntity = new ItemParticleEntity();
-            NewEntity.ItemParticleId = Found;
-            NewEntity.IsInitialized = true;
+            entity.itemID.ID = Found;
 
-            List[Found] = NewEntity;
+            List[Found] = entity;
             Size++;
 
-            return ref List[Found];
+            return List[Found];
         }
 
 
-        public ref ItemParticleEntity Get(int Index)
+        public ItemEntity Get(int Index)
         {
-            return ref List[Index];
+            return List[Index];
         }
 
 
@@ -93,8 +91,8 @@ namespace Item
         // set the IsInitialized field to false
         public void Remove(int itemParticleId)
         {
-            ref ItemParticleEntity entity = ref Get(itemParticleId);
-            entity.IsInitialized = false;
+            ItemEntity entity = Get(itemParticleId);
+            entity.Destroy();
             Size--;
         }
 

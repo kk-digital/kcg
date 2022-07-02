@@ -7,16 +7,16 @@ namespace Agent
 {
     public class EnemyAiSystem
     {
-        List<GameEntity> ToRemoveAgents = new List<GameEntity>();
+        List<AgentEntity> ToRemoveAgents = new List<AgentEntity>();
         public void Update(Planet.PlanetState planetState)
         {
-            var players = planetState.EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentPlayer));
-            var entities = planetState.EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentEnemy));
+            var players = planetState.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentPlayer));
+            var entities = planetState.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentEnemy));
 
 
             if (players.count > 0)
             {
-                GameEntity closestPlayer = players.GetEntities()[0];
+                AgentEntity closestPlayer = players.GetEntities()[0];
 
                 foreach (var entity in entities)
                 {

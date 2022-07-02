@@ -11,7 +11,7 @@ public class SpawnEnemy : MonoBehaviour
     Inventory.InventoryManager InventoryManager;
 
     // Inventory Draw System
-    Inventory.InventoryDrawSystem inventoryDrawSystem;
+    Inventory.DrawSystem inventoryDrawSystem;
 
     // Item Spawner System
     Item.SpawnerSystem itemSpawnSystem;
@@ -67,7 +67,7 @@ public class SpawnEnemy : MonoBehaviour
         itemSpawnSystem = new Item.SpawnerSystem();
 
         // Create Draw System
-        inventoryDrawSystem = new Inventory.InventoryDrawSystem();
+        inventoryDrawSystem = new Inventory.DrawSystem();
 
         // Create Inventory Attacher
         var inventoryAttacher = Inventory.InventoryAttacher.Instance;
@@ -78,7 +78,7 @@ public class SpawnEnemy : MonoBehaviour
         int inventoryHeight = 5;
         int toolBarSize = 8;
 
-        GameEntity playerEntity = contexts.game.CreateEntity();
+        AgentEntity playerEntity = contexts.agent.CreateEntity();
         playerEntity.ReplaceAgentID(agentID);
         playerEntity.isAgentPlayer = true;
         inventoryAttacher.AttachInventoryToAgent(Contexts.sharedInstance, inventoryWidth, inventoryHeight, playerEntity);
@@ -89,14 +89,14 @@ public class SpawnEnemy : MonoBehaviour
 
         // Add item to tool bar.
         {
-            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.game, Enums.ItemType.PlacementTool);
+            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.item, Enums.ItemType.PlacementTool);
             InventoryManager.AddItem(contexts, entity, toolBarID);
         }
 
         // Test not stackable items.
         for (uint i = 0; i < 10; i++)
         {
-            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.game, Enums.ItemType.PlacementTool);
+            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.item, Enums.ItemType.PlacementTool);
             InventoryManager.AddItem(contexts, entity, inventoryID);
         }
 
@@ -164,6 +164,6 @@ public class SpawnEnemy : MonoBehaviour
     }
     private void OnRenderObject()
     {
-        inventoryDrawSystem.Draw(Instantiate(Material), transform);
+        inventoryDrawSystem.Draw(Contexts.sharedInstance, Material, transform);
     }
 }

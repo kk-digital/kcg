@@ -4,6 +4,7 @@ using KMath;
 
 namespace Projectile
 {
+    [Projectile]
     public struct MovableComponent : IComponent
     {
         public Vec2f Velocity;

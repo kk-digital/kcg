@@ -37,7 +37,7 @@ namespace Planet.Unity
         ECSInput.InputProcessSystem InputProcessSystems;
         Agent.AgentSpawnerSystem AgentSpawnerSystem;
         PhysicsMovableSystem PhysicsMovableSystem;
-        Agent.AgentMeshBuilderSystem AgentMeshBuilderSystem;
+        Agent.MeshBuilderSystem AgentMeshBuilderSystem;
         PhysicsProcessCollisionSystem AgentProcessCollisionSystem;
 
         public void Start()
@@ -61,7 +61,7 @@ namespace Planet.Unity
 
             InputProcessSystems = new ECSInput.InputProcessSystem();
             PhysicsMovableSystem = new Physics.PhysicsMovableSystem();
-            AgentMeshBuilderSystem = new Agent.AgentMeshBuilderSystem();
+            AgentMeshBuilderSystem = new Agent.MeshBuilderSystem();
             AgentProcessCollisionSystem = new Physics.PhysicsProcessCollisionSystem();
 
             AgentMeshBuilderSystem.Initialize(Material, transform, 12);
@@ -111,9 +111,9 @@ namespace Planet.Unity
             }
 
 
-            InputProcessSystems.Update();
-            PhysicsMovableSystem.Update();
-            AgentProcessCollisionSystem.Update(ref PlanetState.TileMap);
+            InputProcessSystems.Update(Contexts.sharedInstance);
+            PhysicsMovableSystem.Update(Contexts.sharedInstance.agent);
+            AgentProcessCollisionSystem.Update(Contexts.sharedInstance.agent, ref PlanetState.TileMap);
 
             AgentMeshBuilderSystem.UpdateMesh();
             PlanetState.TileMap.UpdateLayerMesh(MapLayerType.Front);

@@ -30,7 +30,7 @@ namespace Vehicle
         }
 
 
-        public ref VehicleEntity Add()
+        public VehicleEntity Add(VehicleEntity entity)
         {
             // if we dont have enough space we expand
             // the capacity
@@ -47,7 +47,7 @@ namespace Vehicle
             {
                 ref VehicleEntity thisEntity = ref List[index];
 
-                if (!thisEntity.IsInitialized)
+                if (thisEntity == null)
                 {
                     Found = index;
                     break;
@@ -59,7 +59,7 @@ namespace Vehicle
                 {
                     ref VehicleEntity thisEntity = ref List[index];
 
-                    if (!thisEntity.IsInitialized)
+                    if (thisEntity == null)
                     {
                         Found = index;
                         break;
@@ -72,27 +72,25 @@ namespace Vehicle
 
 
             // creating the Entity and initializing it
-            VehicleEntity NewEntity = new VehicleEntity();
-            NewEntity.VehicleId = Found;
-            NewEntity.IsInitialized = true;
+            entity.vehicleID.ID = Found;
 
-            List[Found] = NewEntity;
+            List[Found] = entity;
             Size++;
 
-             return ref List[Found];
+             return List[Found];
         }
 
-        public ref VehicleEntity Get(int Index)
+        public VehicleEntity Get(int Index)
         {
-            return ref List[Index];
+            return List[Index];
         }
 
         // to remove an entity we just 
         // set the IsInitialized field to false
         public void Remove(int vehicleId)
         {
-            ref VehicleEntity entity = ref Get(vehicleId);
-            entity.IsInitialized = false;
+            VehicleEntity entity = Get(vehicleId);
+            entity.Destroy();
             Size--;
         }
 

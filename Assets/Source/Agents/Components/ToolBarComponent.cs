@@ -2,7 +2,8 @@
 
 namespace Agent
 {
-    public struct ToolBarComponent : IComponent
+    [Agent]
+    public class ToolBarComponent : IComponent
     {
         public int ToolBarID;
     }

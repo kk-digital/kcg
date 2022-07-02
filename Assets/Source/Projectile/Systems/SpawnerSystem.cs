@@ -20,14 +20,14 @@ namespace Projectile
             ProjectileCreationApi = projectileCreationApi;
         }
 
-        public GameEntity Spawn(GameContext gameContext, Vec2f position, Vec2f direction, 
+        public ProjectileEntity Spawn(ProjectileContext projectileContext, Vec2f position, Vec2f direction, 
                                 Enums.ProjectileType projectileType, 
                                 int projectileId)
         {
             ProjectileProperties projectileProperties = 
                                     ProjectileCreationApi.GetRef((int)projectileType);
 
-            GameEntity entity = gameContext.CreateEntity();
+            ProjectileEntity entity = projectileContext.CreateEntity();
             // Add ID Component
             entity.AddProjectileID(projectileId);
 
@@ -59,11 +59,11 @@ namespace Projectile
 
         }
 
-        public GameEntity SpawnBullet(Contexts entitasContext, int spriteID, int width, int height, Vec2f startPos,
+        public ProjectileEntity SpawnBullet(Contexts entitasContext, int spriteID, int width, int height, Vec2f startPos,
             Vec2f velocity, Vec2f acceleration, ProjectileType projectileType, 
             ProjectileDrawType projectileDrawType)
         {
-            GameEntity entity = entitasContext.game.CreateEntity();
+            ProjectileEntity entity = entitasContext.projectile.CreateEntity();
             // Increase ID per object statically
             projectileID++;
 
@@ -99,7 +99,7 @@ namespace Projectile
             Cell start, Cell end, ProjectileType projectileType, ProjectileDrawType projectileDrawType)
         {
             // Create Entity
-            var entity = entitasContext.game.CreateEntity();
+            var entity = entitasContext.projectile.CreateEntity();
 
             // Increase ID per object statically
             projectileID++;

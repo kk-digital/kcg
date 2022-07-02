@@ -27,7 +27,7 @@ namespace Item
                 Vector4 textureCoords = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle).TextureCoords;
                 
                 // Draw all items with same sprite.
-                var ItemsOfType = Contexts.sharedInstance.game.GetEntitiesWithItemIDItemType(ItemTypeEntity.itemProperty.ItemType);
+                var ItemsOfType = Contexts.sharedInstance.item.GetEntitiesWithItemType(ItemTypeEntity.itemProperty.ItemType);
 
                 foreach (var entity in ItemsOfType)
                 {

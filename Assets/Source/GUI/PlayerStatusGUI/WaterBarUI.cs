@@ -111,8 +111,8 @@ namespace KGUI
             waterBar.GetComponent<Image>().type = Image.Type.Filled;
             waterBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
             waterBar.GetComponent<Image>().fillOrigin = 0;
-            IGroup<GameEntity> Playerentities =
-            contexts.game.GetGroup(GameMatcher.AgentStats);
+            IGroup<AgentEntity> Playerentities =
+            contexts.agent.GetGroup(AgentMatcher.AgentStats);
             foreach (var entity in Playerentities)
             {
                 waterBar.GetComponent<Image>().fillAmount = entity.agentStats.Water / 100;
@@ -130,8 +130,8 @@ namespace KGUI
         {
             if (Init)
             {
-                IGroup<GameEntity> Playerentities =
-                Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentStats);
+                IGroup<AgentEntity> Playerentities =
+                Contexts.sharedInstance.agent.GetGroup(AgentMatcher.AgentStats);
                 foreach (var entity in Playerentities)
                 {
                     waterBar.GetComponent<Image>().fillAmount = entity.agentStats.Water / 100;

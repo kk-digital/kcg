@@ -8,123 +8,15 @@
 //------------------------------------------------------------------------------
 public static class GameComponentsLookup {
 
-    public const int AgentActionScheduler = 0;
-    public const int AgentAIController = 1;
-    public const int AgentEnemy = 2;
-    public const int AgentID = 3;
-    public const int AgentInventory = 4;
-    public const int AgentPlayer = 5;
-    public const int AgentPositionDiscrete2D = 6;
-    public const int AgentSprite2D = 7;
-    public const int AgentStats = 8;
-    public const int AgentToolBar = 9;
-    public const int AnimationState = 10;
-    public const int ECSInput = 11;
-    public const int ECSInputXY = 12;
-    public const int FloatingTextID = 13;
-    public const int FloatingTextMovable = 14;
-    public const int FloatingTextSprite = 15;
-    public const int FloatingTextState = 16;
-    public const int ItemAttachedInventory = 17;
-    public const int ItemDrawPosition2D = 18;
-    public const int ItemID = 19;
-    public const int ItemLabel = 20;
-    public const int ItemStack = 21;
-    public const int ItemUnpickable = 22;
-    public const int PhysicsBox2DCollider = 23;
-    public const int PhysicsMovable = 24;
-    public const int PhysicsPosition2D = 25;
-    public const int PhysicsSphere2DCollider = 26;
-    public const int ProjectileCollider = 27;
-    public const int ProjectileID = 28;
-    public const int ProjectileMovable = 29;
-    public const int ProjectilePhysicsState2D = 30;
-    public const int ProjectilePosition2D = 31;
-    public const int ProjectileSprite2D = 32;
-    public const int ProjectileType = 33;
-    public const int VehicleID = 34;
-    public const int VehiclePhysicsState2D = 35;
-    public const int VehicleSprite2D = 36;
 
-    public const int TotalComponents = 37;
+
+    public const int TotalComponents = 0;
 
     public static readonly string[] componentNames = {
-        "AgentActionScheduler",
-        "AgentAIController",
-        "AgentEnemy",
-        "AgentID",
-        "AgentInventory",
-        "AgentPlayer",
-        "AgentPositionDiscrete2D",
-        "AgentSprite2D",
-        "AgentStats",
-        "AgentToolBar",
-        "AnimationState",
-        "ECSInput",
-        "ECSInputXY",
-        "FloatingTextID",
-        "FloatingTextMovable",
-        "FloatingTextSprite",
-        "FloatingTextState",
-        "ItemAttachedInventory",
-        "ItemDrawPosition2D",
-        "ItemID",
-        "ItemLabel",
-        "ItemStack",
-        "ItemUnpickable",
-        "PhysicsBox2DCollider",
-        "PhysicsMovable",
-        "PhysicsPosition2D",
-        "PhysicsSphere2DCollider",
-        "ProjectileCollider",
-        "ProjectileID",
-        "ProjectileMovable",
-        "ProjectilePhysicsState2D",
-        "ProjectilePosition2D",
-        "ProjectileSprite2D",
-        "ProjectileType",
-        "VehicleID",
-        "VehiclePhysicsState2D",
-        "VehicleSprite2D"
+
     };
 
     public static readonly System.Type[] componentTypes = {
-        typeof(Agent.ActionSchedulerComponent),
-        typeof(Agent.AIController),
-        typeof(Agent.EnemyComponent),
-        typeof(Agent.IDComponent),
-        typeof(Agent.InventoryComponent),
-        typeof(Agent.PlayerComponent),
-        typeof(Agent.PositionDiscrete2DComponent),
-        typeof(Agent.Sprite2DComponent),
-        typeof(Agent.StatsComponent),
-        typeof(Agent.ToolBarComponent),
-        typeof(Animation.StateComponent),
-        typeof(ECSInput.Component),
-        typeof(ECSInput.XYComponent),
-        typeof(FloatingText.IDComponent),
-        typeof(FloatingText.MovableComponent),
-        typeof(FloatingText.SpriteComponent),
-        typeof(FloatingText.StateComponent),
-        typeof(Item.AttachedInventoryComponent),
-        typeof(Item.DrawPosition2DComponent),
-        typeof(Item.IDComponent),
-        typeof(Item.LabelComponent),
-        typeof(Item.StackComponent),
-        typeof(Item.Unpickable),
-        typeof(Physics.Box2DColliderComponent),
-        typeof(Physics.MovableComponent),
-        typeof(Physics.Position2DComponent),
-        typeof(Physics.Sphere2DColliderComponent),
-        typeof(Projectile.ColliderComponent),
-        typeof(Projectile.IDComponent),
-        typeof(Projectile.MovableComponent),
-        typeof(Projectile.PhysicsState2DComponent),
-        typeof(Projectile.Position2DComponent),
-        typeof(Projectile.Sprite2DComponent),
-        typeof(Projectile.TypeComponent),
-        typeof(Vehicle.IDComponent),
-        typeof(Vehicle.PhysicsState2DComponent),
-        typeof(Vehicle.Sprite2DComponent)
+
     };
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Physics
 {
+    [Agent, Item]
     public struct Position2DComponent : IComponent
     {
         public Vec2f Value;

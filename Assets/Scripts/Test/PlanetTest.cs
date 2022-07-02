@@ -10,7 +10,7 @@ namespace Planet.Unity
 
         public PlanetState Planet;
         Inventory.InventoryManager inventoryManager;
-        Inventory.InventoryDrawSystem inventoryDrawSystem;
+        Inventory.DrawSystem inventoryDrawSystem;
 
         // Health Bar
         KGUI.HealthBarUI healthBarUI;
@@ -27,7 +27,7 @@ namespace Planet.Unity
         // Fuel Bar
         KGUI.FuelBarUI fuelBarUI;
 
-        Agent.AgentEntity Player;
+        AgentEntity Player;
         int PlayerID;
 
         int CharacterSpriteId;
@@ -47,18 +47,18 @@ namespace Planet.Unity
 
         public void Update()
         {
-            int toolBarID = Player.Entity.agentToolBar.ToolBarID;
+            int toolBarID = Player.agentToolBar.ToolBarID;
             InventoryEntity Inventory = Planet.EntitasContext.inventory.GetEntityWithInventoryID(toolBarID);
             int selectedSlot = Inventory.inventorySlots.Selected;
 
-            GameEntity item = GameState.InventoryManager.GetItemInSlot(Planet.EntitasContext.game, toolBarID, selectedSlot);
-            ItemPropertiesEntity itemProperty = Planet.EntitasContext.itemProperties.GetEntityWithItemProperty(item.itemID.ItemType);
+            ItemEntity item = GameState.InventoryManager.GetItemInSlot(Planet.EntitasContext.item, toolBarID, selectedSlot);
+            ItemPropertiesEntity itemProperty = Planet.EntitasContext.itemProperties.GetEntityWithItemProperty(item.itemType.Type);
             if (itemProperty.hasItemPropertyAction)
             {
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
-                    GameState.ActionSchedulerSystem.ScheduleAction(Player.Entity,
-                        GameState.ActionCreationSystem.CreateAction(Planet.EntitasContext, itemProperty.itemPropertyAction.ActionTypeID, Player.AgentId));
+                    GameState.ActionSchedulerSystem.ScheduleAction(Player,
+                        GameState.ActionCreationSystem.CreateAction(Planet.EntitasContext, itemProperty.itemPropertyAction.ActionTypeID, Player.agentID.ID));
                 }
             }
 
@@ -67,10 +67,15 @@ namespace Planet.Unity
 
             // transform.position = new Vector3(playerPosition.x - 6.0f, playerPosition.y - 6.0f, -10.0f);
         }
+        
+        private void OnRenderObject()
+        {
+            inventoryDrawSystem.Draw(Planet.EntitasContext, Material, transform);
+        }
 
         private void OnGUI()
         {
-            if(Init)
+            if (Init)
             {
                 //Health Bar Draw
                 healthBarUI.Draw(Planet.EntitasContext);
@@ -87,22 +92,6 @@ namespace Planet.Unity
                 // OxygenBar Update
                 oxygenBarUI.Update();
             }
-        }
-        
-        private void OnRenderObject()
-        {
-            inventoryDrawSystem.Draw(Material, transform);
-        }
-
-        void DrawSpriteAtlas()
-        {
-            ref Sprites.SpriteAtlas atlas = ref GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Agent);
-            Sprites.Sprite sprite = new Sprites.Sprite
-            {
-                Texture = atlas.Texture,
-                TextureCoords = new Vector4(0, 0, 1, 1)
-            };
-            Utility.Render.DrawSpriteNow(-3, -1, atlas.Width / 32.0f, atlas.Height / 32.0f, sprite, Material);
         }
 
         // create the sprite atlas for testing purposes
@@ -127,17 +116,17 @@ namespace Planet.Unity
 
             var inventoryAttacher = Inventory.InventoryAttacher.Instance;
 
-            inventoryID = Player.Entity.agentInventory.InventoryID;
-            toolBarID = Player.Entity.agentToolBar.ToolBarID;
+            inventoryID = Player.agentInventory.InventoryID;
+            toolBarID = Player.agentToolBar.ToolBarID;
 
-            GameEntity gun = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.game, Enums.ItemType.Gun);
-            GameEntity ore = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.game, Enums.ItemType.Ore);
-            GameEntity placementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.game, Enums.ItemType.PlacementTool);
-            GameEntity removeTileTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.game, Enums.ItemType.RemoveTileTool);
-            GameEntity spawnEnemySlimeTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.game, Enums.ItemType.SpawnEnemySlimeTool);
-            GameEntity miningLaserTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.game, Enums.ItemType.MiningLaserTool);
-            GameEntity pipePlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.game, Enums.ItemType.PipePlacementTool);
-            GameEntity particleEmitterPlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.game, Enums.ItemType.ParticleEmitterPlacementTool);
+            ItemEntity gun = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.Gun);
+            ItemEntity ore = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.Ore);
+            ItemEntity placementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.PlacementTool);
+            ItemEntity removeTileTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.RemoveTileTool);
+            ItemEntity spawnEnemySlimeTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.SpawnEnemySlimeTool);
+            ItemEntity miningLaserTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.MiningLaserTool);
+            ItemEntity pipePlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.PipePlacementTool);
+            ItemEntity particleEmitterPlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.ParticleEmitterPlacementTool);
 
 
             inventoryManager.AddItem(Planet.EntitasContext, placementTool, toolBarID);
@@ -297,7 +286,7 @@ namespace Planet.Unity
             float spawnHeight = tileMap.MapSize.Y - 2;
 
             Player = Planet.AddPlayer(new Vec2f(3.0f, spawnHeight));
-            PlayerID = Player.Entity.agentID.ID;
+            PlayerID = Player.agentID.ID;
 
             Planet.AddAgent(new Vec2f(6.0f, spawnHeight));
             Planet.AddAgent(new Vec2f(1.0f, spawnHeight));

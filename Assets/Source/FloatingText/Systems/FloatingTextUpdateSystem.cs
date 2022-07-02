@@ -6,11 +6,11 @@ namespace FloatingText
 {
     public class FloatingTextUpdateSystem
     {
-        List<GameEntity> ToRemoveEntities = new List<GameEntity>();
+        List<FloatingTextEntity> ToRemoveEntities = new List<FloatingTextEntity>();
 
         public void Update(Planet.PlanetState planetState, float deltaTime)
         {
-            var entities = planetState.EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.FloatingTextState));
+            var entities = planetState.EntitasContext.floatingText.GetGroup(FloatingTextMatcher.AllOf(FloatingTextMatcher.FloatingTextState));
 
             foreach (var entity in entities)
             {

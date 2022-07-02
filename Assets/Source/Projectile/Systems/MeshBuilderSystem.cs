@@ -19,7 +19,7 @@ namespace Projectile
 
         public void UpdateMesh()
         {
-            var projectilessWithSprite = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.ProjectileSprite2D));
+            var projectilessWithSprite = Contexts.sharedInstance.projectile.GetGroup(ProjectileMatcher.AllOf(ProjectileMatcher.ProjectileSprite2D));
 
             Mesh.Clear();
             int index = 0;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Vehicle
 {
+    [Vehicle]
     public class IDComponent : IComponent
     {
         [PrimaryEntityIndex]

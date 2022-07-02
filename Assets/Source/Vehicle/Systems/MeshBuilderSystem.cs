@@ -18,7 +18,7 @@ namespace Vehicle
 
         public void UpdateMesh()
         {
-            var VehiclesWithSprite = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.VehicleSprite2D));
+            var VehiclesWithSprite = Contexts.sharedInstance.vehicle.GetGroup(VehicleMatcher.AllOf(VehicleMatcher.VehicleSprite2D));
 
             Mesh.Clear();
             int index = 0;

@@ -45,8 +45,8 @@ public class RasterScanTest : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             // Get Player Entity
-            IGroup<GameEntity> entities =
-            Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentPlayer);
+            IGroup<AgentEntity> entities =
+            Contexts.sharedInstance.agent.GetGroup(AgentMatcher.AgentPlayer);
             foreach (var player in entities)
             {
                 // Get Players Position

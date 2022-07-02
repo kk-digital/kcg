@@ -30,7 +30,7 @@ namespace Projectile
         }
 
 
-        public ref ProjectileEntity Add()
+        public ProjectileEntity Add(ProjectileEntity entity)
         {
             // if we dont have enough space we expand
             // the capacity
@@ -47,7 +47,7 @@ namespace Projectile
             {
                 ref ProjectileEntity thisEntity = ref List[index];
 
-                if (!thisEntity.IsInitialized)
+                if (!thisEntity.isEnabled)
                 {
                     Found = index;
                     break;
@@ -59,7 +59,7 @@ namespace Projectile
                 {
                     ref ProjectileEntity thisEntity = ref List[index];
 
-                    if (!thisEntity.IsInitialized)
+                    if (!thisEntity.isEnabled)
                     {
                         Found = index;
                         break;
@@ -72,14 +72,12 @@ namespace Projectile
 
 
             // creating the Entity and initializing it
-            ProjectileEntity NewEntity = new ProjectileEntity();
-            NewEntity.ProjectileId = Found;
-            NewEntity.IsInitialized = true;
+            entity.projectileID.ID = Found;
 
-            List[Found] = NewEntity;
+            List[Found] = entity;
             Size++;
 
-             return ref List[Found];
+             return List[Found];
         }
 
         public ref ProjectileEntity Get(int Index)
@@ -91,8 +89,8 @@ namespace Projectile
         // set the IsInitialized field to false
         public void Remove(int projectileId)
         {
-            ref ProjectileEntity entity = ref Get(projectileId);
-            entity.IsInitialized = false;
+            ProjectileEntity entity = Get(projectileId);
+            entity.Destroy();
             Size--;
         }
 

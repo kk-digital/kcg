@@ -80,15 +80,15 @@ public class VehicleTest : MonoBehaviour
         Controls();
     }
 
-    private GameEntity vehicleEntity;
+    private VehicleEntity vehicleEntity;
 
     void Controls()
     {
         if (Input.GetKey(KeyCode.A))
         {
             // Get Vehicle Entites
-            IGroup<GameEntity> entities =
-                Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+            IGroup<VehicleEntity> entities =
+                Contexts.sharedInstance.vehicle.GetGroup(VehicleMatcher.VehiclePhysicsState2D);
             foreach (var vehicle in entities)
             {
                 vehicleEntity = vehicle;
@@ -105,8 +105,8 @@ public class VehicleTest : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.A))
         {
             // Get Vehicle Entites
-            IGroup<GameEntity> entities =
-                Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+            IGroup<VehicleEntity> entities =
+                Contexts.sharedInstance.vehicle.GetGroup(VehicleMatcher.VehiclePhysicsState2D);
             foreach (var vehicle in entities)
             {
                 vehicleEntity = vehicle;
@@ -118,8 +118,8 @@ public class VehicleTest : MonoBehaviour
         if (Input.GetKey(KeyCode.D))
         {
             // Get Vehicle Entites
-            IGroup<GameEntity> entities =
-                Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+            IGroup<VehicleEntity> entities =
+                Contexts.sharedInstance.vehicle.GetGroup(VehicleMatcher.VehiclePhysicsState2D);
             foreach (var vehicle in entities)
             {
                 vehicleEntity = vehicle;
@@ -135,8 +135,8 @@ public class VehicleTest : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.D))
         {
             // Get Vehicle Entites
-            IGroup<GameEntity> entities =
-                Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+            IGroup<VehicleEntity> entities =
+                Contexts.sharedInstance.vehicle.GetGroup(VehicleMatcher.VehiclePhysicsState2D);
             foreach (var vehicle in entities)
             {
                 vehicleEntity = vehicle;
@@ -149,8 +149,8 @@ public class VehicleTest : MonoBehaviour
         {
             canUpdateGravity = false;
             // Get Vehicle Entites
-            IGroup<GameEntity> entities =
-                Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+            IGroup<VehicleEntity> entities =
+                Contexts.sharedInstance.vehicle.GetGroup(VehicleMatcher.VehiclePhysicsState2D);
             foreach (var vehicle in entities)
             {
                 vehicleEntity = vehicle;
@@ -163,8 +163,8 @@ public class VehicleTest : MonoBehaviour
         {
             canUpdateGravity = true;
             // Get Vehicle Entites
-            IGroup<GameEntity> entities =
-                Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+            IGroup<VehicleEntity> entities =
+                Contexts.sharedInstance.vehicle.GetGroup(VehicleMatcher.VehiclePhysicsState2D);
             foreach (var vehicle in entities)
             {
                 vehicleEntity = vehicle;
@@ -177,8 +177,8 @@ public class VehicleTest : MonoBehaviour
         {
             canUpdateGravity = false;
             // Get Vehicle Entites
-            IGroup<GameEntity> entities =
-                Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+            IGroup<VehicleEntity> entities =
+                Contexts.sharedInstance.vehicle.GetGroup(VehicleMatcher.VehiclePhysicsState2D);
             foreach (var vehicle in entities)
             {
                 vehicleEntity = vehicle;
@@ -192,8 +192,8 @@ public class VehicleTest : MonoBehaviour
         {
             canUpdateGravity = true;
             // Get Vehicle Entites
-            IGroup<GameEntity> entities =
-                Contexts.sharedInstance.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+            IGroup<VehicleEntity> entities =
+                Contexts.sharedInstance.vehicle.GetGroup(VehicleMatcher.VehiclePhysicsState2D);
             foreach (var vehicle in entities)
             {
                 vehicleEntity = vehicle;

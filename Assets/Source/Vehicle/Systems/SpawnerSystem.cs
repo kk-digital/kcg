@@ -12,7 +12,7 @@ namespace Vehicle
         public Entity SpawnVehicle(Material material, int spriteID, int width, int height, Vec2f position)
         {
             // Create Entity
-            var entity = Contexts.sharedInstance.game.CreateEntity();
+            var entity = Contexts.sharedInstance.vehicle.CreateEntity();
 
             // Increase ID per object statically
             vehicleID++;
