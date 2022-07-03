@@ -27,6 +27,13 @@ namespace Particle
             foreach (var entity in entities)
             {
                 int spriteId = entity.particleSprite2D.SpriteId;
+
+                if (entity.hasParticleAnimation)
+                {
+                    var animation = entity.particleAnimation;
+                    spriteId = animation.State.GetSpriteId();
+                }
+
                 Vector4 textureCoords = GameState.SpriteAtlasManager.GetSprite(spriteId, Enums.AtlasType.Particle).TextureCoords;
 
                 var pos = entity.particlePosition2D.Position;
