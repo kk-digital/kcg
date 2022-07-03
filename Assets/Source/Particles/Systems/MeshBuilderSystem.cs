@@ -42,6 +42,9 @@ namespace Particle
                 var width = entity.particleSprite2D.Size.X;
                 var height = entity.particleSprite2D.Size.Y;
 
+                if (!Utility.ObjectMesh.isOnScreen(x, y))
+                    continue;
+
                 // Update UVs
                 Mesh.UpdateUV(textureCoords, (index) * 4);
                 // Update Vertices

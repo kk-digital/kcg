@@ -158,5 +158,20 @@ namespace Utility
 
             return go;
         }
+
+        public static bool isOnScreen(float x, float y)
+        {
+            var posMax = Camera.main.ScreenToWorldPoint(new Vector3(Screen.safeArea.xMax, Screen.safeArea.yMax, 0));
+            var posMin = Camera.main.ScreenToWorldPoint(new Vector3(Screen.safeArea.xMin, Screen.safeArea.yMin, 0));
+            if (x > posMax.x ||
+                x < posMin.x - 1.0f ||
+                y > posMax.y ||
+                y < posMin.y - 1.0f)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

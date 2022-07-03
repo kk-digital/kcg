@@ -41,6 +41,9 @@ namespace Projectile
                 var width = entity.projectileSprite2D.Size.X;
                 var height = entity.projectileSprite2D.Size.Y;
 
+                if (!Utility.ObjectMesh.isOnScreen(x, y))
+                    continue;
+
                 // Update UVs
                 Mesh.UpdateUV(textureCoords, (index) * 4);
                 // Update Vertices
