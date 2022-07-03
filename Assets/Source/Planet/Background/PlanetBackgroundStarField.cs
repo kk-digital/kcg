@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using KMath.PerlinNoise;
 using System.IO;
+using Utility;
 
 namespace Planet.Background
 {
@@ -25,6 +26,10 @@ namespace Planet.Background
 
         // Generated Perlin Grid
         float[,] perlinGrid;
+
+        // Note[Joao]; Use atlas and a single gameObejct.
+        // GameObjects.
+        private List<GameObject> gameObjects;
 
         public void Initialize()
         {
@@ -228,8 +233,19 @@ namespace Planet.Background
             Init = true;
         }
 
-        public void Draw(Material Material, Transform transform, int drawOrder)
+        public void Draw(Material material, Transform transform, int drawOrder)
         {
+            if (gameObjects == null)
+            {
+                gameObjects = new List<GameObject>();
+                gameObjects.Capacity = 50;
+
+                for (int z = 0; z < 50; z++)
+                { 
+                    gameObjects.Add(ObjectMesh.CreateObjectMesh(transform, "star" + z.ToString(), 2, material));
+                }
+            }
+
             if (Init)
             {
                 for (; i < 50; i++)
@@ -263,10 +279,10 @@ namespace Planet.Background
                             break;
                     }
 
-                   //if (rand1 >= 0.5)
-                   //    Utility.Render.DrawBackground(Random.Range(-10, 10), Random.Range(-10, 10), 0.5f, 0.5f, sprite, Material, transform, 2);
-                   //else
-                   //    Utility.Render.DrawBackground(Random.Range(-100, 100), Random.Range(-100, 100), 0.5f, 0.5f, sprite, Material, transform, 2);
+                   if (rand1 >= 0.5)
+                       Utility.Render.DrawBackground(gameObjects[i], Random.Range(-10, 10), Random.Range(-10, 10), 0.5f, 0.5f, sprite);
+                   else
+                       Utility.Render.DrawBackground(gameObjects[i], Random.Range(-100, 100), Random.Range(-100, 100), 0.5f, 0.5f, sprite);
 
                     for (int k = 0; k < transform.childCount; k++)
                     {

@@ -1,6 +1,7 @@
 ﻿using Entitas;
 using Entitas.CodeGeneration.Attributes;
 using KMath;
+using Sprites;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -84,13 +85,13 @@ namespace Utility
 
     internal static class ObjectMesh
     {
-        private static GameObject CreateObjectMesh(Transform parent, string name,
-                     int sortingOrder, Material material, Vec2f position, float rotation)
+        //FIX: Do UnityEngine.CreateMesh, not using UnityEngine
+
+        public static GameObject CreateObjectMesh(Transform parent, string name,
+                     int sortingOrder, Material material)
         {
             var go = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
             go.transform.SetParent(parent);
-            go.transform.position = new Vector2(position.X, position.Y);
-            go.transform.Rotate(0.0f, 0.0f, rotation, Space.Self);
 
             var mesh = new Mesh
             {
@@ -99,6 +100,12 @@ namespace Utility
 
             var mf = go.GetComponent<MeshFilter>();
             mf.sharedMesh = mesh;
+
+            var mat = Material.Instantiate(material);
+            var mr = go.GetComponent<MeshRenderer>();
+
+            mr.sharedMaterial = mat;
+            mr.sortingOrder = sortingOrder;
 
             return go;
         }

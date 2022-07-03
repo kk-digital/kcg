@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using KMath.PerlinNoise;
+using Utility;
 
 namespace Planet.Background
 {
@@ -27,6 +28,11 @@ namespace Planet.Background
 
         // Space Loop
         int j = 0;
+
+        // Note[Joao]; Use atlas and a single gameObejct.
+        // GameObjects.
+        private List<GameObject> gameObjects;
+        private GameObject backgroundGameObject;
 
         public void Initialize()
         {
@@ -335,6 +341,19 @@ namespace Planet.Background
         {
             if (Init)
             {
+
+                if (gameObjects == null)
+                {
+                    backgroundGameObject = ObjectMesh.CreateObjectMesh(transform, "BackGround", 0, Material);
+                    gameObjects = new List<GameObject>();
+                    gameObjects.Capacity = 50;
+
+                    for (int z = 0; z < 50; z++)
+                    {
+                        gameObjects.Add(ObjectMesh.CreateObjectMesh(transform, "Planet" + z.ToString(), 1, Material));
+                    }
+                }
+
                 for (; i < 10; i++)
                 {
                     perlinGrid = GenPerlin(256, 256, 2, 30);
@@ -378,10 +397,10 @@ namespace Planet.Background
                             break;
                     }
 
-                    //if (rand1 >= .5)
-                    //    Utility.Render.DrawBackground(Random.Range(-10, 10), Random.Range(-10, 10), 1, 1, sprite, Material, transform, 1);
-                    //else
-                    //   Utility.Render.DrawBackground(Random.Range(-100, 100), Random.Range(-100, 100), 1, 1, sprite, Material, transform, 1);
+                    if (rand1 >= .5)
+                        Utility.Render.DrawBackground(gameObjects[i], Random.Range(-10, 10), Random.Range(-10, 10), 1, 1, sprite);
+                    else
+                        Utility.Render.DrawBackground(gameObjects[i], Random.Range(-100, 100), Random.Range(-100, 100), 1, 1, sprite);
 
                     for(int k = 0; k < transform.childCount; k++)
                     {
@@ -394,10 +413,9 @@ namespace Planet.Background
 
                 for (; j < 1; j++)
                 {
-                //    Utility.Render.DrawQuadColor(-1000000, -1000000, 9999999, 9999999, new Color(0.02745f, 0.03137f, 0.09804f, 1), Material, transform, 0);
+                    Utility.Render.DrawQuadColor(backgroundGameObject, -1000000, -1000000, 9999999, 9999999, new Color(0.02745f, 0.03137f, 0.09804f, 1));
                 }
             }
-
         }
 
         // Generates Perlin Map
@@ -420,4 +438,3 @@ namespace Planet.Background
         }
     }
 }
-
