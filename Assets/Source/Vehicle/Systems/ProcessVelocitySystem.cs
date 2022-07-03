@@ -11,7 +11,7 @@ namespace Vehicle
         public static readonly ProcessVelocitySystem Instance;
 
         // Game Context
-        private GameContext gameContext;
+        private VehicleContext vehicleContext;
 
         // Static Constructor
         static ProcessVelocitySystem()
@@ -22,14 +22,14 @@ namespace Vehicle
         // Constructor
         public ProcessVelocitySystem()
         {
-            gameContext = Contexts.sharedInstance.game;
+            vehicleContext = Contexts.sharedInstance.vehicle;
         }
 
         public void ProcessMovement(Vec2f newSpeed, Contexts contexts)
         {
             // Get Vehicle Entites
-            IGroup<GameEntity> entities =
-            contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+            IGroup<VehicleEntity> entities =
+            contexts.vehicle.GetGroup(VehicleMatcher.VehiclePhysicsState2D);
             foreach (var vehicle in entities)
             {
                 // Get position from component
@@ -58,8 +58,8 @@ namespace Vehicle
         public void UpdateGravity(Contexts contexts)
         {
             // Get Vehicle Entites
-            IGroup<GameEntity> entities =
-            contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+            IGroup<VehicleEntity> entities =
+            contexts.vehicle.GetGroup(VehicleMatcher.VehiclePhysicsState2D);
             foreach (var vehicle in entities)
             {
                 if (vehicle.vehiclePhysicsState2D.angularVelocity.Y > 0.5f)
@@ -88,8 +88,8 @@ namespace Vehicle
 
         public IEnumerator Break(bool xAxis, Vec2f angularVelocity, Contexts contexts)
         {
-            IGroup<GameEntity> entities =
-            contexts.game.GetGroup(GameMatcher.VehiclePhysicsState2D);
+            IGroup<VehicleEntity> entities =
+            contexts.vehicle.GetGroup(VehicleMatcher.VehiclePhysicsState2D);
             foreach (var vehicle in entities)
             {
                 // Get position from component

@@ -14,7 +14,9 @@ namespace Physics
             }
         }
     }
-    public struct MovableComponent : IComponent
+
+    [Agent, Item]
+    public class MovableComponent : IComponent
     {
         public float Speed;
         public Vec2f Velocity;

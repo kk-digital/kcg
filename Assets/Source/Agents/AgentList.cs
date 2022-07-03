@@ -30,7 +30,7 @@ namespace Agent
         }
 
 
-        public ref AgentEntity Add()
+        public AgentEntity Add(AgentEntity entity)
         {
             // if we dont have enough space we expand
             // the capacity
@@ -45,9 +45,9 @@ namespace Agent
             int Found = -1;
             for (int index = LastFreeIndex; index < Capacity; index++)
             {
-                ref AgentEntity thisEntity = ref List[index];
+                AgentEntity thisEntity = List[index];
 
-                if (!thisEntity.IsInitialized)
+                if (thisEntity == null)
                 {
                     Found = index;
                     break;
@@ -57,9 +57,9 @@ namespace Agent
             {
                 for (int index = 0; index < LastFreeIndex; index++)
                 {
-                    ref AgentEntity thisEntity = ref List[index];
+                    AgentEntity thisEntity = List[index];
 
-                    if (!thisEntity.IsInitialized)
+                    if (thisEntity == null)
                     {
                         Found = index;
                         break;
@@ -72,20 +72,18 @@ namespace Agent
 
 
             // creating the Entity and initializing it
-            AgentEntity NewEntity = new AgentEntity();
-            NewEntity.AgentId = Found;
-            NewEntity.IsInitialized = true;
+            entity.ReplaceAgentID(Found);
 
-            List[Found] = NewEntity;
+            List[Found] = entity;
             Size++;
 
-            return ref List[Found];
+            return List[Found];
         }
 
 
-        public ref AgentEntity Get(int Index)
+        public AgentEntity Get(int Index)
         {
-            return ref List[Index];
+            return List[Index];
         }
 
 
@@ -93,8 +91,9 @@ namespace Agent
         // set the IsInitialized field to false
         public void Remove(int agentId)
         {
-            ref AgentEntity entity = ref Get(agentId);
-            entity.IsInitialized = false;
+            AgentEntity entity = Get(agentId);
+            entity.Destroy();
+            entity = null;
             Size--;
         }
 

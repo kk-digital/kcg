@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Entitas;
+using KMath;
+using Inventory;
 
 namespace KGUI
 {
@@ -148,8 +150,8 @@ namespace KGUI
 
         void DrawHealthBar(Contexts contexts)
         {
-            IGroup<GameEntity> Playerentities =
-            contexts.game.GetGroup(GameMatcher.AgentStats);
+            IGroup<AgentEntity> Playerentities =
+            contexts.agent.GetGroup(AgentMatcher.AgentStats);
             foreach (var entity in Playerentities)
             {
                 playerHealth = entity.agentStats.Health;

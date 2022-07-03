@@ -30,7 +30,7 @@ namespace Projectile
         }
 
 
-        public ref ProjectileEntity Add()
+        public ProjectileEntity Add(ProjectileEntity entity)
         {
             // if we dont have enough space we expand
             // the capacity
@@ -47,7 +47,7 @@ namespace Projectile
             {
                 ref ProjectileEntity thisEntity = ref List[index];
 
-                if (!thisEntity.IsInitialized)
+                if (thisEntity == null)
                 {
                     Found = index;
                     break;
@@ -59,7 +59,7 @@ namespace Projectile
                 {
                     ref ProjectileEntity thisEntity = ref List[index];
 
-                    if (!thisEntity.IsInitialized)
+                    if (thisEntity == null)
                     {
                         Found = index;
                         break;
@@ -72,32 +72,28 @@ namespace Projectile
 
 
             // creating the Entity and initializing it
-            ProjectileEntity NewEntity = new ProjectileEntity();
-            NewEntity.ProjectileId = Found;
-            NewEntity.IsInitialized = true;
+            entity.ReplaceProjectileID(Found);
 
-            List[Found] = NewEntity;
+            List[Found] = entity;
             Size++;
 
-             return ref List[Found];
+             return List[Found];
         }
 
-        public ref ProjectileEntity Get(int Index)
+        public ProjectileEntity Get(int Index)
         {
-            return ref List[Index];
+            return List[Index];
         }
 
         // to remove an entity we just 
         // set the IsInitialized field to false
         public void Remove(int projectileId)
         {
-            ref ProjectileEntity entity = ref Get(projectileId);
-            entity.IsInitialized = false;
+            ProjectileEntity entity = Get(projectileId);
+            entity.Destroy();
+            entity = null;
             Size--;
         }
-
-
-
 
         // used to grow the list
         private void Expand(int NewCapacity)

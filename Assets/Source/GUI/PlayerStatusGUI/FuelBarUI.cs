@@ -111,8 +111,8 @@ namespace KGUI
             fuelBar.GetComponent<Image>().type = Image.Type.Filled;
             fuelBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
             fuelBar.GetComponent<Image>().fillOrigin = 0;
-            IGroup<GameEntity> Playerentities =
-            contexts.game.GetGroup(GameMatcher.AgentStats);
+            IGroup<AgentEntity> Playerentities =
+            contexts.agent.GetGroup(AgentMatcher.AgentStats);
             foreach (var entity in Playerentities)
             {
                 fuelBar.GetComponent<Image>().fillAmount = entity.agentStats.Fuel / 100;
@@ -130,7 +130,7 @@ namespace KGUI
         {
             if(Init)
             {
-                IGroup<GameEntity> Playerentities = Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentStats);
+                IGroup<AgentEntity> Playerentities = Contexts.sharedInstance.agent.GetGroup(AgentMatcher.AgentStats);
                 foreach (var entity in Playerentities)
                 {
                     fuelBar.GetComponent<Image>().fillAmount = entity.agentStats.Fuel / 100;

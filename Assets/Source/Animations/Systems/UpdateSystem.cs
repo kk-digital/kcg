@@ -9,7 +9,7 @@ namespace Animation
 
         public void Update(Contexts contexts, float deltaTime)
         {
-            var entities = contexts.game.GetGroup(GameMatcher.AllOf(GameMatcher.AnimationState));
+            var entities = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AnimationState));
 
             foreach (var entity in entities)
             {

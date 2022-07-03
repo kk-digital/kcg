@@ -30,7 +30,7 @@ namespace FloatingText
         }
 
 
-        public ref FloatingTextEntity Add()
+        public FloatingTextEntity Add(FloatingTextEntity entity)
         {
             // if we dont have enough space we expand
             // the capacity
@@ -45,9 +45,9 @@ namespace FloatingText
             int Found = -1;
             for(int index = LastFreeIndex; index < Capacity; index++)
             {
-                ref FloatingTextEntity thisEntity = ref List[index];
+                FloatingTextEntity thisEntity = List[index];
 
-                if (!thisEntity.IsInitialized)
+                if (thisEntity == null)
                 {
                     Found = index;
                     break;
@@ -57,9 +57,9 @@ namespace FloatingText
             {
                 for(int index = 0; index < LastFreeIndex; index++)
                 {
-                    ref FloatingTextEntity thisEntity = ref List[index];
+                    FloatingTextEntity thisEntity = List[index];
 
-                    if (!thisEntity.IsInitialized)
+                    if (thisEntity == null)
                     {
                         Found = index;
                         break;
@@ -72,20 +72,17 @@ namespace FloatingText
 
 
             // creating the Entity and initializing it
-            FloatingTextEntity NewEntity = new FloatingTextEntity();
-            NewEntity.FloatingTextId = Found;
-            NewEntity.IsInitialized = true;
-
-            List[Found] = NewEntity;
+            entity.ReplaceFloatingTextID(Found);
+            List[Found] = entity;
             Size++;
 
-             return ref List[Found];
+             return List[Found];
         }
 
 
-        public ref FloatingTextEntity Get(int Index)
+        public FloatingTextEntity Get(int Index)
         {
-            return ref List[Index];
+            return List[Index];
         }
 
 
@@ -93,7 +90,8 @@ namespace FloatingText
         // set the IsInitialized field to false
         public void Remove(FloatingTextEntity entity)
         {
-            entity.IsInitialized = false;
+            entity.Destroy();
+            entity = null;
             Size--;
         }
 

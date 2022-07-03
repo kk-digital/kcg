@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class InventoryTest : MonoBehaviour
@@ -31,7 +32,7 @@ public class InventoryTest : MonoBehaviour
         int inventoryHeight = 5;
         int toolBarSize = 8;
 
-        GameEntity playerEntity = context.game.CreateEntity();
+        AgentEntity playerEntity = context.agent.CreateEntity();
         playerEntity.AddAgentID(agnetID);
         playerEntity.isAgentPlayer = true;
         inventoryAttacher.AttachInventoryToAgent(Contexts.sharedInstance, inventoryWidth, inventoryHeight, playerEntity);
@@ -42,23 +43,23 @@ public class InventoryTest : MonoBehaviour
 
         // Add item to tool bar.
         {
-            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(context.game, Enums.ItemType.Gun);
+            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(context.item, Enums.ItemType.Gun);
             inventoryManager.AddItem(context, entity, toolBarID);
         }
 
         // Test not stackable items.
         for (uint i = 0; i < 10; i++)
         {
-            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(context.game, Enums.ItemType.Gun);
+            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(context.item, Enums.ItemType.Gun);
             inventoryManager.AddItem(context, entity, inventoryID);
         }
 
         // Testing stackable items.
         for (uint i = 0; i < 10; i++)
         {
-            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(context.game, Enums.ItemType.Rock);
+            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(context.item, Enums.ItemType.Rock);
             inventoryManager.AddItem(context, entity, inventoryID);
-            entity = itemSpawnSystem.SpawnInventoryItem(context.game, Enums.ItemType.RockDust);
+            entity = itemSpawnSystem.SpawnInventoryItem(context.item, Enums.ItemType.RockDust);
             inventoryManager.AddItem(context, entity, inventoryID);
         }
     }
@@ -77,16 +78,12 @@ public class InventoryTest : MonoBehaviour
             GameState.TileSpriteAtlasManager.UpdateAtlasTexture(type);
         }
 
-        //remove all children MeshRenderer
-        foreach (var mr in GetComponentsInChildren<MeshRenderer>())
-            if (Application.isPlaying)
-                Destroy(mr.gameObject);
-            else
-                DestroyImmediate(mr.gameObject);
+        inputProcessSystem.Update(context);
+    }
 
-        inputProcessSystem.Update(Contexts.sharedInstance);
-        inventoryDrawSystem.Draw(Contexts.sharedInstance, material, transform, 0);
-
+    private void OnRenderObject()
+    {
+        inventoryDrawSystem.Draw(Contexts.sharedInstance, material, transform);
     }
 
     private void Initialize()

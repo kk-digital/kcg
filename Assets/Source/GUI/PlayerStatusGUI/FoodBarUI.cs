@@ -114,8 +114,8 @@ namespace KGUI
             foodBar.GetComponent<Image>().type = Image.Type.Filled;
             foodBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
             foodBar.GetComponent<Image>().fillOrigin = 0;
-            IGroup<GameEntity> Playerentities =
-            EntitasContext.game.GetGroup(GameMatcher.AgentStats);
+            IGroup<AgentEntity> Playerentities =
+            EntitasContext.agent.GetGroup(AgentMatcher.AgentStats);
             foreach (var entity in Playerentities)
             {
                 foodBar.GetComponent<Image>().fillAmount = entity.agentStats.Food / 100;
@@ -133,8 +133,8 @@ namespace KGUI
         {
             if (Init)
             {
-                IGroup<GameEntity> Playerentities =
-                EntitasContext.game.GetGroup(GameMatcher.AgentStats);
+                IGroup<AgentEntity> Playerentities =
+                EntitasContext.agent.GetGroup(AgentMatcher.AgentStats);
                 foreach (var entity in Playerentities)
                 {
                     foodBar.GetComponent<Image>().fillAmount = entity.agentStats.Food / 100;

@@ -4,8 +4,11 @@ using KMath;
 
 namespace Item
 {
-    // Used by pickup actions.
-    public struct DrawPosition2DComponent : IComponent
+    /// <summary>
+    /// Used by pickup actions.
+    /// </summary>
+    [Item]
+    public class DrawPosition2DComponent : IComponent
     {
         public Vec2f Value;
         public Vec2f PreviousValue;

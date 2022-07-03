@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Enums.Tile;
 using Physics;
+using Agent;
 
 #if UNITY_EDITOR
 using KMath;
@@ -36,7 +37,7 @@ namespace Planet.Unity
         ECSInput.InputProcessSystem InputProcessSystems;
         Agent.AgentSpawnerSystem AgentSpawnerSystem;
         PhysicsMovableSystem PhysicsMovableSystem;
-        Agent.AgentDrawSystem AgentDrawSystem;
+        Agent.MeshBuilderSystem AgentMeshBuilderSystem;
         PhysicsProcessCollisionSystem AgentProcessCollisionSystem;
 
         public void Start()
@@ -60,9 +61,10 @@ namespace Planet.Unity
 
             InputProcessSystems = new ECSInput.InputProcessSystem();
             PhysicsMovableSystem = new Physics.PhysicsMovableSystem();
-            AgentDrawSystem = new Agent.AgentDrawSystem();
+            AgentMeshBuilderSystem = new Agent.MeshBuilderSystem();
             AgentProcessCollisionSystem = new Physics.PhysicsProcessCollisionSystem();
 
+            AgentMeshBuilderSystem.Initialize(Material, transform, 12);
             GameState.AgentSpawnerSystem.SpawnPlayer(Contexts.sharedInstance, CharacterSpriteId, 32, 48, new Vec2f(3.0f, 2.0f), 0, 0, 100, 100, 100, 100, 100, 0.2f);
         }
 
@@ -108,17 +110,16 @@ namespace Planet.Unity
                 
             }
 
-            foreach(var mr in GetComponentsInChildren<MeshRenderer>())
-                if (Application.isPlaying)
-                    Destroy(mr.gameObject);
-                else
-                    DestroyImmediate(mr.gameObject);
 
             InputProcessSystems.Update(Contexts.sharedInstance);
-            PhysicsMovableSystem.Update(Contexts.sharedInstance.game);
-            AgentProcessCollisionSystem.Update(Contexts.sharedInstance.game, ref PlanetState.TileMap);
-            PlanetState.TileMap.DrawLayer(MapLayerType.Front, Instantiate(Material), transform, 10);
-            AgentDrawSystem.Draw(Contexts.sharedInstance.game, Instantiate(Material), transform, 12);
+            PhysicsMovableSystem.Update(Contexts.sharedInstance.agent);
+            AgentProcessCollisionSystem.Update(Contexts.sharedInstance.agent, ref PlanetState.TileMap);
+
+            AgentMeshBuilderSystem.UpdateMesh(Contexts.sharedInstance.agent);
+            PlanetState.TileMap.UpdateLayerMesh(MapLayerType.Front);
+
+            PlanetState.TileMap.DrawLayer(MapLayerType.Front);
+            Utility.Render.DrawFrame(ref AgentMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Agent));
         }
 
         public void CreateDefaultTiles()
@@ -168,7 +169,7 @@ namespace Planet.Unity
             }
             
             PlanetState.TileMap.UpdateTileMapPositions(MapLayerType.Front);
-
+            PlanetState.TileMap.InitializeLayerMesh(Material, transform, 7);
         }
     }
 }

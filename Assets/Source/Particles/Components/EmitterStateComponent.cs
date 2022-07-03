@@ -6,7 +6,7 @@ using KMath;
 namespace Particle
 {
     [Particle]
-    public struct EmitterStateComponent : IComponent
+    public class EmitterStateComponent : IComponent
     {
         public ParticleType ParticleType;
         public ParticleEmitterType ParticleEmitterType;

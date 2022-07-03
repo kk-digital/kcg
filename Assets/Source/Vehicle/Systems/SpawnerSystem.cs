@@ -12,7 +12,7 @@ namespace Vehicle
         public Entity SpawnVehicle(Material material, int spriteID, int width, int height, Vec2f position)
         {
             // Create Entity
-            var entity = Contexts.sharedInstance.game.CreateEntity();
+            var entity = Contexts.sharedInstance.vehicle.CreateEntity();
 
             // Increase ID per object statically
             vehicleID++;
@@ -23,15 +23,6 @@ namespace Vehicle
             // Set Sprite ID from Sprite Atlas
             var spriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(spriteID, 0, 0, Enums.AtlasType.Agent);
 
-            // Set Sprite Data
-            byte[] spriteData = new byte[pngSize.X * pngSize.Y * 4];
-
-            // Get Sprite Bytes
-            GameState.SpriteAtlasManager.GetSpriteBytes(spriteId, spriteData, Enums.AtlasType.Agent);
-
-            // Set Texture
-            var texture = Utility.Texture.CreateTextureFromRGBA(spriteData, pngSize.X, pngSize.Y);
-
             // Set Sprite Size
             var spriteSize = new Vec2f(pngSize.X / 32f, pngSize.Y / 32f);
 
@@ -39,7 +30,7 @@ namespace Vehicle
             entity.AddVehicleID(vehicleID);
 
             // Add Sprite Component
-            entity.AddVehicleSprite2D(texture, spriteSize);
+            entity.AddVehicleSprite2D(spriteId, spriteSize);
 
             // Add Physics State 2D Component
             entity.AddVehiclePhysicsState2D(position, position, Vec2f.One, Vec2f.One, Vec2f.Zero, 1.0f, 1.0f, 1.5f,

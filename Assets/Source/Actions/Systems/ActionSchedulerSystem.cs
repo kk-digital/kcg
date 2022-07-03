@@ -10,9 +10,9 @@ namespace Action
     {
         public void Update(Contexts contexts, float deltaTime, ref Planet.PlanetState planet)
         {
-            var group = contexts.game.GetGroup(GameMatcher.AgentActionScheduler);
+            var group = contexts.agent.GetGroup(AgentMatcher.AgentActionScheduler);
 
-            foreach (GameEntity entity in group)
+            foreach (AgentEntity entity in group)
             {
                 if (entity.agentActionScheduler.ActiveActionIDs.Count == 0 && entity.hasAgentAIController)
                 {
@@ -24,7 +24,7 @@ namespace Action
             }
         }
 
-        private void ExcuteActions(Contexts contexts, GameEntity actorEntity, float deltaTime, ref Planet.PlanetState planet)
+        private void ExcuteActions(Contexts contexts, AgentEntity actorEntity, float deltaTime, ref Planet.PlanetState planet)
         {
             for (int i = 0; i < actorEntity.agentActionScheduler.ActiveActionIDs.Count; i++)
             {
@@ -72,15 +72,15 @@ namespace Action
                 */
             }
         }
-        private void ScheduleAction(GameEntity ActorEntity)
+        private void ScheduleAction(AgentEntity agentEntity)
         {
-            int actionID = ActorEntity.agentAIController.ActionIDs.Dequeue();  // Get Next Action.
-            ActorEntity.agentActionScheduler.ActiveActionIDs.Add(actionID);
+            int actionID = agentEntity.agentAIController.ActionIDs.Dequeue();  // Get Next Action.
+            agentEntity.agentActionScheduler.ActiveActionIDs.Add(actionID);
         }
 
-        public void ScheduleAction(GameEntity ActorEntity, int actionID)
+        public void ScheduleAction(AgentEntity agentEntity, int actionID)
         {
-            ActorEntity.agentActionScheduler.ActiveActionIDs.Add(actionID);
+            agentEntity.agentActionScheduler.ActiveActionIDs.Add(actionID);
         }
     }
 }

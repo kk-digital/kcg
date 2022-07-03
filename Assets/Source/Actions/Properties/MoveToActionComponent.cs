@@ -10,7 +10,7 @@ namespace Action.Property
     /// This should be used by Goap. To request movement to movimentSystem. 
     /// </summary>
     [ActionProperties]
-    public struct MoveToComponent : IComponent
+    public class MoveToComponent : IComponent
     {
         public Vector2Int GoalPosition;
     }

@@ -5,9 +5,6 @@ using KMath;
 
 public class ProjectileTest : MonoBehaviour
 {
-    // Projectile Draw System
-    Projectile.DrawSystem projectileDrawSystem;
-
     // Projectile Physics System
     //Projectile.ProcessVelocitySystem projectileVelocitySystem;
 
@@ -16,6 +13,9 @@ public class ProjectileTest : MonoBehaviour
 
     // Projectile Spawner System
     Projectile.SpawnerSystem projectileSpawnerSystem;
+
+    // Projectile Mesh Builder System.
+    Projectile.MeshBuilderSystem projectileMeshBuilderSystem;
 
     // Rendering Material
     [SerializeField]
@@ -42,7 +42,7 @@ public class ProjectileTest : MonoBehaviour
         // Create Tile Map
         planetState = GameObject.Find("TilesTest").GetComponent<Planet.Unity.MapLoaderTestScript>().PlanetState;
         // Initialize Projectile Draw System
-        projectileDrawSystem = new Projectile.DrawSystem();
+        //projectileDrawSystem = new Projectile.DrawSystem();
 
         // Initialize Projectile Velocity System
         //projectileVelocitySystem = new Projectile.ProcessVelocitySystem();
@@ -52,6 +52,10 @@ public class ProjectileTest : MonoBehaviour
 
         // Initialize Projectile Collision System
         projectileCollisionSystem = new Projectile.ProcessCollisionSystem();
+
+        // Initialize Projectile Mesh Builder System.
+        projectileMeshBuilderSystem = new Projectile.MeshBuilderSystem();
+        projectileMeshBuilderSystem.Initialize(Material, transform, 12);
 
         // Initialize Image
         image = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Projectiles\\Grenades\\Grenade\\Grenades7.png", 16, 16);
@@ -77,21 +81,14 @@ public class ProjectileTest : MonoBehaviour
 
         if (init)
         {
-            // Clear last frame
-            foreach (var mr in GetComponentsInChildren<MeshRenderer>())
-                if (Application.isPlaying)
-                    Destroy(mr.gameObject);
-                else
-                    DestroyImmediate(mr.gameObject);
-
-            var test = Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentPlayer);
+            var test = Contexts.sharedInstance.agent.GetGroup(AgentMatcher.AgentPlayer);
             foreach (var entity in test)
             {
                 startPos = entity.physicsPosition2D.Value;
             }
 
-            IGroup<GameEntity> Playerentities =
-            Contexts.sharedInstance.game.GetGroup(GameMatcher.PhysicsPosition2D);
+            IGroup<AgentEntity> Playerentities =
+            Contexts.sharedInstance.agent.GetGroup(AgentMatcher.PhysicsPosition2D);
             foreach (var entity in Playerentities)
             {
                 startPos = entity.physicsPosition2D.Value;
@@ -129,7 +126,9 @@ public class ProjectileTest : MonoBehaviour
             projectileCollisionSystem.Update(ref planetState.TileMap);
 
             // Draw Initialized Projectile
-            projectileDrawSystem.Draw(Contexts.sharedInstance.game, Instantiate(Material), transform, 12);
+            projectileMeshBuilderSystem.UpdateMesh(Contexts.sharedInstance.projectile);
+            Utility.Render.DrawFrame(ref projectileMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
+
         }
     }
 }

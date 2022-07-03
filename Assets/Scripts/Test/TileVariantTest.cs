@@ -30,18 +30,11 @@ namespace Planet.Unity
                 int x = (int)worldPosition.x;
                 int y = (int)worldPosition.y;
                 Debug.Log(x + " " + y);
-                Planet.TileMap.RemoveTile(x, y, Enums.Tile.MapLayerType.Front);
-                //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
-                
+                Planet.TileMap.RemoveTile(x, y, Enums.Tile.MapLayerType.Front);                
             }
 
-            foreach(var mr in GetComponentsInChildren<MeshRenderer>())
-                if (Application.isPlaying)
-                    Destroy(mr.gameObject);
-                else
-                    DestroyImmediate(mr.gameObject);
-
-            Planet.TileMap.DrawLayer(MapLayerType.Front, Instantiate(Material), transform, 10);
+            Planet.TileMap.UpdateLayerMesh(MapLayerType.Front);
+            Planet.TileMap.DrawLayer(MapLayerType.Front);
         }
 
         // create the sprite atlas for testing purposes
@@ -121,14 +114,8 @@ namespace Planet.Unity
                     Planet.TileMap.SetTile(i,j, frontTile, MapLayerType.Front);
                 }
             }
-
             Planet.TileMap.UpdateTileMapPositions(Enums.Tile.MapLayerType.Front);
-
-            //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
-            //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Ore);
+            Planet.TileMap.InitializeLayerMesh(Material, transform, 7);
         }
-        
     }
 }
-
-

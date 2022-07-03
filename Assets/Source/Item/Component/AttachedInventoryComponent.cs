@@ -3,7 +3,8 @@ using Entitas.CodeGeneration.Attributes;
 
 namespace Item
 {
-    public struct AttachedInventoryComponent : IComponent // Indicates item is inside a Inventory.
+    [Item]
+    public class AttachedInventoryComponent : IComponent // Indicates item is inside a Inventory.
     {
         [EntityIndex]
         public int      InventoryID;

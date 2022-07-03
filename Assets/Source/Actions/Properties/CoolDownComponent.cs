@@ -3,7 +3,7 @@
 namespace Action.Property
 {
     [ActionProperties]
-    public struct CoolDownComponent : IComponent
+    public class CoolDownComponent : IComponent
     {
         public float CoolDownTime;
     }

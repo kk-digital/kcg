@@ -13,17 +13,17 @@ namespace Item
         public void Update(Contexts contexts)
         {
             // Get agents able to pick an object.
-            var agents = contexts.game.GetGroup(
-                GameMatcher.AllOf(GameMatcher.AgentActionScheduler, GameMatcher.PhysicsPosition2D).AnyOf(GameMatcher.AgentInventory, GameMatcher.AgentToolBar));
+            var agents = contexts.agent.GetGroup(
+                AgentMatcher.AllOf(AgentMatcher.AgentActionScheduler, AgentMatcher.PhysicsPosition2D).AnyOf(AgentMatcher.AgentInventory, AgentMatcher.AgentToolBar));
 
             // Get all pickable items.
-            var pickableItems = contexts.game.GetGroup(
-                GameMatcher.AllOf(GameMatcher.ItemID, GameMatcher.PhysicsPosition2D).NoneOf(GameMatcher.ItemUnpickable));
+            var pickableItems = contexts.item.GetGroup(
+                ItemMatcher.AllOf(ItemMatcher.ItemID, ItemMatcher.PhysicsPosition2D).NoneOf(ItemMatcher.ItemUnpickable));
 
             foreach (var item in pickableItems)
             {
                 // Get item ceter position.
-                var itemPropreties = contexts.itemProperties.GetEntityWithItemProperty(item.itemID.ItemType);
+                var itemPropreties = contexts.itemProperties.GetEntityWithItemProperty(item.itemType.Type);
                 Vec2f centerPos = item.physicsPosition2D.Value + itemPropreties.itemPropertySize.Size / 2.0f;
                 foreach (var agent in agents)
                 {

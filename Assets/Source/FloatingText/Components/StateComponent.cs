@@ -4,6 +4,7 @@ using KMath;
 
 namespace FloatingText
 {
+    [FloatingText]
     public class StateComponent : IComponent
     {
         public float TimeToLive;

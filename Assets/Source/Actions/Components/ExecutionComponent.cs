@@ -3,7 +3,7 @@
 namespace Action
 {
     [Action]
-    public struct ExecutionComponent: IComponent
+    public class ExecutionComponent: IComponent
     {
         public ActionBase           Logic;
         public Enums.ActionState    State;

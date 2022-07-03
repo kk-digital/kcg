@@ -3,6 +3,7 @@ using Entitas.CodeGeneration.Attributes;
 
 namespace Projectile
 {
+    [Projectile]
     public class IDComponent : IComponent
     {
         [PrimaryEntityIndex]

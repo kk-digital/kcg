@@ -5,7 +5,8 @@ using System;
 
 namespace Agent
 {
-    public struct ActionSchedulerComponent : IComponent
+    [Agent]
+    public class ActionSchedulerComponent : IComponent
     {
         public List<int> ActiveActionIDs;
         public List<int> CoolDownActionIDs;

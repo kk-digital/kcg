@@ -24,7 +24,7 @@ public class MiningLaser : MonoBehaviour
     public Vec2f offset = Vec2f.Zero;
 
     // Item Draw System
-    Item.DrawSystem DrawSystem;
+    Item.MeshBuilderSystem DrawSystem;
 
     // Inventory Manager System
     Inventory.InventoryManager inventoryManager;
@@ -53,7 +53,7 @@ public class MiningLaser : MonoBehaviour
         contexts = Contexts.sharedInstance;
 
         // Assign Draw System
-        DrawSystem = new Item.DrawSystem();
+        DrawSystem = new Item.MeshBuilderSystem();
 
         // Create Inventory Manager System
         inventoryManager = new Inventory.InventoryManager();
@@ -76,7 +76,7 @@ public class MiningLaser : MonoBehaviour
         int inventoryHeight = 5;
         int toolBarSize = 8;
 
-        GameEntity playerEntity = contexts.game.CreateEntity();
+        AgentEntity playerEntity = contexts.agent.CreateEntity();
         playerEntity.ReplaceAgentID(agentID);
         playerEntity.isAgentPlayer = true;
         inventoryAttacher.AttachInventoryToAgent(contexts, inventoryWidth, inventoryHeight, playerEntity);
@@ -87,14 +87,14 @@ public class MiningLaser : MonoBehaviour
 
         // Add item to tool bar.
         {
-            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.game, Enums.ItemType.Gun);
+            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.item, Enums.ItemType.Gun);
             inventoryManager.AddItem(contexts, entity, toolBarID);
         }
 
         // Test not stackable items.
         for (uint i = 0; i < 10; i++)
         {
-            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.game, Enums.ItemType.Gun);
+            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.item, Enums.ItemType.Gun);
             inventoryManager.AddItem(contexts, entity, inventoryID);
         }
 
@@ -166,8 +166,8 @@ public class MiningLaser : MonoBehaviour
             }
 
             // Get Laser Position
-            IGroup<GameEntity> Laserentities =
-            contexts.game.GetGroup(GameMatcher.PhysicsPosition2D);
+            IGroup<ItemEntity> Laserentities =
+            contexts.item.GetGroup(ItemMatcher.PhysicsPosition2D);
             foreach (var laser in Laserentities)
             {
                 laserPosition = laser.physicsPosition2D.Value;
@@ -188,11 +188,10 @@ public class MiningLaser : MonoBehaviour
 
             // Draw System Update
             inputProcessSystem.Update(Contexts.sharedInstance);
-            inventoryDrawSystem.Draw(Contexts.sharedInstance, Instantiate(Material), transform, 100);
 
             // If laser held, draw it.
             if(isHeld)
-                DrawSystem.Draw(contexts, Instantiate(Material), transform, 16);
+                //DrawSystem.Draw(contexts, Instantiate(Material), transform, 16);
 
             if (Input.GetKey(KeyCode.Mouse0) && isHeld)
             {
@@ -229,5 +228,10 @@ public class MiningLaser : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void OnRenderObject()
+    {
+        inventoryDrawSystem.Draw(Contexts.sharedInstance, Material, transform);
     }
 }

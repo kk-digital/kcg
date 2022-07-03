@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Agent
 {
+    [Agent]
     public class StatsComponent : IComponent
     {
         [Range(0, 100)]
