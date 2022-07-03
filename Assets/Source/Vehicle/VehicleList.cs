@@ -72,7 +72,7 @@ namespace Vehicle
 
 
             // creating the Entity and initializing it
-            entity.vehicleID.ID = Found;
+            entity.ReplaceVehicleID(Found);
 
             List[Found] = entity;
             Size++;

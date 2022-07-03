@@ -73,7 +73,6 @@ namespace Planet.Unity
             Planet.Init(mapSize);
             Planet.InitializeSystems(Material, transform);
 
-            GameState.ActionInitializeSystem.Initialize(Planet.EntitasContext, Material);
             GameResources.CreateItems(Planet.EntitasContext);
 
             GenerateMap();

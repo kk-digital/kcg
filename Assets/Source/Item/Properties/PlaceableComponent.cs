@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Item.Property
 {
     [ItemProperties]
-    public struct PlaceableComponent : IComponent
+    public class PlaceableComponent : IComponent
     {
     }
 }

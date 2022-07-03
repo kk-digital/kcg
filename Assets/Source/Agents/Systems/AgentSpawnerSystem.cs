@@ -43,8 +43,7 @@ namespace Agent
         }
 
 
-        public AgentEntity Spawn(Contexts entitasContext, Vec2f position, int agentId,
-                     AgentType agentType)
+        public AgentEntity Spawn(Contexts entitasContext, Vec2f position, int agentId, AgentType agentType)
         {
             var entity = entitasContext.agent.CreateEntity();
 

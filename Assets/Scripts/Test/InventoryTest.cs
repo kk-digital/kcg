@@ -78,7 +78,7 @@ public class InventoryTest : MonoBehaviour
             GameState.TileSpriteAtlasManager.UpdateAtlasTexture(type);
         }
 
-        inputProcessSystem.Update(Contexts.sharedInstance);
+        inputProcessSystem.Update(context);
     }
 
     private void OnRenderObject()

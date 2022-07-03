@@ -16,9 +16,9 @@ namespace Item
                 GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle), drawOrder);
         }
 
-        public void UpdateMesh()
+        public void UpdateMesh(Contexts context)
         {
-            var ItemPropertyWithSprite = Contexts.sharedInstance.itemProperties.GetGroup(ItemPropertiesMatcher.AllOf(ItemPropertiesMatcher.ItemPropertySprite));
+            var ItemPropertyWithSprite = context.itemProperties.GetGroup(ItemPropertiesMatcher.AllOf(ItemPropertiesMatcher.ItemPropertySprite));
             Mesh.Clear();
             int index = 0;
             foreach (var ItemTypeEntity in ItemPropertyWithSprite)
@@ -27,7 +27,7 @@ namespace Item
                 Vector4 textureCoords = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle).TextureCoords;
                 
                 // Draw all items with same sprite.
-                var ItemsOfType = Contexts.sharedInstance.item.GetEntitiesWithItemType(ItemTypeEntity.itemProperty.ItemType);
+                var ItemsOfType = context.item.GetEntitiesWithItemType(ItemTypeEntity.itemProperty.ItemType);
 
                 foreach (var entity in ItemsOfType)
                 {

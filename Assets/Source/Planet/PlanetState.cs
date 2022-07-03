@@ -171,7 +171,6 @@ namespace Planet
         public ProjectileEntity AddProjectile(Vec2f position, Vec2f direction, Enums.ProjectileType projectileType)
         {
             Utils.Assert(ProjectileList.Size < PlanetEntityLimits.ProjectileLimit);
-
             ProjectileEntity newEntity = ProjectileList.Add(GameState.ProjectileSpawnerSystem.Spawn(EntitasContext.projectile,
                          position, direction, projectileType, -1));
             return newEntity;
@@ -179,7 +178,7 @@ namespace Planet
 
         public void RemoveProjectile(int projectileId)
         {
-            ref ProjectileEntity entity = ref ProjectileList.Get(projectileId);
+            ProjectileEntity entity = ProjectileList.Get(projectileId);
             Utils.Assert(entity.isEnabled);
             ProjectileList.Remove(entity.projectileID.ID);
         }
@@ -188,7 +187,8 @@ namespace Planet
         {
             Utils.Assert(VehicleList.Size < PlanetEntityLimits.VehicleLimit);
 
-            return new VehicleEntity();
+            VehicleEntity newEntity = VehicleList.Add(new VehicleEntity());
+            return newEntity;
         }
 
         public void RemoveVehicle(int vehicleId)
@@ -234,7 +234,7 @@ namespace Planet
                     for (int index = 0; index < ProjectileList.Capacity; index++)
                     {
                         ProjectileEntity projectile = ProjectileList.List[index];
-                        if (projectile.isEnabled)
+                        if (projectile != null)
                         {
                             //var position = projectile.Entity.projectilePhysicsState2D;
                         }
@@ -263,22 +263,23 @@ namespace Planet
             GameState.PhysicsMovableSystem.Update(EntitasContext.agent);
             GameState.PhysicsMovableSystem.Update(EntitasContext.item);
             GameState.PhysicsProcessCollisionSystem.Update(EntitasContext.agent, ref TileMap);
-            GameState.EnemyAiSystem.Update(this);
-            GameState.FloatingTextUpdateSystem.Update(this, frameTime);
+            GameState.PhysicsProcessCollisionSystem.Update(EntitasContext.item, ref TileMap);
+            GameState.EnemyAiSystem.Update(ref this);
+            GameState.FloatingTextUpdateSystem.Update(ref this, frameTime);
             GameState.AnimationUpdateSystem.Update(EntitasContext, frameTime);
             GameState.ItemPickUpSystem.Update(EntitasContext);
             GameState.ActionSchedulerSystem.Update(EntitasContext, frameTime, ref this);
-            GameState.ParticleEmitterUpdateSystem.Update(this);
-            GameState.ParticleUpdateSystem.Update(this, EntitasContext.particle);
+            GameState.ParticleEmitterUpdateSystem.Update(ref this);
+            GameState.ParticleUpdateSystem.Update(ref this, EntitasContext.particle);
             GameState.ProjectileMovementSystem.Update(EntitasContext.projectile);
             GameState.ProjectileCollisionSystem.UpdateEx(ref this);
 
             // Update Meshes.
             TileMap.UpdateLayerMesh(MapLayerType.Mid);
             TileMap.UpdateLayerMesh(MapLayerType.Front);
-            GameState.ItemMeshBuilderSystem.UpdateMesh();
-            GameState.AgentMeshBuilderSystem.UpdateMesh();
-            GameState.ProjectileMeshBuilderSystem.UpdateMesh();
+            GameState.ItemMeshBuilderSystem.UpdateMesh(EntitasContext);
+            GameState.AgentMeshBuilderSystem.UpdateMesh(EntitasContext.agent);
+            GameState.ProjectileMeshBuilderSystem.UpdateMesh(EntitasContext.projectile);
             GameState.ParticleMeshBuilderSystem.UpdateMesh(EntitasContext.particle);
 
             // Draw Frames.

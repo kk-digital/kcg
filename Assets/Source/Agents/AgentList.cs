@@ -47,7 +47,7 @@ namespace Agent
             {
                 AgentEntity thisEntity = List[index];
 
-                if (!thisEntity.isEnabled)
+                if (thisEntity == null)
                 {
                     Found = index;
                     break;
@@ -57,9 +57,9 @@ namespace Agent
             {
                 for (int index = 0; index < LastFreeIndex; index++)
                 {
-                    ref AgentEntity thisEntity = ref List[index];
+                    AgentEntity thisEntity = List[index];
 
-                    if (!thisEntity.isEnabled)
+                    if (thisEntity == null)
                     {
                         Found = index;
                         break;
@@ -72,7 +72,7 @@ namespace Agent
 
 
             // creating the Entity and initializing it
-            entity.agentID.ID = Found;
+            entity.ReplaceAgentID(Found);
 
             List[Found] = entity;
             Size++;
@@ -93,6 +93,7 @@ namespace Agent
         {
             AgentEntity entity = Get(agentId);
             entity.Destroy();
+            entity = null;
             Size--;
         }
 

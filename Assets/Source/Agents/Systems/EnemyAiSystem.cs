@@ -8,7 +8,7 @@ namespace Agent
     public class EnemyAiSystem
     {
         List<AgentEntity> ToRemoveAgents = new List<AgentEntity>();
-        public void Update(Planet.PlanetState planetState)
+        public void Update(ref Planet.PlanetState planetState)
         {
             var players = planetState.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentPlayer));
             var entities = planetState.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentEnemy));

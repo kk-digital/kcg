@@ -17,9 +17,9 @@ namespace Agent
                 GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Agent), drawOrder);
         }
 
-        public void UpdateMesh()
+        public void UpdateMesh(AgentContext context)
         {
-            var AgentsWithSprite = Contexts.sharedInstance.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentSprite2D));
+            var AgentsWithSprite = context.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentSprite2D));
 
             int index = 0;
             Mesh.Clear();

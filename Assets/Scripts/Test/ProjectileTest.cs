@@ -126,7 +126,7 @@ public class ProjectileTest : MonoBehaviour
             projectileCollisionSystem.Update(ref planetState.TileMap);
 
             // Draw Initialized Projectile
-            projectileMeshBuilderSystem.UpdateMesh();
+            projectileMeshBuilderSystem.UpdateMesh(Contexts.sharedInstance.projectile);
             Utility.Render.DrawFrame(ref projectileMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
 
         }

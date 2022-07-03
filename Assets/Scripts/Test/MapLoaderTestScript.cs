@@ -115,7 +115,7 @@ namespace Planet.Unity
             PhysicsMovableSystem.Update(Contexts.sharedInstance.agent);
             AgentProcessCollisionSystem.Update(Contexts.sharedInstance.agent, ref PlanetState.TileMap);
 
-            AgentMeshBuilderSystem.UpdateMesh();
+            AgentMeshBuilderSystem.UpdateMesh(Contexts.sharedInstance.agent);
             PlanetState.TileMap.UpdateLayerMesh(MapLayerType.Front);
 
             PlanetState.TileMap.DrawLayer(MapLayerType.Front);

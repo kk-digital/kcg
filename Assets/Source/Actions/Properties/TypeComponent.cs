@@ -5,7 +5,7 @@ using Entitas.CodeGeneration.Attributes;
 namespace Action.Property
 {
     [ActionProperties]
-    public struct Component : IComponent
+    public class Component : IComponent
     {
         [PrimaryEntityIndex]
         public int   TypeID;

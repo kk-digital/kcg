@@ -31,7 +31,6 @@ namespace Inventory
             AgentEntity playerEntity = agentEntity;
             playerEntity.AddAgentToolBar(InventoryID);
             InventoryEntity entity = MakeInventoryEntity(entitasContext, size, 1);
-            entity.inventorySize.Width = 5;
 
             entity.isInventoryToolBar = true;
             entity.isInventoryDrawable = true;

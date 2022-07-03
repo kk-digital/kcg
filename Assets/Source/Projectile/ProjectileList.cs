@@ -47,7 +47,7 @@ namespace Projectile
             {
                 ref ProjectileEntity thisEntity = ref List[index];
 
-                if (!thisEntity.isEnabled)
+                if (thisEntity == null)
                 {
                     Found = index;
                     break;
@@ -59,7 +59,7 @@ namespace Projectile
                 {
                     ref ProjectileEntity thisEntity = ref List[index];
 
-                    if (!thisEntity.isEnabled)
+                    if (thisEntity == null)
                     {
                         Found = index;
                         break;
@@ -72,7 +72,7 @@ namespace Projectile
 
 
             // creating the Entity and initializing it
-            entity.projectileID.ID = Found;
+            entity.ReplaceProjectileID(Found);
 
             List[Found] = entity;
             Size++;
@@ -80,9 +80,9 @@ namespace Projectile
              return List[Found];
         }
 
-        public ref ProjectileEntity Get(int Index)
+        public ProjectileEntity Get(int Index)
         {
-            return ref List[Index];
+            return List[Index];
         }
 
         // to remove an entity we just 
@@ -91,11 +91,9 @@ namespace Projectile
         {
             ProjectileEntity entity = Get(projectileId);
             entity.Destroy();
+            entity = null;
             Size--;
         }
-
-
-
 
         // used to grow the list
         private void Expand(int NewCapacity)

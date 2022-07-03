@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Item.Property
 {
     [ItemProperties]
-    public struct StackableComponent : IComponent
+    public class StackableComponent : IComponent
     {
         public int MaxStackSize;
     }

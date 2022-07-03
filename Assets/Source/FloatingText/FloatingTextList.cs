@@ -45,9 +45,9 @@ namespace FloatingText
             int Found = -1;
             for(int index = LastFreeIndex; index < Capacity; index++)
             {
-                ref FloatingTextEntity thisEntity = ref List[index];
+                FloatingTextEntity thisEntity = List[index];
 
-                if (!thisEntity.isEnabled)
+                if (thisEntity == null)
                 {
                     Found = index;
                     break;
@@ -57,9 +57,9 @@ namespace FloatingText
             {
                 for(int index = 0; index < LastFreeIndex; index++)
                 {
-                    ref FloatingTextEntity thisEntity = ref List[index];
+                    FloatingTextEntity thisEntity = List[index];
 
-                    if (thisEntity.isEnabled)
+                    if (thisEntity == null)
                     {
                         Found = index;
                         break;
@@ -72,7 +72,7 @@ namespace FloatingText
 
 
             // creating the Entity and initializing it
-            entity.floatingTextID.Index = Found;
+            entity.ReplaceFloatingTextID(Found);
             List[Found] = entity;
             Size++;
 
@@ -91,6 +91,7 @@ namespace FloatingText
         public void Remove(FloatingTextEntity entity)
         {
             entity.Destroy();
+            entity = null;
             Size--;
         }
 

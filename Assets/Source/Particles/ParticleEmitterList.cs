@@ -47,7 +47,7 @@ namespace Particle
             {
                 ParticleEntity thisEntity = List[index];
 
-                if (!thisEntity.isEnabled)
+                if (thisEntity == null)
                 {
                     Found = index;
                     break;
@@ -59,7 +59,7 @@ namespace Particle
                 {
                     ParticleEntity thisEntity = List[index];
 
-                    if (!thisEntity.isEnabled)
+                    if (thisEntity == null)
                     {
                         Found = index;
                         break;
@@ -72,7 +72,7 @@ namespace Particle
 
 
             // creating the Entity and initializing it
-            entity.particleEmitterID.ParticleEmitterId = Found;
+            entity.ReplaceParticleEmitterID(Found);
 
             List[Found] = entity;
             Size++;
@@ -93,6 +93,7 @@ namespace Particle
         {
             ParticleEntity entity = Get(particleEmitterId);
             entity.Destroy();
+            entity = null;
             Size--;
         }
 

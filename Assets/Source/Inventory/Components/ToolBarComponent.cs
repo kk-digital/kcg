@@ -3,7 +3,7 @@
 namespace Inventory
 {
     [Inventory]
-    public struct ToolBarComponent: IComponent
+    public class ToolBarComponent: IComponent
     {
     }
 }

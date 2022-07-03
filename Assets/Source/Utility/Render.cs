@@ -76,15 +76,21 @@ namespace Utility
             mesh.SetTriangles(triangles, 0);
         }
 
-        public static void DrawBackground(float x, float y, float w, float h,
-    Sprites.Sprite sprite, Material material, Transform transform,
-            int drawOrder = 0)
+        public static void DrawBackground(GameObject gameObject, float x, float y, float w, float h, 
+            Sprites.Sprite sprite, Material material, int drawOrder = 0)
         {
             var tex = sprite.Texture;
             var mat = Material.Instantiate(material);
             mat.SetTexture("_MainTex", tex);
             //FIX: Do UnityEngine.CreateMesh, not using UnityEngine
-            var mesh = CreateMesh(transform, "sprite", drawOrder, mat);
+
+            gameObject.transform.position = new Vector3(x, y, 0.0f);
+            var mr = gameObject.GetComponent<MeshRenderer>();
+            mr.sharedMaterial = mat;
+            mr.sortingOrder = drawOrder;
+            var mf = gameObject.GetComponent<MeshFilter>();
+
+            var mesh = mf.sharedMesh;
 
             List<int> triangles = new List<int>();
             List<Vector2> uvs = new List<Vector2>();
@@ -123,8 +129,6 @@ namespace Utility
             mesh.SetTriangles(triangles, 0);
         }
 
-        public static void DrawQuadColor(float x, float y, float w, float h,
-            Color color, Material material)
         public static void DrawQuadColor(GameObject gameObject, float x, float y, float w, float h,
             Color color, Material material, int drawOrder = 0, float rotation = 0)
         {

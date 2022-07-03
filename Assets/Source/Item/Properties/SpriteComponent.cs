@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Item.Property
 {
     [ItemProperties]
-    public struct SpriteComponent : IComponent
+    public class SpriteComponent : IComponent
     {
         public int ID;
     }

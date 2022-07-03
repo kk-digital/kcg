@@ -263,10 +263,10 @@ namespace Planet.Background
                             break;
                     }
 
-                    if (rand1 >= 0.5)
-                        //Utility.Render.DrawBackground(Random.Range(-10, 10), Random.Range(-10, 10), 0.5f, 0.5f, sprite, Material, transform, 2);
-                    else
-                        //Utility.Render.DrawBackground(Random.Range(-100, 100), Random.Range(-100, 100), 0.5f, 0.5f, sprite, Material, transform, 2);
+                   //if (rand1 >= 0.5)
+                   //    Utility.Render.DrawBackground(Random.Range(-10, 10), Random.Range(-10, 10), 0.5f, 0.5f, sprite, Material, transform, 2);
+                   //else
+                   //    Utility.Render.DrawBackground(Random.Range(-100, 100), Random.Range(-100, 100), 0.5f, 0.5f, sprite, Material, transform, 2);
 
                     for (int k = 0; k < transform.childCount; k++)
                     {

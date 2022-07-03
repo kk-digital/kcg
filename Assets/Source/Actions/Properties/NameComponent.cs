@@ -4,7 +4,7 @@ using Entitas.CodeGeneration.Attributes;
 namespace Action.Property
 {
     [ActionProperties]
-    public struct NameComponent : IComponent
+    public class NameComponent : IComponent
     {
         [PrimaryEntityIndex]
         public string TypeName;

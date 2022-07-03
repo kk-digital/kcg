@@ -8,7 +8,7 @@ namespace FloatingText
     {
         List<FloatingTextEntity> ToRemoveEntities = new List<FloatingTextEntity>();
 
-        public void Update(Planet.PlanetState planetState, float deltaTime)
+        public void Update(ref Planet.PlanetState planetState, float deltaTime)
         {
             var entities = planetState.EntitasContext.floatingText.GetGroup(FloatingTextMatcher.AllOf(FloatingTextMatcher.FloatingTextState));
 

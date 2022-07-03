@@ -17,9 +17,9 @@ namespace Projectile
                 GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle), drawOrder);
         }
 
-        public void UpdateMesh()
+        public void UpdateMesh(ProjectileContext context)
         {
-            var projectilessWithSprite = Contexts.sharedInstance.projectile.GetGroup(ProjectileMatcher.AllOf(ProjectileMatcher.ProjectileSprite2D));
+            var projectilessWithSprite = context.GetGroup(ProjectileMatcher.AllOf(ProjectileMatcher.ProjectileSprite2D));
 
             Mesh.Clear();
             int index = 0;
