@@ -10,6 +10,10 @@ AppMac.app/
 Env/
 Logs/
 
+# Ndepends
+kcg.ndproj
+NDependOut
+
 #exclude unity user settings
 UserSettings/
 /UserSettings/

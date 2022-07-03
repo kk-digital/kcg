@@ -1,5 +1,4 @@
 using UnityEngine;
-using Enums;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -27,8 +26,19 @@ public class CameraInfo : MonoBehaviour
         public float aspect;
     }
 
+    // Planet/View Switching
+    public enum ViewType
+    {
+        ViewTypeError,
+        ViewTypePlanet,
+        ViewTypeSector
+    }
+
     // Struct Creation
     CameraProperties camProp;
+
+    // Enum Creation
+    public ViewType viewType;
 
     // Input Informations
     private float tempZoom;
@@ -44,7 +54,7 @@ public class CameraInfo : MonoBehaviour
         //Check if Scene has SceneManager setup
         if (SceneManager.Instance != null)
         {
-            SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+            SceneManager.Instance.Register(this, Enums.SceneObjectType.SceneObjectTypeUtilityScript);
         }
     }
 
@@ -257,6 +267,21 @@ public class CameraInfo : MonoBehaviour
             Debug.LogError("Camera object is empty.");
         }
         UpdateCamera();
+    }
+
+    // Set View Type
+    public ViewType SetViewType(ViewType newViewType)
+    {
+        if (newViewType != ViewType.ViewTypeError)
+        {
+            viewType = newViewType;
+            return viewType;
+        }
+        else
+        {
+            Debug.LogError("New View Type is empty.");
+            return ViewType.ViewTypeError;
+        }
     }
 
     // Reset Camera Zoom 

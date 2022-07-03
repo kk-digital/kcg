@@ -1,18 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Enums;
 
 public class CameraMove : MonoBehaviour
 {
-    public float CameraSpeed= 6.0f;
+    public float CameraSpeed = 6.0f;
 
     void Awake()
     {
         //Check if Scene has SceneManager setup
         if(SceneManager.Instance != null)
         {
-            SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+            SceneManager.Instance.Register(this, Enums.SceneObjectType.SceneObjectTypeUtilityScript);
         }
     }
 

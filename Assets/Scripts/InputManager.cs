@@ -1,5 +1,5 @@
 using UnityEngine;
-using Enums;
+using Entitas;
 
 public class InputManager : MonoBehaviour
 {
@@ -7,12 +7,15 @@ public class InputManager : MonoBehaviour
     public struct Key
     {
         public KeyCode keyCode;
-        public eKeyEvent keyEvent;
+        public Enums.eKeyEvent keyEvent;
         public string keyName;
     }
 
     // Input Device
-    private eInputDevice inputDevice;
+    private Enums.eInputDevice inputDevice;
+
+    // Player State
+    private Enums.PlayerState playerState = Enums.PlayerState.Pedestrian;
 
     // Currently Active Key
     public Key activeKey;
@@ -23,45 +26,109 @@ public class InputManager : MonoBehaviour
         //Check if Scene has SceneManager setup
         if (SceneManager.Instance != null)
         {
-            SceneManager.Instance.Register(this, SceneObjectType.SceneObjectTypeUtilityScript);
+            SceneManager.Instance.Register(this, Enums.SceneObjectType.SceneObjectTypeUtilityScript);
+        }
+
+        if (Camera.main.gameObject.GetComponent<CameraMove>().enabled == true)
+        {
+            if (Camera.main.gameObject.GetComponent<CameraFollow>() != null)
+                Camera.main.gameObject.GetComponent<CameraFollow>().enabled = false;
+            else
+                Camera.main.gameObject.AddComponent<CameraFollow>();
         }
     }
 
-    // Event: On Key Pressed
-    private void OnKeyPressed()
+    public void Controls()
     {
-        // Increase Zoom with +
-        if (activeKey.keyName == KeyCode.KeypadPlus.ToString())
+        if (playerState == Enums.PlayerState.Pedestrian)
         {
-            PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
-            if(pixelCam.targetCameraHalfWidth < 15.0f)
-                pixelCam.targetCameraHalfWidth += 1.0f;
-            // Update Zoomed ortho pixel perfect calculation
-            pixelCam.adjustCameraFOV();
+            // Decrease zoom with -
+            if (Input.GetKey(KeyCode.KeypadMinus))
+            {
+                PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
+                if (pixelCam.targetCameraHalfWidth < 15.0f)
+                    pixelCam.targetCameraHalfWidth += 1.0f;
+                // Update Zoomed ortho pixel perfect calculation
+                pixelCam.adjustCameraFOV();
+            }
+
+            // Increase Zoom with +
+            if (Input.GetKey(KeyCode.KeypadPlus))
+            {
+                PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
+                if (pixelCam.targetCameraHalfWidth > 1.5f)
+                    pixelCam.targetCameraHalfWidth -= 1.0f;
+                // Update Zoomed ortho pixel perfect calculation
+                pixelCam.adjustCameraFOV();
+            }
+
+            if (Input.mouseScrollDelta.y > 0)
+            {
+                PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
+                if (pixelCam.targetCameraHalfWidth > 1.5f)
+                    pixelCam.targetCameraHalfWidth -= 1.0f;
+                // Update Zoomed ortho pixel perfect calculation
+                pixelCam.adjustCameraFOV();
+            }
+            else if (Input.mouseScrollDelta.y < -0.5f)
+            {
+                PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
+                if (pixelCam.targetCameraHalfWidth < 15.0f)
+                    pixelCam.targetCameraHalfWidth += 1.0f;
+                // Update Zoomed ortho pixel perfect calculation
+                pixelCam.adjustCameraFOV();
+            }
+
+            // Open or close statistics
+            if (Input.GetKeyDown(KeyCode.F1))
+            {
+                if (KGUI.Statistics.StatisticsDisplay.canDraw)
+                    KGUI.Statistics.StatisticsDisplay.canDraw = false;
+                else if (!KGUI.Statistics.StatisticsDisplay.canDraw)
+                    KGUI.Statistics.StatisticsDisplay.canDraw = true;
+
+            }
+
+            if(Input.GetKeyDown(KeyCode.LeftAlt))
+            {
+                if(Camera.main.gameObject.GetComponent<CameraFollow>().enabled == true)
+                {
+                    Camera.main.gameObject.GetComponent<CameraFollow>().enabled = false;
+                    Camera.main.gameObject.GetComponent<CameraMove>().enabled = true;
+                }
+                else
+                {
+                    Camera.main.gameObject.GetComponent<CameraFollow>().enabled = true;
+                    Camera.main.gameObject.GetComponent<CameraMove>().enabled = false;
+                }
+            }
         }
 
-        // Decrease zoom with -
-        if (activeKey.keyName == KeyCode.KeypadMinus.ToString())
+        if (Input.mouseScrollDelta.y > 0)
         {
             PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
-            if(pixelCam.targetCameraHalfWidth > 1.5f)
+            if (pixelCam.targetCameraHalfWidth > 1.5f)
                 pixelCam.targetCameraHalfWidth -= 1.0f;
             // Update Zoomed ortho pixel perfect calculation
             pixelCam.adjustCameraFOV();
         }
+        else if (Input.mouseScrollDelta.y < -0.5f)
+        {
+            PixelPerfectCameraTestTool pixelCam = Camera.main.GetComponent<PixelPerfectCameraTestTool>();
+            if (pixelCam.targetCameraHalfWidth < 15.0f)
+                pixelCam.targetCameraHalfWidth += 1.0f;
+            // Update Zoomed ortho pixel perfect calculation
+            pixelCam.adjustCameraFOV();
+        }
     }
 
-    // Event: On Key Released
-    private void OnKeyReleased()
-    {
-        
-    }
-
-    // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html
-    private void FixedUpdate()
+    // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
+    private void Update()
     {
         // Detect Key Call
-        DetectKey();
+        //DetectKey();
+
+        Controls();
     }
 
     // Returns if referenced key pressed or not
@@ -74,60 +141,34 @@ public class InputManager : MonoBehaviour
         return false;
     }
 
-    // Detect which key player pressing
-    private void DetectKey()
-    {
-        // Check input device is empty
-        if (inputDevice == eInputDevice.Invalid)
-            return;
-
-        // Getting active keycode from unity system.enum
-        foreach (KeyCode vKey in System.Enum.GetValues(typeof(KeyCode)))
-        {
-            // Assign active key to local activeKey and key event to local key event
-            if (Input.GetKey(vKey))
-            {
-                activeKey.keyCode = vKey;
-                activeKey.keyName = vKey.ToString();
-                activeKey.keyEvent = eKeyEvent.Press;
-                OnKeyPressed();
-            }
-            else if (Input.GetKeyUp(vKey))
-            {
-                activeKey.keyEvent = eKeyEvent.Release;
-                OnKeyReleased();
-                activeKey.keyName = "";
-                activeKey.keyCode = KeyCode.None;
-            }
-        }
-    }
-
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnGUI.html
     private void OnGUI()
     {
         // Detect Input device to understand which device player using.
         DetectInputDevice();
+
+        if (GameObject.Find("Test") != null)
+            KGUI.Statistics.StatisticsDisplay.DrawStatistics(GameObject.Find("Test").GetComponent<Planet.Unity.PlanetTest>().Planet);
     }
 
     // Detecting Input device from input actions
-    private eInputDevice DetectInputDevice()
+    private Enums.eInputDevice DetectInputDevice()
     {
         // If any mouse or keyboard key detected, set input device to keyboard+mouse
         if(Event.current.isKey ||
             Event.current.isMouse)
         {
-            return eInputDevice.KeyboardMouse;
+            return Enums.eInputDevice.KeyboardMouse;
         }
 
         // If any mouse hover event detected, set input device to keyboard+mouse
         if (Input.GetAxis("Mouse X") != 0.0f ||
             Input.GetAxis("Mouse Y") != 0.0f)
         {
-            return eInputDevice.KeyboardMouse;
+            return Enums.eInputDevice.KeyboardMouse;
         }
 
         // Else, return none device.
-        return eInputDevice.Invalid;
+        return Enums.eInputDevice.Invalid;
     }
 }
-
