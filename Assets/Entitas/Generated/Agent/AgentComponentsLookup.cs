@@ -13,20 +13,21 @@ public static class AgentComponentsLookup {
     public const int AgentEnemy = 2;
     public const int AgentID = 3;
     public const int AgentInventory = 4;
-    public const int AgentPlayer = 5;
-    public const int AgentPositionDiscrete2D = 6;
-    public const int AgentSprite2D = 7;
-    public const int AgentStats = 8;
-    public const int AgentToolBar = 9;
-    public const int AnimationState = 10;
-    public const int ECSInput = 11;
-    public const int ECSInputXY = 12;
-    public const int PhysicsBox2DCollider = 13;
-    public const int PhysicsMovable = 14;
-    public const int PhysicsPosition2D = 15;
-    public const int PhysicsSphere2DCollider = 16;
+    public const int AgentMovementState = 5;
+    public const int AgentPlayer = 6;
+    public const int AgentPositionDiscrete2D = 7;
+    public const int AgentSprite2D = 8;
+    public const int AgentStats = 9;
+    public const int AgentToolBar = 10;
+    public const int AnimationState = 11;
+    public const int ECSInput = 12;
+    public const int ECSInputXY = 13;
+    public const int PhysicsBox2DCollider = 14;
+    public const int PhysicsMovable = 15;
+    public const int PhysicsPosition2D = 16;
+    public const int PhysicsSphere2DCollider = 17;
 
-    public const int TotalComponents = 17;
+    public const int TotalComponents = 18;
 
     public static readonly string[] componentNames = {
         "AgentActionScheduler",
@@ -34,6 +35,7 @@ public static class AgentComponentsLookup {
         "AgentEnemy",
         "AgentID",
         "AgentInventory",
+        "AgentMovementState",
         "AgentPlayer",
         "AgentPositionDiscrete2D",
         "AgentSprite2D",
@@ -54,6 +56,7 @@ public static class AgentComponentsLookup {
         typeof(Agent.EnemyComponent),
         typeof(Agent.IDComponent),
         typeof(Agent.InventoryComponent),
+        typeof(Agent.MovementStateComponent),
         typeof(Agent.PlayerComponent),
         typeof(Agent.PositionDiscrete2DComponent),
         typeof(Agent.Sprite2DComponent),

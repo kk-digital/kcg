@@ -58,13 +58,13 @@ namespace Agent
                             movable.Velocity.Y = 5.0f;
                         }
 
-                        entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration);
+                        entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration, movable.Landed);
                     }
                     else
                     {
                         //Idle
                         movable.Acceleration = new Vec2f();
-                        entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration);
+                        entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration, movable.Landed);
                     }
 
 

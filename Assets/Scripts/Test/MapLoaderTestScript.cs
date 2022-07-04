@@ -111,7 +111,7 @@ namespace Planet.Unity
             }
 
 
-            InputProcessSystems.Update(Contexts.sharedInstance);
+            //InputProcessSystems.Update(Contexts.sharedInstance);
             PhysicsMovableSystem.Update(Contexts.sharedInstance.agent);
             AgentProcessCollisionSystem.Update(Contexts.sharedInstance.agent, ref PlanetState.TileMap);
 
