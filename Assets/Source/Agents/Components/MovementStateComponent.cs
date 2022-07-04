@@ -7,7 +7,7 @@ namespace Agent
     public class MovementStateComponent : IComponent
     {
         public bool Jumping;
-        public bool DoubleJumping;
+        public int JumpCounter;
         public bool Dashing;
         public bool Flying;
 
