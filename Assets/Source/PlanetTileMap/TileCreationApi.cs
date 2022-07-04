@@ -67,14 +67,12 @@ namespace PlanetTileMap
             CurrentTileIndex = TileID.Error;
         }
 
-        public ref TileProperty Get(int index)
+        public ref TileProperty GetTileProperty(TileID tileID)
         {
-            Utils.Assert(index >= 0 && index < TilePropertyArray.Length);
-
-            return ref TilePropertyArray[index];
+            return ref TilePropertyArray[(int)tileID];
         }
 
-        public void CreateTile(TileID tileID)
+        public void CreateTileProperty(TileID tileID)
         {
             if (tileID == TileID.Error) return;
 
@@ -82,14 +80,14 @@ namespace PlanetTileMap
             CurrentTileIndex = tileID;
         }
 
-        public void SetTileName(string name)
+        public void SetTilePropertyName(string name)
         {
             if (CurrentTileIndex == TileID.Error) return;
 
             TilePropertyArray[(int)CurrentTileIndex].Name = name;
         }
 
-        public void SetTileSpriteSheet16(int spriteSheetId, int row, int column)
+        public void SetTilePropertySpriteSheet16(int spriteSheetId, int row, int column)
         {
             if (CurrentTileIndex == TileID.Error) return;
             
@@ -114,7 +112,7 @@ namespace PlanetTileMap
             TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = true;
         }
 
-        public void SetTileSpriteSheet(int spriteSheetId, int row, int column)
+        public void SetTilePropertySpriteSheet(int spriteSheetId, int row, int column)
         {
             if (CurrentTileIndex == TileID.Error) return;
             
@@ -134,7 +132,7 @@ namespace PlanetTileMap
             TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = true;
         }
 
-        public void SetTileTexture(int spriteSheetId, int row, int column)
+        public void SetTilePropertyTexture(int spriteSheetId, int row, int column)
         {
             if (CurrentTileIndex == TileID.Error) return;
             
@@ -145,7 +143,7 @@ namespace PlanetTileMap
             TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = false;
         }
 
-        public void SetTileTexture16(int spriteSheetId, int row, int column)
+        public void SetTilePropertyTexture16(int spriteSheetId, int row, int column)
         {
             if (CurrentTileIndex == TileID.Error) return;
             
@@ -161,7 +159,7 @@ namespace PlanetTileMap
             TilePropertyArray[(int)CurrentTileIndex].IsExplosive = isExplosive;
         }
 
-        public void SetTileCollisionType(CollisionType type)
+        public void SetTilePropertyCollisionType(CollisionType type)
         {
             if (CurrentTileIndex == TileID.Error) return;
 
@@ -169,21 +167,21 @@ namespace PlanetTileMap
         }
 
         
-        public void SetTileDurability(byte durability)
+        public void SetTilePropertyDurability(byte durability)
         {
             if (CurrentTileIndex == TileID.Error) return;
 
             TilePropertyArray[(int)CurrentTileIndex].Durability = durability;
         }
 
-        public void SetTileDescription(byte durability)
+        public void SetTilePropertyDescription(byte durability)
         {
             if (CurrentTileIndex == TileID.Error) return;
             
             TilePropertyArray[(int)CurrentTileIndex].Durability = durability;
         }
 
-       /* public void SetTileVariant(int spriteSheetId, int row, int column, PlanetTileMap.TilePosition variant)
+       /* public void SetTilePropertyVariant(int spriteSheetId, int row, int column, PlanetTileMap.TilePosition variant)
         {
             if (CurrentTileIndex != -1)
             {
@@ -194,7 +192,7 @@ namespace PlanetTileMap
             }
         }
 
-        public void SetTileVariant16(int spriteSheetId, int row, int column, PlanetTileMap.TilePosition variant)
+        public void SetTilePropertyVariant16(int spriteSheetId, int row, int column, PlanetTileMap.TilePosition variant)
         {
             if (CurrentTileIndex != -1)
             {
@@ -204,7 +202,7 @@ namespace PlanetTileMap
             }
         }*/
 
-        public void EndTile()
+        public void EndTileProperty()
         {
             CurrentTileIndex = TileID.Error;
         }

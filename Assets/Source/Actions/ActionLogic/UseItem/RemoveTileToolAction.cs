@@ -16,13 +16,9 @@ namespace Action
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             int x = (int)worldPosition.x;
             int y = (int)worldPosition.y;
-
-            if (x >= 0 && x < planet.TileMap.MapSize.X &&
-            y >= 0 && y < planet.TileMap.MapSize.Y)
-            {
-                planet.TileMap.RemoveTile(x, y, MapLayerType.Front);
-            }
-
+            
+            planet.TileMap.RemoveFrontTile(x, y);
+            
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
         }
     }

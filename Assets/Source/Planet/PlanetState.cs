@@ -275,8 +275,8 @@ namespace Planet
             GameState.ProjectileCollisionSystem.UpdateEx(ref this);
 
             // Update Meshes.
-            TileMap.UpdateLayerMesh(MapLayerType.Mid);
-            TileMap.UpdateLayerMesh(MapLayerType.Front);
+            TileMap.UpdateMidLayerMesh();
+            TileMap.UpdateFrontLayerMesh();
             GameState.ItemMeshBuilderSystem.UpdateMesh(EntitasContext);
             GameState.AgentMeshBuilderSystem.UpdateMesh(EntitasContext.agent);
             GameState.ProjectileMeshBuilderSystem.UpdateMesh(EntitasContext.projectile);

@@ -1,8 +1,5 @@
-﻿
-
-using Entitas;
+﻿using System;
 using UnityEngine;
-using KMath;
 using Enums.Tile;
 
 namespace Action
@@ -27,13 +24,20 @@ namespace Action
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             int x = (int)worldPosition.x;
             int y = (int)worldPosition.y;
-            
-            if (x >= 0 && x < planet.TileMap.MapSize.X &&
-               y >= 0 && y < planet.TileMap.MapSize.Y)
+
+            switch (data.Layer)
             {
-                planet.TileMap.SetTile(x, y, data.TileID, data.Layer);
+                case MapLayerType.Back:
+                    planet.TileMap.SetBackTile(x, y, data.TileID);
+                    break;
+                case MapLayerType.Mid:
+                    planet.TileMap.SetMidTile(x, y, data.TileID);
+                    break;
+                case MapLayerType.Front:
+                    planet.TileMap.SetFrontTile(x, y, data.TileID);
+                    break;
             }
-            
+
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
         }
     }
