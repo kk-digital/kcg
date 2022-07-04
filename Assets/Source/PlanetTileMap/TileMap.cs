@@ -288,6 +288,9 @@ namespace PlanetTileMap
                         const float width = 1;
                         const float height = 1;
 
+                        if (!Utility.ObjectMesh.isOnScreen(x, y))
+                            continue;
+
                         // Update UVs
                         LayerMeshes[(int)planetLayer].UpdateUV(textureCoords, (index) * 4);
                         // Update Vertices

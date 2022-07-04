@@ -187,7 +187,7 @@ public class MiningLaser : MonoBehaviour
             }
 
             // Draw System Update
-            inputProcessSystem.Update(Contexts.sharedInstance);
+            //inputProcessSystem.Update(Contexts.sharedInstance);
 
             // If laser held, draw it.
             if(isHeld)

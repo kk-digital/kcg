@@ -19,7 +19,14 @@ namespace Physics
 {
             var entityBoxBorders = new AABB2D(new Vec2f(pos.PreviousValue.X, pos.Value.Y) + box2DColider.Offset, box2DColider.Size);
 
-            if (entityBoxBorders.IsCollidingBottom(tileMap, movable.Velocity) || entityBoxBorders.IsCollidingTop(tileMap, movable.Velocity))
+            if (entityBoxBorders.IsCollidingBottom(tileMap, movable.Velocity))
+            {
+                pos.Value = new Vec2f(pos.Value.X, pos.PreviousValue.Y);
+                movable.Velocity.Y = 0.0f;
+                movable.Acceleration.Y = 0.0f;
+                movable.Landed = true;
+            }
+            if (entityBoxBorders.IsCollidingTop(tileMap, movable.Velocity))
             {   
                 pos.Value = new Vec2f(pos.Value.X, pos.PreviousValue.Y);
                 movable.Velocity.Y = 0.0f;

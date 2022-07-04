@@ -11,7 +11,7 @@ public partial interface IPhysicsMovableEntity {
     Physics.MovableComponent physicsMovable { get; }
     bool hasPhysicsMovable { get; }
 
-    void AddPhysicsMovable(float newSpeed, KMath.Vec2f newVelocity, KMath.Vec2f newAcceleration);
-    void ReplacePhysicsMovable(float newSpeed, KMath.Vec2f newVelocity, KMath.Vec2f newAcceleration);
+    void AddPhysicsMovable(float newSpeed, KMath.Vec2f newVelocity, KMath.Vec2f newAcceleration, bool newLanded);
+    void ReplacePhysicsMovable(float newSpeed, KMath.Vec2f newVelocity, KMath.Vec2f newAcceleration, bool newLanded);
     void RemovePhysicsMovable();
 }

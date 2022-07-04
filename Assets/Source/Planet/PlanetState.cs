@@ -215,7 +215,7 @@ namespace Planet
         // updates the entities, must call the systems and so on ..
         public void Update(float deltaTime, Material material, Transform transform)
         {
-            float targetFps = 30.0f;
+            float targetFps = 60.0f;
             float frameTime = 1.0f / targetFps;
 
             TimeState.Deficit += deltaTime;
@@ -259,7 +259,7 @@ namespace Planet
 
             // calling all the systems we have
 
-            GameState.InputProcessSystem.Update(EntitasContext);
+            GameState.InputProcessSystem.Update(ref this);
             GameState.PhysicsMovableSystem.Update(EntitasContext.agent);
             GameState.PhysicsMovableSystem.Update(EntitasContext.item);
             GameState.PhysicsProcessCollisionSystem.Update(EntitasContext.agent, ref TileMap);
