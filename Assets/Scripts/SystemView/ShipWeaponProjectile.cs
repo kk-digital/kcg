@@ -25,6 +25,7 @@ namespace Scripts {
 
             public float acc;
             public bool  seeking;
+            public bool  rocket;
             public SystemState state;
 
             public int Damage;
@@ -39,6 +40,8 @@ namespace Scripts {
                     Weapon.projectiles_fired.Remove(this);
                     return false;
                 }
+
+                bool accelerated = false;
 
                 if(seeking) {
                     SystemShip target          = null;
@@ -55,20 +58,26 @@ namespace Scripts {
                         }
 
                     if(target != null) {
-                        float dx   = target.self.posx - Body.posx;
-                        float dy   = target.self.posy - Body.posy;
 
-                        float accx = acc * dx / target_distance;
-                        float accy = acc * dy / target_distance;
+                        float dx        = target.self.posx - Body.posx;
+                        float dy        = target.self.posy - Body.posy;
 
-                        float vel  = Tools.magnitude(Body.velx, Body.vely);
+                        float angle     = Tools.get_angle(dx, dy);
+                        float magnitude = Tools.magnitude(Body.velx, Body.vely) + acc * dt;
 
-                        Body.velx -= acc * dt * 0.5f * Body.velx / vel;
-                        Body.vely -= acc * dt * 0.5f * Body.vely / vel;
+                        Body.velx       = (float)Math.Cos(angle) * magnitude;
+                        Body.vely       = (float)Math.Sin(angle) * magnitude;
 
-                        Body.velx += accx * dt;
-                        Body.vely += accy * dt;
+                        accelerated     = true;
+
                     }
+                }
+
+                if(rocket && !accelerated) {
+                    float vel   = Tools.magnitude(Body.velx, Body.vely);
+
+                    Body.velx  += acc * dt * Body.velx / vel;
+                    Body.vely  += acc * dt * Body.vely / vel;
                 }
 
                 if(Descriptor == null) // Linear trajectory

@@ -231,15 +231,17 @@ namespace Scripts {
 
                 left_cannon.range                = 45.0f;
                 left_cannon.shield_penetration   = 0.2f;
-                left_cannon.projectile_velocity  = 50.0f;
+                left_cannon.projectile_velocity  = 5.0f;
                 left_cannon.damage               = 6000;
                 left_cannon.attack_speed         = 1250;
                 left_cannon.cooldown             = 0;
                 left_cannon.self                 = Player.ship;
                 left_cannon.FOV                  = Tools.quarterpi;
+                left_cannon.acc                  = 40.0f;
 
                 left_cannon.flags                = (int)WeaponFlags.WEAPON_PROJECTILE
                                                  | (int)WeaponFlags.WEAPON_BROADSIDE
+                                                 | (int)WeaponFlags.WEAPON_ROCKET
                                                  | (int)WeaponFlags.WEAPON_POSX;
 
 
@@ -266,15 +268,17 @@ namespace Scripts {
 
                 right_cannon.range               = 45.0f;
                 right_cannon.shield_penetration  = 0.2f;
-                right_cannon.projectile_velocity = 50.0f;
+                right_cannon.projectile_velocity = 5.0f;
                 right_cannon.damage              = 6000;
                 right_cannon.attack_speed        = 1250;
                 right_cannon.cooldown            = 0;
                 right_cannon.self                = Player.ship;
                 right_cannon.FOV                 = Tools.quarterpi;
+                right_cannon.acc                 = 40.0f;
 
                 right_cannon.flags               = (int)WeaponFlags.WEAPON_PROJECTILE
-                                                 | (int)WeaponFlags.WEAPON_BROADSIDE;
+                                                 | (int)WeaponFlags.WEAPON_BROADSIDE
+                                                 | (int)WeaponFlags.WEAPON_ROCKET;
 
                 ShipWeapon right_gun             = new ShipWeapon();
 
@@ -296,9 +300,9 @@ namespace Scripts {
 
                 turret.color                     = Color.white;
 
-                turret.range                     = 20.0f;
+                turret.range                     = 25.0f;
                 turret.shield_penetration        = 0.1f;
-                turret.projectile_velocity       = 12.0f;
+                turret.projectile_velocity       = 15.0f;
                 turret.damage                    = 200;
                 turret.attack_speed              = 50;
                 turret.cooldown                  = 0;
@@ -307,7 +311,6 @@ namespace Scripts {
                 turret.rotation_rate             = 2.0f;
                 turret.self                      = Player.ship;
                 turret.state                     = State;
-                turret.acc                       = 25.0f;
 
                 turret.flags                     = (int)WeaponFlags.WEAPON_PROJECTILE
                                                  | (int)WeaponFlags.WEAPON_TURRET

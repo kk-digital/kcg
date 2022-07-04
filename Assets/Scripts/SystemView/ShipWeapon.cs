@@ -108,6 +108,7 @@ namespace Scripts {
                 projectile.Damage = damage;
 
                 projectile.seeking = (flags & (int)WeaponFlags.WEAPON_SEEKING) != 0;
+                projectile.rocket  = (flags & (int)WeaponFlags.WEAPON_ROCKET)  != 0;
                 projectile.acc     = acc;
                 projectile.state   = state;
 
@@ -259,6 +260,7 @@ namespace Scripts {
                     projectile.Damage = damage;
 
                     projectile.seeking = (flags & (int)WeaponFlags.WEAPON_SEEKING) != 0;
+                    projectile.rocket  = (flags & (int)WeaponFlags.WEAPON_ROCKET)  != 0;
                     projectile.acc     = acc;
                     projectile.state   = state;
 
