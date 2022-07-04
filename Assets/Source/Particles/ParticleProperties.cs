@@ -18,6 +18,9 @@ namespace Particle
         // we can use a mix of sprites for the particles
         public int SpriteId;
 
+        public bool HasAnimation;
+        public Animation.AnimationType AnimationType;
+
         // the starting properties of the particles
         public Vec2f Size;
         public Vector2 StartingVelocity;

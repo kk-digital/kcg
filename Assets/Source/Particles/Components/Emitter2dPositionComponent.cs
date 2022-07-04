@@ -6,7 +6,7 @@ namespace Particle
 {
 
     [Particle]
-    public struct Emitter2dPositionComponent : IComponent
+    public class Emitter2dPositionComponent : IComponent
     {
         public Vector2 Position;
         public Vector2 Acceleration;

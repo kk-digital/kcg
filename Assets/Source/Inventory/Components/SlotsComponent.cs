@@ -3,7 +3,8 @@ using Entitas;
 
 namespace Inventory
 {
-    public struct SlotsComponent : IComponent
+    [Inventory]
+    public class SlotsComponent : IComponent
     {
         /// <summary>
         /// Current Slots(inventory.Width * inventory.Heigh)

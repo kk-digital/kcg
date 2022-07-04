@@ -22,9 +22,9 @@ namespace Action
 
         Data data;
 
-        public PlaceParticleEmitterToolAction(int actionID, int agentID) : base(actionID, agentID)
+        public PlaceParticleEmitterToolAction(Contexts entitasContext, int actionID, int agentID) : base(entitasContext, actionID, agentID)
         {
-            data = (Data)ActionAttributeEntity.actionAttributeData.Data;
+            data = (Data)ActionPropertyEntity.actionPropertyData.Data;
         }
 
         public override void OnEnter(ref Planet.PlanetState planet)
@@ -32,7 +32,10 @@ namespace Action
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float x = worldPosition.x;
             float y = worldPosition.y;
-            planet.AddParticleEmitter(new Vec2f(x, y), Particle.ParticleEmitterType.OreFountain);
+            int t = System.Math.Abs((int)KMath.Random.Mt19937.genrand_int32() % System.Enum.GetNames(typeof(Particle.ParticleType)).Length);
+
+            Debug.Log((Particle.ParticleEmitterType)t);
+            planet.AddParticleEmitter(new Vec2f(x, y), (Particle.ParticleEmitterType)t);
 
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);
         }
@@ -41,9 +44,9 @@ namespace Action
     // Factory Method
     public class PlaceParticleEmitterActionCreator : ActionCreator
     {
-        public override ActionBase CreateAction(int actionID, int agentID)
+        public override ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
         {
-            return new PlaceParticleEmitterToolAction(actionID, agentID);
+            return new PlaceParticleEmitterToolAction(entitasContext, actionID, agentID);
         }
     }
 }

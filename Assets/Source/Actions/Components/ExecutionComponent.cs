@@ -2,7 +2,8 @@
 
 namespace Action
 {
-    public struct ExecutionComponent: IComponent
+    [Action]
+    public class ExecutionComponent: IComponent
     {
         public ActionBase           Logic;
         public Enums.ActionState    State;

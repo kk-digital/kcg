@@ -7,10 +7,10 @@ namespace Action
 {
     public class FireWeaponAction : ActionBase
     {
-        GameEntity ProjectileEntity;
+        ProjectileEntity ProjectileEntity;
         Vec2f StartPos;
 
-        public FireWeaponAction(int actionID, int agentID) : base(actionID, agentID)
+        public FireWeaponAction(Contexts entitasContext, int actionID, int agentID) : base(entitasContext, actionID, agentID)
         {
         }
 
@@ -27,8 +27,9 @@ namespace Action
             StartPos.X += 0.3f;
             StartPos.Y += 0.5f;
 
-            ProjectileEntity = GameState.ProjectileSpawnerSystem.SpawnBullet(GameResources.OreIcon, 4, 4, StartPos, 
-                new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized * speed, Vec2f.Zero, Enums.ProjectileType.Bullet, Enums.ProjectileDrawType.Standard);
+            ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Bullet);
+           /* ProjectileEntity = GameState.ProjectileSpawnerSystem.SpawnBullet(GameResources.OreIcon, 4, 4, StartPos, 
+                new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized * speed, Vec2f.Zero, Enums.ProjectileType.Bullet, Enums.ProjectileDrawType.Standard);*/
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Running);
         }
 
@@ -51,7 +52,7 @@ namespace Action
             }
 
             // Check if projectile has hit a enemy.
-            var entities = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentID));
+            var entities = EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
 
             // Todo: Create a agent colision system?
             foreach (var entity in entities)
@@ -74,7 +75,8 @@ namespace Action
                     Vector2 oppositeDirection = new Vector2(-diff.X, -diff.Y);
                     var stats = entity.agentStats;
                     float damage = 20.0f;
-                    entity.ReplaceAgentStats(stats.Health - damage, stats.AttackCooldown);
+                    entity.ReplaceAgentStats(stats.Health - (int)damage, stats.Food, stats.Water, stats.Oxygen, 
+                        stats.Fuel, stats.AttackCooldown);
 
                     // spawns a debug floating text for damage 
                     planet.AddFloatingText("" + damage, 0.5f, new Vec2f(oppositeDirection.x * 0.05f, oppositeDirection.y * 0.05f), new Vec2f(entityPos.X, entityPos.Y + 0.35f));
@@ -96,9 +98,9 @@ namespace Action
     // Factory Method
     public class FireWeaponActionCreator : ActionCreator
     {
-        public override ActionBase CreateAction(int actionID, int agentID)
+        public override ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
         {
-            return new FireWeaponAction(actionID, agentID);
+            return new FireWeaponAction(entitasContext, actionID, agentID);
         }
     }
 }

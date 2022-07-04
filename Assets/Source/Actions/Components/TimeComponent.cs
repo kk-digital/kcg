@@ -2,7 +2,8 @@
 
 namespace Action
 {
-    public struct TimeComponent : IComponent
+    [Action]
+    public class TimeComponent : IComponent
     {
         public float StartTime;
     }

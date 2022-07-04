@@ -4,20 +4,20 @@ namespace Agent
 {
     public class List
     {
-        private readonly GameContext gameContext;
+        private readonly AgentContext agentContext;
         /// <summary>
         /// New agents will be Added to that List if new Entity created with a Sprite Component
         /// </summary>
-        public IGroup<GameEntity> AgentsWithSprite;
-        public IGroup<GameEntity> AgentsWithXY;
-        public IGroup<GameEntity> AgentsWithVelocity;
+        public IGroup<AgentEntity> AgentsWithSprite;
+        public IGroup<AgentEntity> AgentsWithXY;
+        public IGroup<AgentEntity> AgentsWithVelocity;
         
         public List()
         {
-            gameContext = Contexts.sharedInstance.game;
-            AgentsWithSprite = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.AgentSprite2D));
-            AgentsWithXY = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.ECSInput, GameMatcher.ECSInputXY));
-            AgentsWithVelocity = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsMovable, GameMatcher.PhysicsPosition2D));
+            agentContext = Contexts.sharedInstance.agent;
+            AgentsWithSprite = agentContext.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentSprite2D));
+            AgentsWithXY = agentContext.GetGroup(AgentMatcher.AllOf(AgentMatcher.ECSInput, AgentMatcher.ECSInputXY));
+            AgentsWithVelocity = agentContext.GetGroup(AgentMatcher.AllOf(AgentMatcher.PhysicsMovable, AgentMatcher.PhysicsPosition2D));
         }
     }
 }

@@ -79,6 +79,14 @@ namespace Particle
             PropertiesArray[CurrentIndex].Name = name;
         }
 
+        public void SetAnimationType(Animation.AnimationType animationType)
+        {
+            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
+            {
+                PropertiesArray[CurrentIndex].HasAnimation = true;
+                PropertiesArray[CurrentIndex].AnimationType = animationType;
+            }
+        }
         public void SetDecayRate(float decayRate)
         {
             if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)

@@ -19,14 +19,13 @@ namespace Item
         private static CreationApi instance;
         public static CreationApi Instance => instance ??= new CreationApi();
 
-        private Contexts EntitasContext = Contexts.sharedInstance;
 
-        private GameEntity ItemType = null;
+        private ItemPropertiesEntity ItemType = null;
 
-        public void CreateItem(Enums.ItemType itemType, string name)
+        public void CreateItem(Contexts entitasContext, Enums.ItemType itemType, string name)
         {
-            ItemType = EntitasContext.game.CreateEntity();
-            ItemType.AddItemAttributes(itemType, name);
+            ItemType = entitasContext.itemProperties.CreateEntity();
+            ItemType.AddItemProperty(itemType, name);
         }
 
         public void SetName(string name)
@@ -34,13 +33,13 @@ namespace Item
             if (ItemType == null)
                 return;
 
-            var Attributes = ItemType.itemAttributes;
-            ItemType.ReplaceItemAttributes(Attributes.ItemType, name);
+            var Attributes = ItemType.itemProperty;
+            ItemType.ReplaceItemProperty(Attributes.ItemType, name);
         }
 
         public void SetSize(Vec2f size)
         {
-            ItemType.AddItemAttributeSize(size);
+            ItemType.AddItemPropertySize(size);
         }
 
         public void SetTexture(int spriteId)
@@ -48,7 +47,7 @@ namespace Item
             if (ItemType == null)
                 return;
 
-            ItemType.AddItemAttributeSprite(spriteId);
+            ItemType.AddItemPropertySprite(spriteId);
         }
 
 
@@ -57,13 +56,13 @@ namespace Item
             if (ItemType == null)
                 return;
 
-            ItemType.AddItemAttributeInventorySprite(spriteId);
+            ItemType.AddItemPropertyInventorySprite(spriteId);
 
         }
 
         public void SetAction(int actionID)
         {
-            ItemType.AddItemAttributeAction(actionID);
+            ItemType.AddItemPropertyAction(actionID);
         }
 
         public void SetStackable(int maxStackCount)
@@ -71,7 +70,7 @@ namespace Item
             if (ItemType == null)
                 return;
 
-            ItemType.AddItemAttributeStackable(maxStackCount);
+            ItemType.AddItemPropertyStackable(maxStackCount);
         }
 
         public void SetPlaceable()
@@ -79,7 +78,7 @@ namespace Item
             if (ItemType == null)
                 return;
 
-            ItemType.isItemAttributePlaceable = true;
+            ItemType.isItemPropertyPlaceable = true;
         }
 
         public void SetEquipament()
@@ -87,7 +86,7 @@ namespace Item
             if (ItemType == null)
                 return;
 
-            ItemType.isItemAttributePlaceable = true;
+            ItemType.isItemPropertyPlaceable = true;
         }
 
         public void EndItem()

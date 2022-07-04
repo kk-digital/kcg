@@ -3,7 +3,8 @@ using KMath;
 
 namespace Physics
 {
-    public struct Sphere2DColliderComponent : IComponent
+    [Agent, Item, Vehicle, Projectile]
+    public class Sphere2DColliderComponent : IComponent
     {
         public float Radius;
         public Vec2f Size;

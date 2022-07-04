@@ -10,25 +10,27 @@ namespace Item
     {
         private static int ItemID;
 
-        public GameEntity SpawnItem(GameContext gameContext, ItemType itemType, Vec2f position)
+        public ItemEntity SpawnItem(Contexts entitasContext, ItemType itemType, Vec2f position)
         {
-            var entityAttribute = gameContext.GetEntityWithItemAttributes(itemType);
-            Vec2f size = entityAttribute.itemAttributeSize.Size;
+            ItemPropertiesEntity entityAttribute = entitasContext.itemProperties.GetEntityWithItemProperty(itemType);
+            Vec2f size = entityAttribute.itemPropertySize.Size;
 
-            var entity = gameContext.CreateEntity();
-            entity.AddItemID(ItemID, itemType);
+            var entity = entitasContext.item.CreateEntity();
+            entity.AddItemID(ItemID);
+            entity.AddItemType(itemType);
             entity.AddPhysicsPosition2D(position, Vec2f.Zero);
             entity.AddPhysicsBox2DCollider(size, Vec2f.Zero);
-            entity.AddPhysicsMovable(0f, Vec2f.Zero, Vec2f.Zero);
+            entity.AddPhysicsMovable(0f, Vec2f.Zero, Vec2f.Zero, false);
 
             ItemID++;
             return entity;
         }
 
-        public GameEntity SpawnInventoryItem(GameContext gameContext, ItemType itemType)
+        public ItemEntity SpawnInventoryItem(ItemContext context, ItemType itemType)
         {
-            var entity = gameContext.CreateEntity();
-            entity.AddItemID(ItemID, itemType);
+            var entity = context.CreateEntity();
+            entity.AddItemID(ItemID);
+            entity.AddItemType(itemType);
 
             ItemID++;
             return entity;

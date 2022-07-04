@@ -2,7 +2,8 @@ using Entitas;
 
 namespace Inventory
 {
-    public struct SizeComponent : IComponent
+    [Inventory]
+    public sealed class SizeComponent : IComponent
     {
         public int  Width;
         public int  Height;

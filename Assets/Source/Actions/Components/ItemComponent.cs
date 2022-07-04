@@ -3,7 +3,8 @@ using Entitas.CodeGeneration.Attributes;
 
 namespace Action
 {
-    public struct ItemComponent : IComponent
+    [Action]
+    public class ItemComponent : IComponent
     {
         [PrimaryEntityIndex]
         public int ItemID;

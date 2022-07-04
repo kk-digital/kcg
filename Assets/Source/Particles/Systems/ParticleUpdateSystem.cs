@@ -9,7 +9,7 @@ namespace Particle
         List<ParticleEntity> ToDestroy = new List<ParticleEntity>();
 
 
-        public void Update(Planet.PlanetState planetState, ParticleContext particleContext)
+        public void Update(ref Planet.PlanetState planetState, ParticleContext particleContext)
         {
             ToDestroy.Clear();
 
@@ -17,10 +17,19 @@ namespace Particle
             IGroup<ParticleEntity> entities = particleContext.GetGroup(ParticleMatcher.ParticleState);
             foreach (var gameEntity in entities)
             {
+
+                if (gameEntity.hasParticleAnimation)
+                {
+                    var animation = gameEntity.particleAnimation;
+                    animation.State.Update(deltaTime, animation.AnimationSpeed);
+
+                    gameEntity.ReplaceParticleAnimation(animation.AnimationSpeed, animation.State);
+                }
+
                 var state = gameEntity.particleState;
 
                 float newHealth = state.Health - state.DecayRate * deltaTime;
-                gameEntity.ReplaceParticleState(state.GameObject, newHealth, state.DecayRate, state.DeltaRotation, state.DeltaScale);
+                gameEntity.ReplaceParticleState(newHealth, state.DecayRate, state.DeltaRotation, state.DeltaScale);
 
                 var pos = gameEntity.particlePosition2D;
                 Vector2 displacement = 
@@ -28,7 +37,10 @@ namespace Particle
                 Vector2 newVelocity = pos.Acceleration * deltaTime + pos.Velocity;
 
                 Vector2 newPosition = pos.Position + displacement;
-                gameEntity.ReplaceParticlePosition2D(newPosition, pos.Acceleration, newVelocity);
+
+                float newRotation = pos.Rotation + state.DeltaRotation * deltaTime;
+                
+                gameEntity.ReplaceParticlePosition2D(newPosition, pos.Acceleration, newVelocity, newRotation);
 
                 /*state.GameObject.transform.position = new Vector3(newPosition.x, newPosition.y, 0.0f);
                 state.GameObject.transform.Rotate(0.0f, 0.0f, state.DeltaRotation, Space.Self);*/
@@ -42,7 +54,8 @@ namespace Particle
             foreach(var gameEntity in ToDestroy)
             {
                 //Object.Destroy(gameEntity.particleState.GameObject);
-                gameEntity.Destroy();
+                //gameEntity.Destroy();
+                planetState.RemoveParticle(gameEntity.particleID.ID);
             }
         }
     }

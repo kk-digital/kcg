@@ -10,40 +10,41 @@ namespace Inventory
         private static InventoryAttacher instance;
         public static InventoryAttacher Instance => instance ??= new InventoryAttacher();
 
-        public Contexts EntitasContext = Contexts.sharedInstance;
-
         private static int InventoryID = 0;
 
-        public void AttachInventoryToAgent(int width, int height, int AgentID)
+        public void AttachInventoryToAgent(Contexts entitasContext, int width, int height, AgentEntity agentEntity)
         {
-            GameEntity entity = EntitasContext.game.GetEntityWithAgentID(AgentID);
+            AgentEntity entity = agentEntity;
             entity.AddAgentInventory(InventoryID);
-            MakeInventoryEntity(width, height);
+            MakeInventoryEntity(entitasContext, width, height);
         }
 
-        public void AttachInventorytoItem(int width, int height, int ItemID)
+        public void AttachInventorytoItem(Contexts entitasContext, int width, int height, int ItemID)
         {
-            GameEntity entity = EntitasContext.game.GetEntityWithItemIDID(ItemID);
-            entity.AddAgentInventory(InventoryID);
-            MakeInventoryEntity(width, height);
+            ItemEntity entity = entitasContext.item.GetEntityWithItemID(ItemID);
+            entity.AddItemInventory(InventoryID);
+            MakeInventoryEntity(entitasContext, width, height);
         }
 
-        public void AttachToolBarToPlayer(int size, int AgentID)
+        public void AttachToolBarToPlayer(Contexts entitasContext, int size, AgentEntity agentEntity)
         {
-            GameEntity playerEntity = EntitasContext.game.GetEntityWithAgentID(AgentID);
+            AgentEntity playerEntity = agentEntity;
             playerEntity.AddAgentToolBar(InventoryID);
-            GameEntity entity = MakeInventoryEntity(size, 1);
+            InventoryEntity entity = MakeInventoryEntity(entitasContext, size, 1);
+
             entity.isInventoryToolBar = true;
             entity.isInventoryDrawable = true;
         }
 
-        private GameEntity MakeInventoryEntity(int width, int height)
+        private InventoryEntity MakeInventoryEntity(Contexts entitasContext, int width, int height)
         {
-            GameEntity entity = EntitasContext.game.CreateEntity();
+            InventoryEntity entity = entitasContext.inventory.CreateEntity();
             entity.AddInventoryID(InventoryID++);
             entity.AddInventorySize(width, height);
             BitArray bitArray = new BitArray(width* height, false);
             entity.AddInventorySlots(bitArray, 0);
+
+
             
             return entity;
         }

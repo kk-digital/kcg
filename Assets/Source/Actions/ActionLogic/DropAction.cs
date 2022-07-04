@@ -6,38 +6,36 @@ namespace Action
 {
     public class DropAction : ActionBase
     {
-        private GameEntity ItemEntity;
+        private ItemEntity ItemEntity;
 
-        public DropAction(int actionID, int agentID) : base(actionID, agentID)
+        public DropAction(Contexts entitasContext, int actionID, int agentID) : base(entitasContext, actionID, agentID)
         {
         }
 
         public override void OnEnter(ref Planet.PlanetState planet)
         {
-            var gameContext = Contexts.sharedInstance.game;
-
             if (AgentEntity.hasAgentToolBar)
             {
                 int toolBarID = AgentEntity.agentToolBar.ToolBarID;
-                GameEntity toolBarEntity = gameContext.GetEntityWithInventoryID(toolBarID);
+                InventoryEntity toolBarEntity = EntitasContext.inventory.GetEntityWithInventoryID(toolBarID);
 
                 int selected = toolBarEntity.inventorySlots.Selected;
 
 
-                ItemEntity = GameState.InventoryManager.GetItemInSlot(toolBarID, selected);
+                ItemEntity = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.item, toolBarID, selected);
                 if (ItemEntity == null)
                 {
                     ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
                     return;
                 }
-                GameState.InventoryManager.RemoveItem(ItemEntity, selected);
+                GameState.InventoryManager.RemoveItem(planet.EntitasContext, ItemEntity, selected);
              
                 Vec2f pos = AgentEntity.physicsPosition2D.Value;
-                Vec2f size = Contexts.sharedInstance.game.GetEntityWithItemAttributes(ItemEntity.itemID.ItemType).itemAttributeSize.Size;
+                Vec2f size = EntitasContext.itemProperties.GetEntityWithItemProperty(ItemEntity.itemType.Type).itemPropertySize.Size;
 
                 ItemEntity.AddPhysicsPosition2D(pos, pos);
                 ItemEntity.AddPhysicsBox2DCollider(size, Vec2f.Zero);
-                ItemEntity.AddPhysicsMovable(0.0f, new Vec2f(-30.0f, 20.0f), Vec2f.Zero);
+                ItemEntity.AddPhysicsMovable(0.0f, new Vec2f(-30.0f, 20.0f), Vec2f.Zero, false);
                 ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Running);
                 return;
 
@@ -49,7 +47,7 @@ namespace Action
         public override void OnUpdate(float deltaTime, ref Planet.PlanetState planet)
         {
             ActionEntity.ReplaceActionTime(ActionEntity.actionTime.StartTime + deltaTime);
-            if (ActionEntity.actionTime.StartTime < ActionAttributeEntity.actionAttributeTime.Duration)
+            if (ActionEntity.actionTime.StartTime < ActionPropertyEntity.actionPropertyTime.Duration)
             {
                 return;
             }
@@ -67,9 +65,9 @@ namespace Action
     // Factory Method
     public class DropActionCreator : ActionCreator
     {
-        public override ActionBase CreateAction(int actionID, int agentID)
+        public override ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
         {
-            return new DropAction(actionID, agentID);
+            return new DropAction(entitasContext, actionID, agentID);
         }
     }
 }

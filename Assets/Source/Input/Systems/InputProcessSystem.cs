@@ -5,11 +5,14 @@ namespace ECSInput
 {
     public class InputProcessSystem
     {
-        public void Update()
+        public void Update(ref Planet.PlanetState planet)
         {
-            var AgentsWithXY = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.ECSInput, GameMatcher.ECSInputXY));
+            Contexts contexts = planet.EntitasContext;
+
+            var AgentsWithXY = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.ECSInput, AgentMatcher.ECSInputXY));
 
             bool jump = Input.GetKeyDown(KeyCode.UpArrow);
+            bool dash = Input.GetKeyDown(KeyCode.LeftShift);
             float x = 0.0f;
             if (Input.GetKey(KeyCode.RightArrow))
             {
@@ -22,30 +25,71 @@ namespace ECSInput
 
             foreach (var entity in AgentsWithXY)
             {
-                entity.ReplaceECSInputXY(new Vec2f(x, 0.0f), jump);
+                entity.ReplaceECSInputXY(new Vec2f(x, 0.0f), jump, dash);
 
+                var pos = entity.physicsPosition2D;
                 var input = entity.eCSInputXY;
                 var movable = entity.physicsMovable;
 
                 movable.Acceleration = input.Value * movable.Speed * 50.0f;
-                if (jump)
+
+                var movementState = entity.agentMovementState;
+
+                movementState.DashCooldown -= Time.deltaTime;
+
+                if (!movementState.Jumping)
                 {
-                    movable.Acceleration.Y += 100.0f;
-                    movable.Velocity.Y = 5.0f;
+                    if (dash && movementState.DashCooldown <= 0.0f)
+                    {
+                        movable.Acceleration.X += 500.0f * x;
+                        movable.Velocity.X = 60.0f * x;
+                        movementState.Dashing = true;
+                        movementState.DashCooldown = 1.5f;
+                    }
+                    else if (jump)
+                    {
+                        movable.Landed = false;
+                        movable.Acceleration.Y += 0.0f;
+                        movable.Velocity.Y = 8.5f;
+                        movementState.Jumping = true;
+                    }
+
+                }
+                else
+                {
+                    if (jump && movementState.JumpCounter <= 1)
+                    {
+                        movable.Acceleration.Y += 0.0f;
+                        movable.Velocity.Y = 6.5f;
+                        movementState.JumpCounter++;
+                    }
                 }
 
-                entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration);
+                if (System.Math.Abs(movable.Velocity.X) <= 3.0f)
+                {
+                    movementState.Dashing = false;
+                }
+                if (movable.Landed)
+                {
+                    movementState.JumpCounter = 0;
+                    movementState.Jumping = false;
+                }
+
+                if (movementState.Dashing)
+                {
+                    planet.AddParticleEmitter(pos.Value, Particle.ParticleEmitterType.DustEmitter);
+                }
 
             }
 
 
 
             //  Open Inventory with Tab.
-            var PlayerWithInventory = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentInventory, GameMatcher.AgentPlayer));
+            var PlayerWithInventory = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentInventory, AgentMatcher.AgentPlayer));
             foreach (var entity in PlayerWithInventory)
             {
                 int inventoryID = entity.agentInventory.InventoryID;
-                GameEntity inventoryEntity = Contexts.sharedInstance.game.GetEntityWithInventoryID(inventoryID);
+                InventoryEntity inventoryEntity = contexts.inventory.GetEntityWithInventoryID(inventoryID);
 
                 if (Input.GetKeyDown(KeyCode.Tab))
                 {
@@ -54,11 +98,11 @@ namespace ECSInput
             }
 
             // Change Item Selection with nums.
-            var PlayerWithToolBar = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentPlayer, GameMatcher.AgentToolBar));
+            var PlayerWithToolBar = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentPlayer, AgentMatcher.AgentToolBar));
             foreach (var entity in PlayerWithInventory)
             {
                 int inventoryID = entity.agentToolBar.ToolBarID;
-                GameEntity inventoryEntity = Contexts.sharedInstance.game.GetEntityWithInventoryID(inventoryID);
+                InventoryEntity inventoryEntity = contexts.inventory.GetEntityWithInventoryID(inventoryID);
                 var SlotComponent = inventoryEntity.inventorySlots;
 
                 if (Input.GetKeyDown(KeyCode.Alpha1))

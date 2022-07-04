@@ -9,31 +9,25 @@ namespace Action
 {
     public class ActionCreationSystem
     {
-        public Contexts EntitasContext;
 
         private static int ActionID;
 
-        public ActionCreationSystem()
+        public int CreateAction(Contexts entitasContext, int actionTypeID, int agentID)
         {
-            EntitasContext = Contexts.sharedInstance;
-        }
+            var entityAttribute = entitasContext.actionProperties.GetEntityWithActionProperty(actionTypeID);
 
-        public int CreateAction(int actionTypeID, int agentID)
-        {
-            var entityAttribute = EntitasContext.game.GetEntityWithActionAttribute(actionTypeID);
-
-            var actionEntity = EntitasContext.game.CreateEntity();
+            ActionEntity actionEntity = entitasContext.action.CreateEntity();
             actionEntity.AddActionID(ActionID, actionTypeID);
             actionEntity.AddActionExecution(
-                entityAttribute.actionAttributeFactory.ActionFactory.CreateAction(ActionID, agentID), 
+                entityAttribute.actionPropertyFactory.ActionFactory.CreateAction(entitasContext, ActionID, agentID), 
                 ActionState.Entry);
 
             // Maybe we should deal with time and CoolDown inside onEntry?
-            if (entityAttribute.hasActionAttributeTime)
+            if (entityAttribute.hasActionPropertyTime)
             {
                 actionEntity.AddActionTime(0f);
             }
-            if (entityAttribute.hasActionAttributeCoolDown)
+            if (entityAttribute.hasActionPropertyCoolDown)
             {
                 actionEntity.AddActionBeginCoolDown(0f);
             }
@@ -41,9 +35,9 @@ namespace Action
             return ActionID++;
         }
 
-        public void SetItem(int actionID, int itemID)
+        public void SetItem(Contexts entitasContext, int actionID, int itemID)
         {
-            GameEntity actionEntity = EntitasContext.game.GetEntityWithActionIDID(actionID);
+            ActionEntity actionEntity = entitasContext.action.GetEntityWithActionIDID(actionID);
             actionEntity.AddActionItem(itemID);
         }
     }

@@ -4,6 +4,8 @@ namespace Particle
 
     public enum ParticleType
     {
-        Ore,
+        Ore, 
+        OreExplosionParticle,
+        DustParticle
     }
 }

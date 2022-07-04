@@ -3,7 +3,8 @@ using Entitas.CodeGeneration.Attributes;
 
 namespace Inventory
 {
-    public struct IDComponent : IComponent
+    [Inventory]
+    public class IDComponent : IComponent
     {
         [PrimaryEntityIndex]
         public int  ID;

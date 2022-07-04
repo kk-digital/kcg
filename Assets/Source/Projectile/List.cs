@@ -4,20 +4,19 @@ namespace Projectile
 {
     public class List
     {
-        private readonly GameContext gameContext;
+        private readonly ProjectileContext projectileContext;
 
-        public IGroup<GameEntity> ProjectilesWithSprite;
-        public IGroup<GameEntity> ProjectilesWithInput;
-        public IGroup<GameEntity> ProjectilesWithPhysics;
+        public IGroup<ProjectileEntity> ProjectilesWithSprite;
+        public IGroup<ProjectileEntity> ProjectilesWithInput;
+        public IGroup<ProjectileEntity> ProjectilesWithPhysics;
 
         // List of projectiles
         public List()
         {
-            gameContext = Contexts.sharedInstance.game;
-            ProjectilesWithSprite = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.ProjectileID, GameMatcher.ProjectileSprite2D));
-            ProjectilesWithInput = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.ProjectileID, GameMatcher.ECSInput));
-            ProjectilesWithPhysics = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.ProjectileID, GameMatcher.ProjectilePhysicsState2D, GameMatcher.ProjectilePhysicsState2D));
+            projectileContext = Contexts.sharedInstance.projectile;
+            ProjectilesWithSprite = projectileContext.GetGroup(ProjectileMatcher.AllOf(ProjectileMatcher.ProjectileID, ProjectileMatcher.ProjectileSprite2D));
+            ProjectilesWithInput = projectileContext.GetGroup(ProjectileMatcher.AllOf(ProjectileMatcher.ProjectileID, ProjectileMatcher.ECSInput));
+            ProjectilesWithPhysics = projectileContext.GetGroup(ProjectileMatcher.AllOf(ProjectileMatcher.ProjectileID, ProjectileMatcher.ProjectilePhysicsState2D, ProjectileMatcher.ProjectilePhysicsState2D));
         }
     }
 }
-

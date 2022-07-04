@@ -6,70 +6,72 @@ namespace Action
 { 
     public class InitializeSystem
     {
-        public int CreatePickUpAction(int agentID, int itemID)
+        public int CreatePickUpAction(Contexts entitasContext, int agentID, int itemID)
         {
             // Pick Up action.
-            int actionID = GameState.ActionCreationSystem.CreateAction((int)Enums.ActionType.PickUpAction, agentID);
-            GameState.ActionCreationSystem.SetItem(actionID, itemID);
+            int actionID = GameState.ActionCreationSystem.CreateAction(entitasContext,
+                                (int)Enums.ActionType.PickUpAction, agentID);
+            GameState.ActionCreationSystem.SetItem(entitasContext, actionID, itemID);
             return actionID;
         }
 
-        private static void CreatePlaceTileAction(TileID tileID)
+        private static void CreatePlaceTileAction(Contexts entitasContext, TileID tileID, MapLayerType layer)
         {
             // Todo: Shit code is gonna break all the time. Fix this.
-            GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.PlaceTilOre1Action + (int)tileID - (int)TileID.Ore1);
-            GameState.ActionAttributeManager.SetLogicFactory(new PlaceTileActionCreator());
+            GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.PlaceTilOre1Action + (int)tileID - (int)TileID.Ore1);
+            GameState.ActionPropertyManager.SetLogicFactory(new PlaceTileActionCreator());
             var data = new PlaceTileToolAction.Data
             {
-                TileID = tileID
+                TileID = tileID,
+                Layer = layer
             };
-            GameState.ActionAttributeManager.SetData(data);
-            GameState.ActionAttributeManager.EndActionAttributeType();
+            GameState.ActionPropertyManager.SetData(data);
+            GameState.ActionPropertyManager.EndActionPropertyType();
         }
 
-        public void Initialize(Material material)
+        public void Initialize(Contexts entitasContext, Material material)
         {
-            GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.DropAction);
-            GameState.ActionAttributeManager.SetLogicFactory(new DropActionCreator());
-            GameState.ActionAttributeManager.SetTime(2.0f);
-            GameState.ActionAttributeManager.EndActionAttributeType();
+            GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.DropAction);
+            GameState.ActionPropertyManager.SetLogicFactory(new DropActionCreator());
+            GameState.ActionPropertyManager.SetTime(2.0f);
+            GameState.ActionPropertyManager.EndActionPropertyType();
 
-            GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.PickUpAction);
-            GameState.ActionAttributeManager.SetLogicFactory(new PickUpActionCreator());
-            GameState.ActionAttributeManager.EndActionAttributeType();
+            GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.PickUpAction);
+            GameState.ActionPropertyManager.SetLogicFactory(new PickUpActionCreator());
+            GameState.ActionPropertyManager.EndActionPropertyType();
 
-            CreatePlaceTileAction(TileID.Ore1);
-            CreatePlaceTileAction(TileID.Ore2);
-            CreatePlaceTileAction(TileID.Ore3);
-            CreatePlaceTileAction(TileID.Glass);
-            CreatePlaceTileAction(TileID.Moon);
-            CreatePlaceTileAction(TileID.Pipe);
+            CreatePlaceTileAction(entitasContext, TileID.Ore1, MapLayerType.Front);
+            CreatePlaceTileAction(entitasContext, TileID.Ore2, MapLayerType.Front);
+            CreatePlaceTileAction(entitasContext, TileID.Ore3, MapLayerType.Front);
+            CreatePlaceTileAction(entitasContext, TileID.Glass, MapLayerType.Front);
+            CreatePlaceTileAction(entitasContext, TileID.Moon, MapLayerType.Front);
+            CreatePlaceTileAction(entitasContext, TileID.Pipe, MapLayerType.Mid);
 
-            GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.FireWeaponAction);
-            GameState.ActionAttributeManager.SetLogicFactory(new FireWeaponActionCreator());
-            GameState.ActionAttributeManager.EndActionAttributeType();
+            GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.FireWeaponAction);
+            GameState.ActionPropertyManager.SetLogicFactory(new FireWeaponActionCreator());
+            GameState.ActionPropertyManager.EndActionPropertyType();
 
-            GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.PlaceParticleEmitterAction);
-            GameState.ActionAttributeManager.SetLogicFactory(new PlaceParticleEmitterActionCreator());
+            GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.PlaceParticleEmitterAction);
+            GameState.ActionPropertyManager.SetLogicFactory(new PlaceParticleEmitterActionCreator());
             PlaceParticleEmitterToolAction.Data placeParticleEmitterData = new PlaceParticleEmitterToolAction.Data();
             placeParticleEmitterData.Material = material;
-            GameState.ActionAttributeManager.SetData(placeParticleEmitterData);
-            GameState.ActionAttributeManager.EndActionAttributeType();
+            GameState.ActionPropertyManager.SetData(placeParticleEmitterData);
+            GameState.ActionPropertyManager.EndActionPropertyType();
 
-            GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.EnemySpawnAction);
-            GameState.ActionAttributeManager.SetLogicFactory(new EnemySpawnActionCreator());
+            GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.EnemySpawnAction);
+            GameState.ActionPropertyManager.SetLogicFactory(new EnemySpawnActionCreator());
             EnemySpawnToolAction.Data data = new EnemySpawnToolAction.Data();
             data.CharacterSpriteId = GameResources.SlimeSpriteSheet;
-            GameState.ActionAttributeManager.SetData(data);
-            GameState.ActionAttributeManager.EndActionAttributeType();
+            GameState.ActionPropertyManager.SetData(data);
+            GameState.ActionPropertyManager.EndActionPropertyType();
 
-            GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.MiningLaserAction);
-            GameState.ActionAttributeManager.SetLogicFactory(new MiningLaserActionCreator());
-            GameState.ActionAttributeManager.EndActionAttributeType();
+            GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.MiningLaserAction);
+            GameState.ActionPropertyManager.SetLogicFactory(new MiningLaserActionCreator());
+            GameState.ActionPropertyManager.EndActionPropertyType();
 
-            GameState.ActionAttributeManager.CreateActionAttributeType(Enums.ActionType.RemoveTileAction);
-            GameState.ActionAttributeManager.SetLogicFactory(new RemoveTileActionCreator());
-            GameState.ActionAttributeManager.EndActionAttributeType();
+            GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.RemoveTileAction);
+            GameState.ActionPropertyManager.SetLogicFactory(new RemoveTileActionCreator());
+            GameState.ActionPropertyManager.EndActionPropertyType();
         }
     }
 }
