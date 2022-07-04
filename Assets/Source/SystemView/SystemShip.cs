@@ -183,7 +183,7 @@ namespace Source {
                     targetrotation       = Tools.normalize_angle(targetrotation + Tools.pi);
 
                 if(rotation == targetrotation) {
-                    float diff = targetrotation - velocity_direction;
+                    float diff = true_anomaly - descriptor.true_anomaly;
                     if(diff > -0.4f && diff < 0.4f) accelerate(current_time);
                     else descriptor.update_position(current_time);
                 } else { rotate_to(targetrotation, current_time); descriptor.update_position(current_time); }
