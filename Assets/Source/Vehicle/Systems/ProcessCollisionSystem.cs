@@ -12,7 +12,7 @@ namespace Vehicle
             float deltaTime = Time.deltaTime;
 
             // Get Vehicle Physics Entity
-            var entities = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsBox2DCollider, GameMatcher.VehiclePhysicsState2D));
+            var entities = Contexts.sharedInstance.vehicle.GetGroup(VehicleMatcher.AllOf(VehicleMatcher.PhysicsBox2DCollider, VehicleMatcher.VehiclePhysicsState2D));
 
             foreach (var entity in entities)
             {

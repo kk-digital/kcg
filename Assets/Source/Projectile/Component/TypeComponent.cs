@@ -2,6 +2,7 @@ using Entitas;
 
 namespace Projectile
 {
+    [Projectile]
     public class TypeComponent : IComponent
     {
         public Enums.ProjectileType Type;

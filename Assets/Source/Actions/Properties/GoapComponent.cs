@@ -3,7 +3,7 @@
 namespace Action.Property
 {
     [ActionProperties]
-    public struct GoapComponent: IComponent
+    public class GoapComponent: IComponent
     {
         public AI.GoapState PreConditions;
         public AI.GoapState Effects;

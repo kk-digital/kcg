@@ -42,10 +42,10 @@ public class SpawnEnemy : MonoBehaviour
         var mapSize = new Vec2i(16, 16);
         planetState = new Planet.PlanetState();
         planetState.Init(mapSize);
-
+        planetState.InitializeSystems(Material, transform);
 
         // Enemy Sprite Sheet ID
-        int EnemySpriteSheetID = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
+        int EnemySpriteSheetID = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Enemies\\Slime\\slime.png", 32, 32);
 
         // Slime Animation Slice Tiles
         SlimeMoveLeftBaseSpriteId = GameState.SpriteAtlasManager.CopySpritesToAtlas(EnemySpriteSheetID, 0, 0, 3, 0, Enums.AtlasType.Agent);
@@ -78,7 +78,7 @@ public class SpawnEnemy : MonoBehaviour
         int inventoryHeight = 5;
         int toolBarSize = 8;
 
-        GameEntity playerEntity = contexts.game.CreateEntity();
+        AgentEntity playerEntity = contexts.agent.CreateEntity();
         playerEntity.ReplaceAgentID(agentID);
         playerEntity.isAgentPlayer = true;
         inventoryAttacher.AttachInventoryToAgent(Contexts.sharedInstance, inventoryWidth, inventoryHeight, playerEntity);
@@ -89,14 +89,14 @@ public class SpawnEnemy : MonoBehaviour
 
         // Add item to tool bar.
         {
-            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.game, Enums.ItemType.PlacementTool);
+            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.item, Enums.ItemType.PlacementTool);
             InventoryManager.AddItem(contexts, entity, toolBarID);
         }
 
         // Test not stackable items.
         for (uint i = 0; i < 10; i++)
         {
-            GameEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.game, Enums.ItemType.PlacementTool);
+            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.item, Enums.ItemType.PlacementTool);
             InventoryManager.AddItem(contexts, entity, inventoryID);
         }
 
@@ -114,7 +114,7 @@ public class SpawnEnemy : MonoBehaviour
     private void InitializeItems()
     {
         // Get Sheet ID
-        int slimeSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\slime.png", 32, 32);
+        int slimeSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Enemies\\Slime\\slime.png", 32, 32);
         int slimeIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(slimeSpriteSheet, 0, 0, Enums.AtlasType.Particle);
         // Create Item
         Item.CreationApi.Instance.CreateItem(contexts, Enums.ItemType.PlacementTool, "Slime");
@@ -131,18 +131,6 @@ public class SpawnEnemy : MonoBehaviour
 
     void Update()
     {
-        // check if the sprite atlas textures needs to be updated
-        for(int type = 0; type < GameState.SpriteAtlasManager.Length; type++)
-        {
-            GameState.SpriteAtlasManager.UpdateAtlasTexture(type);
-        }
-
-        // check if the tile sprite atlas textures needs to be updated
-        for(int type = 0; type < GameState.TileSpriteAtlasManager.Length; type++)
-        {
-            GameState.TileSpriteAtlasManager.UpdateAtlasTexture(type);
-        }
-
         if (Init)
         {
             // Get Slot Entites
@@ -170,26 +158,12 @@ public class SpawnEnemy : MonoBehaviour
                 SpawnEnemySlime(new Vec2f(worldPosition.x, worldPosition.y));
             }
 
-            // Delete the old one
-            foreach (var mr in GetComponentsInChildren<MeshRenderer>())
-            {
-                if (Application.isPlaying)
-                {
-                    Destroy(mr.gameObject);
-                }
-                else
-                {
-                    DestroyImmediate(mr.gameObject);
-                }
-            }
-
             // Update Inventory Draw System
             planetState.Update(Time.deltaTime, Material, transform);
-
-            // Inventory Draw System
-            inventoryDrawSystem.Draw(Contexts.sharedInstance, Instantiate(Material), transform, 100);
-
         }
-
+    }
+    private void OnRenderObject()
+    {
+        inventoryDrawSystem.Draw(Contexts.sharedInstance, Material, transform);
     }
 }

@@ -8,7 +8,7 @@ namespace Action
         protected Contexts EntitasContext;
         protected ActionEntity ActionEntity;
         protected ActionPropertiesEntity ActionPropertyEntity;
-        protected GameEntity AgentEntity;
+        protected AgentEntity AgentEntity;
 
         public ActionBase(Contexts entitasContext, int actionID, int agentID)
         {   
@@ -16,7 +16,7 @@ namespace Action
             ActionEntity = entitasContext.action.GetEntityWithActionIDID(actionID);
             ActionPropertyEntity = entitasContext.actionProperties.GetEntityWithActionProperty(
                 ActionEntity.actionID.TypeID);
-            AgentEntity = entitasContext.game.GetEntityWithAgentID(agentID);    
+            AgentEntity = entitasContext.agent.GetEntityWithAgentID(agentID);    
         }
 
         public virtual void OnEnter(ref Planet.PlanetState planet)

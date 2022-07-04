@@ -5,7 +5,7 @@ using Enums;
 namespace Item.Property
 {
     [ItemProperties]
-    public struct Component : IComponent
+    public class Component : IComponent
     {
         [PrimaryEntityIndex]
         public ItemType     ItemType;

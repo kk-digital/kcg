@@ -4,19 +4,19 @@ namespace Vehicle
 {
     public class List
     {
-        private readonly GameContext gameContext;
+        private readonly VehicleContext Context;
 
-        public IGroup<GameEntity> VehiclesWithSprite;
-        public IGroup<GameEntity> VehiclesWithInput;
-        public IGroup<GameEntity> VehiclesWithPhysics;
+        public IGroup<VehicleEntity> VehiclesWithSprite;
+        public IGroup<VehicleEntity> VehiclesWithInput;
+        public IGroup<VehicleEntity> VehiclesWithPhysics;
 
         // List of vehicles
         public List()
         {
-            gameContext = Contexts.sharedInstance.game;
-            VehiclesWithSprite = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.VehicleID, GameMatcher.VehicleSprite2D));
-            VehiclesWithInput = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.VehicleID, GameMatcher.ECSInput));
-            VehiclesWithPhysics = gameContext.GetGroup(GameMatcher.AllOf(GameMatcher.VehicleID, GameMatcher.VehiclePhysicsState2D, GameMatcher.VehiclePhysicsState2D));
+            Context = Contexts.sharedInstance.vehicle;
+            VehiclesWithSprite = Context.GetGroup(VehicleMatcher.AllOf(VehicleMatcher.VehicleID, VehicleMatcher.VehicleSprite2D));
+            VehiclesWithInput = Context.GetGroup(VehicleMatcher.AllOf(VehicleMatcher.VehicleID, VehicleMatcher.ECSInput));
+            VehiclesWithPhysics = Context.GetGroup(VehicleMatcher.AllOf(VehicleMatcher.VehicleID, VehicleMatcher.VehiclePhysicsState2D, VehicleMatcher.VehiclePhysicsState2D));
         }
     }
 }

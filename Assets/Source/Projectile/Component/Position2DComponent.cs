@@ -4,7 +4,8 @@ using UnityEngine;
 
 namespace Projectile
 {
-    public struct Position2DComponent : IComponent
+    [Projectile]
+    public class Position2DComponent : IComponent
     {
         public Vec2f Value;
         public Vec2f PreviousValue;

@@ -6,7 +6,7 @@ namespace Action
     /// This should exist only while action is in cooldown.
     /// </summary>
     [Action]
-    public struct BeginCoolDownComponent : IComponent
+    public class BeginCoolDownComponent : IComponent
     {
         /// <summary>
         /// CoolDown Start Time.

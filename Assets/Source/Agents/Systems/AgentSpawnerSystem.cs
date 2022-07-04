@@ -14,11 +14,10 @@ namespace Agent
         }
 
         //NOTE(Mahdi): Deprecated, will be removed soon
-        public GameEntity SpawnPlayer(Contexts entitasContext, int spriteId, int width, int height, Vec2f position,
-        int agentId, int startingAnimation, int playerHealth, int playerFood, int playerWater,
-        int playerOxygen, int playerFuel, float attackCoolDown)
+        public AgentEntity SpawnPlayer(Contexts entitasContext, int spriteId, int width, int height, Vec2f position,
+        int agentId, int startingAnimation, int playerHealth, int playerFood, int playerWater, int playerOxygen, int playerFuel, float attackCoolDown)
         {
-            var entity = entitasContext.game.CreateEntity();
+            var entity = entitasContext.agent.CreateEntity();
 
             var spriteSize = new Vec2f(width / 32f, height / 32f);
 
@@ -44,10 +43,9 @@ namespace Agent
         }
 
 
-        public GameEntity Spawn(Contexts entitasContext, Vec2f position, int agentId,
-                     AgentType agentType)
+        public AgentEntity Spawn(Contexts entitasContext, Vec2f position, int agentId, AgentType agentType)
         {
-            var entity = entitasContext.game.CreateEntity();
+            var entity = entitasContext.agent.CreateEntity();
 
             ref Agent.AgentProperties properties = ref AgentCreationApi.GetRef((int)agentType);
 
@@ -88,10 +86,10 @@ namespace Agent
         }
 
         //NOTE(Mahdi): Deprecated, will be removed soon
-        public GameEntity SpawnAgent(Contexts contexts, int spriteId, int width, int height, Vec2f position,
+        public AgentEntity SpawnAgent(Contexts contexts, int spriteId, int width, int height, Vec2f position,
         int agentId, int startingAnimation)
         {
-            var entity = contexts.game.CreateEntity();
+            var entity = contexts.agent.CreateEntity();
 
             var spriteSize = new Vec2f(width / 32f, height / 32f);
 
@@ -108,10 +106,10 @@ namespace Agent
         }
 
         //NOTE(Mahdi): Deprecated, will be removed soon
-        public GameEntity SpawnEnemy(int spriteId, int width, int height, Vec2f position,
+        public AgentEntity SpawnEnemy(int spriteId, int width, int height, Vec2f position,
         int agentId, int startingAnimation)
         {
-            var entity = Contexts.sharedInstance.game.CreateEntity();
+            var entity = Contexts.sharedInstance.agent.CreateEntity();
             
             var spriteSize = new Vec2f(width / 32f, height / 32f);
             

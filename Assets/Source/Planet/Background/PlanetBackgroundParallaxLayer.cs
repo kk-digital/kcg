@@ -25,9 +25,6 @@ namespace Planet.Background
         // Generated Perlin Grid
         float[,] perlinGrid;
 
-        // Space Sprite
-        Sprites.Sprite spaceSprite;
-
         // Space Loop
         int j = 0;
 
@@ -41,7 +38,7 @@ namespace Planet.Background
             Vector2Int planet1PngSize = new Vector2Int(planet1Width, planet1Height);
             
             // Load image from file
-            var planet1Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\galaxy_256x256.png", planet1Width, planet1Height);
+            var planet1Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\PlanetBackground\\StarField\\Stars\\galaxy_256x256.png", planet1Width, planet1Height);
 
             // Set Sprite ID from Sprite Atlas
             int planet1ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(planet1Sheet, 0, 5, Enums.AtlasType.Particle);
@@ -70,7 +67,7 @@ namespace Planet.Background
             Vector2Int planet2PngSize = new Vector2Int(planet2Width, planet2Height);
 
             // Load image from file
-            var planet2Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\galaxy_256x256.png", planet2Width, planet2Height);
+            var planet2Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\PlanetBackground\\StarField\\Stars\\galaxy_256x256.png", planet2Width, planet2Height);
 
             // Set Sprite ID from Sprite Atlas
             int planet2ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(planet2Sheet, 0, 6, Enums.AtlasType.Particle);
@@ -99,7 +96,7 @@ namespace Planet.Background
             Vector2Int planet3PngSize = new Vector2Int(planet3Width, planet3Height);
 
             // Load image from file
-            var planet3Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\galaxy_256x256.png", planet3Width, planet3Height);
+            var planet3Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\PlanetBackground\\StarField\\Stars\\galaxy_256x256.png", planet3Width, planet3Height);
 
             // Set Sprite ID from Sprite Atlas
             int planet3ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(planet3Sheet, 7, 4, Enums.AtlasType.Particle);
@@ -128,7 +125,7 @@ namespace Planet.Background
             Vector2Int planet4PngSize = new Vector2Int(planet4Width, planet4Height);
 
             // Load image from file
-            var planet4Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\galaxy_256x256.png", planet4Width, planet4Height);
+            var planet4Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\PlanetBackground\\StarField\\Stars\\galaxy_256x256.png", planet4Width, planet4Height);
 
             // Set Sprite ID from Sprite Atlas
             int planet4ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(planet4Sheet, 4, 5, Enums.AtlasType.Particle);
@@ -157,7 +154,7 @@ namespace Planet.Background
             Vector2Int planet5PngSize = new Vector2Int(planet5Width, planet5Height);
 
             // Load image from file
-            var planet5Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\galaxy_256x256.png", planet5Width, planet5Height);
+            var planet5Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\PlanetBackground\\StarField\\Stars\\galaxy_256x256.png", planet5Width, planet5Height);
 
             // Set Sprite ID from Sprite Atlas
             int planet5ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(planet5Sheet, 7, 5, Enums.AtlasType.Particle);
@@ -186,7 +183,7 @@ namespace Planet.Background
             Vector2Int planet6PngSize = new Vector2Int(planet6Width, planet6Height);
 
             // Load image from file
-            var planet6Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\galaxy_256x256.png", planet6Width, planet6Height);
+            var planet6Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\PlanetBackground\\StarField\\Stars\\galaxy_256x256.png", planet6Width, planet6Height);
 
             // Set Sprite ID from Sprite Atlas
             int planet6ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(planet6Sheet, 4, 4, Enums.AtlasType.Particle);
@@ -215,7 +212,7 @@ namespace Planet.Background
             Vector2Int planet7PngSize = new Vector2Int(planet7Width, planet7Height);
 
             // Load image from file
-            var planet7Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\galaxy_256x256.png", planet7Width, planet7Height);
+            var planet7Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\PlanetBackground\\StarField\\Stars\\galaxy_256x256.png", planet7Width, planet7Height);
 
             // Set Sprite ID from Sprite Atlas
             int planet7ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(planet7Sheet, 6, 4, Enums.AtlasType.Particle);
@@ -244,7 +241,7 @@ namespace Planet.Background
             Vector2Int planet8PngSize = new Vector2Int(planet8Width, planet8Height);
 
             // Load image from file
-            var planet8Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\galaxy_256x256.png", planet8Width, planet8Height);
+            var planet8Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\PlanetBackground\\StarField\\Stars\\galaxy_256x256.png", planet8Width, planet8Height);
 
             // Set Sprite ID from Sprite Atlas
             int planet8ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(planet8Sheet, 0, 4, Enums.AtlasType.Particle);
@@ -273,7 +270,7 @@ namespace Planet.Background
             Vector2Int planet9PngSize = new Vector2Int(planet9Width, planet9Height);
 
             // Load image from file
-            var planet9Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\galaxy_256x256.png", planet9Width, planet9Height);
+            var planet9Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\PlanetBackground\\StarField\\Stars\\galaxy_256x256.png", planet9Width, planet9Height);
 
             // Set Sprite ID from Sprite Atlas
             int planet9ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(planet9Sheet, 2, 4, Enums.AtlasType.Particle);
@@ -302,7 +299,7 @@ namespace Planet.Background
             Vector2Int planet10PngSize = new Vector2Int(planet10Width, planet10Height);
 
             // Load image from file
-            var planet10Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\galaxy_256x256.png", planet10Width, planet10Height);
+            var planet10Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\PlanetBackground\\StarField\\Stars\\galaxy_256x256.png", planet10Width, planet10Height);
 
             // Set Sprite ID from Sprite Atlas
             int planet10ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(planet10Sheet, 3, 4, Enums.AtlasType.Particle);
@@ -330,33 +327,6 @@ namespace Planet.Background
 
             // Initialzie Perlin Field
             perlinField.init(256, 256);
-
-            // Set Width and Height
-            int spaceWidth = 32;
-            int spaceHeight = 32;
-            Vector2Int space1PngSize = new Vector2Int(spaceWidth, spaceWidth);
-
-            // Load image from file
-            var space1Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\starfield\\stars\\galaxy_256x256.png", spaceWidth, spaceHeight);
-
-            // Set Sprite ID from Sprite Atlas
-            int space1ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(space1Sheet, 0, 0, Enums.AtlasType.Particle);
-
-            // Set Sprite Data
-            byte[] space1spriteData = new byte[space1PngSize.x * space1PngSize.y * 4];
-
-            // Get Sprite Bytes
-            GameState.SpriteAtlasManager.GetSpriteBytes(space1ID, space1spriteData, Enums.AtlasType.Particle);
-
-            // Set Texture
-            Texture2D space1Tex = Utility.Texture.CreateTextureFromRGBA(space1spriteData, space1PngSize.x, space1PngSize.y);
-
-            // Create the sprite
-            spaceSprite = new Sprites.Sprite
-            {
-                Texture = space1Tex,
-                TextureCoords = new Vector4(0, 0, 1, 1)
-            };
 
             Init = true;
         }
@@ -408,10 +378,10 @@ namespace Planet.Background
                             break;
                     }
 
-                    if (rand1 >= .5)
-                        Utility.Render.DrawSprite(Random.Range(-10, 10), Random.Range(-10, 10), 1, 1, sprite, Material, transform, 1);
-                    else
-                        Utility.Render.DrawSprite(Random.Range(-100, 100), Random.Range(-100, 100), 1, 1, sprite, Material, transform, 1);
+                    //if (rand1 >= .5)
+                    //    Utility.Render.DrawBackground(Random.Range(-10, 10), Random.Range(-10, 10), 1, 1, sprite, Material, transform, 1);
+                    //else
+                    //   Utility.Render.DrawBackground(Random.Range(-100, 100), Random.Range(-100, 100), 1, 1, sprite, Material, transform, 1);
 
                     for(int k = 0; k < transform.childCount; k++)
                     {
@@ -424,7 +394,7 @@ namespace Planet.Background
 
                 for (; j < 1; j++)
                 {
-                    Utility.Render.DrawSprite(-1000000, -1000000, 9999999, 9999999, spaceSprite, Material, transform, 0);
+                //    Utility.Render.DrawQuadColor(-1000000, -1000000, 9999999, 9999999, new Color(0.02745f, 0.03137f, 0.09804f, 1), Material, transform, 0);
                 }
             }
 

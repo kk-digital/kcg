@@ -3,6 +3,7 @@ using Entitas.CodeGeneration.Attributes;
 
 namespace Agent
 {
+    [Agent]
     public class MovementStateComponent : IComponent
     {
         public bool Jumping;

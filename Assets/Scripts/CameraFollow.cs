@@ -14,7 +14,7 @@ public class CameraFollow : MonoBehaviour
     void Update()
     {
         // Get Player Position Info
-        IGroup<GameEntity> Playerentities = Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentPlayer);
+        IGroup<AgentEntity> Playerentities = Contexts.sharedInstance.agent.GetGroup(AgentMatcher.AgentPlayer);
         foreach (var entity in Playerentities)
         {
             Vector3 targetPosition = new Vector3(entity.physicsPosition2D.Value.X, entity.physicsPosition2D.Value.Y, 0.0f) + offset;

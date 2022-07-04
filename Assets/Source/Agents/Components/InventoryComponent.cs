@@ -2,7 +2,8 @@
 
 namespace Agent
 {
-    public struct InventoryComponent : IComponent
+    [Agent]
+    public class InventoryComponent : IComponent
     {
         public int InventoryID;
     }

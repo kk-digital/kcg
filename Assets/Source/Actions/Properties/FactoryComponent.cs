@@ -8,7 +8,7 @@ namespace Action.Property
     /// Todo: Use callBacks instead of OOP.
     /// </summary>
     [ActionProperties]
-    public struct FactoryComponent  : IComponent
+    public class FactoryComponent  : IComponent
     {
         public Action.ActionCreator ActionFactory;
     }

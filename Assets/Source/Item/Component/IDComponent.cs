@@ -5,11 +5,10 @@ using Enums;
 
 namespace Item
 {
-    public struct IDComponent : IComponent
+    [Item]
+    public class IDComponent : IComponent
     {
         [PrimaryEntityIndex]
         public int              ID;
-        [EntityIndex]
-        public ItemType   ItemType;
     }
 }

@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Entitas;
+using KMath;
+using Inventory;
 
 namespace KGUI
 {
@@ -39,7 +41,7 @@ namespace KGUI
             Vector2Int iconPngSize = new Vector2Int(IconWidth, IconHeight);
 
             // Load image from file
-            var iconSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\interface\\hud_hp_icon.png", IconWidth, IconHeight);
+            var iconSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\UserInterface\\Icons\\Health\\hud_hp_icon.png", IconWidth, IconHeight);
 
             // Set Sprite ID from Sprite Atlas
             int iconID = GameState.SpriteAtlasManager.CopySpriteToAtlas(iconSheet, 0, 0, Enums.AtlasType.Particle);
@@ -66,7 +68,7 @@ namespace KGUI
             Vector2Int BarBorderPngSize = new Vector2Int(BarBorderWidth, BarBorderHeight);
 
             // Load image from file
-            var BarBorderSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\interface\\hud_hp_bar_border.png", BarBorderWidth, BarBorderHeight);
+            var BarBorderSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\UserInterface\\Bars\\HealthBar\\hud_hp_bar_border.png", BarBorderWidth, BarBorderHeight);
 
             // Set Sprite ID from Sprite Atlas
             int BarBorderID = GameState.SpriteAtlasManager.CopySpriteToAtlas(BarBorderSheet, 0, 0, Enums.AtlasType.Particle);
@@ -93,7 +95,7 @@ namespace KGUI
             Vector2Int BarDiv1PngSize = new Vector2Int(BarDiv1Width, BarDiv1Height);
 
             // Load image from file
-            var BarDiv1Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\interface\\hud_hp_bar_div1.png", BarDiv1Width, BarDiv1Height);
+            var BarDiv1Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\UserInterface\\Bars\\HealthBar\\hud_hp_bar_div1.png", BarDiv1Width, BarDiv1Height);
 
             // Set Sprite ID from Sprite Atlas
             int BarDiv1ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(BarDiv1Sheet, 0, 0, Enums.AtlasType.Particle);
@@ -120,7 +122,7 @@ namespace KGUI
             Vector2Int BarDiv2PngSize = new Vector2Int(BarDiv2Width, BarDiv2Height);
 
             // Load image from file
-            var BarDiv2Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\interface\\hud_hp_bar_div2.png", BarDiv2Width, BarDiv2Height);
+            var BarDiv2Sheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\UserInterface\\Bars\\HealthBar\\hud_hp_bar_div2.png", BarDiv2Width, BarDiv2Height);
 
             // Set Sprite ID from Sprite Atlas
             int BarDiv2ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(BarDiv2Sheet, 0, 0, Enums.AtlasType.Particle);
@@ -148,8 +150,8 @@ namespace KGUI
 
         void DrawHealthBar(Contexts contexts)
         {
-            IGroup<GameEntity> Playerentities =
-            contexts.game.GetGroup(GameMatcher.AgentStats);
+            IGroup<AgentEntity> Playerentities =
+            contexts.agent.GetGroup(AgentMatcher.AgentStats);
             foreach (var entity in Playerentities)
             {
                 playerHealth = entity.agentStats.Health;

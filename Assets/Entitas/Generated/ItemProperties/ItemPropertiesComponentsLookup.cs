@@ -11,7 +11,7 @@ public static class ItemPropertiesComponentsLookup {
     public const int ItemPropertyAction = 0;
     public const int ItemProperty = 1;
     public const int ItemPropertyConsumable = 2;
-    public const int ItemPropertyEquipament = 3;
+    public const int ItemPropertyEquipment = 3;
     public const int ItemPropertyInventorySprite = 4;
     public const int ItemPropertyPlaceable = 5;
     public const int ItemPropertySize = 6;
@@ -24,7 +24,7 @@ public static class ItemPropertiesComponentsLookup {
         "ItemPropertyAction",
         "ItemProperty",
         "ItemPropertyConsumable",
-        "ItemPropertyEquipament",
+        "ItemPropertyEquipment",
         "ItemPropertyInventorySprite",
         "ItemPropertyPlaceable",
         "ItemPropertySize",
@@ -36,7 +36,7 @@ public static class ItemPropertiesComponentsLookup {
         typeof(Item.Property.ActionComponent),
         typeof(Item.Property.Component),
         typeof(Item.Property.ConsumableComponent),
-        typeof(Item.Property.EquipamentComponent),
+        typeof(Item.Property.EquipmentComponent),
         typeof(Item.Property.InventorySpriteComponent),
         typeof(Item.Property.PlaceableComponent),
         typeof(Item.Property.SizeComponent),

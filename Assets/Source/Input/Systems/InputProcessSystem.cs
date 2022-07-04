@@ -9,7 +9,7 @@ namespace ECSInput
         {
             Contexts contexts = planet.EntitasContext;
 
-            var AgentsWithXY = contexts.game.GetGroup(GameMatcher.AllOf(GameMatcher.ECSInput, GameMatcher.ECSInputXY));
+            var AgentsWithXY = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.ECSInput, AgentMatcher.ECSInputXY));
 
             bool jump = Input.GetKeyDown(KeyCode.UpArrow);
             bool dash = Input.GetKeyDown(KeyCode.LeftShift);
@@ -89,7 +89,7 @@ namespace ECSInput
 
 
             //  Open Inventory with Tab.
-            var PlayerWithInventory = contexts.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentInventory, GameMatcher.AgentPlayer));
+            var PlayerWithInventory = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentInventory, AgentMatcher.AgentPlayer));
             foreach (var entity in PlayerWithInventory)
             {
                 int inventoryID = entity.agentInventory.InventoryID;
@@ -102,7 +102,7 @@ namespace ECSInput
             }
 
             // Change Item Selection with nums.
-            var PlayerWithToolBar = contexts.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentPlayer, GameMatcher.AgentToolBar));
+            var PlayerWithToolBar = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentPlayer, AgentMatcher.AgentToolBar));
             foreach (var entity in PlayerWithInventory)
             {
                 int inventoryID = entity.agentToolBar.ToolBarID;

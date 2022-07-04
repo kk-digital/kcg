@@ -28,7 +28,7 @@ namespace KGUI
             Vector2Int iconPngSize = new Vector2Int(IconWidth, IconHeight);
 
             // Load image from file
-            var iconSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\interface\\hud_status_fuel.png", IconWidth, IconHeight);
+            var iconSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\UserInterface\\Icons\\Fuel\\hud_status_fuel.png", IconWidth, IconHeight);
 
             // Set Sprite ID from Sprite Atlas
             int iconID = GameState.SpriteAtlasManager.CopySpriteToAtlas(iconSheet, 0, 0, Enums.AtlasType.Particle);
@@ -55,7 +55,7 @@ namespace KGUI
             Vector2Int FillPngSize = new Vector2Int(FillWidth, FillHeight);
 
             // Load image from file
-            var FillSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\interface\\hud_status_fill.png", FillWidth, FillHeight);
+            var FillSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\UserInterface\\Bars\\CircleBar\\hud_status_fill.png", FillWidth, FillHeight);
 
             // Set Sprite ID from Sprite Atlas
             int FillID = GameState.SpriteAtlasManager.CopySpriteToAtlas(FillSheet, 0, 0, Enums.AtlasType.Particle);
@@ -86,10 +86,11 @@ namespace KGUI
             Sprite iconBar = Sprite.Create(icon.Texture, new Rect(0.0f, 0.0f, IconWidth, IconHeight), new Vector2(0.5f, 0.5f));
             iconCanvas.GetComponent<Image>().sprite = iconBar;
 
+            // Calculate position using aspect ratio
             if (Camera.main.aspect >= 1.7f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-402.6f, -40.6f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, -52.6f, 4.873917f);
             else if (Camera.main.aspect >= 1.5f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-359.9f, -49f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, -49.2f, 4.873917f);
             else
                 iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 16.6f, 4.873917f);
 
@@ -110,8 +111,8 @@ namespace KGUI
             fuelBar.GetComponent<Image>().type = Image.Type.Filled;
             fuelBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
             fuelBar.GetComponent<Image>().fillOrigin = 0;
-            IGroup<GameEntity> Playerentities =
-            contexts.game.GetGroup(GameMatcher.AgentStats);
+            IGroup<AgentEntity> Playerentities =
+            contexts.agent.GetGroup(AgentMatcher.AgentStats);
             foreach (var entity in Playerentities)
             {
                 fuelBar.GetComponent<Image>().fillAmount = entity.agentStats.Fuel / 100;
@@ -129,7 +130,7 @@ namespace KGUI
         {
             if(Init)
             {
-                IGroup<GameEntity> Playerentities = Contexts.sharedInstance.game.GetGroup(GameMatcher.AgentStats);
+                IGroup<AgentEntity> Playerentities = Contexts.sharedInstance.agent.GetGroup(AgentMatcher.AgentStats);
                 foreach (var entity in Playerentities)
                 {
                     fuelBar.GetComponent<Image>().fillAmount = entity.agentStats.Fuel / 100;
@@ -137,9 +138,9 @@ namespace KGUI
 
                 // Calculate position using aspect ratio
                 if (Camera.main.aspect >= 1.7f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-402.6f, -40.6f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, -52.6f, 4.873917f);
                 else if (Camera.main.aspect >= 1.5f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-359.9f, -49f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, -49.2f, 4.873917f);
                 else
                     iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 16.6f, 4.873917f);
             }

@@ -22,24 +22,24 @@ namespace Inventory
             inventory.isInventoryDrawable = false;
         }
 
-        public void AddItem(Contexts contexts, GameEntity entity, int inventoryID)
+        public void AddItem(Contexts contexts, ItemEntity entity, int inventoryID)
         {
             var inventory = contexts.inventory.GetEntityWithInventoryID(inventoryID);
 
-            var EntityAttribute = contexts.itemProperties.GetEntityWithItemProperty(entity.itemID.ItemType);
+            var EntityAttribute = contexts.itemProperties.GetEntityWithItemProperty(entity.itemType.Type);
 
             // If stackable check if there are any available stack in the inventory.
             if (EntityAttribute.hasItemPropertyStackable)
             {
-                var Group = contexts.game.GetEntitiesWithItemAttachedInventory(inventoryID); // Todo: Use multiple Entity Index. To narrow down the search with item type.
+                var Group = contexts.item.GetEntitiesWithItemAttachedInventory(inventoryID); // Todo: Use multiple Entity Index. To narrow down the search with item type.
 
                 int NewEntityCount = 1;
                 if (entity.hasItemStack)
                     NewEntityCount = entity.itemStack.Count;
 
-                foreach (GameEntity entityIT in Group)
+                foreach (ItemEntity entityIT in Group)
                 {
-                    if (entityIT.itemID.ItemType != entity.itemID.ItemType)
+                    if (entityIT.itemType.Type != entity.itemType.Type)
                     {
                         continue;
                     }
@@ -72,7 +72,7 @@ namespace Inventory
             inventory.inventorySlots.Values.Set(fistEmptySlot, true);
         }
 
-        public void PickUp(Contexts entitasContext, GameEntity entity, int inventoryID)
+        public void PickUp(Contexts entitasContext, ItemEntity entity, int inventoryID)
         {
             entity.RemovePhysicsPosition2D();
             entity.RemovePhysicsMovable();
@@ -80,7 +80,7 @@ namespace Inventory
             AddItem(entitasContext, entity, inventoryID);
         }
 
-        public void RemoveItem(Contexts contexts, GameEntity entity, int slot)
+        public void RemoveItem(Contexts contexts, ItemEntity entity, int slot)
         {
             var inventoryEntity = contexts.inventory.GetEntityWithInventoryID(entity.itemAttachedInventory.InventoryID);
             inventoryEntity.inventorySlots.Values.Set(slot, false);
@@ -115,9 +115,9 @@ namespace Inventory
             return false;
         }
 
-        public GameEntity GetItemInSlot(GameContext gameContext, int inventoryID, int slot)
+        public ItemEntity GetItemInSlot(ItemContext itemContext, int inventoryID, int slot)
         {
-            var items = gameContext.GetEntitiesWithItemAttachedInventory(inventoryID);
+            var items = itemContext.GetEntitiesWithItemAttachedInventory(inventoryID);
 
             foreach (var item in items)
             {

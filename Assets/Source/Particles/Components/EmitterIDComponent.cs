@@ -6,7 +6,7 @@ namespace Particle
 {
 
     [Particle]
-    public struct EmitterIDComponent : IComponent
+    public class EmitterIDComponent : IComponent
     {
         [PrimaryEntityIndex]
         public int ParticleEmitterId;

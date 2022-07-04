@@ -32,7 +32,7 @@ namespace KGUI
             Vector2Int iconPngSize = new Vector2Int(IconWidth, IconHeight);
 
             // Load image from file
-            var iconSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\interface\\hud_status_food.png", IconWidth, IconHeight);
+            var iconSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\UserInterface\\Icons\\Food\\hud_status_food.png", IconWidth, IconHeight);
 
             // Set Sprite ID from Sprite Atlas
             int iconID = GameState.SpriteAtlasManager.CopySpriteToAtlas(iconSheet, 0, 0, Enums.AtlasType.Particle);
@@ -59,7 +59,7 @@ namespace KGUI
             Vector2Int FillPngSize = new Vector2Int(FillWidth, FillHeight);
 
             // Load image from file
-            var FillSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\assets\\luis\\interface\\hud_status_fill.png", FillWidth, FillHeight);
+            var FillSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\UserInterface\\Bars\\CircleBar\\hud_status_fill.png", FillWidth, FillHeight);
 
             // Set Sprite ID from Sprite Atlas
             int FillID = GameState.SpriteAtlasManager.CopySpriteToAtlas(FillSheet, 0, 0, Enums.AtlasType.Particle);
@@ -91,9 +91,9 @@ namespace KGUI
             iconCanvas.GetComponent<Image>().sprite = iconBar;
 
             if (Camera.main.aspect >= 1.7f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-402.6f, 138.2f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 123.8f, 4.873917f);
             else if (Camera.main.aspect >= 1.5f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-359.9f, 137f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, 125.4f, 4.873917f);
             else
                 iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 193.4f, 4.873917f);
 
@@ -114,8 +114,8 @@ namespace KGUI
             foodBar.GetComponent<Image>().type = Image.Type.Filled;
             foodBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
             foodBar.GetComponent<Image>().fillOrigin = 0;
-            IGroup<GameEntity> Playerentities =
-            EntitasContext.game.GetGroup(GameMatcher.AgentStats);
+            IGroup<AgentEntity> Playerentities =
+            EntitasContext.agent.GetGroup(AgentMatcher.AgentStats);
             foreach (var entity in Playerentities)
             {
                 foodBar.GetComponent<Image>().fillAmount = entity.agentStats.Food / 100;
@@ -133,17 +133,17 @@ namespace KGUI
         {
             if (Init)
             {
-                IGroup<GameEntity> Playerentities =
-                EntitasContext.game.GetGroup(GameMatcher.AgentStats);
+                IGroup<AgentEntity> Playerentities =
+                EntitasContext.agent.GetGroup(AgentMatcher.AgentStats);
                 foreach (var entity in Playerentities)
                 {
                     foodBar.GetComponent<Image>().fillAmount = entity.agentStats.Food / 100;
                 }
 
                 if (Camera.main.aspect >= 1.7f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-402.6f, 138.2f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 123.8f, 4.873917f);
                 else if (Camera.main.aspect >= 1.5f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-359.9f, 137f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, 125.4f, 4.873917f);
                 else
                     iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 193.4f, 4.873917f);
             }

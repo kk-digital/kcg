@@ -2,7 +2,8 @@
 
 namespace Item
 {
-    public struct LabelComponent: IComponent
+    [Item]
+    public class LabelComponent : IComponent
     {
         public string ItemName;
     }

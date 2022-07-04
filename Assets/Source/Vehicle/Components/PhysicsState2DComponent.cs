@@ -6,6 +6,7 @@ using KMath;
 
 namespace Vehicle
 {
+    [Vehicle]
     public class PhysicsState2DComponent : IComponent
     {
         public Vec2f Position = Vec2f.Zero;

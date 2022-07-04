@@ -2,9 +2,11 @@
 using Entitas.CodeGeneration.Attributes;
 using System.Collections.Generic;
 using System;
+using System.Diagnostics.Tracing;
 
 namespace Agent
 {
+    [Agent]
     public class AIController : IComponent
     {
         [PrimaryEntityIndex]

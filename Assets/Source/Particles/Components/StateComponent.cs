@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Particle
 {
     [Particle]
-    public struct StateComponent : IComponent
+    public class StateComponent : IComponent
     {
         public float Health;
         public float DecayRate;

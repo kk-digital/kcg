@@ -6,6 +6,7 @@ using KMath;
 
 namespace Projectile
 {
+    [Projectile]
     public class PhysicsState2DComponent : IComponent
     {
         [Range(-1.0f, 1.0f)]

@@ -7,14 +7,14 @@ namespace Projectile
 {
     public class ProcessCollisionSystem
     {
-        List<GameEntity> ToRemoveList = new List<GameEntity>();
+        List<ProjectileEntity> ToRemoveList = new List<ProjectileEntity>();
         public void Update(ref PlanetTileMap.TileMap tileMap)
         {
             // Get Delta Time
             float deltaTime = Time.deltaTime;
 
             // Get Vehicle Physics Entity
-            var entities = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsBox2DCollider, GameMatcher.ProjectilePhysicsState2D));
+            var entities = Contexts.sharedInstance.projectile.GetGroup(ProjectileMatcher.AllOf(ProjectileMatcher.PhysicsBox2DCollider, ProjectileMatcher.ProjectilePhysicsState2D));
 
             foreach (var entity in entities)
             {
@@ -77,7 +77,7 @@ namespace Projectile
             ref PlanetTileMap.TileMap tileMap = ref planet.TileMap;
 
             // Get Vehicle Physics Entity
-            var entities = planet.EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.PhysicsBox2DCollider, GameMatcher.ProjectilePhysicsState2D));
+            var entities = planet.EntitasContext.projectile.GetGroup(ProjectileMatcher.AllOf(ProjectileMatcher.PhysicsBox2DCollider, ProjectileMatcher.ProjectilePhysicsState2D));
 
             foreach (var entity in entities)
             {

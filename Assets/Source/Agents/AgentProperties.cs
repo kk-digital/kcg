@@ -3,8 +3,6 @@ using KMath;
 
 namespace Agent
 {
-
-
     public struct AgentProperties
     {
         public int PropertiesId;

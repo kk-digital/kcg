@@ -3,7 +3,7 @@
 namespace Action.Property
 {
     [ActionProperties]
-    public struct TimeComponent : IComponent
+    public class TimeComponent : IComponent
     {
         /// <summary>
         /// How long it takes to execute the action in miliseconds

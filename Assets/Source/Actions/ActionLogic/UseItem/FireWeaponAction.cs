@@ -7,7 +7,7 @@ namespace Action
 {
     public class FireWeaponAction : ActionBase
     {
-        GameEntity ProjectileEntity;
+        ProjectileEntity ProjectileEntity;
         Vec2f StartPos;
 
         public FireWeaponAction(Contexts entitasContext, int actionID, int agentID) : base(entitasContext, actionID, agentID)
@@ -27,7 +27,7 @@ namespace Action
             StartPos.X += 0.3f;
             StartPos.Y += 0.5f;
 
-            ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Bullet).Entity;
+            ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Bullet);
            /* ProjectileEntity = GameState.ProjectileSpawnerSystem.SpawnBullet(GameResources.OreIcon, 4, 4, StartPos, 
                 new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized * speed, Vec2f.Zero, Enums.ProjectileType.Bullet, Enums.ProjectileDrawType.Standard);*/
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Running);
@@ -52,7 +52,7 @@ namespace Action
             }
 
             // Check if projectile has hit a enemy.
-            var entities = EntitasContext.game.GetGroup(GameMatcher.AllOf(GameMatcher.AgentID));
+            var entities = EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
 
             // Todo: Create a agent colision system?
             foreach (var entity in entities)
