@@ -1,6 +1,6 @@
 namespace Enums.Tile
 {
-    public enum PointType
+    public enum TilePointType
     {
         Error = 0,
         C1, C2, C3, C4,
