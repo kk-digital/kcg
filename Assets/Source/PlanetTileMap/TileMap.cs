@@ -37,6 +37,32 @@ namespace PlanetTileMap
             ChunkIndexLookup = new int[ChunkArrayCapacity];
             ChunkArray = new Chunk[ChunkArrayCapacity];
 
+            // Initialize all chunks. They all be empty
+            for (int chunkIndex = 0; chunkIndex < ChunkArray.Length; chunkIndex++)
+            {
+                ChunkArray[chunkIndex].Type = MapChunkType.Empty;
+                ChunkArray[chunkIndex].TileArray = new Tile[LayerCount][];
+
+                var layerLength = ChunkArray[chunkIndex].TileArray.Length;
+
+                // For each layer...
+                for (int layerIndex = 0; layerIndex < layerLength; layerIndex++)
+                {
+                    // ... create new tile array and...
+                    ref var layer = ref ChunkArray[chunkIndex].TileArray[layerIndex];
+                    layer = new Tile[256];
+                    // ... for each tile in layer of tile array...
+                    for (int tileIndex = 0; tileIndex < layer.Length; tileIndex++)
+                    {
+                        // ... set tile to Air
+                        layer[tileIndex].ID = TileID.Air;
+                        layer[tileIndex].SpriteID = -1;
+                    }
+                }
+            
+                ChunkArrayLength++;
+            }
+
             MapSize = mapSize;
             
             LayerMeshes = new FrameMesh[LayerCount];
@@ -198,12 +224,8 @@ namespace PlanetTileMap
             var chunkIndex = xChunkIndex + yChunkIndex;
 
             ref var chunk = ref ChunkArray[chunkIndex];
-            
-            if (chunk.Type == MapChunkType.Error)
-            {
-                NewEmptyChunk(chunkIndex);
-                if (tileID != TileID.Air) chunk.Type = MapChunkType.NotEmpty;
-            }
+
+            if (tileID != TileID.Air) chunk.Type = MapChunkType.NotEmpty;
 
             var xTileIndex = x & 0x0f;
             var yTileIndex = y & 0x0f;
@@ -222,11 +244,10 @@ namespace PlanetTileMap
             var chunkIndex = xChunkIndex + yChunkIndex;
 
             ref var chunk = ref ChunkArray[chunkIndex];
-            
-            if (chunk.Type == MapChunkType.Error)
+
+            if (tileID != TileID.Air)
             {
-                NewEmptyChunk(chunkIndex);
-                if (tileID != TileID.Air) chunk.Type = MapChunkType.NotEmpty;
+                chunk.Type = MapChunkType.NotEmpty;
             }
 
             var xTileIndex = x & 0x0f;
@@ -246,11 +267,10 @@ namespace PlanetTileMap
             var chunkIndex = xChunkIndex + yChunkIndex;
 
             ref var chunk = ref ChunkArray[chunkIndex];
-            
-            if (chunk.Type == MapChunkType.Error)
+
+            if (tileID != TileID.Air)
             {
-                NewEmptyChunk(chunkIndex);
-                if (tileID != TileID.Air) chunk.Type = MapChunkType.NotEmpty;
+                chunk.Type = MapChunkType.NotEmpty;
             }
 
             var xTileIndex = x & 0x0f;
@@ -438,34 +458,6 @@ namespace PlanetTileMap
 
         #endregion
 
-        #region Chunks
-
-        public int NewEmptyChunk(int chunkArrayIndex) 
-        {
-            int chunkIndex = chunkArrayIndex;
-            ChunkArray[chunkIndex].Type = MapChunkType.Empty;
-            ChunkArray[chunkIndex].TileArray = new Tile[LayerCount][];
-
-            // For each layer...
-            for (int layerIndex = 0; layerIndex < ChunkArray[chunkIndex].TileArray.Length; layerIndex++)
-            {
-                // ... create new tile array and...
-                ChunkArray[chunkIndex].TileArray[layerIndex] = new Tile[256];
-                // ... for each tile in tile array...
-                for (int tileIndex = 0; tileIndex < ChunkArray[chunkIndex].TileArray[layerIndex].Length; tileIndex++)
-                {
-                    // ... set tile to Air
-                    ChunkArray[chunkIndex].TileArray[layerIndex][tileIndex].ID = TileID.Air;
-                    ChunkArray[chunkIndex].TileArray[layerIndex][tileIndex].SpriteID = -1;
-                }
-            }
-            
-            ChunkArrayLength++; //increment
-            return chunkIndex;
-        }
-
-        #endregion
-        
         #region Layers
 
         public void InitializeLayerMesh(Material material, Transform transform, int drawOrder)
