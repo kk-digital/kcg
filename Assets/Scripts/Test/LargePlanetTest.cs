@@ -65,7 +65,7 @@ namespace Planet.Unity
             GameResources.Initialize();
 
             // Generating the map
-            Vec2i mapSize = new Vec2i(6400, 1600);
+            Vec2i mapSize = new Vec2i(6400, 24);
             Planet = new Planet.PlanetState();
             Planet.Init(mapSize);
             Planet.InitializeSystems(Material, transform);
@@ -73,7 +73,7 @@ namespace Planet.Unity
             GameResources.CreateItems(Planet.EntitasContext);
 
             GenerateMap();
-            Player = Planet.AddPlayer(new Vec2f(3.0f, 1605));
+            Player = Planet.AddPlayer(new Vec2f(3.0f, 25));
             PlayerID = Player.agentID.ID;
             //SpawnStuff();
 
