@@ -11,10 +11,17 @@ namespace Scripts {
             public List<SpaceStation>       stations      = new();
             public List<LaserTower>         laser_towers  = new();
             public List<SpaceObject>        objects       = new();
+            public List<SystemStar>         stars         = new();
 
             public PlayerShip player;
 
-            public SpaceObject star = new();
+            public void load(string file_name) {
+
+            }
+
+            public void save(string file_name) {
+
+            }
         }
     }
 }

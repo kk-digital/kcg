@@ -40,9 +40,14 @@ namespace Scripts {
             public Button   UpdateEnemyButton;
             public Button   DeleteEnemyButton;
 
-            public float    rudder_speed;
-            public float    rudder_strength;
+            public float    rudder_speed;               // Speed at which rudder/sail turns
+            public float    rudder_strength;            // Strength with which rudder/sail rotates ship movement vector
             public bool     rudder_enabled = true;
+
+            public bool     mouse_movement = false;
+            public bool     turn_to_mouse  = true;
+
+            public Toggle   mouse_turning_toggle;
 
             public void set_rudder_speed(float f) {
                 rudder_speed = f;
@@ -59,12 +64,25 @@ namespace Scripts {
                 if(Player != null) Player.rudder_enabled = rudder_enabled;
             }
 
+            public void toggle_mouse_movement(bool b) {
+                mouse_movement = b;
+                if(Player != null) Player.mouse_steering = mouse_movement;
+                mouse_turning_toggle.enabled      = mouse_movement;
+                mouse_turning_toggle.interactable = mouse_movement;
+            }
+
+            public void toggle_mouse_turning(bool b) {
+                turn_to_mouse = b;
+                if(Player != null) Player.turn_towards_mouse = turn_to_mouse;
+            }
+
             void Start() {
                 LastTime = (int)(Time.time * 1000.0f);
 
-                State.star.mass = 5000000.0f;
-                State.star.posx = -5.0f;
-                State.star.posy = 0.0f;
+                State.stars.Add(new SystemStar());
+                State.stars[0].self.mass = 5000000.0f;
+                State.stars[0].self.posx = -5.0f;
+                State.stars[0].self.posy = 0.0f;
 
                 RespawnPlayer();
 
@@ -72,7 +90,7 @@ namespace Scripts {
                 StarObject.name = "Star Renderer";
 
                 SystemStarRenderer starRenderer = StarObject.AddComponent<SystemStarRenderer>();
-                starRenderer.Star = State.star;
+                starRenderer.Star = State.stars[0];
             }
 
             void LateUpdate() {
@@ -198,6 +216,12 @@ namespace Scripts {
                 }
 
                 Player = gameObject.AddComponent<PlayerShip>();
+
+                Player.sail_speed = rudder_speed;
+                Player.sailing_factor = 50 - rudder_strength;
+                Player.rudder_enabled = rudder_enabled;
+                Player.mouse_steering = mouse_movement;
+                Player.turn_towards_mouse = turn_to_mouse;
             }
 
             public void UpdatePlayerWeapons() {
@@ -207,15 +231,17 @@ namespace Scripts {
 
                 left_cannon.range                = 45.0f;
                 left_cannon.shield_penetration   = 0.2f;
-                left_cannon.projectile_velocity  = 50.0f;
+                left_cannon.projectile_velocity  = 5.0f;
                 left_cannon.damage               = 6000;
                 left_cannon.attack_speed         = 1250;
                 left_cannon.cooldown             = 0;
                 left_cannon.self                 = Player.ship;
                 left_cannon.FOV                  = Tools.quarterpi;
+                left_cannon.acc                  = 40.0f;
 
                 left_cannon.flags                = (int)WeaponFlags.WEAPON_PROJECTILE
                                                  | (int)WeaponFlags.WEAPON_BROADSIDE
+                                                 | (int)WeaponFlags.WEAPON_ROCKET
                                                  | (int)WeaponFlags.WEAPON_POSX;
 
 
@@ -242,15 +268,17 @@ namespace Scripts {
 
                 right_cannon.range               = 45.0f;
                 right_cannon.shield_penetration  = 0.2f;
-                right_cannon.projectile_velocity = 50.0f;
+                right_cannon.projectile_velocity = 5.0f;
                 right_cannon.damage              = 6000;
                 right_cannon.attack_speed        = 1250;
                 right_cannon.cooldown            = 0;
                 right_cannon.self                = Player.ship;
                 right_cannon.FOV                 = Tools.quarterpi;
+                right_cannon.acc                 = 40.0f;
 
                 right_cannon.flags               = (int)WeaponFlags.WEAPON_PROJECTILE
-                                                 | (int)WeaponFlags.WEAPON_BROADSIDE;
+                                                 | (int)WeaponFlags.WEAPON_BROADSIDE
+                                                 | (int)WeaponFlags.WEAPON_ROCKET;
 
                 ShipWeapon right_gun             = new ShipWeapon();
 
@@ -272,9 +300,9 @@ namespace Scripts {
 
                 turret.color                     = Color.white;
 
-                turret.range                     = 20.0f;
+                turret.range                     = 25.0f;
                 turret.shield_penetration        = 0.1f;
-                turret.projectile_velocity       = 8.0f;
+                turret.projectile_velocity       = 15.0f;
                 turret.damage                    = 200;
                 turret.attack_speed              = 50;
                 turret.cooldown                  = 0;
@@ -282,9 +310,11 @@ namespace Scripts {
                 turret.rotation                  = Tools.pi;
                 turret.rotation_rate             = 2.0f;
                 turret.self                      = Player.ship;
+                turret.state                     = State;
 
                 turret.flags                     = (int)WeaponFlags.WEAPON_PROJECTILE
-                                                 | (int)WeaponFlags.WEAPON_TURRET;
+                                                 | (int)WeaponFlags.WEAPON_TURRET
+                                                 | (int)WeaponFlags.WEAPON_SEEKING;
 
                 ShipWeapon laser                 = new ShipWeapon();
 
