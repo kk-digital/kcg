@@ -31,6 +31,9 @@ namespace Vehicle
                 var width = entity.vehicleSprite2D.Size.X;
                 var height = entity.vehicleSprite2D.Size.Y;
 
+                if (!Utility.ObjectMesh.isOnScreen(x, y))
+                    continue;
+
                 // Update UVs
                 Mesh.UpdateUV(textureCoords, (index) * 4);
                 // Update Vertices

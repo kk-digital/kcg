@@ -57,6 +57,9 @@ namespace Item
                     float w = ItemTypeEntity.itemPropertySize.Size.X;
                     float h = ItemTypeEntity.itemPropertySize.Size.Y;
 
+                    if (!Utility.ObjectMesh.isOnScreen(x, y))
+                        continue;
+
                     // Update UVs
                     Mesh.UpdateUV(textureCoords, (index) * 4);
                     // Update Vertices

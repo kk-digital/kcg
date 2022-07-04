@@ -40,6 +40,9 @@ namespace Agent
                 var width = entity.agentSprite2D.Size.X;
                 var height = entity.agentSprite2D.Size.Y;
 
+                if (!Utility.ObjectMesh.isOnScreen(x, y))
+                    continue;
+
                 // Update UVs
                 Mesh.UpdateUV(textureCoords, (index) * 4);
                 // Update Vertices

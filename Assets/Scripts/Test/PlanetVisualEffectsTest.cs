@@ -24,7 +24,7 @@ public class PlanetVisualEffectsTest : MonoBehaviour
     }
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
-    void OnRenderObject()
+    void Update()
     {
         if(Init)
         {
