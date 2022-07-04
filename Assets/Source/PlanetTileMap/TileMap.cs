@@ -390,15 +390,15 @@ namespace PlanetTileMap
             Render.DrawFrame(ref LayerMeshes[(int)planetLayer], GameState.TileSpriteAtlasManager.GetSpriteAtlas(0));
         }
 
-        public void UpdateBackLayerMesh()
+        private void UpdateLayerMesh(MapLayerType planetLayer, GetTileDelegate getTile)
         {
-            LayerMeshes[(int)MapLayerType.Back].Clear();
+            LayerMeshes[(int)planetLayer].Clear();
             int index = 0;
             for (int y = 0; y < MapSize.Y; y++)
             {
                 for (int x = 0; x < MapSize.X; x++)
                 {
-                    ref var tile = ref GetBackTile(x, y);
+                    ref var tile = ref getTile(x, y);
 
                     var spriteId = tile.SpriteID;
 
@@ -409,73 +409,27 @@ namespace PlanetTileMap
                         const float width = 1;
                         const float height = 1;
 
-                        if (!Utility.ObjectMesh.isOnScreen(x, y))
-                            continue;
-
                         // Update UVs
-                        LayerMeshes[(int)MapLayerType.Back].UpdateUV(textureCoords, (index) * 4);
+                        LayerMeshes[(int)planetLayer].UpdateUV(textureCoords, (index) * 4);
                         // Update Vertices
-                        LayerMeshes[(int)MapLayerType.Back].UpdateVertex((index * 4), x, y, width, height);
+                        LayerMeshes[(int)planetLayer].UpdateVertex((index * 4), x, y, width, height);
                         index++;
                     }
                 }
             }
+        }
+        
+        public void UpdateBackLayerMesh()
+        {
+            UpdateLayerMesh(MapLayerType.Back, GetBackTile);
         }
         public void UpdateMidLayerMesh()
         {
-            LayerMeshes[(int)MapLayerType.Mid].Clear();
-            int index = 0;
-            for (int y = 0; y < MapSize.Y; y++)
-            {
-                for (int x = 0; x < MapSize.X; x++)
-                {
-                    ref var tile = ref GetMidTile(x, y);
-
-                    var spriteId = tile.SpriteID;
-
-                    if (spriteId >= 0)
-                    {
-                        Vector4 textureCoords = GameState.TileSpriteAtlasManager.GetSprite(spriteId).TextureCoords;
-
-                        const float width = 1;
-                        const float height = 1;
-
-                        // Update UVs
-                        LayerMeshes[(int)MapLayerType.Mid].UpdateUV(textureCoords, (index) * 4);
-                        // Update Vertices
-                        LayerMeshes[(int)MapLayerType.Mid].UpdateVertex((index * 4), x, y, width, height);
-                        index++;
-                    }
-                }
-            }
+            UpdateLayerMesh(MapLayerType.Mid, GetMidTile);
         }
         public void UpdateFrontLayerMesh()
         {
-            LayerMeshes[(int)MapLayerType.Front].Clear();
-            int index = 0;
-            for (int y = 0; y < MapSize.Y; y++)
-            {
-                for (int x = 0; x < MapSize.X; x++)
-                {
-                    ref var tile = ref GetFrontTile(x, y);
-
-                    var spriteId = tile.SpriteID;
-
-                    if (spriteId >= 0)
-                    {
-                        Vector4 textureCoords = GameState.TileSpriteAtlasManager.GetSprite(spriteId).TextureCoords;
-
-                        const float width = 1;
-                        const float height = 1;
-
-                        // Update UVs
-                        LayerMeshes[(int)MapLayerType.Front].UpdateUV(textureCoords, (index) * 4);
-                        // Update Vertices
-                        LayerMeshes[(int)MapLayerType.Front].UpdateVertex((index * 4), x, y, width, height);
-                        index++;
-                    }
-                }
-            }
+            UpdateLayerMesh(MapLayerType.Front, GetFrontTile);
         }
 
         #endregion
