@@ -94,7 +94,7 @@ namespace PlanetTileMap
             ref Tile tile = ref GetTile(x, y, layer);
             tile.ID = tileId;
             ToUpdateTiles.Add(new UpdateTile(new Vec2i(x, y), layer));
-           // UpdateTile(x, y, layer);
+            //UpdateTile(x, y, layer);
         }
 
         private ref Tile GetTile(int x, int y, MapLayerType planetLayer)
@@ -195,6 +195,17 @@ namespace PlanetTileMap
                 {
                     if (!IsValid(i, j)) continue;
                     UpdateNeighbourTiles(i, j, type);
+                }
+            }
+        }
+
+        public void UpdateTileMapPositions(MapLayerType planetLayer)
+        {
+            for(int y = 0; y < MapSize.Y; y++)
+            {
+                for(int x = 0; x < MapSize.X; x++)
+                {
+                    UpdateNeighbourTiles(x, y, planetLayer);
                 }
             }
         }
@@ -348,34 +359,6 @@ namespace PlanetTileMap
             Render.DrawFrame(ref LayerMeshes[(int)planetLayer], GameState.TileSpriteAtlasManager.GetSpriteAtlas(0));
         }
 
-        public void UpdateBackLayerMesh()
-        {
-            LayerMeshes[(int)MapLayerType.Back].Clear();
-            int index = 0;
-            for (int y = 0; y < MapSize.Y; y++)
-            {
-                for (int x = 0; x < MapSize.X; x++)
-                {
-                    ref var tile = ref GetBackTile(x, y);
-
-                    var spriteId = tile.SpriteID;
-
-                    if (spriteId >= 0)
-                    {
-                        Vector4 textureCoords = GameState.TileSpriteAtlasManager.GetSprite(spriteId).TextureCoords;
-
-                        const float width = 1;
-                        const float height = 1;
-
-                        // Update UVs
-                        LayerMeshes[(int)MapLayerType.Back].UpdateUV(textureCoords, (index) * 4);
-                        // Update Vertices
-                        LayerMeshes[(int)MapLayerType.Back].UpdateVertex((index * 4), x, y, width, height);
-                        index++;
-                    }
-                }
-            }
-        }
 
         public void UpdateTiles()
         {
@@ -384,7 +367,9 @@ namespace PlanetTileMap
                 UpdateTile updateTile = ToUpdateTiles[i];
                 UpdateTile(updateTile.Position.X, updateTile.Position.Y, updateTile.Layer);
             }
-            ToUpdateTiles.RemoveRange(0, Math.Min(4096, ToUpdateTiles.Count));
+            ToUpdateTiles.RemoveRange(0, Math.Min(128, ToUpdateTiles.Count));
+
+            Debug.Log(ToUpdateTiles.Count + " are left");
             
         }
 
@@ -418,7 +403,7 @@ namespace PlanetTileMap
             {
                 for (int x = (int)(bottomLeft.x - 10); x < MapSize.X && x <= (bottomRight.x + 10); x++)
                 {
-                    if (x >= 0  &&y >= 0)
+                    if (x >= 0  && y >= 0)
                     {
                     ref var tile = ref GetTile(x, y, planetLayer);
 
@@ -431,15 +416,18 @@ namespace PlanetTileMap
                         const float width = 1;
                         const float height = 1;
 
+                        if (!Utility.ObjectMesh.isOnScreen(x, y))
+                            continue;
+
                         // Update UVs
-                        LayerMeshes[(int)MapLayerType.Back].UpdateUV(textureCoords, (index) * 4);
+                        LayerMeshes[(int)planetLayer].UpdateUV(textureCoords, (index) * 4);
                         // Update Vertices
-                        LayerMeshes[(int)MapLayerType.Back].UpdateVertex((index * 4), x, y, width, height);
+                        LayerMeshes[(int)planetLayer].UpdateVertex((index * 4), x, y, width, height);
                         index++;
+                    }
                     }
                 }
             }
-        }
         }
 
        

@@ -276,6 +276,8 @@ namespace Planet.Unity
                     tileMap.SetFrontTile(i, j, TileID.Air);
                 }
             }
+
+            //tileMap.UpdateTileMapPositions(MapLayerType.Front);
         }
 
         void SpawnStuff()
