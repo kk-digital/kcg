@@ -46,12 +46,37 @@ namespace Utility
             triangles.Clear();
         }
 
-        public void UpdateVertex(int index, float x, float y, float w, float h)
+
+        private Vec2f RotatePoint(Vec2f pos, float angle) {
+            float tmpX = pos.X;
+
+            float s = (float)System.Math.Sin((double)angle);
+            float c = (float)System.Math.Cos((double)angle);
+
+            // rotate point
+            return new Vec2f(tmpX * c - pos.Y * s, tmpX * s + pos.Y * c);
+        }
+
+        public void UpdateVertex(int index, float x, float y, float w, float h, float angle = 0)
         {
-            var p0 = new Vector3(x, y, 0);
-            var p1 = new Vector3((x + w), (y + h), 0);
-            var p2 = p0; p2.y = p1.y;
-            var p3 = p1; p3.y = p0.y;
+            angle = angle * 3.14f / 180.0f;
+            Vec2f topLeft = new Vec2f(0, h);
+            Vec2f BottomLeft = new Vec2f(0, 0);
+            Vec2f BottomRight = new Vec2f(w, 0);
+            Vec2f TopRight = new Vec2f(w, h);
+
+            if (angle != 0)
+            {
+                topLeft = RotatePoint(topLeft, angle);
+                BottomLeft = RotatePoint(BottomLeft, angle);
+                BottomRight = RotatePoint(BottomRight, angle);
+                TopRight = RotatePoint(TopRight, angle);
+            }
+
+            var p0 = new Vector3(BottomLeft.X + x, BottomLeft.Y + y, 0);
+            var p1 = new Vector3(TopRight.X + x, TopRight.Y + y, 0);
+            var p2 = new Vector3(topLeft.X + x, topLeft.Y + y, 0);
+            var p3 = new Vector3(BottomRight.X + x, BottomRight.Y + y, 0);
 
             int triangleIndex = vertices.Count;
 

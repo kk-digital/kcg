@@ -24,7 +24,7 @@ namespace Agent
             entity.isAgentPlayer = true;
             entity.isECSInput = true;
             entity.AddECSInputXY(new Vec2f(0, 0), false, false);
-            entity.AddAgentMovementState(false, false, false, false, 0.0f);
+            entity.AddAgentMovementState(false, 0, false, false, 0.0f);
             entity.AddAgentID(agentId);
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
             entity.AddAgentSprite2D(spriteId, spriteSize); // adds the sprite  component to the entity
@@ -57,7 +57,7 @@ namespace Agent
             entity.AddAgentSprite2D(spriteId, spriteSize); // adds the sprite  component to the entity
             entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.Zero, newAcceleration: Vec2f.Zero, false); // used for physics simulation
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=properties.StartingAnimation});
-            entity.AddAgentMovementState(false, false, false, false, 0.0f);
+            entity.AddAgentMovementState(false, 0, false, false, 0.0f);
 
             if (agentType == Agent.AgentType.Player)
             {

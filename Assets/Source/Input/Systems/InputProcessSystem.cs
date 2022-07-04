@@ -57,11 +57,11 @@ namespace ECSInput
                 }
                 else
                 {
-                    if (jump && !movementState.DoubleJumping)
+                    if (jump && movementState.JumpCounter <= 1)
                     {
                         movable.Acceleration.Y += 0.0f;
                         movable.Velocity.Y = 6.5f;
-                        movementState.DoubleJumping = true;
+                        movementState.JumpCounter++;
                     }
                 }
 
@@ -71,7 +71,7 @@ namespace ECSInput
                 }
                 if (movable.Landed)
                 {
-                    movementState.DoubleJumping = false;
+                    movementState.JumpCounter = 0;
                     movementState.Jumping = false;
                 }
 
@@ -79,10 +79,6 @@ namespace ECSInput
                 {
                     planet.AddParticleEmitter(pos.Value, Particle.ParticleEmitterType.DustEmitter);
                 }
-
-                entity.ReplaceAgentMovementState(movementState.Jumping, movementState.DoubleJumping,
-                                    movementState.Dashing, movementState.Flying, movementState.DashCooldown);
-                entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration, movable.Landed);
 
             }
 
