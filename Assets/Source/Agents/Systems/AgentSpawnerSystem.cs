@@ -24,7 +24,7 @@ namespace Agent
             entity.isAgentPlayer = true;
             entity.isECSInput = true;
             entity.AddECSInputXY(new Vec2f(0, 0), false, false);
-
+            entity.AddAgentMovementState(false, false, false, false, 0.0f);
             entity.AddAgentID(agentId);
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
             entity.AddAgentSprite2D(spriteId, spriteSize); // adds the sprite  component to the entity
