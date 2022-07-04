@@ -83,7 +83,7 @@ public class RasterScanTest : MonoBehaviour
             {
                 Debug.Log($"({cell.x},{cell.y})");
 
-                ref var tile = ref testTiles.TileMap.GetTileRef(cell.x, cell.y, MapLayerType.Front);
+                ref var tile = ref testTiles.TileMap.GetFrontTile(cell.x, cell.y);
                 if (tile.ID != TileID.Error)
                 {
                     GameObject Temp = CollisionBlock;

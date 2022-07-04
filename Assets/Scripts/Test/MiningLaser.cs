@@ -217,10 +217,10 @@ public class MiningLaser : MonoBehaviour
                 {
                     Debug.Log($"({cell.x},{cell.y})");
 
-                    ref var tile = ref planet.TileMap.GetTileRef(cell.x, cell.y, MapLayerType.Front);
+                    ref var tile = ref planet.TileMap.GetFrontTile(cell.x, cell.y);
                     if (tile.ID != TileID.Error)
                     {
-                        planet.TileMap.RemoveTile(cell.x, cell.y, MapLayerType.Front);
+                        planet.TileMap.RemoveFrontTile(cell.x, cell.y);
                         //tileMap.BuildLayerTexture(Enums.Tile.MapLayerType.Front);
                     }
 

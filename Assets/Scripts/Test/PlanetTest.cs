@@ -211,7 +211,7 @@ namespace Planet.Unity
                     }
 
 
-                    tileMap.SetTile(i, j, frontTileID, MapLayerType.Front);
+                    tileMap.SetFrontTile(i, j, frontTileID);
                 }
             }
 
@@ -219,7 +219,7 @@ namespace Planet.Unity
             {
                 for (int j = tileMap.MapSize.Y - 10; j < tileMap.MapSize.Y; j++)
                 {
-                    tileMap.SetTile(i, j, TileID.Air, MapLayerType.Front);
+                    tileMap.SetFrontTile(i, j, TileID.Air);
                 }
             }
 
@@ -241,7 +241,7 @@ namespace Planet.Unity
 
                 for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
-                    tileMap.SetTile(i, j, TileID.Air, MapLayerType.Front);
+                    tileMap.SetFrontTile(i, j, TileID.Air);
                 }
             }
 
@@ -268,13 +268,9 @@ namespace Planet.Unity
 
                 for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
-                    tileMap.SetTile(i, j, TileID.Air, MapLayerType.Front);
+                    tileMap.SetFrontTile(i, j, TileID.Air);
                 }
             }
-
-
-            tileMap.UpdateTileMapPositions(MapLayerType.Front);
-
         }
 
         void SpawnStuff()

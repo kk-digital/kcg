@@ -18,7 +18,7 @@ namespace Physics
                 {
                     if (y >= 0 && y < tileMap.MapSize.Y)
                     {
-                        ref var tile = ref tileMap.GetTileRef(x, y, MapLayerType.Front);
+                        ref var tile = ref tileMap.GetFrontTile(x, y);
                         if (tile.ID != TileID.Air)
                         {
                             var tileBorders = new AABB2D(x, y);
@@ -44,7 +44,7 @@ namespace Physics
                 {
                     if (y >= 0 && y < tileMap.MapSize.Y)
                     {
-                        ref var tile = ref tileMap.GetTileRef(x, y, MapLayerType.Front);
+                        ref var tile = ref tileMap.GetFrontTile(x, y);
 
                         if (tile.ID != TileID.Air)
                         {
@@ -75,7 +75,7 @@ namespace Physics
                 {
                     if (x >= 0 && x < tileMap.MapSize.X)
                     {
-                        ref var tile = ref tileMap.GetTileRef(x, y, MapLayerType.Front);
+                        ref var tile = ref tileMap.GetFrontTile(x, y);
                         if (tile.ID != TileID.Air)
                         {
                             var tileBorders = new AABB2D(x, y);
@@ -103,7 +103,7 @@ namespace Physics
                 {
                     if (x >= 0 && x < tileMap.MapSize.X)
                     {
-                        ref var tile = ref tileMap.GetTileRef(x, y, MapLayerType.Front);
+                        ref var tile = ref tileMap.GetFrontTile(x, y);
                         if (tile.ID != TileID.Air)
                         {
                             var tileBorders = new AABB2D(x, y);
