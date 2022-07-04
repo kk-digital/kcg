@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 
 using System;
 using Enums.Tile;
@@ -431,20 +431,19 @@ namespace PlanetTileMap
                         const float width = 1;
                         const float height = 1;
 
-                        if (!Utility.ObjectMesh.isOnScreen(x, y))
-                            continue;
-
                         // Update UVs
-                        LayerMeshes[(int)planetLayer].UpdateUV(textureCoords, (index) * 4);
+                        LayerMeshes[(int)MapLayerType.Back].UpdateUV(textureCoords, (index) * 4);
                         // Update Vertices
-                        LayerMeshes[(int)planetLayer].UpdateVertex((index * 4), x, y, width, height);
+                        LayerMeshes[(int)MapLayerType.Back].UpdateVertex((index * 4), x, y, width, height);
                         index++;
-                    }
                     }
                 }
             }
         }
+        }
 
-        #endregion
+       
     }
 }
+
+#endregion
