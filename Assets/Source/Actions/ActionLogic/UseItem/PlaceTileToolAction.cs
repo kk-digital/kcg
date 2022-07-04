@@ -25,6 +25,9 @@ namespace Action
             int x = (int)worldPosition.x;
             int y = (int)worldPosition.y;
 
+            if (x >= 0 && x < planet.TileMap.MapSize.X &&
+            y >= 0 && y < planet.TileMap.MapSize.Y)
+            {
             switch (data.Layer)
             {
                 case MapLayerType.Back:
@@ -36,6 +39,7 @@ namespace Action
                 case MapLayerType.Front:
                     planet.TileMap.SetFrontTile(x, y, data.TileID);
                     break;
+            }
             }
 
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Success);

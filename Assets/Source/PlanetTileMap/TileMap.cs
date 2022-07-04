@@ -1,8 +1,11 @@
-﻿using System;
+﻿﻿
+
+using System;
 using Enums.Tile;
 using KMath;
 using UnityEngine;
 using Utility;
+using System.Collections.Generic;
 
 namespace PlanetTileMap
 {
@@ -15,6 +18,8 @@ namespace PlanetTileMap
         public bool[] NeedsUpdate;
         
         public Vec2i MapSize;
+        public Vec2i ChunkSize;
+        List<UpdateTile> ToUpdateTiles;
         
         //Array that maps to Chunk List
         public int[] ChunkIndexLookup;
@@ -26,14 +31,11 @@ namespace PlanetTileMap
         public TileMap(Vec2i mapSize)
         {
             ChunkArrayLength = 0;
-            
-            var chunkSizeX = mapSize.X >> 4;
-            var chunkSizeY = mapSize.Y >> 4;
+            ToUpdateTiles = new List<UpdateTile>();
 
-            if ((chunkSizeX & 0x0f) != 0) chunkSizeX++;
-            if ((chunkSizeY & 0x0f) != 0) chunkSizeY++;
+            ChunkSize = new Vec2i(mapSize.X / 16 + 1, mapSize.Y / 16 + 1);
             
-            ChunkArrayCapacity = chunkSizeX + chunkSizeY;
+            ChunkArrayCapacity = ChunkSize.X * ChunkSize.Y;
             ChunkIndexLookup = new int[ChunkArrayCapacity];
             ChunkArray = new Chunk[ChunkArrayCapacity];
 
@@ -87,13 +89,21 @@ namespace PlanetTileMap
         
         #region Tile getters
         
+        public void SetTile(int x, int y, Enums.Tile.TileID tileId, MapLayerType layer)
+        {
+            ref Tile tile = ref GetTile(x, y, layer);
+            tile.ID = tileId;
+            ToUpdateTiles.Add(new UpdateTile(new Vec2i(x, y), layer));
+            //UpdateTile(x, y, layer);
+        }
+
         private ref Tile GetTile(int x, int y, MapLayerType planetLayer)
         {
             Utils.Assert(x >= 0 && x < MapSize.X &&
                          y >= 0 && y < MapSize.Y);
             
-            var xChunkIndex = x >> 4;
-            var yChunkIndex = ((y >> 4) * MapSize.X) >> 4;
+            var xChunkIndex = x / 16;
+            var yChunkIndex = ((y / 16) * ChunkSize.X);
             var chunkIndex = (xChunkIndex + yChunkIndex);
 
             ref var chunk = ref ChunkArray[chunkIndex];
@@ -114,75 +124,15 @@ namespace PlanetTileMap
         
         public ref Tile GetBackTile(int x, int y)
         {
-            Utils.Assert(x >= 0 && x < MapSize.X &&
-                         y >= 0 && y < MapSize.Y);
-            
-            var xChunkIndex = x >> 4;
-            var yChunkIndex = ((y >> 4) * MapSize.X) >> 4;
-            var chunkIndex = (xChunkIndex + yChunkIndex);
-
-            ref var chunk = ref ChunkArray[chunkIndex];
-            
-            if (chunk.Type == MapChunkType.Error)
-            {
-                return ref AirTile;
-            }
-            
-            var xIndex = x & 0x0f;
-            var yIndex = y & 0x0f;
-            var tileIndex = xIndex + (yIndex << 4);
-            
-            chunk.ReadCount++;
-            
-            return ref chunk.TileArray[(int)MapLayerType.Back][tileIndex];
+            return ref GetTile(x, y, MapLayerType.Back);
         }
         public ref Tile GetMidTile(int x, int y)
         {
-            Utils.Assert(x >= 0 && x < MapSize.X &&
-                         y >= 0 && y < MapSize.Y);
-            
-            var xChunkIndex = x >> 4;
-            var yChunkIndex = ((y >> 4) * MapSize.X) >> 4;
-            var chunkIndex = (xChunkIndex + yChunkIndex);
-
-            ref var chunk = ref ChunkArray[chunkIndex];
-            
-            if (chunk.Type == MapChunkType.Error)
-            {
-                return ref AirTile;
-            }
-            
-            var xIndex = x & 0x0f;
-            var yIndex = y & 0x0f;
-            var tileIndex = xIndex + (yIndex << 4);
-            
-            chunk.ReadCount++;
-            
-            return ref chunk.TileArray[(int)MapLayerType.Mid][tileIndex];
+             return ref GetTile(x, y, MapLayerType.Mid);
         }
         public ref Tile GetFrontTile(int x, int y)
         {
-            Utils.Assert(x >= 0 && x < MapSize.X &&
-                         y >= 0 && y < MapSize.Y);
-            
-            var xChunkIndex = x >> 4;
-            var yChunkIndex = ((y >> 4) * MapSize.X) >> 4;
-            var chunkIndex = (xChunkIndex + yChunkIndex);
-
-            ref var chunk = ref ChunkArray[chunkIndex];
-            
-            if (chunk.Type == MapChunkType.Error)
-            {
-                return ref AirTile;
-            }
-            
-            var xIndex = x & 0x0f;
-            var yIndex = y & 0x0f;
-            var tileIndex = xIndex + (yIndex << 4);
-            
-            chunk.ReadCount++;
-            
-            return ref chunk.TileArray[(int)MapLayerType.Front][tileIndex];
+             return ref GetTile(x, y, MapLayerType.Front);
         }
 
         #endregion
@@ -194,21 +144,24 @@ namespace PlanetTileMap
             ref var backTile = ref GetBackTile(x, y);
             backTile.ID = TileID.Air;
             backTile.SpriteID = -1;
-            UpdateBackTile(x, y);
+            ToUpdateTiles.Add(new UpdateTile(new Vec2i(x, y), MapLayerType.Back));
+            //UpdateBackTile(x, y);
         }
         public void RemoveMidTile(int x, int y)
         {
             ref var midTile = ref GetBackTile(x, y);
             midTile.ID = TileID.Air;
             midTile.SpriteID = -1;
-            UpdateBackTile(x, y);
+            ToUpdateTiles.Add(new UpdateTile(new Vec2i(x, y), MapLayerType.Mid));
+          //  UpdateBackTile(x, y);
         }
         public void RemoveFrontTile(int x, int y)
         {
             ref var frontTile = ref GetBackTile(x, y);
             frontTile.ID = TileID.Air;
             frontTile.SpriteID = -1;
-            UpdateBackTile(x, y);
+            ToUpdateTiles.Add(new UpdateTile(new Vec2i(x, y), MapLayerType.Front));
+            //UpdateBackTile(x, y);
         }
 
         #endregion
@@ -217,69 +170,15 @@ namespace PlanetTileMap
 
         public void SetBackTile(int x, int y, TileID tileID)
         {
-            Utils.Assert(IsValid(x, y));
-
-            var xChunkIndex = x >> 4;
-            var yChunkIndex = ((y >> 4) * MapSize.X) >> 4;
-            var chunkIndex = xChunkIndex + yChunkIndex;
-
-            ref var chunk = ref ChunkArray[chunkIndex];
-
-            if (tileID != TileID.Air) chunk.Type = MapChunkType.NotEmpty;
-
-            var xTileIndex = x & 0x0f;
-            var yTileIndex = y & 0x0f;
-            var tileIndex = xTileIndex + (yTileIndex << 4);
-
-            chunk.TileArray[(int) MapLayerType.Back][tileIndex].ID = tileID;
-            chunk.Sequence++;
-            UpdateBackTile(x, y);
+           SetTile(x, y, tileID, MapLayerType.Back);
         }
         public void SetMidTile(int x, int y, TileID tileID)
         {
-            Utils.Assert(IsValid(x, y));
-
-            var xChunkIndex = x >> 4;
-            var yChunkIndex = ((y >> 4) * MapSize.X) >> 4;
-            var chunkIndex = xChunkIndex + yChunkIndex;
-
-            ref var chunk = ref ChunkArray[chunkIndex];
-
-            if (tileID != TileID.Air)
-            {
-                chunk.Type = MapChunkType.NotEmpty;
-            }
-
-            var xTileIndex = x & 0x0f;
-            var yTileIndex = y & 0x0f;
-            var tileIndex = xTileIndex + (yTileIndex << 4);
-
-            chunk.TileArray[(int) MapLayerType.Mid][tileIndex].ID = tileID;
-            chunk.Sequence++;
-            UpdateMidTile(x, y);
+            SetTile(x, y, tileID, MapLayerType.Mid);
         }
         public void SetFrontTile(int x, int y, TileID tileID)
         {
-            Utils.Assert(IsValid(x, y));
-
-            var xChunkIndex = x >> 4;
-            var yChunkIndex = ((y >> 4) * MapSize.X) >> 4;
-            var chunkIndex = xChunkIndex + yChunkIndex;
-
-            ref var chunk = ref ChunkArray[chunkIndex];
-
-            if (tileID != TileID.Air)
-            {
-                chunk.Type = MapChunkType.NotEmpty;
-            }
-
-            var xTileIndex = x & 0x0f;
-            var yTileIndex = y & 0x0f;
-            var tileIndex = xTileIndex + (yTileIndex << 4);
-
-            chunk.TileArray[(int) MapLayerType.Front][tileIndex].ID = tileID;
-            chunk.Sequence++;
-            UpdateFrontTile(x, y);
+            SetTile(x, y, tileID, MapLayerType.Front);
         }
 
         #endregion
@@ -287,7 +186,7 @@ namespace PlanetTileMap
         // Update data of tile, update sprites of tile and etc.
         #region Tile updater
 
-        private void UpdateBackTile(int x, int y)
+        private void UpdateTile(int x, int y, MapLayerType type)
         {
             for(int i = x - 1; i <= x + 1; i++)
             {
@@ -295,31 +194,18 @@ namespace PlanetTileMap
                 for(int j = y - 1; j <= y + 1; j++)
                 {
                     if (!IsValid(i, j)) continue;
-                    UpdateNeighbourTiles(i, j, MapLayerType.Back);
+                    UpdateNeighbourTiles(i, j, type);
                 }
             }
         }
-        private void UpdateMidTile(int x, int y)
+
+        public void UpdateTileMapPositions(MapLayerType planetLayer)
         {
-            for(int i = x - 1; i <= x + 1; i++)
+            for(int y = 0; y < MapSize.Y; y++)
             {
-                if (!IsValid(i, 0)) continue;
-                for(int j = y - 1; j <= y + 1; j++)
+                for(int x = 0; x < MapSize.X; x++)
                 {
-                    if (!IsValid(i, j)) continue;
-                    UpdateNeighbourTiles(i, j, MapLayerType.Mid);
-                }
-            }
-        }
-        private void UpdateFrontTile(int x, int y)
-        {
-            for(int i = x - 1; i <= x + 1; i++)
-            {
-                if (!IsValid(i, 0)) continue;
-                for(int j = y - 1; j <= y + 1; j++)
-                {
-                    if (!IsValid(i, j)) continue;
-                    UpdateNeighbourTiles(i, j, MapLayerType.Front);
+                    UpdateNeighbourTiles(x, y, planetLayer);
                 }
             }
         }
@@ -473,71 +359,53 @@ namespace PlanetTileMap
             Render.DrawFrame(ref LayerMeshes[(int)planetLayer], GameState.TileSpriteAtlasManager.GetSpriteAtlas(0));
         }
 
-        public void UpdateBackLayerMesh()
+
+        public void UpdateTiles()
         {
-            LayerMeshes[(int)MapLayerType.Back].Clear();
-            int index = 0;
-            for (int y = 0; y < MapSize.Y; y++)
+            for(int i = 0; i < 128 && i < ToUpdateTiles.Count; i++)
             {
-                for (int x = 0; x < MapSize.X; x++)
-                {
-                    ref var tile = ref GetBackTile(x, y);
-
-                    var spriteId = tile.SpriteID;
-
-                    if (spriteId >= 0)
-                    {
-                        Vector4 textureCoords = GameState.TileSpriteAtlasManager.GetSprite(spriteId).TextureCoords;
-
-                        const float width = 1;
-                        const float height = 1;
-
-                        // Update UVs
-                        LayerMeshes[(int)MapLayerType.Back].UpdateUV(textureCoords, (index) * 4);
-                        // Update Vertices
-                        LayerMeshes[(int)MapLayerType.Back].UpdateVertex((index * 4), x, y, width, height);
-                        index++;
-                    }
-                }
+                UpdateTile updateTile = ToUpdateTiles[i];
+                UpdateTile(updateTile.Position.X, updateTile.Position.Y, updateTile.Layer);
             }
+            ToUpdateTiles.RemoveRange(0, Math.Min(128, ToUpdateTiles.Count));
+
+            Debug.Log(ToUpdateTiles.Count + " are left");
+            
         }
+
         public void UpdateMidLayerMesh()
         {
-            LayerMeshes[(int)MapLayerType.Mid].Clear();
-            int index = 0;
-            for (int y = 0; y < MapSize.Y; y++)
-            {
-                for (int x = 0; x < MapSize.X; x++)
-                {
-                    ref var tile = ref GetMidTile(x, y);
-
-                    var spriteId = tile.SpriteID;
-
-                    if (spriteId >= 0)
-                    {
-                        Vector4 textureCoords = GameState.TileSpriteAtlasManager.GetSprite(spriteId).TextureCoords;
-
-                        const float width = 1;
-                        const float height = 1;
-
-                        // Update UVs
-                        LayerMeshes[(int)MapLayerType.Mid].UpdateUV(textureCoords, (index) * 4);
-                        // Update Vertices
-                        LayerMeshes[(int)MapLayerType.Mid].UpdateVertex((index * 4), x, y, width, height);
-                        index++;
-                    }
-                }
-            }
+            UpdateLayerMesh(MapLayerType.Mid);
         }
+
         public void UpdateFrontLayerMesh()
         {
-            LayerMeshes[(int)MapLayerType.Front].Clear();
+            UpdateLayerMesh(MapLayerType.Front);
+           
+        }
+
+        public void UpdateLayerMesh(MapLayerType planetLayer)
+        {
+            if (Camera.main==null) {Debug.LogError("Camera.main not found, failed to create edge colliders"); return;}
+
+            var cam = Camera.main;
+            if (!cam.orthographic) {Debug.LogError("Camera.main is not Orthographic, failed to create edge colliders"); return;}
+
+            var bottomLeft = (Vector2)cam.ScreenToWorldPoint(new Vector3(0, 0, cam.nearClipPlane));
+            var topLeft = (Vector2)cam.ScreenToWorldPoint(new Vector3(0, cam.pixelHeight, cam.nearClipPlane));
+            var topRight = (Vector2)cam.ScreenToWorldPoint(new Vector3(cam.pixelWidth, cam.pixelHeight, cam.nearClipPlane));
+            var bottomRight = (Vector2)cam.ScreenToWorldPoint(new Vector3(cam.pixelWidth, 0, cam.nearClipPlane));
+            
+            LayerMeshes[(int)planetLayer].Clear();
+
             int index = 0;
-            for (int y = 0; y < MapSize.Y; y++)
+            for (int y = (int)(bottomLeft.y - 10); y < MapSize.Y&& y <= (topRight.y + 10); y++)
             {
-                for (int x = 0; x < MapSize.X; x++)
+                for (int x = (int)(bottomLeft.x - 10); x < MapSize.X && x <= (bottomRight.x + 10); x++)
                 {
-                    ref var tile = ref GetFrontTile(x, y);
+                    if (x >= 0  && y >= 0)
+                    {
+                    ref var tile = ref GetTile(x, y, planetLayer);
 
                     var spriteId = tile.SpriteID;
 
@@ -548,16 +416,22 @@ namespace PlanetTileMap
                         const float width = 1;
                         const float height = 1;
 
+                        if (!Utility.ObjectMesh.isOnScreen(x, y))
+                            continue;
+
                         // Update UVs
-                        LayerMeshes[(int)MapLayerType.Front].UpdateUV(textureCoords, (index) * 4);
+                        LayerMeshes[(int)planetLayer].UpdateUV(textureCoords, (index) * 4);
                         // Update Vertices
-                        LayerMeshes[(int)MapLayerType.Front].UpdateVertex((index * 4), x, y, width, height);
+                        LayerMeshes[(int)planetLayer].UpdateVertex((index * 4), x, y, width, height);
                         index++;
+                    }
                     }
                 }
             }
         }
 
-        #endregion
+       
     }
 }
+
+#endregion

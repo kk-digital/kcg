@@ -4,29 +4,12 @@ using KMath;
 
 namespace Planet.Unity
 {
-    class PlanetTest : MonoBehaviour
+    class LargePlanetTest : MonoBehaviour
     {
         [SerializeField] Material Material;
-
         public PlanetState Planet;
         Inventory.InventoryManager inventoryManager;
         Inventory.DrawSystem inventoryDrawSystem;
-
-        // Health Bar
-        KGUI.HealthBarUI healthBarUI;
-
-        // Food Bar
-        KGUI.FoodBarUI foodBarUI;
-
-        // Water Bar
-        KGUI.WaterBarUI waterBarUI;
-
-        // Oxygen Bar
-        KGUI.OxygenBarUI oxygenBarUI;
-
-        // Fuel Bar
-        KGUI.FuelBarUI fuelBarUI;
-
         AgentEntity Player;
         int PlayerID;
 
@@ -73,27 +56,6 @@ namespace Planet.Unity
             inventoryDrawSystem.Draw(Planet.EntitasContext, Material, transform);
         }
 
-        private void OnGUI()
-        {
-            if (Init)
-            {
-                //Health Bar Draw
-                healthBarUI.Draw(Planet.EntitasContext);
-
-                // Food Bar Update
-                foodBarUI.Update();
-
-                // Water Bar Update
-                waterBarUI.Update();
-
-                // Fuel Bar Update
-                fuelBarUI.Update();
-
-                // OxygenBar Update
-                oxygenBarUI.Update();
-            }
-        }
-
         // create the sprite atlas for testing purposes
         public void Initialize()
         {
@@ -103,7 +65,7 @@ namespace Planet.Unity
             GameResources.Initialize();
 
             // Generating the map
-            Vec2i mapSize = new Vec2i(32, 24);
+            Vec2i mapSize = new Vec2i(6400, 24);
             Planet = new Planet.PlanetState();
             Planet.Init(mapSize);
             Planet.InitializeSystems(Material, transform);
@@ -111,7 +73,9 @@ namespace Planet.Unity
             GameResources.CreateItems(Planet.EntitasContext);
 
             GenerateMap();
-            SpawnStuff();
+            Player = Planet.AddPlayer(new Vec2f(3.0f, 25));
+            PlayerID = Player.agentID.ID;
+            //SpawnStuff();
 
             var inventoryAttacher = Inventory.InventoryAttacher.Instance;
 
@@ -134,27 +98,6 @@ namespace Planet.Unity
             inventoryManager.AddItem(Planet.EntitasContext, miningLaserTool, toolBarID);
             inventoryManager.AddItem(Planet.EntitasContext, pipePlacementTool, toolBarID);
             inventoryManager.AddItem(Planet.EntitasContext, particleEmitterPlacementTool, toolBarID);
-
-
-            // Health Bar Initialize
-            healthBarUI = new KGUI.HealthBarUI();
-            healthBarUI.Initialize();
-
-            // Food Bar Initialize
-            foodBarUI = new KGUI.FoodBarUI();
-            foodBarUI.Initialize(Planet.EntitasContext);
-
-            // Water Bar Initialize
-            waterBarUI = new KGUI.WaterBarUI();
-            waterBarUI.Initialize(Planet.EntitasContext);
-
-            // Oxygen Bar Initialize
-            oxygenBarUI = new KGUI.OxygenBarUI();
-            oxygenBarUI.Initialize(Planet.EntitasContext);
-
-            // Oxygen Bar Initialize
-            fuelBarUI = new KGUI.FuelBarUI();
-            fuelBarUI.Initialize(Planet.EntitasContext);
         }
 
         void GenerateMap()
@@ -189,37 +132,19 @@ namespace Planet.Unity
                         else
                         {
                             frontTileID = TileID.Moon;
-                            /*if ((int) KMath.Random.Mt19937.genrand_int32() % 10 == 0)
-                            {
-                                int oreRandom = (int) KMath.Random.Mt19937.genrand_int32() % 3;
-                                if (oreRandom == 0)
-                                {
-                                    frontTile.SpriteId2 = GameResources.OreSprite;
-                                }
-                                else if (oreRandom == 1)
-                                {
-                                    frontTile.SpriteId2 = GameResources.Ore2Sprite;
-                                }
-                                else
-                                {
-                                    frontTile.SpriteId2 = GameResources.Ore3Sprite;
-                                }
-
-                                frontTile.DrawType = TileDrawType.Composited;
-                            }*/
                         }
                     }
 
 
-                    tileMap.SetFrontTile(i, j, frontTileID);
+                    tileMap.SetTile(i, j, frontTileID, MapLayerType.Front);
                 }
             }
 
-            for (int i = 0; i < tileMap.MapSize.X; i++)
+            /*for (int i = 0; i < tileMap.MapSize.X; i++)
             {
                 for (int j = tileMap.MapSize.Y - 10; j < tileMap.MapSize.Y; j++)
                 {
-                    tileMap.SetFrontTile(i, j, TileID.Air);
+                    tileMap.SetTile(i, j, TileID.Air, MapLayerType.Front);
                 }
             }
 
@@ -243,10 +168,9 @@ namespace Planet.Unity
                 {
                     carveHeight = 0;
                 }
-
                 for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
-                    tileMap.SetFrontTile(i, j, TileID.Air);
+                    tileMap.SetTile(i, j, TileID.Air, MapLayerType.Front);
                 }
             }
 
@@ -273,11 +197,13 @@ namespace Planet.Unity
 
                 for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
-                    tileMap.SetFrontTile(i, j, TileID.Air);
+                    tileMap.SetTile(i, j, TileID.Air, MapLayerType.Front);
                 }
             }
+*/
 
-            //tileMap.UpdateTileMapPositions(MapLayerType.Front);
+       //     tileMap.UpdateTileMapPositions(MapLayerType.Front);
+
         }
 
         void SpawnStuff()
@@ -287,8 +213,6 @@ namespace Planet.Unity
 
             float spawnHeight = tileMap.MapSize.Y - 2;
 
-            Player = Planet.AddPlayer(new Vec2f(3.0f, spawnHeight));
-            PlayerID = Player.agentID.ID;
 
             Planet.AddAgent(new Vec2f(6.0f, spawnHeight));
             Planet.AddAgent(new Vec2f(1.0f, spawnHeight));
@@ -306,4 +230,5 @@ namespace Planet.Unity
         }
         
     }
+    
 }

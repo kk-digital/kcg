@@ -215,10 +215,10 @@ namespace Planet
         // updates the entities, must call the systems and so on ..
         public void Update(float deltaTime, Material material, Transform transform)
         {
-            float targetFps = 60.0f;
+            float targetFps = 30.0f;
             float frameTime = 1.0f / targetFps;
 
-            TimeState.Deficit += deltaTime;
+            /*TimeState.Deficit += deltaTime;
 
             while (TimeState.Deficit >= frameTime)
             {
@@ -228,24 +228,11 @@ namespace Planet
                     TimeState.TickTime++;
 
 
-
-
-
-                    for (int index = 0; index < ProjectileList.Capacity; index++)
-                    {
-                        ProjectileEntity projectile = ProjectileList.List[index];
-                        if (projectile != null)
-                        {
-                            //var position = projectile.Entity.projectilePhysicsState2D;
-                        }
-                    }
-
-
                 }
 
-            }
+            }*/
 
-            // check if the sprite atlas textures needs to be updated
+            // check if the sprite atlas teSetTilextures needs to be updated
             for(int type = 0; type < GameState.SpriteAtlasManager.Length; type++)
             {
                 GameState.SpriteAtlasManager.UpdateAtlasTexture(type);
@@ -274,6 +261,8 @@ namespace Planet
             GameState.ProjectileMovementSystem.Update(EntitasContext.projectile);
             GameState.ProjectileCollisionSystem.UpdateEx(ref this);
 
+            TileMap.UpdateTiles();
+            
             // Update Meshes.
             TileMap.UpdateMidLayerMesh();
             TileMap.UpdateFrontLayerMesh();
