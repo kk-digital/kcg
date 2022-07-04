@@ -4,7 +4,7 @@ using KMath;
 
 namespace Planet.Unity
 {
-    class LargePlanetTest : MonoBehaviour
+    class PlanetTest : MonoBehaviour
     {
         [SerializeField] Material Material;
 

@@ -215,7 +215,8 @@ namespace Planet
         // updates the entities, must call the systems and so on ..
         public void Update(float deltaTime, Material material, Transform transform)
         {
-            float targetFps = 30.0f;
+            float frameTime = deltaTime;
+            /*float targetFps = 30.0f;
             float frameTime = 1.0f / targetFps;
 
             TimeState.Deficit += deltaTime;
@@ -229,21 +230,9 @@ namespace Planet
 
 
 
-
-
-                    for (int index = 0; index < ProjectileList.Capacity; index++)
-                    {
-                        ProjectileEntity projectile = ProjectileList.List[index];
-                        if (projectile != null)
-                        {
-                            //var position = projectile.Entity.projectilePhysicsState2D;
-                        }
-                    }
-
-
                 }
 
-            }
+            }*/
 
             // check if the sprite atlas textures needs to be updated
             for(int type = 0; type < GameState.SpriteAtlasManager.Length; type++)
@@ -291,6 +280,80 @@ namespace Planet
             Utility.Render.DrawFrame(ref GameState.ParticleMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
 
             GameState.FloatingTextDrawSystem.Draw(EntitasContext.floatingText, transform, 10000);
+        }
+
+
+
+
+
+        // updates the entities, must call the systems and so on ..
+        public void UpdateEx(float deltaTime, Material material, Transform transform)
+        {
+             float frameTime = deltaTime;
+            /*float targetFps = 30.0f;
+            float frameTime = 1.0f / targetFps;
+
+            TimeState.Deficit += deltaTime;
+
+            while (TimeState.Deficit >= frameTime)
+            {
+                TimeState.Deficit -= frameTime;
+                // do a server/client tick right here
+                {
+                    TimeState.TickTime++;
+
+
+
+                }
+
+            }*/
+
+            // check if the sprite atlas textures needs to be updated
+            for(int type = 0; type < GameState.SpriteAtlasManager.Length; type++)
+            {
+                GameState.SpriteAtlasManager.UpdateAtlasTexture(type);
+            }
+
+            // check if the tile sprite atlas textures needs to be updated
+            for(int type = 0; type < GameState.TileSpriteAtlasManager.Length; type++)
+            {
+                GameState.TileSpriteAtlasManager.UpdateAtlasTexture(type);
+            }
+
+            // calling all the systems we have
+
+            GameState.InputProcessSystem.Update(EntitasContext);
+            GameState.PhysicsMovableSystem.Update(EntitasContext.agent);
+            GameState.PhysicsMovableSystem.Update(EntitasContext.item);
+            GameState.PhysicsProcessCollisionSystem.Update(EntitasContext.agent, ref TileMap);
+            GameState.PhysicsProcessCollisionSystem.Update(EntitasContext.item, ref TileMap);
+            GameState.EnemyAiSystem.Update(ref this);
+            GameState.FloatingTextUpdateSystem.Update(ref this, frameTime);
+            GameState.AnimationUpdateSystem.Update(EntitasContext, frameTime);
+            GameState.ItemPickUpSystem.Update(EntitasContext);
+            GameState.ActionSchedulerSystem.Update(EntitasContext, frameTime, ref this);
+            GameState.ParticleEmitterUpdateSystem.Update(ref this);
+            GameState.ParticleUpdateSystem.Update(ref this, EntitasContext.particle);
+            GameState.ProjectileMovementSystem.Update(EntitasContext.projectile);
+            GameState.ProjectileCollisionSystem.UpdateEx(ref this);
+
+            // Update Meshes.
+            TileMap.UpdateLayerMesh(MapLayerType.Mid);
+            TileMap.UpdateLayerMesh(MapLayerType.Front);
+            //GameState.ItemMeshBuilderSystem.UpdateMesh(EntitasContext);
+            //GameState.AgentMeshBuilderSystem.UpdateMesh(EntitasContext.agent);
+            //GameState.ProjectileMeshBuilderSystem.UpdateMesh(EntitasContext.projectile);
+            //GameState.ParticleMeshBuilderSystem.UpdateMesh(EntitasContext.particle);
+
+            // Draw Frames.
+            TileMap.DrawLayer(MapLayerType.Mid);
+            TileMap.DrawLayer(MapLayerType.Front);
+            //Utility.Render.DrawFrame(ref GameState.ItemMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
+            //Utility.Render.DrawFrame(ref GameState.AgentMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Agent));
+            //Utility.Render.DrawFrame(ref GameState.ProjectileMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
+            //Utility.Render.DrawFrame(ref GameState.ParticleMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
+
+            //GameState.FloatingTextDrawSystem.Draw(EntitasContext.floatingText, transform, 10000);
         }
     }
 }

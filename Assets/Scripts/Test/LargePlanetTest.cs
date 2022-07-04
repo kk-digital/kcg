@@ -1,31 +1,17 @@
 using UnityEngine;
 using Enums.Tile;
 using KMath;
+using Planet;
 
-namespace Planet.Unity
+namespace UnityTest
 {
-    class PlanetTest : MonoBehaviour
+    class LargePlanetTest : MonoBehaviour
     {
         [SerializeField] Material Material;
 
         public PlanetState Planet;
         Inventory.InventoryManager inventoryManager;
         Inventory.DrawSystem inventoryDrawSystem;
-
-        // Health Bar
-        KGUI.HealthBarUI healthBarUI;
-
-        // Food Bar
-        KGUI.FoodBarUI foodBarUI;
-
-        // Water Bar
-        KGUI.WaterBarUI waterBarUI;
-
-        // Oxygen Bar
-        KGUI.OxygenBarUI oxygenBarUI;
-
-        // Fuel Bar
-        KGUI.FuelBarUI fuelBarUI;
 
         AgentEntity Player;
         int PlayerID;
@@ -62,7 +48,7 @@ namespace Planet.Unity
                 }
             }
 
-            Planet.Update(Time.deltaTime, Material, transform);
+            Planet.UpdateEx(Time.deltaTime, Material, transform);
             //   Vector2 playerPosition = Player.Entity.physicsPosition2D.Value;
 
             // transform.position = new Vector3(playerPosition.x - 6.0f, playerPosition.y - 6.0f, -10.0f);
@@ -73,26 +59,6 @@ namespace Planet.Unity
             inventoryDrawSystem.Draw(Planet.EntitasContext, Material, transform);
         }
 
-        private void OnGUI()
-        {
-            if (Init)
-            {
-                //Health Bar Draw
-                healthBarUI.Draw(Planet.EntitasContext);
-
-                // Food Bar Update
-                foodBarUI.Update();
-
-                // Water Bar Update
-                waterBarUI.Update();
-
-                // Fuel Bar Update
-                fuelBarUI.Update();
-
-                // OxygenBar Update
-                oxygenBarUI.Update();
-            }
-        }
 
         // create the sprite atlas for testing purposes
         public void Initialize()
@@ -136,25 +102,6 @@ namespace Planet.Unity
             inventoryManager.AddItem(Planet.EntitasContext, particleEmitterPlacementTool, toolBarID);
 
 
-            // Health Bar Initialize
-            healthBarUI = new KGUI.HealthBarUI();
-            healthBarUI.Initialize();
-
-            // Food Bar Initialize
-            foodBarUI = new KGUI.FoodBarUI();
-            foodBarUI.Initialize(Planet.EntitasContext);
-
-            // Water Bar Initialize
-            waterBarUI = new KGUI.WaterBarUI();
-            waterBarUI.Initialize(Planet.EntitasContext);
-
-            // Oxygen Bar Initialize
-            oxygenBarUI = new KGUI.OxygenBarUI();
-            oxygenBarUI.Initialize(Planet.EntitasContext);
-
-            // Oxygen Bar Initialize
-            fuelBarUI = new KGUI.FuelBarUI();
-            fuelBarUI.Initialize(Planet.EntitasContext);
         }
 
         void GenerateMap()
