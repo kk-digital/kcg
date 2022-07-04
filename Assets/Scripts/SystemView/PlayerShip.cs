@@ -38,12 +38,25 @@ namespace Scripts {
             public const string broadsides_key  = "2";
             public const string turrets_key     = "3";
 
+            public float periapsis;
+            public float apoapsis;
+            public float rotation;
+            public bool  circularizing;
+
+            public bool  turn_towards_mouse     = true;
+            public bool  stations_orbiting;
+
             private SelectedWeaponType selectedWeapon = SelectedWeaponType.MAIN_WEAPONS;
 
             public CameraController camera_controller;
             public SystemState state;
 
             public LineRenderer rudder_renderer;
+            public LineRenderer angular_velocity_in_direction_of_movement;
+            public LineRenderer angular_velocity_perpendicular_to_movement;
+
+            public GameObject   angular_velocity_direction_renderer;
+            public GameObject   angular_velocity_perpendicular_renderer;
 
             private void Start() {
                 camera_controller  = GameObject.Find("Main Camera").GetComponent<CameraController>();
@@ -89,10 +102,26 @@ namespace Scripts {
                 mat.SetInt("_ZWrite", 0);
                 mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
 
-                rudder_renderer.material      = mat;
-                rudder_renderer.useWorldSpace = true;
-                rudder_renderer.startColor    =
-                rudder_renderer.endColor      = Color.white;
+                rudder_renderer.material                                 = mat;
+                rudder_renderer.useWorldSpace                            = true;
+                rudder_renderer.startColor                               =
+                rudder_renderer.endColor                                 = Color.white;
+                
+                angular_velocity_direction_renderer                      = new GameObject();
+                angular_velocity_in_direction_of_movement                = angular_velocity_direction_renderer.AddComponent<LineRenderer>();
+
+                angular_velocity_perpendicular_renderer                  = new GameObject();
+                angular_velocity_perpendicular_to_movement               = angular_velocity_perpendicular_renderer.AddComponent<LineRenderer>();
+
+                angular_velocity_in_direction_of_movement.material       = mat;
+                angular_velocity_in_direction_of_movement.useWorldSpace  = true;
+                angular_velocity_in_direction_of_movement.startColor     =
+                angular_velocity_in_direction_of_movement.endColor       = Color.blue;
+
+                angular_velocity_perpendicular_to_movement.material      = mat;
+                angular_velocity_perpendicular_to_movement.useWorldSpace = true;
+                angular_velocity_perpendicular_to_movement.startColor    =
+                angular_velocity_perpendicular_to_movement.endColor      = Color.green;
             }
 
             private void Update() {
@@ -103,21 +132,82 @@ namespace Scripts {
                 current_time *= time_scale;
 
                 last_time = Time.time;
-
-                if (ship.DockingAutopilotLoop(current_time, 0.1f * system_scale)) return;
-
-                if (Input.GetKeyDown("tab")) mouse_steering = !mouse_steering;
-
-                float horizontal_movement = 0.0f;
-
-                float rotation_change = ship.rotation;
-
                 Vector3[] vertices = new Vector3[2];
+
+                if(ship.descriptor.central_body != null) {
+                    float angular_velocity_x     = ship.self.velx - ship.descriptor.central_body.velx;
+                    float angular_velocity_y     = ship.self.vely - ship.descriptor.central_body.vely;
+
+                    float velocity_angle         = Tools.get_angle(angular_velocity_x,
+                                                                   angular_velocity_y);
+
+                    float angular_velocity_angle = Tools.get_angle(ship.descriptor.central_body.posx - ship.self.posx,
+                                                                   ship.descriptor.central_body.posy - ship.self.posy);
+
+                    // theta = angle between hypothetical circular orbit through ship's position
+
+                    float theta                  = angular_velocity_angle - velocity_angle;
+
+                    float costheta               = (float)Math.Cos(theta);
+                    float sintheta               = (float)Math.Sin(theta);
+
+                    (angular_velocity_x,
+                     angular_velocity_y)         = (costheta * angular_velocity_x - sintheta * angular_velocity_y,
+                                                    sintheta * angular_velocity_x + costheta * angular_velocity_x);
+
+                    float in_direction           = Tools.magnitude(sintheta * angular_velocity_x, sintheta * angular_velocity_y);
+                    float perpendicular          = Tools.magnitude(costheta * angular_velocity_x, costheta * angular_velocity_y);
+
+                    Vector3[] vertices1          = new Vector3[2];
+                    Vector3[] vertices2          = new Vector3[2];
+
+                    vertices1[0] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
+                    vertices1[1] = new Vector3(ship.self.posx + (float)Math.Cos(velocity_angle)
+                                                              * 0.1f * in_direction / camera_controller.scale,
+                                               ship.self.posy + (float)Math.Sin(velocity_angle)
+                                                              * 0.1f * in_direction / camera_controller.scale,
+                                               0.0f);
+
+                    angular_velocity_in_direction_of_movement.SetPositions(vertices1);
+                    angular_velocity_in_direction_of_movement.positionCount  = 2;
+
+                    angular_velocity_in_direction_of_movement.startWidth     =
+                    angular_velocity_in_direction_of_movement.endWidth       = 0.25f / camera_controller.scale;
+
+
+
+                    vertices2[0] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
+                    vertices2[1] = new Vector3(ship.self.posx + (float)Math.Cos(velocity_angle + Tools.halfpi)
+                                                              * 0.1f * perpendicular / camera_controller.scale,
+                                               ship.self.posy + (float)Math.Sin(velocity_angle + Tools.halfpi)
+                                                              * 0.1f * perpendicular / camera_controller.scale,
+                                               0.0f);
+
+                    angular_velocity_perpendicular_to_movement.SetPositions(vertices2);
+                    angular_velocity_perpendicular_to_movement.positionCount = 2;
+
+                    angular_velocity_perpendicular_to_movement.startWidth    =
+                    angular_velocity_perpendicular_to_movement.endWidth      = 0.25f / camera_controller.scale;
+
+                } else {
+
+                    Vector3[] vertices1 = new Vector3[2];
+
+                    vertices1[0]        = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
+                    vertices1[1]        = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
+
+                    angular_velocity_in_direction_of_movement.SetPositions(vertices1);
+                    angular_velocity_in_direction_of_movement.positionCount  = 0;
+
+                    angular_velocity_perpendicular_to_movement.SetPositions(vertices1);
+                    angular_velocity_perpendicular_to_movement.positionCount = 0;
+
+                }
 
                 if(rudder_enabled) {
                     vertices[0] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
-                    vertices[1] = new Vector3(ship.self.posx + (float)Math.Cos(ship.rotation + sail_angle) * 5.0f,
-                                              ship.self.posy + (float)Math.Sin(ship.rotation + sail_angle) * 5.0f,
+                    vertices[1] = new Vector3(ship.self.posx + (float)Math.Cos(ship.rotation + sail_angle) * 5.0f / camera_controller.scale,
+                                              ship.self.posy + (float)Math.Sin(ship.rotation + sail_angle) * 5.0f / camera_controller.scale,
                                               0.0f);
 
                     rudder_renderer.SetPositions(vertices);
@@ -133,6 +223,20 @@ namespace Scripts {
                     rudder_renderer.positionCount  = 0;
                 }
 
+                if(ship.docking_autopilot_tick(current_time, 0.1f * system_scale, stations_orbiting)) return;
+                if(ship.orbital_autopilot_tick(periapsis, apoapsis, rotation, current_time))          return;
+                if(circularizing) { circularizing = !ship.circularize(current_time);                  return; }
+
+                if (Input.GetKeyDown("tab")) mouse_steering = !mouse_steering;
+
+                float horizontal_movement = 0.0f;
+
+                float rotation_change = ship.rotation;
+
+                float direction     = ship.rotation;
+                bool  move_to_mouse = false;
+                float movement      = Input.GetAxis("Vertical");
+
                 if (!mouse_steering) {
                     ship.rotation         += ship.self.angular_vel * current_time;
                     if(Input.GetKey("left ctrl")) horizontal_movement = Input.GetAxis("Horizontal");
@@ -146,16 +250,16 @@ namespace Scripts {
                     horizontal_movement = -Input.GetAxis("Horizontal");
                     Vector3 RelPos = camera_controller.get_rel_pos(new Vector3(ship.self.posx, ship.self.posy, 0.0f));
 
-                    float dx = Input.mousePosition.x - RelPos.x;
-                    float dy = Input.mousePosition.y - RelPos.y;
+                    float dx    = Input.mousePosition.x - RelPos.x;
+                    float dy    = Input.mousePosition.y - RelPos.y;
 
-                    float d  = (float)Math.Sqrt(dx * dx + dy * dy);
+                    float angle = Tools.get_angle(dx, dy);
 
-                    float angle = (float)Math.Acos(dx / d);
-
-                    if (dy < 0.0f) angle = 2.0f * 3.1415926f - angle;
-
-                    ship.rotate_to(angle, current_time);
+                    if(turn_towards_mouse) ship.rotate_to(angle, current_time);
+                    else if(Input.GetMouseButton(0)) {
+                        direction     = angle;
+                        move_to_mouse = true;
+                    }
                 }
 
                 if(Input.GetKey("q")) sail_angle += sail_speed * current_time;
@@ -163,19 +267,62 @@ namespace Scripts {
 
                 rotation_change -= ship.rotation;
 
-                float movement = Input.GetAxis("Vertical");
                 if (movement == 0.0f && Input.GetKey("w")) movement =  1.0f;
                 if (movement == 0.0f && Input.GetKey("s")) movement = -1.0f;
 
-                float accx = (float)Math.Cos(ship.rotation) * movement * ship.acceleration;
-                float accy = (float)Math.Sin(ship.rotation) * movement * ship.acceleration;
+                float cos  = (float)Math.Cos(ship.rotation);
+                float sin  = (float)Math.Sin(ship.rotation);
 
-                accx += (float)Math.Sin(ship.rotation) * horizontal_movement * ship.horizontal_acceleration;
-                accy -= (float)Math.Cos(ship.rotation) * horizontal_movement * ship.horizontal_acceleration;
+                if(move_to_mouse) {
 
-                accx *= current_time;
-                accy *= current_time;
-            
+                    //  ax
+                    // --- = cos(dir)
+                    //  a 
+
+                    //  ay
+                    // --- = sin(dir)
+                    //  a
+
+                    // a = √(ax² + ay²)
+
+                    // ax = t * (cos(rot) * a1 * m1 - sin(rot) * a2 * m2)
+
+                    // ay = t * (sin(rot) * a1 * m1 + cos(rot) * a2 * m2)
+
+                    // m1² + m2² = 1
+
+                    // m2 = √(1 - m1²)
+
+                    //                                 t * cos(rot) * a1 * m1 - sin(rot) * a2 * √(1 - m1²)
+                    // --------------------------------------------------------------------------------------------------------------------- = cos(dir)
+                    // √((t * (cos(rot) * a1 * m1 - sin(rot) * a2 * √(1 - m1²)))² + (t * (sin(rot) * a1 * m1 + cos(rot) * a2 * √(1 - m1²)))²)
+
+                    //                        a2 * √(cos(2dir ± 2rot) + 1)
+                    // m1 = ± --------------------------------------------------------------
+                    //        √(a1² * (1 - cos(2dir ± 2rot)) + a2² * (1 + cos(2dir ± 2rot)))
+
+                    // todo: solve this optimized version later
+                    //       for now using version that only uses main thruster
+
+                    /*float dirrot = 2 * direction + 2 * ship.rotation; // could be - too
+                    float cosdirrot = (float)Math.Cos(dirrot);
+
+                    movement  = ship.horizontal_acceleration * (float)Math.Sqrt(cosdirrot + 1);
+                    movement /= (float)Math.Sqrt(ship.acceleration            * ship.acceleration            * (1 - cosdirrot)
+                             +                   ship.horizontal_acceleration * ship.horizontal_acceleration * (1 + cosdirrot));
+
+                    horizontal_movement = (float)Math.Sqrt(1 - movement * movement);*/
+
+                    movement = 1.0f;
+
+                    cos = (float)Math.Cos(direction);
+                    sin = (float)Math.Sin(direction);
+
+                }
+
+                float accx = (cos * movement * ship.acceleration - sin * horizontal_movement * ship.horizontal_acceleration) * current_time;
+                float accy = (sin * movement * ship.acceleration + cos * horizontal_movement * ship.horizontal_acceleration) * current_time;
+
                 /*
                  * if (horizontal_movement != 0.0f && movement != 0.0f) {
                  *     accx *= Tools.rsqrt2;
@@ -199,16 +346,22 @@ namespace Scripts {
 
                     // "Air resistance" effect
                     if(magnitude > drag_cutoff) {
+                        // Drag cutoff as a vector facing the same direction as velocity
                         float cutoff_x = drag_cutoff * ship.self.velx / magnitude;
                         float cutoff_y = drag_cutoff * ship.self.vely / magnitude;
-
+                        
+                        // Effective velocity = velocity - drag cutoff, this is the part of the velocity
+                        // that we care about for calculating the drag;
                         float effective_vel_x = ship.self.velx - cutoff_x;
                         float effective_vel_y = ship.self.vely - cutoff_y;
 
-                        float drag_x = effective_vel_x * (quadratic_drag ? effective_vel_x : 1.0f)
-                                     * -current_time  / (gravitational_factor + drag_factor);
-                        float drag_y = effective_vel_y * (quadratic_drag ? effective_vel_y : 1.0f)
-                                     * -current_time  / (gravitational_factor + drag_factor);
+                        float drag_x = effective_vel_x * -current_time / (gravitational_factor + drag_factor);
+                        float drag_y = effective_vel_y * -current_time / (gravitational_factor + drag_factor);
+
+                        if(quadratic_drag) {
+                            drag_x *= effective_vel_x;
+                            drag_y *= effective_vel_y;
+                        }
 
                         ship.self.velx *= 1.0f + drag_x;
                         ship.self.vely *= 1.0f + drag_y;
@@ -235,7 +388,7 @@ namespace Scripts {
 
                 if (render_orbit) {
                     if (ship.descriptor.central_body == null)
-                        ship.descriptor.central_body = state.star;
+                        ship.descriptor.central_body = state.stars[0].self;
 
                     SpaceObject strongest_gravity_object = null;
                     float g = 0.0f;
@@ -254,7 +407,7 @@ namespace Scripts {
                         }
                     }
 
-                    if (strongest_gravity_object != null)
+                    if(strongest_gravity_object != null)
                         ship.descriptor.change_frame_of_reference(strongest_gravity_object);
 
                     ship.path_planned = true;

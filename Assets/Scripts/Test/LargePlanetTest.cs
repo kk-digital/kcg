@@ -73,7 +73,7 @@ namespace Planet.Unity
             GameResources.CreateItems(Planet.EntitasContext);
 
             GenerateMap();
-            Player = Planet.AddPlayer(new Vec2f(3.0f, 1805));
+            Player = Planet.AddPlayer(new Vec2f(3.0f, 1605));
             PlayerID = Player.agentID.ID;
             //SpawnStuff();
 

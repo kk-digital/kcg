@@ -20,7 +20,7 @@ namespace Scripts {
 
             public void update_renderer(int segments) {
                 if(line_renderer == null) return;
-                if(descriptor == null || descriptor.eccentricity >= 1.0f) {
+                if(descriptor == null) {
                     line_renderer.positionCount = 0;
                     line_renderer.startWidth = line_renderer.endWidth = 0.0f;
                     return;
@@ -32,8 +32,9 @@ namespace Scripts {
                     float true_anomaly;
 
                     if(descriptor.eccentricity >= 1.0f)
-                        true_anomaly = -descriptor.true_anomaly_asymptote
-                                     +  descriptor.true_anomaly_asymptote * 2.0f * i / segments;
+                        // 0.002f "safety" margin otherwise there is an unpleasant flickering
+                        true_anomaly = -descriptor.true_anomaly_asymptote + 0.001f
+                                     + (descriptor.true_anomaly_asymptote - 0.002f) * 2.0f * i / segments;
                     else
                         true_anomaly = descriptor.get_true_anomaly(
                             descriptor.get_eccentric_anomaly_at(

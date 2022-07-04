@@ -11,8 +11,10 @@ namespace Scripts {
             WEAPON_LASER      = 1 << 1,
             WEAPON_BROADSIDE  = 1 << 2,
             WEAPON_TURRET     = 1 << 3,
-            WEAPON_POSX       = 1 << 4,       // Left  = flags & WEAPON_POSX, right = ~flags & WEAPON_POSX
-            WEAPON_POSY       = 1 << 5        // front = flags & WEAPON_POSY, back  = ~flags & WEAPON_POSY
+            WEAPON_ROCKET     = 1 << 4,
+            WEAPON_SEEKING    = 1 << 5,       // Projectiles that seek nearby enemies
+            WEAPON_POSX       = 1 << 6,       // Left  = flags & WEAPON_POSX, right = ~flags & WEAPON_POSX
+            WEAPON_POSY       = 1 << 7,       // front = flags & WEAPON_POSY, back  = ~flags & WEAPON_POSY
         }
 
         public class ShipWeapon {
@@ -31,6 +33,7 @@ namespace Scripts {
 
             public float last_x;
             public float last_y;
+            public float acc;
 
             public int damage;
 
@@ -103,6 +106,11 @@ namespace Scripts {
                 projectile.HullDamageMultiplier   = hull_damage_multiplier;
 
                 projectile.Damage = damage;
+
+                projectile.seeking = (flags & (int)WeaponFlags.WEAPON_SEEKING) != 0;
+                projectile.rocket  = (flags & (int)WeaponFlags.WEAPON_ROCKET)  != 0;
+                projectile.acc     = acc;
+                projectile.state   = state;
 
                 projectiles_fired.Add(projectile);
 
@@ -250,6 +258,11 @@ namespace Scripts {
                     projectile.ShieldPenetration = shield_penetration;
 
                     projectile.Damage = damage;
+
+                    projectile.seeking = (flags & (int)WeaponFlags.WEAPON_SEEKING) != 0;
+                    projectile.rocket  = (flags & (int)WeaponFlags.WEAPON_ROCKET)  != 0;
+                    projectile.acc     = acc;
+                    projectile.state   = state;
 
                     projectiles_fired.Add(projectile);
                 }

@@ -105,7 +105,7 @@ namespace Planet.Unity
                 int x = (int)worldPosition.x;
                 int y = (int)worldPosition.y;
                 Debug.Log(x + " " + y);
-                PlanetState.TileMap.RemoveTile(x, y, Enums.Tile.MapLayerType.Front);
+                PlanetState.TileMap.RemoveFrontTile(x, y);
                 //TileMap.Layers.BuildLayerTexture(TileMap, Enums.Tile.MapLayerType.Front);
                 
             }
@@ -116,7 +116,7 @@ namespace Planet.Unity
             AgentProcessCollisionSystem.Update(Contexts.sharedInstance.agent, ref PlanetState.TileMap);
 
             AgentMeshBuilderSystem.UpdateMesh(Contexts.sharedInstance.agent);
-            PlanetState.TileMap.UpdateLayerMesh(MapLayerType.Front);
+            PlanetState.TileMap.UpdateFrontLayerMesh();
 
             PlanetState.TileMap.DrawLayer(MapLayerType.Front);
             Utility.Render.DrawFrame(ref AgentMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Agent));
@@ -134,15 +134,15 @@ namespace Planet.Unity
             GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Items\\Ores\\Gems\\Hexagon\\gem_hexagon_1.png", 16, 16);
 
 
-            GameState.TileCreationApi.CreateTile(TileID.Ore1);
-            GameState.TileCreationApi.SetTileName("ore_1");
-            GameState.TileCreationApi.SetTileTexture16(oreTileSheet, 0, 0);
-            GameState.TileCreationApi.EndTile();
+            GameState.TileCreationApi.CreateTileProperty(TileID.Ore1);
+            GameState.TileCreationApi.SetTilePropertyName("ore_1");
+            GameState.TileCreationApi.SetTilePropertyTexture16(oreTileSheet, 0, 0);
+            GameState.TileCreationApi.EndTileProperty();
 
-            GameState.TileCreationApi.CreateTile(TileID.Glass);
-            GameState.TileCreationApi.SetTileName("glass");
-            GameState.TileCreationApi.SetTileSpriteSheet16(tilesMoon, 11, 10);
-            GameState.TileCreationApi.EndTile();
+            GameState.TileCreationApi.CreateTileProperty(TileID.Glass);
+            GameState.TileCreationApi.SetTilePropertyName("glass");
+            GameState.TileCreationApi.SetTilePropertySpriteSheet16(tilesMoon, 11, 10);
+            GameState.TileCreationApi.EndTileProperty();
 
 
 
@@ -164,11 +164,10 @@ namespace Planet.Unity
                        frontTile = TileID.Air;
                     }
 
-                    PlanetState.TileMap.SetTile(i, j, frontTile, MapLayerType.Front);
+                    PlanetState.TileMap.SetFrontTile(i, j, frontTile);
                 }
             }
-            
-            PlanetState.TileMap.UpdateTileMapPositions(MapLayerType.Front);
+
             PlanetState.TileMap.InitializeLayerMesh(Material, transform, 7);
         }
     }
