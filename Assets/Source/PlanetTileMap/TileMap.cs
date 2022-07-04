@@ -5,6 +5,9 @@ using KMath;
 using UnityEngine;
 using Utility;
 
+using System;
+using System.Runtime.CompilerServices;
+
 namespace PlanetTileMap
 {
     public struct TileMap
@@ -16,25 +19,23 @@ namespace PlanetTileMap
         public bool[] NeedsUpdate;
         
         public Vec2i MapSize;
+        public Vec2i ChunkSize;
         
         //Array that maps to Chunk List
         public int[] ChunkIndexLookup;
         //Store Chunks
         public Chunk[] ChunkArray;
+        public Tile[][] TileArray;
         public int ChunkArrayLength;
         public int ChunkArrayCapacity;
 
         public TileMap(Vec2i mapSize)
         {
             ChunkArrayLength = 0;
-            
-            var chunkSizeX = mapSize.X >> 4;
-            var chunkSizeY = mapSize.Y >> 4;
 
-            if ((chunkSizeX & 0x0f) != 0) chunkSizeX++;
-            if ((chunkSizeY & 0x0f) != 0) chunkSizeY++;
+            ChunkSize = new Vec2i(mapSize.X / 4 + 1, mapSize.Y / 4 + 1);
             
-            ChunkArrayCapacity = chunkSizeX + chunkSizeY;
+            ChunkArrayCapacity = ChunkSize.X * ChunkSize.Y;
             ChunkIndexLookup = new int[ChunkArrayCapacity];
             ChunkArray = new Chunk[ChunkArrayCapacity];
 
@@ -42,11 +43,25 @@ namespace PlanetTileMap
             
             LayerMeshes = new FrameMesh[LayerCount];
             NeedsUpdate = new bool[LayerCount];
+            TileArray = new Tile[LayerCount][];
 
             for(int layerIndex = 0; layerIndex < LayerCount; layerIndex++)
             {
                 NeedsUpdate[layerIndex] = true;
+                TileArray[layerIndex] = new Tile[MapSize.X * MapSize.Y];
+
+                for(int y = 0; y < MapSize.Y; y++)
+                {
+                    for(int x = 0; x < MapSize.X; x++)
+                    {
+                        int index = x + y * MapSize.X;
+                        TileArray[layerIndex][index].ID = TileID.Air;
+                        TileArray[layerIndex][index].SpriteID = -1;
+                    }
+                }
             }
+            
+
         }
         
         /// <summary>
@@ -62,31 +77,26 @@ namespace PlanetTileMap
 
         #region Tiles
         
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetTile(int x, int y, TileID tileID, MapLayerType planetLayer)
         {
             //if (!IsValid(x, y)) return;
             Utils.Assert(x >= 0 && x < MapSize.X &&
                    y >= 0 && y < MapSize.Y);
 
-            var xChunkIndex = x >> 4;
-            var yChunkIndex = ((y >> 4) * MapSize.X) >> 4;
-            var chunkIndex = xChunkIndex + yChunkIndex;
+            var chunkIndex = (x / 4) + (y / 4) * ChunkSize.X;
 
             ref var chunk = ref ChunkArray[chunkIndex];
             
             if (chunk.Type == MapChunkType.Error)
             {
-                NewEmptyChunk(chunkIndex);
                 if (tileID != TileID.Air) chunk.Type = MapChunkType.NotEmpty;
             }
 
-            var xTileIndex = x & 0x0f;
-            var yTileIndex = y & 0x0f;
-            var tileIndex = xTileIndex + (yTileIndex << 4);
-
-            chunk.TileArray[(int) planetLayer][tileIndex].ID = tileID;
-            chunk.Sequence++;
-            UpdateTile(x, y, planetLayer);
+            //int tileIndex = x + y * MapSize.X;
+            TileArray[(int) planetLayer][x + y * MapSize.X].ID = tileID;
+           // chunk.Sequence++;
+           // UpdateTile(x, y, planetLayer);
         }
 
         public ref Tile GetTileRef(int x, int y, MapLayerType planetLayer)
@@ -99,24 +109,20 @@ namespace PlanetTileMap
             Utils.Assert(x >= 0 && x < MapSize.X &&
                    y >= 0 && y < MapSize.Y);
             
-            var xChunkIndex = x >> 4;
-            var yChunkIndex = ((y >> 4) * MapSize.X) >> 4;
-            var chunkIndex = (xChunkIndex + yChunkIndex);
+            /*var chunkIndex = (x / 4) + (y / 4) * ChunkSize.X;
 
             ref var chunk = ref ChunkArray[chunkIndex];
             
             if (chunk.Type == MapChunkType.Error)
             {
                 return ref AirTile;
-            }
+            }*/
             
-            var xIndex = x & 0x0f;
-            var yIndex = y & 0x0f;
-            var tileIndex = xIndex + (yIndex << 4);
+            var tileIndex = x + (y * MapSize.X);
             
-            chunk.ReadCount++;
+           // chunk.ReadCount++;
             
-            return ref chunk.TileArray[(int) planetLayer][tileIndex];
+            return ref TileArray[(int) planetLayer][tileIndex];
         }
 
         public void RemoveTile(int x, int y, MapLayerType planetLayer)
@@ -143,30 +149,6 @@ namespace PlanetTileMap
         #endregion
         
         #region Chunks
-
-        public int NewEmptyChunk(int chunkArrayIndex) 
-        {
-            int chunkIndex = chunkArrayIndex;
-            ChunkArray[chunkIndex].Type = MapChunkType.Empty;
-            ChunkArray[chunkIndex].TileArray = new Tile[LayerCount][];
-
-            // For each layer...
-            for (int layerIndex = 0; layerIndex < ChunkArray[chunkIndex].TileArray.Length; layerIndex++)
-            {
-                // ... create new tile array and...
-                ChunkArray[chunkIndex].TileArray[layerIndex] = new Tile[256];
-                // ... for each tile in tile array...
-                for (int tileIndex = 0; tileIndex < ChunkArray[chunkIndex].TileArray[layerIndex].Length; tileIndex++)
-                {
-                    // ... set tile to Air
-                    ChunkArray[chunkIndex].TileArray[layerIndex][tileIndex].ID = TileID.Air;
-                    ChunkArray[chunkIndex].TileArray[layerIndex][tileIndex].SpriteID = -1;
-                }
-            }
-            
-            ChunkArrayLength++; //increment
-            return chunkIndex;
-        }
 
         #endregion
 
@@ -271,12 +253,25 @@ namespace PlanetTileMap
 
         public void UpdateLayerMesh(MapLayerType planetLayer)
         {
+            if (Camera.main==null) {Debug.LogError("Camera.main not found, failed to create edge colliders"); return;}
+
+            var cam = Camera.main;
+            if (!cam.orthographic) {Debug.LogError("Camera.main is not Orthographic, failed to create edge colliders"); return;}
+
+            var bottomLeft = (Vector2)cam.ScreenToWorldPoint(new Vector3(0, 0, cam.nearClipPlane));
+            var topLeft = (Vector2)cam.ScreenToWorldPoint(new Vector3(0, cam.pixelHeight, cam.nearClipPlane));
+            var topRight = (Vector2)cam.ScreenToWorldPoint(new Vector3(cam.pixelWidth, cam.pixelHeight, cam.nearClipPlane));
+            var bottomRight = (Vector2)cam.ScreenToWorldPoint(new Vector3(cam.pixelWidth, 0, cam.nearClipPlane));
+            
             LayerMeshes[(int)planetLayer].Clear();
+
             int index = 0;
-            for (int y = 0; y < MapSize.Y; y++)
+            for (int y = (int)(bottomLeft.y - 10); y < MapSize.Y&& y <= (topRight.y + 10); y++)
             {
-                for (int x = 0; x < MapSize.X; x++)
+                for (int x = (int)(bottomLeft.x - 10); x < MapSize.X && x <= (bottomRight.x + 10); x++)
                 {
+                    if (x >= 0  &&y >= 0)
+                    {
                     ref var tile = ref GetTileRef(x, y, planetLayer);
 
                     var spriteId = tile.SpriteID;
@@ -296,6 +291,7 @@ namespace PlanetTileMap
                         // Update Vertices
                         LayerMeshes[(int)planetLayer].UpdateVertex((index * 4), x, y, width, height);
                         index++;
+                    }
                     }
                 }
             }
