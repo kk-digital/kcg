@@ -27,7 +27,14 @@ namespace Particle
             foreach (var entity in entities)
             {
                 int spriteId = entity.particleSprite2D.SpriteId;
-                Vector4 textureCoords = GameState.SpriteAtlasManager.GetSprite(spriteId, Enums.AtlasType.Particle).TextureCoords;
+
+                if (entity.hasParticleAnimation)
+                {
+                    var animation = entity.particleAnimation;
+                    spriteId = animation.State.GetSpriteId();
+                }
+
+                Sprites.Sprite sprite = GameState.SpriteAtlasManager.GetSprite(spriteId, Enums.AtlasType.Particle);
 
                 var pos = entity.particlePosition2D.Position;
                 var x = pos.x;
@@ -36,9 +43,9 @@ namespace Particle
                 var height = entity.particleSprite2D.Size.Y;
 
                 // Update UVs
-                Mesh.UpdateUV(textureCoords, (index) * 4);
+                Mesh.UpdateUV(sprite.TextureCoords, (index) * 4);
                 // Update Vertices
-                Mesh.UpdateVertex((index * 4), x, y, width, height);
+                Mesh.UpdateVertex((index * 4), x, y, width, height, entity.particlePosition2D.Rotation);
                 index++;
             }
         }
