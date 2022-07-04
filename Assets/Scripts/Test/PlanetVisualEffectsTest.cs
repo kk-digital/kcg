@@ -18,7 +18,7 @@ public class PlanetVisualEffectsTest : MonoBehaviour
     {
         planetVisualEffects = new PlanetBackgroundVisualEffects();
 
-        planetVisualEffects.Initialize();
+        planetVisualEffects.Initialize(Material, transform, 1);
 
         Init = true;
     }
@@ -28,7 +28,19 @@ public class PlanetVisualEffectsTest : MonoBehaviour
     {
         if(Init)
         {
-           // Draw The Visual Effects
+            // check if the sprite atlas textures needs to be updated
+            for (int type = 0; type < GameState.SpriteAtlasManager.Length; type++)
+            {
+                GameState.SpriteAtlasManager.UpdateAtlasTexture(type);
+            }
+
+            // check if the tile sprite atlas textures needs to be updated
+            for (int type = 0; type < GameState.TileSpriteAtlasManager.Length; type++)
+            {
+                GameState.TileSpriteAtlasManager.UpdateAtlasTexture(type);
+            }
+
+            // Draw The Visual Effects
             planetVisualEffects.Draw(Material, transform, 1);
         }
     }

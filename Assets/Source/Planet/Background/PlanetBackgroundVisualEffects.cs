@@ -6,20 +6,16 @@ namespace Planet.Background
 {
     public class PlanetBackgroundVisualEffects
     {
-        PlanetBackgroundStarField starField;
         PlanetBackgroundParallaxLayer parallaxLayer;
 
         private bool Init;
 
-        public void Initialize()
+        public void Initialize(Material material, Transform transform, int drawOrder)
         {
             if(GameManager.BackgroundDraw)
             {
-                starField = new Planet.Background.PlanetBackgroundStarField();
                 parallaxLayer = new Planet.Background.PlanetBackgroundParallaxLayer();
-
-                starField.Initialize();
-                parallaxLayer.Initialize();
+                parallaxLayer.Initialize(material, transform);
 
                 Init = true;
             }
@@ -31,8 +27,7 @@ namespace Planet.Background
             {
                 if(GameManager.BackgroundDraw)
                 {
-                    starField.Draw(material, transform, drawOrder);
-                    parallaxLayer.Draw(material, transform, drawOrder);
+                    parallaxLayer.Draw();
                 }
             }
         }
