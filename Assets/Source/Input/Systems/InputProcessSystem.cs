@@ -12,7 +12,9 @@ namespace ECSInput
             var AgentsWithXY = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.ECSInput, AgentMatcher.ECSInputXY));
 
             bool jump = Input.GetKeyDown(KeyCode.UpArrow);
-            bool dash = Input.GetKeyDown(KeyCode.LeftShift);
+            bool dash = Input.GetKeyDown(KeyCode.Space);
+            bool running = Input.GetKey(KeyCode.LeftAlt);
+
             float x = 0.0f;
             if (Input.GetKey(KeyCode.RightArrow))
             {
@@ -31,27 +33,49 @@ namespace ECSInput
                 var input = entity.eCSInputXY;
                 var movable = entity.physicsMovable;
 
-                movable.Acceleration = input.Value * movable.Speed * 50.0f;
-
                 var movementState = entity.agentMovementState;
+                movementState.Running = running;
+
+                if (movementState.Running)
+                {
+                    movable.Acceleration.X = input.Value.X * movable.Speed * 100.0f * 2;
+                }
+                else
+                {
+                    movable.Acceleration.X = input.Value.X * movable.Speed * 100.0f;
+                }
+
+                //movable.AffectedByGravity = false;
+            
 
                 movementState.DashCooldown -= Time.deltaTime;
 
+                if (dash && movementState.DashCooldown <= 0.0f)
+                {
+                    movable.Acceleration.X += 500.0f * x;
+                    movable.Velocity.X = 90.0f * x;
+
+                    movable.Velocity.Y = 0.0f;
+                    movable.Acceleration.Y = 0.0f;
+
+                    movable.Invulnerable = true;
+                    movable.AffectedByGravity = false;
+                    movementState.Dashing = true;
+                    movementState.DashCooldown = 1.0f;
+                }
+
                 if (!movementState.Jumping)
                 {
-                    if (dash && movementState.DashCooldown <= 0.0f)
-                    {
-                        movable.Acceleration.X += 500.0f * x;
-                        movable.Velocity.X = 60.0f * x;
-                        movementState.Dashing = true;
-                        movementState.DashCooldown = 1.5f;
-                    }
-                    else if (jump)
+    
+                    
+                    if (jump && !movementState.Dashing)
                     {
                         movable.Landed = false;
-                        movable.Acceleration.Y += 0.0f;
-                        movable.Velocity.Y = 8.5f;
+                        movable.Acceleration.Y = 100.0f;
+                        movable.Velocity.Y = 11.5f;
                         movementState.Jumping = true;
+                        movable.AffectedByGroundFriction = false;
+                        movementState.JumpCounter++;
                     }
 
                 }
@@ -59,20 +83,29 @@ namespace ECSInput
                 {
                     if (jump && movementState.JumpCounter <= 1)
                     {
-                        movable.Acceleration.Y += 0.0f;
-                        movable.Velocity.Y = 6.5f;
+                        movable.Acceleration.Y = 100.0f;
+                        movable.Velocity.Y = 8.5f;
                         movementState.JumpCounter++;
                     }
                 }
 
-                if (System.Math.Abs(movable.Velocity.X) <= 3.0f)
+                // the end of dashing
+                // we can do this using a fixed amount of time
+                if (System.Math.Abs(movable.Velocity.X) <= 6.0f)
                 {
+                    movable.AffectedByGravity = true;
                     movementState.Dashing = false;
+                    movable.Invulnerable = false;
                 }
+
+                Debug.Log("gravity " + movable.AffectedByGravity);
+                Debug.Log(movementState.Dashing + " " + movable.Invulnerable);
+
                 if (movable.Landed)
                 {
                     movementState.JumpCounter = 0;
                     movementState.Jumping = false;
+                    movable.AffectedByGroundFriction = true;
                 }
 
                 if (movementState.Dashing)

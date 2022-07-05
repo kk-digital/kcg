@@ -9,11 +9,14 @@ namespace Physics
         private void Update(Position2DComponent pos, MovableComponent movable, float deltaTime)
         {
             float Gravity = 800.0f;
-            float MaxAcceleration = 300.0f;
+            float MaxAcceleration = 50.0f;
             // maximum Y velocity
             float MaxVelocityY = 15.0f;
 
-            movable.Acceleration.Y -= Gravity * deltaTime;
+            if (movable.AffectedByGravity)
+            {
+                movable.Acceleration.Y -= Gravity * deltaTime;
+            }
 
             // maximum acceleration in the game
             if (movable.Acceleration.Y <= -MaxAcceleration)
@@ -39,8 +42,20 @@ namespace Physics
 
             Vec2f displacement = 
                     0.5f * movable.Acceleration * (deltaTime * deltaTime) + movable.Velocity * deltaTime;
+            
+            
             Vec2f newVelocity = movable.Acceleration * deltaTime + movable.Velocity;
-            newVelocity.X *= 0.7f;
+
+            if (movable.AffectedByGroundFriction)
+            {
+                // ground friction
+                newVelocity.X *= 0.7f;
+            }
+            else
+            {
+                // air friction
+                newVelocity.X *= 0.7f;
+            }
 
 
             // maximum velocity in the game
