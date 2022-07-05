@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Admin
 {
@@ -33,6 +36,32 @@ namespace Admin
                 return;
 
             manager.AddItem(contexts, SpawnItem(itemID, contexts), agentID.agentInventory.InventoryID);
+        }
+
+        // Chunk Visualizer X Offset
+        public static float chunkVisualizerXOffset = 0.5f;
+
+        // Chunk Visualizer Y Offset
+        public static float chunkVisualizerYOffset = 0.0f;
+
+        // Display Chunk Visualizer
+        public static void DrawChunkVisualizer(PlanetTileMap.TileMap tileMap)
+        {
+            // Draw square to every tile
+            for(int y = 0; y < tileMap.MapSize.Y; y++)
+            {
+                for(int x = 0; x < tileMap.MapSize.X; x++)
+                {
+                    // If chunk is empty/air make it black
+                    if (tileMap.GetFrontTile(x, y).ID == Enums.Tile.TileID.Air)
+                        Gizmos.color = Color.black;
+                    else // If chunk is not empty make it green
+                        Gizmos.color = Color.green;
+
+                    // Draw colored cubes to the editor display (Debug)
+                    Gizmos.DrawCube(new Vector3(x + chunkVisualizerXOffset, y + chunkVisualizerYOffset), new Vector3(1, 1));
+                }
+            }
         }
     }
 }
