@@ -5,6 +5,7 @@ using UnityEngine;
 public class Parallax : MonoBehaviour
 {
     private float length, startPos;
+    private Transform _cam;
     public float parallaxEffect;
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html
@@ -12,14 +13,15 @@ public class Parallax : MonoBehaviour
     {
         startPos = transform.position.x;
         length = GetComponent<MeshRenderer>().bounds.size.x;
+        _cam = Camera.main.transform;
     }
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
-    void LateUpdate()
+    void Update()
     {
-        float temp = (Camera.main.transform.position.x * (1 - parallaxEffect));
-        float dist = (Camera.main.transform.position.x * parallaxEffect);
-        transform.position = new Vector3(startPos * dist, transform.position.y, transform.position.z);
+        float temp = (_cam.position.x * (1 - parallaxEffect));
+        float dist = (_cam.position.x * parallaxEffect);
+        transform.position = new Vector3(startPos + dist, transform.position.y, transform.position.z);
 
         if (temp > startPos + length) startPos += length;
         else if (temp < startPos - length) startPos -= length;

@@ -21,18 +21,24 @@ namespace Planet.Background
         public Utility.FrameMesh Planet;
         public Utility.FrameMesh Space;
         public Utility.FrameMesh Star;
+
         private List<int> PlanetSpriteIDs;
+
         private List<int> StarSpriteIDs;
-        private int SpaceID = 0;
+
         private List<float> planetRandomGridX;
         private List<float> planetRandomGridY;
+
         private List<float> starRandomGridX;
         private List<float> starRandomGridY;
+
+        private int SpaceID = 0;
 
         public void Initialize(Material material, Transform transform)
         {
             PlanetSpriteIDs = new List<int>();
             StarSpriteIDs = new List<int>();
+            StarSpriteIDs.Capacity = 50;
             planetRandomGridX = new List<float>();
             planetRandomGridY = new List<float>();
             starRandomGridX = new List<float>();
@@ -136,13 +142,37 @@ namespace Planet.Background
             StarSpriteIDs.Add(star6ID);
 
             // Set Sprite ID from Sprite Atlas
+            int star7ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(star1Sheet, 2, 3, Enums.AtlasType.BackGround);
+
+            StarSpriteIDs.Add(star7ID);
+
+            // Set Sprite ID from Sprite Atlas
+            int star8ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(star1Sheet, 3, 3, Enums.AtlasType.BackGround);
+
+            StarSpriteIDs.Add(star8ID);
+
+            // Set Sprite ID from Sprite Atlas
+            int star9ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(star1Sheet, 4, 3, Enums.AtlasType.BackGround);
+
+            StarSpriteIDs.Add(star9ID);
+
+            // Set Sprite ID from Sprite Atlas
+            int star10ID = GameState.SpriteAtlasManager.CopySpriteToAtlas(star1Sheet, 4, 0, Enums.AtlasType.BackGround);
+
+            StarSpriteIDs.Add(star10ID);
+
+            // Set Sprite ID from Sprite Atlas
             SpaceID = GameState.SpriteAtlasManager.CopySpriteToAtlas(planetSheet, 0, 0, Enums.AtlasType.BackGround);
 
             Planet = new Utility.FrameMesh("BackgroundGameobjects", material, transform,
                     GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.BackGround), 2);
+            Planet.obj.AddComponent<Parallax>();
+            Planet.obj.GetComponent<Parallax>().parallaxEffect = 0.1f;
 
             Star = new Utility.FrameMesh("Stars", material, transform,
                     GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.BackGround), 1);
+            Star.obj.AddComponent<Parallax>();
+            Star.obj.GetComponent<Parallax>().parallaxEffect = 0.05f;
 
             Space = new Utility.FrameMesh("Space", material, transform,
                     GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.BackGround), 0);
@@ -176,14 +206,17 @@ namespace Planet.Background
             {
                 if (rand1 >= .5)
                 {
-                    starRandomGridX.Add(Random.Range(-20.0f, 20.0f));
-                    starRandomGridY.Add(Random.Range(-20.0f, 20.0f));
+                    starRandomGridX.Add(Random.Range(-10.0f, 10.0f));
+                    starRandomGridY.Add(Random.Range(-10.0f, 10.0f));
                 }
                 else
                 {
                     starRandomGridX.Add(Random.Range(-100.0f, 100.0f));
                     starRandomGridY.Add(Random.Range(-100.0f, 100.0f));
                 }
+
+                int starRandom = Random.Range(0, 10);
+                StarSpriteIDs.Add(StarSpriteIDs[starRandom]);
             }
 
             Init = true;
@@ -249,7 +282,7 @@ namespace Planet.Background
             {
                 int index = 0;
                 Star.Clear();
-                for (int n = 0; n < StarSpriteIDs.Count; n++)
+                for (int n = 0; n < 50; n++)
                 {
                     int spriteId = StarSpriteIDs[n];
 
