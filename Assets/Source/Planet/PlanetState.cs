@@ -8,7 +8,6 @@ using Enums;
 using Item;
 using KMath;
 using UnityEngine;
-using Item;
 
 namespace Planet
 {
@@ -26,9 +25,7 @@ namespace Planet
         public ParticleList ParticleList;
         public ItemParticleList ItemParticleList;
 
-
         public Contexts EntitasContext;
-
 
         public void Init(Vec2i mapSize)
         {
