@@ -113,21 +113,18 @@ namespace Planet.Unity
             GenerateMap();
             SpawnStuff();
 
-            var inventoryAttacher = Inventory.InventoryAttacher.Instance;
-
             inventoryID = Player.agentInventory.InventoryID;
             toolBarID = Player.agentToolBar.ToolBarID;
 
             Admin.AdminAPI.SpawnItem(Enums.ItemType.Gun, Planet.EntitasContext);
             Admin.AdminAPI.SpawnItem(Enums.ItemType.Ore, Planet.EntitasContext);
-            
-            inventoryManager.AddItem(Planet.EntitasContext, Admin.AdminAPI.SpawnItem(Enums.ItemType.PlacementTool, Planet.EntitasContext), toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, Admin.AdminAPI.SpawnItem(Enums.ItemType.RemoveTileTool, Planet.EntitasContext), toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, Admin.AdminAPI.SpawnItem(Enums.ItemType.SpawnEnemySlimeTool, Planet.EntitasContext), toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, Admin.AdminAPI.SpawnItem(Enums.ItemType.MiningLaserTool, Planet.EntitasContext), toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, Admin.AdminAPI.SpawnItem(Enums.ItemType.PipePlacementTool, Planet.EntitasContext), toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, Admin.AdminAPI.SpawnItem(Enums.ItemType.ParticleEmitterPlacementTool, Planet.EntitasContext), toolBarID);
 
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.PlacementTool, Planet.EntitasContext);
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.RemoveTileTool, Planet.EntitasContext);
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.SpawnEnemySlimeTool, Planet.EntitasContext);
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.MiningLaserTool, Planet.EntitasContext);
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.PipePlacementTool, Planet.EntitasContext);
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.ParticleEmitterPlacementTool, Planet.EntitasContext);
 
             // Health Bar Initialize
             healthBarUI = new KGUI.HealthBarUI();
