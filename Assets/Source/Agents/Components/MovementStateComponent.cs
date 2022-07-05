@@ -10,6 +10,7 @@ namespace Agent
         public int JumpCounter;
         public bool Dashing;
         public bool Flying;
+        public bool Running;
 
         public float DashCooldown;
     }

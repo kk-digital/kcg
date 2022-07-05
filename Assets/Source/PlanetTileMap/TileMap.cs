@@ -149,7 +149,7 @@ namespace PlanetTileMap
         }
         public void RemoveMidTile(int x, int y)
         {
-            ref var midTile = ref GetBackTile(x, y);
+            ref var midTile = ref GetMidTile(x, y);
             midTile.ID = TileID.Air;
             midTile.SpriteID = -1;
             ToUpdateTiles.Add(new UpdateTile(new Vec2i(x, y), MapLayerType.Mid));
@@ -157,7 +157,7 @@ namespace PlanetTileMap
         }
         public void RemoveFrontTile(int x, int y)
         {
-            ref var frontTile = ref GetBackTile(x, y);
+            ref var frontTile = ref GetFrontTile(x, y);
             frontTile.ID = TileID.Air;
             frontTile.SpriteID = -1;
             ToUpdateTiles.Add(new UpdateTile(new Vec2i(x, y), MapLayerType.Front));
