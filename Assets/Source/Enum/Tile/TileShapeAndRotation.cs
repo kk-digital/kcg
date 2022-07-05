@@ -5,36 +5,41 @@ namespace Enums.Tile
         Error = 0,
         
         // Empty Block
-        EB_R0,
+        EB,
         
         // FullBlock
-        FB_R0,
-        FB_R1,
-        FB_R2,
-        FB_R3,
-        
+        FB,
+
         // HalfBlock
-        HB_R0,
         HB_R1,
         HB_R2,
         HB_R3,
+        HB_R4,
         
         //TriangleBlock
-        TB_R0,
         TB_R1,
         TB_R2,
         TB_R3,
+        TB_R4,
         
-        //LBlockSection0
-        LBS0_R0,
-        LBS0_R1,
-        LBS0_R2,
-        LBS0_R3,
+        //LBlockTop
+        LBT_R1,
+        LBT_R2,
+        LBT_R3,
+        LBT_R4,
+        LBT_R5,
+        LBT_R6,
+        LBT_R7,
+        LBT_R8,
         
-        //LBlockSection1
-        LBS1_R0,
-        LBS1_R1,
-        LBS1_R2,
-        LBS1_R3,
+        //LBlockBottom
+        LBB_R1,
+        LBB_R2,
+        LBB_R3,
+        LBB_R4,
+        LBB_R5,
+        LBB_R6,
+        LBB_R7,
+        LBB_R8,
     }
 }

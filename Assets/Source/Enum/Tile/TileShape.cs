@@ -1,6 +1,6 @@
 namespace Enums.Tile
 {
-    public enum TileShapeType
+    public enum TileShape
     {
         Error = 0,
         
@@ -8,7 +8,7 @@ namespace Enums.Tile
         FullBlock,
         HalfBlock,
         TriangleBlock,
-        LBlockSection0,
-        LBlockSection1,
+        LBlockTop,
+        LBlockBottom,
     }
 }
