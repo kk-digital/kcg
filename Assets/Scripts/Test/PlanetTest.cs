@@ -89,9 +89,40 @@ namespace Planet.Unity
                 // Fuel Bar Update
                 fuelBarUI.Update();
 
-                // OxygenBar Update
+                // Oxygen Bar Update
                 oxygenBarUI.Update();
             }
+        }
+
+        private void OnDrawGizmos()
+        {
+            // Set the color of gizmos
+            Gizmos.color = Color.green;
+            
+            // Draw a cube around the map
+            Gizmos.DrawWireCube(Vector3.zero, new Vector3(Planet.TileMap.MapSize.X, Planet.TileMap.MapSize.Y, 0.0f));
+
+            // Draw lines around player if out of bounds
+            if (Player != null)
+                if(Player.physicsPosition2D.Value.X -10.0f >= Planet.TileMap.MapSize.X)
+                {
+                    // Out of bounds
+                
+                    // X+
+                    Gizmos.DrawLine(new Vector3(Player.physicsPosition2D.Value.X, Player.physicsPosition2D.Value.Y, 0.0f), new Vector3(Player.physicsPosition2D.Value.X + 10.0f, Player.physicsPosition2D.Value.Y));
+
+                    // X-
+                    Gizmos.DrawLine(new Vector3(Player.physicsPosition2D.Value.X, Player.physicsPosition2D.Value.Y, 0.0f), new Vector3(Player.physicsPosition2D.Value.X - 10.0f, Player.physicsPosition2D.Value.Y));
+
+                    // Y+
+                    Gizmos.DrawLine(new Vector3(Player.physicsPosition2D.Value.X, Player.physicsPosition2D.Value.Y, 0.0f), new Vector3(Player.physicsPosition2D.Value.X, Player.physicsPosition2D.Value.Y + 10.0f));
+
+                    // Y-
+                    Gizmos.DrawLine(new Vector3(Player.physicsPosition2D.Value.X, Player.physicsPosition2D.Value.Y, 0.0f), new Vector3(Player.physicsPosition2D.Value.X, Player.physicsPosition2D.Value.Y - 10.0f));
+                }
+
+            // Draw Chunk Visualizer
+            Admin.AdminAPI.DrawChunkVisualizer(Planet.TileMap);
         }
 
         // create the sprite atlas for testing purposes
@@ -113,28 +144,20 @@ namespace Planet.Unity
             GenerateMap();
             SpawnStuff();
 
-            var inventoryAttacher = Inventory.InventoryAttacher.Instance;
-
             inventoryID = Player.agentInventory.InventoryID;
             toolBarID = Player.agentToolBar.ToolBarID;
 
-            ItemEntity gun = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.Gun);
-            ItemEntity ore = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.Ore);
-            ItemEntity placementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.PlacementTool);
-            ItemEntity removeTileTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.RemoveTileTool);
-            ItemEntity spawnEnemySlimeTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.SpawnEnemySlimeTool);
-            ItemEntity miningLaserTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.MiningLaserTool);
-            ItemEntity pipePlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.PipePlacementTool);
-            ItemEntity particleEmitterPlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.ParticleEmitterPlacementTool);
+            // Admin API Spawn Items
+            Admin.AdminAPI.SpawnItem(Enums.ItemType.Gun, Planet.EntitasContext);
+            Admin.AdminAPI.SpawnItem(Enums.ItemType.Ore, Planet.EntitasContext);
 
-
-            inventoryManager.AddItem(Planet.EntitasContext, placementTool, toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, removeTileTool, toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, spawnEnemySlimeTool, toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, miningLaserTool, toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, pipePlacementTool, toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, particleEmitterPlacementTool, toolBarID);
-
+            // Admin API Add Items
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.PlacementTool, Planet.EntitasContext);
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.RemoveTileTool, Planet.EntitasContext);
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.SpawnEnemySlimeTool, Planet.EntitasContext);
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.MiningLaserTool, Planet.EntitasContext);
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.PipePlacementTool, Planet.EntitasContext);
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.ParticleEmitterPlacementTool, Planet.EntitasContext);
 
             // Health Bar Initialize
             healthBarUI = new KGUI.HealthBarUI();
@@ -304,6 +327,5 @@ namespace Planet.Unity
             GameState.ItemSpawnSystem.SpawnItem(Planet.EntitasContext, Enums.ItemType.Gun, new Vec2f(6.0f, spawnHeight));
             GameState.ItemSpawnSystem.SpawnItem(Planet.EntitasContext, Enums.ItemType.Ore, new Vec2f(10.0f, spawnHeight));
         }
-        
     }
 }
