@@ -118,22 +118,15 @@ namespace Planet.Unity
             inventoryID = Player.agentInventory.InventoryID;
             toolBarID = Player.agentToolBar.ToolBarID;
 
-            ItemEntity gun = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.Gun);
-            ItemEntity ore = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.Ore);
-            ItemEntity placementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.PlacementTool);
-            ItemEntity removeTileTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.RemoveTileTool);
-            ItemEntity spawnEnemySlimeTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.SpawnEnemySlimeTool);
-            ItemEntity miningLaserTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.MiningLaserTool);
-            ItemEntity pipePlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.PipePlacementTool);
-            ItemEntity particleEmitterPlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.ParticleEmitterPlacementTool);
-
-
-            inventoryManager.AddItem(Planet.EntitasContext, placementTool, toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, removeTileTool, toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, spawnEnemySlimeTool, toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, miningLaserTool, toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, pipePlacementTool, toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, particleEmitterPlacementTool, toolBarID);
+            Admin.AdminAPI.SpawnItem(Enums.ItemType.Gun, Planet.EntitasContext);
+            Admin.AdminAPI.SpawnItem(Enums.ItemType.Ore, Planet.EntitasContext);
+            
+            inventoryManager.AddItem(Planet.EntitasContext, Admin.AdminAPI.SpawnItem(Enums.ItemType.PlacementTool, Planet.EntitasContext), toolBarID);
+            inventoryManager.AddItem(Planet.EntitasContext, Admin.AdminAPI.SpawnItem(Enums.ItemType.RemoveTileTool, Planet.EntitasContext), toolBarID);
+            inventoryManager.AddItem(Planet.EntitasContext, Admin.AdminAPI.SpawnItem(Enums.ItemType.SpawnEnemySlimeTool, Planet.EntitasContext), toolBarID);
+            inventoryManager.AddItem(Planet.EntitasContext, Admin.AdminAPI.SpawnItem(Enums.ItemType.MiningLaserTool, Planet.EntitasContext), toolBarID);
+            inventoryManager.AddItem(Planet.EntitasContext, Admin.AdminAPI.SpawnItem(Enums.ItemType.PipePlacementTool, Planet.EntitasContext), toolBarID);
+            inventoryManager.AddItem(Planet.EntitasContext, Admin.AdminAPI.SpawnItem(Enums.ItemType.ParticleEmitterPlacementTool, Planet.EntitasContext), toolBarID);
 
 
             // Health Bar Initialize
