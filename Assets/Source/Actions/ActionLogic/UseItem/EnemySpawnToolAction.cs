@@ -22,7 +22,7 @@ namespace Action
 
         Data data;
 
-        public EnemySpawnToolAction(Contexts entitasContext, int actionID, int agentID) : base(entitasContext, actionID, agentID)
+        public EnemySpawnToolAction(int actionID) : base(actionID)
         {
             data = (Data)ActionPropertyEntity.actionPropertyData.Data;
         }
@@ -41,9 +41,9 @@ namespace Action
     // Factory Method
     public class EnemySpawnActionCreator : ActionCreator
     {
-        public override ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
+        public override ActionBase CreateAction(int actionID)
         {
-            return new EnemySpawnToolAction(entitasContext, actionID, agentID);
+            return new EnemySpawnToolAction(actionID);
         }
     }
 }
