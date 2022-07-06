@@ -8,7 +8,7 @@ namespace Action
     {
         private ItemEntity ItemEntity;
 
-        public DropAction(int actionID) : base(actionID)
+        public DropAction(Contexts entitasContext, int actionID, int agentID) : base(entitasContext, actionID, agentID)
         {
         }
 
@@ -66,9 +66,9 @@ namespace Action
     // Factory Method
     public class DropActionCreator : ActionCreator
     {
-        public override ActionBase CreateAction(int actionID)
+        public override ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
         {
-            return new DropAction(actionID);
+            return new DropAction(entitasContext, actionID, agentID);
         }
     }
 }

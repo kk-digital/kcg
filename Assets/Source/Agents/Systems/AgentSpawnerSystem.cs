@@ -67,6 +67,8 @@ namespace Agent
                 entity.isECSInput = true;
                 entity.AddECSInputXY(new Vec2f(0, 0), false, false);
    
+                entity.AddAgentActionScheduler(new List<int>(), new List<int>());
+
                 // Add Inventory and toolbar.
                 var attacher = Inventory.InventoryAttacher.Instance;
                 attacher.AttachInventoryToAgent(entitasContext, 6, 5, entity);

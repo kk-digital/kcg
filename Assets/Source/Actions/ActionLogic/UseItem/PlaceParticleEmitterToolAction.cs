@@ -22,7 +22,7 @@ namespace Action
 
         Data data;
 
-        public PlaceParticleEmitterToolAction(int actionID) : base(actionID)
+        public PlaceParticleEmitterToolAction(Contexts entitasContext, int actionID, int agentID) : base(entitasContext, actionID, agentID)
         {
             data = (Data)ActionPropertyEntity.actionPropertyData.Data;
         }
@@ -44,9 +44,9 @@ namespace Action
     // Factory Method
     public class PlaceParticleEmitterActionCreator : ActionCreator
     {
-        public override ActionBase CreateAction(int actionID)
+        public override ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
         {
-            return new PlaceParticleEmitterToolAction(actionID);
+            return new PlaceParticleEmitterToolAction(entitasContext, actionID, agentID);
         }
     }
 }

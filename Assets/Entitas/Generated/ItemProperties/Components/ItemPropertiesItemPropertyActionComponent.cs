@@ -11,14 +11,14 @@ public partial class ItemPropertiesEntity {
     public Item.Property.ActionComponent itemPropertyAction { get { return (Item.Property.ActionComponent)GetComponent(ItemPropertiesComponentsLookup.ItemPropertyAction); } }
     public bool hasItemPropertyAction { get { return HasComponent(ItemPropertiesComponentsLookup.ItemPropertyAction); } }
 
-    public void AddItemPropertyAction(Enums.ActionType newActionTypeID) {
+    public void AddItemPropertyAction(int newActionTypeID) {
         var index = ItemPropertiesComponentsLookup.ItemPropertyAction;
         var component = (Item.Property.ActionComponent)CreateComponent(index, typeof(Item.Property.ActionComponent));
         component.ActionTypeID = newActionTypeID;
         AddComponent(index, component);
     }
 
-    public void ReplaceItemPropertyAction(Enums.ActionType newActionTypeID) {
+    public void ReplaceItemPropertyAction(int newActionTypeID) {
         var index = ItemPropertiesComponentsLookup.ItemPropertyAction;
         var component = (Item.Property.ActionComponent)CreateComponent(index, typeof(Item.Property.ActionComponent));
         component.ActionTypeID = newActionTypeID;
