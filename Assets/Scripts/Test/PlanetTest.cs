@@ -58,7 +58,7 @@ namespace Planet.Unity
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
                     GameState.ActionSchedulerSystem.ScheduleAction(Player,
-                        GameState.ActionCreationSystem.CreateAction(Planet.EntitasContext, itemProperty.itemPropertyAction.ActionTypeID));
+                        GameState.ActionCreationSystem.CreateAction(Planet.EntitasContext, itemProperty.itemPropertyAction.ActionTypeID, Player.agentID.ID));
                 }
             }
 

@@ -60,7 +60,7 @@ namespace Item
 
         }
 
-        public void SetAction(Enums.ActionType actionID)
+        public void SetAction(int actionID)
         {
             ItemType.AddItemPropertyAction(actionID);
         }
