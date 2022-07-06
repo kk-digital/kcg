@@ -53,6 +53,7 @@ namespace Particle
                     break;
                 }
             }
+
             if (Found == -1)
             {
                 for (int index = 0; index < LastFreeIndex; index++)
@@ -66,6 +67,7 @@ namespace Particle
                     }
                 }
             }
+            
 
             // increment the LastFreeIndex
             LastFreeIndex = (LastFreeIndex + 1) % Capacity;
@@ -91,7 +93,8 @@ namespace Particle
         // set the IsInitialized field to false
         public void Remove(int particleEmitterId)
         {
-            ParticleEntity entity = Get(particleEmitterId);
+            LastFreeIndex = particleEmitterId;
+            ref ParticleEntity entity = ref List[particleEmitterId];
             entity.Destroy();
             entity = null;
             Size--;

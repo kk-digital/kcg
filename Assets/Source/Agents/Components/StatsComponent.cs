@@ -18,7 +18,7 @@ namespace Agent
         [Range(0, 100)]
         public float Oxygen;
 
-        [Range(0, 100)]
+        [Range(-100, 100)]
         public float Fuel;
 
         public float AttackCooldown;
