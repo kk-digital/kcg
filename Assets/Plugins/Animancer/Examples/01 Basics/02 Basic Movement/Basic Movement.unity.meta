@@ -1,5 +1,10 @@
 fileFormatVersion: 2
 guid: 36642b3968193b449b982f5df88932d3
+<<<<<<< HEAD
+=======
+labels:
+- Example
+>>>>>>> 9d63ac2aade07df62444b68844a62cda2bcaab54
 DefaultImporter:
   externalObjects: {}
   userData: 

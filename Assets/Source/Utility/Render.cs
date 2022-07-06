@@ -73,54 +73,6 @@ namespace Utility
             mesh.SetTriangles(triangles, 0);
         }
 
-        public static void DrawBackground(GameObject gameObject, float x, float y, float w, float h, 
-            Sprites.Sprite sprite)
-        {
-            var tex = sprite.Texture;
-            gameObject.transform.position = new Vector3(x, y, 0.0f);
-            var mr = gameObject.GetComponent<MeshRenderer>();
-            mr.sharedMaterial.SetTexture("_MainTex", tex);
-
-            var mf = gameObject.GetComponent<MeshFilter>();
-            var mesh = mf.sharedMesh;
-
-            List<int> triangles = new List<int>();
-            List<Vector2> uvs = new List<Vector2>();
-            List<Vector3> vertices = new List<Vector3>();
-
-
-            var p0 = new Vector3(x, y, 0);
-            var p1 = new Vector3((x + w), (y + h), 0);
-            var p2 = p0; p2.y = p1.y;
-            var p3 = p1; p3.y = p0.y;
-
-            vertices.Add(p0);
-            vertices.Add(p1);
-            vertices.Add(p2);
-            vertices.Add(p3);
-
-            triangles.Add(0);
-            triangles.Add(2);
-            triangles.Add(1);
-            triangles.Add(0);
-            triangles.Add(1);
-            triangles.Add(3);
-
-            var uv0 = new Vector2(sprite.TextureCoords.x, sprite.TextureCoords.y + sprite.TextureCoords.w);
-            var uv1 = new Vector2(sprite.TextureCoords.x + sprite.TextureCoords.z, sprite.TextureCoords.y);
-            var uv2 = uv0; uv2.y = uv1.y;
-            var uv3 = uv1; uv3.y = uv0.y;
-
-            uvs.Add(uv0);
-            uvs.Add(uv1);
-            uvs.Add(uv2);
-            uvs.Add(uv3);
-
-            mesh.SetVertices(vertices);
-            mesh.SetUVs(0, uvs);
-            mesh.SetTriangles(triangles, 0);
-        }
-
         public static void DrawQuadColor(GameObject gameObject, float x, float y, float w, float h,
             Color color)
         {
