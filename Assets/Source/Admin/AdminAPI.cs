@@ -56,6 +56,7 @@ namespace Admin
                     else // If chunk is not empty make it green
                         Gizmos.color = Color.green;
 
+                    // Draw colored cubes to the editor display (Debug)
                     Gizmos.DrawCube(new Vector3(x + chunkVisualizerXOffset, y + chunkVisualizerYOffset), new Vector3(1, 1));
                 }
             }
