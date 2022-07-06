@@ -18,6 +18,11 @@ namespace Projectile
         public float Speed;
         public Vec2f Acceleration;
         public float DeltaRotation;
+
+        public bool canRamp;
+        public float StartVelocity;
+        public float MaxVelocity;
+        public float rampTime;
     }
 }
 

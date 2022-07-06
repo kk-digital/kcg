@@ -336,6 +336,10 @@ public class GameResources
         GameState.ProjectileCreationApi.SetSpriteId(OreIcon);
         GameState.ProjectileCreationApi.SetSize(new Vec2f(0.5f, 0.5f));
         GameState.ProjectileCreationApi.SetSpeed(20.0f);
+        GameState.ProjectileCreationApi.SetCanRamp(false);
+        GameState.ProjectileCreationApi.SetRampTime(1.0f);
+        GameState.ProjectileCreationApi.SetStartSpeed(1f);
+        GameState.ProjectileCreationApi.SetMaxSpeed(10f);
         GameState.ProjectileCreationApi.SetAcceleration(new Vec2f());
         GameState.ProjectileCreationApi.End();
 

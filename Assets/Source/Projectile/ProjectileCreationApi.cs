@@ -112,6 +112,38 @@ namespace Projectile
             }
         }
 
+        public void SetRampTime(float rampTime)
+        {
+            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
+            {
+                PropertiesArray[CurrentIndex].rampTime = rampTime;
+            }
+        }
+
+        public void SetCanRamp(bool canRamp)
+        {
+            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
+            {
+                PropertiesArray[CurrentIndex].canRamp = canRamp;
+            }
+        }
+
+        public void SetStartSpeed(float StartVelocity)
+        {
+            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
+            {
+                PropertiesArray[CurrentIndex].StartVelocity = StartVelocity;
+            }
+        }
+
+        public void SetMaxSpeed(float MaxVelocity)
+        {
+            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
+            {
+                PropertiesArray[CurrentIndex].MaxVelocity = MaxVelocity;
+            }
+        }
+
         public void SetAcceleration(Vec2f acceleration)
         {
             if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)

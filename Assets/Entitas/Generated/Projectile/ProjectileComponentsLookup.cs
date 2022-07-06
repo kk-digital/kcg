@@ -17,10 +17,11 @@ public static class ProjectileComponentsLookup {
     public const int ProjectileMovable = 6;
     public const int ProjectilePhysicsState2D = 7;
     public const int ProjectilePosition2D = 8;
-    public const int ProjectileSprite2D = 9;
-    public const int ProjectileType = 10;
+    public const int ProjectileRamp = 9;
+    public const int ProjectileSprite2D = 10;
+    public const int ProjectileType = 11;
 
-    public const int TotalComponents = 11;
+    public const int TotalComponents = 12;
 
     public static readonly string[] componentNames = {
         "AnimationState",
@@ -32,6 +33,7 @@ public static class ProjectileComponentsLookup {
         "ProjectileMovable",
         "ProjectilePhysicsState2D",
         "ProjectilePosition2D",
+        "ProjectileRamp",
         "ProjectileSprite2D",
         "ProjectileType"
     };
@@ -46,6 +48,7 @@ public static class ProjectileComponentsLookup {
         typeof(Projectile.MovableComponent),
         typeof(Projectile.PhysicsState2DComponent),
         typeof(Projectile.Position2DComponent),
+        typeof(Projectile.RampComponent),
         typeof(Projectile.Sprite2DComponent),
         typeof(Projectile.TypeComponent)
     };
