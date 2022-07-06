@@ -56,10 +56,6 @@ namespace Admin
                     else // If chunk is not empty make it green
                         Gizmos.color = Color.green;
 
-                    if (!Utility.ObjectMesh.isOnScreen(x, y))
-                        Gizmos.color = Color.blue;
-
-
                     Gizmos.DrawCube(new Vector3(x + chunkVisualizerXOffset, y + chunkVisualizerYOffset), new Vector3(1, 1));
                 }
             }
