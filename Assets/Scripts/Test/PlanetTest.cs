@@ -168,16 +168,19 @@ namespace Planet.Unity
                 for (int i = 0; i < tileMap.MapSize.X; i++)
                 {
                     var frontTileID = TileID.Air;
+                    var backTileID = TileID.Air;
 
                     if (i >= tileMap.MapSize.X / 2)
                     {
                         if (j % 2 == 0 && i == tileMap.MapSize.X / 2)
                         {
                             frontTileID = TileID.Moon;
+                            backTileID = TileID.Background;
                         }
                         else
                         {
                             frontTileID = TileID.Glass;
+                            backTileID = TileID.Background;
                         }
                     }
                     else
@@ -185,10 +188,12 @@ namespace Planet.Unity
                         if (j % 3 == 0 && i == tileMap.MapSize.X / 2 + 1)
                         {
                             frontTileID = TileID.Glass;
+                            backTileID = TileID.Background;
                         }
                         else
                         {
                             frontTileID = TileID.Moon;
+                            backTileID = TileID.Background;
                             /*if ((int) KMath.Random.Mt19937.genrand_int32() % 10 == 0)
                             {
                                 int oreRandom = (int) KMath.Random.Mt19937.genrand_int32() % 3;
@@ -212,6 +217,7 @@ namespace Planet.Unity
 
 
                     tileMap.SetFrontTile(i, j, frontTileID);
+                    tileMap.SetBackTile(i, j, backTileID);
                 }
             }
 
@@ -220,6 +226,7 @@ namespace Planet.Unity
                 for (int j = tileMap.MapSize.Y - 10; j < tileMap.MapSize.Y; j++)
                 {
                     tileMap.SetFrontTile(i, j, TileID.Air);
+                    tileMap.SetBackTile(i, j, TileID.Air);
                 }
             }
 
@@ -247,6 +254,7 @@ namespace Planet.Unity
                 for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
                     tileMap.SetFrontTile(i, j, TileID.Air);
+                    tileMap.SetBackTile(i, j, TileID.Air);
                 }
             }
 

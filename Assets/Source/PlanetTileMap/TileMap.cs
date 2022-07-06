@@ -1,4 +1,4 @@
-﻿﻿
+﻿
 
 using System;
 using Enums.Tile;
@@ -368,11 +368,10 @@ namespace PlanetTileMap
                 UpdateTile(updateTile.Position.X, updateTile.Position.Y, updateTile.Layer);
             }
             ToUpdateTiles.RemoveRange(0, Math.Min(128, ToUpdateTiles.Count));
-
-            Debug.Log(ToUpdateTiles.Count + " are left");
             
         }
 
+            
         public void UpdateMidLayerMesh()
         {
             UpdateLayerMesh(MapLayerType.Mid);
