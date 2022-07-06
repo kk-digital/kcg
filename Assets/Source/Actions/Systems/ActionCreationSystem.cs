@@ -32,6 +32,8 @@ namespace Action
                 actionEntity.AddActionBeginCoolDown(0f);
             }
 
+            //if()
+
             return ActionID++;
         }
 
