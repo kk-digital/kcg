@@ -9,8 +9,7 @@ namespace Action
         public int CreatePickUpAction(Contexts entitasContext, int agentID, int itemID)
         {
             // Pick Up action.
-            int actionID = GameState.ActionCreationSystem.CreateAction(entitasContext,
-                                (int)Enums.ActionType.PickUpAction, agentID);
+            int actionID = GameState.ActionCreationSystem.CreateAction(entitasContext, Enums.ActionType.PickUpAction);
             GameState.ActionCreationSystem.SetItem(entitasContext, actionID, itemID);
             return actionID;
         }

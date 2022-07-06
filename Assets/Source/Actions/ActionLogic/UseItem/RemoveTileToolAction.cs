@@ -7,7 +7,7 @@ namespace Action
 {
     public class RemoveTileToolAction : ActionBase
     {
-        public RemoveTileToolAction(Contexts entitasContext, int actionID, int agentID) : base(entitasContext, actionID, agentID)
+        public RemoveTileToolAction(Contexts entitasContext, int actionID) : base(entitasContext, actionID)
         {
         }
 
@@ -31,9 +31,9 @@ namespace Action
     // Factory Method
     public class RemoveTileActionCreator : ActionCreator
     {
-        public override ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
+        public override ActionBase CreateAction(Contexts entitasContext, int actionID)
         {
-            return new RemoveTileToolAction(entitasContext, actionID, agentID);
+            return new RemoveTileToolAction(entitasContext, actionID);
         }
     }
 }

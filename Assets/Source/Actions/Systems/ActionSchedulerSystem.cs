@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Agent;
 using Entitas;
 using UnityEngine;
 
@@ -14,40 +15,31 @@ namespace Action
 
             foreach (AgentEntity entity in group)
             {
-                if (entity.agentActionScheduler.ActiveActionIDs.Count == 0 && entity.hasAgentAIController)
-                {
-                    if (entity.agentAIController.ActionIDs.Count == 0)
-                        continue;
-                    ScheduleAction(entity);
-                }
-                ExcuteActions(contexts, entity, deltaTime, ref planet);
+                ExcuteActions(entity.agentID.ID, deltaTime, ref planet);
             }
         }
 
-        private void ExcuteActions(Contexts contexts, AgentEntity actorEntity, float deltaTime, ref Planet.PlanetState planet)
+        private void ExcuteActions(int agentID, float deltaTime, ref Planet.PlanetState planet)
         {
-            for (int i = 0; i < actorEntity.agentActionScheduler.ActiveActionIDs.Count; i++)
-            {
-                int actionID = actorEntity.agentActionScheduler.ActiveActionIDs[i];
-                ActionEntity actionEntity = contexts.action.GetEntityWithActionIDID(actionID);
+            var actions = Contexts.sharedInstance.action.GetEntitiesWithActionOwner(agentID);
 
-                if (actionEntity.hasActionExecution)
+            foreach (var action in actions)
+            {
+                if (action.hasActionExecution)
                 {
-                    switch (actionEntity.actionExecution.State)
+                    switch (action.actionExecution.State)
                     {
                         case Enums.ActionState.Entry:
-                            actionEntity.actionExecution.Logic.OnEnter(ref planet);
+                            action.actionExecution.Logic.OnEnter(ref planet);
                             break;
                         case Enums.ActionState.Running:
-                            actionEntity.actionExecution.Logic.OnUpdate(deltaTime, ref planet);
+                            action.actionExecution.Logic.OnUpdate(deltaTime, ref planet);
                             break;
                         case Enums.ActionState.Success:
-                            actionEntity.actionExecution.Logic.OnExit(ref planet);
-                            actorEntity.agentActionScheduler.ActiveActionIDs.RemoveAt(i--);
+                            action.actionExecution.Logic.OnExit(ref planet);
                             break;
                         case Enums.ActionState.Fail:
-                            actionEntity.actionExecution.Logic.OnExit(ref planet);
-                            actorEntity.agentActionScheduler.ActiveActionIDs.RemoveAt(i--);
+                            action.actionExecution.Logic.OnExit(ref planet);
                             break;
                         default:
                             Debug.Log("Not valid Action state.");
@@ -56,6 +48,7 @@ namespace Action
                 }
 
                 /* Code to test AIGridWorld
+                 * Move this inside an action.
                 if (actionDeltaTime > ActionEntity.actionTime.Duration && actionDeltaTime != -1f)
                 {
                     var Effects = ActionEntity.actionGoap.Effects;
@@ -72,15 +65,23 @@ namespace Action
                 */
             }
         }
-        private void ScheduleAction(AgentEntity agentEntity)
+        
+        // Todo: find better way to get next planned actions for the AI. maybe an NextAction component?
+        private void ScheduleAction(GameEntity AgentEntity)
         {
-            int actionID = agentEntity.agentAIController.ActionIDs.Dequeue();  // Get Next Action.
-            agentEntity.agentActionScheduler.ActiveActionIDs.Add(actionID);
+            int actionID = AgentEntity.agentAIController.ActionIDs.Dequeue();  // Get Next Action.
+            ScheduleAction(actionID, AgentEntity.agentID.ID);
         }
 
-        public void ScheduleAction(AgentEntity agentEntity, int actionID)
+        public void ScheduleAction(int actionID, int agentID)
         {
-            agentEntity.agentActionScheduler.ActiveActionIDs.Add(actionID);
+            ActionEntity actionEntity = Contexts.sharedInstance.action.GetEntityWithActionID(actionID);
+            actionEntity.AddActionOwner(agentID);
+        }
+
+        public void ScheduleAction(Enums.ActionType type, int agentID)
+        {
+            ScheduleAction(GameState.ActionCreationSystem.CreateAction(type), agentID);
         }
     }
 }

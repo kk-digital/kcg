@@ -9,35 +9,28 @@ namespace Action
 {
     public class ActionCreationSystem
     {
-
         private static int ActionID;
 
-        public int CreateAction(Contexts entitasContext, int actionTypeID, int agentID)
+        public int CreateAction(Contexts entitasContext, Enums.ActionType actionTypeID)
         {
-            var entityAttribute = entitasContext.actionProperties.GetEntityWithActionProperty(actionTypeID);
+            var entityAttribute = Contexts.sharedInstance.actionProperties.GetEntityWithActionProperty(actionTypeID);
 
-            ActionEntity actionEntity = entitasContext.action.CreateEntity();
-            actionEntity.AddActionID(ActionID, actionTypeID);
+            ActionEntity actionEntity = Contexts.sharedInstance.action.CreateEntity();
             actionEntity.AddActionExecution(
-                entityAttribute.actionPropertyFactory.ActionFactory.CreateAction(entitasContext, ActionID, agentID), 
+                entityAttribute.actionPropertyFactory.ActionFactory.CreateAction(ActionID), 
                 ActionState.Entry);
 
-            // Maybe we should deal with time and CoolDown inside onEntry?
             if (entityAttribute.hasActionPropertyTime)
             {
                 actionEntity.AddActionTime(0f);
-            }
-            if (entityAttribute.hasActionPropertyCoolDown)
-            {
-                actionEntity.AddActionBeginCoolDown(0f);
             }
 
             return ActionID++;
         }
 
-        public void SetItem(Contexts entitasContext, int actionID, int itemID)
+        private void SetItem(int actionID, int itemID)
         {
-            ActionEntity actionEntity = entitasContext.action.GetEntityWithActionIDID(actionID);
+            ActionEntity actionEntity = Contexts.sharedInstance.action.GetEntityWithActionID(actionID);
             actionEntity.AddActionItem(itemID);
         }
     }

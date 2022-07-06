@@ -33,7 +33,7 @@ namespace Planet.Unity
             if (Input.GetKeyDown(KeyCode.T))
             {
                 GameState.ActionSchedulerSystem.ScheduleAction(Player, 
-                    GameState.ActionCreationSystem.CreateAction(Planet.EntitasContext, (int)Enums.ActionType.DropAction, Player.agentID.ID));
+                    GameState.ActionCreationSystem.CreateAction(Planet.EntitasContext, Enums.ActionType.DropAction));
             }
 
             int toolBarID = Player.agentToolBar.ToolBarID;
@@ -49,7 +49,7 @@ namespace Planet.Unity
                     if (Input.GetKeyDown(KeyCode.Mouse0))
                     {
                         GameState.ActionSchedulerSystem.ScheduleAction(Player,
-                            GameState.ActionCreationSystem.CreateAction(Planet.EntitasContext, itemProperty.itemPropertyAction.ActionTypeID, Player.agentID.ID)); 
+                            GameState.ActionCreationSystem.CreateAction(Planet.EntitasContext, itemProperty.itemPropertyAction.ActionTypeID)); 
                     }
                 }
             }

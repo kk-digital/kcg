@@ -14,7 +14,7 @@ namespace Action
 
         Data data;
 
-        public PlaceTileToolAction(Contexts entitasContext, int actionID, int agentID) : base(entitasContext, actionID, agentID)
+        public PlaceTileToolAction(Contexts entitasContext, int actionID) : base(entitasContext, actionID)
         {
             data = (Data)ActionPropertyEntity.actionPropertyData.Data;
         }
@@ -49,9 +49,9 @@ namespace Action
     // Factory Method
     public class PlaceTileActionCreator : ActionCreator
     {
-        public override ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
+        public override ActionBase CreateAction(Contexts entitasContext, int actionID)
         {
-            return new PlaceTileToolAction(entitasContext, actionID, agentID);
+            return new PlaceTileToolAction(entitasContext, actionID);
         }
     }
 }
