@@ -101,35 +101,35 @@ public class GameResources
 
     private static void CreateTiles()
     {
-        GameState.TileCreationApi.CreateTile(TileID.Ore1);
-        GameState.TileCreationApi.SetTileName("ore_1");
-        GameState.TileCreationApi.SetTileTexture16(OreSpriteSheet, 0, 0);
-        GameState.TileCreationApi.EndTile();
+        GameState.TileCreationApi.CreateTileProperty(TileID.Ore1);
+        GameState.TileCreationApi.SetTilePropertyName("ore_1");
+        GameState.TileCreationApi.SetTilePropertyTexture16(OreSpriteSheet, 0, 0);
+        GameState.TileCreationApi.EndTileProperty();
 
-        GameState.TileCreationApi.CreateTile(TileID.Glass);
-        GameState.TileCreationApi.SetTileName("glass");
-        GameState.TileCreationApi.SetTileSpriteSheet16(MoonSpriteSheet, 11, 10);
-        GameState.TileCreationApi.EndTile();
+        GameState.TileCreationApi.CreateTileProperty(TileID.Glass);
+        GameState.TileCreationApi.SetTilePropertyName("glass");
+        GameState.TileCreationApi.SetTilePropertySpriteSheet16(MoonSpriteSheet, 11, 10);
+        GameState.TileCreationApi.EndTileProperty();
 
-        GameState.TileCreationApi.CreateTile(TileID.Moon);
-        GameState.TileCreationApi.SetTileName("moon");
-        GameState.TileCreationApi.SetTileSpriteSheet16(MoonSpriteSheet, 0, 0);
-        GameState.TileCreationApi.EndTile();
+        GameState.TileCreationApi.CreateTileProperty(TileID.Moon);
+        GameState.TileCreationApi.SetTilePropertyName("moon");
+        GameState.TileCreationApi.SetTilePropertySpriteSheet16(MoonSpriteSheet, 0, 0);
+        GameState.TileCreationApi.EndTileProperty();
 
-        GameState.TileCreationApi.CreateTile(TileID.Ore2);
-        GameState.TileCreationApi.SetTileName("ore_2");
-        GameState.TileCreationApi.SetTileTexture16(Ore2SpriteSheet, 0, 0);
-        GameState.TileCreationApi.EndTile();
+        GameState.TileCreationApi.CreateTileProperty(TileID.Ore2);
+        GameState.TileCreationApi.SetTilePropertyName("ore_2");
+        GameState.TileCreationApi.SetTilePropertyTexture16(Ore2SpriteSheet, 0, 0);
+        GameState.TileCreationApi.EndTileProperty();
 
-        GameState.TileCreationApi.CreateTile(TileID.Ore3);
-        GameState.TileCreationApi.SetTileName("ore_3");
-        GameState.TileCreationApi.SetTileTexture16(Ore3SpriteSheet, 0, 0);
-        GameState.TileCreationApi.EndTile();
+        GameState.TileCreationApi.CreateTileProperty(TileID.Ore3);
+        GameState.TileCreationApi.SetTilePropertyName("ore_3");
+        GameState.TileCreationApi.SetTilePropertyTexture16(Ore3SpriteSheet, 0, 0);
+        GameState.TileCreationApi.EndTileProperty();
 
-        GameState.TileCreationApi.CreateTile(TileID.Pipe);
-        GameState.TileCreationApi.SetTileName("pipe");
-        GameState.TileCreationApi.SetTileSpriteSheet16(PipeSpriteSheet, 0, 0);
-        GameState.TileCreationApi.EndTile();
+        GameState.TileCreationApi.CreateTileProperty(TileID.Pipe);
+        GameState.TileCreationApi.SetTilePropertyName("pipe");
+        GameState.TileCreationApi.SetTilePropertySpriteSheet16(PipeSpriteSheet, 0, 0);
+        GameState.TileCreationApi.EndTileProperty();
     }
 
     private static void CreateAnimations()
@@ -285,7 +285,7 @@ public class GameResources
         GameState.ParticleCreationApi.SetName("dust-particle");
         GameState.ParticleCreationApi.SetDecayRate(4.0f);
         GameState.ParticleCreationApi.SetAcceleration(new Vector2(0.0f, 0.0f));
-        GameState.ParticleCreationApi.SetDeltaRotation(130.0f);
+        GameState.ParticleCreationApi.SetDeltaRotation(0);
         GameState.ParticleCreationApi.SetDeltaScale(-1.0f);
         GameState.ParticleCreationApi.SetAnimationType(Animation.AnimationType.Dust);
         GameState.ParticleCreationApi.SetSize(new Vec2f(0.5f, 0.5f));
@@ -323,8 +323,8 @@ public class GameResources
         GameState.ParticleEmitterCreationApi.SetDuration(0.1f);
         GameState.ParticleEmitterCreationApi.SetSpawnRadius(0.1f);
         GameState.ParticleEmitterCreationApi.SetParticleCount(1);
-        GameState.ParticleEmitterCreationApi.SetTimeBetweenEmissions(0.02f);
-        GameState.ParticleEmitterCreationApi.SetVelocityInterval(new Vec2f(2.0f, 0), new Vec2f(4.0f, 0));
+        GameState.ParticleEmitterCreationApi.SetTimeBetweenEmissions(1.02f);
+        GameState.ParticleEmitterCreationApi.SetVelocityInterval(new Vec2f(0.0f, 0), new Vec2f(0.0f, 0));
         GameState.ParticleEmitterCreationApi.End();
     }
 

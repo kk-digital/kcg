@@ -8,7 +8,6 @@ using Enums;
 using Item;
 using KMath;
 using UnityEngine;
-using Item;
 
 namespace Planet
 {
@@ -26,9 +25,7 @@ namespace Planet
         public ParticleList ParticleList;
         public ItemParticleList ItemParticleList;
 
-
         public Contexts EntitasContext;
-
 
         public void Init(Vec2i mapSize)
         {
@@ -218,7 +215,7 @@ namespace Planet
             float targetFps = 30.0f;
             float frameTime = 1.0f / targetFps;
 
-            TimeState.Deficit += deltaTime;
+            /*TimeState.Deficit += deltaTime;
 
             while (TimeState.Deficit >= frameTime)
             {
@@ -228,24 +225,11 @@ namespace Planet
                     TimeState.TickTime++;
 
 
-
-
-
-                    for (int index = 0; index < ProjectileList.Capacity; index++)
-                    {
-                        ProjectileEntity projectile = ProjectileList.List[index];
-                        if (projectile != null)
-                        {
-                            //var position = projectile.Entity.projectilePhysicsState2D;
-                        }
-                    }
-
-
                 }
 
-            }
+            }*/
 
-            // check if the sprite atlas textures needs to be updated
+            // check if the sprite atlas teSetTilextures needs to be updated
             for(int type = 0; type < GameState.SpriteAtlasManager.Length; type++)
             {
                 GameState.SpriteAtlasManager.UpdateAtlasTexture(type);
@@ -259,7 +243,7 @@ namespace Planet
 
             // calling all the systems we have
 
-            GameState.InputProcessSystem.Update(EntitasContext);
+            GameState.InputProcessSystem.Update(ref this);
             GameState.PhysicsMovableSystem.Update(EntitasContext.agent);
             GameState.PhysicsMovableSystem.Update(EntitasContext.item);
             GameState.PhysicsProcessCollisionSystem.Update(EntitasContext.agent, ref TileMap);
@@ -274,9 +258,11 @@ namespace Planet
             GameState.ProjectileMovementSystem.Update(EntitasContext.projectile);
             GameState.ProjectileCollisionSystem.UpdateEx(ref this);
 
+            TileMap.UpdateTiles();
+            
             // Update Meshes.
-            TileMap.UpdateLayerMesh(MapLayerType.Mid);
-            TileMap.UpdateLayerMesh(MapLayerType.Front);
+            TileMap.UpdateMidLayerMesh();
+            TileMap.UpdateFrontLayerMesh();
             GameState.ItemMeshBuilderSystem.UpdateMesh(EntitasContext);
             GameState.AgentMeshBuilderSystem.UpdateMesh(EntitasContext.agent);
             GameState.ProjectileMeshBuilderSystem.UpdateMesh(EntitasContext.projectile);

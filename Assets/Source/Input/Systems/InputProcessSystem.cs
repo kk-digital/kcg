@@ -5,11 +5,16 @@ namespace ECSInput
 {
     public class InputProcessSystem
     {
-        public void Update(Contexts contexts)
+        public void Update(ref Planet.PlanetState planet)
         {
+            Contexts contexts = planet.EntitasContext;
+
             var AgentsWithXY = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.ECSInput, AgentMatcher.ECSInputXY));
 
             bool jump = Input.GetKeyDown(KeyCode.UpArrow);
+            bool dash = Input.GetKeyDown(KeyCode.Space);
+            bool running = Input.GetKey(KeyCode.LeftAlt);
+
             float x = 0.0f;
             if (Input.GetKey(KeyCode.RightArrow))
             {
@@ -22,19 +27,91 @@ namespace ECSInput
 
             foreach (var entity in AgentsWithXY)
             {
-                entity.ReplaceECSInputXY(new Vec2f(x, 0.0f), jump);
+                entity.ReplaceECSInputXY(new Vec2f(x, 0.0f), jump, dash);
 
+                var pos = entity.physicsPosition2D;
                 var input = entity.eCSInputXY;
                 var movable = entity.physicsMovable;
 
-                movable.Acceleration = input.Value * movable.Speed * 50.0f;
-                if (jump)
+                var movementState = entity.agentMovementState;
+                movementState.Running = running;
+
+                if (movementState.Running)
                 {
-                    movable.Acceleration.Y += 100.0f;
-                    movable.Velocity.Y = 5.0f;
+                    movable.Acceleration.X = input.Value.X * movable.Speed * 100.0f * 2;
+                }
+                else
+                {
+                    movable.Acceleration.X = input.Value.X * movable.Speed * 100.0f;
                 }
 
-                entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration);
+                //movable.AffectedByGravity = false;
+            
+
+                movementState.DashCooldown -= Time.deltaTime;
+
+                if (dash && movementState.DashCooldown <= 0.0f)
+                {
+                    movable.Acceleration.X += 500.0f * x;
+                    movable.Velocity.X = 90.0f * x;
+
+                    movable.Velocity.Y = 0.0f;
+                    movable.Acceleration.Y = 0.0f;
+
+                    movable.Invulnerable = true;
+                    movable.AffectedByGravity = false;
+                    movementState.Dashing = true;
+                    movementState.DashCooldown = 1.0f;
+                }
+
+                if (!movementState.Jumping)
+                {
+    
+                    
+                    if (jump && !movementState.Dashing)
+                    {
+                        movable.Landed = false;
+                        movable.Acceleration.Y = 100.0f;
+                        movable.Velocity.Y = 11.5f;
+                        movementState.Jumping = true;
+                        movable.AffectedByGroundFriction = false;
+                        movementState.JumpCounter++;
+                    }
+
+                }
+                else
+                {
+                    if (jump && movementState.JumpCounter <= 1)
+                    {
+                        movable.Acceleration.Y = 100.0f;
+                        movable.Velocity.Y = 8.5f;
+                        movementState.JumpCounter++;
+                    }
+                }
+
+                // the end of dashing
+                // we can do this using a fixed amount of time
+                if (System.Math.Abs(movable.Velocity.X) <= 6.0f)
+                {
+                    movable.AffectedByGravity = true;
+                    movementState.Dashing = false;
+                    movable.Invulnerable = false;
+                }
+
+                Debug.Log("gravity " + movable.AffectedByGravity);
+                Debug.Log(movementState.Dashing + " " + movable.Invulnerable);
+
+                if (movable.Landed)
+                {
+                    movementState.JumpCounter = 0;
+                    movementState.Jumping = false;
+                    movable.AffectedByGroundFriction = true;
+                }
+
+                if (movementState.Dashing)
+                {
+                    planet.AddParticleEmitter(pos.Value, Particle.ParticleEmitterType.DustEmitter);
+                }
 
             }
 

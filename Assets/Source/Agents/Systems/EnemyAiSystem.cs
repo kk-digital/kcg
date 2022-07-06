@@ -21,6 +21,8 @@ namespace Agent
                 foreach (var entity in entities)
                 {
                     var targetPos = closestPlayer.physicsPosition2D;
+                    var targetMovable = closestPlayer.physicsMovable;
+
                     var pos = entity.physicsPosition2D;
                     var movable = entity.physicsMovable;
 
@@ -30,7 +32,7 @@ namespace Agent
                     direction.Y = 0;
                     direction.Normalize();
 
-                    if (entity.hasAgentStats && Len <= 0.6f)
+                    if (entity.hasAgentStats && Len <= 0.6f && !targetMovable.Invulnerable)
                     {
                         Vector2 oppositeDirection = new Vector2(-direction.X, -direction.Y);
                         var stats = entity.agentStats;
@@ -54,17 +56,15 @@ namespace Agent
                         movable.Acceleration = direction * movable.Speed * 25.0f;
                         if (jump)
                         {
-                            movable.Acceleration.Y += 100.0f;
-                            movable.Velocity.Y = 5.0f;
+                            movable.Acceleration.Y = 0.0f;
+                            movable.Velocity.Y = 7.5f;
                         }
 
-                        entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration);
                     }
                     else
                     {
                         //Idle
                         movable.Acceleration = new Vec2f();
-                        entity.ReplacePhysicsMovable(movable.Speed, movable.Velocity, movable.Acceleration);
                     }
 
 

@@ -11,19 +11,21 @@ public partial class AgentEntity {
     public ECSInput.XYComponent eCSInputXY { get { return (ECSInput.XYComponent)GetComponent(AgentComponentsLookup.ECSInputXY); } }
     public bool hasECSInputXY { get { return HasComponent(AgentComponentsLookup.ECSInputXY); } }
 
-    public void AddECSInputXY(KMath.Vec2f newValue, bool newJump) {
+    public void AddECSInputXY(KMath.Vec2f newValue, bool newJump, bool newDash) {
         var index = AgentComponentsLookup.ECSInputXY;
         var component = (ECSInput.XYComponent)CreateComponent(index, typeof(ECSInput.XYComponent));
         component.Value = newValue;
         component.Jump = newJump;
+        component.Dash = newDash;
         AddComponent(index, component);
     }
 
-    public void ReplaceECSInputXY(KMath.Vec2f newValue, bool newJump) {
+    public void ReplaceECSInputXY(KMath.Vec2f newValue, bool newJump, bool newDash) {
         var index = AgentComponentsLookup.ECSInputXY;
         var component = (ECSInput.XYComponent)CreateComponent(index, typeof(ECSInput.XYComponent));
         component.Value = newValue;
         component.Jump = newJump;
+        component.Dash = newDash;
         ReplaceComponent(index, component);
     }
 

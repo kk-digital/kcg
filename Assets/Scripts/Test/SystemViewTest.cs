@@ -49,7 +49,9 @@ namespace Scripts {
             private float CachedPlanetMass =   100000000000000.0f;
             private float CachedMoonMass   =    20000000000000.0f;
 
-            public  bool TrackingPlayer    =                false;
+            public  bool  TrackingPlayer   =                false;
+            public  bool  planet_movement  =                 true;
+            public  bool  n_body_gravity   =                 true;
 
             public  CameraController Camera;
 
@@ -69,8 +71,40 @@ namespace Scripts {
             public void setDragFactor(float f)      { drag_factor     = 100000.0f - f; }
             public void setSailingFactor(float f)   { sailing_factor  =   1000.0f - f; }
 
-            public Dropdown DockingTargetSelector;
+            public void toggle_planet_movement(bool b) {
+                planet_movement = b;
+            }
+
+            public void toggle_n_body_gravity(bool b) {
+                n_body_gravity = b;
+                gravity_renderer.n_body_gravity = b;
+            }
+                
+            public void engage_autopilot() {
+                State.player.ship.engage_orbital_autopilot();
+            }
+
+            public void circularize() {
+                State.player.circularizing = true;
+            }
+
+            public void set_periapsis(String s) {
+                State.player.periapsis = float.Parse(s);
+            }
+
+            public void set_apoapsis(String s) {
+                State.player.apoapsis = float.Parse(s);
+            }
+
+            public void set_rotation(String s) { 
+                State.player.rotation = float.Parse(s) * Tools.pi / 180.0f;
+                while(State.player.rotation > Tools.twopi) State.player.rotation -= Tools.twopi;
+                if   (State.player.rotation <        0.0f) State.player.rotation += Tools.twopi;
+            }
+
+            public  Dropdown DockingTargetSelector;
             private SpaceStation DockingTarget;
+            public  GravityRenderer gravity_renderer;
 
             private void Start() {
                 RegenerateSystem();
@@ -79,7 +113,7 @@ namespace Scripts {
                 StarObject.name = "Star Renderer";
 
                 SystemStarRenderer starRenderer = StarObject.AddComponent<SystemStarRenderer>();
-                starRenderer.Star = State.star;
+                starRenderer.Star = State.stars[0];
 
                 Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
             }
@@ -95,9 +129,12 @@ namespace Scripts {
             public void RegenerateSystem() {
                 LastTime = Time.time;
 
-                State.star.mass = SunMass;
-                State.star.posx = ((float)rnd.NextDouble() * 8.0f - 64.0f) * system_scale;
-                State.star.posy = ((float)rnd.NextDouble() * 8.0f - 4.0f)  * system_scale;
+                State.stars.Clear();
+                State.stars.Add(new SystemStar());
+
+                State.stars[0].self.mass = SunMass;
+                State.stars[0].self.posx = ((float)rnd.NextDouble() * 8.0f - 64.0f) * system_scale;
+                State.stars[0].self.posy = ((float)rnd.NextDouble() * 8.0f - 4.0f)  * system_scale;
 
                 // delete previous system
 
@@ -140,7 +177,7 @@ namespace Scripts {
                 for(int i = 0; i < InnerPlanets; i++) {
                     SystemPlanet Planet = new SystemPlanet();
 
-                    Planet.descriptor.central_body = State.star;
+                    Planet.descriptor.central_body = State.stars[0].self;
 
                     Planet.descriptor.semiminoraxis = (30.0f + (i + 1) * (i + 1) * 10) * system_scale;
                     Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + ((float)rnd.NextDouble() * (i + 5) * system_scale);
@@ -204,7 +241,7 @@ namespace Scripts {
                 for(int i = 0; i < OuterPlanets; i++) {
                     SystemPlanet Planet = new SystemPlanet();
 
-                    Planet.descriptor.central_body = State.star;
+                    Planet.descriptor.central_body = State.stars[0].self;
 
                     //Planet.descriptor.semiminoraxis = InnerAsteroidBeltDescriptor.semimajoraxis + (i + 3) * (i + 3);
                     //Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + (float)rnd.NextDouble() * i / 2.0f;
@@ -300,7 +337,7 @@ namespace Scripts {
                 for(int i = 0; i < FarOrbitPlanets; i++) {
                     SystemPlanet Planet = new SystemPlanet();
 
-                    Planet.descriptor.central_body = State.star;
+                    Planet.descriptor.central_body = State.stars[0].self;
 
                     //Planet.descriptor.semiminoraxis = InnerAsteroidBeltDescriptor.semimajoraxis + (i + 3) * (i + 3);
                     //Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + (float)rnd.NextDouble() * i / 2.0f;
@@ -330,12 +367,12 @@ namespace Scripts {
                 foreach(SystemPlanet Planet in State.planets) {
                     State.objects.Add(Planet.descriptor.self);
                 }
-                State.objects.Add(State.star);
+                State.objects.Add(State.stars[0].self);
 
                 for(int i = 0; i < SpaceStations; i++) {
                     SpaceStation Station = new();
 
-                    Station.descriptor.central_body   = State.star;
+                    Station.descriptor.central_body  = State.stars[0].self;
 
                     Station.descriptor.semiminoraxis = ((float)rnd.NextDouble() * State.planets[InnerPlanets + OuterPlanets - 1].descriptor.semimajoraxis + 4.0f);
                     Station.descriptor.semimajoraxis =  (float)rnd.NextDouble() * system_scale + Station.descriptor.semiminoraxis;
@@ -414,7 +451,7 @@ namespace Scripts {
                 LastTime = Time.time;
 
                 if(CachedSunMass != SunMass) {
-                    State.star.mass = CachedSunMass = SunMass;
+                    State.stars[0].self.mass = CachedSunMass = SunMass;
 
                     for(int i = 0; i < Planets.Count; i++)
                         Planets.ElementAt(i).Key.descriptor.compute();
@@ -439,16 +476,14 @@ namespace Scripts {
                     for(int i = 0; i < Moons.Count; i++)
                         Moons.ElementAt(i).Key.descriptor.self.mass = MoonMass;
                 }
-                
-                /*
-                 * Disabled planet movement as requested
-                 * 
-                foreach(SystemPlanet p in State.planets)
-                    p.descriptor.update_position(CurrentTime);
 
-                foreach(SpaceStation s in State.stations)
-                    s.descriptor.update_position(CurrentTime);
-                */
+                if(planet_movement) {
+                    foreach(SystemPlanet p in State.planets)
+                        p.descriptor.update_position(CurrentTime);
+
+                    foreach(SpaceStation s in State.stations)
+                        s.descriptor.update_position(CurrentTime);
+                }
                 
                 foreach(SystemShip s in State.ships) {
                     if(!s.path_planned)
@@ -462,47 +497,55 @@ namespace Scripts {
                     s.descriptor.update_position(CurrentTime);
                 }
 
-                float maxg = 0.0f;
-                float GravVelX = 0.0f;
-                float GravVelY = 0.0f;
+                State.player.stations_orbiting = planet_movement;
 
-                // this behaves weird when getting really close to central body --- is float too inaccurate?
-                foreach(SpaceObject Body in State.objects) {
-                    float dx = Body.posx - State.player.ship.self.posx;
-                    float dy = Body.posy - State.player.ship.self.posy;
+                if(!State.player.ship.ignore_gravity) {
+                    float maxg = 0.0f;
+                    float GravVelX = 0.0f;
+                    float GravVelY = 0.0f;
 
-                    float d2 = dx * dx + dy * dy;
-                    float d = (float)Math.Sqrt(d2);
+                    // this behaves weird when getting really close to central body --- is float too inaccurate?
+                    foreach(SpaceObject Body in State.objects) {
 
-                    float g = Tools.gravitational_constant * Body.mass / d2;
-                    
-                    if(g > maxg) {
-                        maxg = g;
-                        float vel = g * CurrentTime;
+                        float dx = Body.posx - State.player.ship.self.posx;
+                        float dy = Body.posy - State.player.ship.self.posy;
 
-                        GravVelX = vel * dx / d;
-                        GravVelY = vel * dy / d;
+                        float d2 = dx * dx + dy * dy;
+                        float d = (float)Math.Sqrt(d2);
+
+                        float g = Tools.gravitational_constant * Body.mass / d2;
+
+                        if(n_body_gravity) {
+
+                            float Velocity = g * CurrentTime;
+
+                            GravVelX += Velocity * dx / d;
+                            GravVelY += Velocity * dy / d;
+
+                        } else {
+
+                            if(g > maxg) {
+                                maxg = g;
+                                float vel = g * CurrentTime;
+
+                                GravVelX = vel * dx / d;
+                                GravVelY = vel * dy / d;
+                            }
+
+                        }
+
                     }
 
-                    /*
-                     * Only apply gravity for strongest object
-                     * 
-                    float Velocity = g * CurrentTime;
+                    State.player.gravitational_strength = (float)Math.Sqrt(GravVelX * GravVelX + GravVelY * GravVelY) * 0.4f / CurrentTime;
 
-                    GravVelX += Velocity * dx / d;
-                    GravVelY += Velocity * dy / d;
-                    */
+                    State.player.ship.self.velx   += GravVelX;
+                    State.player.ship.self.vely   += GravVelY;
+
+                    // For some reason this messes stuff up?!
+
+                    //State.Player.ship.self.posx   += GravVelX * CurrentTime * 0.5f;
+                    //State.Player.ship.self.posy   += GravVelY * CurrentTime * 0.5f;
                 }
-
-                State.player.gravitational_strength = (float)Math.Sqrt(GravVelX * GravVelX + GravVelY * GravVelY) * 0.4f / CurrentTime;
-
-                State.player.ship.self.velx   += GravVelX;
-                State.player.ship.self.vely   += GravVelY;
-
-                // For some reason this messes stuff up?!
-
-                //State.Player.ship.self.posx   += GravVelX * CurrentTime * 0.5f;
-                //State.Player.ship.self.posy   += GravVelY * CurrentTime * 0.5f;
 
                 State.player.ship.acceleration = acceleration;
                 State.player.drag_factor       = drag_factor;

@@ -60,11 +60,29 @@ namespace Source {
             }
 
             /*
+             * Returns the distance between two objects
+             */
+            public static float get_distance(float x1, float y1, float x2, float y2) {
+                float dx = x1 - x2;
+                float dy = y1 - y2;
+                return (float)Math.Sqrt(dx * dx + dy * dy);
+            }
+
+            /*
              * Quick and simple function to get the angle a vector points to
              */
             public static float get_angle(float x, float y) {
                 float angle = (float)Math.Acos(x / magnitude(x, y));
                 return y >= 0.0f ? angle : twopi - angle;
+            }
+
+            /*
+             * Clamps an angle between 0 and 2π
+             */
+            public static float normalize_angle(float angle) {
+                while(angle > twopi) angle -= twopi;
+                if   (angle <  0.0f) angle += twopi;
+                return angle;
             }
         }
     }

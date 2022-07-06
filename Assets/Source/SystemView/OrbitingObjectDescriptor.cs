@@ -164,7 +164,6 @@ namespace Source {
                     // E    = E  - ------------------
                     //  n+1    n      1 - ε cos(En)
 
-
                     while(mean <        0.0f) mean  = Tools.twopi + mean;
                     while(mean > Tools.twopi) mean -= Tools.twopi;
 
@@ -201,7 +200,6 @@ namespace Source {
                     //             ε sinh(En) - En - M
                     // E    = E  - -------------------
                     //  n+1    n      ε cosh(En) - 1
-
 
                     while(mean <        0.0f) mean  = Tools.twopi + mean;
                     while(mean > Tools.twopi) mean -= Tools.twopi;
@@ -559,11 +557,11 @@ namespace Source {
 
                     semiminoraxis = semimajoraxis * (float)Math.Sqrt(1.0f - eccentricity * eccentricity);
 
-                    //           e
-                    //            y
-                    // ω = atan( -- )
-                    //           e
-                    //            x
+                    //            e
+                    //             y
+                    // ω = atan( --- )
+                    //            e
+                    //             x
 
                     rotation = (float)Math.Atan(eccentricity_vector[1] / eccentricity_vector[0]);
 
@@ -580,6 +578,15 @@ namespace Source {
                     //
 
                     semiminoraxis = -semimajoraxis * (float)Math.Sqrt(eccentricity * eccentricity - 1.0f);
+
+                    //                e
+                    //                 y
+                    // ω = π + atan( --- )
+                    //                e
+                    //                 x
+
+                    rotation = Tools.pi + (float)Math.Atan(eccentricity_vector[1] / eccentricity_vector[0]);
+
 
                     //        μ
                     // n = √ ---

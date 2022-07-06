@@ -8,7 +8,7 @@ namespace Source {
             public float velx            = 0.0f;
             public float vely            = 0.0f;
             public float angular_vel     = 0.0f;
-
+    
             public float angular_inertia { get { return 0.5f * mass * size * size; } }
         }
     }

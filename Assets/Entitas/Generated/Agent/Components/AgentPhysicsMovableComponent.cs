@@ -11,21 +11,29 @@ public partial class AgentEntity {
     public Physics.MovableComponent physicsMovable { get { return (Physics.MovableComponent)GetComponent(AgentComponentsLookup.PhysicsMovable); } }
     public bool hasPhysicsMovable { get { return HasComponent(AgentComponentsLookup.PhysicsMovable); } }
 
-    public void AddPhysicsMovable(float newSpeed, KMath.Vec2f newVelocity, KMath.Vec2f newAcceleration) {
+    public void AddPhysicsMovable(float newSpeed, KMath.Vec2f newVelocity, KMath.Vec2f newAcceleration, bool newAffectedByGravity, bool newAffectedByGroundFriction, bool newInvulnerable, bool newLanded) {
         var index = AgentComponentsLookup.PhysicsMovable;
         var component = (Physics.MovableComponent)CreateComponent(index, typeof(Physics.MovableComponent));
         component.Speed = newSpeed;
         component.Velocity = newVelocity;
         component.Acceleration = newAcceleration;
+        component.AffectedByGravity = newAffectedByGravity;
+        component.AffectedByGroundFriction = newAffectedByGroundFriction;
+        component.Invulnerable = newInvulnerable;
+        component.Landed = newLanded;
         AddComponent(index, component);
     }
 
-    public void ReplacePhysicsMovable(float newSpeed, KMath.Vec2f newVelocity, KMath.Vec2f newAcceleration) {
+    public void ReplacePhysicsMovable(float newSpeed, KMath.Vec2f newVelocity, KMath.Vec2f newAcceleration, bool newAffectedByGravity, bool newAffectedByGroundFriction, bool newInvulnerable, bool newLanded) {
         var index = AgentComponentsLookup.PhysicsMovable;
         var component = (Physics.MovableComponent)CreateComponent(index, typeof(Physics.MovableComponent));
         component.Speed = newSpeed;
         component.Velocity = newVelocity;
         component.Acceleration = newAcceleration;
+        component.AffectedByGravity = newAffectedByGravity;
+        component.AffectedByGroundFriction = newAffectedByGroundFriction;
+        component.Invulnerable = newInvulnerable;
+        component.Landed = newLanded;
         ReplaceComponent(index, component);
     }
 

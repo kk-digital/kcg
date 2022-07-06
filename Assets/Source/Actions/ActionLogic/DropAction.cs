@@ -35,7 +35,8 @@ namespace Action
 
                 ItemEntity.AddPhysicsPosition2D(pos, pos);
                 ItemEntity.AddPhysicsBox2DCollider(size, Vec2f.Zero);
-                ItemEntity.AddPhysicsMovable(0.0f, new Vec2f(-30.0f, 20.0f), Vec2f.Zero);
+                ItemEntity.AddPhysicsMovable(0.0f, new Vec2f(-30.0f, 20.0f), Vec2f.Zero,
+                                                true, true, false, false);
                 ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Running);
                 return;
 

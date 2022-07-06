@@ -126,13 +126,9 @@ namespace Planet.Unity
                     }
 
 
-                    tileMap.SetTile(i, j, frontTile, MapLayerType.Front);
+                    tileMap.SetFrontTile(i, j, frontTile);
                 }
             }
-
-
-
-            tileMap.UpdateTileMapPositions(MapLayerType.Front);
             //TileMap.BuildLayerTexture(MapLayerType.Front);
         }
     }

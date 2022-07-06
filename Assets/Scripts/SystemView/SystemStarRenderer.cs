@@ -4,7 +4,7 @@ using Source.SystemView;
 namespace Scripts {
     namespace SystemView {
         public class SystemStarRenderer : MonoBehaviour {
-            public SpaceObject Star;
+            public SystemStar Star;
 
             public SpriteRenderer sr;
 
@@ -24,7 +24,7 @@ namespace Scripts {
 
             // Update is called once per frame
             void Update() {
-                sr.transform.position = new Vector3(Star.posx, Star.posy, -0.1f);
+                sr.transform.position = new Vector3(Star.self.posx, Star.self.posy, -0.1f);
                 sr.transform.localScale = new Vector3(10.0f / Camera.scale, 10.0f / Camera.scale, 1.0f);
 
                 sr.color = color;
