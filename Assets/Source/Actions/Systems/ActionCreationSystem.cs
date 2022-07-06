@@ -19,7 +19,7 @@ namespace Action
             ActionEntity actionEntity = entitasContext.action.CreateEntity();
             actionEntity.AddActionID(ActionID, actionTypeID);
             actionEntity.AddActionExecution(
-                entityAttribute.actionPropertyFactory.ActionFactory.CreateAction(entitasContext, ActionID, agentID), 
+                entityAttribute.actionPropertyFactory.ActionFactory.CreateAction(entitasContext, ActionID, agentID),
                 ActionState.Entry);
 
             // Maybe we should deal with time and CoolDown inside onEntry?
@@ -32,8 +32,6 @@ namespace Action
                 actionEntity.AddActionBeginCoolDown(0f);
             }
 
-            //if()
-
             return ActionID++;
         }
 
@@ -44,4 +42,3 @@ namespace Action
         }
     }
 }
-
