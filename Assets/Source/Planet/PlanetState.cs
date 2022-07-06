@@ -136,7 +136,7 @@ namespace Planet
             FloatingTextEntity entity = FloatingTextList.Get(floatingTextId);
             Utils.Assert(entity.isEnabled);
             GameObject.Destroy(entity.floatingTextSprite.GameObject);
-            FloatingTextList.Remove(entity);
+            FloatingTextList.Remove(floatingTextId);
         }
 
         public ParticleEntity AddParticleEmitter(Vec2f position, Particle.ParticleEmitterType type)

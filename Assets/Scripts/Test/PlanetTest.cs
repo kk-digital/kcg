@@ -87,7 +87,7 @@ namespace Planet.Unity
                 waterBarUI.Update();
 
                 // Fuel Bar Update
-                fuelBarUI.Update();
+                fuelBarUI.Update(Player);
 
                 // OxygenBar Update
                 oxygenBarUI.Update();

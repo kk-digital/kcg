@@ -14,6 +14,7 @@ namespace ECSInput
             bool jump = Input.GetKeyDown(KeyCode.UpArrow);
             bool dash = Input.GetKeyDown(KeyCode.Space);
             bool running = Input.GetKey(KeyCode.LeftAlt);
+            bool flying = Input.GetKey(KeyCode.F);
 
             float x = 0.0f;
             if (Input.GetKey(KeyCode.RightArrow))
@@ -32,6 +33,7 @@ namespace ECSInput
                 var pos = entity.physicsPosition2D;
                 var input = entity.eCSInputXY;
                 var movable = entity.physicsMovable;
+                var stats = entity.agentStats;
 
                 var movementState = entity.agentMovementState;
                 movementState.Running = running;
@@ -50,6 +52,7 @@ namespace ECSInput
 
                 movementState.DashCooldown -= Time.deltaTime;
 
+                // dash
                 if (dash && movementState.DashCooldown <= 0.0f)
                 {
                     movable.Acceleration.X += 500.0f * x;
@@ -67,7 +70,7 @@ namespace ECSInput
                 if (!movementState.Jumping)
                 {
     
-                    
+                    // jump
                     if (jump && !movementState.Dashing)
                     {
                         movable.Landed = false;
@@ -81,12 +84,22 @@ namespace ECSInput
                 }
                 else
                 {
+                    // double jump
                     if (jump && movementState.JumpCounter <= 1)
                     {
                         movable.Acceleration.Y = 100.0f;
                         movable.Velocity.Y = 8.5f;
                         movementState.JumpCounter++;
                     }
+                }
+
+                // if the fly button is pressed
+                movementState.Flying = flying && stats.Fuel > 1.0f;
+
+                if (movementState.Flying)
+                {
+                    movable.Acceleration.Y = 0;
+                    movable.Velocity.Y = 3.5f;
                 }
 
                 // the end of dashing
@@ -98,14 +111,30 @@ namespace ECSInput
                     movable.Invulnerable = false;
                 }
 
-                Debug.Log("gravity " + movable.AffectedByGravity);
-                Debug.Log(movementState.Dashing + " " + movable.Invulnerable);
-
                 if (movable.Landed)
                 {
                     movementState.JumpCounter = 0;
                     movementState.Jumping = false;
                     movable.AffectedByGroundFriction = true;
+                }
+
+                if (movementState.Flying)
+                {
+                    stats.Fuel -= 1.0f;
+                    if (stats.Fuel <= 1.0f)
+                    {
+                        stats.Fuel -= 20.0f;
+                    }
+                    planet.AddParticleEmitter(pos.Value, Particle.ParticleEmitterType.DustEmitter);
+                }
+                else
+                {
+                    stats.Fuel += 1.0f;
+                }
+
+                if (stats.Fuel > 100) 
+                {
+                    stats.Fuel = 100;
                 }
 
                 if (movementState.Dashing)

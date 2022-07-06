@@ -67,7 +67,7 @@ public class GUIStatusTest : MonoBehaviour
             waterBarUI.Update();
 
             // Fuel Bar Update
-            fuelBarUI.Update();
+            fuelBarUI.Update(null);
 
             // OxygenBar Update
             oxygenBarUI.Update();

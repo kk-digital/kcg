@@ -60,6 +60,7 @@ namespace Agent
                                      true, true, false, false); // used for physics simulation
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=properties.StartingAnimation});
             entity.AddAgentMovementState(false, 0, false, false, false, 0.0f);
+            entity.AddAgentStats((int)properties.Health, 100, 100, 100, 100, properties.AttackCooldown);
 
             if (agentType == Agent.AgentType.Player)
             {
@@ -81,7 +82,7 @@ namespace Agent
             else if (agentType == Agent.AgentType.Enemy)
             {
                 entity.AddAgentEnemy(properties.EnemyBehaviour, properties.DetectionRadius);
-                entity.AddAgentStats((int)properties.Health, 100, 100, 100, 100, properties.AttackCooldown);
+                
             }
 
             return entity;
