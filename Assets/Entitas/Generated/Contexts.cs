@@ -22,7 +22,6 @@ public partial class Contexts : Entitas.IContexts {
     static Contexts _sharedInstance;
 
     public ActionContext action { get; set; }
-    public ActionCoolDownContext actionCoolDown { get; set; }
     public ActionPropertiesContext actionProperties { get; set; }
     public AgentContext agent { get; set; }
     public AIContext aI { get; set; }
@@ -36,11 +35,10 @@ public partial class Contexts : Entitas.IContexts {
     public ProjectileContext projectile { get; set; }
     public VehicleContext vehicle { get; set; }
 
-    public Entitas.IContext[] allContexts { get { return new Entitas.IContext [] { action, actionCoolDown, actionProperties, agent, aI, floatingText, game, input, inventory, item, itemProperties, particle, projectile, vehicle }; } }
+    public Entitas.IContext[] allContexts { get { return new Entitas.IContext [] { action, actionProperties, agent, aI, floatingText, game, input, inventory, item, itemProperties, particle, projectile, vehicle }; } }
 
     public Contexts() {
         action = new ActionContext();
-        actionCoolDown = new ActionCoolDownContext();
         actionProperties = new ActionPropertiesContext();
         agent = new AgentContext();
         aI = new AIContext();
@@ -82,15 +80,11 @@ public partial class Contexts : Entitas.IContexts {
 //------------------------------------------------------------------------------
 public partial class Contexts {
 
-    public const string ActionID = "ActionID";
-    public const string ActionTypeID = "ActionTypeID";
-    public const string ActionCoolDownTypeID = "ActionCoolDownTypeID";
-    public const string ActionCoolDownAgentID = "ActionCoolDownAgentID";
+    public const string ActionIDID = "ActionIDID";
+    public const string ActionIDTypeID = "ActionIDTypeID";
     public const string ActionItem = "ActionItem";
-    public const string ActionOwner = "ActionOwner";
     public const string ActionProperty = "ActionProperty";
-    public const string ActionPropertyNameTypeName = "ActionPropertyNameTypeName";
-    public const string ActionPropertyNameTypeName = "ActionPropertyNameTypeName";
+    public const string ActionPropertyName = "ActionPropertyName";
     public const string AgentAIController = "AgentAIController";
     public const string AgentID = "AgentID";
     public const string AIGoal = "AIGoal";
@@ -108,55 +102,27 @@ public partial class Contexts {
     [Entitas.CodeGeneration.Attributes.PostConstructor]
     public void InitializeEntityIndices() {
         action.AddEntityIndex(new Entitas.PrimaryEntityIndex<ActionEntity, int>(
-            ActionID,
-            action.GetGroup(ActionMatcher.Action),
-            (e, c) => ((Action.Component)c).ID));
+            ActionIDID,
+            action.GetGroup(ActionMatcher.ActionID),
+            (e, c) => ((Action.IDComponent)c).ID));
 
-        action.AddEntityIndex(new Entitas.EntityIndex<ActionEntity, Enums.ActionType>(
-            ActionTypeID,
-            action.GetGroup(ActionMatcher.Action),
-            (e, c) => ((Action.Component)c).TypeID));
-
-        actionCoolDown.AddEntityIndex(new Entitas.EntityIndex<ActionCoolDownEntity, Enums.ActionType>(
-            ActionCoolDownTypeID,
-            actionCoolDown.GetGroup(ActionCoolDownMatcher.ActionCoolDown),
-            (e, c) => ((Action.CoolDown.Component)c).TypeID));
-
-        actionCoolDown.AddEntityIndex(new Entitas.EntityIndex<ActionCoolDownEntity, int>(
-            ActionCoolDownAgentID,
-            actionCoolDown.GetGroup(ActionCoolDownMatcher.ActionCoolDown),
-            (e, c) => ((Action.CoolDown.Component)c).AgentID));
+        action.AddEntityIndex(new Entitas.EntityIndex<ActionEntity, int>(
+            ActionIDTypeID,
+            action.GetGroup(ActionMatcher.ActionID),
+            (e, c) => ((Action.IDComponent)c).TypeID));
 
         action.AddEntityIndex(new Entitas.PrimaryEntityIndex<ActionEntity, int>(
             ActionItem,
             action.GetGroup(ActionMatcher.ActionItem),
             (e, c) => ((Action.ItemComponent)c).ItemID));
 
-        action.AddEntityIndex(new Entitas.EntityIndex<ActionEntity, int>(
-            ActionOwner,
-            action.GetGroup(ActionMatcher.ActionOwner),
-            (e, c) => ((Action.OwnerComponent)c).AgentID));
-
-        actionProperties.AddEntityIndex(new Entitas.PrimaryEntityIndex<ActionPropertiesEntity, Enums.ActionType>(
+        actionProperties.AddEntityIndex(new Entitas.PrimaryEntityIndex<ActionPropertiesEntity, int>(
             ActionProperty,
             actionProperties.GetGroup(ActionPropertiesMatcher.ActionProperty),
             (e, c) => ((Action.Property.Component)c).TypeID));
 
         actionProperties.AddEntityIndex(new Entitas.PrimaryEntityIndex<ActionPropertiesEntity, string>(
-            ActionPropertyNameTypeName,
-            actionProperties.GetGroup(ActionPropertiesMatcher.ActionPropertyName),
-            (e, c) => ((Action.Property.NameComponent)c).TypeName));
-        actionProperties.AddEntityIndex(new Entitas.PrimaryEntityIndex<ActionPropertiesEntity, string>(
-            ActionPropertyNameTypeName,
-            actionProperties.GetGroup(ActionPropertiesMatcher.ActionPropertyName),
-            (e, c) => ((Action.Property.NameComponent)c).TypeName));
-
-        actionProperties.AddEntityIndex(new Entitas.PrimaryEntityIndex<ActionPropertiesEntity, string>(
-            ActionPropertyNameTypeName,
-            actionProperties.GetGroup(ActionPropertiesMatcher.ActionPropertyName),
-            (e, c) => ((Action.Property.NameComponent)c).TypeName));
-        actionProperties.AddEntityIndex(new Entitas.PrimaryEntityIndex<ActionPropertiesEntity, string>(
-            ActionPropertyNameTypeName,
+            ActionPropertyName,
             actionProperties.GetGroup(ActionPropertiesMatcher.ActionPropertyName),
             (e, c) => ((Action.Property.NameComponent)c).TypeName));
 
@@ -200,7 +166,7 @@ public partial class Contexts {
             itemProperties.GetGroup(ItemPropertiesMatcher.ItemProperty),
             (e, c) => ((Item.Property.Component)c).ItemType));
 
-        itemProperties.AddEntityIndex(new Entitas.EntityIndex<ItemPropertiesEntity, Enums.ActionType>(
+        itemProperties.AddEntityIndex(new Entitas.EntityIndex<ItemPropertiesEntity, int>(
             ItemPropertyAction,
             itemProperties.GetGroup(ItemPropertiesMatcher.ItemPropertyAction),
             (e, c) => ((Item.Property.ActionComponent)c).ActionTypeID));
@@ -229,48 +195,24 @@ public partial class Contexts {
 
 public static class ContextsExtensions {
 
-    public static ActionEntity GetEntityWithActionID(this ActionContext context, int ID) {
-        return ((Entitas.PrimaryEntityIndex<ActionEntity, int>)context.GetEntityIndex(Contexts.ActionID)).GetEntity(ID);
+    public static ActionEntity GetEntityWithActionIDID(this ActionContext context, int ID) {
+        return ((Entitas.PrimaryEntityIndex<ActionEntity, int>)context.GetEntityIndex(Contexts.ActionIDID)).GetEntity(ID);
     }
 
-    public static System.Collections.Generic.HashSet<ActionEntity> GetEntitiesWithActionTypeID(this ActionContext context, Enums.ActionType TypeID) {
-        return ((Entitas.EntityIndex<ActionEntity, Enums.ActionType>)context.GetEntityIndex(Contexts.ActionTypeID)).GetEntities(TypeID);
-    }
-
-    public static System.Collections.Generic.HashSet<ActionCoolDownEntity> GetEntitiesWithActionCoolDownTypeID(this ActionCoolDownContext context, Enums.ActionType TypeID) {
-        return ((Entitas.EntityIndex<ActionCoolDownEntity, Enums.ActionType>)context.GetEntityIndex(Contexts.ActionCoolDownTypeID)).GetEntities(TypeID);
-    }
-
-    public static System.Collections.Generic.HashSet<ActionCoolDownEntity> GetEntitiesWithActionCoolDownAgentID(this ActionCoolDownContext context, int AgentID) {
-        return ((Entitas.EntityIndex<ActionCoolDownEntity, int>)context.GetEntityIndex(Contexts.ActionCoolDownAgentID)).GetEntities(AgentID);
+    public static System.Collections.Generic.HashSet<ActionEntity> GetEntitiesWithActionIDTypeID(this ActionContext context, int TypeID) {
+        return ((Entitas.EntityIndex<ActionEntity, int>)context.GetEntityIndex(Contexts.ActionIDTypeID)).GetEntities(TypeID);
     }
 
     public static ActionEntity GetEntityWithActionItem(this ActionContext context, int ItemID) {
         return ((Entitas.PrimaryEntityIndex<ActionEntity, int>)context.GetEntityIndex(Contexts.ActionItem)).GetEntity(ItemID);
     }
 
-    public static System.Collections.Generic.HashSet<ActionEntity> GetEntitiesWithActionOwner(this ActionContext context, int AgentID) {
-        return ((Entitas.EntityIndex<ActionEntity, int>)context.GetEntityIndex(Contexts.ActionOwner)).GetEntities(AgentID);
+    public static ActionPropertiesEntity GetEntityWithActionProperty(this ActionPropertiesContext context, int TypeID) {
+        return ((Entitas.PrimaryEntityIndex<ActionPropertiesEntity, int>)context.GetEntityIndex(Contexts.ActionProperty)).GetEntity(TypeID);
     }
 
-    public static ActionPropertiesEntity GetEntityWithActionProperty(this ActionPropertiesContext context, Enums.ActionType TypeID) {
-        return ((Entitas.PrimaryEntityIndex<ActionPropertiesEntity, Enums.ActionType>)context.GetEntityIndex(Contexts.ActionProperty)).GetEntity(TypeID);
-    }
-
-    public static ActionPropertiesEntity GetEntityWithActionPropertyNameTypeName(this ActionPropertiesContext context, string TypeName) {
-        return ((Entitas.PrimaryEntityIndex<ActionPropertiesEntity, string>)context.GetEntityIndex(Contexts.ActionPropertyNameTypeName)).GetEntity(TypeName);
-    }
-
-    public static ActionPropertiesEntity GetEntityWithActionPropertyNameTypeName(this ActionPropertiesContext context, string TypeName) {
-        return ((Entitas.PrimaryEntityIndex<ActionPropertiesEntity, string>)context.GetEntityIndex(Contexts.ActionPropertyNameTypeName)).GetEntity(TypeName);
-    }
-
-    public static ActionPropertiesEntity GetEntityWithActionPropertyNameTypeName(this ActionPropertiesContext context, string TypeName) {
-        return ((Entitas.PrimaryEntityIndex<ActionPropertiesEntity, string>)context.GetEntityIndex(Contexts.ActionPropertyNameTypeName)).GetEntity(TypeName);
-    }
-
-    public static ActionPropertiesEntity GetEntityWithActionPropertyNameTypeName(this ActionPropertiesContext context, string TypeName) {
-        return ((Entitas.PrimaryEntityIndex<ActionPropertiesEntity, string>)context.GetEntityIndex(Contexts.ActionPropertyNameTypeName)).GetEntity(TypeName);
+    public static ActionPropertiesEntity GetEntityWithActionPropertyName(this ActionPropertiesContext context, string TypeName) {
+        return ((Entitas.PrimaryEntityIndex<ActionPropertiesEntity, string>)context.GetEntityIndex(Contexts.ActionPropertyName)).GetEntity(TypeName);
     }
 
     public static AgentEntity GetEntityWithAgentAIController(this AgentContext context, int AgentPlannerID) {
@@ -305,8 +247,8 @@ public static class ContextsExtensions {
         return ((Entitas.PrimaryEntityIndex<ItemPropertiesEntity, Enums.ItemType>)context.GetEntityIndex(Contexts.ItemProperty)).GetEntity(ItemType);
     }
 
-    public static System.Collections.Generic.HashSet<ItemPropertiesEntity> GetEntitiesWithItemPropertyAction(this ItemPropertiesContext context, Enums.ActionType ActionTypeID) {
-        return ((Entitas.EntityIndex<ItemPropertiesEntity, Enums.ActionType>)context.GetEntityIndex(Contexts.ItemPropertyAction)).GetEntities(ActionTypeID);
+    public static System.Collections.Generic.HashSet<ItemPropertiesEntity> GetEntitiesWithItemPropertyAction(this ItemPropertiesContext context, int ActionTypeID) {
+        return ((Entitas.EntityIndex<ItemPropertiesEntity, int>)context.GetEntityIndex(Contexts.ItemPropertyAction)).GetEntities(ActionTypeID);
     }
 
     public static System.Collections.Generic.HashSet<ItemEntity> GetEntitiesWithItemType(this ItemContext context, Enums.ItemType Type) {
@@ -341,7 +283,6 @@ public partial class Contexts {
     public void InitializeContextObservers() {
         try {
             CreateContextObserver(action);
-            CreateContextObserver(actionCoolDown);
             CreateContextObserver(actionProperties);
             CreateContextObserver(agent);
             CreateContextObserver(aI);

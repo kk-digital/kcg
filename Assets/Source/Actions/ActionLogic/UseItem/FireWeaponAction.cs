@@ -7,46 +7,30 @@ namespace Action
 {
     public class FireWeaponAction : ActionBase
     {
-        private ItemPropertiesEntity    ItemPropertyEntity;
-        private GameEntity              ItemEntity;
-        private GameEntity              ProjectileEntity;
-        private Vec2f                   StartPos;
+        ProjectileEntity ProjectileEntity;
+        Vec2f StartPos;
 
-        public FireWeaponAction(int actionID) : base(actionID)
+        public FireWeaponAction(Contexts entitasContext, int actionID, int agentID) : base(entitasContext, actionID, agentID)
         {
         }
 
         public override void OnEnter(ref Planet.PlanetState planet)
         {
-            ItemEntity = Contexts.sharedInstance.game.GetEntityWithItemIDID(ActionEntity.actionItem.ItemID);
-            ItemPropertyEntity = Contexts.sharedInstance.itemProperties.GetEntityWithItemProperty(ItemEntity.itemID.ItemType);
+            const float speed = 20.0f;
 
-            int numBullet = ItemEntity.itemFireWeaponClip.numOfBullets;
-            if (numBullet == 0)
-            {
-                Debug.Log("Clip is empty. Press R to reload.");
-                ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
-            }
-
-            ItemEntity.ReplaceItemFireWeaponClip(numBullet--);
-
-            // Get Target.
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float x = worldPosition.x;
             float y = worldPosition.y;
 
-            // Todo: startPos needs to be the tip of the gun.
             // Start positiom
             StartPos = AgentEntity.physicsPosition2D.Value;
             StartPos.X += 0.3f;
             StartPos.Y += 0.5f;
 
-            ProjectileEntity = GameState.ProjectileSpawnerSystem.SpawnBullet(ItemPropertyEntity.itemPropertyFireWeapon.BulletSpriteID, 
-                4, 4, StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized * ItemPropertyEntity.itemPropertyFireWeapon.BulletSpeed,
-                Vec2f.Zero, Enums.ProjectileType.Bullet, Enums.ProjectileDrawType.Standard);
+            ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Bullet);
+           /* ProjectileEntity = GameState.ProjectileSpawnerSystem.SpawnBullet(GameResources.OreIcon, 4, 4, StartPos, 
+                new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized * speed, Vec2f.Zero, Enums.ProjectileType.Bullet, Enums.ProjectileDrawType.Standard);*/
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Running);
-
-            GameState.ActionCoolDownSystem.SetCoolDown(ActionEntity.action.TypeID, AgentEntity.agentID.ID, ItemPropertyEntity.itemPropertyFireWeapon.CoolDown);
         }
 
         public override void OnUpdate(float deltaTime, ref Planet.PlanetState planet)
@@ -114,9 +98,9 @@ namespace Action
     // Factory Method
     public class FireWeaponActionCreator : ActionCreator
     {
-        public override ActionBase CreateAction(int actionID)
+        public override ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
         {
-            return new FireWeaponAction(actionID);
+            return new FireWeaponAction(entitasContext, actionID, agentID);
         }
     }
 }

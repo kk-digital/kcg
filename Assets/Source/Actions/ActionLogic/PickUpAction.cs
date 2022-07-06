@@ -11,7 +11,7 @@ namespace Action
         private float Speed = 3.0f;
         private float aceleration = 0.5f;
 
-        public PickUpAction(int actionID) : base(actionID)
+        public PickUpAction(Contexts entitasContext, int actionID, int agentID) : base(entitasContext, actionID, agentID)
         {
         }
 
@@ -100,9 +100,9 @@ namespace Action
 
     public class PickUpActionCreator : ActionCreator
     {
-        public override ActionBase CreateAction(int actionID)
+        public override ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
         {
-            return new PickUpAction(actionID);
+            return new PickUpAction(entitasContext, actionID, agentID);
         }
     }
 }

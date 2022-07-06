@@ -8,27 +8,27 @@
 //------------------------------------------------------------------------------
 public static class ActionComponentsLookup {
 
-    public const int Action = 0;
+    public const int ActionBeginCoolDown = 0;
     public const int ActionExecution = 1;
-    public const int ActionItem = 2;
-    public const int ActionOwner = 3;
+    public const int ActionID = 2;
+    public const int ActionItem = 3;
     public const int ActionTime = 4;
 
     public const int TotalComponents = 5;
 
     public static readonly string[] componentNames = {
-        "Action",
+        "ActionBeginCoolDown",
         "ActionExecution",
+        "ActionID",
         "ActionItem",
-        "ActionOwner",
         "ActionTime"
     };
 
     public static readonly System.Type[] componentTypes = {
-        typeof(Action.Component),
+        typeof(Action.BeginCoolDownComponent),
         typeof(Action.ExecutionComponent),
+        typeof(Action.IDComponent),
         typeof(Action.ItemComponent),
-        typeof(Action.OwnerComponent),
         typeof(Action.TimeComponent)
     };
 }
