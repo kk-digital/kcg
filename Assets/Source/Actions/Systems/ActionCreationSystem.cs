@@ -9,15 +9,16 @@ namespace Action
 {
     public class ActionCreationSystem
     {
+
         private static int ActionID;
 
         public int CreateAction(Contexts entitasContext, Enums.ActionType actionTypeID)
         {
-            var entityAttribute = Contexts.sharedInstance.actionProperties.GetEntityWithActionProperty(actionTypeID);
+            var entityAttribute = EntitasContext.actionProperties.GetEntityWithActionProperty(actionTypeID);
 
-            ActionEntity actionEntity = Contexts.sharedInstance.action.CreateEntity();
+            ActionEntity actionEntity = EntitasContext.action.CreateEntity();
             actionEntity.AddActionExecution(
-                entityAttribute.actionPropertyFactory.ActionFactory.CreateAction(ActionID), 
+                entityAttribute.actionPropertyFactory.ActionFactory.CreateAction(entitasContext, ActionID), 
                 ActionState.Entry);
 
             if (entityAttribute.hasActionPropertyTime)
@@ -25,12 +26,14 @@ namespace Action
                 actionEntity.AddActionTime(0f);
             }
 
+            if()
+
             return ActionID++;
         }
 
         private void SetItem(int actionID, int itemID)
         {
-            ActionEntity actionEntity = Contexts.sharedInstance.action.GetEntityWithActionID(actionID);
+            ActionEntity actionEntity = EntitasContext.action.GetEntityWithActionID(actionID);
             actionEntity.AddActionItem(itemID);
         }
     }
