@@ -12,27 +12,19 @@ public static class ItemPropertiesComponentsLookup {
     public const int ItemProperty = 1;
     public const int ItemPropertyConsumable = 2;
     public const int ItemPropertyEquipment = 3;
-    public const int ItemPropertyFireWeaponClip = 4;
-    public const int ItemPropertyFireWeapon = 5;
-    public const int ItemPropertyFireWeaponMultiShoot = 6;
-    public const int ItemPropertyFireWeaponRecoil = 7;
-    public const int ItemPropertyInventorySprite = 8;
-    public const int ItemPropertyPlaceable = 9;
-    public const int ItemPropertySize = 10;
-    public const int ItemPropertySprite = 11;
-    public const int ItemPropertyStackable = 12;
+    public const int ItemPropertyInventorySprite = 4;
+    public const int ItemPropertyPlaceable = 5;
+    public const int ItemPropertySize = 6;
+    public const int ItemPropertySprite = 7;
+    public const int ItemPropertyStackable = 8;
 
-    public const int TotalComponents = 13;
+    public const int TotalComponents = 12;
 
     public static readonly string[] componentNames = {
         "ItemPropertyAction",
         "ItemProperty",
         "ItemPropertyConsumable",
         "ItemPropertyEquipment",
-        "ItemPropertyFireWeaponClip",
-        "ItemPropertyFireWeapon",
-        "ItemPropertyFireWeaponMultiShoot",
-        "ItemPropertyFireWeaponRecoil",
         "ItemPropertyInventorySprite",
         "ItemPropertyPlaceable",
         "ItemPropertySize",
@@ -45,10 +37,6 @@ public static class ItemPropertiesComponentsLookup {
         typeof(Item.Property.Component),
         typeof(Item.Property.ConsumableComponent),
         typeof(Item.Property.EquipmentComponent),
-        typeof(Item.Property.FireWeapon.ClipComponent),
-        typeof(Item.Property.FireWeapon.Component),
-        typeof(Item.Property.FireWeapon.MultiShootComponent),
-        typeof(Item.Property.FireWeapon.RecoilComponent),
         typeof(Item.Property.InventorySpriteComponent),
         typeof(Item.Property.PlaceableComponent),
         typeof(Item.Property.SizeComponent),

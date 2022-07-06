@@ -6,8 +6,9 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public partial class ItemPropertiesEntity {
+public partial class GameEntity {
 
+<<<<<<<< HEAD:Assets/Entitas/Generated/ItemProperties/Components/ItemPropertiesItemPropertyEquipmentComponent.cs
     static readonly Item.Property.EquipmentComponent itemPropertyEquipmentComponent = new Item.Property.EquipmentComponent();
 
     public bool isItemPropertyEquipment {
@@ -15,11 +16,24 @@ public partial class ItemPropertiesEntity {
         set {
             if (value != isItemPropertyEquipment) {
                 var index = ItemPropertiesComponentsLookup.ItemPropertyEquipment;
+========
+    static readonly Action.Property.NeedsItemComponent actionPropertyNeedsItemComponent = new Action.Property.NeedsItemComponent();
+
+    public bool ActionPropertyNeedsItem {
+        get { return HasComponent(GameComponentsLookup.ActionPropertyNeedsItem); }
+        set {
+            if (value != ActionPropertyNeedsItem) {
+                var index = GameComponentsLookup.ActionPropertyNeedsItem;
+>>>>>>>> ded95874 (Improve CoolDown System.):Assets/Entitas/Generated/Agent/Components/GameActionPropertyNeedsItemComponent.cs
                 if (value) {
                     var componentPool = GetComponentPool(index);
                     var component = componentPool.Count > 0
                             ? componentPool.Pop()
+<<<<<<<< HEAD:Assets/Entitas/Generated/ItemProperties/Components/ItemPropertiesItemPropertyEquipmentComponent.cs
                             : itemPropertyEquipmentComponent;
+========
+                            : actionPropertyNeedsItemComponent;
+>>>>>>>> ded95874 (Improve CoolDown System.):Assets/Entitas/Generated/Agent/Components/GameActionPropertyNeedsItemComponent.cs
 
                     AddComponent(index, component);
                 } else {
@@ -38,8 +52,9 @@ public partial class ItemPropertiesEntity {
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public sealed partial class ItemPropertiesMatcher {
+public sealed partial class GameMatcher {
 
+<<<<<<<< HEAD:Assets/Entitas/Generated/ItemProperties/Components/ItemPropertiesItemPropertyEquipmentComponent.cs
     static Entitas.IMatcher<ItemPropertiesEntity> _matcherItemPropertyEquipment;
 
     public static Entitas.IMatcher<ItemPropertiesEntity> ItemPropertyEquipment {
@@ -51,6 +66,19 @@ public sealed partial class ItemPropertiesMatcher {
             }
 
             return _matcherItemPropertyEquipment;
+========
+    static Entitas.IMatcher<GameEntity> _matcherActionPropertyNeedsItem;
+
+    public static Entitas.IMatcher<GameEntity> ActionPropertyNeedsItem {
+        get {
+            if (_matcherActionPropertyNeedsItem == null) {
+                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.ActionPropertyNeedsItem);
+                matcher.componentNames = GameComponentsLookup.componentNames;
+                _matcherActionPropertyNeedsItem = matcher;
+            }
+
+            return _matcherActionPropertyNeedsItem;
+>>>>>>>> ded95874 (Improve CoolDown System.):Assets/Entitas/Generated/Agent/Components/GameActionPropertyNeedsItemComponent.cs
         }
     }
 }
