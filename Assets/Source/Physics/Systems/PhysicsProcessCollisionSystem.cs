@@ -15,9 +15,96 @@ namespace Physics
     // http://www.cs.yorku.ca/~amana/research/grid.pdf
     public class PhysicsProcessCollisionSystem
     {
-        private void Update(ref PlanetTileMap.TileMap tileMap, Position2DComponent pos, MovableComponent movable, Box2DColliderComponent box2DColider, float deltaTime)
-{
-            var entityBoxBorders = new AABB2D(new Vec2f(pos.PreviousValue.X, pos.Value.Y) + box2DColider.Offset, box2DColider.Size);
+        private void PlotLineLow(Vec2i start, Vec2i end)
+        {
+            Vec2i delta = end - start;
+
+            int y_inc = 1;
+
+            if (delta.Y < 0)
+            {
+                y_inc = -1;
+
+                delta.Y = -delta.Y;
+            }
+
+            var D = 2 * delta.Y - delta.X;
+            var y = start.Y;
+
+            for (int x = start.X; x <= end.X; x++)
+            {
+                plot(x, y);
+                if (D > 0)
+                {
+                    y += y_inc;
+                    D += 2 * (delta.Y - delta.X);
+                }
+                else
+                {
+                    D += 2 * delta.Y;
+                }
+            }
+        }
+
+        private void PlotLineHigh(Vec2i start, Vec2i end)
+        {
+            Vec2i delta = end - start;
+            
+            int x_inc = 1;
+            if (delta.X < 0)
+            {
+                x_inc = -1;
+                delta.X = -delta.X;
+            }
+
+            var D = 2 * delta.X - delta.Y;
+            var x = start.X;
+
+            for (int y = start.Y; y <= end.Y; y++)
+            {
+                plot(x, y);
+                if (D > 0)
+                {
+                    x += x_inc;
+                    D += 2 * (delta.X - delta.Y);
+
+                }
+                else
+                {
+                    D += 2 * delta.X;
+                }
+            }
+        }
+
+        public void PlotLine(Vec2i start, Vec2i end)
+        {
+            if (System.Math.Abs(end.Y - start.Y) < System.Math.Abs(end.X - start.X))
+            {
+                if (start.X > end.X)
+                {
+                    PlotLineLow(end, start);
+                }
+                else
+                {
+                    PlotLineLow(start, end);
+                }
+            }
+            else
+            {
+                if (start.Y > end.Y)
+                {
+                    PlotLineHigh(end, start);
+                }
+                else
+                {
+                    PlotLineHigh(start, end);
+                }
+            }
+        }
+        
+        private void Update(ref PlanetTileMap.TileMap tileMap, Position2DComponent pos, MovableComponent movable, Box2DColliderComponent box2DCollider, float deltaTime)
+        {       
+            var entityBoxBorders = new AABB2D(new Vec2f(pos.PreviousValue.X, pos.Value.Y) + box2DCollider.Offset, box2DCollider.Size);
 
             if (entityBoxBorders.IsCollidingBottom(tileMap, movable.Velocity))
             {
@@ -33,7 +120,7 @@ namespace Physics
                 movable.Acceleration.Y = 0.0f;
             }
 
-            entityBoxBorders = new AABB2D(new Vec2f(pos.Value.X, pos.PreviousValue.Y) + box2DColider.Offset, box2DColider.Size);
+            entityBoxBorders = new AABB2D(new Vec2f(pos.Value.X, pos.PreviousValue.Y) + box2DCollider.Offset, box2DCollider.Size);
 
             if (entityBoxBorders.IsCollidingLeft(tileMap, movable.Velocity) || entityBoxBorders.IsCollidingRight(tileMap, movable.Velocity))
             {
@@ -48,15 +135,15 @@ namespace Physics
         public void Update(AgentContext agentContext, ref PlanetTileMap.TileMap tileMap)
         {
             float deltaTime = Time.deltaTime;
-            var entitiesWithBox = agentContext.GetGroup(AgentMatcher.AllOf(AgentMatcher.PhysicsBox2DCollider, AgentMatcher.PhysicsPosition2D));
+            var agentEntitiesWithBox = agentContext.GetGroup(AgentMatcher.AllOf(AgentMatcher.PhysicsBox2DCollider, AgentMatcher.PhysicsPosition2D));
 
-            foreach (var entity in entitiesWithBox)
+            foreach (var agentEntity in agentEntitiesWithBox)
             {
-                var pos = entity.physicsPosition2D;
-                var movable = entity.physicsMovable;
-                var box2DColider = entity.physicsBox2DCollider;
+                var pos = agentEntity.physicsPosition2D;
+                var movable = agentEntity.physicsMovable;
+                var box2DCollider = agentEntity.physicsBox2DCollider;
 
-                Update(ref tileMap, pos, movable, box2DColider, deltaTime); 
+                Update(ref tileMap, pos, movable, box2DCollider, deltaTime); 
             }
 
         }

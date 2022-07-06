@@ -30,11 +30,11 @@ namespace PlanetTileMap
 
         public SpriteRuleType SpriteRuleType;
 
-        public CollisionType TileCollisionType;
-        
-        public TileShapeAndRotation Shape;
+        public CollisionType CollisionIsoType;
+        public TileShape BlockShapeType;
+        public TileShapeAndRotation BlockShapeAndRotation;
 
-        public bool IsSolid => TileCollisionType == CollisionType.Solid;
+        public bool IsSolid => CollisionIsoType == CollisionType.Solid;
 
         public TileProperty(TileID tileID, int baseSpriteId) : this()
         {

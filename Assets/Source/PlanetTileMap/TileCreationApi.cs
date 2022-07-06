@@ -82,6 +82,14 @@ namespace PlanetTileMap
             CurrentTileIndex = tileID;
         }
 
+        public void SetTilePropertyShape(TileShape shape, TileShapeAndRotation shapeAndRotation)
+        {
+            if (CurrentTileIndex == TileID.Error) return;
+
+            TilePropertyArray[(int) CurrentTileIndex].BlockShapeType = shape;
+            TilePropertyArray[(int) CurrentTileIndex].BlockShapeAndRotation = shapeAndRotation;
+        }
+
         public void SetTilePropertyName(string name)
         {
             if (CurrentTileIndex == TileID.Error) return;
@@ -219,7 +227,7 @@ namespace PlanetTileMap
         {
             if (CurrentTileIndex == TileID.Error) return;
 
-            TilePropertyArray[(int)CurrentTileIndex].TileCollisionType = type;
+            TilePropertyArray[(int)CurrentTileIndex].CollisionIsoType = type;
         }
 
         
