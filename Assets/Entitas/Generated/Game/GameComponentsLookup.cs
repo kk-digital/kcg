@@ -8,15 +8,18 @@
 //------------------------------------------------------------------------------
 public static class GameComponentsLookup {
 
+    public const int ActionPropertyNeedsItem = 0;
+    public const int ItemFireWeaponClip = 1;
 
-
-    public const int TotalComponents = 0;
+    public const int TotalComponents = 2;
 
     public static readonly string[] componentNames = {
-
+        "ActionPropertyNeedsItem",
+        "ItemFireWeaponClip"
     };
 
     public static readonly System.Type[] componentTypes = {
-
+        typeof(Action.Property.NeedsItemComponent),
+        typeof(Item.FireWeapon.ClipComponent)
     };
 }

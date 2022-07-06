@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 <<<<<<<< HEAD:Assets/Source/Item/Components/InventoryComponent.cs.meta
-guid: 476a7634d4c93ad489639bdb29600db2
+guid: ff6c701923dc9e846a476d5d8040a726
 ========
 guid: 25d2aca28e5f7ce4da7ef2a45fdf1d9f
 >>>>>>>> ded95874 (Improve CoolDown System.):Assets/Entitas/Generated/Agent/Components/GameItemFireWeaponClipComponent.cs.meta
