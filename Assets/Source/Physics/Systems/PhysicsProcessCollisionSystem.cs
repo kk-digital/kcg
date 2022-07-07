@@ -1,7 +1,9 @@
+using System;
 using Entitas;
 using Enums;
 using Enums.Tile;
 using KMath;
+using PlanetTileMap;
 using UnityEngine;
 using Utility;
 
@@ -33,7 +35,7 @@ namespace Physics
 
             for (int x = start.X; x <= end.X; x++)
             {
-                plot(x, y);
+                // plot(x, y); Output for the position at Line
                 if (D > 0)
                 {
                     y += y_inc;
@@ -62,7 +64,7 @@ namespace Physics
 
             for (int y = start.Y; y <= end.Y; y++)
             {
-                plot(x, y);
+                // plot(x, y); Output for the position at Line
                 if (D > 0)
                 {
                     x += x_inc;
@@ -101,8 +103,94 @@ namespace Physics
                 }
             }
         }
-        
-        private void Update(ref PlanetTileMap.TileMap tileMap, Position2DComponent pos, MovableComponent movable, Box2DColliderComponent box2DCollider, float deltaTime)
+
+        public void IsColliding(ref TileMap tileMap, Vec2f previousCenter, Vec2f currentCenter, Vec2f size, Vec2f velocity)
+        {
+            var halfSize = size / 2f;
+
+            var previousRightX  = (int)Math.Ceiling(previousCenter.X + halfSize.X); //round up
+            var currentRightX   = (int)Math.Ceiling(currentCenter.X + halfSize.X);  //round up
+            
+            var previousLeftX   = (int)Math.Floor(previousCenter.X - halfSize.X);   //round down
+            var currentLeftX    = (int)Math.Floor(currentCenter.X - halfSize.X);    //round down
+            
+            var previousTopY    = (int)Math.Ceiling(previousCenter.Y + halfSize.Y); //round up
+            var currentTopY     = (int)Math.Ceiling(currentCenter.Y + halfSize.Y);  //round up
+            
+            var previousBottomY = (int)Math.Floor(previousCenter.Y - halfSize.Y);   //round down
+            var currentBottomY  = (int)Math.Floor(currentCenter.Y - halfSize.Y);    //round down
+
+            //verify, that no tile is checked twice
+            //do a count to verify
+            //NOTE: Do asserts, that min<=max and swap if not
+
+            int xMin1 = velocity.X > 0f ? previousRightX : currentLeftX;
+            int xMax1 = velocity.X > 0f ? currentRightX  : previousLeftX;
+            
+            for (int y = currentBottomY; y <= currentTopY; y++)
+            {
+                for (int x = xMin1; x <= xMax1; x++)
+                {
+                    var tile = tileMap.GetFrontTile(x, y);
+
+                    if (tile.ID != TileID.Air)
+                    {
+                        // collision on X
+                    }
+                }
+            }
+            
+            int yMin1 = velocity.Y > 0f ? previousTopY   : currentBottomY;
+            int yMax1 = velocity.Y > 0f ? currentTopY    : previousBottomY;
+            
+            for (int y = yMin1; y <= yMax1; y++)
+            {
+                for (int x = currentLeftX; x <= currentRightX; x++)
+                {
+                    var tile = tileMap.GetFrontTile(x, y);
+
+                    if (tile.ID != TileID.Air)
+                    {
+                        // collision on Y
+                    }
+                }
+            }
+            
+            int xMin2 = Math.Min(currentLeftX, previousLeftX);
+            int xMax2 = Math.Max(previousRightX, currentRightX);
+            
+            for (int y = currentBottomY; y <= currentTopY; y++)
+            {
+                for (int x = xMin2; x <= xMax2; x++)
+                {
+                    var tile = tileMap.GetFrontTile(x, y);
+
+                    if (tile.ID != TileID.Air)
+                    {
+                        // collision on X
+                    }
+                }
+            }
+            
+
+            int yMin2 = Math.Min(previousBottomY, currentBottomY);
+            int yMax2 = Math.Max(previousTopY, currentTopY);
+            
+            for (int y = yMin2; y <= yMax2; y++)
+            {
+                for (int x = currentLeftX; x <= currentRightX; x++)
+                {
+                    var tile = tileMap.GetFrontTile(x, y);
+
+                    if (tile.ID != TileID.Air)
+                    {
+                        // collision on Y
+                    }
+                }
+            }
+        }
+
+        private void Update(ref TileMap tileMap, Position2DComponent pos, MovableComponent movable, Box2DColliderComponent box2DCollider, float deltaTime)
         {       
             var entityBoxBorders = new AABB2D(new Vec2f(pos.PreviousValue.X, pos.Value.Y) + box2DCollider.Offset, box2DCollider.Size);
 
