@@ -23,14 +23,22 @@ namespace Projectile
             var projectiles = gameContext.GetGroup(ProjectileMatcher.ProjectileMovable);
             foreach (var projectile in projectiles)
             {
+                // Get Projectile Type
+                var type = projectile.projectileType.Type;
+
+                // Get Projectile Properties
+                ProjectileProperties projectileProperties =
+                                    ProjectileCreationApi.GetRef((int)type);
+
                 // Get Projectile Position
                 var pos = projectile.projectilePosition2D;
 
                 // Get Movable Component
                 var movable = projectile.projectileMovable;
 
-                // Get Projectile Type
-                var type = projectile.projectileType.Type;
+                // Set Gravity
+                projectileProperties.GravityScale = 0.1f;
+                Gravity = projectileProperties.GravityScale;
 
                 // Get Projectile Can Ramp Condition
                 var canRamp = projectile.projectileRamp.canRamp;
@@ -46,10 +54,6 @@ namespace Projectile
 
                 // Get Quadratic Drag
                 var quadraticDrag = projectile.projectileQuadraticDrag.Drag;
-
-                // Get Projectile Properties
-                ProjectileProperties projectileProperties = 
-                                    ProjectileCreationApi.GetRef((int)type);
                 
                 // Calculate Displacement
                 Vec2f displacement =

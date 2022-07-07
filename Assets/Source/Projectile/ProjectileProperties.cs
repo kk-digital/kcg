@@ -31,6 +31,7 @@ namespace Projectile
         public float quadraticDrag;
 
         public bool AffectedByGravity;
+        public float GravityScale;
     }
 }
 
