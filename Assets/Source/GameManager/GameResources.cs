@@ -338,6 +338,7 @@ public class GameResources
         GameState.ProjectileCreationApi.SetSpeed(20.0f);
         GameState.ProjectileCreationApi.SetRamp(false, 1f, 10f, 1.0f);
         GameState.ProjectileCreationApi.SetLinearDrag(true, 0.73f);
+        GameState.ProjectileCreationApi.SetQuadraticDrag(false, 1f);
         GameState.ProjectileCreationApi.SetAcceleration(new Vec2f());
         GameState.ProjectileCreationApi.End();
 

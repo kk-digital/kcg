@@ -37,6 +37,9 @@ namespace Projectile
             // Add Linear Drag Component
             entity.AddProjectileLinearDrag(projectileProperties.canLinearDrag, projectileProperties.linearDrag);
 
+            // Add Quadratic Drag Component
+            entity.AddProjectileQuadraticDrag(projectileProperties.canQuadraticDrag, projectileProperties.quadraticDrag);
+
             // Add Sprite Component
             entity.AddProjectileSprite2D(projectileProperties.SpriteId, projectileProperties.Size);
             // Add Position Component

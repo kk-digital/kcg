@@ -26,6 +26,9 @@ namespace Projectile
 
         public bool canLinearDrag;
         public float linearDrag;
+
+        public bool canQuadraticDrag;
+        public float quadraticDrag;
     }
 }
 

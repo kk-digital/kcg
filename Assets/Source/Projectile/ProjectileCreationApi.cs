@@ -133,6 +133,15 @@ namespace Projectile
             }
         }
 
+        public void SetQuadraticDrag(bool canDrag, float quadraticDrag)
+        {
+            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
+            {
+                PropertiesArray[CurrentIndex].canQuadraticDrag = canDrag;
+                PropertiesArray[CurrentIndex].quadraticDrag = quadraticDrag;
+            }
+        }
+
         public void SetAcceleration(Vec2f acceleration)
         {
             if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
