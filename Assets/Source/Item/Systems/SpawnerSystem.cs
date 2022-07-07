@@ -22,15 +22,26 @@ namespace Item
             entity.AddPhysicsBox2DCollider(size, Vec2f.Zero);
             entity.AddPhysicsMovable(0f, Vec2f.Zero, Vec2f.Zero, true, true, false, false);
 
+            if (entityAttribute.hasItemPropertyFireWeaponClip)
+            {
+                entity.AddItemFireWeaponClip(entityAttribute.itemPropertyFireWeaponClip.ClipSize);
+            }
+
             ItemID++;
             return entity;
         }
 
-        public ItemEntity SpawnInventoryItem(ItemContext context, ItemType itemType)
+        public ItemEntity SpawnInventoryItem(Contexts entitasContext, ItemType itemType)
         {
-            var entity = context.CreateEntity();
+            ItemPropertiesEntity entityAttribute = entitasContext.itemProperties.GetEntityWithItemProperty(itemType);
+            var entity = entitasContext.item.CreateEntity();
             entity.AddItemID(ItemID);
             entity.AddItemType(itemType);
+
+            if (entityAttribute.hasItemPropertyFireWeaponClip)
+            {
+                entity.AddItemFireWeaponClip(entityAttribute.itemPropertyFireWeaponClip.ClipSize);
+            }
 
             ItemID++;
             return entity;

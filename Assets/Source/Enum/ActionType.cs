@@ -8,6 +8,7 @@
         /// </summary>
         DropAction,
         PickUpAction,
+        ReloadAction,
 
         /// <summary>
         /// PlaceTileTool
@@ -23,10 +24,10 @@
         /// <summary>
         /// Others tools actions
         /// </summary>
-        FireWeaponAction = 9,
-        PlaceParticleEmitterAction,
-        EnemySpawnAction,
-        MiningLaserAction,
-        RemoveTileAction
+        ToolActionFireWeapon = 9,
+        ToolActionPlaceParticle,
+        ToolActionEnemySpawn,
+        ToolActionMiningLaser,
+        ToolActionRemoveTile
     }
 }

@@ -60,7 +60,7 @@ namespace Item
 
         }
 
-        public void SetAction(int actionID)
+        public void SetAction(Enums.ActionType actionID)
         {
             ItemType.AddItemPropertyAction(actionID);
         }
@@ -81,12 +81,32 @@ namespace Item
             ItemType.isItemPropertyPlaceable = true;
         }
 
-        public void SetEquipament()
+        public void SetEquipment()
         {
             if (ItemType == null)
                 return;
 
-            ItemType.isItemPropertyPlaceable = true;
+            ItemType.isItemPropertyEquipment = true;
+        }
+
+        public void SetFireWeapon(float bulletSpeed, float coolDown, float range, float basicDamage, Vec2f spriteSize, int bulletSpriteID)
+        {
+            ItemType.AddItemPropertyFireWeapon(bulletSpeed, coolDown, range, basicDamage, spriteSize, bulletSpriteID);
+        }
+
+        public void SetFireWeaponClip(int clipSize, float reloadTime)
+        {
+            ItemType.AddItemPropertyFireWeaponClip(clipSize, reloadTime);
+        }
+
+        public void SetFireWeaponMultiShoot(float speadAngle, int numOfBullet)
+        {
+            ItemType.AddItemPropertyFireWeaponMultiShoot(speadAngle, numOfBullet);
+        }
+
+        public void SetFireWeaponRecoil(float maxRecoilAngle, float minRecoilAngle, float rateOfChange, float recoverTime, float recoverDelay)
+        {
+            ItemType.AddItemPropertyFireWeaponRecoil(maxRecoilAngle, minRecoilAngle, rateOfChange, recoverTime, recoverDelay);
         }
 
         public void EndItem()

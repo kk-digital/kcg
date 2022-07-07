@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Enums;
 using KMath;
 using Entitas;
+using Unity.VisualScripting;
 
 namespace Action
 {
@@ -12,14 +13,24 @@ namespace Action
 
         private static int ActionID;
 
-        public int CreateAction(Contexts entitasContext, int actionTypeID, int agentID)
+        /// <summary>
+        /// Create action and schedule it. Later we will be able to create action without scheduling immediately.
+        /// If actions is in cool down returns -1. 
+        /// </summary>
+        public int CreateAction(Contexts entitasContext, Enums.ActionType actionTypeID, int agentID)
         {
             var entityAttribute = entitasContext.actionProperties.GetEntityWithActionProperty(actionTypeID);
 
             ActionEntity actionEntity = entitasContext.action.CreateEntity();
+            if (GameState.ActionCoolDownSystem.InCoolDown(entitasContext, actionTypeID, agentID))
+            {
+                return -1;
+            }
+
             actionEntity.AddActionID(ActionID, actionTypeID);
+            actionEntity.AddActionOwner(agentID);
             actionEntity.AddActionExecution(
-                entityAttribute.actionPropertyFactory.ActionFactory.CreateAction(entitasContext, ActionID, agentID), 
+                entityAttribute.actionPropertyFactory.ActionFactory.CreateAction(entitasContext, ActionID), 
                 ActionState.Entry);
 
             // Maybe we should deal with time and CoolDown inside onEntry?
@@ -35,10 +46,15 @@ namespace Action
             return ActionID++;
         }
 
-        public void SetItem(Contexts entitasContext, int actionID, int itemID)
+        public int CreateAction(Contexts entitasContext, Enums.ActionType actionTypeID, int agentID, int itemID)
         {
-            ActionEntity actionEntity = entitasContext.action.GetEntityWithActionIDID(actionID);
-            actionEntity.AddActionItem(itemID);
+            int actionID = CreateAction(entitasContext, actionTypeID, agentID);
+            if (actionID != -1)
+            {
+                ActionEntity actionEntity = entitasContext.action.GetEntityWithActionIDID(actionID);
+                actionEntity.AddActionTool(itemID);
+            }
+            return actionID;
         }
     }
 }

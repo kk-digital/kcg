@@ -89,14 +89,14 @@ public class SpawnEnemy : MonoBehaviour
 
         // Add item to tool bar.
         {
-            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.item, Enums.ItemType.PlacementTool);
+            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts, Enums.ItemType.PlacementTool);
             InventoryManager.AddItem(contexts, entity, toolBarID);
         }
 
         // Test not stackable items.
         for (uint i = 0; i < 10; i++)
         {
-            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.item, Enums.ItemType.PlacementTool);
+            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts, Enums.ItemType.PlacementTool);
             InventoryManager.AddItem(contexts, entity, inventoryID);
         }
 

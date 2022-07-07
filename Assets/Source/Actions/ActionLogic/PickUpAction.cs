@@ -11,13 +11,13 @@ namespace Action
         private float Speed = 3.0f;
         private float aceleration = 0.5f;
 
-        public PickUpAction(Contexts entitasContext, int actionID, int agentID) : base(entitasContext, actionID, agentID)
+        public PickUpAction(Contexts entitasContext, int actionID) : base(entitasContext, actionID)
         {
         }
 
         public override void OnEnter(ref Planet.PlanetState planet)
         {
-            ItemEntity = EntitasContext.item.GetEntityWithItemID(ActionEntity.actionItem.ItemID);
+            ItemEntity = EntitasContext.item.GetEntityWithItemID(ActionEntity.actionTool.ItemID);
 
 #if DEBUG
             // Item Doesnt Exist
@@ -100,9 +100,9 @@ namespace Action
 
     public class PickUpActionCreator : ActionCreator
     {
-        public override ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
+        public override ActionBase CreateAction(Contexts entitasContext, int action)
         {
-            return new PickUpAction(entitasContext, actionID, agentID);
+            return new PickUpAction(entitasContext, action);
         }
     }
 }

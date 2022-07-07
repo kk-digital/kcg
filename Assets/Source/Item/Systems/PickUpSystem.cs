@@ -14,7 +14,7 @@ namespace Item
         {
             // Get agents able to pick an object.
             var agents = contexts.agent.GetGroup(
-                AgentMatcher.AllOf(AgentMatcher.AgentActionScheduler, AgentMatcher.PhysicsPosition2D).AnyOf(AgentMatcher.AgentInventory, AgentMatcher.AgentToolBar));
+                AgentMatcher.AllOf(AgentMatcher.PhysicsPosition2D).AnyOf(AgentMatcher.AgentInventory, AgentMatcher.AgentToolBar));
 
             // Get all pickable items.
             var pickableItems = contexts.item.GetGroup(
@@ -30,8 +30,7 @@ namespace Item
                     // Todo: Use action center Position.
                     if ((agent.physicsPosition2D.Value - centerPos).Magnitude <= 1.25f)
                     {
-                        GameState.ActionSchedulerSystem.ScheduleAction(agent, 
-                            GameState.ActionInitializeSystem.CreatePickUpAction(contexts, agent.agentID.ID, item.itemID.ID));
+                        GameState.ActionInitializeSystem.CreatePickUpAction(contexts, agent.agentID.ID, item.itemID.ID);
                     }
                 }    
             }

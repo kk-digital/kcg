@@ -253,6 +253,7 @@ namespace Planet
             GameState.AnimationUpdateSystem.Update(EntitasContext, frameTime);
             GameState.ItemPickUpSystem.Update(EntitasContext);
             GameState.ActionSchedulerSystem.Update(EntitasContext, frameTime, ref this);
+            GameState.ActionCoolDownSystem.Update(EntitasContext, deltaTime);
             GameState.ParticleEmitterUpdateSystem.Update(ref this);
             GameState.ParticleUpdateSystem.Update(ref this, EntitasContext.particle);
             GameState.ProjectileMovementSystem.Update(EntitasContext.projectile);

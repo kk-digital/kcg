@@ -87,14 +87,14 @@ public class MiningLaser : MonoBehaviour
 
         // Add item to tool bar.
         {
-            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.item, Enums.ItemType.Gun);
+            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts, Enums.ItemType.Gun);
             inventoryManager.AddItem(contexts, entity, toolBarID);
         }
 
         // Test not stackable items.
         for (uint i = 0; i < 10; i++)
         {
-            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts.item, Enums.ItemType.Gun);
+            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(contexts, Enums.ItemType.Gun);
             inventoryManager.AddItem(contexts, entity, inventoryID);
         }
 

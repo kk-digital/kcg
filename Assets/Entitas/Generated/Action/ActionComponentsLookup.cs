@@ -11,24 +11,27 @@ public static class ActionComponentsLookup {
     public const int ActionBeginCoolDown = 0;
     public const int ActionExecution = 1;
     public const int ActionID = 2;
-    public const int ActionItem = 3;
+    public const int ActionOwner = 3;
     public const int ActionTime = 4;
+    public const int ActionTool = 5;
 
-    public const int TotalComponents = 5;
+    public const int TotalComponents = 6;
 
     public static readonly string[] componentNames = {
         "ActionBeginCoolDown",
         "ActionExecution",
         "ActionID",
-        "ActionItem",
-        "ActionTime"
+        "ActionOwner",
+        "ActionTime",
+        "ActionTool"
     };
 
     public static readonly System.Type[] componentTypes = {
         typeof(Action.BeginCoolDownComponent),
         typeof(Action.ExecutionComponent),
         typeof(Action.IDComponent),
-        typeof(Action.ItemComponent),
-        typeof(Action.TimeComponent)
+        typeof(Action.OwnerComponent),
+        typeof(Action.TimeComponent),
+        typeof(Action.ToolComponent)
     };
 }

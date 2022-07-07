@@ -14,7 +14,7 @@ namespace Admin
                 return null;
 
             // Spawn Item
-            ItemEntity item = GameState.ItemSpawnSystem.SpawnInventoryItem(contexts.item, itemID);
+            ItemEntity item = GameState.ItemSpawnSystem.SpawnInventoryItem(contexts, itemID);
 
             // Return Item
             return item;

@@ -15,10 +15,11 @@ public class GameState
     #endregion
 
     #region Action
-    public static readonly Action.ActionPropertyManager    ActionPropertyManager;
+    public static readonly Action.ActionPropertyManager     ActionPropertyManager;
     public static readonly Action.ActionCreationSystem      ActionCreationSystem;
     public static readonly Action.ActionSchedulerSystem     ActionSchedulerSystem;
     public static readonly Action.InitializeSystem          ActionInitializeSystem;
+    public static readonly Action.CoolDownSystem            ActionCoolDownSystem;
     #endregion
 
     #region Tile
@@ -116,6 +117,7 @@ public class GameState
         ActionCreationSystem = new Action.ActionCreationSystem();
         ActionSchedulerSystem = new Action.ActionSchedulerSystem();
         ActionInitializeSystem = new Action.InitializeSystem();
+        ActionCoolDownSystem = new Action.CoolDownSystem();
         ParticleCreationApi = new Particle.ParticleCreationApi();
         ParticleEmitterCreationApi = new Particle.ParticleEmitterCreationApi();
         ParticleEmitterUpdateSystem = new Particle.ParticleEmitterUpdateSystem(ParticleEmitterCreationApi, ParticleCreationApi);

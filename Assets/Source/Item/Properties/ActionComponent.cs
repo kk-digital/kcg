@@ -7,6 +7,6 @@ namespace Item.Property
     public class ActionComponent : IComponent
     {
         [EntityIndex]
-        public int ActionTypeID;
+        public Enums.ActionType ActionTypeID;
     }
 }
