@@ -88,8 +88,10 @@ namespace FloatingText
 
         // to remove an entity we just 
         // set the IsInitialized field to false
-        public void Remove(FloatingTextEntity entity)
+        public void Remove(int floatingTextId)
         {
+            LastFreeIndex = floatingTextId;
+            ref FloatingTextEntity entity = ref List[floatingTextId];
             entity.Destroy();
             entity = null;
             Size--;

@@ -91,8 +91,10 @@ namespace Item
         // set the IsInitialized field to false
         public void Remove(int itemParticleId)
         {
-            ItemEntity entity = Get(itemParticleId);
+            LastFreeIndex = itemParticleId;
+            ref ItemEntity entity = ref List[itemParticleId];
             entity.Destroy();
+            entity = null;
             Size--;
         }
 

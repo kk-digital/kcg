@@ -89,8 +89,10 @@ namespace Vehicle
         // set the IsInitialized field to false
         public void Remove(int vehicleId)
         {
-            VehicleEntity entity = Get(vehicleId);
+            LastFreeIndex = vehicleId;
+            ref VehicleEntity entity = ref List[vehicleId];
             entity.Destroy();
+            entity = null;
             Size--;
         }
 

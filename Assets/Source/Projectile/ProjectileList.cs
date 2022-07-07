@@ -89,7 +89,8 @@ namespace Projectile
         // set the IsInitialized field to false
         public void Remove(int projectileId)
         {
-            ProjectileEntity entity = Get(projectileId);
+            LastFreeIndex = projectileId;
+            ref ProjectileEntity entity = ref List[projectileId];
             entity.Destroy();
             entity = null;
             Size--;

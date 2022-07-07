@@ -133,7 +133,7 @@ namespace Planet
             FloatingTextEntity entity = FloatingTextList.Get(floatingTextId);
             Utils.Assert(entity.isEnabled);
             GameObject.Destroy(entity.floatingTextSprite.GameObject);
-            FloatingTextList.Remove(entity);
+            FloatingTextList.Remove(floatingTextId);
         }
 
         public ParticleEntity AddParticleEmitter(Vec2f position, Particle.ParticleEmitterType type)
@@ -261,14 +261,16 @@ namespace Planet
             TileMap.UpdateTiles();
             
             // Update Meshes.
-            TileMap.UpdateMidLayerMesh();
-            TileMap.UpdateFrontLayerMesh();
+            TileMap.UpdateLayerMesh(MapLayerType.Back);
+            TileMap.UpdateLayerMesh(MapLayerType.Mid);
+            TileMap.UpdateLayerMesh(MapLayerType.Front);
             GameState.ItemMeshBuilderSystem.UpdateMesh(EntitasContext);
             GameState.AgentMeshBuilderSystem.UpdateMesh(EntitasContext.agent);
             GameState.ProjectileMeshBuilderSystem.UpdateMesh(EntitasContext.projectile);
             GameState.ParticleMeshBuilderSystem.UpdateMesh(EntitasContext.particle);
 
             // Draw Frames.
+            TileMap.DrawLayer(MapLayerType.Back);
             TileMap.DrawLayer(MapLayerType.Mid);
             TileMap.DrawLayer(MapLayerType.Front);
             Utility.Render.DrawFrame(ref GameState.ItemMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));

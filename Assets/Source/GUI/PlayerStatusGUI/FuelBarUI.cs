@@ -115,7 +115,12 @@ namespace KGUI
             contexts.agent.GetGroup(AgentMatcher.AgentStats);
             foreach (var entity in Playerentities)
             {
-                fuelBar.GetComponent<Image>().fillAmount = entity.agentStats.Fuel / 100;
+                float fuelValue = entity.agentStats.Fuel;
+                if (fuelValue <= 0)
+                {
+                    fuelValue = 0;
+                }
+                fuelBar.GetComponent<Image>().fillAmount = fuelValue / 100;
             }
             fuelBar.GetComponent<Image>().fillClockwise = true;
 
@@ -126,15 +131,16 @@ namespace KGUI
             Init = true;
         }
 
-        public void Update()
+        public void Update(AgentEntity playerEntity)
         {
-            if(Init)
+            if(Init && playerEntity != null)
             {
-                IGroup<AgentEntity> Playerentities = Contexts.sharedInstance.agent.GetGroup(AgentMatcher.AgentStats);
-                foreach (var entity in Playerentities)
+                float fuelValue = playerEntity.agentStats.Fuel;
+                if (fuelValue <= 0)
                 {
-                    fuelBar.GetComponent<Image>().fillAmount = entity.agentStats.Fuel / 100;
+                    fuelValue = 0;
                 }
+                fuelBar.GetComponent<Image>().fillAmount = fuelValue / 100;
 
                 // Calculate position using aspect ratio
                 if (Camera.main.aspect >= 1.7f)
