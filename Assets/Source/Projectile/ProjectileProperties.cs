@@ -29,6 +29,8 @@ namespace Projectile
 
         public bool canQuadraticDrag;
         public float quadraticDrag;
+
+        public bool AffectedByGravity;
     }
 }
 

@@ -158,6 +158,14 @@ namespace Projectile
             }
         }
 
+        public void SetAffectedByGravity(bool affectedByGravity)
+        {
+            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
+            {
+                PropertiesArray[CurrentIndex].AffectedByGravity = affectedByGravity;
+            }
+        }
+
         public void End()
         {
             CurrentIndex = -1;

@@ -46,7 +46,7 @@ namespace Projectile
             entity.AddProjectilePosition2D(position, position, 0.0f);
             // Add Movement Component
             entity.AddProjectileMovable(direction.Normalized * projectileProperties.Speed, 
-                                    projectileProperties.Acceleration);
+                                    projectileProperties.Acceleration, projectileProperties.AffectedByGravity);
             
             // Add Physics Box Collider Component
             entity.AddPhysicsBox2DCollider(projectileProperties.Size, Vec2f.Zero);
@@ -89,7 +89,7 @@ namespace Projectile
             // Add Position Component
             entity.AddProjectilePosition2D(startPos, startPos, 0.0f);
             // Add Moviment Component
-            entity.AddProjectileMovable(velocity, acceleration);
+            entity.AddProjectileMovable(velocity, acceleration, false);
 
             // Add Physics Box Collider Component
             entity.AddPhysicsBox2DCollider(spriteSize, Vec2f.Zero);

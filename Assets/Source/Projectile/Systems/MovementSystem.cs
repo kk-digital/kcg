@@ -9,6 +9,9 @@ namespace Projectile
     public class MovementSystem
     {
         ProjectileCreationApi ProjectileCreationApi;
+
+        float Gravity = 0.1f;
+
         public MovementSystem(ProjectileCreationApi projectileCreationApi)
         {
             ProjectileCreationApi = projectileCreationApi;
@@ -54,6 +57,9 @@ namespace Projectile
 
                 // New Calculated Velocity
                 Vec2f newVelocity = new Vec2f(0f, 0f);
+
+                if(projectileProperties.AffectedByGravity)
+                    projectile.projectileMovable.Velocity.Y -= Gravity;
 
                 // If Ramp is On
                 if(canRamp)
@@ -102,7 +108,7 @@ namespace Projectile
                                 // Set New velocity without adding any drag
                                 newVelocity = movable.Acceleration * deltaTime + (movable.Velocity * projectileProperties.Speed);
                             }
-
+                            
 
                             // Increase Time
                             elapsed += Time.deltaTime;
@@ -128,13 +134,28 @@ namespace Projectile
                 }
                 else
                 {
+                    // If linear drag is on
                     if(canLinearDrag)
                     {
+                        // Calculate Speed
                         projectileProperties.Speed = (1 - projectileProperties.Speed / linearDrag);
+
+
+                        // Calculate Drag Force Magnitude
                         var dragForceMag = movable.Velocity.Magnitude / 2 * linearDrag;
+
+
+                        // Calculate Drag Force Vector
                         var dragForceVector = dragForceMag * new Vec2f(-movable.Velocity.Normalized.X, -movable.Velocity.Normalized.Y);
+
+
+                        // Calculate New Velocity
                         newVelocity = movable.Acceleration * deltaTime + movable.Velocity / linearDrag;
+
+                        // Add drag force to new velocity
                         newVelocity += dragForceVector;
+
+
                     }
                     else
                     {
@@ -155,7 +176,7 @@ namespace Projectile
 
                 float newRotation = pos.Rotation + projectileProperties.DeltaRotation * deltaTime;  
 
-                projectile.ReplaceProjectileMovable(newVelocity, movable.Acceleration);
+                projectile.ReplaceProjectileMovable(newVelocity, movable.Acceleration, movable.AffectedByGravity);
                 projectile.ReplaceProjectilePosition2D(pos.Value + displacement, pos.Value, newRotation);
                 projectile.ReplaceProjectilePhysicsState2D(newVelocity, projectile.projectilePhysicsState2D.angularMass, 
                     projectile.projectilePhysicsState2D.angularAcceleration, projectile.projectilePhysicsState2D.centerOfGravity, 
