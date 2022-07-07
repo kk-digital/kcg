@@ -21,26 +21,22 @@ namespace Action
         {
             var entityAttribute = entitasContext.actionProperties.GetEntityWithActionProperty(actionTypeID);
 
-            ActionEntity actionEntity = entitasContext.action.CreateEntity();
             if (GameState.ActionCoolDownSystem.InCoolDown(entitasContext, actionTypeID, agentID))
             {
+                Debug.Log("Action " + entityAttribute.actionPropertyName.TypeName + " in CoolDown");
                 return -1;
             }
 
+            ActionEntity actionEntity = entitasContext.action.CreateEntity();
             actionEntity.AddActionID(ActionID, actionTypeID);
             actionEntity.AddActionOwner(agentID);
             actionEntity.AddActionExecution(
                 entityAttribute.actionPropertyFactory.ActionFactory.CreateAction(entitasContext, ActionID), 
                 ActionState.Entry);
 
-            // Maybe we should deal with time and CoolDown inside onEntry?
             if (entityAttribute.hasActionPropertyTime)
             {
                 actionEntity.AddActionTime(0f);
-            }
-            if (entityAttribute.hasActionPropertyCoolDown)
-            {
-                actionEntity.AddActionBeginCoolDown(0f);
             }
 
             return ActionID++;

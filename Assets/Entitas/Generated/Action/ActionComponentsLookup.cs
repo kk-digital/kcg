@@ -8,17 +8,15 @@
 //------------------------------------------------------------------------------
 public static class ActionComponentsLookup {
 
-    public const int ActionBeginCoolDown = 0;
-    public const int ActionExecution = 1;
-    public const int ActionID = 2;
-    public const int ActionOwner = 3;
-    public const int ActionTime = 4;
-    public const int ActionTool = 5;
+    public const int ActionExecution = 0;
+    public const int ActionID = 1;
+    public const int ActionOwner = 2;
+    public const int ActionTime = 3;
+    public const int ActionTool = 4;
 
-    public const int TotalComponents = 6;
+    public const int TotalComponents = 5;
 
     public static readonly string[] componentNames = {
-        "ActionBeginCoolDown",
         "ActionExecution",
         "ActionID",
         "ActionOwner",
@@ -27,7 +25,6 @@ public static class ActionComponentsLookup {
     };
 
     public static readonly System.Type[] componentTypes = {
-        typeof(Action.BeginCoolDownComponent),
         typeof(Action.ExecutionComponent),
         typeof(Action.IDComponent),
         typeof(Action.OwnerComponent),

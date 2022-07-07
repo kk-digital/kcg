@@ -1,4 +1,5 @@
 ﻿using Entitas;
+using UnityEngine;
 
 namespace Action
 {
@@ -35,12 +36,12 @@ namespace Action
         {
             currentTime += deltaTime;
 
-            var coolDownList = contexts.actionCoolDown.GetGroup(ActionCoolDownMatcher.ActionCoolDown);
-            foreach (var coolDown in coolDownList)
+            ActionCoolDownEntity[] coolDownList = contexts.actionCoolDown.GetEntities();
+            for (int i = 0; i < coolDownList.Length; i++)
             {
-                if (coolDown.actionCoolDownTime.EndTime > currentTime)
+                if (coolDownList[i].actionCoolDownTime.EndTime < currentTime)
                 {
-                    coolDown.Destroy();
+                    coolDownList[i].Destroy();
                 }
             }
 
