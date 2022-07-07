@@ -337,7 +337,7 @@ public class GameResources
         GameState.ProjectileCreationApi.SetSize(new Vec2f(0.5f, 0.5f));
         GameState.ProjectileCreationApi.SetSpeed(20.0f);
         GameState.ProjectileCreationApi.SetRamp(false, 1f, 10f, 1.0f);
-        GameState.ProjectileCreationApi.SetLinearDrag(true, 1.0f);
+        GameState.ProjectileCreationApi.SetLinearDrag(true, 0.73f);
         GameState.ProjectileCreationApi.SetAcceleration(new Vec2f());
         GameState.ProjectileCreationApi.End();
 

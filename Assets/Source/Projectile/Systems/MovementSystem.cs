@@ -51,7 +51,10 @@ namespace Projectile
                             if (canLinearDrag)
                             {
                                 projectileProperties.Speed = (1 - projectileProperties.Speed / linearDrag);
-                                newVelocity = movable.Acceleration * deltaTime + (movable.Velocity * (projectileProperties.Speed / projectileProperties.linearDrag));
+                                var dragForceMag = movable.Velocity.Magnitude / 2 * linearDrag;
+                                var dragForceVector = dragForceMag *  new Vec2f(-movable.Velocity.Normalized.X, -movable.Velocity.Normalized.Y);
+                                newVelocity = movable.Acceleration * deltaTime + (movable.Velocity * projectileProperties.Speed);
+                                newVelocity += dragForceVector;
                             }
                             else
                             {
@@ -69,7 +72,10 @@ namespace Projectile
                     if(canLinearDrag)
                     {
                         projectileProperties.Speed = (1 - projectileProperties.Speed / linearDrag);
+                        var dragForceMag = movable.Velocity.Magnitude / 2 * linearDrag;
+                        var dragForceVector = dragForceMag * new Vec2f(-movable.Velocity.Normalized.X, -movable.Velocity.Normalized.Y);
                         newVelocity = movable.Acceleration * deltaTime + movable.Velocity / linearDrag;
+                        newVelocity += dragForceVector;
                     }
                     else
                     {
