@@ -23,6 +23,9 @@ namespace Projectile
         public float StartVelocity;
         public float MaxVelocity;
         public float rampTime;
+
+        public bool canLinearDrag;
+        public float linearDrag;
     }
 }
 

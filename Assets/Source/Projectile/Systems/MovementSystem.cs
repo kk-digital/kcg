@@ -24,6 +24,8 @@ namespace Projectile
                 var movable = projectile.projectileMovable;
                 var type = projectile.projectileType.Type;
                 var canRamp = projectile.projectileRamp.canRamp;
+                var canLinearDrag = projectile.projectileLinearDrag.canDrag;
+                var linearDrag = projectile.projectileLinearDrag.Drag;
 
                 ProjectileProperties projectileProperties = 
                                     ProjectileCreationApi.GetRef((int)type);
@@ -45,7 +47,18 @@ namespace Projectile
                         if (canRamp)
                         {
                             projectileProperties.Speed = Mathf.Lerp(startSpeed, maxSpeed, elapsed / rampTime);
-                            newVelocity = movable.Acceleration * deltaTime + (movable.Velocity * projectileProperties.Speed);
+
+                            if (canLinearDrag)
+                            {
+                                projectileProperties.Speed = (1 - projectileProperties.Speed / linearDrag);
+                                newVelocity = movable.Acceleration * deltaTime + (movable.Velocity * (projectileProperties.Speed / projectileProperties.linearDrag));
+                            }
+                            else
+                            {
+                                newVelocity = movable.Acceleration * deltaTime + (movable.Velocity * projectileProperties.Speed);
+                            }
+
+
                             elapsed += Time.deltaTime;
                         }
                     }
@@ -53,10 +66,19 @@ namespace Projectile
                 }
                 else
                 {
-                    newVelocity = movable.Acceleration * deltaTime + movable.Velocity;
+                    if(canLinearDrag)
+                    {
+                        projectileProperties.Speed = (1 - projectileProperties.Speed / linearDrag);
+                        newVelocity = movable.Acceleration * deltaTime + movable.Velocity / linearDrag;
+                    }
+                    else
+                    {
+                        newVelocity = movable.Acceleration * deltaTime + movable.Velocity;
+                    }
+
                 }
 
-                float newRotation = pos.Rotation + projectileProperties.DeltaRotation * deltaTime;
+                float newRotation = pos.Rotation + projectileProperties.DeltaRotation * deltaTime;  
 
                 projectile.ReplaceProjectileMovable(newVelocity, movable.Acceleration);
                 projectile.ReplaceProjectilePosition2D(pos.Value + displacement, pos.Value, newRotation);

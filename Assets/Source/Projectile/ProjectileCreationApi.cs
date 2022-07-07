@@ -112,35 +112,24 @@ namespace Projectile
             }
         }
 
-        public void SetRampTime(float rampTime)
+        public void SetRamp(bool canRamp, float startSpeed, float maxSpeed, 
+            float rampTime)
         {
             if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
             {
                 PropertiesArray[CurrentIndex].rampTime = rampTime;
-            }
-        }
-
-        public void SetCanRamp(bool canRamp)
-        {
-            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
-            {
                 PropertiesArray[CurrentIndex].canRamp = canRamp;
+                PropertiesArray[CurrentIndex].StartVelocity = startSpeed;
+                PropertiesArray[CurrentIndex].MaxVelocity = maxSpeed;
             }
         }
 
-        public void SetStartSpeed(float StartVelocity)
+        public void SetLinearDrag(bool canDrag, float linearDrag)
         {
             if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
             {
-                PropertiesArray[CurrentIndex].StartVelocity = StartVelocity;
-            }
-        }
-
-        public void SetMaxSpeed(float MaxVelocity)
-        {
-            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
-            {
-                PropertiesArray[CurrentIndex].MaxVelocity = MaxVelocity;
+                PropertiesArray[CurrentIndex].canLinearDrag = canDrag;
+                PropertiesArray[CurrentIndex].linearDrag = linearDrag;
             }
         }
 
