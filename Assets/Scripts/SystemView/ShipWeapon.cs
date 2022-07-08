@@ -45,6 +45,9 @@ namespace Scripts {
             public int attack_speed; // in milliseconds
             public int cooldown;     // in milliseconds
 
+            public int   projectiles_per_burst;
+            public float projectile_spread;
+
             public List<ShipWeaponProjectile> projectiles_fired = new List<ShipWeaponProjectile>();
 
             public CameraController camera;
@@ -53,8 +56,6 @@ namespace Scripts {
             public Material         mat;
             public SystemState      state;
 
-            // Can't be WeaponFlags as type as C# doesn't let you bitwise OR enum values unless every single possible combination
-            // you might want to OR is defined as a value... Microsoft why??
             public int flags;
 
             public void cleanup() {
@@ -232,39 +233,43 @@ namespace Scripts {
                 cooldown = attack_speed;
 
                 if((flags & (int)WeaponFlags.WEAPON_PROJECTILE) != 0) {
-                    ShipWeaponProjectile projectile = new ShipWeaponProjectile();
+                    for(int i = 0; i < projectiles_per_burst; i++) {
+                        ShipWeaponProjectile projectile = new ShipWeaponProjectile();
 
-                    projectile.Self = self;
-                    projectile.Weapon = this;
+                        projectile.Self = self;
+                        projectile.Weapon = this;
 
-                    projectile.Body.posx = self.self.posx;
-                    projectile.Body.posy = self.self.posy;
+                        projectile.Body.posx = self.self.posx;
+                        projectile.Body.posy = self.self.posy;
 
-                    float angle = (float)Math.Acos(dx / d);
+                        float angle = Tools.get_angle(dx, dy);
 
-                    if (dy < 0.0f) angle = 2.0f * 3.1415926f - angle;
+                        angle -=     projectile_spread * 0.5f;
+                        angle += i * projectile_spread / projectiles_per_burst;
+                        angle  = Tools.normalize_angle(angle);
 
-                    float cos = (float)Math.Cos(angle);
-                    float sin = (float)Math.Sin(angle);
+                        float cos = (float)Math.Cos(angle);
+                        float sin = (float)Math.Sin(angle);
 
-                    projectile.Body.velx = cos * (float)Math.Sqrt(projectile_velocity * projectile_velocity - sin * sin) + self.self.velx;
-                    projectile.Body.vely = sin * (float)Math.Sqrt(projectile_velocity * projectile_velocity - cos * cos) + self.self.vely;
+                        projectile.Body.velx = cos * (float)Math.Sqrt(projectile_velocity * projectile_velocity - sin * sin) + self.self.velx;
+                        projectile.Body.vely = sin * (float)Math.Sqrt(projectile_velocity * projectile_velocity - cos * cos) + self.self.vely;
 
-                    projectile.TimeElapsed = 0.0f;
-                    projectile.LifeSpan = range / projectile_velocity;
+                        projectile.TimeElapsed = 0.0f;
+                        projectile.LifeSpan = range / projectile_velocity;
 
-                    projectile.ProjectileColor = color;
+                        projectile.ProjectileColor = color;
 
-                    projectile.ShieldPenetration = shield_penetration;
+                        projectile.ShieldPenetration = shield_penetration;
 
-                    projectile.Damage = damage;
+                        projectile.Damage = damage;
 
-                    projectile.seeking = (flags & (int)WeaponFlags.WEAPON_SEEKING) != 0;
-                    projectile.rocket  = (flags & (int)WeaponFlags.WEAPON_ROCKET)  != 0;
-                    projectile.acc     = acc;
-                    projectile.state   = state;
+                        projectile.seeking = (flags & (int)WeaponFlags.WEAPON_SEEKING) != 0;
+                        projectile.rocket  = (flags & (int)WeaponFlags.WEAPON_ROCKET)  != 0;
+                        projectile.acc     = acc;
+                        projectile.state   = state;
 
-                    projectiles_fired.Add(projectile);
+                        projectiles_fired.Add(projectile);
+                    }
                 }
 
                 if((flags & (int)WeaponFlags.WEAPON_LASER) != 0) {
