@@ -13,18 +13,18 @@ namespace Action
         public void CreateActionPropertyType(Contexts contexts, Enums.ActionType actionType, string name)
         {
             ActionPropertyEntity = contexts.actionProperties.CreateEntity();
-            ActionPropertyEntity.AddActionProperty((int)actionType);
+            ActionPropertyEntity.AddActionProperty(actionType);
             ActionPropertyEntity.AddActionPropertyName(name);
         }
 
         public void CreateActionPropertyType(Contexts contexts, Enums.ActionType actionType)
         {
             ActionPropertyEntity = contexts.actionProperties.CreateEntity();
-            ActionPropertyEntity.AddActionProperty((int)actionType);
+            ActionPropertyEntity.AddActionProperty(actionType);
             ActionPropertyEntity.AddActionPropertyName(actionType.ToString());
         }
 
-        public int GetTypeID(Contexts contexts, string name)
+        public Enums.ActionType GetTypeID(Contexts contexts, string name)
 {
             ActionPropertiesEntity entity = contexts.actionProperties.GetEntityWithActionPropertyName(name);
             return entity.actionProperty.TypeID;

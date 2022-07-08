@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Item;
+using System.Collections;
 using UnityEngine;
 
 namespace Inventory
@@ -26,10 +27,10 @@ namespace Inventory
         {
             var inventory = contexts.inventory.GetEntityWithInventoryID(inventoryID);
 
-            var EntityAttribute = contexts.itemProperties.GetEntityWithItemProperty(entity.itemType.Type);
+            ItemProprieties proprieties = GameState.ItemCreationApi.Get(entity.itemType.Type);
 
             // If stackable check if there are any available stack in the inventory.
-            if (EntityAttribute.hasItemPropertyStackable)
+            if (proprieties.IsStackable())
             {
                 var Group = contexts.item.GetEntitiesWithItemAttachedInventory(inventoryID); // Todo: Use multiple Entity Index. To narrow down the search with item type.
 
@@ -45,10 +46,11 @@ namespace Inventory
                     }
                     
                     int EntityITCount = 1;
+                    int MaxStackSize = 64;
                     if (entityIT.hasItemStack)
                     {
                         EntityITCount = entityIT.itemStack.Count;
-                        if (EntityITCount == EntityAttribute.itemPropertyStackable.MaxStackSize)
+                        if (EntityITCount == MaxStackSize)
                             continue;
                     }
                     else
@@ -58,7 +60,7 @@ namespace Inventory
                         return;
                     }
                     
-                    if (NewEntityCount + EntityITCount <= EntityAttribute.itemPropertyStackable.MaxStackSize)
+                    if (NewEntityCount + EntityITCount <= MaxStackSize)
                     {
                         entityIT.ReplaceItemStack(NewEntityCount + EntityITCount);
                         entity.Destroy();

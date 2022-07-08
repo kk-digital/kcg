@@ -8,6 +8,6 @@ namespace Action.Property
     public class Component : IComponent
     {
         [PrimaryEntityIndex]
-        public int   TypeID;
+        public Enums.ActionType   TypeID;
     }
 }

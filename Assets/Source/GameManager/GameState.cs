@@ -1,6 +1,5 @@
 using Agent;
 using Inventory;
-using Item;
 using Projectile;
 /// <summary>
 /// <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/static-constructors">Static Constructor</a>
@@ -15,19 +14,21 @@ public class GameState
     #endregion
 
     #region Action
-    public static readonly Action.ActionPropertyManager    ActionPropertyManager;
+    public static readonly Action.ActionPropertyManager     ActionPropertyManager;
     public static readonly Action.ActionCreationSystem      ActionCreationSystem;
     public static readonly Action.ActionSchedulerSystem     ActionSchedulerSystem;
     public static readonly Action.InitializeSystem          ActionInitializeSystem;
+    public static readonly Action.CoolDownSystem            ActionCoolDownSystem;
     #endregion
 
     #region Tile
 
     public static readonly PlanetTileMap.TileAtlasManager TileSpriteAtlasManager;
     public static readonly PlanetTileMap.TileCreationApi TileCreationApi;
+    public static readonly PlanetTileMap.TileMapRenderer TileMapRenderer;
 
     #endregion
-    
+
     #region Sprites
 
     public static readonly Sprites.SpriteAtlasManager SpriteAtlasManager;
@@ -58,6 +59,7 @@ public class GameState
     public static readonly Item.SpawnerSystem ItemSpawnSystem;
     public static readonly Item.PickUpSystem ItemPickUpSystem;
     public static readonly Item.MeshBuilderSystem ItemMeshBuilderSystem;
+    public static readonly Item.ItemCreationApi ItemCreationApi;
     #endregion
 
     #region Projectile
@@ -93,6 +95,7 @@ public class GameState
         TileSpriteAtlasManager = new PlanetTileMap.TileAtlasManager(SpriteLoader);
         SpriteAtlasManager = new Sprites.SpriteAtlasManager(SpriteLoader);
         TileCreationApi = new PlanetTileMap.TileCreationApi();
+        TileMapRenderer = new PlanetTileMap.TileMapRenderer();
         FileLoadingManager = new Utility.FileLoadingManager();
         InputProcessSystem = new ECSInput.InputProcessSystem();
         AgentCreationApi = new Agent.AgentCreationApi();
@@ -109,6 +112,7 @@ public class GameState
         FloatingTextDrawSystem = new FloatingText.FloatingTextDrawSystem();
         AnimationUpdateSystem = new Animation.UpdateSystem();
         //UnityImage2DCache = new Sprites.UnityImage2DCache();
+        ItemCreationApi = new Item.ItemCreationApi();
         ItemSpawnSystem = new Item.SpawnerSystem();
         ItemPickUpSystem = new Item.PickUpSystem();
         ItemMeshBuilderSystem = new Item.MeshBuilderSystem();
@@ -116,6 +120,7 @@ public class GameState
         ActionCreationSystem = new Action.ActionCreationSystem();
         ActionSchedulerSystem = new Action.ActionSchedulerSystem();
         ActionInitializeSystem = new Action.InitializeSystem();
+        ActionCoolDownSystem = new Action.CoolDownSystem();
         ParticleCreationApi = new Particle.ParticleCreationApi();
         ParticleEmitterCreationApi = new Particle.ParticleEmitterCreationApi();
         ParticleEmitterUpdateSystem = new Particle.ParticleEmitterUpdateSystem(ParticleEmitterCreationApi, ParticleCreationApi);

@@ -33,8 +33,8 @@ namespace Planet.Unity
                 Planet.TileMap.RemoveFrontTile(x, y);                
             }
 
-            Planet.TileMap.UpdateFrontLayerMesh();
-            Planet.TileMap.DrawLayer(MapLayerType.Front);
+            GameState.TileMapRenderer.UpdateFrontLayerMesh(ref Planet.TileMap);
+            GameState.TileMapRenderer.DrawLayer(MapLayerType.Front);
         }
 
         // create the sprite atlas for testing purposes
