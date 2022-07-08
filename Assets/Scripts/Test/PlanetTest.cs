@@ -243,6 +243,8 @@ namespace Planet.Unity
                 }
             }
 
+
+
             for (int i = 0; i < tileMap.MapSize.X; i++)
             {
                 for (int j = tileMap.MapSize.Y - 10; j < tileMap.MapSize.Y; j++)
@@ -277,6 +279,7 @@ namespace Planet.Unity
                 {
                     tileMap.SetFrontTile(i, j, TileID.Air);
                     tileMap.SetBackTile(i, j, TileID.Air);
+                    tileMap.SetMidTile(i, j, TileID.Wire);
                 }
             }
 
@@ -304,6 +307,7 @@ namespace Planet.Unity
                 for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
                     tileMap.SetFrontTile(i, j, TileID.Air);
+                    tileMap.SetMidTile(i, j, TileID.Pipe);
                 }
             }
 

@@ -17,6 +17,7 @@ public class GameResources
     public static int CharacterSpriteSheet;
     public static int LaserSpriteSheet;
     public static int PipeSpriteSheet;
+
     public static int pipeIconSpriteSheet;
     public static int DustSpriteSheet;
     public static int GrenadeSpriteSheet;
@@ -111,16 +112,19 @@ public class GameResources
 
         GameState.TileCreationApi.CreateTileProperty(TileID.Glass);
         GameState.TileCreationApi.SetTilePropertyName("glass");
+        GameState.TileCreationApi.SetSpriteRuleType(PlanetTileMap.SpriteRuleType.R1);
         GameState.TileCreationApi.SetTilePropertySpriteSheet16(MoonSpriteSheet, 11, 10);
         GameState.TileCreationApi.EndTileProperty();
 
         GameState.TileCreationApi.CreateTileProperty(TileID.Moon);
         GameState.TileCreationApi.SetTilePropertyName("moon");
+        GameState.TileCreationApi.SetSpriteRuleType(PlanetTileMap.SpriteRuleType.R1);
         GameState.TileCreationApi.SetTilePropertySpriteSheet16(MoonSpriteSheet, 0, 0);
         GameState.TileCreationApi.EndTileProperty();
 
         GameState.TileCreationApi.CreateTileProperty(TileID.Background);
         GameState.TileCreationApi.SetTilePropertyName("background");
+        GameState.TileCreationApi.SetSpriteRuleType(PlanetTileMap.SpriteRuleType.R1);
         GameState.TileCreationApi.SetTilePropertySpriteSheet16(BackgroundSpriteSheet, 0, 0);
         GameState.TileCreationApi.EndTileProperty();
 
@@ -136,7 +140,14 @@ public class GameResources
 
         GameState.TileCreationApi.CreateTileProperty(TileID.Pipe);
         GameState.TileCreationApi.SetTilePropertyName("pipe");
+        GameState.TileCreationApi.SetSpriteRuleType(PlanetTileMap.SpriteRuleType.R2);
         GameState.TileCreationApi.SetTilePropertySpriteSheet16(PipeSpriteSheet, 0, 0);
+        GameState.TileCreationApi.EndTileProperty();
+
+        GameState.TileCreationApi.CreateTileProperty(TileID.Wire);
+        GameState.TileCreationApi.SetTilePropertyName("wire");
+        GameState.TileCreationApi.SetSpriteRuleType(PlanetTileMap.SpriteRuleType.R2);
+        GameState.TileCreationApi.SetTilePropertySpriteSheet16(PipeSpriteSheet, 4, 12);
         GameState.TileCreationApi.EndTileProperty();
     }
 
@@ -345,6 +356,9 @@ public class GameResources
         GameState.ProjectileCreationApi.SetSpriteId(OreIcon);
         GameState.ProjectileCreationApi.SetSize(new Vec2f(0.5f, 0.5f));
         GameState.ProjectileCreationApi.SetSpeed(20.0f);
+        GameState.ProjectileCreationApi.SetRamp(false, 1f, 10f, 1.0f);
+        GameState.ProjectileCreationApi.SetLinearDrag(true, 0.73f, 0.01f);
+        GameState.ProjectileCreationApi.SetAffectedByGravity(true);
         GameState.ProjectileCreationApi.SetAcceleration(new Vec2f());
         GameState.ProjectileCreationApi.End();
 

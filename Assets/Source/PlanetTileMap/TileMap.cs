@@ -212,72 +212,16 @@ namespace PlanetTileMap
         
         #region Tile neighbour getter
 
-        // TODO: Refactor
-        public int CheckTile(TileID[] neighbors, TilePosition rules, TileID tileId)
-        {
-            // 16 different values can be stored
-            // using only 4 bits for the
-            // adjacent tiles 
-
-            int[] neighborBit = {
-                0x1, 0x2, 0x4, 0x8
-            };
-
-            int match = 0;
-            // number of total neighbors is 4 right/left/down/up
-            for(int i = 0; i < neighbors.Length; i++)
-            {
-                // check if we have to have the same tileId
-                // in this particular neighbor                      
-                if (((int)rules & neighborBit[i]) == neighborBit[i])
-                {
-                    // if this neighbor does not match return -1 immediately
-                    if (neighbors[i] != tileId) return -1;
-                    match++;
-                }
-            }
-
-
-            return match;
-        }
-        // TODO: Refactor
-        public TilePosition GetTilePosition(TileID[] neighbors, TileID tileId)
-        {
-            int biggestMatch = 0;
-            TilePosition tilePosition = 0;
-
-            // we have 16 different values for the spriteId
-            foreach(var position in (TilePosition[])Enum.GetValues(typeof(TilePosition)))
-            {
-                int match = CheckTile(neighbors, position, tileId);
-
-                // pick only tiles with the biggest match count
-                if (match > biggestMatch)
-                {
-                    biggestMatch = match;
-                    tilePosition = position;
-                }
-            }
-
-            return tilePosition;
-        }
 
         #endregion
 
         // Update neighbour sprites of tiles
         #region Tile neighbour updater
+
+        
         
         private void UpdateNeighbourTiles(int x, int y, MapLayerType planetLayer)
         {
-            // standard sheet mapping
-            // every tile has a constant offset
-            // in the sprite atlas
-
-            // example: 15 is (3,3)
-            //           8 is (0,2)
-            //           1 is (1,0)
-            int[] tilePositionToTileSet = {15, 12, 14, 13, 3, 0, 2, 1, 11, 8, 10, 9, 7, 4, 6, 5};
-
             ref var tile = ref GetTile(x, y, planetLayer);
             
             if (tile.ID != TileID.Error)
@@ -285,48 +229,19 @@ namespace PlanetTileMap
                 ref var property = ref GameState.TileCreationApi.GetTileProperty(tile.ID);
                 if (property.IsAutoMapping)
                 {
-                    // we have 4 neighbors per tile
-                    // could be more but its 4 for now
-                    // right/left/down/up
-                    var neighbors = new TileID[4];
-
-                    for (int i = 0; i < neighbors.Length; i++)
+                    if (property.SpriteRuleType == SpriteRuleType.R1)
                     {
-                        neighbors[i] = TileID.Air;
+                        TileMapping.UpdateSpriteRule_R1(x, y, planetLayer, ref this);
                     }
-
-                    if (x + 1 < MapSize.X)
+                    else if (property.SpriteRuleType == SpriteRuleType.R2)
                     {
-                        ref var neighborTile = ref GetTile(x + 1, y, planetLayer);
-                        neighbors[(int) Neighbor.Right] = neighborTile.ID;
+                        TileMapping.UpdateSpriteRule_R2(x, y, planetLayer, ref this);
                     }
-
-                    if (x - 1 >= 0)
+                    else if (property.SpriteRuleType == SpriteRuleType.R3)
                     {
-                        ref var neighborTile = ref GetTile(x - 1, y, planetLayer);
-                        neighbors[(int) Neighbor.Left] = neighborTile.ID;
+                        TileMapping.UpdateSpriteRule_R3(x, y, planetLayer, ref this);
                     }
-
-                    if (y + 1 < MapSize.Y)
-                    {
-                        ref var neighborTile = ref GetTile(x, y + 1, planetLayer);
-                        neighbors[(int) Neighbor.Up] = neighborTile.ID;
-                    }
-
-                    if (y - 1 >= 0)
-                    {
-                        ref var neighborTile = ref GetTile(x, y - 1, planetLayer);
-                        neighbors[(int) Neighbor.Down] = neighborTile.ID;
-                    }
-
-
-                    var tilePosition = GetTilePosition(neighbors, tile.ID);
-
-                    // the sprite ids are next to each other in the sprite atlas
-                    // we just have to know which one to draw based on the offset
-                    tile.SpriteID = property.BaseSpriteId + tilePositionToTileSet[(int) tilePosition];
                 }
-
                 else
                 {
                     tile.SpriteID = property.BaseSpriteId;
