@@ -10,13 +10,13 @@ namespace Action
         protected ActionPropertiesEntity ActionPropertyEntity;
         protected AgentEntity AgentEntity;
 
-        public ActionBase(Contexts entitasContext, int actionID, int agentID)
+        public ActionBase(Contexts entitasContext, int actionID)
         {   
             EntitasContext = entitasContext;
             ActionEntity = entitasContext.action.GetEntityWithActionIDID(actionID);
             ActionPropertyEntity = entitasContext.actionProperties.GetEntityWithActionProperty(
                 ActionEntity.actionID.TypeID);
-            AgentEntity = entitasContext.agent.GetEntityWithAgentID(agentID);    
+            AgentEntity = entitasContext.agent.GetEntityWithAgentID(ActionEntity.actionOwner.AgentID);    
         }
 
         public virtual void OnEnter(ref Planet.PlanetState planet)
@@ -49,9 +49,9 @@ namespace Action
     // Factory Method
     public class ActionCreator
     {
-        public virtual ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
+        public virtual ActionBase CreateAction(Contexts entitasContext, int actionID)
         { 
-            return new ActionBase(entitasContext, actionID, agentID);
+            return new ActionBase(entitasContext, actionID);
         }
     }
 }

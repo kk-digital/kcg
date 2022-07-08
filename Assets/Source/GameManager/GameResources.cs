@@ -94,6 +94,7 @@ public class GameResources
 
             CreateTiles();
             CreateAnimations();
+            CreateItems();
             CreateAgents();
             CreateParticles();
             CreateParticleEmitters();
@@ -181,64 +182,65 @@ public class GameResources
         GameState.AnimationManager.EndAnimation();
     }
 
-    public static void CreateItems(Contexts entitasContext)
+    public static void CreateItems()
     {
-        
-        Item.CreationApi.Instance.CreateItem(entitasContext, Enums.ItemType.Gun, "Gun");
-        Item.CreationApi.Instance.SetTexture(GunIcon);
-        Item.CreationApi.Instance.SetInventoryTexture(GunIcon);
-        Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.FireWeaponAction);
-        Item.CreationApi.Instance.EndItem();
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.Gun, "Gun");
+        GameState.ItemCreationApi.SetTexture(GunIcon);
+        GameState.ItemCreationApi.SetInventoryTexture(GunIcon);
+        GameState.ItemCreationApi.SetFireWeapon(20.0f, 1f, 10.0f, 25.0f, new Vec2f(0.2f, 0.2f), OreIcon);
+        GameState.ItemCreationApi.SetFireWeaponClip(8, 1f);
+        GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
+        GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionFireWeapon);
+        GameState.ItemCreationApi.EndItem();
 
-        Item.CreationApi.Instance.CreateItem(entitasContext, Enums.ItemType.Ore, "Ore");
-        Item.CreationApi.Instance.SetTexture(OreIcon);
-        Item.CreationApi.Instance.SetInventoryTexture(OreIcon);
-        Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-        Item.CreationApi.Instance.SetStackable(99);
-        Item.CreationApi.Instance.EndItem();
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.Ore, "Ore");
+        GameState.ItemCreationApi.SetTexture(OreIcon);
+        GameState.ItemCreationApi.SetInventoryTexture(OreIcon);
+        GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
+        GameState.ItemCreationApi.SetStackable(99);
+        GameState.ItemCreationApi.EndItem();
 
-        Item.CreationApi.Instance.CreateItem(entitasContext, Enums.ItemType.PlacementTool, "PlacementTool");
-        Item.CreationApi.Instance.SetTexture(PlacementToolIcon);
-        Item.CreationApi.Instance.SetInventoryTexture(PlacementToolIcon);
-        Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.PlaceTilMoonAction);
-        Item.CreationApi.Instance.EndItem();
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.PlacementTool, "PlacementTool");
+        GameState.ItemCreationApi.SetTexture(PlacementToolIcon);
+        GameState.ItemCreationApi.SetInventoryTexture(PlacementToolIcon);
+        GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
+        GameState.ItemCreationApi.SetAction(Enums.ActionType.PlaceTilMoonAction);
+        GameState.ItemCreationApi.EndItem();
 
-        Item.CreationApi.Instance.CreateItem(entitasContext, Enums.ItemType.RemoveTileTool, "RemoveTileTool");
-        Item.CreationApi.Instance.SetTexture(RemoveToolIcon);
-        Item.CreationApi.Instance.SetInventoryTexture(RemoveToolIcon);
-        Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.RemoveTileAction);
-        Item.CreationApi.Instance.EndItem();
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.RemoveTileTool, "RemoveTileTool");
+        GameState.ItemCreationApi.SetTexture(RemoveToolIcon);
+        GameState.ItemCreationApi.SetInventoryTexture(RemoveToolIcon);
+        GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
+        GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionRemoveTile);
+        GameState.ItemCreationApi.EndItem();
 
-        Item.CreationApi.Instance.CreateItem(entitasContext, Enums.ItemType.SpawnEnemySlimeTool, "SpawnSlimeTool");
-        Item.CreationApi.Instance.SetTexture(SlimeIcon);
-        Item.CreationApi.Instance.SetInventoryTexture(SlimeIcon);
-        Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.EnemySpawnAction);
-        Item.CreationApi.Instance.EndItem();
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.SpawnEnemySlimeTool, "SpawnSlimeTool");
+        GameState.ItemCreationApi.SetTexture(SlimeIcon);
+        GameState.ItemCreationApi.SetInventoryTexture(SlimeIcon);
+        GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
+        GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionEnemySpawn);
+        GameState.ItemCreationApi.EndItem();
 
-        Item.CreationApi.Instance.CreateItem(entitasContext, Enums.ItemType.MiningLaserTool, "MiningLaserTool");
-        Item.CreationApi.Instance.SetTexture(MiningLaserToolIcon);
-        Item.CreationApi.Instance.SetInventoryTexture(MiningLaserToolIcon);
-        Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.MiningLaserAction);
-        Item.CreationApi.Instance.EndItem();
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.MiningLaserTool, "MiningLaserTool");
+        GameState.ItemCreationApi.SetTexture(MiningLaserToolIcon);
+        GameState.ItemCreationApi.SetInventoryTexture(MiningLaserToolIcon);
+        GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
+        GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionMiningLaser);
+        GameState.ItemCreationApi.EndItem();
 
-        Item.CreationApi.Instance.CreateItem(entitasContext, Enums.ItemType.PipePlacementTool, "PipePlacementTool");
-        Item.CreationApi.Instance.SetTexture(PipePlacementToolIcon);
-        Item.CreationApi.Instance.SetInventoryTexture(PipePlacementToolIcon);
-        Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.PlaceTilPipeAction);
-        Item.CreationApi.Instance.EndItem();
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.PipePlacementTool, "PipePlacementTool");
+        GameState.ItemCreationApi.SetTexture(PipePlacementToolIcon);
+        GameState.ItemCreationApi.SetInventoryTexture(PipePlacementToolIcon);
+        GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
+        GameState.ItemCreationApi.SetAction(Enums.ActionType.PlaceTilPipeAction);
+        GameState.ItemCreationApi.EndItem();
 
-        Item.CreationApi.Instance.CreateItem(entitasContext, Enums.ItemType.ParticleEmitterPlacementTool, "ParticleEmitterPlacementTool");
-        Item.CreationApi.Instance.SetTexture(OreIcon);
-        Item.CreationApi.Instance.SetInventoryTexture(OreIcon);
-        Item.CreationApi.Instance.SetSize(new Vec2f(0.5f, 0.5f));
-        Item.CreationApi.Instance.SetAction((int)Enums.ActionType.PlaceParticleEmitterAction);
-        Item.CreationApi.Instance.EndItem();
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.ParticleEmitterPlacementTool, "ParticleEmitterPlacementTool");
+        GameState.ItemCreationApi.SetTexture(OreIcon);
+        GameState.ItemCreationApi.SetInventoryTexture(OreIcon);
+        GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
+        GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionPlaceParticle);
+        GameState.ItemCreationApi.EndItem();
     }
 
     private static void CreateAgents()
@@ -354,6 +356,9 @@ public class GameResources
         GameState.ProjectileCreationApi.SetSpriteId(OreIcon);
         GameState.ProjectileCreationApi.SetSize(new Vec2f(0.5f, 0.5f));
         GameState.ProjectileCreationApi.SetSpeed(20.0f);
+        GameState.ProjectileCreationApi.SetRamp(false, 1f, 10f, 1.0f);
+        GameState.ProjectileCreationApi.SetLinearDrag(true, 0.73f, 0.01f);
+        GameState.ProjectileCreationApi.SetAffectedByGravity(true);
         GameState.ProjectileCreationApi.SetAcceleration(new Vec2f());
         GameState.ProjectileCreationApi.End();
 
@@ -366,7 +371,4 @@ public class GameResources
         GameState.ProjectileCreationApi.SetAcceleration(new Vec2f(0.0f, -10.0f));
         GameState.ProjectileCreationApi.End();
     }
-
-
-
 }

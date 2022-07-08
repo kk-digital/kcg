@@ -9,8 +9,8 @@ namespace Enums.Tile
         Ore3,
         Glass, // 9
         Moon, // 10
-        Background,
         Pipe,
+        Background,
         Wire
     }
 }

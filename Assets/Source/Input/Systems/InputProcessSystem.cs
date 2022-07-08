@@ -145,6 +145,13 @@ namespace ECSInput
             }
 
 
+            // Reload Weapon.
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                var players = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentPlayer));
+                foreach (var player in players) 
+                    GameState.ActionCreationSystem.CreateAction(planet.EntitasContext,Enums.ActionType.ReloadAction, player.agentID.ID);
+            }
 
             //  Open Inventory with Tab.
             var PlayerWithInventory = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentInventory, AgentMatcher.AgentPlayer));

@@ -31,13 +31,19 @@ namespace Projectile
             // Add ID Component
             entity.AddProjectileID(projectileId);
 
+            // Add Ramp Component
+            entity.AddProjectileRamp(projectileProperties.canRamp, projectileProperties.StartVelocity, projectileProperties.StartVelocity, projectileProperties.rampTime);
+
+            // Add Linear Drag Component
+            entity.AddProjectileLinearDrag(projectileProperties.canLinearDrag, projectileProperties.linearDrag, projectileProperties.linearCutOff);
+
             // Add Sprite Component
             entity.AddProjectileSprite2D(projectileProperties.SpriteId, projectileProperties.Size);
             // Add Position Component
             entity.AddProjectilePosition2D(position, position, 0.0f);
             // Add Movement Component
-            entity.AddProjectileMovable(direction.Normalized * projectileProperties.Speed, 
-                                    projectileProperties.Acceleration);
+            entity.AddProjectileMovable(direction.Normalized * projectileProperties.Speed, projectileProperties.Acceleration, 
+                projectileProperties.AffectedByGravity);
             
             // Add Physics Box Collider Component
             entity.AddPhysicsBox2DCollider(projectileProperties.Size, Vec2f.Zero);
@@ -80,7 +86,7 @@ namespace Projectile
             // Add Position Component
             entity.AddProjectilePosition2D(startPos, startPos, 0.0f);
             // Add Moviment Component
-            entity.AddProjectileMovable(velocity, acceleration);
+            entity.AddProjectileMovable(velocity, acceleration, false);
 
             // Add Physics Box Collider Component
             entity.AddPhysicsBox2DCollider(spriteSize, Vec2f.Zero);
