@@ -2,6 +2,7 @@
 using KMath;
 using Planet;
 using UnityEngine;
+using System.Collections;
 
 namespace Action
 {
@@ -16,8 +17,6 @@ namespace Action
 
         public override void OnEnter(ref Planet.PlanetState planet)
         {
-            const float speed = 20.0f;
-
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float x = worldPosition.x;
             float y = worldPosition.y;
@@ -28,8 +27,8 @@ namespace Action
             StartPos.Y += 0.5f;
 
             ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Bullet);
-           /* ProjectileEntity = GameState.ProjectileSpawnerSystem.SpawnBullet(GameResources.OreIcon, 4, 4, StartPos, 
-                new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized * speed, Vec2f.Zero, Enums.ProjectileType.Bullet, Enums.ProjectileDrawType.Standard);*/
+            /* ProjectileEntity = GameState.ProjectileSpawnerSystem.SpawnBullet(GameResources.OreIcon, 4, 4, StartPos, 
+                 new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized * speed, Vec2f.Zero, Enums.ProjectileType.Bullet, Enums.ProjectileDrawType.Standard);*/
             ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Running);
         }
 
