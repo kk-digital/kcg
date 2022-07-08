@@ -35,7 +35,7 @@ namespace Projectile
             entity.AddProjectileRamp(projectileProperties.canRamp, projectileProperties.StartVelocity, projectileProperties.StartVelocity, projectileProperties.rampTime);
 
             // Add Linear Drag Component
-            entity.AddProjectileLinearDrag(projectileProperties.canLinearDrag, projectileProperties.linearDrag, projectileProperties.linearCutOff);
+            entity.AddProjectileLinearDrag(projectileProperties.linearDrag, projectileProperties.linearCutOff);
 
             // Add Sprite Component
             entity.AddProjectileSprite2D(projectileProperties.SpriteId, projectileProperties.Size);

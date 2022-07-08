@@ -30,6 +30,8 @@ namespace Projectile
 
         public bool AffectedByGravity;
         public float GravityScale;
+
+        public Enums.DragType dragType;
     }
 }
 

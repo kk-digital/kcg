@@ -45,9 +45,6 @@ namespace Projectile
                 // Get Projectile Can Ramp Condition
                 var canRamp = projectile.projectileRamp.canRamp;
 
-                // Get Can Linear Drag Condition
-                var canLinearDrag = projectile.projectileLinearDrag.canDrag;
-
                 // Get Linear Drag
                 var linearDrag = projectile.projectileLinearDrag.Drag;
 
@@ -74,7 +71,7 @@ namespace Projectile
                     var maxSpeed = projectile.projectileRamp.maxVelocity;
 
                     // Get Ramp Time for Ramp
-                    var rampTime = projectile.projectileRamp.rampTime;
+                    var rampTime = projectile.projectileRamp.rampTime; 
 
                     // Elapsed time
                     float elapsed = 0.0f;
@@ -89,7 +86,7 @@ namespace Projectile
                             projectileProperties.Speed = Mathf.Lerp(startSpeed, maxSpeed, elapsed / rampTime);
 
                             // If linear drag is on
-                            if (canLinearDrag)
+                            if (projectileProperties.dragType == Enums.DragType.Linear)
                             {
                                 // Apply linear drag to speed
                                 projectileProperties.Speed = (1 - projectileProperties.Speed / (linearDrag + linearCutoff));
@@ -106,13 +103,12 @@ namespace Projectile
                                 // Add drag force to velocity vector
                                 newVelocity += dragForceVector;
                             }
-                            else // If linear drag is off
+                            else if (projectileProperties.dragType == Enums.DragType.Off) // If linear drag is off
                             {
                                 // Set New velocity without adding any drag
                                 newVelocity = movable.Acceleration * deltaTime + (movable.Velocity * projectileProperties.Speed);
                             }
                             
-
                             // Increase Time
                             elapsed += Time.deltaTime;
                         }
@@ -123,7 +119,7 @@ namespace Projectile
                 else
                 {
                     // If linear drag is on
-                    if(canLinearDrag)
+                    if(projectileProperties.dragType == Enums.DragType.Linear)
                     {
                         // Calculate Speed
                         projectileProperties.Speed = (1 - projectileProperties.Speed / (linearDrag + linearCutoff));
@@ -145,11 +141,10 @@ namespace Projectile
 
 
                     }
-                    else
+                    else if (projectileProperties.dragType == Enums.DragType.Off)
                     {
                         newVelocity = movable.Acceleration * deltaTime + movable.Velocity;
                     }
-
                 }
 
                 float newRotation = pos.Rotation + projectileProperties.DeltaRotation * deltaTime;  
