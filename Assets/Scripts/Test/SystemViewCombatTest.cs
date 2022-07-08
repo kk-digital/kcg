@@ -296,25 +296,11 @@ namespace Scripts {
                 right_gun.flags                  = (int)WeaponFlags.WEAPON_PROJECTILE
                                                  | (int)WeaponFlags.WEAPON_BROADSIDE;
 
-                ShipWeapon turret                = new ShipWeapon();
+                ShipWeapon turret                = ShipWeapon.add_tri_cannon(Player.ship, State, (int)WeaponFlags.WEAPON_TURRET
+                                                                                               | (int)WeaponFlags.WEAPON_SEEKING);
 
-                turret.color                     = Color.white;
-
-                turret.range                     = 25.0f;
-                turret.shield_penetration        = 0.1f;
-                turret.projectile_velocity       = 15.0f;
-                turret.damage                    = 200;
-                turret.attack_speed              = 50;
-                turret.cooldown                  = 0;
-                turret.FOV                       = Tools.eigthpi;
                 turret.rotation                  = Tools.pi;
                 turret.rotation_rate             = 2.0f;
-                turret.self                      = Player.ship;
-                turret.state                     = State;
-
-                turret.flags                     = (int)WeaponFlags.WEAPON_PROJECTILE
-                                                 | (int)WeaponFlags.WEAPON_TURRET
-                                                 | (int)WeaponFlags.WEAPON_SEEKING;
 
                 ShipWeapon laser                 = new ShipWeapon();
 
@@ -334,7 +320,6 @@ namespace Scripts {
 
                 laser.flags                      = (int)WeaponFlags.WEAPON_LASER;
 
-                Player.ship.weapons.Add(turret);
                 Player.ship.weapons.Add(laser);
                 Player.ship.weapons.Add(left_cannon);
                 Player.ship.weapons.Add(left_gun);

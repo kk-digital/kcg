@@ -29,7 +29,7 @@ namespace Source {
             public const float sixthpi                = 0.5235988f;     // ---                  0.5235988                    30.0°
                                                                         //  6
 
-            //  π
+                                                                        //  π
             public const float eigthpi                = 0.3926991f;     // ---                  0.3926991                    22.5°
                                                                         //  8
 

@@ -45,7 +45,7 @@ namespace Scripts {
             public int attack_speed; // in milliseconds
             public int cooldown;     // in milliseconds
 
-            public int   projectiles_per_burst;
+            public int   projectiles_per_burst = 1;
             public float projectile_spread;
 
             public List<ShipWeaponProjectile> projectiles_fired = new List<ShipWeaponProjectile>();
@@ -57,6 +57,71 @@ namespace Scripts {
             public SystemState      state;
 
             public int flags;
+
+            // Pre defined weapon types
+            public static ShipWeapon add_cannon(SystemShip self, SystemState state, int flags) {
+                ShipWeapon cannon = new ShipWeapon();
+
+                cannon.color                 = Color.white;
+                cannon.range                 = 30.0f;
+                cannon.shield_penetration    = 0.2f;
+                cannon.projectile_velocity   = 5.0f;
+                cannon.damage                = 3000;
+                cannon.attack_speed          = 800;
+                cannon.cooldown              = 0;
+                cannon.FOV                   = Tools.quarterpi;
+                cannon.self                  = self;
+                cannon.state                 = state;
+                cannon.projectiles_per_burst = 1;
+                cannon.flags                 = (int)WeaponFlags.WEAPON_PROJECTILE | flags;
+
+                self.weapons.Add(cannon);
+
+                return cannon;
+            }
+
+            public static ShipWeapon add_auto_cannon(SystemShip self, SystemState state, int flags) {
+                ShipWeapon cannon = new ShipWeapon();
+
+                cannon.color                 = Color.white;
+                cannon.range                 = 30.0f;
+                cannon.shield_penetration    = 0.2f;
+                cannon.projectile_velocity   = 5.0f;
+                cannon.damage                = 2000;
+                cannon.attack_speed          = 400;
+                cannon.cooldown              = 0;
+                cannon.FOV                   = Tools.quarterpi;
+                cannon.self                  = self;
+                cannon.state                 = state;
+                cannon.projectiles_per_burst = 1;
+                cannon.flags                 = (int)WeaponFlags.WEAPON_PROJECTILE | flags;
+
+                self.weapons.Add(cannon);
+
+                return cannon;
+            }
+
+            public static ShipWeapon add_tri_cannon(SystemShip self, SystemState state, int flags) {
+                ShipWeapon cannon = new ShipWeapon();
+
+                cannon.color                 = Color.white;
+                cannon.range                 = 30.0f;
+                cannon.shield_penetration    = 0.2f;
+                cannon.projectile_velocity   = 5.0f;
+                cannon.damage                = 2000;
+                cannon.attack_speed          = 1250;
+                cannon.cooldown              = 0;
+                cannon.FOV                   = Tools.sixthpi;
+                cannon.self                  = self;
+                cannon.state                 = state;
+                cannon.projectiles_per_burst = 3;
+                cannon.projectile_spread     = Tools.sixthpi;
+                cannon.flags                 = (int)WeaponFlags.WEAPON_PROJECTILE | flags;
+
+                self.weapons.Add(cannon);
+
+                return cannon;
+            }
 
             public void cleanup() {
                 if(laser_renderer != null) GameObject.Destroy(laser_renderer);
@@ -233,6 +298,9 @@ namespace Scripts {
                 cooldown = attack_speed;
 
                 if((flags & (int)WeaponFlags.WEAPON_PROJECTILE) != 0) {
+                    float half_spread           = projectile_spread * 0.5f;
+                    float spread_per_projectile = projectile_spread / projectiles_per_burst;
+
                     for(int i = 0; i < projectiles_per_burst; i++) {
                         ShipWeaponProjectile projectile = new ShipWeaponProjectile();
 
@@ -244,8 +312,8 @@ namespace Scripts {
 
                         float angle = Tools.get_angle(dx, dy);
 
-                        angle -=     projectile_spread * 0.5f;
-                        angle += i * projectile_spread / projectiles_per_burst;
+                        angle -= half_spread;
+                        angle += spread_per_projectile * (i + 0.5f);
                         angle  = Tools.normalize_angle(angle);
 
                         float cos = (float)Math.Cos(angle);
