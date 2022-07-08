@@ -24,6 +24,8 @@ namespace PlanetTileMap
         /// </summary>
         public bool IsAutoMapping; 
 
+        public SpriteRuleType SpriteRuleType;
+
         public CollisionType TileCollisionType;
         public bool IsExplosive;
 

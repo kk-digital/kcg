@@ -11,5 +11,6 @@ namespace Enums.Tile
         Moon, // 10
         Background,
         Pipe,
+        Wire
     }
 }

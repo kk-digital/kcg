@@ -91,45 +91,105 @@ namespace PlanetTileMap
         {
             if (CurrentTileIndex == TileID.Error) return;
             
-            int baseId = 0;
+           
 
-            for(int j = column; j < column + 4; j++)
+            if (TilePropertyArray[(int)CurrentTileIndex].SpriteRuleType == SpriteRuleType.R1 ||
+                TilePropertyArray[(int)CurrentTileIndex].SpriteRuleType == SpriteRuleType.R2)
             {
-                for(int i = row; i < row + 4; i++)
+                int baseId = 0;
+                for(int j = column; j < column + 4; j++)
                 {
-                    //FIX: Dont import GameState, make a method?
-                    //TileAtlas is imported by GameState, so TileAtlas should not import GameState
-                    int atlasSpriteId = 
-                        GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(spriteSheetId, i, j, 0);
-                    if (i == row && j == column)
+                    for(int i = row; i < row + 4; i++)
                     {
-                        baseId = atlasSpriteId;
+                        //FIX: Dont import GameState, make a method?
+                        //TileAtlas is imported by GameState, so TileAtlas should not import GameState
+                        int atlasSpriteId = 
+                            GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(spriteSheetId, i, j, 0);
+
+                        // the first sprite id is the baseId
+                        if (i == row && j == column)
+                        {
+                            baseId = atlasSpriteId;
+                        }
                     }
                 }
+   
+                TilePropertyArray[(int)CurrentTileIndex].BaseSpriteId = baseId;
+                TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = true;
             }
-                
-            TilePropertyArray[(int)CurrentTileIndex].BaseSpriteId = baseId;
-            TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = true;
+            else if (TilePropertyArray[(int)CurrentTileIndex].SpriteRuleType == SpriteRuleType.R3)
+            {
+                int baseId = 0;
+                for(int x = column; x < column + 5; x++)
+                {
+                    for(int y = row; y < row + 11; y++)
+                    {
+                        //FIX: Dont import GameState, make a method?
+                        //TileAtlas is imported by GameState, so TileAtlas should not import GameState
+                        int atlasSpriteId = 
+                            GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(spriteSheetId, y, x, 0);
+
+                        // the first sprite id is the baseId
+                        if (x == column && y == row)
+                        {
+                            baseId = atlasSpriteId;
+                        }
+                    }
+                }
+   
+                TilePropertyArray[(int)CurrentTileIndex].BaseSpriteId = baseId;
+                TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = true;
+            }
         }
 
         public void SetTilePropertySpriteSheet(int spriteSheetId, int row, int column)
         {
             if (CurrentTileIndex == TileID.Error) return;
             
-            int baseId = 0;
-            for(int i = row; i <= row + 4; i++)
+            if (TilePropertyArray[(int)CurrentTileIndex].SpriteRuleType == SpriteRuleType.R1 ||
+            TilePropertyArray[(int)CurrentTileIndex].SpriteRuleType == SpriteRuleType.R2)
             {
-                for(int j = column; j <= column + 4; j++)
+                int baseId = 0;
+                
+                for(int i = row; i <= row + 4; i++)
                 {
-                    int atlasSpriteId = GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas(spriteSheetId, i, j, 0);
-                    if (i == row && j == column)
+                    for(int j = column; j <= column + 4; j++)
                     {
-                        baseId = atlasSpriteId;
+                        int atlasSpriteId = GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas(spriteSheetId, i, j, 0);
+
+                        // the first sprite id is the baseId
+                        if (i == row && j == column)
+                        {
+                            baseId = atlasSpriteId;
+                        }
                     }
                 }
+                TilePropertyArray[(int)CurrentTileIndex].BaseSpriteId = baseId;
+                TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = true;
             }
-            TilePropertyArray[(int)CurrentTileIndex].BaseSpriteId = baseId;
-            TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = true;
+            else if (TilePropertyArray[(int)CurrentTileIndex].SpriteRuleType == SpriteRuleType.R3)
+            {
+                int baseId = 0;
+                for(int x = column; x < column + 5; x++)
+                {
+                    for(int y = row; y < row + 11; y++)
+                    {
+                        //FIX: Dont import GameState, make a method?
+                        //TileAtlas is imported by GameState, so TileAtlas should not import GameState
+                        int atlasSpriteId = 
+                            GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas(spriteSheetId, y, x, 0);
+
+                        // the first sprite id is the baseId
+                        if (x == column && y == row)
+                        {
+                            baseId = atlasSpriteId;
+                        }
+                    }
+                }
+
+                TilePropertyArray[(int)CurrentTileIndex].BaseSpriteId = baseId;
+                TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = true;
+            }
         }
 
         public void SetTilePropertyTexture(int spriteSheetId, int row, int column)
@@ -146,10 +206,11 @@ namespace PlanetTileMap
         public void SetTilePropertyTexture16(int spriteSheetId, int row, int column)
         {
             if (CurrentTileIndex == TileID.Error) return;
-            
+              
             int atlasSpriteId = GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(spriteSheetId, row, column, 0);
             TilePropertyArray[(int)CurrentTileIndex].BaseSpriteId = atlasSpriteId;
             TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = false;
+            
         }
 
         public void SetTilePropertyIsExplosive(bool isExplosive)
@@ -179,6 +240,13 @@ namespace PlanetTileMap
             if (CurrentTileIndex == TileID.Error) return;
             
             TilePropertyArray[(int)CurrentTileIndex].Durability = durability;
+        }
+
+        public void SetSpriteRuleType(SpriteRuleType spriteRuleType)
+        {
+            Utils.Assert((int)CurrentTileIndex >= 0 && (int)CurrentTileIndex < TilePropertyArray.Length);
+
+            TilePropertyArray[(int)CurrentTileIndex].SpriteRuleType = spriteRuleType;
         }
 
        /* public void SetTilePropertyVariant(int spriteSheetId, int row, int column, PlanetTileMap.TilePosition variant)
