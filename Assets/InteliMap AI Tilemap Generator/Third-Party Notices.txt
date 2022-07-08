@@ -1,0 +1,31 @@
+All third-party assets are used under the Public Domain license (CC0 1.0).
+
+Example 2 Tileset:
+	Name: Forgotten Dungeon
+	License: Public Domain (CC0 1.0)
+	Artist: Blackwolfdave (https://opengameart.org/users/blackwolfdave)
+
+Example 3 Tileset:
+	Name: Overworld - Grass Biome
+	License: Public Domain (CC0 1.0)
+	Artist: Beast (https://opengameart.org/users/beast)
+
+Example 4 Tileset:
+	Name: 2D Sci-Fi Platformer Tileset
+	License: Public Domain (CC0 1.0)
+	Artist: RottingPixels (https://opengameart.org/users/rottingpixels)
+
+Example 5 Tileset:
+	Name: Dungeon Tileset
+	License: Public Domain (CC0 1.0)
+	Artist: HorusKDI (https://opengameart.org/users/horuskdi)
+
+Example 6 Tileset:
+	Name: Platformer Tileset 16x16
+	License: Public Domain (CC0 1.0)
+	Artist: Duasun (https://opengameart.org/users/duasun)
+
+Example 7 Tileset:
+	Name: Isometric Dungeon Tiles
+	License: Public Domain (CC0 1.0)
+	Artist: Kenney (https://kenney.nl/)

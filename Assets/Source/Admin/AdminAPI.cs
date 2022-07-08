@@ -48,7 +48,7 @@ namespace Admin
             // Draw square to every tile
             for (int y = 0; y < tileMap.MapSize.Y; y++)
             {
-                for (int x = 0; x < tileMap.MapSize.X; x++)
+                for(int x = 0; x < tileMap.MapSize.X; x++)
                 {
                     // If chunk is empty/air make it black
                     if (tileMap.GetFrontTile(x, y).ID == Enums.Tile.TileID.Air)
@@ -58,7 +58,7 @@ namespace Admin
 
                     if (!Utility.ObjectMesh.isOnScreen(x, y))
                         Gizmos.color = Color.blue;
-                        
+
                     // Draw colored cubes to the editor display (Debug)
                     Gizmos.DrawCube(new Vector3(x + chunkVisualizerXOffset, y + chunkVisualizerYOffset), new Vector3(1, 1));
                 }
