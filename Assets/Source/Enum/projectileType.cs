@@ -21,4 +21,11 @@ namespace Enums
         Standard,
         Invalid
     }
+
+    // An enum to determine projectile rendering type
+    public enum DragType
+    {
+        Off,
+        Linear
+    }
 }

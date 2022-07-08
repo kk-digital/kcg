@@ -11,19 +11,17 @@ public partial class ProjectileEntity {
     public Projectile.LinearDragComponent projectileLinearDrag { get { return (Projectile.LinearDragComponent)GetComponent(ProjectileComponentsLookup.ProjectileLinearDrag); } }
     public bool hasProjectileLinearDrag { get { return HasComponent(ProjectileComponentsLookup.ProjectileLinearDrag); } }
 
-    public void AddProjectileLinearDrag(bool newCanDrag, float newDrag, float newCutOff) {
+    public void AddProjectileLinearDrag(float newDrag, float newCutOff) {
         var index = ProjectileComponentsLookup.ProjectileLinearDrag;
         var component = (Projectile.LinearDragComponent)CreateComponent(index, typeof(Projectile.LinearDragComponent));
-        component.canDrag = newCanDrag;
         component.Drag = newDrag;
         component.CutOff = newCutOff;
         AddComponent(index, component);
     }
 
-    public void ReplaceProjectileLinearDrag(bool newCanDrag, float newDrag, float newCutOff) {
+    public void ReplaceProjectileLinearDrag(float newDrag, float newCutOff) {
         var index = ProjectileComponentsLookup.ProjectileLinearDrag;
         var component = (Projectile.LinearDragComponent)CreateComponent(index, typeof(Projectile.LinearDragComponent));
-        component.canDrag = newCanDrag;
         component.Drag = newDrag;
         component.CutOff = newCutOff;
         ReplaceComponent(index, component);

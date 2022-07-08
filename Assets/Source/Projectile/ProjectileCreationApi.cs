@@ -124,13 +124,20 @@ namespace Projectile
             }
         }
 
-        public void SetLinearDrag(bool canDrag, float linearDrag, float cutOff)
+        public void SetLinearDrag(float linearDrag, float cutOff)
         {
             if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
             {
-                PropertiesArray[CurrentIndex].canLinearDrag = canDrag;
                 PropertiesArray[CurrentIndex].linearDrag = linearDrag;
                 PropertiesArray[CurrentIndex].linearCutOff = cutOff;
+            }
+        }
+
+        public void SetDragType(Enums.DragType dragType)
+        {
+            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
+            {
+                PropertiesArray[CurrentIndex].dragType = dragType;
             }
         }
 
