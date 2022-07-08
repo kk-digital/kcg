@@ -1,6 +1,7 @@
 ﻿using Entitas;
 using UnityEngine;
 using KMath;
+using Enums;
 
 namespace Action
 {
@@ -8,7 +9,7 @@ namespace Action
     {
         private ItemEntity ItemEntity;
 
-        public DropAction(Contexts entitasContext, int actionID, int agentID) : base(entitasContext, actionID, agentID)
+        public DropAction(Contexts entitasContext, int actionID) : base(entitasContext, actionID)
         {
         }
 
@@ -31,12 +32,11 @@ namespace Action
                 GameState.InventoryManager.RemoveItem(planet.EntitasContext, ItemEntity, selected);
              
                 Vec2f pos = AgentEntity.physicsPosition2D.Value;
-                Vec2f size = EntitasContext.itemProperties.GetEntityWithItemProperty(ItemEntity.itemType.Type).itemPropertySize.Size;
+                Vec2f size = GameState.ItemCreationApi.Get(ItemEntity.itemType.Type).SpriteSize;
 
                 ItemEntity.AddPhysicsPosition2D(pos, pos);
                 ItemEntity.AddPhysicsBox2DCollider(size, Vec2f.Zero);
-                ItemEntity.AddPhysicsMovable(0.0f, new Vec2f(-30.0f, 20.0f), Vec2f.Zero,
-                                                true, true, false, false);
+                ItemEntity.AddPhysicsMovable(0.0f, new Vec2f(-30.0f, 20.0f), Vec2f.Zero, true, true, false, false);
                 ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Running);
                 return;
 
@@ -66,9 +66,9 @@ namespace Action
     // Factory Method
     public class DropActionCreator : ActionCreator
     {
-        public override ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
+        public override ActionBase CreateAction(Contexts entitasContext, int actionID)
         {
-            return new DropAction(entitasContext, actionID, agentID);
+            return new DropAction(entitasContext, actionID);
         }
     }
 }

@@ -66,6 +66,8 @@ namespace Planet.Unity
 
             AgentMeshBuilderSystem.Initialize(Material, transform, 12);
             GameState.AgentSpawnerSystem.SpawnPlayer(Contexts.sharedInstance, CharacterSpriteId, 32, 48, new Vec2f(3.0f, 2.0f), 0, 0, 100, 100, 100, 100, 100, 0.2f);
+            GameState.TileMapRenderer.Initialize(Material, transform, 7);
+
         }
 
         public void Update()
@@ -116,9 +118,9 @@ namespace Planet.Unity
             AgentProcessCollisionSystem.Update(Contexts.sharedInstance.agent, ref PlanetState.TileMap);
 
             AgentMeshBuilderSystem.UpdateMesh(Contexts.sharedInstance.agent);
-            PlanetState.TileMap.UpdateFrontLayerMesh();
+            GameState.TileMapRenderer.UpdateFrontLayerMesh(ref PlanetState.TileMap);
 
-            PlanetState.TileMap.DrawLayer(MapLayerType.Front);
+            GameState.TileMapRenderer.DrawLayer(MapLayerType.Front);
             Utility.Render.DrawFrame(ref AgentMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Agent));
         }
 
@@ -167,8 +169,6 @@ namespace Planet.Unity
                     PlanetState.TileMap.SetFrontTile(i, j, frontTile);
                 }
             }
-
-            PlanetState.TileMap.InitializeLayerMesh(Material, transform, 7);
         }
     }
 }

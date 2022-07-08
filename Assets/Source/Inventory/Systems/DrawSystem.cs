@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using KMath;
 using Entitas;
+using Item;
 
 namespace Inventory
 {
@@ -129,8 +130,8 @@ namespace Inventory
                 }
 
                 // Draw sprites.
-                ItemPropertiesEntity itemPropertyEntity = entitasContext.itemProperties.GetEntityWithItemProperty(itemEntity.itemType.Type);
-                int SpriteID = itemPropertyEntity.itemPropertyInventorySprite.ID;
+                Item.ItemProprieties itemProprieties = GameState.ItemCreationApi.Get(itemEntity.itemType.Type);
+                int SpriteID = itemProprieties.SpriteID;
 
                 Sprites.Sprite sprite = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle);
 

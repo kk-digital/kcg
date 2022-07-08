@@ -14,7 +14,7 @@ namespace Admin
                 return null;
 
             // Spawn Item
-            ItemEntity item = GameState.ItemSpawnSystem.SpawnInventoryItem(contexts.item, itemID);
+            ItemEntity item = GameState.ItemSpawnSystem.SpawnInventoryItem(contexts, itemID);
 
             // Return Item
             return item;
@@ -40,15 +40,13 @@ namespace Admin
 
         // Chunk Visualizer X Offset
         public static float chunkVisualizerXOffset = 0.5f;
-
         // Chunk Visualizer Y Offset
         public static float chunkVisualizerYOffset = 0.0f;
-
         // Display Chunk Visualizer
         public static void DrawChunkVisualizer(PlanetTileMap.TileMap tileMap)
         {
             // Draw square to every tile
-            for(int y = 0; y < tileMap.MapSize.Y; y++)
+            for (int y = 0; y < tileMap.MapSize.Y; y++)
             {
                 for(int x = 0; x < tileMap.MapSize.X; x++)
                 {
@@ -57,6 +55,9 @@ namespace Admin
                         Gizmos.color = Color.black;
                     else // If chunk is not empty make it green
                         Gizmos.color = Color.green;
+
+                    if (!Utility.ObjectMesh.isOnScreen(x, y))
+                        Gizmos.color = Color.blue;
 
                     // Draw colored cubes to the editor display (Debug)
                     Gizmos.DrawCube(new Vector3(x + chunkVisualizerXOffset, y + chunkVisualizerYOffset), new Vector3(1, 1));
