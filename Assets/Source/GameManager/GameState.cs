@@ -1,6 +1,5 @@
 using Agent;
 using Inventory;
-using Item;
 using Projectile;
 /// <summary>
 /// <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/static-constructors">Static Constructor</a>
@@ -59,6 +58,7 @@ public class GameState
     public static readonly Item.SpawnerSystem ItemSpawnSystem;
     public static readonly Item.PickUpSystem ItemPickUpSystem;
     public static readonly Item.MeshBuilderSystem ItemMeshBuilderSystem;
+    public static readonly Item.ItemCreationApi ItemCreationApi;
     #endregion
 
     #region Projectile
@@ -110,6 +110,7 @@ public class GameState
         FloatingTextDrawSystem = new FloatingText.FloatingTextDrawSystem();
         AnimationUpdateSystem = new Animation.UpdateSystem();
         //UnityImage2DCache = new Sprites.UnityImage2DCache();
+        ItemCreationApi = new Item.ItemCreationApi();
         ItemSpawnSystem = new Item.SpawnerSystem();
         ItemPickUpSystem = new Item.PickUpSystem();
         ItemMeshBuilderSystem = new Item.MeshBuilderSystem();

@@ -2,11 +2,17 @@
 {
     public enum ItemType
     {
-        Error,
-        Gun,
+        Error = -1,     // Not inialized type.
         Rock,
         RockDust,
         Ore,
+        /// <summary>
+        /// Weapons
+        /// </summary>
+        Gun,
+        /// <summary>
+        /// Tools
+        /// </summary>
         PlacementTool,
         RemoveTileTool,
         MiningLaserTool,

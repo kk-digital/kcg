@@ -6,7 +6,7 @@ namespace Action
 {
     public class ReloadAction : ActionBase
     {
-        private ItemPropertiesEntity ItemPropretiesEntity;
+        private Item.FireWeaponPropreties WeaponPropreties;
         private InventoryEntity InventoryEntity;
         private ItemEntity ItemEntity;
         private float runningTime = 0f;
@@ -24,8 +24,7 @@ namespace Action
                 InventoryEntity = planet.EntitasContext.inventory.GetEntityWithInventoryID(toolBarID);
                 int selectedSlot = InventoryEntity.inventorySlots.Selected;
                 ItemEntity = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.item, toolBarID, selectedSlot);
-                ItemPropretiesEntity = 
-                    planet.EntitasContext.itemProperties.GetEntityWithItemProperty(ItemEntity.itemType.Type);
+                WeaponPropreties = GameState.ItemCreationApi.GetWeapon(ItemEntity.itemType.Type);
 
                 bool isReloadable = ItemEntity.hasItemFireWeaponClip;
 
@@ -41,9 +40,9 @@ namespace Action
         public override void OnUpdate(float deltaTime, ref PlanetState planet)
         {
             runningTime += deltaTime;
-            if (runningTime >= ItemPropretiesEntity.itemPropertyFireWeaponClip.ReloadTime)
+            if (runningTime >= WeaponPropreties.ReloadTime)
             {
-                ItemEntity.itemFireWeaponClip.NumOfBullets = ItemPropretiesEntity.itemPropertyFireWeaponClip.ClipSize;
+                ItemEntity.itemFireWeaponClip.NumOfBullets = WeaponPropreties.ClipSize;
                 ActionEntity.actionExecution.State =  Enums.ActionState.Success;
             }
         }

@@ -1,6 +1,7 @@
 using UnityEngine;
 using Enums.Tile;
 using KMath;
+using Item;
 
 namespace Planet.Unity
 {
@@ -35,12 +36,13 @@ namespace Planet.Unity
             int selectedSlot = Inventory.inventorySlots.Selected;
 
             ItemEntity item = GameState.InventoryManager.GetItemInSlot(Planet.EntitasContext.item, toolBarID, selectedSlot);
-            ItemPropertiesEntity itemProperty = Planet.EntitasContext.itemProperties.GetEntityWithItemProperty(item.itemType.Type);
-            if (itemProperty.hasItemPropertyAction)
+            ItemProprieties itemProperty = GameState.ItemCreationApi.Get(item.itemType.Type);
+            if (itemProperty.IsTool())
             {
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
-                    GameState.ActionCreationSystem.CreateAction(Planet.EntitasContext, itemProperty.itemPropertyAction.ActionTypeID, Player.agentID.ID);
+                    GameState.ActionCreationSystem.CreateAction(Planet.EntitasContext, 
+                        itemProperty.ToolActionType, Player.agentID.ID);
                 }
             }
 
@@ -68,8 +70,6 @@ namespace Planet.Unity
             Planet = new Planet.PlanetState();
             Planet.Init(mapSize);
             Planet.InitializeSystems(Material, transform);
-
-            GameResources.CreateItems(Planet.EntitasContext);
 
             GenerateMap();
             Player = Planet.AddPlayer(new Vec2f(3.0f, 25));

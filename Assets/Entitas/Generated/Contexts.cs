@@ -31,12 +31,12 @@ public partial class Contexts : Entitas.IContexts {
     public InputContext input { get; set; }
     public InventoryContext inventory { get; set; }
     public ItemContext item { get; set; }
-    public ItemPropertiesContext itemProperties { get; set; }
+    public ItemInventoryContext itemInventory { get; set; }
     public ParticleContext particle { get; set; }
     public ProjectileContext projectile { get; set; }
     public VehicleContext vehicle { get; set; }
 
-    public Entitas.IContext[] allContexts { get { return new Entitas.IContext [] { action, actionCoolDown, actionProperties, agent, aI, floatingText, game, input, inventory, item, itemProperties, particle, projectile, vehicle }; } }
+    public Entitas.IContext[] allContexts { get { return new Entitas.IContext [] { action, actionCoolDown, actionProperties, agent, aI, floatingText, game, input, inventory, item, itemInventory, particle, projectile, vehicle }; } }
 
     public Contexts() {
         action = new ActionContext();
@@ -49,7 +49,7 @@ public partial class Contexts : Entitas.IContexts {
         input = new InputContext();
         inventory = new InventoryContext();
         item = new ItemContext();
-        itemProperties = new ItemPropertiesContext();
+        itemInventory = new ItemInventoryContext();
         particle = new ParticleContext();
         projectile = new ProjectileContext();
         vehicle = new VehicleContext();
@@ -97,8 +97,6 @@ public partial class Contexts {
     public const string InventoryID = "InventoryID";
     public const string ItemAttachedInventory = "ItemAttachedInventory";
     public const string ItemID = "ItemID";
-    public const string ItemProperty = "ItemProperty";
-    public const string ItemPropertyAction = "ItemPropertyAction";
     public const string ItemType = "ItemType";
     public const string ParticleEmitterID = "ParticleEmitterID";
     public const string ProjectileID = "ProjectileID";
@@ -180,16 +178,6 @@ public partial class Contexts {
             ItemID,
             item.GetGroup(ItemMatcher.ItemID),
             (e, c) => ((Item.IDComponent)c).ID));
-
-        itemProperties.AddEntityIndex(new Entitas.PrimaryEntityIndex<ItemPropertiesEntity, Enums.ItemType>(
-            ItemProperty,
-            itemProperties.GetGroup(ItemPropertiesMatcher.ItemProperty),
-            (e, c) => ((Item.Property.Component)c).ItemType));
-
-        itemProperties.AddEntityIndex(new Entitas.EntityIndex<ItemPropertiesEntity, Enums.ActionType>(
-            ItemPropertyAction,
-            itemProperties.GetGroup(ItemPropertiesMatcher.ItemPropertyAction),
-            (e, c) => ((Item.Property.ActionComponent)c).ActionTypeID));
 
         item.AddEntityIndex(new Entitas.EntityIndex<ItemEntity, Enums.ItemType>(
             ItemType,
@@ -275,14 +263,6 @@ public static class ContextsExtensions {
         return ((Entitas.PrimaryEntityIndex<ItemEntity, int>)context.GetEntityIndex(Contexts.ItemID)).GetEntity(ID);
     }
 
-    public static ItemPropertiesEntity GetEntityWithItemProperty(this ItemPropertiesContext context, Enums.ItemType ItemType) {
-        return ((Entitas.PrimaryEntityIndex<ItemPropertiesEntity, Enums.ItemType>)context.GetEntityIndex(Contexts.ItemProperty)).GetEntity(ItemType);
-    }
-
-    public static System.Collections.Generic.HashSet<ItemPropertiesEntity> GetEntitiesWithItemPropertyAction(this ItemPropertiesContext context, Enums.ActionType ActionTypeID) {
-        return ((Entitas.EntityIndex<ItemPropertiesEntity, Enums.ActionType>)context.GetEntityIndex(Contexts.ItemPropertyAction)).GetEntities(ActionTypeID);
-    }
-
     public static System.Collections.Generic.HashSet<ItemEntity> GetEntitiesWithItemType(this ItemContext context, Enums.ItemType Type) {
         return ((Entitas.EntityIndex<ItemEntity, Enums.ItemType>)context.GetEntityIndex(Contexts.ItemType)).GetEntities(Type);
     }
@@ -324,7 +304,7 @@ public partial class Contexts {
             CreateContextObserver(input);
             CreateContextObserver(inventory);
             CreateContextObserver(item);
-            CreateContextObserver(itemProperties);
+            CreateContextObserver(itemInventory);
             CreateContextObserver(particle);
             CreateContextObserver(projectile);
             CreateContextObserver(vehicle);

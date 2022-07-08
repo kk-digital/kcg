@@ -7,7 +7,7 @@ namespace Action
 {
     public class ToolActionFireWeapon : ActionBase
     {
-        private ItemPropertiesEntity ItemPropertyEntity; 
+        private Item.FireWeaponPropreties WeaponProperty; 
         private ProjectileEntity ProjectileEntity;
         private ItemEntity ItemEntity;
         private Vec2f StartPos;
@@ -19,7 +19,7 @@ namespace Action
         public override void OnEnter(ref Planet.PlanetState planet)
         {
             ItemEntity = EntitasContext.item.GetEntityWithItemID(ActionEntity.actionTool.ItemID);
-            ItemPropertyEntity = EntitasContext.itemProperties.GetEntityWithItemProperty(ItemEntity.itemType.Type);
+            WeaponProperty = GameState.ItemCreationApi.GetWeapon(ItemEntity.itemType.Type);
 
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float x = worldPosition.x;
@@ -47,13 +47,13 @@ namespace Action
 
             ActionEntity.actionExecution.State = Enums.ActionState.Running;
 
-            GameState.ActionCoolDownSystem.SetCoolDown(EntitasContext, ActionEntity.actionID.TypeID, AgentEntity.agentID.ID, ItemPropertyEntity.itemPropertyFireWeapon.CoolDown);
+            GameState.ActionCoolDownSystem.SetCoolDown(EntitasContext, ActionEntity.actionID.TypeID, AgentEntity.agentID.ID, WeaponProperty.CoolDown);
         }
 
         public override void OnUpdate(float deltaTime, ref Planet.PlanetState planet)
         {
-            float range = ItemPropertyEntity.itemPropertyFireWeapon.Range;
-            float damage = ItemPropertyEntity.itemPropertyFireWeapon.BasicDemage;
+            float range = WeaponProperty.Range;
+            float damage = WeaponProperty.BasicDemage;
 
             // Check if projectile has hit something and was destroyed.
             if (!ProjectileEntity.isEnabled)

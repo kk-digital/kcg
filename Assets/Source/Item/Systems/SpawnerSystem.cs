@@ -12,8 +12,10 @@ namespace Item
 
         public ItemEntity SpawnItem(Contexts entitasContext, ItemType itemType, Vec2f position)
         {
-            ItemPropertiesEntity entityAttribute = entitasContext.itemProperties.GetEntityWithItemProperty(itemType);
-            Vec2f size = entityAttribute.itemPropertySize.Size;
+            ItemProprieties itemProperty = GameState.ItemCreationApi.Get(itemType);
+            FireWeaponPropreties weaponProperty = GameState.ItemCreationApi.GetWeapon(itemType);
+
+            Vec2f size = itemProperty.SpriteSize;
 
             var entity = entitasContext.item.CreateEntity();
             entity.AddItemID(ItemID);
@@ -22,9 +24,9 @@ namespace Item
             entity.AddPhysicsBox2DCollider(size, Vec2f.Zero);
             entity.AddPhysicsMovable(0f, Vec2f.Zero, Vec2f.Zero, true, true, false, false);
 
-            if (entityAttribute.hasItemPropertyFireWeaponClip)
+            if (weaponProperty.HasClip())
             {
-                entity.AddItemFireWeaponClip(entityAttribute.itemPropertyFireWeaponClip.ClipSize);
+                entity.AddItemFireWeaponClip(weaponProperty.ClipSize);
             }
 
             ItemID++;
@@ -33,14 +35,16 @@ namespace Item
 
         public ItemEntity SpawnInventoryItem(Contexts entitasContext, ItemType itemType)
         {
-            ItemPropertiesEntity entityAttribute = entitasContext.itemProperties.GetEntityWithItemProperty(itemType);
+            ItemProprieties itemProperty = GameState.ItemCreationApi.Get(itemType);
+            FireWeaponPropreties weaponProperty = GameState.ItemCreationApi.GetWeapon(itemType);
+
             var entity = entitasContext.item.CreateEntity();
             entity.AddItemID(ItemID);
             entity.AddItemType(itemType);
 
-            if (entityAttribute.hasItemPropertyFireWeaponClip)
+            if (weaponProperty.HasClip())
             {
-                entity.AddItemFireWeaponClip(entityAttribute.itemPropertyFireWeaponClip.ClipSize);
+                entity.AddItemFireWeaponClip(weaponProperty.ClipSize);
             }
 
             ItemID++;

@@ -2,6 +2,7 @@
 using Entitas;
 using UnityEngine;
 using KMath;
+using Enums;
 
 namespace Item
 {
@@ -23,8 +24,8 @@ namespace Item
             foreach (var item in pickableItems)
             {
                 // Get item ceter position.
-                var itemPropreties = contexts.itemProperties.GetEntityWithItemProperty(item.itemType.Type);
-                Vec2f centerPos = item.physicsPosition2D.Value + itemPropreties.itemPropertySize.Size / 2.0f;
+                var itemPropreties = GameState.ItemCreationApi.Get(item.itemType.Type);
+                Vec2f centerPos = item.physicsPosition2D.Value + itemPropreties.SpriteSize / 2.0f;
                 foreach (var agent in agents)
                 {
                     // Todo: Use action center Position.
