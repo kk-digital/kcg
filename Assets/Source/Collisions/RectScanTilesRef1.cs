@@ -11,52 +11,49 @@ namespace Collisions
     {
         public static Vec2i[] RectScan(Vec2f center, Vec2f halfSize, Vec2f velocity)
         {
-            var previous_box_xmax = (int) Math.Ceiling(center.X + halfSize.X); //round up
-            var current_box_xmax = (int) Math.Ceiling(center.X + halfSize.X + velocity.X); //round up
+            var box1_xmax = (int) Math.Ceiling(center.X + halfSize.X); //round up
+            var box2_xmax = (int) Math.Ceiling(center.X + halfSize.X + velocity.X); //round up
 
-            var previous_box_xmin = (int) Math.Floor(center.X - halfSize.X); //round down
-            var current_box_xmin = (int) Math.Floor(center.X - halfSize.X + velocity.X); //round down
+            var box1_xmin = (int) Math.Floor(center.X - halfSize.X); //round down
+            var box2_xmin = (int) Math.Floor(center.X - halfSize.X + velocity.X); //round down
 
-            var previous_box_ymax = (int) Math.Ceiling(center.Y + halfSize.Y); //round up
-            var current_box_ymax = (int) Math.Ceiling(center.Y + halfSize.Y + velocity.Y); //round up
+            var box1_ymax = (int) Math.Ceiling(center.Y + halfSize.Y); //round up
+            var box2_ymax = (int) Math.Ceiling(center.Y + halfSize.Y + velocity.Y); //round up
 
-            var previous_box_ymin = (int) Math.Floor(center.Y - halfSize.Y); //round down
-            var current_box_ymin = (int) Math.Floor(center.Y - halfSize.Y + velocity.Y); //round down
-
-            //verify, that no tile is checked twice
-            //do a count to verify
-            //NOTE: Do asserts, that min<=max and swap if not
-
-            int xmin_1 = velocity.X >= 0f ? previous_box_xmin : current_box_xmin;
-            int xmax_1 = velocity.X >= 0f ? current_box_xmax  : previous_box_xmax;
-            int ymin_1 = velocity.Y >= 0f ? previous_box_ymax : current_box_ymin;
-            int ymax_1 = velocity.Y >= 0f ? current_box_ymax  : previous_box_ymin;
+            var box1_ymin = (int) Math.Floor(center.Y - halfSize.Y); //round down
+            var box2_ymin = (int) Math.Floor(center.Y - halfSize.Y + velocity.Y); //round down
             
-            int xmin_2 = velocity.X >= 0f ? previous_box_xmax : current_box_xmin;
-            int xmax_2 = velocity.X >= 0f ? current_box_xmax  : previous_box_xmin;
-            int ymin_2 = velocity.Y >= 0f ? previous_box_ymin : current_box_ymin;
-            int ymax_2 = velocity.Y >= 0f ? current_box_ymax : previous_box_ymax;
+            // r - region
+            // r1 - region1 and etc.
 
-            int outputCount = (xmin_1 - xmax_1) * (ymin_1 - ymax_1);
-            outputCount += (xmin_2 - xmax_2) * (ymin_2 - ymax_2);
+            int r1_xmin = velocity.X >= 0f ? box1_xmin : box2_xmin;
+            int r1_xmax = velocity.X >= 0f ? box2_xmax : box1_xmax;
+            int r1_ymin = velocity.Y >= 0f ? box1_ymax : box2_ymin;
+            int r1_ymax = velocity.Y >= 0f ? box2_ymax : box1_ymin;
+            
+            int r2_xmin = velocity.X >= 0f ? box1_xmax : box2_xmin;
+            int r2_xmax = velocity.X >= 0f ? box2_xmax : box1_xmin;
+            int r2_ymin = velocity.Y >= 0f ? box1_ymin : box2_ymin;
+            int r2_ymax = velocity.Y >= 0f ? box2_ymax : box1_ymax;
+
+            int outputCount = (r1_xmax - r1_xmin) * (r1_ymax - r1_ymin);
+            outputCount    += (r2_xmax - r2_xmin) * (r2_ymax - r2_ymin);
 
             var output = new Vec2i[outputCount];
             var outputIndex = 0;
 
-            for (int x = xmin_1; x <= xmax_1; x++)
+            for (int x = r1_xmin; x <= r1_xmax; x++)
             {
-                for (int y = ymin_1; y <= ymax_1; y++)
+                for (int y = r1_ymin; y <= r1_ymax; y++)
                 {
                     output[outputIndex] = new Vec2i(x, y);
                     outputIndex++;
                 }
             }
             
-
-            
-            for (int y = xmin_2; y <= xmax_2; y++)
+            for (int x = r2_xmin; x <= r2_xmax; x++)
             {
-                for (int x = ymin_2; x <= ymax_2; x++)
+                for (int y = r2_ymin; y <= r2_ymax; y++)
                 {
                     output[outputIndex] = new Vec2i(x, y);
                     outputIndex++;
