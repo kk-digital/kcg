@@ -12,6 +12,8 @@ namespace Projectile
 
         float Gravity = 0.1f;
 
+        public bool fixedGravity = false;
+
         public MovementSystem(ProjectileCreationApi projectileCreationApi)
         {
             ProjectileCreationApi = projectileCreationApi;
@@ -49,12 +51,9 @@ namespace Projectile
                 // Get Linear Drag
                 var linearDrag = projectile.projectileLinearDrag.Drag;
 
-                // Get Can Quadratic Drag Condition
-                var canQuadraticDrag = projectile.projectileQuadraticDrag.canDrag;
+                // Get Linear Drag Cutoff
+                var linearCutoff = projectile.projectileLinearDrag.CutOff;
 
-                // Get Quadratic Drag
-                var quadraticDrag = projectile.projectileQuadraticDrag.Drag;
-                
                 // Calculate Displacement
                 Vec2f displacement =
                     0.5f * movable.Acceleration * (deltaTime * deltaTime) + movable.Velocity * deltaTime;
@@ -93,7 +92,7 @@ namespace Projectile
                             if (canLinearDrag)
                             {
                                 // Apply linear drag to speed
-                                projectileProperties.Speed = (1 - projectileProperties.Speed / linearDrag);
+                                projectileProperties.Speed = (1 - projectileProperties.Speed / (linearDrag + linearCutoff));
 
                                 // Calculate Drag Force Magnitude
                                 var dragForceMag = movable.Velocity.Magnitude / 2 * linearDrag;
@@ -120,21 +119,6 @@ namespace Projectile
                     }
                     // Set Speed to Maxmium Velocity
                     projectileProperties.Speed = projectileProperties.MaxVelocity;
-
-                    // If Quadratic Drag On
-                    if (canQuadraticDrag)
-                    {
-                        // Calculate Force
-                        Vec2f force = quadraticDrag * movable.Velocity.Normalized * movable.Velocity.SqrMagnitude;
-
-                        // Add Force to new velocity
-                        newVelocity = movable.Acceleration * deltaTime + new Vec2f(movable.Velocity.X / force.X, movable.Velocity.Y / force.Y);
-                    }
-                    else // If Quadratic Drag is off
-                    {
-                        // Set New velocity without adding any drag
-                        newVelocity = movable.Acceleration * deltaTime + movable.Velocity;
-                    }
                 }
                 else
                 {
@@ -142,7 +126,7 @@ namespace Projectile
                     if(canLinearDrag)
                     {
                         // Calculate Speed
-                        projectileProperties.Speed = (1 - projectileProperties.Speed / linearDrag);
+                        projectileProperties.Speed = (1 - projectileProperties.Speed / (linearDrag + linearCutoff));
 
 
                         // Calculate Drag Force Magnitude
@@ -160,16 +144,6 @@ namespace Projectile
                         newVelocity += dragForceVector;
 
 
-                    }
-                    else
-                    {
-                        newVelocity = movable.Acceleration * deltaTime + movable.Velocity;
-                    }
-
-                    if (canQuadraticDrag)
-                    {
-                        float force = quadraticDrag * movable.Velocity.SqrMagnitude;
-                        newVelocity = movable.Acceleration * deltaTime + movable.Velocity / force;
                     }
                     else
                     {

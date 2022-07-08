@@ -26,9 +26,7 @@ namespace Projectile
 
         public bool canLinearDrag;
         public float linearDrag;
-
-        public bool canQuadraticDrag;
-        public float quadraticDrag;
+        public float linearCutOff;
 
         public bool AffectedByGravity;
         public float GravityScale;

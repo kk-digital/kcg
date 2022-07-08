@@ -9,6 +9,7 @@ namespace Projectile
     {
         public bool canDrag;
         public float Drag;
+        public float CutOff;
     }
 }
 
