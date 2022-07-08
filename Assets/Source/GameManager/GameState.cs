@@ -25,9 +25,10 @@ public class GameState
 
     public static readonly PlanetTileMap.TileAtlasManager TileSpriteAtlasManager;
     public static readonly PlanetTileMap.TileCreationApi TileCreationApi;
+    public static readonly PlanetTileMap.TileMapRenderer TileMapRenderer;
 
     #endregion
-    
+
     #region Sprites
 
     public static readonly Sprites.SpriteAtlasManager SpriteAtlasManager;
@@ -94,6 +95,7 @@ public class GameState
         TileSpriteAtlasManager = new PlanetTileMap.TileAtlasManager(SpriteLoader);
         SpriteAtlasManager = new Sprites.SpriteAtlasManager(SpriteLoader);
         TileCreationApi = new PlanetTileMap.TileCreationApi();
+        TileMapRenderer = new PlanetTileMap.TileMapRenderer();
         FileLoadingManager = new Utility.FileLoadingManager();
         InputProcessSystem = new ECSInput.InputProcessSystem();
         AgentCreationApi = new Agent.AgentCreationApi();

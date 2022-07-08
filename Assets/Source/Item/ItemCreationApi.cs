@@ -21,7 +21,7 @@ namespace Item
 {
     public class ItemCreationApi
     {
-        // Constructor is called before the first frame update
+        // Constructor is called before the first frame update.
          
         // Note[Joao] this arrays are very memory expensive: use array of pointers instead?
         private ItemProprieties[] PropertiesArray;
@@ -68,12 +68,12 @@ namespace Item
             ItemType itemType = PropertiesArray[(int)type].ItemType;
             IsItemTypeValid(itemType);
 
-            return WeaponList[PropertiesArray[(int)CurrentIndex].FireWeaponID];
+            return WeaponList[PropertiesArray[(int)type].FireWeaponID];
         }
 
         public void CreateItem(Enums.ItemType itemType, string name)
         {
-            ItemType CurrentIndex = itemType;
+            CurrentIndex = itemType;
 
             PropertiesArray[(int)itemType].ItemType = itemType;
             ItemTypeLabels[(int)itemType] = name;
@@ -162,6 +162,7 @@ namespace Item
             ref FireWeaponPropreties fireWeapon = ref WeaponList[PropertiesArray[(int)CurrentIndex].FireWeaponID];
             fireWeapon.ClipSize = clipSize;
             fireWeapon.ReloadTime = reloadTime;
+            fireWeapon.WeaponFlags |= FireWeaponPropreties.Flags.HasClip;
         }
 
         public void SetFireWeaponMultiShoot(float speadAngle, int numOfBullet)
@@ -194,10 +195,10 @@ namespace Item
         private void IsItemTypeValid(ItemType itemType)
         {
 #if DEBUG
-            if (itemType != ItemType.Error)
+            if (itemType == ItemType.Error)
             {
                 Debug.Log("Not valid ItemType");
-                Utils.Assert(true);
+                Utils.Assert(false);
             }
 #endif
         }
