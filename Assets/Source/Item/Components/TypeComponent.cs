@@ -3,7 +3,7 @@ using Entitas.CodeGeneration.Attributes;
 
 namespace Item
 {
-    [Item]
+    [ItemInventory, ItemParticle]
     public class TypeComponent : IComponent
     {
         [EntityIndex]

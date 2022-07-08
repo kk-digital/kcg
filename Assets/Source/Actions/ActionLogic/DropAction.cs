@@ -7,7 +7,7 @@ namespace Action
 {
     public class DropAction : ActionBase
     {
-        private ItemEntity ItemEntity;
+        private ItemInventoryEntity ItemEntity;
 
         public DropAction(Contexts entitasContext, int actionID) : base(entitasContext, actionID)
         {
@@ -23,7 +23,7 @@ namespace Action
                 int selected = toolBarEntity.inventorySlots.Selected;
 
 
-                ItemEntity = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.item, toolBarID, selected);
+                ItemEntity = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, toolBarID, selected);
                 if (ItemEntity == null)
                 {
                     ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
@@ -32,11 +32,8 @@ namespace Action
                 GameState.InventoryManager.RemoveItem(planet.EntitasContext, ItemEntity, selected);
              
                 Vec2f pos = AgentEntity.physicsPosition2D.Value;
-                Vec2f size = GameState.ItemCreationApi.Get(ItemEntity.itemType.Type).SpriteSize;
+                GameState.ItemSpawnSystem.SpawnItemParticle(planet.EntitasContext, ItemEntity, pos);
 
-                ItemEntity.AddPhysicsPosition2D(pos, pos);
-                ItemEntity.AddPhysicsBox2DCollider(size, Vec2f.Zero);
-                ItemEntity.AddPhysicsMovable(0.0f, new Vec2f(-30.0f, 20.0f), Vec2f.Zero, true, true, false, false);
                 ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Running);
                 return;
 

@@ -23,7 +23,7 @@ namespace Inventory
             inventory.isInventoryDrawable = false;
         }
 
-        public void AddItem(Contexts contexts, ItemEntity entity, int inventoryID)
+        public void AddItem(Contexts contexts, ItemInventoryEntity entity, int inventoryID)
         {
             var inventory = contexts.inventory.GetEntityWithInventoryID(inventoryID);
 
@@ -32,13 +32,13 @@ namespace Inventory
             // If stackable check if there are any available stack in the inventory.
             if (proprieties.IsStackable())
             {
-                var Group = contexts.item.GetEntitiesWithItemAttachedInventory(inventoryID); // Todo: Use multiple Entity Index. To narrow down the search with item type.
+                var Group = contexts.itemInventory.GetEntitiesWithItemInventory(inventoryID); // Todo: Use multiple Entity Index. To narrow down the search with item type.
 
                 int NewEntityCount = 1;
                 if (entity.hasItemStack)
                     NewEntityCount = entity.itemStack.Count;
 
-                foreach (ItemEntity entityIT in Group)
+                foreach (ItemInventoryEntity entityIT in Group)
                 {
                     if (entityIT.itemType.Type != entity.itemType.Type)
                     {
@@ -70,23 +70,21 @@ namespace Inventory
             }
 
             int fistEmptySlot = GetFirstEmptySlot(inventory.inventorySlots.Values);
-            entity.AddItemAttachedInventory(inventoryID, fistEmptySlot);
+            entity.AddItemInventory(inventoryID, fistEmptySlot);
             inventory.inventorySlots.Values.Set(fistEmptySlot, true);
         }
 
-        public void PickUp(Contexts entitasContext, ItemEntity entity, int inventoryID)
+        public void PickUp(Contexts entitasContext, ItemParticleEntity entity, int inventoryID)
         {
-            entity.RemovePhysicsPosition2D();
-            entity.RemovePhysicsMovable();
-            entity.RemovePhysicsBox2DCollider();
-            AddItem(entitasContext, entity, inventoryID);
+            AddItem(entitasContext, GameState.ItemSpawnSystem.SpawnInventoryItem(entitasContext, entity), 
+                inventoryID);
         }
 
-        public void RemoveItem(Contexts contexts, ItemEntity entity, int slot)
+        public void RemoveItem(Contexts contexts, ItemInventoryEntity entity, int slot)
         {
-            var inventoryEntity = contexts.inventory.GetEntityWithInventoryID(entity.itemAttachedInventory.InventoryID);
+            var inventoryEntity = contexts.inventory.GetEntityWithInventoryID(entity.itemInventory.InventoryID);
             inventoryEntity.inventorySlots.Values.Set(slot, false);
-            entity.RemoveItemAttachedInventory();
+            entity.itemInventory.InventoryID = -1;
         }
         
         public void ChangeSlot(Contexts contexts, int newSelectedSlot, int inventoryID)
@@ -117,13 +115,13 @@ namespace Inventory
             return false;
         }
 
-        public ItemEntity GetItemInSlot(ItemContext itemContext, int inventoryID, int slot)
+        public ItemInventoryEntity GetItemInSlot(ItemInventoryContext itemContext, int inventoryID, int slot)
         {
-            var items = itemContext.GetEntitiesWithItemAttachedInventory(inventoryID);
+            var items = itemContext.GetEntitiesWithItemInventory(inventoryID);
 
             foreach (var item in items)
             {
-                if (item.itemAttachedInventory.SlotNumber == slot)
+                if (item.itemInventory.SlotNumber == slot)
                 {
                     return item;
                 }

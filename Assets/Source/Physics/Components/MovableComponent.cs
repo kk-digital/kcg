@@ -15,7 +15,7 @@ namespace Physics
         }
     }
 
-    [Agent, Item]
+    [Agent, ItemParticle]
     public class MovableComponent : IComponent
     {
         public float Speed;

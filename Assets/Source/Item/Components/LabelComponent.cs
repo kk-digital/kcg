@@ -2,7 +2,7 @@
 
 namespace Item
 {
-    [Item]
+    [ItemInventory, ItemParticle]
     public class LabelComponent : IComponent
     {
         public string ItemName;

@@ -5,7 +5,7 @@ using Enums;
 
 namespace Item
 {
-    [Item]
+    [ItemInventory, ItemParticle]
     public class IDComponent : IComponent
     {
         [PrimaryEntityIndex]
