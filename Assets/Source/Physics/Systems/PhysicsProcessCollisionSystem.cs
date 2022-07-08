@@ -16,7 +16,7 @@ namespace Physics
     {
         private void Update(ref TileMap tileMap, Position2DComponent pos, MovableComponent movable, Box2DColliderComponent box2DCollider, float deltaTime)
         {       
-            var entityBoxBorders = new AABB2D(new Vec2f(pos.PreviousValue.X, pos.Value.Y) + box2DCollider.Offset, box2DCollider.Size);
+            var entityBoxBorders = new AABox2D(new Vec2f(pos.PreviousValue.X, pos.Value.Y) + box2DCollider.Offset, box2DCollider.Size);
 
             if (entityBoxBorders.IsCollidingBottom(tileMap, movable.Velocity))
             {
@@ -32,7 +32,7 @@ namespace Physics
                 movable.Acceleration.Y = 0.0f;
             }
 
-            entityBoxBorders = new AABB2D(new Vec2f(pos.Value.X, pos.PreviousValue.Y) + box2DCollider.Offset, box2DCollider.Size);
+            entityBoxBorders = new AABox2D(new Vec2f(pos.Value.X, pos.PreviousValue.Y) + box2DCollider.Offset, box2DCollider.Size);
 
             if (entityBoxBorders.IsCollidingLeft(tileMap, movable.Velocity) || entityBoxBorders.IsCollidingRight(tileMap, movable.Velocity))
             {

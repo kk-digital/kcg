@@ -1,15 +1,23 @@
 using KMath;
 
-// Line Width = 1 pixel
-// Functions for getting int coordinates of Line
-// Used for example for a bullet checking
-
 // Bresenham's line algorithm
 // https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 
+// Line Width = 1 pixel
+// Functions for getting int coordinates of Line
+// Used for example for a bullet checking
+// Ray from start position to the End position
+// One returns all tiles
+// One has radius 0
+// One keeps going from start to finish
+
+//TODO: Function that returns all tiles on ray
+//TODO: Function for Raycast Tile Grid for variable width line
+//TODO: Function for ray casting tile grid, that only returns the first
+
 namespace Collisions
 {
-    public static class PlotLine
+    public static class RayTileCollisionCheck
     {
         private static Vec2i[] PlotLineLow(Vec2i start, Vec2i end)
         {
@@ -88,7 +96,7 @@ namespace Collisions
             return output;
         }
 
-        public static Vec2i[] GetLineCoordinates(Vec2i start, Vec2i end)
+        public static Vec2i[] GetRayCoordinates(Vec2i start, Vec2i end)
         {
             if (System.Math.Abs(end.Y - start.Y) < System.Math.Abs(end.X - start.X))
             {
