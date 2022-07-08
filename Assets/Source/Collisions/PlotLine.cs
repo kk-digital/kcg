@@ -1,8 +1,11 @@
 using KMath;
 
-// Line Width = 1
-// Functions for getting int Line Coordinates
+// Line Width = 1 pixel
+// Functions for getting int coordinates of Line
 // Used for example for a bullet checking
+
+// Bresenham's line algorithm
+// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 
 namespace Collisions
 {
