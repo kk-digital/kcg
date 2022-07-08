@@ -26,6 +26,7 @@ namespace Action
             float x = worldPosition.x;
             float y = worldPosition.y;
 
+
             int numBullet = ItemEntity.itemFireWeaponClip.NumOfBullets;
             if (numBullet == 0)
             {

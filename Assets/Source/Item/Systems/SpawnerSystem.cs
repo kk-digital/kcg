@@ -29,6 +29,11 @@ namespace Item
                 entity.AddItemFireWeaponClip(weaponProperty.ClipSize);
             }
 
+            if (weaponProperty.HasCharge())
+            {
+                entity.AddItemFireWeaponCharge(20, 1, 20);
+            }
+
             ItemID++;
             return entity;
         }
@@ -45,6 +50,11 @@ namespace Item
             if (weaponProperty.HasClip())
             {
                 entity.AddItemFireWeaponClip(weaponProperty.ClipSize);
+            }
+
+            if (weaponProperty.HasCharge())
+            {
+                entity.AddItemFireWeaponCharge(20, 1, 20);
             }
 
             ItemID++;
