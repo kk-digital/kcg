@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Enums.Tile;
+using KMath;
 
 //MOST IMPORTANT TILE
 
@@ -51,7 +53,7 @@ namespace PlanetTileMap
         // Start is called before the first frame update
         private TileID CurrentTileIndex;
         public TileProperty[] TilePropertyArray;
-
+        
         public TileCreationApi()
         {
             var tilePropertyArray = new TileProperty[4096];
@@ -78,6 +80,14 @@ namespace PlanetTileMap
 
             TilePropertyArray[(int)CurrentTileIndex].TileID = tileID;
             CurrentTileIndex = tileID;
+        }
+
+        public void SetTilePropertyShape(TileShape shape, TileShapeAndRotation shapeAndRotation)
+        {
+            if (CurrentTileIndex == TileID.Error) return;
+
+            TilePropertyArray[(int) CurrentTileIndex].BlockShapeType = shape;
+            TilePropertyArray[(int) CurrentTileIndex].BlockShapeAndRotation = shapeAndRotation;
         }
 
         public void SetTilePropertyName(string name)
@@ -213,18 +223,11 @@ namespace PlanetTileMap
             
         }
 
-        public void SetTilePropertyIsExplosive(bool isExplosive)
-        {
-            if (CurrentTileIndex == TileID.Error) return;
-            
-            TilePropertyArray[(int)CurrentTileIndex].IsExplosive = isExplosive;
-        }
-
         public void SetTilePropertyCollisionType(CollisionType type)
         {
             if (CurrentTileIndex == TileID.Error) return;
 
-            TilePropertyArray[(int)CurrentTileIndex].TileCollisionType = type;
+            TilePropertyArray[(int)CurrentTileIndex].CollisionIsoType = type;
         }
 
         

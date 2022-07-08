@@ -40,11 +40,8 @@ namespace Physics
                 movable.Velocity.Y = -MaxVelocityY;
             }
 
-            Vec2f displacement = 
-                    0.5f * movable.Acceleration * (deltaTime * deltaTime) + movable.Velocity * deltaTime;
-            
-            
-            Vec2f newVelocity = movable.Acceleration * deltaTime + movable.Velocity;
+            Vec2f displacement = 0.5f * movable.Acceleration * (deltaTime * deltaTime) + movable.Velocity * deltaTime;
+            Vec2f newVelocity =         movable.Acceleration *  deltaTime              + movable.Velocity;
 
             if (movable.AffectedByGroundFriction)
             {
