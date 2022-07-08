@@ -111,19 +111,19 @@ public class GameResources
 
         GameState.TileCreationApi.CreateTileProperty(TileID.Glass);
         GameState.TileCreationApi.SetTilePropertyName("glass");
-        GameState.TileCreationApi.SetSpriteRuleType(PlanetTileMap.SpriteRuleType.R1);
-        GameState.TileCreationApi.SetTilePropertySpriteSheet16(MoonSpriteSheet, 11, 10);
+        GameState.TileCreationApi.SetSpriteRuleType(PlanetTileMap.SpriteRuleType.R3);
+        GameState.TileCreationApi.SetTilePropertySpriteSheet16(MoonSpriteSheet, 11, 10); // 11 10
         GameState.TileCreationApi.EndTileProperty();
 
         GameState.TileCreationApi.CreateTileProperty(TileID.Moon);
         GameState.TileCreationApi.SetTilePropertyName("moon");
-        GameState.TileCreationApi.SetSpriteRuleType(PlanetTileMap.SpriteRuleType.R1);
+        GameState.TileCreationApi.SetSpriteRuleType(PlanetTileMap.SpriteRuleType.R3);
         GameState.TileCreationApi.SetTilePropertySpriteSheet16(MoonSpriteSheet, 0, 0);
         GameState.TileCreationApi.EndTileProperty();
 
         GameState.TileCreationApi.CreateTileProperty(TileID.Background);
         GameState.TileCreationApi.SetTilePropertyName("background");
-        GameState.TileCreationApi.SetSpriteRuleType(PlanetTileMap.SpriteRuleType.R1);
+        GameState.TileCreationApi.SetSpriteRuleType(PlanetTileMap.SpriteRuleType.R3);
         GameState.TileCreationApi.SetTilePropertySpriteSheet16(BackgroundSpriteSheet, 0, 0);
         GameState.TileCreationApi.EndTileProperty();
 
