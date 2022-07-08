@@ -372,36 +372,39 @@ namespace Scripts {
                     last_x = x;
                     last_y = y;
 
-                    // todo: should be able to target stuff other than ships
-                    // todo: should be able to hit ship with whole laser, not just tip
-                    SystemShip target = null;
-
+                    // todo: should also be able to target stuff other than ships, like satellites, stations, etc.
                     foreach(SystemShip ship in state.ships) {
-                        float _dx = ship.self.posx - x;
-                        float _dy = ship.self.posy - y;
-                        float _d  = Tools.magnitude(_dx, _dy);
 
-                        if(_d < 2.5f / camera.scale) {
-                            target = ship;
-                            break;
+                        // (1) y = mx + b   =>   mx - y + b = 0
+                        //                  =>   b = y - mx
+
+                        //          |mx - y + b|
+                        // (2) d = --------------
+                        //           ? (m² + 1)
+
+                        float m = dy / dx;
+                        float b = y - m * x;
+
+                        float distance = Math.Abs(m * ship.self.posx - ship.self.posy + b) / (float)Math.Sqrt(m * m + 1);
+                         
+                        // Probably should not be affected by camera scale, but it makes it easier at least for testing
+                        if(distance < 2.5f / camera.scale) {
+                            float shield_damage          = damage * shield_damage_multiplier * 1.0f - shield_penetration;
+                            float hull_damage            = damage *   hull_damage_multiplier *        shield_penetration;
+
+                            ship.shield                 -= (int)shield_damage;
+
+                            if(ship.shield < 0) {
+                                hull_damage             -= (float)ship.shield / shield_damage_multiplier * hull_damage_multiplier;
+                                ship.shield              = 0;
+                            }
+                            
+                            ship.health                 -= (int)hull_damage;
+
+                            if(ship.health <= 0) ship.destroy();
                         }
+
                     }
-
-                    if(target == null) return;
-
-                    float shield_damage          = damage * shield_damage_multiplier * 1.0f - shield_penetration;
-                    float hull_damage            = damage *   hull_damage_multiplier *        shield_penetration;
-
-                    target.shield               -= (int)shield_damage;
-
-                    if(target.shield < 0) {
-                        hull_damage             -= (float)target.shield / shield_damage_multiplier * hull_damage_multiplier;
-                        target.shield            = 0;
-                    }
-
-                    target.health               -= (int)hull_damage;
-
-                    if(target.health <= 0) target.destroy();
                 }
             }
         }
