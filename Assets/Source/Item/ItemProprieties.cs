@@ -52,7 +52,14 @@ namespace Item
 
         public Vec2f BulletSpriteSize;
         public int BulletSpriteID;
-        
+
+        /// <summary>
+        /// Can Recharge the gun
+        /// </summary>
+        public bool CanCharge;
+        public float ChargeRate;
+        public float ChargeMin;
+        public float ChargeMax;
         /// <summary>
         /// Clip attributes.
         /// 

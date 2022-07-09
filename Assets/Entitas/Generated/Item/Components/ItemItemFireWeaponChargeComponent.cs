@@ -11,18 +11,20 @@ public partial class ItemEntity {
     public Item.FireWeapon.ChargeComponent itemFireWeaponCharge { get { return (Item.FireWeapon.ChargeComponent)GetComponent(ItemComponentsLookup.ItemFireWeaponCharge); } }
     public bool hasItemFireWeaponCharge { get { return HasComponent(ItemComponentsLookup.ItemFireWeaponCharge); } }
 
-    public void AddItemFireWeaponCharge(float newChargeRate, float newChargeMin, float newChargeMax) {
+    public void AddItemFireWeaponCharge(bool newCanCharge, float newChargeRate, float newChargeMin, float newChargeMax) {
         var index = ItemComponentsLookup.ItemFireWeaponCharge;
         var component = (Item.FireWeapon.ChargeComponent)CreateComponent(index, typeof(Item.FireWeapon.ChargeComponent));
+        component.CanCharge = newCanCharge;
         component.ChargeRate = newChargeRate;
         component.ChargeMin = newChargeMin;
         component.ChargeMax = newChargeMax;
         AddComponent(index, component);
     }
 
-    public void ReplaceItemFireWeaponCharge(float newChargeRate, float newChargeMin, float newChargeMax) {
+    public void ReplaceItemFireWeaponCharge(bool newCanCharge, float newChargeRate, float newChargeMin, float newChargeMax) {
         var index = ItemComponentsLookup.ItemFireWeaponCharge;
         var component = (Item.FireWeapon.ChargeComponent)CreateComponent(index, typeof(Item.FireWeapon.ChargeComponent));
+        component.CanCharge = newCanCharge;
         component.ChargeRate = newChargeRate;
         component.ChargeMin = newChargeMin;
         component.ChargeMax = newChargeMax;

@@ -26,15 +26,21 @@ namespace Action
                 ItemEntity = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.item, toolBarID, selectedSlot);
                 WeaponPropreties = GameState.ItemCreationApi.GetWeapon(ItemEntity.itemType.Type);
 
-                
+                // Get Is the item weapon chargable or not
                 bool isChargable = ItemEntity.hasItemFireWeaponCharge;
+
+                // Get the old charge rate
                 tempCharge = ItemEntity.itemFireWeaponCharge.ChargeRate;
+
+                // If weapon is chargable
                 if (isChargable)
                 {
+                    // Return true
                     ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Running);
                     return;
                 }
             }
+            // Fail
             ActionEntity.actionExecution.State = Enums.ActionState.Fail;
         }
 
