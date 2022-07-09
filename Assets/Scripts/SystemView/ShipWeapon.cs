@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Source.SystemView;
@@ -48,6 +48,8 @@ namespace Scripts {
             public int   projectiles_per_burst = 1;
             public float projectile_spread;
 
+            public int   penetration = 1; // Amount of enemies beams and projectiles can hit
+
             public List<ShipWeaponProjectile> projectiles_fired = new List<ShipWeaponProjectile>();
 
             public CameraController camera;
@@ -57,6 +59,11 @@ namespace Scripts {
             public SystemState      state;
 
             public int flags;
+
+            private class target_info {
+                public SystemShip ship;
+                public float      distance;
+            };
 
             // Pre defined weapon types
             public static ShipWeapon add_cannon(SystemShip self, SystemState state, int flags) {
@@ -373,37 +380,67 @@ namespace Scripts {
                     last_y = y;
 
                     // todo: should also be able to target stuff other than ships, like satellites, stations, etc.
+
+                    target_info[] targets = new target_info[penetration];
+
                     foreach(SystemShip ship in state.ships) {
+
+                        if(ship == self) continue;
 
                         // (1) y = mx + b   =>   mx - y + b = 0
                         //                  =>   b = y - mx
 
                         //          |mx - y + b|
                         // (2) d = --------------
-                        //           ? (m� + 1)
+                        //           √ (m² + 1)
 
                         float m = dy / dx;
                         float b = y - m * x;
 
-                        float distance = Math.Abs(m * ship.self.posx - ship.self.posy + b) / (float)Math.Sqrt(m * m + 1);
+                        float distance_from_beam = Math.Abs(m * ship.self.posx - ship.self.posy + b) / (float)Math.Sqrt(m * m + 1);
                          
                         // Probably should not be affected by camera scale, but it makes it easier at least for testing
-                        if(distance < 2.5f / camera.scale) {
-                            float shield_damage          = damage * shield_damage_multiplier * 1.0f - shield_penetration;
-                            float hull_damage            = damage *   hull_damage_multiplier *        shield_penetration;
+                        if(distance_from_beam < 2.5f / camera.scale) {
 
-                            ship.shield                 -= (int)shield_damage;
+                            float distance = Tools.get_distance(self.self.posx, self.self.posy, ship.self.posx, ship.self.posy);
 
-                            if(ship.shield < 0) {
-                                hull_damage             -= (float)ship.shield / shield_damage_multiplier * hull_damage_multiplier;
-                                ship.shield              = 0;
-                            }
-                            
-                            ship.health                 -= (int)hull_damage;
+                            for(int i = 0; i < penetration; i++)
+                                if(targets[i] == null) {
 
-                            if(ship.health <= 0) ship.destroy();
+                                    targets[i]          = new target_info();
+                                    targets[i].ship     = ship;
+                                    targets[i].distance = distance;
+
+                                } else if(targets[i].distance > distance) {
+
+                                    for(int j = penetration - 1; j > i; j--) targets[j] = targets[j - 1];
+
+                                    targets[i].ship     = ship;
+                                    targets[i].distance = distance;
+
+                                }
+
                         }
 
+                        foreach(target_info target in targets)
+
+                            if(target != null) {
+
+                                float shield_damage          = damage * shield_damage_multiplier * 1.0f - shield_penetration;
+                                float hull_damage            = damage *   hull_damage_multiplier *        shield_penetration;
+
+                                target.ship.shield          -= (int)shield_damage;
+
+                                if(target.ship.shield < 0) {
+                                    hull_damage             -= (float)target.ship.shield / shield_damage_multiplier * hull_damage_multiplier;
+                                    target.ship.shield       = 0;
+                                }
+
+                                target.ship.health          -= (int)hull_damage;
+
+                                if(target.ship.health <= 0) target.ship.destroy();
+
+                            }
                     }
                 }
             }
