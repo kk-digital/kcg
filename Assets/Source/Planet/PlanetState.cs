@@ -193,11 +193,11 @@ namespace Planet
             VehicleList.Remove(vehicleId);
         }
 
-        public ItemEntity AddItemParticle(Vec2f position, ItemType itemType)
+        public ItemParticleEntity AddItemParticle(Vec2f position, ItemType itemType)
         {
             Utils.Assert(ItemParticleList.Size < PlanetEntityLimits.ItemParticlesLimit);
 
-            ItemEntity newEntity = ItemParticleList.Add(GameState.ItemSpawnSystem.SpawnItem(EntitasContext, itemType, position));
+            ItemParticleEntity newEntity = ItemParticleList.Add(GameState.ItemSpawnSystem.SpawnItemParticle(EntitasContext, itemType, position));
             return newEntity;
         }
 
@@ -245,9 +245,9 @@ namespace Planet
 
             GameState.InputProcessSystem.Update(ref this);
             GameState.PhysicsMovableSystem.Update(EntitasContext.agent);
-            GameState.PhysicsMovableSystem.Update(EntitasContext.item);
+            GameState.PhysicsMovableSystem.Update(EntitasContext.itemParticle);
             GameState.PhysicsProcessCollisionSystem.Update(EntitasContext.agent, ref TileMap);
-            GameState.PhysicsProcessCollisionSystem.Update(EntitasContext.item, ref TileMap);
+            GameState.PhysicsProcessCollisionSystem.Update(EntitasContext.itemParticle, ref TileMap);
             GameState.EnemyAiSystem.Update(ref this);
             GameState.FloatingTextUpdateSystem.Update(ref this, frameTime);
             GameState.AnimationUpdateSystem.Update(EntitasContext, frameTime);

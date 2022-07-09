@@ -52,8 +52,8 @@ namespace Inventory
 
             DrawCells(x, y, width, height, tileSize, slotSize, material, inventoryEntity);
 
-            var itemInInventory = entitasContext.item.GetEntitiesWithItemAttachedInventory(inventoryEntity.inventoryID.ID);
-            DrawIcons(entitasContext, x, y, width, height, tileSize, slotSize, material, transform, itemInInventory);
+            var itemsInInventory = entitasContext.itemInventory.GetEntitiesWithItemInventory(inventoryEntity.inventoryID.ID);
+            DrawIcons(entitasContext, x, y, width, height, tileSize, slotSize, material, transform, itemsInInventory);
         }
 
         void DrawBackGround(float x, float y, float w, float h, Material material)
@@ -102,11 +102,11 @@ namespace Inventory
             }
         }
 
-        void DrawIcons(Contexts entitasContext, float x, float y, int width, int height, Vec2f tileSize, Vec2f slotSize, Material material, Transform transform, HashSet<ItemEntity> itemInInventory)
+        void DrawIcons(Contexts entitasContext, float x, float y, int width, int height, Vec2f tileSize, Vec2f slotSize, Material material, Transform transform, HashSet<ItemInventoryEntity> itemInInventory)
         {
-            foreach (ItemEntity itemEntity in itemInInventory)
+            foreach (ItemInventoryEntity itemEntity in itemInInventory)
             {
-                int slotNumber = itemEntity.itemAttachedInventory.SlotNumber;
+                int slotNumber = itemEntity.itemInventory.SlotNumber;
                 int i = slotNumber % width;
                 int j = (height - 1) - (slotNumber - i) / width;
 

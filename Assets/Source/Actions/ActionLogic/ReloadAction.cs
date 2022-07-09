@@ -8,7 +8,7 @@ namespace Action
     {
         private Item.FireWeaponPropreties WeaponPropreties;
         private InventoryEntity InventoryEntity;
-        private ItemEntity ItemEntity;
+        private ItemInventoryEntity ItemEntity;
         private float runningTime = 0f;
 
         public ReloadAction(Contexts entitasContext, int actionID) : base(entitasContext, actionID)
@@ -23,7 +23,7 @@ namespace Action
                 int toolBarID = AgentEntity.agentToolBar.ToolBarID;
                 InventoryEntity = planet.EntitasContext.inventory.GetEntityWithInventoryID(toolBarID);
                 int selectedSlot = InventoryEntity.inventorySlots.Selected;
-                ItemEntity = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.item, toolBarID, selectedSlot);
+                ItemEntity = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, toolBarID, selectedSlot);
                 WeaponPropreties = GameState.ItemCreationApi.GetWeapon(ItemEntity.itemType.Type);
 
                 bool isReloadable = ItemEntity.hasItemFireWeaponClip;

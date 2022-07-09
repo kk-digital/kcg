@@ -61,10 +61,10 @@ namespace Physics
 
         }
 
-        public void Update(ItemContext itemContext, ref PlanetTileMap.TileMap tileMap)
+        public void Update(ItemParticleContext itemContext, ref PlanetTileMap.TileMap tileMap)
         {
             float deltaTime = Time.deltaTime;
-            var entitiesWithBox = itemContext.GetGroup(ItemMatcher.AllOf(ItemMatcher.PhysicsBox2DCollider, ItemMatcher.PhysicsPosition2D));
+            var entitiesWithBox = itemContext.GetGroup(ItemParticleMatcher.AllOf(ItemParticleMatcher.PhysicsBox2DCollider, ItemParticleMatcher.PhysicsPosition2D));
 
             foreach (var entity in entitiesWithBox)
             {

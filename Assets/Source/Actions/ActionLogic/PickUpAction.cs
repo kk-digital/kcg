@@ -7,7 +7,7 @@ namespace Action
 {
     public class PickUpAction : ActionBase
     {
-        private ItemEntity ItemEntity;
+        private ItemParticleEntity ItemEntity;
         private float Speed = 3.0f;
         private float aceleration = 0.5f;
 
@@ -17,7 +17,7 @@ namespace Action
 
         public override void OnEnter(ref Planet.PlanetState planet)
         {
-            ItemEntity = EntitasContext.item.GetEntityWithItemID(ActionEntity.actionTool.ItemID);
+            ItemEntity = EntitasContext.itemParticle.GetEntityWithItemID(ActionEntity.actionTool.ItemID);
 
 #if DEBUG
             // Item Doesnt Exist
@@ -93,7 +93,8 @@ namespace Action
 
         public override void OnExit(ref Planet.PlanetState planet)
         {
-            ItemEntity.RemoveItemDrawPosition2D();
+            if(ItemEntity.isEnabled)
+                ItemEntity.RemoveItemDrawPosition2D();
             base.OnExit(ref planet);
         }
     }

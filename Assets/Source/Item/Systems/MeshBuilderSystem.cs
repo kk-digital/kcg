@@ -21,7 +21,7 @@ namespace Item
             Mesh.Clear();
             int index = 0;
 
-            ItemEntity[] items = context.item.GetEntities();
+            ItemParticleEntity[] items = context.itemParticle.GetEntities();
             foreach (var entity in items)
             {
                 ItemProprieties proprieties = GameState.ItemCreationApi.Get(entity.itemType.Type);
