@@ -154,6 +154,33 @@ namespace Scripts {
                 return railgun;
             }
 
+            public static ShipWeapon add_torpedo(SystemShip self, SystemState state, int flags) {
+                ShipWeapon torpedo = new ShipWeapon();
+
+                torpedo.color                 = new Color(1.0f, 0.4f, 0.3f, 1.0f);
+                torpedo.range                 = 75.0f;
+                torpedo.shield_penetration    = 0.05f;
+                torpedo.projectile_velocity   =  5.0f;
+                torpedo.acc                   = 12.5f;
+                torpedo.max_velocity          =  7.5f;
+                torpedo.damage                =  8000;
+                torpedo.attack_speed          =   750;
+                torpedo.cooldown              =     0;
+                torpedo.FOV                   = Tools.quarterpi;
+                torpedo.self                  = self;
+                torpedo.state                 = state;
+                torpedo.projectiles_per_burst = 1;
+                torpedo.flags                 = (int)WeaponFlags.WEAPON_PROJECTILE
+                                              | (int)WeaponFlags.WEAPON_SEEKING
+                                              | (int)WeaponFlags.WEAPON_TRACKING
+                                              | (int)WeaponFlags.WEAPON_ROCKET
+                                              | flags;
+
+                self.weapons.Add(torpedo);
+
+                return torpedo;
+            }
+
             public void cleanup() {
                 if(laser_renderer != null) GameObject.Destroy(laser_renderer);
                 if(laser_object   != null) GameObject.Destroy(laser_object);

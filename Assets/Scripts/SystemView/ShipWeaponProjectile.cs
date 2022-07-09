@@ -173,14 +173,13 @@ namespace Scripts {
                              * Build derivative of (7) for ax to approximate using Newton's method
                              * Using dx instead of (x₁ - x₀) and dy instead of (y₁ - y₀) for the sake of brevity
                              * 
-                             * 
                              *                                                              _________   
                              *      d(7)                     dy ax²                      dx√ a² - ax²   
                              * (9) ------ = ——————————————————————————————————————— + ——————————————————
                              *      d ax                     _____________________      _______________
                              *                  _________   /    __________       |    √ 2 dx ax + vx₀² 
                              *               2 √2a² - ax² \/ dy √ 2a² - ax² + vy₀²
-                             *               
+                             * 
                              *                      _______________             _____________________
                              *               ax * (√ 2 dx ax + vx₀² + vx₀)      /    __________       |
                              *            - —————————————————————————————— - \/ dy √ 2a² - ax² + vy₀²  - vy₀
