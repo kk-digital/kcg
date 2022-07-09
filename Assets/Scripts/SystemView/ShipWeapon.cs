@@ -13,8 +13,9 @@ namespace Scripts {
             WEAPON_TURRET     = 1 << 3,
             WEAPON_ROCKET     = 1 << 4,
             WEAPON_SEEKING    = 1 << 5,       // Projectiles that seek nearby enemies
-            WEAPON_POSX       = 1 << 6,       // Left  = flags & WEAPON_POSX, right = ~flags & WEAPON_POSX
-            WEAPON_POSY       = 1 << 7,       // front = flags & WEAPON_POSY, back  = ~flags & WEAPON_POSY
+            WEAPON_TRACKING   = 1 << 6,       // Projectiles that seek nearby enemies, but use more accurate targeting. Has to be combined with seeking.
+            WEAPON_POSX       = 1 << 7,       // Left  = flags & WEAPON_POSX, right = ~flags & WEAPON_POSX
+            WEAPON_POSY       = 1 << 8,       // front = flags & WEAPON_POSY, back  = ~flags & WEAPON_POSY
         }
 
         public class ShipWeapon {
@@ -47,6 +48,8 @@ namespace Scripts {
 
             public int   projectiles_per_burst = 1;
             public float projectile_spread;
+
+            public float max_velocity;
 
             public int   penetration = 1; // Amount of enemies beams and projectiles can hit
 
@@ -348,23 +351,25 @@ namespace Scripts {
                         float cos = (float)Math.Cos(angle);
                         float sin = (float)Math.Sin(angle);
 
-                        projectile.Body.velx = cos * (float)Math.Sqrt(projectile_velocity * projectile_velocity - sin * sin) + self.self.velx;
-                        projectile.Body.vely = sin * (float)Math.Sqrt(projectile_velocity * projectile_velocity - cos * cos) + self.self.vely;
+                        projectile.Body.velx         = cos * (float)Math.Sqrt(projectile_velocity * projectile_velocity - sin * sin) + self.self.velx;
+                        projectile.Body.vely         = sin * (float)Math.Sqrt(projectile_velocity * projectile_velocity - cos * cos) + self.self.vely;
 
-                        projectile.TimeElapsed = 0.0f;
-                        projectile.LifeSpan = range / projectile_velocity;
+                        projectile.TimeElapsed       = 0.0f;
+                        projectile.LifeSpan          = range / projectile_velocity;
 
-                        projectile.ProjectileColor = color;
+                        projectile.ProjectileColor   = color;
 
                         projectile.ShieldPenetration = shield_penetration;
 
-                        projectile.Damage      = damage;
+                        projectile.Damage            = damage;
 
-                        projectile.seeking     = (flags & (int)WeaponFlags.WEAPON_SEEKING) != 0;
-                        projectile.rocket      = (flags & (int)WeaponFlags.WEAPON_ROCKET)  != 0;
-                        projectile.acc         = acc;
-                        projectile.state       = state;
-                        projectile.penetration = penetration;
+                        projectile.seeking           = (flags & (int)WeaponFlags.WEAPON_SEEKING)  != 0;
+                        projectile.overshoot         = (flags & (int)WeaponFlags.WEAPON_TRACKING) != 0;
+                        projectile.rocket            = (flags & (int)WeaponFlags.WEAPON_ROCKET)   != 0;
+                        projectile.acc               = acc;
+                        projectile.state             = state;
+                        projectile.penetration       = penetration;
+                        projectile.max_velocity      = max_velocity;
 
                         projectiles_fired.Add(projectile);
                     }

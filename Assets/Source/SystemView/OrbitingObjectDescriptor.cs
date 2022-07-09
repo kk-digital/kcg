@@ -144,6 +144,8 @@ namespace Source {
             }
 
             public float get_eccentric_anomaly_at(float mean) {
+                mean = Tools.normalize_angle(mean);
+
                 if(eccentricity <= 1.0f) {
                     // Eccentric anomaly is defined by Kepler's equation
 
@@ -164,20 +166,14 @@ namespace Source {
                     // E    = E  - ------------------
                     //  n+1    n      1 - ε cos(En)
 
-                    while(mean <        0.0f) mean  = Tools.twopi + mean;
-                    while(mean > Tools.twopi) mean -= Tools.twopi;
-
                     float estimate                  =  mean;
                     float result                    =  0.0f;
                     const float delta               = 1E-5f;
 
                     do {
                         estimate -= (estimate - eccentricity * (float)Math.Sin(estimate) - mean) / (1.0f - eccentricity * (float)Math.Cos(estimate));
-
-                        while(estimate <        0.0f) estimate  = Tools.twopi + estimate;
-                        while(estimate > Tools.twopi) estimate -= Tools.twopi;
-
-                        result = estimate  - eccentricity * (float)Math.Sin(estimate);
+                        estimate  = Tools.normalize_angle(estimate);
+                        result    = Tools.normalize_angle(estimate  - eccentricity * (float)Math.Sin(estimate));
                     } while(result - mean > delta || result - mean < -delta);
 
                     return estimate;
@@ -201,23 +197,14 @@ namespace Source {
                     // E    = E  - -------------------
                     //  n+1    n      ε cosh(En) - 1
 
-                    while(mean <        0.0f) mean  = Tools.twopi + mean;
-                    while(mean > Tools.twopi) mean -= Tools.twopi;
-
                     float estimate                  =  mean;
                     float result                    =  0.0f;
                     const float delta               = 1E-2f;
 
                     do {
                         estimate -= (eccentricity * (float)Math.Sinh(estimate) - estimate - mean) / (eccentricity * (float)Math.Cosh(estimate) - 1.0f);
-                        
-                        while(estimate <        0.0f) estimate  = Tools.twopi + estimate;
-                        while(estimate > Tools.twopi) estimate -= Tools.twopi;
-
-                        result = eccentricity * (float)Math.Sinh(estimate) - estimate;
-
-                        while(result   <        0.0f) result    = Tools.twopi + result;
-                        while(result   > Tools.twopi) result   -= Tools.twopi;
+                        estimate  = Tools.normalize_angle(estimate);
+                        result    = Tools.normalize_angle(eccentricity * (float)Math.Sinh(estimate) - estimate);
                     } while(result - mean > delta || result - mean < -delta);
 
                     return estimate;
