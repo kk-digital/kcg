@@ -1,7 +1,7 @@
 using UnityEngine;
-using Physics;
 using KMath;
 using System.Collections.Generic;
+using Collisions;
 
 namespace Projectile
 {
@@ -23,7 +23,7 @@ namespace Projectile
                 var physicsState = entity.projectilePhysicsState2D;
 
                 // Create Box Borders
-                var entityBoxBorders = new AABB2D(new Vec2f(pos.PreviousValue.X, pos.Value.Y), entity.projectileSprite2D.Size);
+                var entityBoxBorders = new AABox2D(new Vec2f(pos.PreviousValue.X, pos.Value.Y), entity.projectileSprite2D.Size);
 
                 // If is colliding bottom-top stop y movement
                 if (entityBoxBorders.IsCollidingBottom(tileMap, physicsState.angularVelocity))
@@ -43,7 +43,7 @@ namespace Projectile
                     }
                 }
 
-                entityBoxBorders = new AABB2D(new Vec2f(pos.Value.X, pos.PreviousValue.Y), entity.projectileSprite2D.Size);
+                entityBoxBorders = new AABox2D(new Vec2f(pos.Value.X, pos.PreviousValue.Y), entity.projectileSprite2D.Size);
 
                 // If is colliding left-right stop x movement
                 if (entityBoxBorders.IsCollidingLeft(tileMap, physicsState.angularVelocity))
@@ -86,7 +86,7 @@ namespace Projectile
                 var physicsState = entity.projectilePhysicsState2D;
 
                 // Create Box Borders
-                var entityBoxBorders = new AABB2D(new Vec2f(pos.PreviousValue.X, pos.Value.Y), entity.projectileSprite2D.Size);
+                var entityBoxBorders = new AABox2D(new Vec2f(pos.PreviousValue.X, pos.Value.Y), entity.projectileSprite2D.Size);
 
                 // If is colliding bottom-top stop y movement
                 if (entityBoxBorders.IsCollidingBottom(tileMap, physicsState.angularVelocity))
@@ -108,7 +108,7 @@ namespace Projectile
                     }
                 }
 
-                entityBoxBorders = new AABB2D(new Vec2f(pos.Value.X, pos.PreviousValue.Y), entity.projectileSprite2D.Size);
+                entityBoxBorders = new AABox2D(new Vec2f(pos.Value.X, pos.PreviousValue.Y), entity.projectileSprite2D.Size);
 
                 // If is colliding left-right stop x movement
                 if (entityBoxBorders.IsCollidingLeft(tileMap, physicsState.angularVelocity))

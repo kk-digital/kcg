@@ -18,6 +18,20 @@ namespace KMath
             Y = y;
         }
 
+        #region Methods
+
+        /// <summary>
+        /// Make X and Y positive
+        /// </summary>
+        [MethodImpl((MethodImplOptions) 256)]
+        public void Abs()
+        {
+            X = Math.Abs(X);
+            Y = Math.Abs(Y);
+        }
+
+        #endregion
+
         #region Properties
 
         /// <summary>
