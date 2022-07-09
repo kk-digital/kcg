@@ -130,6 +130,27 @@ namespace Scripts {
                 return cannon;
             }
 
+            public static ShipWeapon add_railgun(SystemShip self, SystemState state, int flags) {
+                ShipWeapon railgun = new ShipWeapon();
+
+                railgun.color                 = new Color(0.8f, 0.7f, 0.3f, 1.0f);
+                railgun.range                 = 100.0f;
+                railgun.shield_penetration    = 0.3f;
+                railgun.projectile_velocity   = 80.0f;
+                railgun.damage                = 4000;
+                railgun.attack_speed          = 2500;
+                railgun.cooldown              = 0;
+                railgun.FOV                   = Tools.sixthpi;
+                railgun.self                  = self;
+                railgun.state                 = state;
+                railgun.projectiles_per_burst = 1;
+                railgun.flags                 = (int)WeaponFlags.WEAPON_PROJECTILE | flags;
+
+                self.weapons.Add(railgun);
+
+                return railgun;
+            }
+
             public void cleanup() {
                 if(laser_renderer != null) GameObject.Destroy(laser_renderer);
                 if(laser_object   != null) GameObject.Destroy(laser_object);
