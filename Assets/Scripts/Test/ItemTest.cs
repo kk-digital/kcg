@@ -66,7 +66,6 @@ namespace Planet.Unity
         {
             GameResources.Initialize();
 
-
             // Generating the map
             Vec2i mapSize = new Vec2i(16, 16);
             Planet = new Planet.PlanetState();

@@ -138,11 +138,13 @@ namespace Planet.Unity
 
             GameState.TileCreationApi.CreateTileProperty(TileID.Ore1);
             GameState.TileCreationApi.SetTilePropertyName("ore_1");
+            GameState.TileCreationApi.SetTilePropertyShape(TileShape.FullBlock, TileShapeAndRotation.FB);
             GameState.TileCreationApi.SetTilePropertyTexture16(oreTileSheet, 0, 0);
             GameState.TileCreationApi.EndTileProperty();
 
             GameState.TileCreationApi.CreateTileProperty(TileID.Glass);
             GameState.TileCreationApi.SetTilePropertyName("glass");
+            GameState.TileCreationApi.SetTilePropertyShape(TileShape.FullBlock, TileShapeAndRotation.FB);
             GameState.TileCreationApi.SetTilePropertySpriteSheet16(tilesMoon, 11, 10);
             GameState.TileCreationApi.EndTileProperty();
 

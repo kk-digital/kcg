@@ -19,8 +19,8 @@ namespace PlanetTileMap
 
             var atlas = new Sprites.SpriteAtlas
             {
-                Width = 9,
-                Height = 9
+                Width = 128,
+                Height = 128
             };
             atlas.Data = new byte[4 * 32 * 32 * atlas.Width * atlas.Height]; // 4 * 32 * 32 = 4096
             for(int j = 0; j < atlas.Data.Length; j++)

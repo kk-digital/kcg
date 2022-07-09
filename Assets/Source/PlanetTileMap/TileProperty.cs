@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Enums.Tile;
+using KMath;
 
 //TODO: add material type for block
 //TODO: per material coefficient of restitution, coefficient of static friction and coefficient of dynamic friction
@@ -13,24 +15,26 @@ namespace PlanetTileMap
     /// </summary>
     public struct TileProperty
     {
+        public string Name; //later use string pool
+        public string Description; //later use string pool
+        
         public TileID TileID;
         public int BaseSpriteId;
         
-        public string Name; //later use string pool
-        public string Description; //later use string pool
-
+        public byte Durability; //max health of tile
+        
         /// <summary>
         /// To map neighbour tiles or not
         /// </summary>
         public bool IsAutoMapping; 
 
-        public CollisionType TileCollisionType;
-        public bool IsExplosive;
+        public SpriteRuleType SpriteRuleType;
 
-        //note: ore is composited, others are just normal
-        public byte Durability; //max health of tile
-        
-        public bool IsSolid => TileCollisionType == CollisionType.Solid;
+        public CollisionType CollisionIsoType;
+        public TileShape BlockShapeType;
+        public TileShapeAndRotation BlockShapeAndRotation;
+
+        public bool IsSolid => CollisionIsoType == CollisionType.Solid;
 
         public TileProperty(TileID tileID, int baseSpriteId) : this()
         {

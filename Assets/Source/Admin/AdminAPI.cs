@@ -40,30 +40,27 @@ namespace Admin
 
         // Chunk Visualizer X Offset
         public static float chunkVisualizerXOffset = 0.5f;
-
         // Chunk Visualizer Y Offset
         public static float chunkVisualizerYOffset = 0.0f;
-
         // Display Chunk Visualizer
         public static void DrawChunkVisualizer(PlanetTileMap.TileMap tileMap)
         {
             // Draw square to every tile
-            for(int y = 0; y < tileMap.MapSize.Y; y++)
+            for (int y = 0; y < tileMap.MapSize.Y; y++)
             {
-                for (int x = 0; x < tileMap.MapSize.X; x++)
+                for(int x = 0; x < tileMap.MapSize.X; x++)
                 {
-                    // Get Chunks
-                    for (int i = 0; i < tileMap.ChunkArrayLength; i++)
-                    {
-                        // If chunks is empty make gizmos color black, if it's not make it green.
-                        if (tileMap.ChunkArray[i].Type == Enums.Tile.MapChunkType.Empty)
-                            Gizmos.color = Color.black;
-                        else
-                            Gizmos.color = Color.green;
+                    // If chunk is empty/air make it black
+                    if (tileMap.GetFrontTile(x, y).ID == Enums.Tile.TileID.Air)
+                        Gizmos.color = Color.black;
+                    else // If chunk is not empty make it green
+                        Gizmos.color = Color.green;
 
-                        // Draw colored cubes to the editor display (Debug)
-                        Gizmos.DrawCube(new Vector3(x + chunkVisualizerXOffset, y + chunkVisualizerYOffset), new Vector3(1, 1));
-                    }
+                    if (!Utility.ObjectMesh.isOnScreen(x, y))
+                        Gizmos.color = Color.blue;
+
+                    // Draw colored cubes to the editor display (Debug)
+                    Gizmos.DrawCube(new Vector3(x + chunkVisualizerXOffset, y + chunkVisualizerYOffset), new Vector3(1, 1));
                 }
             }
         }
