@@ -86,6 +86,7 @@ public partial class Contexts {
     public const string ActionCoolDownAgentID = "ActionCoolDownAgentID";
     public const string ActionIDID = "ActionIDID";
     public const string ActionIDTypeID = "ActionIDTypeID";
+    public const string ActionInterrupt = "ActionInterrupt";
     public const string ActionOwner = "ActionOwner";
     public const string ActionProperty = "ActionProperty";
     public const string ActionPropertyName = "ActionPropertyName";
@@ -123,6 +124,11 @@ public partial class Contexts {
             ActionIDTypeID,
             action.GetGroup(ActionMatcher.ActionID),
             (e, c) => ((Action.IDComponent)c).TypeID));
+
+        action.AddEntityIndex(new Entitas.PrimaryEntityIndex<ActionEntity, int>(
+            ActionInterrupt,
+            action.GetGroup(ActionMatcher.ActionInterrupt),
+            (e, c) => ((Action.InterruptComponent)c).ID));
 
         action.AddEntityIndex(new Entitas.EntityIndex<ActionEntity, int>(
             ActionOwner,
@@ -217,6 +223,10 @@ public static class ContextsExtensions {
 
     public static System.Collections.Generic.HashSet<ActionEntity> GetEntitiesWithActionIDTypeID(this ActionContext context, Enums.ActionType TypeID) {
         return ((Entitas.EntityIndex<ActionEntity, Enums.ActionType>)context.GetEntityIndex(Contexts.ActionIDTypeID)).GetEntities(TypeID);
+    }
+
+    public static ActionEntity GetEntityWithActionInterrupt(this ActionContext context, int ID) {
+        return ((Entitas.PrimaryEntityIndex<ActionEntity, int>)context.GetEntityIndex(Contexts.ActionInterrupt)).GetEntity(ID);
     }
 
     public static System.Collections.Generic.HashSet<ActionEntity> GetEntitiesWithActionOwner(this ActionContext context, int AgentID) {
