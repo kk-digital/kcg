@@ -135,7 +135,7 @@ namespace Scripts {
                 if(laser_object   != null) GameObject.Destroy(laser_object);
             }
 
-            // todo update this later
+            // todo remove
             public bool TryFiringAt(SystemShip target, int current_millis) {
                 cooldown -= current_millis;
                 if (cooldown < 0) cooldown = 0;
@@ -178,12 +178,13 @@ namespace Scripts {
                 projectile.ShieldDamageMultiplier = shield_damage_multiplier;
                 projectile.HullDamageMultiplier   = hull_damage_multiplier;
 
-                projectile.Damage = damage;
+                projectile.Damage      = damage;
 
-                projectile.seeking = (flags & (int)WeaponFlags.WEAPON_SEEKING) != 0;
-                projectile.rocket  = (flags & (int)WeaponFlags.WEAPON_ROCKET)  != 0;
-                projectile.acc     = acc;
-                projectile.state   = state;
+                projectile.seeking     = (flags & (int)WeaponFlags.WEAPON_SEEKING) != 0;
+                projectile.rocket      = (flags & (int)WeaponFlags.WEAPON_ROCKET)  != 0;
+                projectile.acc         = acc;
+                projectile.state       = state;
+                projectile.penetration = penetration;
 
                 projectiles_fired.Add(projectile);
 
@@ -336,12 +337,13 @@ namespace Scripts {
 
                         projectile.ShieldPenetration = shield_penetration;
 
-                        projectile.Damage = damage;
+                        projectile.Damage      = damage;
 
-                        projectile.seeking = (flags & (int)WeaponFlags.WEAPON_SEEKING) != 0;
-                        projectile.rocket  = (flags & (int)WeaponFlags.WEAPON_ROCKET)  != 0;
-                        projectile.acc     = acc;
-                        projectile.state   = state;
+                        projectile.seeking     = (flags & (int)WeaponFlags.WEAPON_SEEKING) != 0;
+                        projectile.rocket      = (flags & (int)WeaponFlags.WEAPON_ROCKET)  != 0;
+                        projectile.acc         = acc;
+                        projectile.state       = state;
+                        projectile.penetration = penetration;
 
                         projectiles_fired.Add(projectile);
                     }

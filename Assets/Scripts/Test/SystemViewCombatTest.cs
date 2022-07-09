@@ -135,12 +135,12 @@ namespace Scripts {
                             if(ship == Projectile.Self) continue;
 
                             if(Projectile.InRangeOf(ship, 1.0f)) {
-                                Projectile.DoDamage(ship);
-                                Projectile.Weapon.projectiles_fired.Remove(Projectile);
+                                if(Projectile.DoDamage(ship)) {
 
-                                GameObject.Destroy(ProjectileRenderers[Projectile]);
-                                ProjectileRenderers.Remove(Projectile);
-                                i--;
+                                    GameObject.Destroy(ProjectileRenderers[Projectile]);
+                                    ProjectileRenderers.Remove(Projectile);
+                                    i--;
+                                }
 
                                 break;
                             }
@@ -296,8 +296,7 @@ namespace Scripts {
                 right_gun.flags                  = (int)WeaponFlags.WEAPON_PROJECTILE
                                                  | (int)WeaponFlags.WEAPON_BROADSIDE;
 
-                ShipWeapon turret                = ShipWeapon.add_tri_cannon(Player.ship, State, (int)WeaponFlags.WEAPON_TURRET
-                                                                                               | (int)WeaponFlags.WEAPON_SEEKING);
+                ShipWeapon turret                = ShipWeapon.add_tri_cannon(Player.ship, State, (int)WeaponFlags.WEAPON_TURRET);
 
                 turret.rotation                  = Tools.pi;
                 turret.rotation_rate             = 2.0f;

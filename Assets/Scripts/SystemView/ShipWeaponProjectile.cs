@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine; // For color
 using Source.SystemView;
 
@@ -26,8 +27,10 @@ namespace Scripts {
             public float acc;
             public bool  seeking;
             public bool  rocket;
+            public int   penetration;
             public SystemState state;
 
+            public List<SystemShip> hits = new();
             public int Damage;
 
             public ShipWeaponProjectile() {
@@ -105,20 +108,30 @@ namespace Scripts {
                 return Target != null && Math.Sqrt(dx * dx + dy * dy) < AcceptableRange;
             }
 
-            public void DoDamage(SystemShip Target) {
-                Target.shield -= (int)(Damage * (1.0 - ShieldPenetration));
-                Target.health -= (int)(Damage * ShieldPenetration);
+            public bool DoDamage(SystemShip Target) {
+                if(!hits.Contains(Target)) {
+                    Target.shield -= (int)(Damage * (1.0 - ShieldPenetration));
+                    Target.health -= (int)(Damage * ShieldPenetration);
 
-                if(Target.shield < 0) {
-                    Target.health += Target.shield;
-                    Target.shield = 0;
+                    if(Target.shield < 0) {
+                        Target.health += Target.shield;
+                        Target.shield = 0;
+                    }
+
+                    if(Target.health <= 0) {
+                        Target.destroy();
+                    }
+
+                    hits.Add(Target);
+
+                    penetration--;
+                    if(penetration <= 0) {
+                        Weapon.projectiles_fired.Remove(this);
+                        return true;
+                    }
                 }
 
-                if(Target.health <= 0) {
-                    Target.destroy();
-                }
-
-                Weapon.projectiles_fired.Remove(this);
+                return false;
             }
         }
     }
