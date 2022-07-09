@@ -40,6 +40,9 @@ namespace Scripts {
             public const string broadsides_key  = "2";
             public const string turrets_key     = "3";
 
+            private float rotating_to;
+            private bool  rotating;
+
             public float periapsis;
             public float apoapsis;
             public float rotation;
@@ -59,6 +62,11 @@ namespace Scripts {
 
             public GameObject   angular_velocity_direction_renderer;
             public GameObject   angular_velocity_perpendicular_renderer;
+
+            public void rotate_to(float angle) {
+                rotating_to = angle;
+                rotating    = true;
+            }
 
             private void Start() {
                 camera_controller  = GameObject.Find("Main Camera").GetComponent<CameraController>();
@@ -239,10 +247,13 @@ namespace Scripts {
                 bool  move_to_mouse = false;
                 float movement      = Input.GetAxis("Vertical");
 
+                if(rotating && ship.rotation != rotating_to) ship.rotate_to(rotating_to, current_time);
+                else rotating = false;
+
                 if (!mouse_steering) {
                     ship.rotation         += ship.self.angular_vel * current_time;
                     if(Input.GetKey("left ctrl")) horizontal_movement = -Input.GetAxis("Horizontal");
-                    else {
+                    else if(!rotating) {
                         float acc              = (float)Math.Sqrt(ship.torque / ship.self.angular_inertia) * -Input.GetAxis("Horizontal");
                         ship.rotation         += 0.5f * acc * current_time * current_time;
                         if(constant_rate_turning)
@@ -261,7 +272,7 @@ namespace Scripts {
 
                     float angle = Tools.get_angle(dx, dy);
 
-                    if(turn_towards_mouse) ship.rotate_to(angle, current_time);
+                    if(turn_towards_mouse) { if(!rotating) ship.rotate_to(angle, current_time); }
                     else if(Input.GetMouseButton(0)) {
                         direction     = angle;
                         move_to_mouse = true;

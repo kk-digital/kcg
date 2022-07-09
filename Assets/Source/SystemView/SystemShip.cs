@@ -53,7 +53,7 @@ namespace Source {
 
             public  float rotation;
 
-            public  float torque = 2.0f;
+            public  float torque = 50.0f;
 
             public  List<ShipWeapon> weapons;
 

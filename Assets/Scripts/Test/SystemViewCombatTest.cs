@@ -42,10 +42,11 @@ namespace Scripts {
 
             public float    rudder_speed;               // Speed at which rudder/sail turns
             public float    rudder_strength;            // Strength with which rudder/sail rotates ship movement vector
-            public bool     rudder_enabled = true;
+            public bool     rudder_enabled         = true;
 
-            public bool     mouse_movement = false;
-            public bool     turn_to_mouse  = true;
+            public bool     mouse_movement         = false;
+            public bool     turn_to_mouse          = true;
+            public bool     constant_rate_rotation = false;
 
             public Toggle   mouse_turning_toggle;
 
@@ -74,6 +75,15 @@ namespace Scripts {
             public void toggle_mouse_turning(bool b) {
                 turn_to_mouse = b;
                 if(Player != null) Player.turn_towards_mouse = turn_to_mouse;
+            }
+
+            public void toggle_constant_rate_rotation(bool b) {
+                constant_rate_rotation = b;
+                if(Player != null) Player.constant_rate_turning = constant_rate_rotation;
+            }
+
+            public void rotate_to(string s) {
+                Player.rotate_to(Tools.normalize_angle(float.Parse(s) * Tools.pi / 180.0f));
             }
 
             void Start() {
