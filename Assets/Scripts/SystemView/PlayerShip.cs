@@ -239,7 +239,7 @@ namespace Scripts {
 
                 if (!mouse_steering) {
                     ship.rotation         += ship.self.angular_vel * current_time;
-                    if(Input.GetKey("left ctrl")) horizontal_movement = Input.GetAxis("Horizontal");
+                    if(Input.GetKey("left ctrl")) horizontal_movement = -Input.GetAxis("Horizontal");
                     else {
                         float acc              = (float)Math.Sqrt(ship.torque / ship.self.angular_inertia) * -Input.GetAxis("Horizontal");
                         ship.rotation         += 0.5f * acc * current_time * current_time;
