@@ -32,6 +32,8 @@ namespace Scripts {
             public float sail_speed             = 0.5f;
             public bool  rudder_enabled         = true;
 
+            public bool  constant_rate_turning  = false;
+
             public bool  mouse_steering         = false;
 
             public const string main_weapon_key = "1";
@@ -243,8 +245,12 @@ namespace Scripts {
                     else {
                         float acc              = (float)Math.Sqrt(ship.torque / ship.self.angular_inertia) * -Input.GetAxis("Horizontal");
                         ship.rotation         += 0.5f * acc * current_time * current_time;
-                        ship.self.angular_vel += acc * current_time;
-                        ship.self.angular_vel *= 0.99f;
+                        if(constant_rate_turning)
+                            ship.self.angular_vel = acc;
+                        else {
+                            ship.self.angular_vel += acc * current_time;
+                            ship.self.angular_vel *= 0.99f;
+                        }
                     }
                 } else {
                     horizontal_movement = -Input.GetAxis("Horizontal");
