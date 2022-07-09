@@ -296,7 +296,7 @@ namespace Scripts {
                 right_gun.flags                  = (int)WeaponFlags.WEAPON_PROJECTILE
                                                  | (int)WeaponFlags.WEAPON_BROADSIDE;
 
-                ShipWeapon turret                = ShipWeapon.add_torpedo(Player.ship, State, (int)WeaponFlags.WEAPON_TURRET);
+                ShipWeapon turret                = ShipWeapon.add_auto_cannon(Player.ship, State, (int)WeaponFlags.WEAPON_TURRET);
 
                 turret.rotation                  = Tools.pi;
                 turret.rotation_rate             = 2.0f;

@@ -78,7 +78,7 @@ namespace Scripts {
                 ship.acceleration  = 5.0f;
                 ship.horizontal_acceleration = 2.5f;
 
-                ship.self.mass     = 1.0f;
+                ship.self.mass     = 100.0f;
 
                 renderer           = o.AddComponent<SystemShipRenderer>();
                 renderer.ship      = ship;

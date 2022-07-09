@@ -74,10 +74,11 @@ namespace Source {
             public  bool ignore_gravity;
 
             public SystemShip() {
-                self            = new SpaceObject();
-                descriptor      = new OrbitingObjectDescriptor(self);
-                weapons         = new List<ShipWeapon>();
+                self              = new SpaceObject();
+                descriptor        = new OrbitingObjectDescriptor(self);
+                weapons           = new List<ShipWeapon>();
                 autopilot_delta_v = new float[2];
+                self.mass         = 100;
             }
 
             public void destroy() {

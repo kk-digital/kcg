@@ -48,6 +48,7 @@ namespace Scripts {
 
             public int   projectiles_per_burst = 1;
             public float projectile_spread;
+            public float projectile_mass = 0.01f;
 
             public float max_velocity;
 
@@ -375,11 +376,11 @@ namespace Scripts {
                         angle += spread_per_projectile * (i + 0.5f);
                         angle  = Tools.normalize_angle(angle);
 
-                        float cos = (float)Math.Cos(angle);
-                        float sin = (float)Math.Sin(angle);
+                        float rel_velx = (float)Math.Cos(angle) * projectile_velocity;
+                        float rel_vely = (float)Math.Sin(angle) * projectile_velocity;
 
-                        projectile.Body.velx         = cos * (float)Math.Sqrt(projectile_velocity * projectile_velocity - sin * sin) + self.self.velx;
-                        projectile.Body.vely         = sin * (float)Math.Sqrt(projectile_velocity * projectile_velocity - cos * cos) + self.self.vely;
+                        projectile.Body.velx         = self.self.velx + rel_velx;
+                        projectile.Body.vely         = self.self.vely + rel_vely;
 
                         projectile.TimeElapsed       = 0.0f;
                         projectile.LifeSpan          = range / projectile_velocity;
@@ -397,6 +398,48 @@ namespace Scripts {
                         projectile.state             = state;
                         projectile.penetration       = penetration;
                         projectile.max_velocity      = max_velocity;
+
+                        /*
+                         * (1) E  = m * v²
+                         * 
+                         * Split into x and y component
+                         * 
+                         * (2) Ex = m * vx²
+                         *      ⤷ Energy imparted along x-axis
+                         *      
+                         * (3) Ey = m * vy²
+                         *      ⤷ Energy imparted along y-axis
+                         *      
+                         * Solve for velocity change applied to ship
+                         * 
+                         * (4) m₀ * vx₀² = m₁ * vx₁²
+                         *        ⤹          ⤷ Energy imparted on the projectile
+                         *         Energy imparted on the ship
+                         * 
+                         *                m₁ * vx₁²
+                         * (4) vx₀ = ± √ ——————————
+                         *           ⤹       m₀
+                         *            Sign is opposite of vx₁'s sign
+                         * 
+                         * (5) m₀ * vy₀² = m₁ * vy₁²
+                         *        ⤹          ⤷ Energy imparted on the projectile
+                         *         Energy imparted on the ship
+                         * 
+                         *                m₁ * vy₁²
+                         * (5) vy₀ = ± √ ——————————
+                         *           ⤹       m₀
+                         *            Sign is opposite of vy₁'s sign
+                         * 
+                         */
+
+                        float vx = (float)Math.Sqrt(projectile_mass / self.self.mass * rel_velx * rel_velx);
+                        float vy = (float)Math.Sqrt(projectile_mass / self.self.mass * rel_vely * rel_vely);
+
+                        if(rel_velx >= 0.0f) self.self.velx -= vx;
+                        else                 self.self.velx += vx;
+
+                        if(rel_vely >= 0.0f) self.self.vely -= vy;
+                        else                 self.self.vely += vy;
 
                         projectiles_fired.Add(projectile);
                     }
