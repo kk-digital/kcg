@@ -100,7 +100,7 @@ namespace Scripts {
                 StarObject.name = "Star Renderer";
 
                 SystemStarRenderer starRenderer = StarObject.AddComponent<SystemStarRenderer>();
-                starRenderer.Star = State.stars[0];
+                starRenderer.star = State.stars[0];
             }
 
             void LateUpdate() {

@@ -10,8 +10,6 @@ namespace Scripts {
         public struct ObjectInfo<RendererT> {
             public GameObject Object;
             public RendererT Renderer;
-            public int LastUpdateTime;
-            public int LastCycle;
         }
 
         public class SystemViewTest : MonoBehaviour {
@@ -19,6 +17,7 @@ namespace Scripts {
 
             private float LastTime;
 
+            public Dictionary<SystemStar,         ObjectInfo<SystemStarRenderer>>         Stars     = new();
             public Dictionary<SystemPlanet,       ObjectInfo<SystemPlanetRenderer>>       Planets   = new();
             public Dictionary<SystemPlanet,       ObjectInfo<SystemPlanetRenderer>>       Moons     = new();
             //public Dictionary<SystemAsteroidBelt, ObjectInfo<SystemAsteroidBeltRenderer>> Asteroids = new();
@@ -27,10 +26,11 @@ namespace Scripts {
 
             public System.Random rnd = new System.Random();
 
+            public  int   StarCount        =                    1;
             public  int   InnerPlanets     =                    4;
             public  int   OuterPlanets     =                    6;
             public  int   FarOrbitPlanets  =                    2;
-            public  int   SpaceStations    =                   15;
+            public  int   SpaceStations    =                    0;
 
             public  float system_scale     =                25.0f;
 
@@ -110,9 +110,6 @@ namespace Scripts {
                 var StarObject = new GameObject();
                 StarObject.name = "Star Renderer";
 
-                SystemStarRenderer starRenderer = StarObject.AddComponent<SystemStarRenderer>();
-                starRenderer.Star = State.stars[0];
-
                 Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
             }
 
@@ -127,16 +124,15 @@ namespace Scripts {
             public void RegenerateSystem() {
                 LastTime = Time.time;
 
-                State.stars.Clear();
-                State.stars.Add(new SystemStar());
-
-                State.stars[0].self.mass = SunMass;
-                State.stars[0].self.posx = ((float)rnd.NextDouble() * 8.0f - 64.0f) * system_scale;
-                State.stars[0].self.posy = ((float)rnd.NextDouble() * 8.0f - 4.0f)  * system_scale;
-
                 // delete previous system
 
-                // while (Stations.Count > 0) { } todo
+                while(Stars.Count > 0) {
+                    GameObject.Destroy(Stars.ElementAt(0).Value.Renderer);
+                    GameObject.Destroy(Stars.ElementAt(0).Value.Object);
+                    Stars.Remove(Stars.ElementAt(0).Key);
+                }
+
+                State.stars.Clear();
 
                 while(Ships.Count > 0) {
                     GameObject.Destroy(Ships.ElementAt(0).Value.Renderer);
@@ -171,6 +167,43 @@ namespace Scripts {
                 if(State.player != null) {
                     GameObject.Destroy(State.player);
                 }
+
+                for(int i = 0; i < StarCount; i++) {
+
+                    State.stars.Add(new SystemStar());
+
+                    State.stars[i].self.mass                    = SunMass * (float)rnd.NextDouble() * (i + 1);
+                    State.stars[i].self.posx                    = ((float)rnd.NextDouble() * 16.0f - 64.0f) * system_scale;
+                    State.stars[i].self.posy                    = ((float)rnd.NextDouble() * 16.0f -  8.0f) * system_scale;
+                    State.stars[i].render_orbit                 = StarCount > 1;
+
+                    State.objects.Add(State.stars[i].self);
+
+                    ObjectInfo<SystemStarRenderer> StarInfo     = new();
+                    StarInfo.Object                             = new GameObject();
+                    StarInfo.Object.name                        = "Star renderer " + (i + 1);
+                    StarInfo.Renderer                           = StarInfo.Object.AddComponent<SystemStarRenderer>();
+                    StarInfo.Renderer.star                      = State.stars[i];
+
+                    Stars.Add(State.stars[i], StarInfo);
+
+                }
+
+                if(StarCount > 1)
+                    for(int i = 0; i < StarCount; i++) {
+                        State.stars[i].descriptor.semiminoraxis = (float)rnd.NextDouble() * 32.0f * system_scale;
+                        State.stars[i].descriptor.semimajoraxis = (float)rnd.NextDouble() * 32.0f * system_scale + State.stars[i].descriptor.semiminoraxis;
+                        State.stars[i].descriptor.rotation      = (float)rnd.NextDouble() * Tools.twopi;
+                        State.stars[i].descriptor.rotation      = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                        State.stars[i].descriptor.mean_anomaly  = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+
+                        int j;
+                        do j = rnd.Next(StarCount);
+                        while(j == i);
+
+                        State.stars[i].descriptor.central_body  = State.stars[j].self;
+                        State.stars[i].descriptor.compute();
+                    }
 
                 for(int i = 0; i < InnerPlanets; i++) {
                     SystemPlanet Planet = new SystemPlanet();
@@ -268,15 +301,15 @@ namespace Scripts {
                     for(int j = 0; j < rnd.Next(i + 1); j++) {
                         SystemPlanet Moon = new SystemPlanet();
 
-                        Moon.descriptor.self.mass = MoonMass;
+                        Moon.descriptor.self.mass     = MoonMass;
 
-                        Moon.descriptor.central_body = Planet.descriptor.self;
+                        Moon.descriptor.central_body  = Planet.descriptor.self;
 
                         Moon.descriptor.semiminoraxis = ((float)rnd.NextDouble() * (j + 1) + 5.0f) * system_scale;
                         Moon.descriptor.semimajoraxis = Moon.descriptor.semiminoraxis + ((float)rnd.NextDouble() * 2.0f) * system_scale;
 
-                        Moon.descriptor.rotation = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
-                        Moon.descriptor.mean_anomaly = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                        Moon.descriptor.rotation      = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
+                        Moon.descriptor.mean_anomaly  = (float)rnd.NextDouble() * 2.0f * 3.1415926f;
 
                         Moon.descriptor.compute();
 
@@ -284,11 +317,11 @@ namespace Scripts {
 
                         ObjectInfo<SystemPlanetRenderer> MoonInfo = new();
 
-                        MoonInfo.Object = new();
-                        MoonInfo.Object.name = "Moon renderer";
+                        MoonInfo.Object               = new();
+                        MoonInfo.Object.name          = "Moon renderer";
 
-                        MoonInfo.Renderer = MoonInfo.Object.AddComponent<SystemPlanetRenderer>();
-                        MoonInfo.Renderer.planet = Moon;
+                        MoonInfo.Renderer             = MoonInfo.Object.AddComponent<SystemPlanetRenderer>();
+                        MoonInfo.Renderer.planet      = Moon;
 
                         Moons.Add(Moon, MoonInfo);
                     }
@@ -444,8 +477,57 @@ namespace Scripts {
                 State.player.system_scale = system_scale;
             }
 
+            private SpaceObject gravity_cycle(SpaceObject self, float current_time) {
+                SpaceObject strongest_body = null;
+                float       maxg           = 0.0f;
+                float       grav_velx       = 0.0f;
+                float       grav_vely       = 0.0f;
+
+                foreach(SpaceObject body in State.objects) {
+
+                    if(body == self) continue;
+
+                    float dx = body.posx - self.posx;
+                    float dy = body.posy - self.posy;
+
+                    float d2 = dx * dx + dy * dy;
+                    float d = (float)Math.Sqrt(d2);
+
+                    float g = Tools.gravitational_constant * body.mass / d2;
+
+                    if(g > maxg) strongest_body = body;
+
+                    if(n_body_gravity) {
+
+                        float Velocity = g * current_time;
+
+                        grav_velx += Velocity * dx / d;
+                        grav_vely += Velocity * dy / d;
+
+                    } else {
+
+                        if(g > maxg) {
+                            maxg = g;
+                            float vel = g * current_time;
+
+                            grav_velx = vel * dx / d;
+                            grav_vely = vel * dy / d;
+                        }
+
+                    }
+
+                }
+
+                self.posx += self.velx * current_time + 0.5f * grav_velx * current_time;
+                self.posy += self.vely * current_time + 0.5f * grav_vely * current_time;
+
+                self.velx += grav_velx;
+                self.vely += grav_vely;
+
+                return strongest_body;
+            }
             void Update() {
-                float CurrentTime = (Time.time - LastTime) * time_scale;
+                float current_time = (Time.time - LastTime) * time_scale;
                 LastTime = Time.time;
 
                 if(CachedSunMass != SunMass) {
@@ -474,14 +556,6 @@ namespace Scripts {
                     for(int i = 0; i < Moons.Count; i++)
                         Moons.ElementAt(i).Key.descriptor.self.mass = MoonMass;
                 }
-
-                if(planet_movement) {
-                    foreach(SystemPlanet p in State.planets)
-                        p.descriptor.update_position(CurrentTime);
-
-                    foreach(SpaceStation s in State.stations)
-                        s.descriptor.update_position(CurrentTime);
-                }
                 
                 foreach(SystemShip s in State.ships) {
                     if(!s.path_planned)
@@ -492,10 +566,53 @@ namespace Scripts {
                         (s.start, s.destination) = (s.destination, s.start);
                     }
 
-                    s.descriptor.update_position(CurrentTime);
+                    s.descriptor.update_position(current_time);
                 }
 
                 State.player.stations_orbiting = planet_movement;
+
+                if(planet_movement) {
+
+                    if(StarCount <= 1 || !n_body_gravity) {
+
+                        foreach(SystemPlanet p in State.planets)
+                            p.descriptor.update_position(current_time);
+
+                        foreach(SpaceStation s in State.stations)
+                            s.descriptor.update_position(current_time);
+
+                    } else {
+
+                        foreach(SystemStar star in State.stars) {
+
+                            SpaceObject strongest_body = gravity_cycle(star.self, current_time);
+
+                            if(strongest_body != null)
+                                star.descriptor.change_frame_of_reference(strongest_body);
+
+                        }
+
+                        foreach(SystemPlanet planet in State.planets) {
+
+                            SpaceObject strongest_body = gravity_cycle(planet.self, current_time);
+
+                            if(strongest_body != null)
+                                planet.descriptor.change_frame_of_reference(strongest_body);
+
+                        }
+
+                        foreach(SpaceStation station in State.stations) {
+
+                            SpaceObject strongest_body = gravity_cycle(station.self, current_time);
+
+                            if(strongest_body != null)
+                                station.descriptor.change_frame_of_reference(strongest_body);
+
+                        }
+
+                    }
+
+                }
 
                 if(!State.player.ship.ignore_gravity) {
                     float maxg = 0.0f;
@@ -503,19 +620,19 @@ namespace Scripts {
                     float GravVelY = 0.0f;
 
                     // this behaves weird when getting really close to central body --- is float too inaccurate?
-                    foreach(SpaceObject Body in State.objects) {
+                    foreach(SpaceObject body in State.objects) {
 
-                        float dx = Body.posx - State.player.ship.self.posx;
-                        float dy = Body.posy - State.player.ship.self.posy;
+                        float dx = body.posx - State.player.ship.self.posx;
+                        float dy = body.posy - State.player.ship.self.posy;
 
                         float d2 = dx * dx + dy * dy;
                         float d = (float)Math.Sqrt(d2);
 
-                        float g = Tools.gravitational_constant * Body.mass / d2;
+                        float g = Tools.gravitational_constant * body.mass / d2;
 
                         if(n_body_gravity) {
 
-                            float Velocity = g * CurrentTime;
+                            float Velocity = g * current_time;
 
                             GravVelX += Velocity * dx / d;
                             GravVelY += Velocity * dy / d;
@@ -524,7 +641,7 @@ namespace Scripts {
 
                             if(g > maxg) {
                                 maxg = g;
-                                float vel = g * CurrentTime;
+                                float vel = g * current_time;
 
                                 GravVelX = vel * dx / d;
                                 GravVelY = vel * dy / d;
@@ -534,7 +651,7 @@ namespace Scripts {
 
                     }
 
-                    State.player.gravitational_strength = (float)Math.Sqrt(GravVelX * GravVelX + GravVelY * GravVelY) * 0.4f / CurrentTime;
+                    State.player.gravitational_strength = (float)Math.Sqrt(GravVelX * GravVelX + GravVelY * GravVelY) * 0.4f / current_time;
 
                     State.player.ship.self.velx   += GravVelX;
                     State.player.ship.self.vely   += GravVelY;

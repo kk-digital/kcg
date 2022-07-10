@@ -2341,10 +2341,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   State: {fileID: 451157161}
+  StarCount: 1
   InnerPlanets: 4
   OuterPlanets: 6
   FarOrbitPlanets: 2
-  SpaceStations: 15
+  SpaceStations: 0
   system_scale: 25
   SunMass: 5e+16
   PlanetMass: 1e+14
