@@ -467,6 +467,8 @@ namespace Scripts {
             }
 
             void OnDestroy() {
+                GameObject.Destroy(angular_velocity_perpendicular_renderer);
+                GameObject.Destroy(angular_velocity_direction_renderer);
                 GameObject.Destroy(renderer);
                 GameObject.Destroy(o);
             }
