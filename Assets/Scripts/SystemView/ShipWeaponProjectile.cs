@@ -201,19 +201,21 @@ namespace Scripts {
                             //       and use that predicted position for the actual target seeking. However, this math is already
                             //       a huge mess, and I will have to do it at a later date.
 
-                            // TODO: This also doesn't work yet. Fix it later. For now I'll use a simplified version, which will
-                            //       give a stronger overshooting effect.
-
                             float dx = target.self.posx - Body.posx;
                             float dy = target.self.posy - Body.posy;
 
-                            /* Func<float, float> formula7 = ax => {
+                            Func<float, float> formula7 = ax => {
                                 float ay = (float)Math.Sqrt(acc * acc - ax * ax);
 
-                                if(dy < 0) ay *= -1;
-
                                 float result = (float)(ay * (Math.Sqrt(2.0 * ax * dx + Body.velx * Body.velx) + Body.velx)
-                                             - ax * (Math.Sqrt(2.0 * ay * dy + Body.vely * Body.vely) + Body.vely));
+                                             -         ax * (Math.Sqrt(2.0 * ay * dy + Body.vely * Body.vely) + Body.vely));
+
+                                if(float.IsNaN(result)) {
+                                    ay *= -1.0f;
+
+                                    result = (float)(ay * (Math.Sqrt(2.0 * ax * dx + Body.velx * Body.velx) + Body.velx)
+                                           -         ax * (Math.Sqrt(2.0 * ay * dy + Body.vely * Body.vely) + Body.vely));
+                                }
 
                                 return result;
                             };
@@ -243,21 +245,13 @@ namespace Scripts {
                             do {
 
                                 estimate -= formula7(estimate) / formula9(estimate);
-
-                                if(estimate >  acc) estimate =  acc;
-                                if(estimate < -acc) estimate = -acc;
-
                                 result    = formula7(estimate);
 
-                            } while(result > delta || result < -delta);
+                            } while(result > delta || result < -delta || float.IsNaN(result));
 
                             Body.velx += dt * estimate;
                             Body.vely += dt * (float)Math.Sqrt(acc * acc - estimate * estimate);
 
-                            */
-
-                            Body.velx += acc * dt * dx / Tools.magnitude(dx, dy);
-                            Body.vely += acc * dt * dy / Tools.magnitude(dx, dy);
                         }
 
                         accelerated     = true;
