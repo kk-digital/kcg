@@ -8,13 +8,13 @@ namespace Admin
     public static class AdminAPI
     {
         // Spawn Item Function
-        public static ItemEntity SpawnItem(Enums.ItemType itemID, Contexts contexts)
+        public static ItemInventoryEntity SpawnItem(Enums.ItemType itemID, Contexts contexts)
         {
             if(contexts == null)
                 return null;
 
             // Spawn Item
-            ItemEntity item = GameState.ItemSpawnSystem.SpawnInventoryItem(contexts, itemID);
+            ItemInventoryEntity item = GameState.ItemSpawnSystem.SpawnInventoryItem(contexts, itemID);
 
             // Return Item
             return item;

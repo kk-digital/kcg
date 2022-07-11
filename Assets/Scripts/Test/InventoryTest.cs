@@ -42,25 +42,19 @@ public class InventoryTest : MonoBehaviour
         int toolBarID = playerEntity.agentToolBar.ToolBarID;
 
         // Add item to tool bar.
-        {
-            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(context, Enums.ItemType.Gun);
-            inventoryManager.AddItem(context, entity, toolBarID);
-        }
+         inventoryManager.AddItem(context, itemSpawnSystem.SpawnInventoryItem(context, Enums.ItemType.Gun), toolBarID);
 
         // Test not stackable items.
         for (uint i = 0; i < 10; i++)
         {
-            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(context, Enums.ItemType.Gun);
-            inventoryManager.AddItem(context, entity, inventoryID);
+            inventoryManager.AddItem(context, itemSpawnSystem.SpawnInventoryItem(context, Enums.ItemType.Gun), inventoryID);
         }
 
         // Testing stackable items.
         for (uint i = 0; i < 10; i++)
         {
-            ItemEntity entity = itemSpawnSystem.SpawnInventoryItem(context, Enums.ItemType.Rock);
-            inventoryManager.AddItem(context, entity, inventoryID);
-            entity = itemSpawnSystem.SpawnInventoryItem(context, Enums.ItemType.RockDust);
-            inventoryManager.AddItem(context, entity, inventoryID);
+            inventoryManager.AddItem(context, itemSpawnSystem.SpawnInventoryItem(context, Enums.ItemType.Rock), inventoryID);
+            inventoryManager.AddItem(context, itemSpawnSystem.SpawnInventoryItem(context, Enums.ItemType.RockDust), inventoryID);
         }
     }
 

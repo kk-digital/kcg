@@ -7,7 +7,7 @@ namespace Item
     /// <summary>
     /// Used by pickup actions.
     /// </summary>
-    [Item]
+    [ItemParticle]
     public class DrawPosition2DComponent : IComponent
     {
         public Vec2f Value;

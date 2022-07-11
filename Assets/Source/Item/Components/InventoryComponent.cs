@@ -1,10 +1,13 @@
 ﻿using Entitas;
+using Entitas.CodeGeneration.Attributes;
 
 namespace Item
 {
-    [Item]
-    public class InventoryComponent : IComponent
+    [ItemInventory]
+    public class InventoryComponent : IComponent // Indicates item is inside a Inventory.
     {
-        public int InventoryID;
+        [EntityIndex]
+        public int      InventoryID;
+        public int      SlotNumber;
     }
 }

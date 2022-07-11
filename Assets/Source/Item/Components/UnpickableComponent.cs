@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Item
 {
-    [Item]
+    [ItemParticle]
     public class Unpickable : IComponent
     {
     }

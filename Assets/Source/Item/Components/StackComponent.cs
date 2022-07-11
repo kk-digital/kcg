@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Item
 {
-    [Item]
+    [ItemInventory, ItemParticle]
     public class StackComponent : IComponent
     {
         /// <summary>

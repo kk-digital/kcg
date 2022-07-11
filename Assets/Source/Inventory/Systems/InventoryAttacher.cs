@@ -19,12 +19,13 @@ namespace Inventory
             MakeInventoryEntity(entitasContext, width, height);
         }
 
-        public void AttachInventorytoItem(Contexts entitasContext, int width, int height, int ItemID)
-        {
-            ItemEntity entity = entitasContext.item.GetEntityWithItemID(ItemID);
-            entity.AddItemInventory(InventoryID);
-            MakeInventoryEntity(entitasContext, width, height);
-        }
+        // This is for chest and related items.
+        //public void AttachInventorytoItem(Contexts entitasContext, int width, int height, int ItemID)
+        //{
+        //    ItemEntity entity = entitasContext.item.GetEntityWithItemID(ItemID);
+        //    entity.AddItemInventory(InventoryID);
+        //    MakeInventoryEntity(entitasContext, width, height);
+        //}
 
         public void AttachToolBarToPlayer(Contexts entitasContext, int size, AgentEntity agentEntity)
         {

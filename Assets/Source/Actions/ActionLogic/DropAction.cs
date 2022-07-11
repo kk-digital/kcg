@@ -7,7 +7,7 @@ namespace Action
 {
     public class DropAction : ActionBase
     {
-        private ItemEntity ItemEntity;
+        private ItemParticleEntity ItemParticle;
 
         public DropAction(Contexts entitasContext, int actionID) : base(entitasContext, actionID)
         {
@@ -23,20 +23,20 @@ namespace Action
                 int selected = toolBarEntity.inventorySlots.Selected;
 
 
-                ItemEntity = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.item, toolBarID, selected);
-                if (ItemEntity == null)
+                ItemInventoryEntity itemInventory = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, toolBarID, selected);
+                if (itemInventory == null)
                 {
                     ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
                     return;
                 }
-                GameState.InventoryManager.RemoveItem(planet.EntitasContext, ItemEntity, selected);
-             
-                Vec2f pos = AgentEntity.physicsPosition2D.Value;
-                Vec2f size = GameState.ItemCreationApi.Get(ItemEntity.itemType.Type).SpriteSize;
 
-                ItemEntity.AddPhysicsPosition2D(pos, pos);
-                ItemEntity.AddPhysicsBox2DCollider(size, Vec2f.Zero);
-                ItemEntity.AddPhysicsMovable(0.0f, new Vec2f(-30.0f, 20.0f), Vec2f.Zero, true, true, false, false);
+                GameState.InventoryManager.RemoveItem(planet.EntitasContext, itemInventory, selected);
+                itemInventory.Destroy();
+
+                Vec2f pos = AgentEntity.physicsPosition2D.Value;
+                ItemParticle = GameState.ItemSpawnSystem.SpawnItemParticle(planet.EntitasContext, itemInventory, pos);
+                ItemParticle.isItemUnpickable = true;
+
                 ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Running);
                 return;
 
@@ -47,6 +47,7 @@ namespace Action
 
         public override void OnUpdate(float deltaTime, ref Planet.PlanetState planet)
         {
+            // Action is active untill itemParticle becomes pickable again.
             ActionEntity.ReplaceActionTime(ActionEntity.actionTime.StartTime + deltaTime);
             if (ActionEntity.actionTime.StartTime < ActionPropertyEntity.actionPropertyTime.Duration)
             {
@@ -58,8 +59,8 @@ namespace Action
 
         public override void OnExit(ref Planet.PlanetState planet)
         {
-            if(ActionEntity.actionExecution.State == Enums.ActionState.Success)
-                ItemEntity.isItemUnpickable = false;
+            if (ActionEntity.actionExecution.State == Enums.ActionState.Success)
+                ItemParticle.isItemUnpickable = false;
             base.OnExit(ref planet);
         }
     }

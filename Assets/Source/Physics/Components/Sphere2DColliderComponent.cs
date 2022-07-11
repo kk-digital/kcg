@@ -3,7 +3,7 @@ using KMath;
 
 namespace Physics
 {
-    [Agent, Item, Vehicle, Projectile]
+    [Agent, ItemParticle, Vehicle, Projectile]
     public class Sphere2DColliderComponent : IComponent
     {
         public float Radius;

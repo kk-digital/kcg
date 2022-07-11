@@ -10,7 +10,7 @@ namespace Action
     {
         private Item.FireWeaponPropreties WeaponProperty; 
         private ProjectileEntity ProjectileEntity;
-        private ItemEntity ItemEntity;
+        private ItemInventoryEntity ItemEntity;
         private Vec2f StartPos;
 
         public ToolActionFireWeapon(Contexts entitasContext, int actionID) : base(entitasContext, actionID)
@@ -19,7 +19,7 @@ namespace Action
 
         public override void OnEnter(ref Planet.PlanetState planet)
         {
-            ItemEntity = EntitasContext.item.GetEntityWithItemID(ActionEntity.actionTool.ItemID);
+            ItemEntity = EntitasContext.itemInventory.GetEntityWithItemID(ActionEntity.actionTool.ItemID);
             WeaponProperty = GameState.ItemCreationApi.GetWeapon(ItemEntity.itemType.Type);
 
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
