@@ -173,7 +173,7 @@ namespace Scripts {
                 torpedo.projectiles_per_burst = 1;
                 torpedo.flags                 = (int)WeaponFlags.WEAPON_PROJECTILE
                                               | (int)WeaponFlags.WEAPON_SEEKING
-                                              | (int)WeaponFlags.WEAPON_TRACKING
+                                            //| (int)WeaponFlags.WEAPON_TRACKING
                                               | (int)WeaponFlags.WEAPON_ROCKET
                                               | flags;
 
