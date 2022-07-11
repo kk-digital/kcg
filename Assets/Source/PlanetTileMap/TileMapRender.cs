@@ -60,6 +60,11 @@ namespace PlanetTileMap
 
                         var spriteId = tile.SpriteID;
 
+                        if (spriteId < 0)
+                        {
+                            spriteId = GameResources.LoadingTilePlaceholderSpriteId;
+                        }
+
                         if (spriteId >= 0)
                         {
                             Vector4 textureCoords = GameState.TileSpriteAtlasManager.GetSprite(spriteId).TextureCoords;
