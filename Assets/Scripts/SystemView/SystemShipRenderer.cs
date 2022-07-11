@@ -114,7 +114,7 @@ namespace Scripts {
                 ShieldRender.transform.Rotate(new Vector3(0.0f, 0.0f, (ship.rotation - LastRotation) * 180.0f / 3.1415926f));
 
                 LastRotation       = ship.rotation;
-                ShipRenderer.color   = shipColor;
+                ShipRenderer.color = shipColor;
                 OrbitRender.color  = orbitColor;
 
                 if (ship.max_shield == 0)
