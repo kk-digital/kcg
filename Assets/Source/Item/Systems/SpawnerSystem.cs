@@ -27,7 +27,7 @@ namespace Item
 
             if (weaponProperty.HasClip())
             {
-                entity.AddItemFireWeaponClip(weaponProperty.ClipSize);
+                entity.AddItemFireWeaponClip(weaponProperty.ClipSize, weaponProperty.BulletsPerShot);
             }
 
             ItemID++;
@@ -48,7 +48,7 @@ namespace Item
             if(itemInventoryEntity.hasItemStack)
                 entity.AddItemStack(itemInventoryEntity.itemStack.Count);
             if(itemInventoryEntity.hasItemFireWeaponClip)
-                entity.ReplaceItemFireWeaponClip(itemInventoryEntity.itemFireWeaponClip.NumOfBullets);
+                entity.ReplaceItemFireWeaponClip(itemInventoryEntity.itemFireWeaponClip.NumOfBullets, itemInventoryEntity.itemFireWeaponClip.BulletsPerShot);
 
             itemInventoryEntity.Destroy();
 
@@ -66,7 +66,7 @@ namespace Item
 
             if (weaponProperty.HasClip())
             {
-                entity.AddItemFireWeaponClip(weaponProperty.ClipSize);
+                entity.AddItemFireWeaponClip(weaponProperty.ClipSize, weaponProperty.BulletsPerShot);
             }
 
             if (weaponProperty.HasCharge())
@@ -88,7 +88,7 @@ namespace Item
             if (itemParticleEntity.hasItemStack)
                 entity.AddItemStack(itemParticleEntity.itemStack.Count);
             if (itemParticleEntity.hasItemFireWeaponClip)
-                entity.ReplaceItemFireWeaponClip(itemParticleEntity.itemFireWeaponClip.NumOfBullets);
+                entity.ReplaceItemFireWeaponClip(itemParticleEntity.itemFireWeaponClip.NumOfBullets, itemParticleEntity.itemFireWeaponClip.BulletsPerShot);
 
             itemParticleEntity.Destroy();
 

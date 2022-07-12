@@ -25,17 +25,22 @@ namespace Action
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float x = worldPosition.x;
             float y = worldPosition.y;
+            int numBullet = 0;
+            int bulletsPerShot = ItemEntity.itemFireWeaponClip.BulletsPerShot;
 
-
-            int numBullet = ItemEntity.itemFireWeaponClip.NumOfBullets;
-            if (numBullet == 0)
+            if (ItemEntity.hasItemFireWeaponClip)
             {
-                Debug.Log("Clip is empty. Press R to reload.");
-                ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
-                return;
+                numBullet = ItemEntity.itemFireWeaponClip.NumOfBullets;
+                if (numBullet == 0)
+                {
+                    Debug.Log("Clip is empty. Press R to reload.");
+                    ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
+                    return;
+                }
             }
 
-            ItemEntity.itemFireWeaponClip.NumOfBullets = (--numBullet);
+            if (ItemEntity.hasItemFireWeaponClip)
+                ItemEntity.itemFireWeaponClip.NumOfBullets -= bulletsPerShot;
 
             // Start positiom
             StartPos = AgentEntity.physicsPosition2D.Value;

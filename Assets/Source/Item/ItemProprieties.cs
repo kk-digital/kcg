@@ -54,6 +54,11 @@ namespace Item
         public int BulletSpriteID;
 
         /// <summary>
+        /// Number Off Bullets Per Shot
+        /// </summary>
+        public int BulletsPerShot;
+
+        /// <summary>
         /// Can Recharge the gun
         /// </summary>
         public bool CanCharge;

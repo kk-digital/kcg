@@ -11,7 +11,7 @@ public partial interface IItemFireWeaponClipEntity {
     Item.FireWeapon.ClipComponent itemFireWeaponClip { get; }
     bool hasItemFireWeaponClip { get; }
 
-    void AddItemFireWeaponClip(int newNumOfBullets);
-    void ReplaceItemFireWeaponClip(int newNumOfBullets);
+    void AddItemFireWeaponClip(int newNumOfBullets, int newBulletsPerShot);
+    void ReplaceItemFireWeaponClip(int newNumOfBullets, int newBulletsPerShot);
     void RemoveItemFireWeaponClip();
 }
