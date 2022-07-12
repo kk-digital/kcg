@@ -157,6 +157,7 @@ MonoBehaviour:
   color_layers: 2
   width: 512
   height: 512
+  opacity: 0.5
   texture: {fileID: 0}
   renderer: {fileID: 0}
 --- !u!4 &1886980502
