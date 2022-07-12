@@ -91,6 +91,7 @@ namespace PlanetTileMap
         {
             ref Tile tile = ref GetTile(x, y, layer);
             tile.ID = tileId;
+            tile.SpriteID = GameResources.LoadingTilePlaceholderSpriteId;
             ToUpdateTiles.Add(new UpdateTile(new Vec2i(x, y), layer));
             //UpdateTile(x, y, layer);
         }
@@ -142,6 +143,7 @@ namespace PlanetTileMap
             ref var backTile = ref GetBackTile(x, y);
             backTile.ID = TileID.Air;
             backTile.SpriteID = -1;
+            backTile.SpriteID = GameResources.LoadingTilePlaceholderSpriteId;
             ToUpdateTiles.Add(new UpdateTile(new Vec2i(x, y), MapLayerType.Back));
             //UpdateBackTile(x, y);
         }
@@ -150,6 +152,7 @@ namespace PlanetTileMap
             ref var midTile = ref GetMidTile(x, y);
             midTile.ID = TileID.Air;
             midTile.SpriteID = -1;
+            midTile.SpriteID = GameResources.LoadingTilePlaceholderSpriteId;
             ToUpdateTiles.Add(new UpdateTile(new Vec2i(x, y), MapLayerType.Mid));
           //  UpdateBackTile(x, y);
         }
@@ -158,6 +161,7 @@ namespace PlanetTileMap
             ref var frontTile = ref GetFrontTile(x, y);
             frontTile.ID = TileID.Air;
             frontTile.SpriteID = -1;
+            frontTile.SpriteID = GameResources.LoadingTilePlaceholderSpriteId;
             ToUpdateTiles.Add(new UpdateTile(new Vec2i(x, y), MapLayerType.Front));
             //UpdateBackTile(x, y);
         }
@@ -239,7 +243,7 @@ namespace PlanetTileMap
                     }
                     else if (property.SpriteRuleType == SpriteRuleType.R3)
                     {
-                        TileMapping.UpdateSpriteRule_R3(x, y, planetLayer, ref this);
+                        TileMapping.UpdateSpriteRule_R3_New(x, y, planetLayer, ref this);
                     }
                 }
                 else
@@ -259,12 +263,12 @@ namespace PlanetTileMap
 
         public void UpdateTiles()
         {
-            for(int i = 0; i < 128 && i < ToUpdateTiles.Count; i++)
+            for(int i = 0; i < 1024 * 32 && i < ToUpdateTiles.Count; i++)
             {
                 UpdateTile updateTile = ToUpdateTiles[i];
                 UpdateTile(updateTile.Position.X, updateTile.Position.Y, updateTile.Layer);
             }
-            ToUpdateTiles.RemoveRange(0, Math.Min(128, ToUpdateTiles.Count));
+            ToUpdateTiles.RemoveRange(0, Math.Min(1024 * 32, ToUpdateTiles.Count));
         }
     }
 }
