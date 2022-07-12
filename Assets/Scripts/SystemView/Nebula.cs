@@ -10,6 +10,7 @@ namespace Scripts {
             public int            color_layers;
             public int            width;
             public int            height;
+            public float          opacity;
 
             public Texture2D      texture;
             public SpriteRenderer renderer;
@@ -83,7 +84,7 @@ namespace Scripts {
             }
 
             private float[] exponential_filter(float[] noise) {
-                float cutoff    = 0.20f;
+                float cutoff    = 0.05f;
                 float sharpness = 0.95f;
 
                 for(int i = 0; i < width * height; i++) {
@@ -95,6 +96,119 @@ namespace Scripts {
                 return noise;
             }
 
+            private float[] distort(float[] noise, float strength, int distortion_scale) {
+                float[] distortion_noise = smoothen_noise(generate_noise(1.0f, width / distortion_scale, height / distortion_scale),
+                                                                               width / distortion_scale, height / distortion_scale, distortion_scale);
+                float[] distorted        = new float[width * height];
+
+                for(int x = 0; x < width; x++)
+                    for(int y = 0; y < height; y++) {
+                        float distortion_angle = distortion_noise[x + y * width] * Tools.twopi;
+                        float distort_x_by     = (float)Math.Cos(distortion_angle) * strength;
+                        float distort_y_by     = (float)Math.Sin(distortion_angle) * strength;
+
+                        float original_x       = x + distort_x_by;
+                        float original_y       = y + distort_y_by;
+
+                        if(original_x < 0) original_x = width  + original_x;
+                        if(original_y < 0) original_y = height + original_y;
+
+                        int   x0 = (int)original_x;
+                        int   x1 = (int)original_x + 1;
+                        int   y0 = (int)original_y;
+                        int   y1 = (int)original_y + 1;
+
+                        float dx = original_x - x0;
+                        float dy = original_y - y0;
+
+                        float p0 = smootherstep(noise[x0 % width + (y0 % height) * width], noise[x1 % width + (y0 % height) * width], dx);
+                        float p1 = smootherstep(noise[x0 % width + (y1 % height) * width], noise[x1 % width + (y1 % height) * width], dx);
+
+                        distorted[x + y * width] = smootherstep(p0, p1, dy);
+                    }
+
+                return distorted;
+            }
+
+            private float[] mask(float[] noise, int repetitions) {
+                float[] masking_noise = generate_noise(1.0f, width, height);
+
+                for(int i = 0; i < repetitions; i++)
+                    for(int x = 0; x < width; x++)
+                        for(int y = 0; y < height; y++) {
+                        
+                            int x0 =  x - 1;
+                            int x1 = (x + 1) % width;
+                            int y0 =  y - 1;
+                            int y1 = (y + 1) % height;
+
+                            if(x0 < 0) x0 = width  + x0;
+                            if(y0 < 0) y0 = height + y0;
+
+                            float sum = masking_noise[x0 + y0 * width]
+                                      + masking_noise[x  + y0 * width]
+                                      + masking_noise[x1 + y0 * width]
+                                      + masking_noise[x0 + y  * width]
+                                      + masking_noise[x  + y  * width]
+                                      + masking_noise[x1 + y  * width]
+                                      + masking_noise[x0 + y1 * width]
+                                      + masking_noise[x  + y1 * width]
+                                      + masking_noise[x1 + y1 * width];
+
+                            if(sum < 4.0f) masking_noise[x + y * width]  = 0.00f;
+                            else           masking_noise[x + y * width] += 0.25f;
+                        }
+
+                float[] distorted = distort(masking_noise, width * 0.0625f, 32);
+
+                for(int x = 0; x < width; x++)
+                    for(int y = 0; y < height; y++)
+                        noise[x + y * width] *= masking_noise[x + y * width] * distorted[x + y * width];
+
+                return noise;
+            }
+
+            private float[] soften(float[] noise, int repetitions) {
+                for(int i = 0; i < repetitions; i++)
+                    for(int x = 0; x < width; x++)
+                        for(int y = 0; y < height; y++) {
+                            int   x0             =  x;
+                            int   x1             = (x + 1) % width;
+
+                            int   y0             =  y;
+                            int   y1             = (y + 1) % height;
+
+                            float v0             = smootherstep(noise[x0 + y0 * width], noise[x1 + y0 * width], (noise[x0 + y0 * width] + noise[x1 + y0 * width]) * 0.5f);
+                            float v1             = smootherstep(noise[x0 + y1 * width], noise[x1 + y1 * width], (noise[x0 + y1 * width] + noise[x1 + y1 * width]) * 0.5f);
+
+                            noise[x + y * width] = smootherstep(smootherstep(v0, v1, (v0 + v1) * 0.5f), 0.25f, (1.0f - noise[x + y * width]) * 0.5f);
+                        }
+
+                return noise;
+            }
+
+            private float[] circular_mask(float[] noise) {
+                float[] output = new float[width * height];
+
+                for(int x = 0; x < width; x++)
+                    for(int y = 0; y < height; y++) {
+                        float half_width  = width  * 0.5f;
+                        float half_height = height * 0.5f;
+                        float local_x     = x - half_width;
+                        float local_y     = y - half_height;
+
+                        float d           = local_x * local_x / (half_width  * half_width)
+                                          + local_y * local_y / (half_height * half_height);
+
+                        if(d <= 0.15f)
+                            output[x + y * width] = noise[x + y * width];
+                        else if(d <= 0.5f)
+                            output[x + y * width] = noise[x + y * width] * (0.5f - d) / 0.35f;
+            }
+
+                return output;
+            }
+
             private void generate() {
                 rng = new(seed);
 
@@ -102,11 +216,19 @@ namespace Scripts {
 
                 for(int i = 0; i < width * height; i++) pixels[i] = new Color(0.0f, 0.0f, 0.0f, 0.0f);
 
+                float base_r = (float)rng.NextDouble() * 0.8f;
+                float base_g = (float)rng.NextDouble() * 0.8f;
+                float base_b = (float)rng.NextDouble() * 0.8f;
+
                 for(int color = 0; color < color_layers; color++) {
 
-                    float r = (float)rng.NextDouble();
-                    float g = (float)rng.NextDouble();
-                    float b = (float)rng.NextDouble();
+                    float r0 = base_r * 0.8f + (float)rng.NextDouble() * base_r * 0.40f;
+                    float g0 = base_g * 0.8f + (float)rng.NextDouble() * base_g * 0.40f;
+                    float b0 = base_b * 0.8f + (float)rng.NextDouble() * base_b * 0.40f;
+
+                    float r1 = base_r * 0.8f + (float)rng.NextDouble() * base_r * 0.40f;
+                    float g1 = base_g * 0.8f + (float)rng.NextDouble() * base_g * 0.40f;
+                    float b1 = base_b * 0.8f + (float)rng.NextDouble() * base_b * 0.40f;
 
                     float[] alpha = new float[width * height];
 
@@ -115,14 +237,14 @@ namespace Scripts {
                         int   scale         = 1 << layers - layer - 1;
                         float strength      = scale / layers;
 
-                        float[] layer_alpha = exponential_filter(smoothen_noise(blur_noise(generate_noise(strength,
-                                                                                                          width  / scale,
-                                                                                                          height / scale),
-                                                                                                          width  / scale,
-                                                                                                          height / scale),
-                                                                                                          width  / scale,
-                                                                                                          height / scale,
-                                                                                                                   scale));
+                        float[] layer_alpha = smoothen_noise(blur_noise(generate_noise(strength,
+                                                                                       width  / scale,
+                                                                                       height / scale),
+                                                                                       width  / scale,
+                                                                                       height / scale),
+                                                                                       width  / scale,
+                                                                                       height / scale,
+                                                                                       scale);
 
                         for(int x = 0; x < width; x++)
                             for(int y = 0; y < height; y++) {
@@ -131,9 +253,25 @@ namespace Scripts {
                             }
                     }
 
+                    alpha = distort(exponential_filter(alpha), 32.0f, 32);
+
+                    for(int i = 0; i < 4; i++)
+                        alpha = blur_noise(alpha, width, height);
+
+                    alpha = circular_mask(distort(soften(blur_noise(mask(alpha, 8), width, height), 8), 8.0f, 64));
+
+                    float target_x = rng.Next(width);
+                    float target_y = rng.Next(height);
+
                     for(int x = 0; x < width; x++)
                         for(int y = 0; y < height; y++) {
-                            float a                 = alpha[x + y * width];
+                            float a                 = alpha[x + y * width] * 0.4f;
+
+                            float d                 = Tools.get_distance(x, y, target_x, target_y) / Tools.get_distance(0, 0, width, height);
+
+                            float r                 = smootherstep(r0, r1, d);
+                            float g                 = smootherstep(g0, g1, d);
+                            float b                 = smootherstep(b0, b1, d);
 
                             float blended_alpha     =      a +                           pixels[x + y * width].a * (1.0f - a);
                             pixels[x + y * width].r = (r * a + pixels[x + y * width].r * pixels[x + y * width].a * (1.0f - a)) / blended_alpha;
@@ -142,6 +280,9 @@ namespace Scripts {
                             pixels[x + y * width].a = blended_alpha;
                         }
                 }
+
+                for(int i = 0; i < width * height; i++)
+                    pixels[i].a *= opacity;
 
                 texture = new Texture2D(width, height);
                 texture.filterMode = FilterMode.Trilinear;
