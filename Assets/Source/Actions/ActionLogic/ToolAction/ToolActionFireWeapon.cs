@@ -25,12 +25,11 @@ namespace Action
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float x = worldPosition.x;
             float y = worldPosition.y;
-            int numBullet = 0;
             int bulletsPerShot = ItemEntity.itemFireWeaponClip.BulletsPerShot;
 
             if (ItemEntity.hasItemFireWeaponClip)
             {
-                numBullet = ItemEntity.itemFireWeaponClip.NumOfBullets;
+                int numBullet = ItemEntity.itemFireWeaponClip.NumOfBullets;
                 if (numBullet == 0)
                 {
                     Debug.Log("Clip is empty. Press R to reload.");

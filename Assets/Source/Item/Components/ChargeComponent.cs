@@ -10,6 +10,7 @@ namespace Item.FireWeapon
         public bool CanCharge;
         public float ChargeRate;
         public float ChargeRatio;
+        public float ChargePerShot;
         public float ChargeMin;
         public float ChargeMax;
     }

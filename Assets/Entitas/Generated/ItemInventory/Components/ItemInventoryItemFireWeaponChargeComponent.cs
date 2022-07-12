@@ -11,23 +11,25 @@ public partial class ItemInventoryEntity {
     public Item.FireWeapon.ChargeComponent itemFireWeaponCharge { get { return (Item.FireWeapon.ChargeComponent)GetComponent(ItemInventoryComponentsLookup.ItemFireWeaponCharge); } }
     public bool hasItemFireWeaponCharge { get { return HasComponent(ItemInventoryComponentsLookup.ItemFireWeaponCharge); } }
 
-    public void AddItemFireWeaponCharge(bool newCanCharge, float newChargeRate, float newChargeRatio, float newChargeMin, float newChargeMax) {
+    public void AddItemFireWeaponCharge(bool newCanCharge, float newChargeRate, float newChargeRatio, float newChargePerShot, float newChargeMin, float newChargeMax) {
         var index = ItemInventoryComponentsLookup.ItemFireWeaponCharge;
         var component = (Item.FireWeapon.ChargeComponent)CreateComponent(index, typeof(Item.FireWeapon.ChargeComponent));
         component.CanCharge = newCanCharge;
         component.ChargeRate = newChargeRate;
         component.ChargeRatio = newChargeRatio;
+        component.ChargePerShot = newChargePerShot;
         component.ChargeMin = newChargeMin;
         component.ChargeMax = newChargeMax;
         AddComponent(index, component);
     }
 
-    public void ReplaceItemFireWeaponCharge(bool newCanCharge, float newChargeRate, float newChargeRatio, float newChargeMin, float newChargeMax) {
+    public void ReplaceItemFireWeaponCharge(bool newCanCharge, float newChargeRate, float newChargeRatio, float newChargePerShot, float newChargeMin, float newChargeMax) {
         var index = ItemInventoryComponentsLookup.ItemFireWeaponCharge;
         var component = (Item.FireWeapon.ChargeComponent)CreateComponent(index, typeof(Item.FireWeapon.ChargeComponent));
         component.CanCharge = newCanCharge;
         component.ChargeRate = newChargeRate;
         component.ChargeRatio = newChargeRatio;
+        component.ChargePerShot = newChargePerShot;
         component.ChargeMin = newChargeMin;
         component.ChargeMax = newChargeMax;
         ReplaceComponent(index, component);
