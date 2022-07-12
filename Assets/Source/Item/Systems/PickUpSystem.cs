@@ -18,8 +18,8 @@ namespace Item
                 AgentMatcher.AllOf(AgentMatcher.PhysicsPosition2D).AnyOf(AgentMatcher.AgentInventory, AgentMatcher.AgentToolBar));
 
             // Get all pickable items.
-            var pickableItems = contexts.item.GetGroup(
-                ItemMatcher.AllOf(ItemMatcher.ItemID, ItemMatcher.PhysicsPosition2D).NoneOf(ItemMatcher.ItemUnpickable));
+            var pickableItems = contexts.itemParticle.GetGroup(
+                ItemParticleMatcher.AllOf(ItemParticleMatcher.ItemID, ItemParticleMatcher.PhysicsPosition2D).NoneOf(ItemParticleMatcher.ItemUnpickable));
 
             foreach (var item in pickableItems)
             {

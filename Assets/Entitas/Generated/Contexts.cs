@@ -30,13 +30,13 @@ public partial class Contexts : Entitas.IContexts {
     public GameContext game { get; set; }
     public InputContext input { get; set; }
     public InventoryContext inventory { get; set; }
-    public ItemContext item { get; set; }
     public ItemInventoryContext itemInventory { get; set; }
+    public ItemParticleContext itemParticle { get; set; }
     public ParticleContext particle { get; set; }
     public ProjectileContext projectile { get; set; }
     public VehicleContext vehicle { get; set; }
 
-    public Entitas.IContext[] allContexts { get { return new Entitas.IContext [] { action, actionCoolDown, actionProperties, agent, aI, floatingText, game, input, inventory, item, itemInventory, particle, projectile, vehicle }; } }
+    public Entitas.IContext[] allContexts { get { return new Entitas.IContext [] { action, actionCoolDown, actionProperties, agent, aI, floatingText, game, input, inventory, itemInventory, itemParticle, particle, projectile, vehicle }; } }
 
     public Contexts() {
         action = new ActionContext();
@@ -48,8 +48,8 @@ public partial class Contexts : Entitas.IContexts {
         game = new GameContext();
         input = new InputContext();
         inventory = new InventoryContext();
-        item = new ItemContext();
         itemInventory = new ItemInventoryContext();
+        itemParticle = new ItemParticleContext();
         particle = new ParticleContext();
         projectile = new ProjectileContext();
         vehicle = new VehicleContext();
@@ -96,8 +96,8 @@ public partial class Contexts {
     public const string AIGoal = "AIGoal";
     public const string FloatingTextID = "FloatingTextID";
     public const string InventoryID = "InventoryID";
-    public const string ItemAttachedInventory = "ItemAttachedInventory";
     public const string ItemID = "ItemID";
+    public const string ItemInventory = "ItemInventory";
     public const string ItemType = "ItemType";
     public const string ParticleEmitterID = "ParticleEmitterID";
     public const string ProjectileID = "ProjectileID";
@@ -175,19 +175,27 @@ public partial class Contexts {
             inventory.GetGroup(InventoryMatcher.InventoryID),
             (e, c) => ((Inventory.IDComponent)c).ID));
 
-        item.AddEntityIndex(new Entitas.EntityIndex<ItemEntity, int>(
-            ItemAttachedInventory,
-            item.GetGroup(ItemMatcher.ItemAttachedInventory),
-            (e, c) => ((Item.AttachedInventoryComponent)c).InventoryID));
-
-        item.AddEntityIndex(new Entitas.PrimaryEntityIndex<ItemEntity, int>(
+        itemInventory.AddEntityIndex(new Entitas.PrimaryEntityIndex<ItemInventoryEntity, int>(
             ItemID,
-            item.GetGroup(ItemMatcher.ItemID),
+            itemInventory.GetGroup(ItemInventoryMatcher.ItemID),
+            (e, c) => ((Item.IDComponent)c).ID));
+        itemParticle.AddEntityIndex(new Entitas.PrimaryEntityIndex<ItemParticleEntity, int>(
+            ItemID,
+            itemParticle.GetGroup(ItemParticleMatcher.ItemID),
             (e, c) => ((Item.IDComponent)c).ID));
 
-        item.AddEntityIndex(new Entitas.EntityIndex<ItemEntity, Enums.ItemType>(
+        itemInventory.AddEntityIndex(new Entitas.EntityIndex<ItemInventoryEntity, int>(
+            ItemInventory,
+            itemInventory.GetGroup(ItemInventoryMatcher.ItemInventory),
+            (e, c) => ((Item.InventoryComponent)c).InventoryID));
+
+        itemInventory.AddEntityIndex(new Entitas.EntityIndex<ItemInventoryEntity, Enums.ItemType>(
             ItemType,
-            item.GetGroup(ItemMatcher.ItemType),
+            itemInventory.GetGroup(ItemInventoryMatcher.ItemType),
+            (e, c) => ((Item.TypeComponent)c).Type));
+        itemParticle.AddEntityIndex(new Entitas.EntityIndex<ItemParticleEntity, Enums.ItemType>(
+            ItemType,
+            itemParticle.GetGroup(ItemParticleMatcher.ItemType),
             (e, c) => ((Item.TypeComponent)c).Type));
 
         particle.AddEntityIndex(new Entitas.PrimaryEntityIndex<ParticleEntity, int>(
@@ -265,16 +273,24 @@ public static class ContextsExtensions {
         return ((Entitas.PrimaryEntityIndex<InventoryEntity, int>)context.GetEntityIndex(Contexts.InventoryID)).GetEntity(ID);
     }
 
-    public static System.Collections.Generic.HashSet<ItemEntity> GetEntitiesWithItemAttachedInventory(this ItemContext context, int InventoryID) {
-        return ((Entitas.EntityIndex<ItemEntity, int>)context.GetEntityIndex(Contexts.ItemAttachedInventory)).GetEntities(InventoryID);
+    public static ItemInventoryEntity GetEntityWithItemID(this ItemInventoryContext context, int ID) {
+        return ((Entitas.PrimaryEntityIndex<ItemInventoryEntity, int>)context.GetEntityIndex(Contexts.ItemID)).GetEntity(ID);
     }
 
-    public static ItemEntity GetEntityWithItemID(this ItemContext context, int ID) {
-        return ((Entitas.PrimaryEntityIndex<ItemEntity, int>)context.GetEntityIndex(Contexts.ItemID)).GetEntity(ID);
+    public static ItemParticleEntity GetEntityWithItemID(this ItemParticleContext context, int ID) {
+        return ((Entitas.PrimaryEntityIndex<ItemParticleEntity, int>)context.GetEntityIndex(Contexts.ItemID)).GetEntity(ID);
     }
 
-    public static System.Collections.Generic.HashSet<ItemEntity> GetEntitiesWithItemType(this ItemContext context, Enums.ItemType Type) {
-        return ((Entitas.EntityIndex<ItemEntity, Enums.ItemType>)context.GetEntityIndex(Contexts.ItemType)).GetEntities(Type);
+    public static System.Collections.Generic.HashSet<ItemInventoryEntity> GetEntitiesWithItemInventory(this ItemInventoryContext context, int InventoryID) {
+        return ((Entitas.EntityIndex<ItemInventoryEntity, int>)context.GetEntityIndex(Contexts.ItemInventory)).GetEntities(InventoryID);
+    }
+
+    public static System.Collections.Generic.HashSet<ItemInventoryEntity> GetEntitiesWithItemType(this ItemInventoryContext context, Enums.ItemType Type) {
+        return ((Entitas.EntityIndex<ItemInventoryEntity, Enums.ItemType>)context.GetEntityIndex(Contexts.ItemType)).GetEntities(Type);
+    }
+
+    public static System.Collections.Generic.HashSet<ItemParticleEntity> GetEntitiesWithItemType(this ItemParticleContext context, Enums.ItemType Type) {
+        return ((Entitas.EntityIndex<ItemParticleEntity, Enums.ItemType>)context.GetEntityIndex(Contexts.ItemType)).GetEntities(Type);
     }
 
     public static ParticleEntity GetEntityWithParticleEmitterID(this ParticleContext context, int ParticleEmitterId) {
@@ -313,8 +329,8 @@ public partial class Contexts {
             CreateContextObserver(game);
             CreateContextObserver(input);
             CreateContextObserver(inventory);
-            CreateContextObserver(item);
             CreateContextObserver(itemInventory);
+            CreateContextObserver(itemParticle);
             CreateContextObserver(particle);
             CreateContextObserver(projectile);
             CreateContextObserver(vehicle);

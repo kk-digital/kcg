@@ -88,10 +88,10 @@ namespace Physics
             }
         }
 
-        public void Update(ItemContext Context)
+        public void Update(ItemParticleContext Context)
         {
             float deltaTime = Time.deltaTime;
-            var EntitiesWithVelocity = Context.GetGroup(ItemMatcher.AllOf(ItemMatcher.PhysicsMovable, ItemMatcher.PhysicsPosition2D));
+            var EntitiesWithVelocity = Context.GetGroup(ItemParticleMatcher.AllOf(ItemParticleMatcher.PhysicsMovable, ItemParticleMatcher.PhysicsPosition2D));
             foreach (var entity in EntitiesWithVelocity)
             {
                 var pos = entity.physicsPosition2D;
