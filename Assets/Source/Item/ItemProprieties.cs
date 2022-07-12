@@ -52,7 +52,14 @@ namespace Item
 
         public Vec2f BulletSpriteSize;
         public int BulletSpriteID;
-        
+
+        /// <summary>
+        /// Can Recharge the gun
+        /// </summary>
+        public bool CanCharge;
+        public float ChargeRate;
+        public float ChargeMin;
+        public float ChargeMax;
         /// <summary>
         /// Clip attributes.
         /// 
@@ -90,9 +97,9 @@ namespace Item
         public enum Flags : byte
         {
             HasClip = 1 << 0,
-            Chargable = 2 << 1, // Note[Joao] Exemple not implemented yet.
+            HasCharge = 2 << 1, // Note[Joao] Exemple not implemented yet.
         }
         public bool HasClip() { return WeaponFlags.HasFlag(Flags.HasClip); }
-        public bool IsConsumable() { return WeaponFlags.HasFlag(Flags.Chargable); }
+        public bool HasCharge() { return WeaponFlags.HasFlag(Flags.HasCharge); }
     }
 }

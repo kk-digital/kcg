@@ -145,12 +145,20 @@ namespace ECSInput
             }
 
 
+            // Recharge Weapon.
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                var players = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentPlayer));
+                foreach (var player in players) 
+                    GameState.ActionCreationSystem.CreateAction(planet.EntitasContext,Enums.ActionType.ChargeAction, player.agentID.ID);
+            }
+
             // Reload Weapon.
             if (Input.GetKeyDown(KeyCode.R))
             {
                 var players = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentPlayer));
-                foreach (var player in players) 
-                    GameState.ActionCreationSystem.CreateAction(planet.EntitasContext,Enums.ActionType.ReloadAction, player.agentID.ID);
+                foreach (var player in players)
+                    GameState.ActionCreationSystem.CreateAction(planet.EntitasContext, Enums.ActionType.ReloadAction, player.agentID.ID);
             }
 
             //  Open Inventory with Tab.

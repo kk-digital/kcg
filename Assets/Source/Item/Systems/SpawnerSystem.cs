@@ -30,6 +30,12 @@ namespace Item
                 entity.AddItemFireWeaponClip(weaponProperty.ClipSize);
             }
 
+            if (weaponProperty.HasCharge())
+            {
+                entity.AddItemFireWeaponCharge(weaponProperty.CanCharge, weaponProperty.ChargeRate, weaponProperty.ChargeMin, 
+                    weaponProperty.ChargeMax);
+            }
+
             ItemID++;
             return entity;
         }
@@ -67,6 +73,12 @@ namespace Item
             if (weaponProperty.HasClip())
             {
                 entity.AddItemFireWeaponClip(weaponProperty.ClipSize);
+            }
+
+            if (weaponProperty.HasCharge())
+            {
+                entity.AddItemFireWeaponCharge(weaponProperty.CanCharge, weaponProperty.ChargeRate, weaponProperty.ChargeMin,
+                    weaponProperty.ChargeMax);
             }
 
             ItemID++;

@@ -21,7 +21,11 @@ namespace Action
 
         public virtual void OnEnter(ref Planet.PlanetState planet)
         {
-            ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
+            if(ActionEntity.hasActionInterrupt)
+            {
+                ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
+            }
+
         }
 
         public virtual void OnUpdate(float deltaTime, ref Planet.PlanetState planet)
