@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameResources
 {
     // sprite sheets ids
+    public static int LoadingTilePlaceholderSpriteSheet;
     public static int BackgroundSpriteSheet;
     public static int MoonSpriteSheet;
     public static int OreSpriteSheet;
@@ -46,6 +47,10 @@ public class GameResources
     public static int MiningLaserToolIcon;
     public static int PipePlacementToolIcon;
 
+
+
+    public static int LoadingTilePlaceholderSpriteId;
+
     private static bool IsInitialized = false; 
 
 
@@ -55,6 +60,7 @@ public class GameResources
         {
             IsInitialized = true;
             // loading the sprite sheets
+            LoadingTilePlaceholderSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Tiles\\Terrains\\placeholder_loadingSprite.png", 32, 32);
             BackgroundSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Tiles\\Terrains\\test - Copy.png", 16, 16);
             MoonSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Tiles\\Terrains\\Tiles_Moon.png", 16, 16);
             OreSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Items\\Ores\\Gems\\Hexagon\\gem_hexagon_1.png", 16, 16);
@@ -105,6 +111,8 @@ public class GameResources
 
     private static void CreateTiles()
     {
+        LoadingTilePlaceholderSpriteId = 
+                            GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas(LoadingTilePlaceholderSpriteSheet, 0, 0, 0);
         GameState.TileCreationApi.CreateTileProperty(TileID.Ore1);
         GameState.TileCreationApi.SetTilePropertyName("ore_1");
         GameState.TileCreationApi.SetTilePropertyShape(TileShape.FullBlock, TileShapeAndRotation.FB);
