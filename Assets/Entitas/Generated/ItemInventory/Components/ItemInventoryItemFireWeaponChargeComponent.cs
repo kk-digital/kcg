@@ -6,13 +6,13 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public partial class ItemEntity {
+public partial class ItemInventoryEntity {
 
-    public Item.FireWeapon.ChargeComponent itemFireWeaponCharge { get { return (Item.FireWeapon.ChargeComponent)GetComponent(ItemComponentsLookup.ItemFireWeaponCharge); } }
-    public bool hasItemFireWeaponCharge { get { return HasComponent(ItemComponentsLookup.ItemFireWeaponCharge); } }
+    public Item.FireWeapon.ChargeComponent itemFireWeaponCharge { get { return (Item.FireWeapon.ChargeComponent)GetComponent(ItemInventoryComponentsLookup.ItemFireWeaponCharge); } }
+    public bool hasItemFireWeaponCharge { get { return HasComponent(ItemInventoryComponentsLookup.ItemFireWeaponCharge); } }
 
     public void AddItemFireWeaponCharge(bool newCanCharge, float newChargeRate, float newChargeMin, float newChargeMax) {
-        var index = ItemComponentsLookup.ItemFireWeaponCharge;
+        var index = ItemInventoryComponentsLookup.ItemFireWeaponCharge;
         var component = (Item.FireWeapon.ChargeComponent)CreateComponent(index, typeof(Item.FireWeapon.ChargeComponent));
         component.CanCharge = newCanCharge;
         component.ChargeRate = newChargeRate;
@@ -22,7 +22,7 @@ public partial class ItemEntity {
     }
 
     public void ReplaceItemFireWeaponCharge(bool newCanCharge, float newChargeRate, float newChargeMin, float newChargeMax) {
-        var index = ItemComponentsLookup.ItemFireWeaponCharge;
+        var index = ItemInventoryComponentsLookup.ItemFireWeaponCharge;
         var component = (Item.FireWeapon.ChargeComponent)CreateComponent(index, typeof(Item.FireWeapon.ChargeComponent));
         component.CanCharge = newCanCharge;
         component.ChargeRate = newChargeRate;
@@ -32,7 +32,7 @@ public partial class ItemEntity {
     }
 
     public void RemoveItemFireWeaponCharge() {
-        RemoveComponent(ItemComponentsLookup.ItemFireWeaponCharge);
+        RemoveComponent(ItemInventoryComponentsLookup.ItemFireWeaponCharge);
     }
 }
 
@@ -44,15 +44,15 @@ public partial class ItemEntity {
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public sealed partial class ItemMatcher {
+public sealed partial class ItemInventoryMatcher {
 
-    static Entitas.IMatcher<ItemEntity> _matcherItemFireWeaponCharge;
+    static Entitas.IMatcher<ItemInventoryEntity> _matcherItemFireWeaponCharge;
 
-    public static Entitas.IMatcher<ItemEntity> ItemFireWeaponCharge {
+    public static Entitas.IMatcher<ItemInventoryEntity> ItemFireWeaponCharge {
         get {
             if (_matcherItemFireWeaponCharge == null) {
-                var matcher = (Entitas.Matcher<ItemEntity>)Entitas.Matcher<ItemEntity>.AllOf(ItemComponentsLookup.ItemFireWeaponCharge);
-                matcher.componentNames = ItemComponentsLookup.componentNames;
+                var matcher = (Entitas.Matcher<ItemInventoryEntity>)Entitas.Matcher<ItemInventoryEntity>.AllOf(ItemInventoryComponentsLookup.ItemFireWeaponCharge);
+                matcher.componentNames = ItemInventoryComponentsLookup.componentNames;
                 _matcherItemFireWeaponCharge = matcher;
             }
 

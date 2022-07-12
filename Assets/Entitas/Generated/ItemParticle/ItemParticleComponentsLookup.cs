@@ -8,26 +8,22 @@
 //------------------------------------------------------------------------------
 public static class ItemParticleComponentsLookup {
 
-    public const int ItemAttachedInventory = 0;
-    public const int ItemDrawPosition2D = 1;
-    public const int ItemFireWeaponCharge = 2;
-    public const int ItemFireWeaponClip = 3;
-    public const int ItemID = 4;
-    public const int ItemInventory = 5;
-    public const int ItemLabel = 6;
-    public const int ItemStack = 7;
-    public const int ItemType = 8;
-    public const int ItemUnpickable = 9;
-    public const int PhysicsBox2DCollider = 10;
-    public const int PhysicsMovable = 11;
-    public const int PhysicsPosition2D = 12;
-    public const int PhysicsSphere2DCollider = 13;
+    public const int ItemDrawPosition2D = 0;
+    public const int ItemFireWeaponClip = 1;
+    public const int ItemID = 2;
+    public const int ItemLabel = 3;
+    public const int ItemStack = 4;
+    public const int ItemType = 5;
+    public const int ItemUnpickable = 6;
+    public const int PhysicsBox2DCollider = 7;
+    public const int PhysicsMovable = 8;
+    public const int PhysicsPosition2D = 9;
+    public const int PhysicsSphere2DCollider = 10;
 
-    public const int TotalComponents = 14;
+    public const int TotalComponents = 11;
 
     public static readonly string[] componentNames = {
         "ItemDrawPosition2D",
-        "ItemFireWeaponCharge",
         "ItemFireWeaponClip",
         "ItemID",
         "ItemLabel",
@@ -42,7 +38,6 @@ public static class ItemParticleComponentsLookup {
 
     public static readonly System.Type[] componentTypes = {
         typeof(Item.DrawPosition2DComponent),
-        typeof(Item.FireWeapon.ChargeComponent),
         typeof(Item.FireWeapon.ClipComponent),
         typeof(Item.IDComponent),
         typeof(Item.LabelComponent),

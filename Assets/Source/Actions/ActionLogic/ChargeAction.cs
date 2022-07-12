@@ -8,7 +8,7 @@ namespace Action
     {
         private Item.FireWeaponPropreties WeaponPropreties;
         private InventoryEntity InventoryEntity;
-        private ItemEntity ItemEntity;
+        private ItemInventoryEntity ItemEntity;
         private float tempCharge;
 
         public ChargeAction(Contexts entitasContext, int actionID) : base(entitasContext, actionID)
@@ -23,7 +23,7 @@ namespace Action
                 int toolBarID = AgentEntity.agentToolBar.ToolBarID;
                 InventoryEntity = planet.EntitasContext.inventory.GetEntityWithInventoryID(toolBarID);
                 int selectedSlot = InventoryEntity.inventorySlots.Selected;
-                ItemEntity = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.item, toolBarID, selectedSlot);
+                ItemEntity = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, toolBarID, selectedSlot);
                 WeaponPropreties = GameState.ItemCreationApi.GetWeapon(ItemEntity.itemType.Type);
 
                 // Get Is the item weapon chargable or not
@@ -31,7 +31,7 @@ namespace Action
 
                 // Get the old charge rate
                 tempCharge = ItemEntity.itemFireWeaponCharge.ChargeRate;
-
+                
                 // If weapon is chargable
                 if (isChargable)
                 {

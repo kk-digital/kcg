@@ -8,16 +8,18 @@
 //------------------------------------------------------------------------------
 public static class ItemInventoryComponentsLookup {
 
-    public const int ItemFireWeaponClip = 0;
-    public const int ItemID = 1;
-    public const int ItemInventory = 2;
-    public const int ItemLabel = 3;
-    public const int ItemStack = 4;
-    public const int ItemType = 5;
+    public const int ItemFireWeaponCharge = 0;
+    public const int ItemFireWeaponClip = 1;
+    public const int ItemID = 2;
+    public const int ItemInventory = 3;
+    public const int ItemLabel = 4;
+    public const int ItemStack = 5;
+    public const int ItemType = 6;
 
-    public const int TotalComponents = 6;
+    public const int TotalComponents = 7;
 
     public static readonly string[] componentNames = {
+        "ItemFireWeaponCharge",
         "ItemFireWeaponClip",
         "ItemID",
         "ItemInventory",
@@ -27,6 +29,7 @@ public static class ItemInventoryComponentsLookup {
     };
 
     public static readonly System.Type[] componentTypes = {
+        typeof(Item.FireWeapon.ChargeComponent),
         typeof(Item.FireWeapon.ClipComponent),
         typeof(Item.IDComponent),
         typeof(Item.InventoryComponent),
