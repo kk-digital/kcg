@@ -481,7 +481,8 @@ namespace Scripts {
 
                     target_info[] targets = new target_info[penetration];
 
-                    foreach(SystemShip ship in state.ships) {
+                    foreach(var s in state.ships) {
+                        SystemShip ship = s.Object;
 
                         if(ship == self) continue;
 

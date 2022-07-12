@@ -52,7 +52,9 @@ namespace Scripts {
                     SystemShip target          = null;
                     float      target_distance = 0.0f;
 
-                    foreach(SystemShip ship in state.ships)
+                    foreach(var s in state.ships) {
+                        SystemShip ship = s.Object;
+
                         if(ship != Self) {
                             float distance = Tools.get_distance(Body.posx, Body.posy, ship.self.posx, ship.self.posy);
 
@@ -61,6 +63,7 @@ namespace Scripts {
                                 target = ship;
                             }
                         }
+                    }
 
                     if(target != null) {
 

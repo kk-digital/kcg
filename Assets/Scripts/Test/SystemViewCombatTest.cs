@@ -87,32 +87,38 @@ namespace Scripts {
             }
 
             void Start() {
+
                 LastTime = (int)(Time.time * 1000.0f);
 
-                State.stars.Add(new SystemStar());
-                State.stars[0].self.mass = 5000000.0f;
-                State.stars[0].self.posx = -5.0f;
-                State.stars[0].self.posy = 0.0f;
+                State.stars.Add(new());
+                State.stars[0].Object.self.mass = 5000000.0f;
+                State.stars[0].Object.self.posx = -5.0f;
+                State.stars[0].Object.self.posy = 0.0f;
+
+                State.generate_renderers();
 
                 RespawnPlayer();
 
-                var StarObject = new GameObject();
-                StarObject.name = "Star Renderer";
-
-                SystemStarRenderer starRenderer = StarObject.AddComponent<SystemStarRenderer>();
-                starRenderer.star = State.stars[0];
             }
 
             void LateUpdate() {
                 if(Player != null && State.player == null) {
                     State.player = Player;
-                    State.ships.Add(Player.ship);
+                    State.ships.Add(new());
+
+                    var s    = State.ships[State.ships.Count - 1];
+                    s.Object = Player.ship;
+
                     UpdatePlayerWeapons();
                 }
 
                 while(PendingEnemies.Count > 0) {
-                    State.ships.Add(PendingEnemies[0].ship);
+                    State.ships.Add(new());
                     Enemies.Add(PendingEnemies[0]);
+
+                    var s    = State.ships[State.ships.Count - 1];
+                    s.Object = PendingEnemies[0].ship;
+
                     PendingEnemies.RemoveAt(0);
                 }
 
@@ -141,7 +147,9 @@ namespace Scripts {
                     GameObject Renderer = ProjectileRenderer.Value;
 
                     if(Projectile.UpdatePosition(current_millis / 1000.0f)) {
-                        foreach(SystemShip ship in State.ships) {
+                        foreach(var s in State.ships) {
+                            SystemShip ship = s.Object;
+
                             if(ship == Projectile.Self) continue;
 
                             if(Projectile.InRangeOf(ship, 1.0f)) {
@@ -165,7 +173,7 @@ namespace Scripts {
                 }
 
                 for(int i = 0; i < State.ships.Count; i++) {
-                    SystemShip ship = State.ships[i];
+                    SystemShip ship = State.ships[i].Object;
 
                     foreach(ShipWeapon Weapon in ship.weapons) {
                         foreach(ShipWeaponProjectile Projectile in Weapon.projectiles_fired) {
@@ -182,7 +190,12 @@ namespace Scripts {
                     }
 
                     if(ship.destroyed) {
-                        State.ships.Remove(ship);
+                        for(int j = 0; j < State.ships.Count; j++)
+                            if(State.ships[j].Object == ship) {
+                                State.ships.RemoveAt(j);
+                                break;
+                            }
+
                         if(ship == Player.ship) {
                             GameObject.Destroy(Player);
                             Player = null;
@@ -219,8 +232,13 @@ namespace Scripts {
 
             public void RespawnPlayer() {
                 if(Player != null) {
+                    for(int i = 0; i < State.ships.Count; i++)
+                        if(State.ships[i].Object == Player.ship) {
+                            State.ships.RemoveAt(i);
+                            break;
+                        }
+
                     Player.ship.destroy();
-                    State.ships.Remove(Player.ship);
                     GameObject.Destroy(Player);
                     State.player = null;
                 }
@@ -306,10 +324,12 @@ namespace Scripts {
                 right_gun.flags                  = (int)WeaponFlags.WEAPON_PROJECTILE
                                                  | (int)WeaponFlags.WEAPON_BROADSIDE;
 
-                ShipWeapon turret                = ShipWeapon.add_torpedo(Player.ship, State, (int)WeaponFlags.WEAPON_TURRET);
+                ShipWeapon turret                = ShipWeapon.add_auto_cannon(Player.ship, State, (int)WeaponFlags.WEAPON_TURRET | (int)WeaponFlags.WEAPON_SEEKING);
 
                 turret.rotation                  = Tools.pi;
                 turret.rotation_rate             = 2.0f;
+                turret.acc                       = 2.5f;
+                turret.max_velocity              = 12.5f;
 
                 ShipWeapon laser                 = new ShipWeapon();
 
@@ -475,7 +495,12 @@ namespace Scripts {
 
             public void DeleteEnemy() {
                 if(SelectedEnemy != null && Enemies.Contains(SelectedEnemy)) {
-                    State.ships.Remove(SelectedEnemy.ship);
+                    for(int i = 0; i < State.ships.Count; i++)
+                        if(State.ships[i].Object == SelectedEnemy.ship) {
+                            State.ships.RemoveAt(i);
+                            break;
+                        }
+
                     Enemies.Remove(SelectedEnemy);
                     GameObject.Destroy(SelectedEnemy);
                     SelectEnemy(0);
