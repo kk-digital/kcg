@@ -75,6 +75,10 @@ namespace Action
             GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.ToolActionRemoveTile);
             GameState.ActionPropertyManager.SetLogicFactory(new ToolActionRemoveTileCreator());
             GameState.ActionPropertyManager.EndActionPropertyType();
+
+            GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.ToolActionThrowGrenade);
+            GameState.ActionPropertyManager.SetLogicFactory(new ToolActionThrowableGrenadeCreator());
+            GameState.ActionPropertyManager.EndActionPropertyType();
         }
     }
 }

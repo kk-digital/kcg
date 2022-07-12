@@ -25,10 +25,11 @@
         /// <summary>
         /// Others tools actions
         /// </summary>
-        ToolActionFireWeapon = 10,
+        ToolActionFireWeapon,
         ToolActionPlaceParticle,
         ToolActionEnemySpawn,
         ToolActionMiningLaser,
-        ToolActionRemoveTile
+        ToolActionRemoveTile,
+        ToolActionThrowGrenade
     }
 }

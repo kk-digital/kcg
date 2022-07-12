@@ -155,6 +155,24 @@ namespace Item
             PropertiesArray[(int)CurrentIndex].FireWeaponID = WeaponListSize++;
         }
 
+        public void SetThrowableGrenade(float bulletSpeed, float coolDown, float range, float basicDamage, Vec2f spriteSize, int greandeSpriteID)
+        {
+            IsItemTypeValid();
+
+            FireWeaponPropreties fireWeapon = new FireWeaponPropreties()
+            {
+                BulletSpeed = bulletSpeed,
+                CoolDown = coolDown,
+                Range = range,
+                BasicDemage = basicDamage,
+                BulletSpriteSize = spriteSize,
+                BulletSpriteID = greandeSpriteID
+            };
+
+            WeaponList[WeaponListSize] = fireWeapon;
+            PropertiesArray[(int)CurrentIndex].FireWeaponID = WeaponListSize++;
+        }
+
         public void SetFireWeaponClip(int clipSize, int bulletsPerShot, float reloadTime)
         {
             IsItemTypeValid();
