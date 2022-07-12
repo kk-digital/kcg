@@ -71,7 +71,7 @@ namespace Item
 
             if (weaponProperty.HasCharge())
             {
-                entity.AddItemFireWeaponCharge(weaponProperty.CanCharge, weaponProperty.ChargeRate, weaponProperty.ChargeMin,
+                entity.AddItemFireWeaponCharge(weaponProperty.CanCharge, weaponProperty.ChargeRate, weaponProperty.ChargeRatio, weaponProperty.ChargeMin,
                     weaponProperty.ChargeMax);
             }
 

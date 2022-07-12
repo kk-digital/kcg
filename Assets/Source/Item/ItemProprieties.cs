@@ -58,6 +58,7 @@ namespace Item
         /// </summary>
         public bool CanCharge;
         public float ChargeRate;
+        public float ChargeRatio;
         public float ChargeMin;
         public float ChargeMax;
         /// <summary>
