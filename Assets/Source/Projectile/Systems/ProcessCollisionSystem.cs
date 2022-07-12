@@ -149,6 +149,7 @@ namespace Projectile
                     {
                         if (!entity.isAgentPlayer)
                         {
+                            // Note (Mert): This is broken, change it.
                             if (((entity.physicsPosition2D.Value.X > damageRangeMinX && entity.physicsPosition2D.Value.X < damageRangeMaxX) ||
                             (entity.physicsPosition2D.Value.Y > damageRangeMinY && entity.physicsPosition2D.Value.Y < damageRangeMaxY)) || (entity.physicsPosition2D.Value.X == damageRangeMinX && entity.physicsPosition2D.Value.X == damageRangeMaxX) || (entity.physicsPosition2D.Value.Y == damageRangeMinY && entity.physicsPosition2D.Value.Y == damageRangeMaxY))
                             {

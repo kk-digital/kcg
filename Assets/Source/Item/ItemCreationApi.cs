@@ -173,6 +173,17 @@ namespace Item
             PropertiesArray[(int)CurrentIndex].FireWeaponID = WeaponListSize++;
         }
 
+        public void SetThrowableGrenadeClip(int clipSize, int bulletsPerShot, float reloadTime)
+        {
+            IsItemTypeValid();
+
+            ref FireWeaponPropreties fireWeapon = ref WeaponList[PropertiesArray[(int)CurrentIndex].FireWeaponID];
+            fireWeapon.ClipSize = clipSize;
+            fireWeapon.BulletsPerShot = bulletsPerShot;
+            fireWeapon.ReloadTime = reloadTime;
+            fireWeapon.WeaponFlags |= FireWeaponPropreties.Flags.HasClip;
+        }
+
         public void SetFireWeaponClip(int clipSize, int bulletsPerShot, float reloadTime)
         {
             IsItemTypeValid();

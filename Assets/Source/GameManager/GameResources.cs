@@ -211,6 +211,7 @@ public class GameResources
         GameState.ItemCreationApi.SetTexture(GrenadeSpriteId);
         GameState.ItemCreationApi.SetInventoryTexture(GrenadeSpriteId);
         GameState.ItemCreationApi.SetThrowableGrenade(20.0f, 1f, 10.0f, 25.0f, new Vec2f(0.2f, 0.2f), GrenadeSpriteId);
+        GameState.ItemCreationApi.SetThrowableGrenadeClip(4, 1, 2);
         GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
         GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionThrowGrenade);
         GameState.ItemCreationApi.EndItem();
