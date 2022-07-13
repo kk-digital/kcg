@@ -48,7 +48,7 @@ namespace Action
         {
             if (ItemEntity.itemFireWeaponCharge.ChargeRate < ItemEntity.itemFireWeaponCharge.ChargeMax)
             {
-                ItemEntity.itemFireWeaponCharge.ChargeRate += 0.1f;
+                ItemEntity.itemFireWeaponCharge.ChargeRate += ItemEntity.itemFireWeaponCharge.ChargeRatio;
                 ActionEntity.actionExecution.State = Enums.ActionState.Success;
             }
         }

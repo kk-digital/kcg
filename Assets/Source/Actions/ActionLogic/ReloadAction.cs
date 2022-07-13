@@ -55,7 +55,7 @@ namespace Action
             }
             else
             {
-                Debug.Log("Weapon Reloaded." + ItemEntity.itemFireWeaponClip.NumOfBullets.ToString() + " Bullets in the clip.");
+                Debug.Log("Weapon Reloaded." + ItemEntity.itemFireWeaponClip.NumOfBullets.ToString() + " Ammo in the clip.");
             }
 
             base.OnExit(ref planet);

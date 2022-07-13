@@ -11,6 +11,10 @@
         /// </summary>
         Gun,
         /// <summary>
+        /// Throwable Explosive Weapons
+        /// </summary>
+        Grenade,
+        /// <summary>
         /// Tools
         /// </summary>
         PlacementTool,

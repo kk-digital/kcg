@@ -131,12 +131,55 @@ namespace Projectile
                 }
             }
 
-
-            foreach (var entity in ToRemoveList)
+            foreach (var entityP in ToRemoveList)
             {
-                var pos = entity.projectilePosition2D;
-                planet.AddParticleEmitter(pos.Value, Particle.ParticleEmitterType.DustEmitter);
-                planet.RemoveProjectile(entity.projectileID.ID);
+                if(entityP.projectileType.Type == Enums.ProjectileType.Grenade)
+                {
+                    float damageRangeMinX = entityP.projectilePosition2D.Value.X - 2;
+                    float damageRangeMaxX = entityP.projectilePosition2D.Value.X + 2;
+                    float damageRangeMinY = entityP.projectilePosition2D.Value.Y - 2;
+                    float damageRangeMaxY = entityP.projectilePosition2D.Value.Y + 2;
+
+                    planet.AddParticleEmitter(entityP.projectilePosition2D.Value, Particle.ParticleEmitterType.DustEmitter);
+                    // Check if projectile has hit a enemy.
+                    var entitiesA = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
+
+                    // Todo: Create a agent colision system?
+                    foreach (var entity in entitiesA)
+                    {
+                        if (!entity.isAgentPlayer)
+                        {
+                            // Note (Mert): This is broken, change it.
+                            if (((entity.physicsPosition2D.Value.X > damageRangeMinX && entity.physicsPosition2D.Value.X < damageRangeMaxX) ||
+                            (entity.physicsPosition2D.Value.Y > damageRangeMinY && entity.physicsPosition2D.Value.Y < damageRangeMaxY)) || (entity.physicsPosition2D.Value.X == damageRangeMinX && entity.physicsPosition2D.Value.X == damageRangeMaxX) || (entity.physicsPosition2D.Value.Y == damageRangeMinY && entity.physicsPosition2D.Value.Y == damageRangeMaxY))
+                            {
+                                Vec2f entityPos = entity.physicsPosition2D.Value;
+                                Vec2f bulletPos = entityP.projectilePosition2D.Value;
+                                Vec2f diff = bulletPos - entityPos;
+                                diff.Y = 0;
+                                diff.Normalize();
+
+                                Vector2 oppositeDirection = new Vector2(-diff.X, -diff.Y);
+
+                                if (entity.hasAgentStats)
+                                {
+                                    var stats = entity.agentStats;
+                                    entity.ReplaceAgentStats(stats.Health - 25, stats.Food, stats.Water, stats.Oxygen,
+                                        stats.Fuel, stats.AttackCooldown);
+
+                                    // spawns a debug floating text for damage 
+                                    planet.AddFloatingText("" + 25, 0.5f, new Vec2f(oppositeDirection.x * 0.05f, oppositeDirection.y * 0.05f), new Vec2f(entityPos.X, entityPos.Y + 0.35f));
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (entityP.projectileType.Type == Enums.ProjectileType.Bullet)
+                {
+                    planet.AddParticleEmitter(entityP.projectilePosition2D.Value, Particle.ParticleEmitterType.DustEmitter);
+                }
+
+                planet.RemoveProjectile(entityP.projectileID.ID);
             }
         }
     }

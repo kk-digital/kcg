@@ -11,17 +11,19 @@ public partial class ItemParticleEntity {
     public Item.FireWeapon.ClipComponent itemFireWeaponClip { get { return (Item.FireWeapon.ClipComponent)GetComponent(ItemParticleComponentsLookup.ItemFireWeaponClip); } }
     public bool hasItemFireWeaponClip { get { return HasComponent(ItemParticleComponentsLookup.ItemFireWeaponClip); } }
 
-    public void AddItemFireWeaponClip(int newNumOfBullets) {
+    public void AddItemFireWeaponClip(int newNumOfBullets, int newBulletsPerShot) {
         var index = ItemParticleComponentsLookup.ItemFireWeaponClip;
         var component = (Item.FireWeapon.ClipComponent)CreateComponent(index, typeof(Item.FireWeapon.ClipComponent));
         component.NumOfBullets = newNumOfBullets;
+        component.BulletsPerShot = newBulletsPerShot;
         AddComponent(index, component);
     }
 
-    public void ReplaceItemFireWeaponClip(int newNumOfBullets) {
+    public void ReplaceItemFireWeaponClip(int newNumOfBullets, int newBulletsPerShot) {
         var index = ItemParticleComponentsLookup.ItemFireWeaponClip;
         var component = (Item.FireWeapon.ClipComponent)CreateComponent(index, typeof(Item.FireWeapon.ClipComponent));
         component.NumOfBullets = newNumOfBullets;
+        component.BulletsPerShot = newBulletsPerShot;
         ReplaceComponent(index, component);
     }
 
