@@ -12,6 +12,7 @@
         /// </summary>
         Gun,
         Shotgun,
+        Sword,
 
         /// <summary>
         /// Throwable Explosive Weapons

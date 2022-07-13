@@ -185,6 +185,21 @@ namespace Item
             PropertiesArray[(int)CurrentIndex].FireWeaponID = WeaponListSize++;
         }
 
+        public void SetSwordWeapon(float coolDown, float range, float basicDamage)
+        {
+            IsItemTypeValid();
+
+            FireWeaponPropreties fireWeapon = new FireWeaponPropreties()
+            {
+                CoolDown = coolDown,
+                Range = range,
+                BasicDemage = basicDamage,
+            };
+
+            WeaponList[WeaponListSize] = fireWeapon;
+            PropertiesArray[(int)CurrentIndex].FireWeaponID = WeaponListSize++;
+        }
+
         public void SetShotgunWeaponClip(int clipSize, int bulletsPerShot, float reloadTime)
         {
             IsItemTypeValid();

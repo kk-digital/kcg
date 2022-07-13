@@ -22,6 +22,7 @@ public class GameResources
     public static int pipeIconSpriteSheet;
     public static int DustSpriteSheet;
     public static int GrenadeSpriteSheet;
+    public static int SwordSpriteSheet;
 
 
     public static int OreSprite;
@@ -33,6 +34,7 @@ public class GameResources
     public static int CharacterSpriteId;
 
     public static int GrenadeSpriteId;
+    public static int SwordSpriteId;
 
 
     // particle sprite ids used for icons
@@ -76,6 +78,7 @@ public class GameResources
             pipeIconSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Items\\AdminIcon\\Pipesim\\admin_icon_pipesim.png", 16, 16);
             DustSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Particles\\Dust\\dust1.png", 16, 16);
             GrenadeSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Projectiles\\Grenades\\Grenade\\Grenades1.png", 16, 16);
+            SwordSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Weapons\\Swords\\Sword1.png", 16, 48);
 
 
             OreSprite = GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(OreSpriteSheet, 0, 0, 0);
@@ -87,6 +90,7 @@ public class GameResources
             CharacterSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(CharacterSpriteSheet, 0, 0, Enums.AtlasType.Agent);
 
             GrenadeSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(GrenadeSpriteSheet, 0, 0, Enums.AtlasType.Particle);
+            SwordSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(SwordSpriteSheet, 0, 0, Enums.AtlasType.Particle);
             // particle sprite atlas
             OreIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(OreSpriteSheet, 0, 0, Enums.AtlasType.Particle);
             GunIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(GunSpriteSheet, 0, 0, Enums.AtlasType.Particle);
@@ -223,6 +227,14 @@ public class GameResources
         GameState.ItemCreationApi.SetThrowableGrenadeClip(4, 1, 2);
         GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
         GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionThrowGrenade);
+        GameState.ItemCreationApi.EndItem();
+
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.Sword, "Sword");
+        GameState.ItemCreationApi.SetTexture(SwordSpriteId);
+        GameState.ItemCreationApi.SetInventoryTexture(SwordSpriteId);
+        GameState.ItemCreationApi.SetSwordWeapon(1.0f, 1.0f, 10.0f);
+        GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
+        GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionMeleeAttack);
         GameState.ItemCreationApi.EndItem();
 
         GameState.ItemCreationApi.CreateItem(Enums.ItemType.Ore, "Ore");

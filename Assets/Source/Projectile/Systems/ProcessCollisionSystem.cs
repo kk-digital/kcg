@@ -148,7 +148,6 @@ namespace Projectile
 
                             float radius = 2.0f;
 
-                            // Note (Mert): This is broken, change it.
                             if (dist < radius)
                             {
                                 Vec2f entityPos = entity.physicsPosition2D.Value;
