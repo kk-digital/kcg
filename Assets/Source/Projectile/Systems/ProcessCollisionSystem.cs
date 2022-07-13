@@ -135,11 +135,6 @@ namespace Projectile
             {
                 if(entityP.projectileType.Type == Enums.ProjectileType.Grenade)
                 {
-                    float damageRangeMinX = entityP.projectilePosition2D.Value.X - 2;
-                    float damageRangeMaxX = entityP.projectilePosition2D.Value.X + 2;
-                    float damageRangeMinY = entityP.projectilePosition2D.Value.Y - 2;
-                    float damageRangeMaxY = entityP.projectilePosition2D.Value.Y + 2;
-
                     planet.AddParticleEmitter(entityP.projectilePosition2D.Value, Particle.ParticleEmitterType.DustEmitter);
                     // Check if projectile has hit a enemy.
                     var entitiesA = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
@@ -149,9 +144,12 @@ namespace Projectile
                     {
                         if (!entity.isAgentPlayer)
                         {
+                            float dist = Vector2.Distance(new Vector2(entity.physicsPosition2D.Value.X, entity.physicsPosition2D.Value.Y), new Vector2(entityP.projectilePosition2D.Value.X, entityP.projectilePosition2D.Value.Y));
+
+                            float radius = 2.0f;
+
                             // Note (Mert): This is broken, change it.
-                            if (((entity.physicsPosition2D.Value.X > damageRangeMinX && entity.physicsPosition2D.Value.X < damageRangeMaxX) ||
-                            (entity.physicsPosition2D.Value.Y > damageRangeMinY && entity.physicsPosition2D.Value.Y < damageRangeMaxY)) || (entity.physicsPosition2D.Value.X == damageRangeMinX && entity.physicsPosition2D.Value.X == damageRangeMaxX) || (entity.physicsPosition2D.Value.Y == damageRangeMinY && entity.physicsPosition2D.Value.Y == damageRangeMaxY))
+                            if (dist < radius)
                             {
                                 Vec2f entityPos = entity.physicsPosition2D.Value;
                                 Vec2f bulletPos = entityP.projectilePosition2D.Value;

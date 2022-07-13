@@ -70,10 +70,7 @@ namespace Action
             // Check if projectile is inside in weapon range.
             if ((ProjectileEntity.projectilePosition2D.Value - StartPos).Magnitude > range)
             {
-                float damageRangeMinX = ProjectileEntity.projectilePosition2D.Value.X - 2;
-                float damageRangeMaxX = ProjectileEntity.projectilePosition2D.Value.X + 2;
-                float damageRangeMinY = ProjectileEntity.projectilePosition2D.Value.Y - 2;
-                float damageRangeMaxY = ProjectileEntity.projectilePosition2D.Value.Y + 2;
+                float radius = 10.0f;
 
                 planet.AddParticleEmitter(ProjectileEntity.projectilePosition2D.Value, Particle.ParticleEmitterType.DustEmitter);
 
@@ -86,9 +83,10 @@ namespace Action
                     if (entity == AgentEntity)
                         continue;
 
+                    float dist = Vector2.Distance(new Vector2(AgentEntity.physicsPosition2D.Value.X, AgentEntity.physicsPosition2D.Value.Y), new Vector2(ProjectileEntity.projectilePosition2D.Value.X, ProjectileEntity.projectilePosition2D.Value.Y));
+
                     // Note (Mert): This is broken, change it.
-                    if (((entity.physicsPosition2D.Value.X > damageRangeMinX && entity.physicsPosition2D.Value.X < damageRangeMaxX) ||
-                        (entity.physicsPosition2D.Value.Y > damageRangeMinY && entity.physicsPosition2D.Value.Y < damageRangeMaxY)) || (entity.physicsPosition2D.Value.X == damageRangeMinX && entity.physicsPosition2D.Value.X == damageRangeMaxX) || (entity.physicsPosition2D.Value.Y == damageRangeMinY && entity.physicsPosition2D.Value.Y == damageRangeMaxY))
+                    if (dist < radius)
                     {
                         Vec2f entityPos = entity.physicsPosition2D.Value;
                         Vec2f bulletPos = ProjectileEntity.projectilePosition2D.Value;
