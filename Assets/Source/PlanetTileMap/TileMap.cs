@@ -269,9 +269,9 @@ namespace PlanetTileMap
 
         // this is called every frame to update a limited number of sprite ids
         // the excess will be pushed to the next frame
-        public void UpdateTiles()
+        public void UpdateTileSprites()
         {
-            TileSpriteUpdateQueue.UpdateTiles(ref this);
+            TileSpriteUpdateQueue.UpdateTileSprites(ref this);
         }
     }
 }

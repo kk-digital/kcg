@@ -37,7 +37,7 @@ namespace PlanetTileMap
 
 
 
-        public void UpdateTiles(ref TileMap tileMap)
+        public void UpdateTileSprites(ref TileMap tileMap)
         {
             for(int i = 0; i < 1024 * 32 && i < ToUpdateTiles.Count; i++)
             {
