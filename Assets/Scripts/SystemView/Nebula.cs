@@ -7,10 +7,12 @@ namespace Scripts {
         public class Nebula : MonoBehaviour {
             public int            seed;
             public int            layers;
-            public int            color_layers;
+            public int            colors;
             public int            width;
             public int            height;
             public float          opacity;
+            public float          contrast;
+            public float          cutoff;           // Also sometimes called black level
 
             public Texture2D      texture;
             public SpriteRenderer renderer;
@@ -54,6 +56,47 @@ namespace Scripts {
                     }
 
                 return noise;
+            }
+
+            private float[] circular_blur(float[] noise, int w, int h, float r) {
+                if(r <= 1.0f) return noise;
+
+                float[] blurred = new float[w * h];
+
+                for(int x = 0; x < w; x++)
+                    for(int y = 0; y < h; y++) {
+                        float pixels  = 0.0f;
+                        float value   = 0.0f;
+
+                        int   large_r = (int)Math.Ceiling(r);
+
+                        for(int x0 = x - large_r; x0 <= x; x0++) {
+                            int x1 = x + x - x0;
+                            if(x0 < 0 || x1 >= w) continue;
+
+                            for(int y0 = y - large_r; y0 <= y; y0++) {
+                                int y1 = y + y - y0;
+                                if(y0 < 0 || y1 >= h) continue;
+
+                                int local_x = x - x0;
+                                int local_y = y - y0;
+
+                                float distance = Tools.magnitude(local_x, local_y);
+
+                                if(distance > r) continue;
+
+                                pixels += 4 * distance / r;
+                                value  += (noise[x0 + y0 * w]
+                                       +   noise[x1 + y0 * w]
+                                       +   noise[x0 + y1 * w]
+                                       +   noise[x1 + y1 * w]) * (1.0f - distance / r);
+                            }
+                        }
+
+                        blurred[x + y * w] = value / pixels;
+                    }
+
+                return blurred;
             }
 
             private float[] smoothen_noise(float[] noise, int w, int h, int scale) {
@@ -159,11 +202,9 @@ namespace Scripts {
                             else           masking_noise[x + y * width] += 0.25f;
                         }
 
-                float[] distorted = distort(masking_noise, width * 0.0625f, 32);
-
                 for(int x = 0; x < width; x++)
                     for(int y = 0; y < height; y++)
-                        noise[x + y * width] *= masking_noise[x + y * width] * distorted[x + y * width];
+                        noise[x + y * width] *= masking_noise[x + y * width];
 
                 return noise;
             }
@@ -181,7 +222,7 @@ namespace Scripts {
                             float v0             = smootherstep(noise[x0 + y0 * width], noise[x1 + y0 * width], (noise[x0 + y0 * width] + noise[x1 + y0 * width]) * 0.5f);
                             float v1             = smootherstep(noise[x0 + y1 * width], noise[x1 + y1 * width], (noise[x0 + y1 * width] + noise[x1 + y1 * width]) * 0.5f);
 
-                            noise[x + y * width] = smootherstep(smootherstep(v0, v1, (v0 + v1) * 0.5f), 0.25f, (1.0f - noise[x + y * width]) * 0.5f);
+                            noise[x + y * width] = smootherstep(v0, v1, (v0 + v1) * 0.5f);
                         }
 
                 return noise;
@@ -203,10 +244,16 @@ namespace Scripts {
                         if(d <= 0.15f)
                             output[x + y * width] = noise[x + y * width];
                         else if(d <= 0.5f)
-                            output[x + y * width] = noise[x + y * width] * (0.5f - d) / 0.35f;
+                            output[x + y * width] = smootherstep(0.0f, noise[x + y * width], (0.5f - d) / 0.35f);
             }
 
                 return output;
+            }
+
+            private float truncate(float f) {
+                if(f < 0.0f) return 0.0f;
+                if(f > 1.0f) return 1.0f;
+                             return    f;
             }
 
             private void generate() {
@@ -220,21 +267,43 @@ namespace Scripts {
                 float base_g = (float)rng.NextDouble() * 0.8f;
                 float base_b = (float)rng.NextDouble() * 0.8f;
 
-                for(int color = 0; color < color_layers; color++) {
+                float[] base_alpha = soften(distort(smoothen_noise(generate_noise(1.0f,
+                                                                                  width  / 64,
+                                                                                  height / 64),
+                                                                                  width  / 64,
+                                                                                  height / 64,
+                                                                                  64),
+                                                                                  16.0f,
+                                                                                  16),
+                                                                                  4);
 
-                    float r0 = base_r * 0.8f + (float)rng.NextDouble() * base_r * 0.40f;
-                    float g0 = base_g * 0.8f + (float)rng.NextDouble() * base_g * 0.40f;
-                    float b0 = base_b * 0.8f + (float)rng.NextDouble() * base_b * 0.40f;
+                base_alpha = circular_blur(base_alpha, width, height, 16.0f);
 
-                    float r1 = base_r * 0.8f + (float)rng.NextDouble() * base_r * 0.40f;
-                    float g1 = base_g * 0.8f + (float)rng.NextDouble() * base_g * 0.40f;
-                    float b1 = base_b * 0.8f + (float)rng.NextDouble() * base_b * 0.40f;
+                base_alpha = circular_mask(base_alpha);
+
+                for(int x = 0; x < width; x++)
+                    for(int y = 0; y < height; y++) {
+                        pixels[x + y * width].r = base_r;
+                        pixels[x + y * width].g = base_g;
+                        pixels[x + y * width].b = base_b;
+                        pixels[x + y * width].a = base_alpha[x + y * width];
+                    }
+
+                for(int color = 0; color < colors; color++) {
+
+                    float r0 = base_r * 0.6f + (float)rng.NextDouble() * base_r * 0.80f;
+                    float g0 = base_g * 0.6f + (float)rng.NextDouble() * base_g * 0.80f;
+                    float b0 = base_b * 0.6f + (float)rng.NextDouble() * base_b * 0.80f;
+
+                    float r1 = base_r * 0.6f + (float)rng.NextDouble() * base_r * 0.80f;
+                    float g1 = base_g * 0.6f + (float)rng.NextDouble() * base_g * 0.80f;
+                    float b1 = base_b * 0.6f + (float)rng.NextDouble() * base_b * 0.80f;
 
                     float[] alpha = new float[width * height];
 
                     for(int layer = 0; layer < layers; layer++) {
 
-                        int   scale         = 1 << layers - layer - 1;
+                        int   scale         = 1 << layers - layer + 1;
                         float strength      = scale / layers;
 
                         float[] layer_alpha = smoothen_noise(blur_noise(generate_noise(strength,
@@ -248,24 +317,23 @@ namespace Scripts {
 
                         for(int x = 0; x < width; x++)
                             for(int y = 0; y < height; y++) {
-                                float a              = layer_alpha[x + y * width];
+                                float a              = layer_alpha[x + y * width] * 1.5f;
                                 alpha[x + y * width] = a  +  alpha[x + y * width] * (1.0f - a);
                             }
                     }
 
-                    alpha = distort(exponential_filter(alpha), 32.0f, 32);
+                    alpha = exponential_filter(alpha);
 
-                    for(int i = 0; i < 4; i++)
-                        alpha = blur_noise(alpha, width, height);
+                    alpha = soften(distort(mask(alpha, 8), 16.0f, 64), 8);
 
-                    alpha = circular_mask(distort(soften(blur_noise(mask(alpha, 8), width, height), 8), 8.0f, 64));
+                    alpha = circular_mask(alpha);
 
                     float target_x = rng.Next(width);
                     float target_y = rng.Next(height);
 
                     for(int x = 0; x < width; x++)
                         for(int y = 0; y < height; y++) {
-                            float a                 = alpha[x + y * width] * 0.4f;
+                            float a                 = smootherstep(alpha[x + y * width] * 0.3f, 0.0f, 1.0f - pixels[x + y * width].a);
 
                             float d                 = Tools.get_distance(x, y, target_x, target_y) / Tools.get_distance(0, 0, width, height);
 
@@ -281,12 +349,29 @@ namespace Scripts {
                         }
                 }
 
-                for(int i = 0; i < width * height; i++)
+                float contrast_factor =  1.06f * (contrast * 0.5f + 1.00f)
+                                      / (1.00f * (1.06f - contrast * 0.5f));
+
+                for(int i = 0; i < width * height; i++) {
+                    // Increase contrast
+                    pixels[i].r = truncate(contrast_factor * (pixels[i].r - 0.5f) + 0.5f);
+                    pixels[i].g = truncate(contrast_factor * (pixels[i].g - 0.5f) + 0.5f);
+                    pixels[i].b = truncate(contrast_factor * (pixels[i].b - 0.5f) + 0.5f);
+
+                    // Adjust black level
+                    pixels[i].r = truncate((pixels[i].r - cutoff) / (1.0f - cutoff));
+                    pixels[i].g = truncate((pixels[i].g - cutoff) / (1.0f - cutoff));
+                    pixels[i].b = truncate((pixels[i].b - cutoff) / (1.0f - cutoff));
+                    pixels[i].a = truncate((pixels[i].a - cutoff) / (1.0f - cutoff));
+
+                    // Adjust opacity
                     pixels[i].a *= opacity;
+                }
 
                 texture = new Texture2D(width, height);
                 texture.filterMode = FilterMode.Trilinear;
                 texture.SetPixels(pixels);
+                
                 texture.Apply();
 
             }
@@ -298,10 +383,8 @@ namespace Scripts {
                 renderer.sprite = Sprite.Create(texture,
                                                 new Rect(0, 0, width, height),
                                                 new Vector2(0.5f, 0.5f));
-            }
 
-            private void Update() {
-                
+                renderer.transform.Translate(new Vector3(0.0f, 0.0f, -1.0f));
             }
         }
     }
