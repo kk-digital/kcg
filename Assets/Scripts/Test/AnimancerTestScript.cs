@@ -34,14 +34,15 @@ public class AnimancerTestScript : MonoBehaviour
         }
 
 
-        // get the animator component from the game object
-        // this component is used by animancer
+        
 
 
         // create an animancer object and give it a reference to the Animator component
         for(int i = 0; i < HumanoidCount; i++)
         {
             GameObject animancerComponent = new GameObject("AnimancerComponent", typeof(AnimancerComponent));
+            // get the animator component from the game object
+            // this component is used by animancer
             AnimancerComponentArray[i] = animancerComponent.GetComponent<AnimancerComponent>();
             AnimancerComponentArray[i].Animator = HumanoidArray[i].GetComponent<Animator>();
         }
