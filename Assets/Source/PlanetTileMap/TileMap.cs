@@ -235,15 +235,15 @@ namespace PlanetTileMap
                 {
                     if (property.SpriteRuleType == SpriteRuleType.R1)
                     {
-                        TileMapping.UpdateSpriteRule_R1(x, y, planetLayer, ref this);
+                        SpriteRule_R1.UpdateSprite(x, y, planetLayer, ref this);
                     }
                     else if (property.SpriteRuleType == SpriteRuleType.R2)
                     {
-                        TileMapping.UpdateSpriteRule_R2(x, y, planetLayer, ref this);
+                        SpriteRule_R2.UpdateSprite(x, y, planetLayer, ref this);
                     }
                     else if (property.SpriteRuleType == SpriteRuleType.R3)
                     {
-                        TileMapping.UpdateSpriteRule_R3_New(x, y, planetLayer, ref this);
+                        SpriteRule_R3.UpdateSprite(x, y, planetLayer, ref this);
                     }
                 }
                 else
