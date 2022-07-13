@@ -307,7 +307,9 @@ MonoBehaviour:
     -R = run
 
     -I
-    = idle'
+    = idle
+
+    -G = golf swing'
 --- !u!222 &422940751
 CanvasRenderer:
   m_ObjectHideFlags: 0

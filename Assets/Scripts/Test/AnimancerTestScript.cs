@@ -12,6 +12,7 @@ public class AnimancerTestScript : MonoBehaviour
     AnimationClip IdleAnimationClip ;
     AnimationClip RunAnimationClip ;
     AnimationClip WalkAnimationClip ;
+    AnimationClip GolfSwingClip;
 
 
     AnimancerComponent[] AnimancerComponentArray;
@@ -52,6 +53,7 @@ public class AnimancerTestScript : MonoBehaviour
          IdleAnimationClip = (AnimationClip)Resources.Load("Animation/" + "Humanoid-Idle");
          RunAnimationClip = (AnimationClip)Resources.Load("Animation/" + "Humanoid-Run");
          WalkAnimationClip = (AnimationClip)Resources.Load("Animation/" + "Humanoid-Walk");
+         GolfSwingClip = (AnimationClip)Resources.Load("Animation/" + "Humanoid-GolfSwing");
 
 
         // play the idle animation
@@ -67,20 +69,25 @@ public class AnimancerTestScript : MonoBehaviour
         bool run = Input.GetKeyDown(KeyCode.R);
         bool walk = Input.GetKeyDown(KeyCode.W);
         bool idle = Input.GetKeyDown(KeyCode.I);
+        bool golf = Input.GetKeyDown(KeyCode.G);
 
         for(int i = 0; i < HumanoidCount; i++)
         {
             if (run)
             {
-                AnimancerComponentArray[i].Play(RunAnimationClip);
+                AnimancerComponentArray[i].Play(RunAnimationClip, 0.25f);
             }
             else if (walk)
             {
-                AnimancerComponentArray[i].Play(WalkAnimationClip);
+                AnimancerComponentArray[i].Play(WalkAnimationClip, 0.25f);
             }
             else if (idle)
             {
-                AnimancerComponentArray[i].Play(IdleAnimationClip);
+                AnimancerComponentArray[i].Play(IdleAnimationClip, 0.25f);
+            }
+            else if (golf)
+            {
+                AnimancerComponentArray[i].Play(GolfSwingClip, 0.25f);
             }
         }
     }
