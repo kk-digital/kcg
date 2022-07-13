@@ -8,157 +8,161 @@ namespace PlanetTileMap
 
     public static class SpriteRule_R3
     {
-
-        public static int BitField_Right = 1 << 0;
-        public static int BitField_Left = 1 << 1;
-        public static int BitField_Up = 1 << 2;
-        public static int BitField_Down = 1 << 3;
-        public static int BitField_UpRight = 1 << 4;
-        public static int BitField_UpLeft = 1 << 5;
-        public static int BitField_DownRight = 1 << 6;
-        public static int BitField_DownLeft = 1 << 7;
+        // power of 2 numbers 
+        // we need them to do bitwise operations
+        public static int BitField_Right = 1 << 0; // 1
+        public static int BitField_Left = 1 << 1; // 2
+        public static int BitField_Up = 1 << 2; // 4
+        public static int BitField_Down = 1 << 3; // 8
+        public static int BitField_UpRight = 1 << 4; // 16
+        public static int BitField_UpLeft = 1 << 5; // 32
+        public static int BitField_DownRight = 1 << 6; // 64
+        public static int BitField_DownLeft = 1 << 7; // 128
         
         
+        // these are the bits associated with Position 12 in the tile sheet
         public static int R3_P12 = BitField_Right | BitField_Left | BitField_Up | BitField_Down |
             BitField_UpRight | BitField_UpLeft | BitField_DownRight | BitField_DownLeft;
         
+        // these are the bits associated with Position 17 in the tile sheet
         public static int R3_P17 = BitField_Right | BitField_Left | BitField_Up | BitField_Down |
             BitField_UpRight | BitField_UpLeft | BitField_DownRight;
         
+        // these are the bits associated with Position 19 in the tile sheet
         public static int R3_P19 = BitField_Right | BitField_Left | BitField_Up | BitField_Down |
             BitField_UpRight | BitField_UpLeft; 
         
+        // these are the bits associated with Position 16 in the tile sheet
         public static int R3_P16 = BitField_Right | BitField_Left | BitField_Up | BitField_Down |
             BitField_UpRight | BitField_UpLeft | BitField_DownLeft; 
         
+        // these are the bits associated with Position 27 in the tile sheet
         public static int R3_P27 = BitField_Right | BitField_Left | BitField_Up | BitField_Down |
             BitField_UpLeft | BitField_DownRight | BitField_DownLeft;
         
+        // these are the bits associated with Position 30 in the tile sheet
         public static int R3_P30 = BitField_Right | BitField_Left | BitField_Up | BitField_Down |
             BitField_DownRight | BitField_DownLeft;
         
+        // these are the bits associated with Position 28 in the tile sheet
         public static int R3_P28 = BitField_Right | BitField_Left | BitField_Up | BitField_Down |
             BitField_UpRight | BitField_DownRight | BitField_DownLeft;
         
+        // these are the bits associated with Position 49 in the tile sheet
         public static int R3_P49 = BitField_Right | BitField_Left | BitField_Up | BitField_Down |
             BitField_UpLeft | BitField_DownLeft;
         
+        // these are the bits associated with Position 50 in the tile sheet
         public static int R3_P50 = BitField_Right | BitField_Left | BitField_Up | BitField_Down |
             BitField_UpRight | BitField_DownRight;
         
+        // these are the bits associated with Position 9 in the tile sheet
         public static int R3_P9 = BitField_Right | BitField_Left | BitField_Up | BitField_Down |
             BitField_UpLeft | BitField_DownRight;
         
+        // these are the bits associated with Position 20 in the tile sheet
         public static int R3_P20 = BitField_Right | BitField_Left | BitField_Up | BitField_Down |
             BitField_UpRight | BitField_DownLeft;
         
+        // these are the bits associated with Position 52 in the tile sheet
         public static int R3_P52 = BitField_Right | BitField_Left | BitField_Up | BitField_Down;
         
+        // these are the bits associated with Position 32 in the tile sheet
         public static int R3_P32 = BitField_Right | BitField_Left | BitField_Up | BitField_Down |
             BitField_DownLeft;
         
+        // these are the bits associated with Position 31 in the tile sheet
         public static int R3_P31 = BitField_Right | BitField_Left | BitField_Up | BitField_Down |
             BitField_DownRight;
         
+        // these are the bits associated with Position 43 in the tile sheet
         public static int R3_P43 = BitField_Right | BitField_Left | BitField_Up | BitField_Down |
             BitField_UpLeft;
         
+        // these are the bits associated with Position 42 in the tile sheet
         public static int R3_P42 = BitField_Right | BitField_Left | BitField_Up | BitField_Down |
             BitField_UpRight;
         
         
+        // these are the bits associated with Position 34 in the tile sheet
         public static int R3_P34_1 = BitField_Right | BitField_Left;
         public static int R3_P34_2 = BitField_Right | BitField_Left | BitField_UpRight;
         public static int R3_P34_3 = BitField_Right | BitField_Left | BitField_UpLeft;
         public static int R3_P34_4 = BitField_Right | BitField_Left | BitField_DownRight;
         public static int R3_P34_5 = BitField_Right | BitField_Left | BitField_DownLeft;
-        
         public static int R3_P34_6 = BitField_Right | BitField_Left | BitField_UpRight | 
             BitField_UpLeft;
         public static int R3_P34_7 = BitField_Right | BitField_Left | BitField_UpRight | 
             BitField_DownRight;
         public static int R3_P34_8 = BitField_Right | BitField_Left | BitField_UpRight | 
             BitField_DownLeft;
-        
         public static int R3_P34_9 = BitField_Right | BitField_Left | BitField_UpRight | 
             BitField_UpLeft | BitField_DownRight;
         public static int R3_P34_10 = BitField_Right | BitField_Left | BitField_UpRight | 
             BitField_DownRight | BitField_DownLeft;
         public static int R3_P34_11 = BitField_Right | BitField_Left | BitField_UpRight | 
             BitField_UpLeft | BitField_DownLeft;
-        
         public static int R3_P34_12 = BitField_Right | BitField_Left | BitField_UpRight
-            | BitField_UpLeft | BitField_DownRight | BitField_DownLeft;
-        
+            | BitField_UpLeft | BitField_DownRight | BitField_DownLeft;    
         public static int R3_P34_13 = BitField_Right | BitField_Left | BitField_UpLeft |
             BitField_DownRight;
         public static int R3_P34_14 = BitField_Right | BitField_Left | BitField_UpLeft |
-            BitField_DownLeft;
-        
+            BitField_DownLeft;      
         public static int R3_P34_15 = BitField_Right | BitField_Left | BitField_UpLeft |
-            BitField_DownRight | BitField_DownLeft;
-        
+            BitField_DownRight | BitField_DownLeft;     
         public static int R3_P34_16 = BitField_Right | BitField_Left | BitField_DownRight |
             BitField_DownLeft;
         
         
+        // these are the bits associated with Position 14 in the tile sheet
         public static int R3_P14_1 = BitField_Up | BitField_Down;
         public static int R3_P14_2 = BitField_Up | BitField_Down | BitField_UpRight;
         public static int R3_P14_3 = BitField_Up | BitField_Down | BitField_UpLeft;
         public static int R3_P14_4 = BitField_Up | BitField_Down | BitField_DownRight;
-        public static int R3_P14_5 = BitField_Up | BitField_Down | BitField_DownLeft;
-        
+        public static int R3_P14_5 = BitField_Up | BitField_Down | BitField_DownLeft;    
         public static int R3_P14_6 = BitField_Up | BitField_Down | BitField_UpRight | 
             BitField_UpLeft;
         public static int R3_P14_7 = BitField_Up | BitField_Down | BitField_UpRight | 
             BitField_DownRight;
         public static int R3_P14_8 = BitField_Up | BitField_Down | BitField_UpRight | 
             BitField_DownLeft;
-        
         public static int R3_P14_9 = BitField_Up | BitField_Down | BitField_UpRight | 
             BitField_UpLeft | BitField_DownRight;
         public static int R3_P14_10 = BitField_Up | BitField_Down | BitField_UpRight | 
             BitField_DownRight | BitField_DownLeft;
         public static int R3_P14_11 = BitField_Up | BitField_Down | BitField_UpRight | 
             BitField_UpLeft | BitField_DownLeft;
-        
         public static int R3_P14_12 = BitField_Up | BitField_Down | BitField_UpRight
             | BitField_UpLeft | BitField_DownRight | BitField_DownLeft;
-        
         public static int R3_P14_13 = BitField_Up | BitField_Down | BitField_UpLeft |
             BitField_DownRight;
         public static int R3_P14_14 = BitField_Up | BitField_Down | BitField_UpLeft |
             BitField_DownLeft;
-        
         public static int R3_P14_15 = BitField_Up | BitField_Down | BitField_UpLeft |
             BitField_DownRight | BitField_DownLeft;
-        
         public static int R3_P14_16 = BitField_Up | BitField_Down | BitField_DownRight |
             BitField_DownLeft;
         
         
+        // these are the bits associated with Position 33 in the tile sheet
         public static int R3_P33_1 = BitField_Right;
         public static int R3_P33_2 = BitField_Right | BitField_UpRight;
         public static int R3_P33_3 = BitField_Right | BitField_DownRight;
         public static int R3_P33_4 = BitField_Right | BitField_UpRight | BitField_DownRight;
-        
         public static int R3_P33_5 = BitField_Right | BitField_UpRight | BitField_DownRight |
             BitField_UpLeft;
         public static int R3_P33_6 = BitField_Right | BitField_UpRight | BitField_DownRight |
             BitField_DownLeft;
         public static int R3_P33_7 = BitField_Right | BitField_UpRight | BitField_DownRight | 
             BitField_UpLeft | BitField_DownLeft;
-        
         public static int R3_P33_8 = BitField_Right | BitField_DownRight | BitField_UpLeft;
         public static int R3_P33_9 = BitField_Right | BitField_DownRight | BitField_DownLeft;
         public static int R3_P33_10 = BitField_Right | BitField_DownRight | BitField_UpLeft |
             BitField_DownLeft;
-        
         public static int R3_P33_11 = BitField_Right | BitField_UpRight | BitField_UpLeft;
         public static int R3_P33_12 = BitField_Right | BitField_UpRight | BitField_DownLeft;
         public static int R3_P33_13 = BitField_Right | BitField_UpRight | BitField_UpLeft |
             BitField_DownLeft;
-        
         public static int R3_P33_14 = BitField_Right | BitField_UpLeft;
         public static int R3_P33_15 = BitField_Right | BitField_DownLeft;
         public static int R3_P33_16 = BitField_Right | BitField_UpLeft |
@@ -166,6 +170,7 @@ namespace PlanetTileMap
         
         
         
+        // these are the bits associated with Position 35 in the tile sheet
         public static int R3_P35_1 = BitField_Left;
         public static int R3_P35_2 = BitField_Left | BitField_UpRight;
         public static int R3_P35_3 = BitField_Left | BitField_DownRight;
@@ -193,19 +198,18 @@ namespace PlanetTileMap
         public static int R3_P35_16 = BitField_Left | BitField_UpLeft |
             BitField_DownLeft;
         
+        // these are the bits associated with Position 25 in the tile sheet
         public static int R3_P25_1 = BitField_Up;
         public static int R3_P25_2 = BitField_Up | BitField_UpRight;
         public static int R3_P25_3 = BitField_Up | BitField_DownRight;
         public static int R3_P25_4 = BitField_Up | BitField_UpLeft;
-        public static int R3_P25_5 = BitField_Up | BitField_DownLeft;
-        
+        public static int R3_P25_5 = BitField_Up | BitField_DownLeft;  
         public static int R3_P25_6 = BitField_Up | BitField_UpRight | BitField_DownRight;
         public static int R3_P25_7 = BitField_Up | BitField_UpRight | BitField_UpLeft;
         public static int R3_P25_8 = BitField_Up | BitField_UpRight | BitField_DownLeft;
         public static int R3_P25_9 = BitField_Up | BitField_DownRight | BitField_UpLeft;
         public static int R3_P25_10 = BitField_Up | BitField_DownRight | BitField_DownLeft;
         public static int R3_P25_11 = BitField_Up | BitField_UpLeft | BitField_DownLeft;
-        
         public static int R3_P25_12 = BitField_Up | BitField_UpRight | BitField_DownRight |
             BitField_UpLeft;
         public static int R3_P25_13 = BitField_Up | BitField_UpRight | BitField_DownRight |
@@ -218,28 +222,25 @@ namespace PlanetTileMap
             BitField_DownLeft | BitField_UpLeft;
         
         
+        // these are the bits associated with Position 3 in the tile sheet
         public static int R3_P3_1 = BitField_Down;
         public static int R3_P3_2 = BitField_Down | BitField_UpRight;
         public static int R3_P3_3 = BitField_Down | BitField_DownRight;
         public static int R3_P3_4 = BitField_Down | BitField_UpRight | BitField_DownRight;
-        
         public static int R3_P3_5 = BitField_Down | BitField_UpRight | BitField_DownRight |
             BitField_UpLeft;
         public static int R3_P3_6 = BitField_Down | BitField_UpRight | BitField_DownRight |
             BitField_DownLeft;
         public static int R3_P3_7 = BitField_Down | BitField_UpRight | BitField_DownRight | 
             BitField_UpLeft | BitField_DownLeft;
-        
         public static int R3_P3_8 = BitField_Down | BitField_DownRight | BitField_UpLeft;
         public static int R3_P3_9 = BitField_Down | BitField_DownRight | BitField_DownLeft;
         public static int R3_P3_10 = BitField_Down | BitField_DownRight | BitField_UpLeft |
             BitField_DownLeft;
-        
         public static int R3_P3_11 = BitField_Down | BitField_UpRight | BitField_UpLeft;
         public static int R3_P3_12 = BitField_Down | BitField_UpRight | BitField_DownLeft;
         public static int R3_P3_13 = BitField_Down | BitField_UpRight | BitField_UpLeft |
             BitField_DownLeft;
-        
         public static int R3_P3_14 = BitField_Down | BitField_UpLeft;
         public static int R3_P3_15 = BitField_Down | BitField_DownLeft;
         public static int R3_P3_16 = BitField_Down | BitField_UpLeft |
@@ -247,6 +248,7 @@ namespace PlanetTileMap
         
         
         
+        // these are the bits associated with Position 0 in the tile sheet
         public static int R3_P0_1 = BitField_Right | BitField_Down | BitField_DownRight;
         public static int R3_P0_2 = BitField_Right | BitField_Down | BitField_DownRight |
             BitField_UpRight;
@@ -264,6 +266,7 @@ namespace PlanetTileMap
             BitField_UpRight | BitField_UpLeft | BitField_DownLeft;
         
         
+        // these are the bits associated with Position 4 in the tile sheet
         public static int R3_P4_1 = BitField_Right | BitField_Down;
         public static int R3_P4_2 = BitField_Right | BitField_Down | BitField_UpRight;
         public static int R3_P4_3 = BitField_Right | BitField_Down | BitField_UpLeft;
@@ -277,7 +280,7 @@ namespace PlanetTileMap
         public static int R3_P4_8 = BitField_Right | BitField_Down | BitField_UpRight |
             BitField_UpLeft | BitField_DownLeft;
         
-        
+        // these are the bits associated with Position 2 in the tile sheet
         public static int R3_P2_1 = BitField_Left | BitField_Down | BitField_DownLeft;
         public static int R3_P2_2 = BitField_Left | BitField_Down | BitField_DownLeft |
             BitField_DownRight;
@@ -285,7 +288,6 @@ namespace PlanetTileMap
             BitField_UpRight;
         public static int R3_P2_4 = BitField_Left | BitField_Down | BitField_DownLeft |
             BitField_UpLeft;
-        
         public static int R3_P2_5 = BitField_Left | BitField_Down | BitField_DownLeft |
             BitField_DownRight | BitField_UpRight;
         public static int R3_P2_6 = BitField_Left | BitField_Down | BitField_DownLeft |
@@ -297,6 +299,7 @@ namespace PlanetTileMap
         public static int R3_P2_9 = BitField_Left | BitField_Down | BitField_DownLeft |
             BitField_UpRight | BitField_UpLeft;
         
+        // these are the bits associated with Position 7 in the tile sheet
         public static int R3_P7_1 = BitField_Left | BitField_Down;
         public static int R3_P7_2 = BitField_Left | BitField_Down |
             BitField_DownRight;
@@ -304,7 +307,6 @@ namespace PlanetTileMap
             BitField_UpRight;
         public static int R3_P7_4 = BitField_Left | BitField_Down |
             BitField_UpLeft;
-        
         public static int R3_P7_5 = BitField_Left | BitField_Down |
             BitField_DownRight | BitField_UpRight;
         public static int R3_P7_6 = BitField_Left | BitField_Down |
@@ -317,6 +319,7 @@ namespace PlanetTileMap
             BitField_UpRight | BitField_UpLeft;
         
         
+        // these are the bits associated with Position 22 in the tile sheet
         public static int R3_P22_1 = BitField_Right | BitField_Up | BitField_UpRight;
         public static int R3_P22_2 = BitField_Right | BitField_Up | BitField_UpRight |
             BitField_UpLeft;
@@ -336,6 +339,7 @@ namespace PlanetTileMap
             BitField_DownRight | BitField_DownLeft;
         
         
+        // these are the bits associated with Position 37 in the tile sheet
         public static int R3_P37_1 = BitField_Right | BitField_Up;
         public static int R3_P37_2 = BitField_Right | BitField_Up|
             BitField_UpLeft;
@@ -356,8 +360,8 @@ namespace PlanetTileMap
         
         
         
+        // these are the bits associated with Position 24 in the tile sheet
         public static int R3_P24_1 = BitField_Left | BitField_Up | BitField_UpLeft;
-        
         public static int R3_P24_2 = BitField_Left | BitField_Up | BitField_UpLeft |
             BitField_UpRight;
         public static int R3_P24_3 = BitField_Left | BitField_Up | BitField_UpLeft | 
@@ -366,22 +370,18 @@ namespace PlanetTileMap
             BitField_DownLeft;
         public static int R3_P24_5 = BitField_Left | BitField_Up | BitField_UpLeft |
             BitField_UpRight | BitField_DownRight;
-        
         public static int R3_P24_6 = BitField_Left | BitField_Up | BitField_UpLeft |
-            BitField_UpRight | BitField_DownLeft;
-        
+            BitField_UpRight | BitField_DownLeft;  
         public static int R3_P24_7 = BitField_Left | BitField_Up | BitField_UpLeft |
             BitField_DownLeft | BitField_DownRight;
-        
         public static int R3_P24_8 = BitField_Left | BitField_Up | BitField_UpLeft |
             BitField_UpRight | BitField_DownLeft | BitField_DownRight;
-        
         public static int R3_P24_9 = BitField_Left | BitField_Up | BitField_UpLeft |
             BitField_DownLeft | BitField_DownRight;
         
         
+        // these are the bits associated with Position 40 in the tile sheet
         public static int R3_P40_1 = BitField_Left | BitField_Up;
-        
         public static int R3_P40_2 = BitField_Left | BitField_Up|
             BitField_UpRight;
         public static int R3_P40_3 = BitField_Left | BitField_Up | 
@@ -389,21 +389,18 @@ namespace PlanetTileMap
         public static int R3_P40_4 = BitField_Left | BitField_Up | 
             BitField_DownLeft;
         public static int R3_P40_5 = BitField_Left | BitField_Up |
-            BitField_UpRight | BitField_DownRight;
-        
+            BitField_UpRight | BitField_DownRight; 
         public static int R3_P40_6 = BitField_Left | BitField_Up |
             BitField_UpRight | BitField_DownLeft;
-        
         public static int R3_P40_7 = BitField_Left | BitField_Up |
             BitField_DownLeft | BitField_DownRight;
-        
         public static int R3_P40_8 = BitField_Left | BitField_Up |
             BitField_UpRight | BitField_DownLeft | BitField_DownRight;
-        
         public static int R3_P40_9 = BitField_Left | BitField_Up |
             BitField_DownLeft | BitField_DownRight;
         
         
+        // these are the bits associated with Position 11 in the tile sheet
         public static int R3_P11_1 = BitField_Right | BitField_UpRight |
             BitField_DownRight | BitField_Up | BitField_Down;
         public static int R3_P11_2 = BitField_Right | BitField_UpRight |
@@ -414,6 +411,7 @@ namespace PlanetTileMap
             BitField_DownRight | BitField_Up | BitField_Down | BitField_UpLeft |
             BitField_DownLeft;
         
+        // these are the bits associated with Position 15 in the tile sheet
         public static int R3_P15_1 = BitField_Right | BitField_UpRight |
             BitField_Up | BitField_Down;
         public static int R3_P15_2 = BitField_Right | BitField_UpRight |
@@ -424,6 +422,7 @@ namespace PlanetTileMap
             BitField_Up | BitField_Down | BitField_UpLeft |
             BitField_DownLeft;
         
+        // these are the bits associated with Position 26 in the tile sheet
         public static int R3_P26_1 = BitField_Right | BitField_Up | BitField_Down |
             BitField_DownRight;
         public static int R3_P26_2 = BitField_Right | BitField_Up| BitField_Down |
@@ -444,6 +443,7 @@ namespace PlanetTileMap
             BitField_DownRight | BitField_DownRight | BitField_DownLeft;
         
         
+        // these are the bits associated with Position 48 in the tile sheet
         public static int R3_P48_1 = BitField_Right | BitField_Up | BitField_Down;
         public static int R3_P48_2 = BitField_Right | BitField_Up | BitField_Down |
             BitField_UpLeft | BitField_DownLeft;
@@ -452,6 +452,7 @@ namespace PlanetTileMap
         public static int R3_P48_4 = BitField_Right | BitField_Up | BitField_Down |
             BitField_DownLeft;
         
+        // these are the bits associated with Position 13 in the tile sheet
         public static int R3_P13_1 = BitField_Left | BitField_UpLeft | BitField_DownLeft |
             BitField_Up | BitField_Down;
         public static int R3_P13_2 = BitField_Left | BitField_UpLeft | BitField_DownLeft |
@@ -462,6 +463,7 @@ namespace PlanetTileMap
             BitField_Up | BitField_Down | BitField_UpRight | BitField_DownRight;
         
         
+        // these are the bits associated with Position 18 in the tile sheet
         public static int R3_P18_1 = BitField_Left | BitField_UpLeft |
             BitField_Up | BitField_Down;
         public static int R3_P18_2 = BitField_Left | BitField_UpLeft |
@@ -471,6 +473,7 @@ namespace PlanetTileMap
         public static int R3_P18_4 = BitField_Left | BitField_UpLeft |
             BitField_Up | BitField_Down | BitField_UpRight | BitField_DownRight;
         
+        // these are the bits associated with Position 29 in the tile sheet
         public static int R3_P29_1 = BitField_Left | BitField_DownLeft |
             BitField_Up | BitField_Down;
         public static int R3_P29_2 = BitField_Left | BitField_DownLeft |
@@ -480,6 +483,8 @@ namespace PlanetTileMap
         public static int R3_P29_4 = BitField_Left | BitField_DownLeft |
             BitField_Up | BitField_Down | BitField_UpRight | BitField_DownRight;
         
+
+        // these are the bits associated with Position 51 in the tile sheet
         public static int R3_P51_1 = BitField_Left | BitField_Up | BitField_Down;
         public static int R3_P51_2 = BitField_Left | BitField_Up | BitField_Down | 
             BitField_UpRight;
@@ -488,6 +493,7 @@ namespace PlanetTileMap
         public static int R3_P51_4 = BitField_Left | BitField_Up | BitField_Down |
             BitField_UpRight | BitField_DownRight;
         
+        // these are the bits associated with Position 23 in the tile sheet
         public static int R3_P23_1 = BitField_Up | BitField_UpLeft | BitField_UpRight |
             BitField_Right | BitField_Left;
         public static int R3_P23_2 = BitField_Up | BitField_UpLeft | BitField_UpRight |
@@ -498,6 +504,7 @@ namespace PlanetTileMap
             BitField_Right | BitField_Left |  BitField_DownRight | BitField_DownLeft;
         
         
+        // these are the bits associated with Position 38 in the tile sheet
         public static int R3_P38_1 = BitField_Up | BitField_Right | BitField_Left |
             BitField_UpLeft;
         public static int R3_P38_2 = BitField_Up | BitField_Right | BitField_Left |
@@ -507,6 +514,8 @@ namespace PlanetTileMap
         public static int R3_P38_4 = BitField_Up | BitField_Right | BitField_Left |
             BitField_UpLeft | BitField_DownRight | BitField_DownLeft;
         
+
+        // these are the bits associated with Position 39 in the tile sheet
         public static int R3_P39_1 = BitField_Up | BitField_Right | BitField_Left |
             BitField_UpRight | BitField_DownRight;
         public static int R3_P39_2 = BitField_Up | BitField_Right | BitField_Left |
@@ -516,6 +525,8 @@ namespace PlanetTileMap
         public static int R3_P39_4 = BitField_Up | BitField_Right | BitField_Left |
             BitField_UpRight | BitField_DownRight | BitField_DownLeft;
         
+
+        // these are the bits associated with Position 41 in the tile sheet
         public static int R3_P41_1 = BitField_Up | BitField_Left | BitField_Right;
         public static int R3_P41_2 = BitField_Up | BitField_Left | BitField_Right |
             BitField_DownRight;
@@ -524,6 +535,7 @@ namespace PlanetTileMap
         public static int R3_P41_4 = BitField_Up | BitField_Left | BitField_Right |
             BitField_DownRight | BitField_DownLeft;
         
+        // these are the bits associated with Position 1 in the tile sheet
         public static int R3_P1_1 = BitField_Down | BitField_DownLeft | BitField_DownRight |
             BitField_Right | BitField_Left;
         public static int R3_P1_2 = BitField_Down | BitField_DownLeft | BitField_DownRight |
@@ -534,6 +546,7 @@ namespace PlanetTileMap
             BitField_Right | BitField_Left | BitField_UpLeft | BitField_UpRight;
         
         
+        // these are the bits associated with Position 5 in the tile sheet
         public static int R3_P5_1 = BitField_Down | BitField_DownLeft |
             BitField_Right | BitField_Left;
         public static int R3_P5_2 = BitField_Down | BitField_DownLeft |
@@ -543,6 +556,7 @@ namespace PlanetTileMap
         public static int R3_P5_4 = BitField_Down | BitField_DownLeft |
             BitField_Right | BitField_Left | BitField_UpLeft | BitField_UpRight;
         
+        // these are the bits associated with Position 6 in the tile sheet
         public static int R3_P6_1 = BitField_Down | BitField_DownRight |
             BitField_Right | BitField_Left;
         public static int R3_P6_2 = BitField_Down | BitField_DownRight |
@@ -552,6 +566,8 @@ namespace PlanetTileMap
         public static int R3_P6_4 = BitField_Down | BitField_DownRight |
             BitField_Right | BitField_Left | BitField_UpLeft | BitField_UpRight;
         
+
+        // these are the bits associated with Position 8 in the tile sheet
         public static int R3_P8_1 = BitField_Down | BitField_Right | 
             BitField_Left;
         public static int R3_P8_2 = BitField_Down | BitField_Right | BitField_Left |
@@ -567,12 +583,18 @@ namespace PlanetTileMap
         public static int[] R3_Map;
         static SpriteRule_R3()
         {
+            // creating the static Rule array
             R3_Map = new int[256];
+
+            // empty cells will default to tile position 36
             for(int i = 0; i < 256; i++)
             {
                 R3_Map[i] = 36; 
             } 
             
+            // each position in the array must be 
+            // set to a tile position
+
             R3_Map[R3_P12] = 12;
             R3_Map[R3_P17] = 17;
             R3_Map[R3_P19] = 19;
@@ -867,7 +889,8 @@ namespace PlanetTileMap
             
             int neighborsBitField = 0;
             
-            
+            // check if Right Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
             if (x + 1 < tileMap.MapSize.X)
             {
                 ref var neighborTile = ref tileMap.GetTile(x + 1, y, planetLayer);
@@ -877,6 +900,8 @@ namespace PlanetTileMap
                 }
             }
             
+            // check if Left Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
             if (x - 1 >= 0)
             {
                 ref var neighborTile = ref tileMap.GetTile(x - 1, y, planetLayer);
@@ -886,6 +911,8 @@ namespace PlanetTileMap
                 }
             }
             
+            // check if Up Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
             if (y + 1 < tileMap.MapSize.Y)
             {
                 ref var neighborTile = ref tileMap.GetTile(x, y + 1, planetLayer);
@@ -895,6 +922,8 @@ namespace PlanetTileMap
                 }
             }
             
+            // check if Down Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
             if (y - 1 >= 0)
             {
                 ref var neighborTile = ref tileMap.GetTile(x, y - 1, planetLayer);
@@ -904,6 +933,8 @@ namespace PlanetTileMap
                 }
             }
             
+            // check if Up Right Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
             if (x + 1 < tileMap.MapSize.X && y + 1 < tileMap.MapSize.Y)
             {
                 ref var neighborTile = ref tileMap.GetTile(x + 1, y + 1, planetLayer);
@@ -913,6 +944,8 @@ namespace PlanetTileMap
                 }
             }
             
+            // check if Up Left Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
             if (x - 1 >= 0 && y + 1 < tileMap.MapSize.Y)
             {
                 ref var neighborTile = ref tileMap.GetTile(x - 1, y + 1, planetLayer);
@@ -922,6 +955,8 @@ namespace PlanetTileMap
                 }
             }
             
+            // check if Down Right Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
             if (x + 1 < tileMap.MapSize.X && y - 1 >= 0)
             {
                 ref var neighborTile = ref tileMap.GetTile(x + 1, y - 1, planetLayer);
@@ -931,6 +966,8 @@ namespace PlanetTileMap
                 }
             }
             
+            // check if Down Left Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
             if (x - 1 >= 0 && y - 1 >= 0)
             {
                 ref var neighborTile = ref tileMap.GetTile(x - 1, y - 1, planetLayer);
