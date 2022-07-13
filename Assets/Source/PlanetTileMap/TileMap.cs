@@ -188,6 +188,8 @@ namespace PlanetTileMap
         // Update data of tile, update sprites of tile and etc.
         #region Tile updater
 
+        // when a tile is (deleted/changed) tile sprite ids
+        // of all the neighbors must be re-evaluated
         private void UpdateTile(int x, int y, MapLayerType type)
         {
             for(int i = x - 1; i <= x + 1; i++)
@@ -201,6 +203,7 @@ namespace PlanetTileMap
             }
         }
 
+        // updates all the sprite ids in the layer
         public void UpdateTileMapPositions(MapLayerType planetLayer)
         {
             for(int y = 0; y < MapSize.Y; y++)
@@ -224,6 +227,10 @@ namespace PlanetTileMap
 
         
         
+
+        // Updating the Sprite id requires checking the neighboring tiles
+        // each sprite Rule respresent a different way of looking at the neighbors
+        // to determine the sprite ids
         private void UpdateNeighbourTiles(int x, int y, MapLayerType planetLayer)
         {
             ref var tile = ref GetTile(x, y, planetLayer);
@@ -235,15 +242,15 @@ namespace PlanetTileMap
                 {
                     if (property.SpriteRuleType == SpriteRuleType.R1)
                     {
-                        TileMapping.UpdateSpriteRule_R1(x, y, planetLayer, ref this);
+                        SpriteRule_R1.UpdateSprite(x, y, planetLayer, ref this);
                     }
                     else if (property.SpriteRuleType == SpriteRuleType.R2)
                     {
-                        TileMapping.UpdateSpriteRule_R2(x, y, planetLayer, ref this);
+                        SpriteRule_R2.UpdateSprite(x, y, planetLayer, ref this);
                     }
                     else if (property.SpriteRuleType == SpriteRuleType.R3)
                     {
-                        TileMapping.UpdateSpriteRule_R3_New(x, y, planetLayer, ref this);
+                        SpriteRule_R3.UpdateSprite(x, y, planetLayer, ref this);
                     }
                 }
                 else
@@ -261,6 +268,8 @@ namespace PlanetTileMap
 
         #endregion
 
+        // this is called every frame to update a limited number of sprite ids
+        // the excess will be pushed to the next frame
         public void UpdateTiles()
         {
             for(int i = 0; i < 1024 * 32 && i < ToUpdateTiles.Count; i++)
