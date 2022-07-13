@@ -5,27 +5,46 @@ using Animancer;
 
 public class AnimancerTestScript : MonoBehaviour
 {
+
+    public static int HumanoidCount = 3;
+    GameObject[] HumanoidArray;
+
     AnimationClip IdleAnimationClip ;
     AnimationClip RunAnimationClip ;
     AnimationClip WalkAnimationClip ;
 
 
-    AnimancerComponent AnimancerComponent;
+    AnimancerComponent[] AnimancerComponentArray;
 
     void Start()
     {
         // get the 3d model from the scene
-        GameObject humanoid = GameObject.Find("DefaultHumanoid");
+        //GameObject humanoid = GameObject.Find("DefaultHumanoid");
+
+        // load the 3d model from file
+        GameObject prefab = (GameObject)Resources.Load("DefaultHumanoid");
+
+        HumanoidArray = new GameObject[HumanoidCount];
+        AnimancerComponentArray = new AnimancerComponent[HumanoidCount];
+
+        for(int i = 0; i < HumanoidCount; i++)
+        {
+            HumanoidArray[i] = Instantiate(prefab);
+            HumanoidArray[i].transform.position += new Vector3(i, 0.0f, 0.0f);
+        }
+
 
         // get the animator component from the game object
         // this component is used by animancer
-        Animator _Animator = humanoid.GetComponent<Animator>();
 
 
         // create an animancer object and give it a reference to the Animator component
-        GameObject obj = new GameObject("AnimancerComponent", typeof(AnimancerComponent));
-        AnimancerComponent = obj.GetComponent<AnimancerComponent>();
-        AnimancerComponent.Animator = _Animator;
+        for(int i = 0; i < HumanoidCount; i++)
+        {
+            GameObject animancerComponent = new GameObject("AnimancerComponent", typeof(AnimancerComponent));
+            AnimancerComponentArray[i] = animancerComponent.GetComponent<AnimancerComponent>();
+            AnimancerComponentArray[i].Animator = HumanoidArray[i].GetComponent<Animator>();
+        }
 
         
         // load some animation clips from disk
@@ -35,7 +54,10 @@ public class AnimancerTestScript : MonoBehaviour
 
 
         // play the idle animation
-        AnimancerComponent.Play(IdleAnimationClip);
+        for(int i = 0; i < HumanoidCount; i++)
+        {
+            AnimancerComponentArray[i].Play(IdleAnimationClip);
+        }
     }
 
     // Update is called once per frame
@@ -45,17 +67,20 @@ public class AnimancerTestScript : MonoBehaviour
         bool walk = Input.GetKeyDown(KeyCode.W);
         bool idle = Input.GetKeyDown(KeyCode.I);
 
-        if (run)
+        for(int i = 0; i < HumanoidCount; i++)
         {
-            AnimancerComponent.Play(RunAnimationClip);
-        }
-        else if (walk)
-        {
-            AnimancerComponent.Play(WalkAnimationClip);
-        }
-        else if (idle)
-        {
-            AnimancerComponent.Play(IdleAnimationClip);
+            if (run)
+            {
+                AnimancerComponentArray[i].Play(RunAnimationClip);
+            }
+            else if (walk)
+            {
+                AnimancerComponentArray[i].Play(WalkAnimationClip);
+            }
+            else if (idle)
+            {
+                AnimancerComponentArray[i].Play(IdleAnimationClip);
+            }
         }
     }
 }
