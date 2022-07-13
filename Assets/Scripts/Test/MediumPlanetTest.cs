@@ -133,7 +133,7 @@ namespace Planet.Unity
                     }
 
 
-                    tileMap.SetTile(i, j, frontTileID, MapLayerType.Front);
+                    tileMap.SetFrontTile(i, j, frontTileID);
                 }
             }
 

@@ -262,9 +262,9 @@ namespace Planet
             TileMap.UpdateTileSprites();
             
             // Update Meshes.
-            GameState.TileMapRenderer.UpdateLayerMesh(MapLayerType.Back, ref TileMap);
-            GameState.TileMapRenderer.UpdateLayerMesh(MapLayerType.Mid, ref TileMap);
-            GameState.TileMapRenderer.UpdateLayerMesh(MapLayerType.Front, ref TileMap);
+            GameState.TileMapRenderer.UpdateBackLayerMesh(ref TileMap);
+            GameState.TileMapRenderer.UpdateMidLayerMesh(ref TileMap);
+            GameState.TileMapRenderer.UpdateFrontLayerMesh(ref TileMap);
             GameState.ItemMeshBuilderSystem.UpdateMesh(EntitasContext);
             GameState.AgentMeshBuilderSystem.UpdateMesh(EntitasContext.agent);
             GameState.ProjectileMeshBuilderSystem.UpdateMesh(EntitasContext.projectile);
