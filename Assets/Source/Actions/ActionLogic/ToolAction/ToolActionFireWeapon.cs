@@ -2,7 +2,7 @@
 using KMath;
 using Planet;
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 namespace Action
 {
@@ -12,6 +12,9 @@ namespace Action
         private ProjectileEntity ProjectileEntity;
         private ItemInventoryEntity ItemEntity;
         private Vec2f StartPos;
+
+        // Cone
+        private List<ProjectileEntity> EndPointList = new List<ProjectileEntity>();
 
         public ToolActionFireWeapon(Contexts entitasContext, int actionID) : base(entitasContext, actionID)
         {
@@ -53,13 +56,12 @@ namespace Action
                 {
                     var random = UnityEngine.Random.Range(-spread.SpreadAngle, spread.SpreadAngle);
                     ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f((x - StartPos.X) - random, y - StartPos.Y).Normalized, Enums.ProjectileType.Bullet);
+                    EndPointList.Add(ProjectileEntity);
                 }
             }
 
             ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Bullet);
-
-            /* ProjectileEntity = GameState.ProjectileSpawnerSystem.SpawnBullet(GameResources.OreIcon, 4, 4, StartPos, 
-                 new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized * speed, Vec2f.Zero, Enums.ProjectileType.Bullet, Enums.ProjectileDrawType.Standard);*/
+            EndPointList.Add(ProjectileEntity);
 
             ActionEntity.actionExecution.State = Enums.ActionState.Running;
 
@@ -83,6 +85,14 @@ namespace Action
             {
                 ActionEntity.actionExecution.State = Enums.ActionState.Success;
             }
+
+#if UNITY_EDITOR
+            for (int i = 0; i < EndPointList.Count; i++)
+            {
+                if (EndPointList[i].hasProjectilePosition2D)
+                    Debug.DrawLine(new Vector3(StartPos.X, StartPos.Y, 0), new Vector3(EndPointList[i].projectilePosition2D.Value.X, EndPointList[i].projectilePosition2D.Value.Y, 0), Color.red, 2.0f, false);
+            }
+#endif
 
             // Check if projectile has hit a enemy.
             var entities = EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
