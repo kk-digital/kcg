@@ -46,6 +46,16 @@ namespace Action
             StartPos.X += 0.3f;
             StartPos.Y += 0.5f;
 
+            if (ItemEntity.hasItemFireWeaponSpread)
+            {
+                var spread = ItemEntity.itemFireWeaponSpread;
+                for(int i = 0; i < bulletsPerShot; i++)
+                {
+                    var random = UnityEngine.Random.Range(-spread.SpreadAngle, spread.SpreadAngle);
+                    ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f((x - StartPos.X) - random, y - StartPos.Y).Normalized, Enums.ProjectileType.Bullet);
+                }
+            }
+
             ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Bullet);
 
             /* ProjectileEntity = GameState.ProjectileSpawnerSystem.SpawnBullet(GameResources.OreIcon, 4, 4, StartPos, 

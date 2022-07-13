@@ -4,7 +4,7 @@ using Enums;
 
 namespace Item.FireWeapon
 {
-    [ItemInventory]
+    [ItemParticle, ItemInventory]
     public class ChargeComponent : IComponent
     {
         public bool CanCharge;

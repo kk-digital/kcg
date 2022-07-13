@@ -30,6 +30,11 @@ namespace Item
                 entity.AddItemFireWeaponClip(weaponProperty.ClipSize, weaponProperty.BulletsPerShot);
             }
 
+            if (weaponProperty.ShouldSpread())
+            {
+                entity.AddItemFireWeaponSpread(weaponProperty.SpreadAngle);
+            }
+
             ItemID++;
             return entity;
         }
@@ -49,6 +54,8 @@ namespace Item
                 entity.AddItemStack(itemInventoryEntity.itemStack.Count);
             if(itemInventoryEntity.hasItemFireWeaponClip)
                 entity.ReplaceItemFireWeaponClip(itemInventoryEntity.itemFireWeaponClip.NumOfBullets, itemInventoryEntity.itemFireWeaponClip.BulletsPerShot);
+            if (itemInventoryEntity.hasItemFireWeaponSpread)
+                entity.ReplaceItemFireWeaponSpread(itemInventoryEntity.itemFireWeaponSpread.SpreadAngle);
 
             itemInventoryEntity.Destroy();
 
@@ -75,6 +82,11 @@ namespace Item
                     weaponProperty.ChargeMax);
             }
 
+            if (weaponProperty.ShouldSpread())
+            {
+                entity.AddItemFireWeaponSpread(weaponProperty.SpreadAngle);
+            }
+
             ItemID++;
             return entity;
         }
@@ -89,6 +101,8 @@ namespace Item
                 entity.AddItemStack(itemParticleEntity.itemStack.Count);
             if (itemParticleEntity.hasItemFireWeaponClip)
                 entity.ReplaceItemFireWeaponClip(itemParticleEntity.itemFireWeaponClip.NumOfBullets, itemParticleEntity.itemFireWeaponClip.BulletsPerShot);
+            if (itemParticleEntity.hasItemFireWeaponSpread)
+                entity.ReplaceItemFireWeaponSpread(itemParticleEntity.itemFireWeaponSpread.SpreadAngle);
 
             itemParticleEntity.Destroy();
 

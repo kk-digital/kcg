@@ -1,6 +1,8 @@
 ﻿using Enums;
 using KMath;
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 
 namespace Item
@@ -104,9 +106,11 @@ namespace Item
         public enum Flags : byte
         {
             HasClip = 1 << 0,
-            HasCharge = 2 << 1, // Note[Joao] Exemple not implemented yet.
+            ShouldSpread = 2 << 1,
+            HasCharge = 3 << 2
         }
         public bool HasClip() { return WeaponFlags.HasFlag(Flags.HasClip); }
+        public bool ShouldSpread() { return WeaponFlags.HasFlag(Flags.ShouldSpread); }
         public bool HasCharge() { return WeaponFlags.HasFlag(Flags.HasCharge); }
     }
 }

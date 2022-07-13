@@ -9,22 +9,26 @@
 public static class ItemParticleComponentsLookup {
 
     public const int ItemDrawPosition2D = 0;
-    public const int ItemFireWeaponClip = 1;
-    public const int ItemID = 2;
-    public const int ItemLabel = 3;
-    public const int ItemStack = 4;
-    public const int ItemType = 5;
-    public const int ItemUnpickable = 6;
-    public const int PhysicsBox2DCollider = 7;
-    public const int PhysicsMovable = 8;
-    public const int PhysicsPosition2D = 9;
-    public const int PhysicsSphere2DCollider = 10;
+    public const int ItemFireWeaponCharge = 1;
+    public const int ItemFireWeaponClip = 2;
+    public const int ItemFireWeaponSpread = 3;
+    public const int ItemID = 4;
+    public const int ItemLabel = 5;
+    public const int ItemStack = 6;
+    public const int ItemType = 7;
+    public const int ItemUnpickable = 8;
+    public const int PhysicsBox2DCollider = 9;
+    public const int PhysicsMovable = 10;
+    public const int PhysicsPosition2D = 11;
+    public const int PhysicsSphere2DCollider = 12;
 
-    public const int TotalComponents = 11;
+    public const int TotalComponents = 13;
 
     public static readonly string[] componentNames = {
         "ItemDrawPosition2D",
+        "ItemFireWeaponCharge",
         "ItemFireWeaponClip",
+        "ItemFireWeaponSpread",
         "ItemID",
         "ItemLabel",
         "ItemStack",
@@ -38,7 +42,9 @@ public static class ItemParticleComponentsLookup {
 
     public static readonly System.Type[] componentTypes = {
         typeof(Item.DrawPosition2DComponent),
+        typeof(Item.FireWeapon.ChargeComponent),
         typeof(Item.FireWeapon.ClipComponent),
+        typeof(Item.FireWeapon.SpreadComponent),
         typeof(Item.IDComponent),
         typeof(Item.LabelComponent),
         typeof(Item.StackComponent),

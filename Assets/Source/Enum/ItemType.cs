@@ -6,14 +6,18 @@
         Rock,
         RockDust,
         Ore,
+
         /// <summary>
         /// Weapons
         /// </summary>
         Gun,
+        Shotgun,
+
         /// <summary>
         /// Throwable Explosive Weapons
         /// </summary>
         Grenade,
+
         /// <summary>
         /// Tools
         /// </summary>
