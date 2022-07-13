@@ -3,11 +3,12 @@ using UnityEngine;
 
 namespace Scripts {
     namespace SystemView {
-        class Background : MonoBehaviour {
+        public class Background : MonoBehaviour {
             public int            seed;
             public int            stars;
             public int            width;
             public int            height;
+
             public Texture2D      texture;
             public SpriteRenderer renderer;
 
@@ -45,7 +46,7 @@ namespace Scripts {
                                                 new Rect(0, 0, width, height),
                                                 new Vector2(0.5f, 0.5f));
 
-                renderer.transform.Translate(new Vector3(0.0f, 0.0f, -2.0f));
+                renderer.transform.Translate(new Vector3(0.0f, 0.0f, 10.0f));
             }
         }
     }
