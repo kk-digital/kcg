@@ -19,13 +19,6 @@ namespace Scripts {
 
             private System.Random rng;
 
-            private float smootherstep(float a, float b, float w) {
-                if(w < 0.0f) return a;
-                if(w > 1.0f) return b;
-
-                return (b - a) * ((w * (w * 6.0f - 15.0f) + 10.0f) * w * w * w) + a;
-            }
-
             private float[] generate_noise(float strength, int w, int h) {
                 float[] noise = new float[w * h];
 
@@ -111,17 +104,17 @@ namespace Scripts {
                 for(int x = 0; x < w - 1; x++)
                     for(int y = 0; y < h; y++)
                         for(int i = 0; i < scale; i++)
-                            smoothed_noise[i + x * scale + y * scale * scaled_w] = smootherstep(noise[ x      + y * w],
-                                                                                                noise[(x + 1) + y * w],
-                                                                                                (float)i * scale_factor);
+                            smoothed_noise[i + x * scale + y * scale * scaled_w] = Tools.smootherstep(noise[ x      + y * w],
+                                                                                                      noise[(x + 1) + y * w],
+                                                                                                      (float)i * scale_factor);
 
                 // Vertical smoothing
                 for(int x = 0; x < scaled_w; x++)
                     for(int y = 0; y < h - 1; y++)
                         for(int i = 0; i < scale; i++)
-                            smoothed_noise[x + (y * scale + i) * scaled_w]       = smootherstep(smoothed_noise[x +  y      * scale * scaled_w],
-                                                                                                smoothed_noise[x + (y + 1) * scale * scaled_w],
-                                                                                                (float)i * scale_factor);
+                            smoothed_noise[x + (y * scale + i) * scaled_w]       = Tools.smootherstep(smoothed_noise[x +  y      * scale * scaled_w],
+                                                                                                      smoothed_noise[x + (y + 1) * scale * scaled_w],
+                                                                                                      (float)i * scale_factor);
 
                 return smoothed_noise;
             }
@@ -164,10 +157,10 @@ namespace Scripts {
                         float dx = original_x - x0;
                         float dy = original_y - y0;
 
-                        float p0 = smootherstep(noise[x0 % width + (y0 % height) * width], noise[x1 % width + (y0 % height) * width], dx);
-                        float p1 = smootherstep(noise[x0 % width + (y1 % height) * width], noise[x1 % width + (y1 % height) * width], dx);
+                        float p0 = Tools.smootherstep(noise[x0 % width + (y0 % height) * width], noise[x1 % width + (y0 % height) * width], dx);
+                        float p1 = Tools.smootherstep(noise[x0 % width + (y1 % height) * width], noise[x1 % width + (y1 % height) * width], dx);
 
-                        distorted[x + y * width] = smootherstep(p0, p1, dy);
+                        distorted[x + y * width] = Tools.smootherstep(p0, p1, dy);
                     }
 
                 return distorted;
@@ -219,10 +212,10 @@ namespace Scripts {
                             int   y0             =  y;
                             int   y1             = (y + 1) % height;
 
-                            float v0             = smootherstep(noise[x0 + y0 * width], noise[x1 + y0 * width], (noise[x0 + y0 * width] + noise[x1 + y0 * width]) * 0.5f);
-                            float v1             = smootherstep(noise[x0 + y1 * width], noise[x1 + y1 * width], (noise[x0 + y1 * width] + noise[x1 + y1 * width]) * 0.5f);
+                            float v0             = Tools.smootherstep(noise[x0 + y0 * width], noise[x1 + y0 * width], (noise[x0 + y0 * width] + noise[x1 + y0 * width]) * 0.5f);
+                            float v1             = Tools.smootherstep(noise[x0 + y1 * width], noise[x1 + y1 * width], (noise[x0 + y1 * width] + noise[x1 + y1 * width]) * 0.5f);
 
-                            noise[x + y * width] = smootherstep(v0, v1, (v0 + v1) * 0.5f);
+                            noise[x + y * width] = Tools.smootherstep(v0, v1, (v0 + v1) * 0.5f);
                         }
 
                 return noise;
@@ -244,7 +237,7 @@ namespace Scripts {
                         if(d <= 0.15f)
                             output[x + y * width] = noise[x + y * width];
                         else if(d <= 0.5f)
-                            output[x + y * width] = smootherstep(0.0f, noise[x + y * width], (0.5f - d) / 0.35f);
+                            output[x + y * width] = Tools.smootherstep(0.0f, noise[x + y * width], (0.5f - d) / 0.35f);
             }
 
                 return output;
@@ -333,13 +326,13 @@ namespace Scripts {
 
                     for(int x = 0; x < width; x++)
                         for(int y = 0; y < height; y++) {
-                            float a                 = smootherstep(alpha[x + y * width] * 0.3f, 0.0f, 1.0f - pixels[x + y * width].a);
+                            float a                 = Tools.smootherstep(alpha[x + y * width] * 0.3f, 0.0f, 1.0f - pixels[x + y * width].a);
 
                             float d                 = Tools.get_distance(x, y, target_x, target_y) / Tools.get_distance(0, 0, width, height);
 
-                            float r                 = smootherstep(r0, r1, d);
-                            float g                 = smootherstep(g0, g1, d);
-                            float b                 = smootherstep(b0, b1, d);
+                            float r                 = Tools.smootherstep(r0, r1, d);
+                            float g                 = Tools.smootherstep(g0, g1, d);
+                            float b                 = Tools.smootherstep(b0, b1, d);
 
                             float blended_alpha     =      a +                           pixels[x + y * width].a * (1.0f - a);
                             pixels[x + y * width].r = (r * a + pixels[x + y * width].r * pixels[x + y * width].a * (1.0f - a)) / blended_alpha;

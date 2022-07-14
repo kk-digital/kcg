@@ -84,6 +84,20 @@ namespace Source {
                 if (angle < 0.0f) angle += twopi;
                 return angle;
             }
+
+            /*
+             * Picks a value between a and b, using a smootherstep curve.
+             * 
+             * For w <= 0.0 it returns a.
+             * For w >= 1.0 it returns b.
+             * For 0.0 < w < 1.0 it returns a value between a and b along a smootherstep curve.
+             */
+            public static float smootherstep(float a, float b, float w) {
+                if(w < 0.0f) return a;
+                if(w > 1.0f) return b;
+
+                return (b - a) * ((w * (w * 6.0f - 15.0f) + 10.0f) * w * w * w) + a;
+            }
         }
     }
 }
