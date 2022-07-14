@@ -13,9 +13,8 @@ namespace Scripts {
             WEAPON_TURRET     = 1 << 3,
             WEAPON_ROCKET     = 1 << 4,
             WEAPON_SEEKING    = 1 << 5,       // Projectiles that seek nearby enemies
-            WEAPON_TRACKING   = 1 << 6,       // Projectiles that seek nearby enemies, but use more accurate targeting. Has to be combined with seeking.
-            WEAPON_POSX       = 1 << 7,       // Left  = flags & WEAPON_POSX, right = ~flags & WEAPON_POSX
-            WEAPON_POSY       = 1 << 8,       // front = flags & WEAPON_POSY, back  = ~flags & WEAPON_POSY
+            WEAPON_POSX       = 1 << 6,       // Left  = flags & WEAPON_POSX, right = ~flags & WEAPON_POSX
+            WEAPON_POSY       = 1 << 7,       // front = flags & WEAPON_POSY, back  = ~flags & WEAPON_POSY
         }
 
         public class ShipWeapon {
@@ -51,6 +50,7 @@ namespace Scripts {
             public float projectile_mass = 0.01f;
 
             public float max_velocity;
+            public float detection_angle;
 
             public int   penetration = 1; // Amount of enemies beams and projectiles can hit
 
@@ -392,7 +392,7 @@ namespace Scripts {
                         projectile.Damage            = damage;
 
                         projectile.seeking           = (flags & (int)WeaponFlags.WEAPON_SEEKING)  != 0;
-                        projectile.overshoot         = (flags & (int)WeaponFlags.WEAPON_TRACKING) != 0;
+                        projectile.detection_angle   = detection_angle;
                         projectile.rocket            = (flags & (int)WeaponFlags.WEAPON_ROCKET)   != 0;
                         projectile.acc_angle         = angle;
                         projectile.acc               = acc;

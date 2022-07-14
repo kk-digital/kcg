@@ -324,12 +324,14 @@ namespace Scripts {
                 right_gun.flags                  = (int)WeaponFlags.WEAPON_PROJECTILE
                                                  | (int)WeaponFlags.WEAPON_BROADSIDE;
 
-                ShipWeapon turret                = ShipWeapon.add_auto_cannon(Player.ship, State, (int)WeaponFlags.WEAPON_TURRET | (int)WeaponFlags.WEAPON_SEEKING);
+                ShipWeapon turret                = ShipWeapon.add_auto_cannon(Player.ship, State, (int)WeaponFlags.WEAPON_TURRET
+                                                                                                | (int)WeaponFlags.WEAPON_SEEKING);
 
                 turret.rotation                  = Tools.pi;
                 turret.rotation_rate             = 2.0f;
                 turret.acc                       = 2.5f;
                 turret.max_velocity              = 12.5f;
+                turret.detection_angle           = Tools.halfpi;
 
                 ShipWeapon laser                 = new ShipWeapon();
 
