@@ -384,7 +384,7 @@ namespace Scripts {
                                                 new Rect(0, 0, width, height),
                                                 new Vector2(0.5f, 0.5f));
 
-                renderer.transform.Translate(new Vector3(0.0f, 0.0f, 5.0f));
+                renderer.transform.Translate(new Vector3(0.0f, 0.0f, renderer.transform.position.z + 5.0f));
             }
         }
     }
