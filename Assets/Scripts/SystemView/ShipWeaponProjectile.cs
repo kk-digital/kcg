@@ -24,6 +24,7 @@ namespace Scripts {
             public float ShieldDamageMultiplier;
             public float HullDamageMultiplier;
 
+            public float acc_angle;
             public float acc;
             public bool  overshoot;
             public bool  seeking;
@@ -263,10 +264,8 @@ namespace Scripts {
                 }
 
                 if(rocket && !accelerated) {
-                    float vel   = Tools.magnitude(Body.velx, Body.vely);
-
-                    Body.velx  += acc * dt * Body.velx / vel;
-                    Body.vely  += acc * dt * Body.vely / vel;
+                    Body.velx  += acc * dt * (float)Math.Cos(acc_angle);
+                    Body.vely  += acc * dt * (float)Math.Sin(acc_angle);
 
                     accelerated = true;
                 }

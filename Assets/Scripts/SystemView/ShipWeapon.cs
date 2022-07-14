@@ -394,6 +394,7 @@ namespace Scripts {
                         projectile.seeking           = (flags & (int)WeaponFlags.WEAPON_SEEKING)  != 0;
                         projectile.overshoot         = (flags & (int)WeaponFlags.WEAPON_TRACKING) != 0;
                         projectile.rocket            = (flags & (int)WeaponFlags.WEAPON_ROCKET)   != 0;
+                        projectile.acc_angle         = angle;
                         projectile.acc               = acc;
                         projectile.state             = state;
                         projectile.penetration       = penetration;
