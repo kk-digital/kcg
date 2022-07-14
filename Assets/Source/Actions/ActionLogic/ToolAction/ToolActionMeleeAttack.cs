@@ -10,7 +10,6 @@ namespace Action
     {
         private Item.FireWeaponPropreties WeaponProperty;
         private ItemInventoryEntity ItemEntity;
-        float radius = 2.0f;
 
         public ToolActionMeleeAttack(Contexts entitasContext, int actionID) : base(entitasContext, actionID)
         {
@@ -19,7 +18,7 @@ namespace Action
         public bool IsInRange(Vector2 currentTarget)
         {
             Vector2 yourPos = new Vector2(AgentEntity.physicsPosition2D.Value.X, AgentEntity.physicsPosition2D.Value.Y);
-            return radius >= Vector2.Distance(yourPos, currentTarget);
+            return WeaponProperty.Range >= Vector2.Distance(yourPos, currentTarget);
         }
 
         public override void OnEnter(ref Planet.PlanetState planet)

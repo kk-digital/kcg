@@ -80,9 +80,6 @@ namespace Action
                 // Todo: Create a agent colision system?
                 foreach (var entity in entities)
                 {
-                    if (entity == AgentEntity)
-                        continue;
-
                     float dist = Vector2.Distance(new Vector2(AgentEntity.physicsPosition2D.Value.X, AgentEntity.physicsPosition2D.Value.Y), new Vector2(ProjectileEntity.projectilePosition2D.Value.X, ProjectileEntity.projectilePosition2D.Value.Y));
 
                     if (dist < radius)
