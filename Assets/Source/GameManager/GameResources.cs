@@ -241,11 +241,20 @@ public class GameResources
         GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionFireWeapon);
         GameState.ItemCreationApi.EndItem();
 
-        GameState.ItemCreationApi.CreateItem(Enums.ItemType.Shotgun, "Shotgun");
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.PumpShotgun, "PumpShotgun");
         GameState.ItemCreationApi.SetTexture(ShotgunIcon);
         GameState.ItemCreationApi.SetInventoryTexture(ShotgunIcon);
         GameState.ItemCreationApi.SetShotgunWeapon(20.0f, 2f, 5.0f, 1.0f, 30.0f, new Vec2f(0.2f, 0.2f), OreIcon);
         GameState.ItemCreationApi.SetShotgunWeaponClip(8, 4, 2.5f);
+        GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
+        GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionFireWeapon);
+        GameState.ItemCreationApi.EndItem();
+
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.Shotgun, "Shotgun");
+        GameState.ItemCreationApi.SetTexture(ShotgunIcon);
+        GameState.ItemCreationApi.SetInventoryTexture(ShotgunIcon);
+        GameState.ItemCreationApi.SetShotgunWeapon(30.0f, 1f, 10.0f, 1.0f, 35.0f, new Vec2f(0.2f, 0.2f), OreIcon);
+        GameState.ItemCreationApi.SetShotgunWeaponClip(6, 2, 2.5f);
         GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
         GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionFireWeapon);
         GameState.ItemCreationApi.EndItem();
