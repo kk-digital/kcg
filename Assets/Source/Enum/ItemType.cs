@@ -10,8 +10,12 @@
         /// <summary>
         /// Weapons
         /// </summary>
-        Gun,
+        Pistol,
         Shotgun,
+        LongRifle,
+        AutoCannon,
+        RPG,
+        SMG,
         Sword,
 
         /// <summary>

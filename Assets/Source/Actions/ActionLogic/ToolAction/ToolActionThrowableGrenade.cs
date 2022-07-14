@@ -12,6 +12,7 @@ namespace Action
         private ProjectileEntity ProjectileEntity;
         private ItemInventoryEntity ItemEntity;
         private Vec2f StartPos;
+        float radius = 0.0f;
 
         public ToolActionThrowableGrenade(Contexts entitasContext, int actionID) : base(entitasContext, actionID)
         {
@@ -21,6 +22,11 @@ namespace Action
         {
             ItemEntity = EntitasContext.itemInventory.GetEntityWithItemID(ActionEntity.actionTool.ItemID);
             WeaponProperty = GameState.ItemCreationApi.GetWeapon(ItemEntity.itemType.Type);
+
+            if (ItemEntity.itemType.Type == Enums.ItemType.Grenade)
+                radius = 2.0f;
+            else if (ItemEntity.itemType.Type == Enums.ItemType.RPG)
+                radius = 4.0f;
 
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float x = worldPosition.x;
@@ -48,7 +54,10 @@ namespace Action
             StartPos.X += 0.5f;
             StartPos.Y += 0.5f;
 
-            ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Grenade);
+            if(ItemEntity.itemType.Type == Enums.ItemType.Grenade)
+                ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Grenade);
+            else if (ItemEntity.itemType.Type == Enums.ItemType.RPG)
+                ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Rocket);
 
             ActionEntity.actionExecution.State = Enums.ActionState.Running;
 
@@ -70,7 +79,6 @@ namespace Action
             // Check if projectile is inside in weapon range.
             if ((ProjectileEntity.projectilePosition2D.Value - StartPos).Magnitude > range)
             {
-                float radius = 2.0f;
 
                 planet.AddParticleEmitter(ProjectileEntity.projectilePosition2D.Value, Particle.ParticleEmitterType.DustEmitter);
 

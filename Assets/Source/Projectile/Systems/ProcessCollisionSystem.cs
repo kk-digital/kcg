@@ -168,6 +168,41 @@ namespace Projectile
                         }
                     }
                 }
+                else if (entityP.projectileType.Type == Enums.ProjectileType.Rocket)
+                {
+                    planet.AddParticleEmitter(entityP.projectilePosition2D.Value, Particle.ParticleEmitterType.DustEmitter);
+                    // Check if projectile has hit a enemy.
+                    var entitiesA = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
+
+                    // Todo: Create a agent colision system?
+                    foreach (var entity in entitiesA)
+                    {
+                        float dist = Vector2.Distance(new Vector2(entity.physicsPosition2D.Value.X, entity.physicsPosition2D.Value.Y), new Vector2(entityP.projectilePosition2D.Value.X, entityP.projectilePosition2D.Value.Y));
+
+                        float radius = 4.0f;
+
+                        if (dist < radius)
+                        {
+                            Vec2f entityPos = entity.physicsPosition2D.Value;
+                            Vec2f bulletPos = entityP.projectilePosition2D.Value;
+                            Vec2f diff = bulletPos - entityPos;
+                            diff.Y = 0;
+                            diff.Normalize();
+
+                            Vector2 oppositeDirection = new Vector2(-diff.X, -diff.Y);
+
+                            if (entity.hasAgentStats)
+                            {
+                                var stats = entity.agentStats;
+                                entity.ReplaceAgentStats(stats.Health - 100, stats.Food, stats.Water, stats.Oxygen,
+                                    stats.Fuel, stats.AttackCooldown);
+
+                                // spawns a debug floating text for damage 
+                                planet.AddFloatingText("" + 100, 0.5f, new Vec2f(oppositeDirection.x * 0.05f, oppositeDirection.y * 0.05f), new Vec2f(entityPos.X, entityPos.Y + 0.35f));
+                            }
+                        }
+                    }
+                }
                 else if (entityP.projectileType.Type == Enums.ProjectileType.Bullet)
                 {
                     planet.AddParticleEmitter(entityP.projectilePosition2D.Value, Particle.ParticleEmitterType.DustEmitter);

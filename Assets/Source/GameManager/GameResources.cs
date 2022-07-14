@@ -42,7 +42,10 @@ public class GameResources
     public static int DustBaseSpriteId;
 
     public static int OreIcon;
-    public static int GunIcon;
+    public static int PistolIcon;
+    public static int ShotgunIcon;
+    public static int LongRifleIcon;
+    public static int RPGIcon;
     public static int SlimeIcon;
     public static int PlacementToolIcon;
     public static int RemoveToolIcon;
@@ -69,6 +72,9 @@ public class GameResources
             Ore2SpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Items\\Ores\\Copper\\ore_copper_1.png", 16, 16);
             Ore3SpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Items\\Ores\\Adamantine\\ore_adamantine_1.png", 16, 16);
             GunSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Items\\Pistol\\gun-temp.png", 44, 25);
+            ShotgunIcon = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Weapons\\Guns\\Pistol\\Guns\\Gun13.png", 48, 16);
+            LongRifleIcon = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Weapons\\Guns\\Pistol\\Guns\\Gun10.png", 48, 16);
+            RPGIcon = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Weapons\\Guns\\Pistol\\Guns\\Gun18.png", 48, 16);
             RockSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Items\\MaterialIcons\\Rock\\rock1.png", 16, 16);
             RockDustSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Items\\Rock\\rock1_dust.png", 16, 16);
             SlimeSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Enemies\\Slime\\slime.png", 32, 32);
@@ -93,7 +99,10 @@ public class GameResources
             SwordSpriteId = GameState.SpriteAtlasManager.CopySpriteToAtlas(SwordSpriteSheet, 0, 0, Enums.AtlasType.Particle);
             // particle sprite atlas
             OreIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(OreSpriteSheet, 0, 0, Enums.AtlasType.Particle);
-            GunIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(GunSpriteSheet, 0, 0, Enums.AtlasType.Particle);
+            PistolIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(GunSpriteSheet, 0, 0, Enums.AtlasType.Particle);
+            ShotgunIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(ShotgunIcon, 0, 0, Enums.AtlasType.Particle);
+            LongRifleIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(LongRifleIcon, 0, 0, Enums.AtlasType.Particle);
+            RPGIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(RPGIcon, 0, 0, Enums.AtlasType.Particle);
             SlimeIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 0, 0, Enums.AtlasType.Particle);
             PlacementToolIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(RockSpriteSheet, 0, 0, Enums.AtlasType.Particle);
             RemoveToolIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(Ore2SpriteSheet, 0, 0, Enums.AtlasType.Particle);
@@ -202,18 +211,27 @@ public class GameResources
 
     public static void CreateItems()
     {
-        GameState.ItemCreationApi.CreateItem(Enums.ItemType.Gun, "Gun");
-        GameState.ItemCreationApi.SetTexture(GunIcon);
-        GameState.ItemCreationApi.SetInventoryTexture(GunIcon);
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.Pistol, "Pistol");
+        GameState.ItemCreationApi.SetTexture(PistolIcon);
+        GameState.ItemCreationApi.SetInventoryTexture(PistolIcon);
         GameState.ItemCreationApi.SetFireWeapon(20.0f, 1f, 10.0f, 25.0f, new Vec2f(0.2f, 0.2f), OreIcon);
         GameState.ItemCreationApi.SetFireWeaponClip(8, 1, 1f);
         GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
         GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionFireWeapon);
         GameState.ItemCreationApi.EndItem();
 
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.LongRifle, "LongRifle");
+        GameState.ItemCreationApi.SetTexture(LongRifleIcon);
+        GameState.ItemCreationApi.SetInventoryTexture(LongRifleIcon);
+        GameState.ItemCreationApi.SetFireWeapon(50.0f, 1f, 20.0f, 40.0f, new Vec2f(0.2f, 0.2f), OreIcon);
+        GameState.ItemCreationApi.SetFireWeaponClip(25, 1, 2f);
+        GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
+        GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionFireWeapon);
+        GameState.ItemCreationApi.EndItem();
+
         GameState.ItemCreationApi.CreateItem(Enums.ItemType.Shotgun, "Shotgun");
-        GameState.ItemCreationApi.SetTexture(GunIcon);
-        GameState.ItemCreationApi.SetInventoryTexture(GunIcon);
+        GameState.ItemCreationApi.SetTexture(ShotgunIcon);
+        GameState.ItemCreationApi.SetInventoryTexture(ShotgunIcon);
         GameState.ItemCreationApi.SetShotgunWeapon(20.0f, 2f, 5.0f, 1.0f, 30.0f, new Vec2f(0.2f, 0.2f), OreIcon);
         GameState.ItemCreationApi.SetShotgunWeaponClip(8, 4, 2.5f);
         GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
@@ -223,8 +241,17 @@ public class GameResources
         GameState.ItemCreationApi.CreateItem(Enums.ItemType.Grenade, "Grenade");
         GameState.ItemCreationApi.SetTexture(GrenadeSpriteId);
         GameState.ItemCreationApi.SetInventoryTexture(GrenadeSpriteId);
-        GameState.ItemCreationApi.SetThrowableGrenade(20.0f, 1f, 10.0f, 25.0f, new Vec2f(0.2f, 0.2f), GrenadeSpriteId);
+        GameState.ItemCreationApi.SetThrowableGrenade(20.0f, 1f, 20.0f, 25.0f, new Vec2f(0.2f, 0.2f), GrenadeSpriteId);
         GameState.ItemCreationApi.SetThrowableGrenadeClip(4, 1, 2);
+        GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
+        GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionThrowGrenade);
+        GameState.ItemCreationApi.EndItem();
+
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.RPG, "RPG");
+        GameState.ItemCreationApi.SetTexture(RPGIcon);
+        GameState.ItemCreationApi.SetInventoryTexture(RPGIcon);
+        GameState.ItemCreationApi.SetThrowableGrenade(50.0f, 3f, 50.0f, 100.0f, new Vec2f(0.2f, 0.2f), GrenadeSpriteId);
+        GameState.ItemCreationApi.SetThrowableGrenadeClip(2, 1, 3);
         GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
         GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionThrowGrenade);
         GameState.ItemCreationApi.EndItem();
@@ -415,6 +442,15 @@ public class GameResources
         GameState.ProjectileCreationApi.SetSize(new Vec2f(0.5f, 0.5f));
         GameState.ProjectileCreationApi.SetSpeed(10.0f);
         GameState.ProjectileCreationApi.SetAcceleration(new Vec2f(0.0f, -10.0f));
+        GameState.ProjectileCreationApi.End();
+
+        GameState.ProjectileCreationApi.Create((int)Enums.ProjectileType.Rocket);
+        GameState.ProjectileCreationApi.SetName("rocket");
+        GameState.ProjectileCreationApi.SetSpriteId(GrenadeSpriteId);
+        GameState.ProjectileCreationApi.SetAffectedByGravity(true);
+        GameState.ProjectileCreationApi.SetDeltaRotation(180.0f);
+        GameState.ProjectileCreationApi.SetSize(new Vec2f(0.5f, 0.5f));
+        GameState.ProjectileCreationApi.SetSpeed(20.0f);
         GameState.ProjectileCreationApi.End();
     }
 }
