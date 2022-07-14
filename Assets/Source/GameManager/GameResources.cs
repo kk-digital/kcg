@@ -46,6 +46,7 @@ public class GameResources
     public static int ShotgunIcon;
     public static int LongRifleIcon;
     public static int RPGIcon;
+    public static int SMGIcon;
     public static int SlimeIcon;
     public static int PlacementToolIcon;
     public static int RemoveToolIcon;
@@ -75,6 +76,7 @@ public class GameResources
             ShotgunIcon = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Weapons\\Guns\\Pistol\\Guns\\Gun13.png", 48, 16);
             LongRifleIcon = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Weapons\\Guns\\Pistol\\Guns\\Gun10.png", 48, 16);
             RPGIcon = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Weapons\\Guns\\Pistol\\Guns\\Gun18.png", 48, 16);
+            SMGIcon = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Weapons\\Guns\\Pistol\\Guns\\Gun6.png", 48, 16);
             RockSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Items\\MaterialIcons\\Rock\\rock1.png", 16, 16);
             RockDustSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Items\\Rock\\rock1_dust.png", 16, 16);
             SlimeSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Enemies\\Slime\\slime.png", 32, 32);
@@ -103,6 +105,7 @@ public class GameResources
             ShotgunIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(ShotgunIcon, 0, 0, Enums.AtlasType.Particle);
             LongRifleIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(LongRifleIcon, 0, 0, Enums.AtlasType.Particle);
             RPGIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(RPGIcon, 0, 0, Enums.AtlasType.Particle);
+            SMGIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(SMGIcon, 0, 0, Enums.AtlasType.Particle);
             SlimeIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(SlimeSpriteSheet, 0, 0, Enums.AtlasType.Particle);
             PlacementToolIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(RockSpriteSheet, 0, 0, Enums.AtlasType.Particle);
             RemoveToolIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(Ore2SpriteSheet, 0, 0, Enums.AtlasType.Particle);
@@ -225,6 +228,15 @@ public class GameResources
         GameState.ItemCreationApi.SetInventoryTexture(LongRifleIcon);
         GameState.ItemCreationApi.SetFireWeapon(50.0f, 1f, 20.0f, 40.0f, new Vec2f(0.2f, 0.2f), OreIcon);
         GameState.ItemCreationApi.SetFireWeaponClip(25, 1, 2f);
+        GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
+        GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionFireWeapon);
+        GameState.ItemCreationApi.EndItem();
+
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.SMG, "SMG");
+        GameState.ItemCreationApi.SetTexture(SMGIcon);
+        GameState.ItemCreationApi.SetInventoryTexture(SMGIcon);
+        GameState.ItemCreationApi.SetFireWeapon(50.0f, 0.2f, 20.0f, 15.0f, new Vec2f(0.2f, 0.2f), OreIcon);
+        GameState.ItemCreationApi.SetFireWeaponClip(30, 1, 1f);
         GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
         GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionFireWeapon);
         GameState.ItemCreationApi.EndItem();
