@@ -18,7 +18,7 @@ namespace PlanetTileMap
         
         public Vec2i MapSize;
         public Vec2i ChunkSize;
-        List<UpdateTile> ToUpdateTiles;
+        TileSpriteUpdateQueue TileSpriteUpdateQueue;
         
         //Array that maps to Chunk List
         public int[] ChunkIndexLookup;
@@ -30,7 +30,7 @@ namespace PlanetTileMap
         public TileMap(Vec2i mapSize)
         {
             ChunkArrayLength = 0;
-            ToUpdateTiles = new List<UpdateTile>();
+            TileSpriteUpdateQueue = new TileSpriteUpdateQueue();
 
             ChunkSize = new Vec2i(mapSize.X / 16 + 1, mapSize.Y / 16 + 1);
             
@@ -92,8 +92,7 @@ namespace PlanetTileMap
             ref Tile tile = ref GetTile(x, y, layer);
             tile.ID = tileId;
             tile.SpriteID = GameResources.LoadingTilePlaceholderSpriteId;
-            ToUpdateTiles.Add(new UpdateTile(new Vec2i(x, y), layer));
-            //UpdateTile(x, y, layer);
+            TileSpriteUpdateQueue.Add(x, y, layer);
         }
 
         public ref Tile GetTile(int x, int y, MapLayerType planetLayer)
@@ -144,7 +143,7 @@ namespace PlanetTileMap
             backTile.ID = TileID.Air;
             backTile.SpriteID = -1;
             backTile.SpriteID = GameResources.LoadingTilePlaceholderSpriteId;
-            ToUpdateTiles.Add(new UpdateTile(new Vec2i(x, y), MapLayerType.Back));
+            TileSpriteUpdateQueue.Add(x, y, MapLayerType.Back);
             //UpdateBackTile(x, y);
         }
         public void RemoveMidTile(int x, int y)
@@ -153,7 +152,7 @@ namespace PlanetTileMap
             midTile.ID = TileID.Air;
             midTile.SpriteID = -1;
             midTile.SpriteID = GameResources.LoadingTilePlaceholderSpriteId;
-            ToUpdateTiles.Add(new UpdateTile(new Vec2i(x, y), MapLayerType.Mid));
+            TileSpriteUpdateQueue.Add(x, y, MapLayerType.Mid);
           //  UpdateBackTile(x, y);
         }
         public void RemoveFrontTile(int x, int y)
@@ -162,7 +161,7 @@ namespace PlanetTileMap
             frontTile.ID = TileID.Air;
             frontTile.SpriteID = -1;
             frontTile.SpriteID = GameResources.LoadingTilePlaceholderSpriteId;
-            ToUpdateTiles.Add(new UpdateTile(new Vec2i(x, y), MapLayerType.Front));
+            TileSpriteUpdateQueue.Add(x, y, MapLayerType.Front);
             //UpdateBackTile(x, y);
         }
 
@@ -190,7 +189,7 @@ namespace PlanetTileMap
 
         // when a tile is (deleted/changed) tile sprite ids
         // of all the neighbors must be re-evaluated
-        private void UpdateTile(int x, int y, MapLayerType type)
+        public void UpdateTile(int x, int y, MapLayerType type)
         {
             for(int i = x - 1; i <= x + 1; i++)
             {
@@ -270,14 +269,9 @@ namespace PlanetTileMap
 
         // this is called every frame to update a limited number of sprite ids
         // the excess will be pushed to the next frame
-        public void UpdateTiles()
+        public void UpdateTileSprites()
         {
-            for(int i = 0; i < 1024 * 32 && i < ToUpdateTiles.Count; i++)
-            {
-                UpdateTile updateTile = ToUpdateTiles[i];
-                UpdateTile(updateTile.Position.X, updateTile.Position.Y, updateTile.Layer);
-            }
-            ToUpdateTiles.RemoveRange(0, Math.Min(1024 * 32, ToUpdateTiles.Count));
+            TileSpriteUpdateQueue.UpdateTileSprites(ref this);
         }
     }
 }
