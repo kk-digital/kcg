@@ -200,6 +200,14 @@ namespace Item
             PropertiesArray[(int)CurrentIndex].FireWeaponID = WeaponListSize++;
         }
 
+        public void SetSwordWeaponMeleeType(FireWeaponPropreties.MeleeFlags type)
+        {
+            IsItemTypeValid();
+
+            ref FireWeaponPropreties fireWeapon = ref WeaponList[PropertiesArray[(int)CurrentIndex].FireWeaponID];
+            fireWeapon.MeleeAttackFlags |= type;
+        }
+
         public void SetShotgunWeaponClip(int clipSize, int bulletsPerShot, float reloadTime)
         {
             IsItemTypeValid();

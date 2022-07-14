@@ -109,8 +109,19 @@ namespace Item
             ShouldSpread = 2 << 1,
             HasCharge = 3 << 2
         }
+
+        public MeleeFlags MeleeAttackFlags;
+        public enum MeleeFlags : byte
+        {
+            Stab = 1 << 0,
+            Slash = 2 << 1
+        }
         public bool HasClip() { return WeaponFlags.HasFlag(Flags.HasClip); }
         public bool ShouldSpread() { return WeaponFlags.HasFlag(Flags.ShouldSpread); }
         public bool HasCharge() { return WeaponFlags.HasFlag(Flags.HasCharge); }
+
+        public bool IsStab() { return WeaponFlags.HasFlag(MeleeFlags.Stab); }
+        public bool IsSlash() { return WeaponFlags.HasFlag(MeleeFlags.Slash); }
+
     }
 }

@@ -233,6 +233,7 @@ public class GameResources
         GameState.ItemCreationApi.SetTexture(SwordSpriteId);
         GameState.ItemCreationApi.SetInventoryTexture(SwordSpriteId);
         GameState.ItemCreationApi.SetSwordWeapon(1.0f, 2.0f, 10.0f);
+        GameState.ItemCreationApi.SetSwordWeaponMeleeType(Item.FireWeaponPropreties.MeleeFlags.Stab);
         GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
         GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionMeleeAttack);
         GameState.ItemCreationApi.EndItem();
