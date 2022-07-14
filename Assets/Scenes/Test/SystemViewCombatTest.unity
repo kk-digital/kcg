@@ -1776,7 +1776,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '  Health: 50000 / 50000'
+  m_Text: '  Health: 25000 / 25000'
 --- !u!1 &235359030
 GameObject:
   m_ObjectHideFlags: 0
