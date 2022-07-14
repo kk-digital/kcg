@@ -60,7 +60,10 @@ namespace Action
                 }
             }
 
-            ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Bullet);
+            if(ItemEntity.itemType.Type == Enums.ItemType.Bow)
+                ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Arrow);
+            else
+                ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Bullet);
             EndPointList.Add(ProjectileEntity);
 
             ActionEntity.actionExecution.State = Enums.ActionState.Running;

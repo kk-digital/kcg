@@ -1,6 +1,7 @@
 using UnityEngine;
 using KMath;
 using System.Collections.Generic;
+using System.Collections;
 using Collisions;
 
 namespace Projectile
@@ -8,6 +9,7 @@ namespace Projectile
     public class ProcessCollisionSystem
     {
         List<ProjectileEntity> ToRemoveList = new List<ProjectileEntity>();
+        List<ProjectileEntity> ToRemoveArrowList = new List<ProjectileEntity>();
         public void Update(ref PlanetTileMap.TileMap tileMap)
         {
             // Get Delta Time
@@ -30,7 +32,14 @@ namespace Projectile
                 {
                     if (entity.projectileCollider.isFirstSolid)
                     {
-                        entity.Destroy();
+                        if(entity.projectileType.Type == Enums.ProjectileType.Arrow)
+                        {
+                            entity.projectilePhysicsState2D.angularVelocity = Vec2f.Zero;
+                        }
+                        else
+                        {
+                            entity.Destroy();
+                        }
                         return;
                     }
                 }
@@ -38,7 +47,14 @@ namespace Projectile
                 {
                     if(entity.projectileCollider.isFirstSolid)
                     {
-                        entity.Destroy();
+                        if (entity.projectileType.Type == Enums.ProjectileType.Arrow)
+                        {
+                            entity.projectilePhysicsState2D.angularVelocity = Vec2f.Zero;
+                        }
+                        else
+                        {
+                            entity.Destroy();
+                        }
                         return;
                     }
                 }
@@ -50,7 +66,14 @@ namespace Projectile
                 {
                     if (entity.projectileCollider.isFirstSolid)
                     {
-                        entity.Destroy();
+                        if (entity.projectileType.Type == Enums.ProjectileType.Arrow)
+                        {
+                            entity.projectilePhysicsState2D.angularVelocity = Vec2f.Zero;
+                        }
+                        else
+                        {
+                            entity.Destroy();
+                        }
                         return;
                     }
                 }
@@ -58,13 +81,22 @@ namespace Projectile
                 {
                     if (entity.projectileCollider.isFirstSolid)
                     {
-                        entity.Destroy();
+                        if (entity.projectileType.Type == Enums.ProjectileType.Arrow)
+                        {
+                            entity.projectilePhysicsState2D.angularVelocity = Vec2f.Zero;
+                        }
+                        else
+                        {
+                            entity.Destroy();
+                        }
                         return;
                     }
                 }
             }
         }
 
+        float elapsed = 0.0f;
+        bool deleteArrows;
 
         // new version of the update function
         // uses the planet state to remove the projectile
@@ -167,6 +199,7 @@ namespace Projectile
                             }
                         }
                     }
+                    planet.RemoveProjectile(entityP.projectileID.ID);
                 }
                 else if (entityP.projectileType.Type == Enums.ProjectileType.Rocket)
                 {
@@ -202,14 +235,44 @@ namespace Projectile
                             }
                         }
                     }
+                    planet.RemoveProjectile(entityP.projectileID.ID);
+                }
+                else if (entityP.projectileType.Type == Enums.ProjectileType.Arrow)
+                {
+                    planet.AddParticleEmitter(entityP.projectilePosition2D.Value, Particle.ParticleEmitterType.DustEmitter);
+
+                    entityP.projectileMovable.Velocity = Vec2f.Zero;
+
+                    DeleteArrow(entityP);
+
+                    deleteArrows = true;
                 }
                 else if (entityP.projectileType.Type == Enums.ProjectileType.Bullet)
                 {
                     planet.AddParticleEmitter(entityP.projectilePosition2D.Value, Particle.ParticleEmitterType.DustEmitter);
-                }
 
-                planet.RemoveProjectile(entityP.projectileID.ID);
+                    planet.RemoveProjectile(entityP.projectileID.ID);
+                }
             }
+
+            // Arrow Deleting
+            if (deleteArrows)
+                elapsed += Time.deltaTime;
+
+            if(elapsed > 5.0f)
+            {
+                deleteArrows = false;
+                elapsed = 0.0f;
+                for(int i = 0; i<  ToRemoveArrowList.Count; i++)
+                {
+                    ToRemoveArrowList[i].Destroy();
+                }
+            }
+        }
+
+        public void DeleteArrow(ProjectileEntity arrow)
+        {
+            ToRemoveArrowList.Add(arrow);
         }
     }
 }

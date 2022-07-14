@@ -259,6 +259,15 @@ public class GameResources
         GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionFireWeapon);
         GameState.ItemCreationApi.EndItem();
 
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.Bow, "Bow");
+        GameState.ItemCreationApi.SetTexture(PistolIcon);
+        GameState.ItemCreationApi.SetInventoryTexture(PistolIcon);
+        GameState.ItemCreationApi.SetFireWeapon(70.0f, 3f, 100.0f, 30.0f, new Vec2f(0.2f, 0.2f), OreIcon);
+        GameState.ItemCreationApi.SetFireWeaponClip(1, 1, 2f);
+        GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
+        GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionFireWeapon);
+        GameState.ItemCreationApi.EndItem();
+
         GameState.ItemCreationApi.CreateItem(Enums.ItemType.Grenade, "Grenade");
         GameState.ItemCreationApi.SetTexture(GrenadeSpriteId);
         GameState.ItemCreationApi.SetInventoryTexture(GrenadeSpriteId);
@@ -469,6 +478,15 @@ public class GameResources
         GameState.ProjectileCreationApi.SetName("rocket");
         GameState.ProjectileCreationApi.SetSpriteId(GrenadeSpriteId);
         GameState.ProjectileCreationApi.SetAffectedByGravity(true);
+        GameState.ProjectileCreationApi.SetDeltaRotation(180.0f);
+        GameState.ProjectileCreationApi.SetSize(new Vec2f(0.5f, 0.5f));
+        GameState.ProjectileCreationApi.SetSpeed(20.0f);
+        GameState.ProjectileCreationApi.End();
+
+        GameState.ProjectileCreationApi.Create((int)Enums.ProjectileType.Arrow);
+        GameState.ProjectileCreationApi.SetName("arrow");
+        GameState.ProjectileCreationApi.SetSpriteId(OreIcon);
+        GameState.ProjectileCreationApi.SetAffectedByGravity(false);
         GameState.ProjectileCreationApi.SetDeltaRotation(180.0f);
         GameState.ProjectileCreationApi.SetSize(new Vec2f(0.5f, 0.5f));
         GameState.ProjectileCreationApi.SetSpeed(20.0f);

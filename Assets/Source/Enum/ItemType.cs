@@ -18,6 +18,7 @@
         RPG,
         SMG,
         Sword,
+        Bow,
 
         /// <summary>
         /// Throwable Explosive Weapons
