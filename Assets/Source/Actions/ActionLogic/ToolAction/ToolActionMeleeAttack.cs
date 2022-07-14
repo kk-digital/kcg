@@ -35,10 +35,7 @@ namespace Action
             // Check if projectile has hit a enemy.
             var entities = EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
 
-            if (WeaponProperty.MeleeAttackFlags == Item.FireWeaponPropreties.MeleeFlags.Stab)
-                planet.AddFloatingText("Stab", 1.0f, new Vec2f(0, 0), new Vec2f(AgentEntity.physicsPosition2D.Value.X + 0.2f, AgentEntity.physicsPosition2D.Value.Y));
-            else if(WeaponProperty.MeleeAttackFlags == Item.FireWeaponPropreties.MeleeFlags.Slash)
-                planet.AddFloatingText("Slash", 1.0f, new Vec2f(0, 0), new Vec2f(AgentEntity.physicsPosition2D.Value.X + 0.2f, AgentEntity.physicsPosition2D.Value.Y));
+            planet.AddFloatingText(WeaponProperty.MeleeAttackFlags.ToString(), 1.0f, new Vec2f(0, 0), new Vec2f(AgentEntity.physicsPosition2D.Value.X + 0.2f, AgentEntity.physicsPosition2D.Value.Y));
 
             // Todo: Create a agent colision system?
             foreach (var entity in entities)

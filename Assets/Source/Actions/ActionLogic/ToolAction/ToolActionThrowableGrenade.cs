@@ -55,9 +55,14 @@ namespace Action
             StartPos.Y += 0.5f;
 
             if(ItemEntity.itemType.Type == Enums.ItemType.Grenade)
+            {
                 ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Grenade);
+                planet.AddFloatingText(WeaponProperty.GrenadeFlags.ToString(), 2.0f, new Vec2f(0, 0), new Vec2f(AgentEntity.physicsPosition2D.Value.X + 0.5f, AgentEntity.physicsPosition2D.Value.Y));
+            }
             else if (ItemEntity.itemType.Type == Enums.ItemType.RPG)
+            {
                 ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Rocket);
+            }
 
             ActionEntity.actionExecution.State = Enums.ActionState.Running;
 
