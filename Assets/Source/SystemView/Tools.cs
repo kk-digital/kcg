@@ -80,8 +80,8 @@ namespace Source {
              * Clamps an angle between 0 and 2π
              */
             public static float normalize_angle(float angle) {
-                while(angle > twopi) angle -= twopi;
-                if   (angle <  0.0f) angle += twopi;
+                angle %= twopi;
+                if (angle < 0.0f) angle += twopi;
                 return angle;
             }
         }
