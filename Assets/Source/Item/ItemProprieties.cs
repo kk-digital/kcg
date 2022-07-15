@@ -105,6 +105,7 @@ namespace Item
         /// Melee Attack Properties
         /// </summary>
         public float StaggerTime;
+        [Range(0, 1)]
         public float StaggerRate;
 
         /// <summary>

@@ -137,7 +137,15 @@ namespace Item
             PropertiesArray[(int)CurrentIndex].ItemFlags |= ItemProprieties.Flags.Placeable;
         }
 
-        public void SetThrowableGrenade(float bulletSpeed, float coolDown, float range, float basicDamage, Vec2f spriteSize, int greandeSpriteID)
+        public void SetSpreadAngle(float spreadAngle)
+        {
+            IsItemTypeValid();
+
+            ref FireWeaponPropreties fireWeapon = ref WeaponList[PropertiesArray[(int)CurrentIndex].FireWeaponID];
+            fireWeapon.SpreadAngle = spreadAngle;
+        }
+
+        public void SetFireWeapon(float bulletSpeed, float coolDown, float range, float basicDamage)
         {
             IsItemTypeValid();
 
@@ -147,122 +155,6 @@ namespace Item
                 CoolDown = coolDown,
                 Range = range,
                 BasicDemage = basicDamage,
-                BulletSpriteSize = spriteSize,
-                BulletSpriteID = greandeSpriteID
-            };
-
-            WeaponList[WeaponListSize] = fireWeapon;
-            PropertiesArray[(int)CurrentIndex].FireWeaponID = WeaponListSize++;
-        }
-
-        public void SetThrowableGrenadeClip(int clipSize, int bulletsPerShot, float reloadTime, FireWeaponPropreties.GrenadesFlags gflags)
-        {
-            IsItemTypeValid();
-
-            ref FireWeaponPropreties fireWeapon = ref WeaponList[PropertiesArray[(int)CurrentIndex].FireWeaponID];
-            fireWeapon.ClipSize = clipSize;
-            fireWeapon.BulletsPerShot = bulletsPerShot;
-            fireWeapon.ReloadTime = reloadTime;
-            fireWeapon.WeaponFlags |= FireWeaponPropreties.Flags.HasClip;
-            fireWeapon.GrenadeFlags |= gflags;
-        }
-
-        public void SetThrowableRPG(float bulletSpeed, float coolDown, float range, float basicDamage, Vec2f spriteSize, int greandeSpriteID)
-        {
-            IsItemTypeValid();
-
-            FireWeaponPropreties fireWeapon = new FireWeaponPropreties()
-            {
-                BulletSpeed = bulletSpeed,
-                CoolDown = coolDown,
-                Range = range,
-                BasicDemage = basicDamage,
-                BulletSpriteSize = spriteSize,
-                BulletSpriteID = greandeSpriteID
-            };
-
-            WeaponList[WeaponListSize] = fireWeapon;
-            PropertiesArray[(int)CurrentIndex].FireWeaponID = WeaponListSize++;
-        }
-
-        public void SetThrowableRPGClip(int clipSize, int bulletsPerShot, float reloadTime)
-        {
-            IsItemTypeValid();
-
-            ref FireWeaponPropreties fireWeapon = ref WeaponList[PropertiesArray[(int)CurrentIndex].FireWeaponID];
-            fireWeapon.ClipSize = clipSize;
-            fireWeapon.BulletsPerShot = bulletsPerShot;
-            fireWeapon.ReloadTime = reloadTime;
-            fireWeapon.WeaponFlags |= FireWeaponPropreties.Flags.HasClip;
-        }
-
-        public void SetShotgunWeapon(float bulletSpeed, float coolDown, float range, float spreadAngle, float basicDamage, Vec2f spriteSize, int bulletSpriteID)
-        {
-            IsItemTypeValid();
-
-            FireWeaponPropreties fireWeapon = new FireWeaponPropreties()
-            {
-                BulletSpeed = bulletSpeed,
-                CoolDown = coolDown,
-                Range = range,
-                SpreadAngle = spreadAngle,
-                BasicDemage = basicDamage,
-                BulletSpriteSize = spriteSize,
-                BulletSpriteID = bulletSpriteID
-            };
-
-            WeaponList[WeaponListSize] = fireWeapon;
-            PropertiesArray[(int)CurrentIndex].FireWeaponID = WeaponListSize++;
-        }
-
-        public void SetSwordWeapon(float coolDown, float range, float staggerTime, float staggerRate, float basicDamage)
-        {
-            IsItemTypeValid();
-
-            FireWeaponPropreties fireWeapon = new FireWeaponPropreties()
-            {
-                CoolDown = coolDown,
-                Range = range,
-                StaggerTime = staggerTime,
-                StaggerRate = staggerRate,
-                BasicDemage = basicDamage,
-            };
-
-            WeaponList[WeaponListSize] = fireWeapon;
-            PropertiesArray[(int)CurrentIndex].FireWeaponID = WeaponListSize++;
-        }
-
-        public void SetSwordWeaponMeleeType(FireWeaponPropreties.MeleeFlags type)
-        {
-            IsItemTypeValid();
-
-            ref FireWeaponPropreties fireWeapon = ref WeaponList[PropertiesArray[(int)CurrentIndex].FireWeaponID];
-            fireWeapon.MeleeAttackFlags |= type;
-        }
-
-        public void SetShotgunWeaponClip(int clipSize, int bulletsPerShot, float reloadTime)
-        {
-            IsItemTypeValid();
-
-            ref FireWeaponPropreties fireWeapon = ref WeaponList[PropertiesArray[(int)CurrentIndex].FireWeaponID];
-            fireWeapon.ClipSize = clipSize;
-            fireWeapon.BulletsPerShot = bulletsPerShot;
-            fireWeapon.ReloadTime = reloadTime;
-            fireWeapon.WeaponFlags |= FireWeaponPropreties.Flags.HasClip | FireWeaponPropreties.Flags.ShouldSpread;
-        }
-
-        public void SetFireWeapon(float bulletSpeed, float coolDown, float range, float basicDamage, Vec2f spriteSize, int bulletSpriteID)
-        {
-            IsItemTypeValid();
-
-            FireWeaponPropreties fireWeapon = new FireWeaponPropreties()
-            {
-                BulletSpeed = bulletSpeed,
-                CoolDown = coolDown,
-                Range = range,
-                BasicDemage = basicDamage,
-                BulletSpriteSize = spriteSize,
-                BulletSpriteID = bulletSpriteID
             };
 
             WeaponList[WeaponListSize] = fireWeapon;
@@ -301,7 +193,7 @@ namespace Item
             fireWeapon.RecoverDelay = recoverDelay;
         }
 
-        public void SetPulseWeapon(float bulletSpeed, float coolDown, float range, bool isLaunchGrenade, float basicDamage, Vec2f spriteSize, int bulletSpriteID)
+        public void SetPulseWeapon(float bulletSpeed, float coolDown, float range, bool isLaunchGrenade, float basicDamage)
         {
             IsItemTypeValid();
 
@@ -312,8 +204,6 @@ namespace Item
                 Range = range,
                 isLaunchGreanade = isLaunchGrenade,
                 BasicDemage = basicDamage,
-                BulletSpriteSize = spriteSize,
-                BulletSpriteID = bulletSpriteID
             };
 
             WeaponList[WeaponListSize] = fireWeapon;
@@ -331,6 +221,56 @@ namespace Item
             fireWeapon.BulletsPerShot = bulletsPerShot;
             fireWeapon.ReloadTime = bulletReloadTime;
             fireWeapon.WeaponFlags |= FireWeaponPropreties.Flags.HasClip | FireWeaponPropreties.Flags.PulseWeapon;
+        }
+
+        public void SetMeleeWeapon(float coolDown, float range, float staggerTime, float staggerRate, float basicDamage)
+        {
+            IsItemTypeValid();
+
+            FireWeaponPropreties fireWeapon = new FireWeaponPropreties()
+            {
+                CoolDown = coolDown,
+                Range = range,
+                StaggerTime = staggerTime,
+                StaggerRate = staggerRate,
+                BasicDemage = basicDamage,
+            };
+
+            WeaponList[WeaponListSize] = fireWeapon;
+            PropertiesArray[(int)CurrentIndex].FireWeaponID = WeaponListSize++;
+        }
+
+        public void SetMeleeFlags(FireWeaponPropreties.MeleeFlags flags)
+        {
+            IsItemTypeValid();
+
+            ref FireWeaponPropreties fireWeapon = ref WeaponList[PropertiesArray[(int)CurrentIndex].FireWeaponID];
+            fireWeapon.MeleeAttackFlags |= flags;
+        }
+
+        public void SetFireWeaponFlags(FireWeaponPropreties.Flags flags)
+        {
+            IsItemTypeValid();
+
+            ref FireWeaponPropreties fireWeapon = ref WeaponList[PropertiesArray[(int)CurrentIndex].FireWeaponID];
+            fireWeapon.WeaponFlags |= flags;
+        }
+
+        public void SetThrowableFlags(FireWeaponPropreties.GrenadesFlags flags)
+        {
+            IsItemTypeValid();
+
+            ref FireWeaponPropreties fireWeapon = ref WeaponList[PropertiesArray[(int)CurrentIndex].FireWeaponID];
+            fireWeapon.GrenadeFlags |= flags;
+        }
+
+        public void SetBullet(int bulletSpriteID, Vec2f size)
+        {
+            IsItemTypeValid();
+
+            ref FireWeaponPropreties fireWeapon = ref WeaponList[PropertiesArray[(int)CurrentIndex].FireWeaponID];
+            fireWeapon.BulletSpriteID = bulletSpriteID;
+            fireWeapon.BulletSpriteSize = size;
         }
 
         public void EndItem()

@@ -17,14 +17,10 @@
         LongRifle,
         AutoCannon,
         RPG,
+        GrenadeLauncher,
         SMG,
         Sword,
         Bow,
-
-        /// <summary>
-        /// Throwable Explosive Weapons
-        /// </summary>
-        Grenade,
 
         /// <summary>
         /// Tools
