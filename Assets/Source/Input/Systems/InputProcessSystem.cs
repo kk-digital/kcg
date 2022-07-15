@@ -204,7 +204,7 @@ namespace ECSInput
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 1);
 
-                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, SlotComponent.Selected);
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 1);
 
                     var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
 
@@ -222,7 +222,7 @@ namespace ECSInput
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 2);
 
-                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, SlotComponent.Selected);
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 2);
 
                     var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
 
@@ -240,7 +240,7 @@ namespace ECSInput
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 3);
 
-                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, SlotComponent.Selected);
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 3);
 
                     var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
 
@@ -258,7 +258,7 @@ namespace ECSInput
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 4);
 
-                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, SlotComponent.Selected);
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 4);
 
                     var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
 
@@ -276,7 +276,7 @@ namespace ECSInput
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 5);
 
-                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, SlotComponent.Selected);
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 5);
 
                     var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
 
@@ -294,7 +294,7 @@ namespace ECSInput
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 6);
 
-                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, SlotComponent.Selected);
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 6);
 
                     var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
 
@@ -312,7 +312,7 @@ namespace ECSInput
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 7);
 
-                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, SlotComponent.Selected);
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 7);
 
                     var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
 
@@ -330,7 +330,7 @@ namespace ECSInput
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 8);
 
-                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, SlotComponent.Selected);
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 8);
 
                     var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
 
@@ -348,8 +348,6 @@ namespace ECSInput
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 9);
 
-                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, SlotComponent.Selected);
-
                     var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
 
                     // Todo: Create a agent colision system?
@@ -357,6 +355,8 @@ namespace ECSInput
                     {
                         if(entityP.isAgentPlayer)
                         {
+                            var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 9);
+
                             planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entityP.physicsPosition2D.Value.X + 0.4f,
                                 entityP.physicsPosition2D.Value.Y));
                         }
