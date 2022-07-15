@@ -8,6 +8,7 @@ namespace PlanetTileMap
 
     public static class SpriteRule_R3
     {
+        // neighbor positions 
         // power of 2 numbers 
         // we need them to do bitwise operations
         public static int BitField_Right = 1 << 0; // 1
