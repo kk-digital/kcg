@@ -401,7 +401,7 @@ MonoBehaviour:
   width: 512
   height: 512
   opacity: 1
-  contrast: 0.6
+  contrast: 1.2
   cutoff: 0.15
   texture: {fileID: 0}
   renderer: {fileID: 0}

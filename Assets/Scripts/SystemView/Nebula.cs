@@ -19,236 +19,6 @@ namespace Scripts {
 
             private System.Random rng;
 
-            private float[] generate_noise(float strength, int w, int h) {
-                float[] noise = new float[w * h];
-
-                // Generate random noise
-
-                for(int x = 1; x < w - 1; x++)
-                    for(int y = 1; y < h - 1; y++) {
-                        noise[x + y * w] = (float)rng.NextDouble() * strength;
-                        if(noise[x + y * w] > 1.0f) noise[x + y * w] = 1.0f;
-                    }
-
-                return noise;
-            }
-
-            private float[] blur_noise(float[] noise, int w, int h) {
-
-                for(int x = 1; x < w - 1; x++)
-                    for(int y = 1; y < h - 1; y++) {
-
-                        float center  =   0.20f *  noise[x + y * w];
-                        float sides   =  0.125f * (noise[x - 1 +  y      * w] + noise[x + 1 +  y      * w]
-                                                +  noise[x     + (y - 1) * w] + noise[x     + (y + 1) * w]);
-                        float corners = 0.0625f * (noise[x - 1 + (y - 1) * w] + noise[x + 1 + (y - 1) * w]
-                                                +  noise[x - 1 + (y + 1) * w] + noise[x + 1 + (y + 1) * w]);
-
-                        noise[x + y * w] = center + sides + corners;
-
-                    }
-
-                return noise;
-            }
-
-            private float[] circular_blur(float[] noise, int w, int h, float r) {
-                if(r <= 1.0f) return noise;
-
-                float[] blurred = new float[w * h];
-
-                for(int x = 0; x < w; x++)
-                    for(int y = 0; y < h; y++) {
-                        float pixels  = 0.0f;
-                        float value   = 0.0f;
-
-                        int   large_r = (int)Math.Ceiling(r);
-
-                        for(int x0 = x - large_r; x0 <= x; x0++) {
-                            int x1 = x + x - x0;
-                            if(x0 < 0 || x1 >= w) continue;
-
-                            for(int y0 = y - large_r; y0 <= y; y0++) {
-                                int y1 = y + y - y0;
-                                if(y0 < 0 || y1 >= h) continue;
-
-                                int local_x = x - x0;
-                                int local_y = y - y0;
-
-                                float distance = Tools.magnitude(local_x, local_y);
-
-                                if(distance > r) continue;
-
-                                pixels += 4 * distance / r;
-                                value  += (noise[x0 + y0 * w]
-                                       +   noise[x1 + y0 * w]
-                                       +   noise[x0 + y1 * w]
-                                       +   noise[x1 + y1 * w]) * (1.0f - distance / r);
-                            }
-                        }
-
-                        blurred[x + y * w] = value / pixels;
-                    }
-
-                return blurred;
-            }
-
-            private float[] smoothen_noise(float[] noise, int w, int h, int scale) {
-                int   scaled_w = w * scale;
-                int   scaled_h = h * scale;
-                float scale_factor = 1.0f / scale;
-
-                float[] smoothed_noise = new float[scaled_w * scaled_h];
-
-                // Horizontal smoothing
-
-                for(int x = 0; x < w - 1; x++)
-                    for(int y = 0; y < h; y++)
-                        for(int i = 0; i < scale; i++)
-                            smoothed_noise[i + x * scale + y * scale * scaled_w] = Tools.smootherstep(noise[ x      + y * w],
-                                                                                                      noise[(x + 1) + y * w],
-                                                                                                      (float)i * scale_factor);
-
-                // Vertical smoothing
-                for(int x = 0; x < scaled_w; x++)
-                    for(int y = 0; y < h - 1; y++)
-                        for(int i = 0; i < scale; i++)
-                            smoothed_noise[x + (y * scale + i) * scaled_w]       = Tools.smootherstep(smoothed_noise[x +  y      * scale * scaled_w],
-                                                                                                      smoothed_noise[x + (y + 1) * scale * scaled_w],
-                                                                                                      (float)i * scale_factor);
-
-                return smoothed_noise;
-            }
-
-            private float[] exponential_filter(float[] noise) {
-                float cutoff    = 0.05f;
-                float sharpness = 0.95f;
-
-                for(int i = 0; i < width * height; i++) {
-                    float        c = 255.0f * (noise[i] - (1.0f - cutoff));
-                    if(c < 0.0f) c = 0.0f;
-                    noise[i]       = 1.0f - (float)Math.Pow(sharpness, c);
-                }
-
-                return noise;
-            }
-
-            private float[] distort(float[] noise, float strength, int distortion_scale) {
-                float[] distortion_noise = smoothen_noise(generate_noise(1.0f, width / distortion_scale, height / distortion_scale),
-                                                                               width / distortion_scale, height / distortion_scale, distortion_scale);
-                float[] distorted        = new float[width * height];
-
-                for(int x = 0; x < width; x++)
-                    for(int y = 0; y < height; y++) {
-                        float distortion_angle = distortion_noise[x + y * width] * Tools.twopi;
-                        float distort_x_by     = (float)Math.Cos(distortion_angle) * strength;
-                        float distort_y_by     = (float)Math.Sin(distortion_angle) * strength;
-
-                        float original_x       = x + distort_x_by;
-                        float original_y       = y + distort_y_by;
-
-                        if(original_x < 0) original_x = width  + original_x;
-                        if(original_y < 0) original_y = height + original_y;
-
-                        int   x0 = (int)original_x;
-                        int   x1 = (int)original_x + 1;
-                        int   y0 = (int)original_y;
-                        int   y1 = (int)original_y + 1;
-
-                        float dx = original_x - x0;
-                        float dy = original_y - y0;
-
-                        float p0 = Tools.smootherstep(noise[x0 % width + (y0 % height) * width], noise[x1 % width + (y0 % height) * width], dx);
-                        float p1 = Tools.smootherstep(noise[x0 % width + (y1 % height) * width], noise[x1 % width + (y1 % height) * width], dx);
-
-                        distorted[x + y * width] = Tools.smootherstep(p0, p1, dy);
-                    }
-
-                return distorted;
-            }
-
-            private float[] mask(float[] noise, int repetitions) {
-                float[] masking_noise = generate_noise(1.0f, width, height);
-
-                for(int i = 0; i < repetitions; i++)
-                    for(int x = 0; x < width; x++)
-                        for(int y = 0; y < height; y++) {
-                        
-                            int x0 =  x - 1;
-                            int x1 = (x + 1) % width;
-                            int y0 =  y - 1;
-                            int y1 = (y + 1) % height;
-
-                            if(x0 < 0) x0 = width  + x0;
-                            if(y0 < 0) y0 = height + y0;
-
-                            float sum = masking_noise[x0 + y0 * width]
-                                      + masking_noise[x  + y0 * width]
-                                      + masking_noise[x1 + y0 * width]
-                                      + masking_noise[x0 + y  * width]
-                                      + masking_noise[x  + y  * width]
-                                      + masking_noise[x1 + y  * width]
-                                      + masking_noise[x0 + y1 * width]
-                                      + masking_noise[x  + y1 * width]
-                                      + masking_noise[x1 + y1 * width];
-
-                            if(sum < 4.0f) masking_noise[x + y * width]  = 0.00f;
-                            else           masking_noise[x + y * width] += 0.25f;
-                        }
-
-                for(int x = 0; x < width; x++)
-                    for(int y = 0; y < height; y++)
-                        noise[x + y * width] *= masking_noise[x + y * width];
-
-                return noise;
-            }
-
-            private float[] soften(float[] noise, int repetitions) {
-                for(int i = 0; i < repetitions; i++)
-                    for(int x = 0; x < width; x++)
-                        for(int y = 0; y < height; y++) {
-                            int   x0             =  x;
-                            int   x1             = (x + 1) % width;
-
-                            int   y0             =  y;
-                            int   y1             = (y + 1) % height;
-
-                            float v0             = Tools.smootherstep(noise[x0 + y0 * width], noise[x1 + y0 * width], (noise[x0 + y0 * width] + noise[x1 + y0 * width]) * 0.5f);
-                            float v1             = Tools.smootherstep(noise[x0 + y1 * width], noise[x1 + y1 * width], (noise[x0 + y1 * width] + noise[x1 + y1 * width]) * 0.5f);
-
-                            noise[x + y * width] = Tools.smootherstep(v0, v1, (v0 + v1) * 0.5f);
-                        }
-
-                return noise;
-            }
-
-            private float[] circular_mask(float[] noise) {
-                float[] output = new float[width * height];
-
-                for(int x = 0; x < width; x++)
-                    for(int y = 0; y < height; y++) {
-                        float half_width  = width  * 0.5f;
-                        float half_height = height * 0.5f;
-                        float local_x     = x - half_width;
-                        float local_y     = y - half_height;
-
-                        float d           = local_x * local_x / (half_width  * half_width)
-                                          + local_y * local_y / (half_height * half_height);
-
-                        if(d <= 0.15f)
-                            output[x + y * width] = noise[x + y * width];
-                        else if(d <= 0.5f)
-                            output[x + y * width] = Tools.smootherstep(0.0f, noise[x + y * width], (0.5f - d) / 0.35f);
-            }
-
-                return output;
-            }
-
-            private float truncate(float f) {
-                if(f < 0.0f) return 0.0f;
-                if(f > 1.0f) return 1.0f;
-                             return    f;
-            }
-
             private void generate() {
                 rng = new(seed);
 
@@ -260,19 +30,12 @@ namespace Scripts {
                 float base_g = (float)rng.NextDouble() * 0.8f;
                 float base_b = (float)rng.NextDouble() * 0.8f;
 
-                float[] base_alpha = soften(distort(smoothen_noise(generate_noise(1.0f,
-                                                                                  width  / 64,
-                                                                                  height / 64),
-                                                                                  width  / 64,
-                                                                                  height / 64,
-                                                                                  64),
-                                                                                  16.0f,
-                                                                                  16),
-                                                                                  4);
-
-                base_alpha = circular_blur(base_alpha, width, height, 16.0f);
-
-                base_alpha = circular_mask(base_alpha);
+                float[] base_alpha = ProceduralImages.generate_noise(rng, 1.0f,             width / 64, height / 64);
+                        base_alpha = ProceduralImages.smoothen_noise(base_alpha,            width / 64, height / 64, 64);
+                        base_alpha = ProceduralImages.distort(rng,   base_alpha, 16.0f, 16, width,      height);
+                        base_alpha = ProceduralImages.soften(        base_alpha, 4,         width,      height);
+                        base_alpha = ProceduralImages.circular_blur( base_alpha,            width,      height, 16.0f);
+                        base_alpha = ProceduralImages.circular_mask( base_alpha,            width,      height);
 
                 for(int x = 0; x < width; x++)
                     for(int y = 0; y < height; y++) {
@@ -299,14 +62,9 @@ namespace Scripts {
                         int   scale         = 1 << layers - layer + 1;
                         float strength      = scale / layers;
 
-                        float[] layer_alpha = smoothen_noise(blur_noise(generate_noise(strength,
-                                                                                       width  / scale,
-                                                                                       height / scale),
-                                                                                       width  / scale,
-                                                                                       height / scale),
-                                                                                       width  / scale,
-                                                                                       height / scale,
-                                                                                       scale);
+                        float[] layer_alpha = ProceduralImages.generate_noise(rng, strength, width / scale, height / scale);
+                                layer_alpha = ProceduralImages.blur_noise(   layer_alpha,    width / scale, height / scale);
+                                layer_alpha = ProceduralImages.smoothen_noise(layer_alpha,   width / scale, height / scale, scale);
 
                         for(int x = 0; x < width; x++)
                             for(int y = 0; y < height; y++) {
@@ -315,11 +73,11 @@ namespace Scripts {
                             }
                     }
 
-                    alpha = exponential_filter(alpha);
-
-                    alpha = soften(distort(mask(alpha, 8), 16.0f, 64), 8);
-
-                    alpha = circular_mask(alpha);
+                    alpha = ProceduralImages.exponential_filter(alpha,            width, height);
+                    alpha = ProceduralImages.mask(   rng,       alpha,         8, width, height);
+                    alpha = ProceduralImages.distort(rng,       alpha, 16.0f, 64, width, height);
+                    alpha = ProceduralImages.soften(            alpha,         8, width, height);
+                    alpha = ProceduralImages.circular_mask(     alpha,            width, height);
 
                     float target_x = rng.Next(width);
                     float target_y = rng.Next(height);
@@ -342,20 +100,13 @@ namespace Scripts {
                         }
                 }
 
-                float contrast_factor =  1.06f * (contrast * 0.5f + 1.00f)
-                                      / (1.00f * (1.06f - contrast * 0.5f));
 
                 for(int i = 0; i < width * height; i++) {
-                    // Increase contrast
-                    pixels[i].r = truncate(contrast_factor * (pixels[i].r - 0.5f) + 0.5f);
-                    pixels[i].g = truncate(contrast_factor * (pixels[i].g - 0.5f) + 0.5f);
-                    pixels[i].b = truncate(contrast_factor * (pixels[i].b - 0.5f) + 0.5f);
+                    // Adjust contrast
+                    ProceduralImages.adjust_contrast(ref pixels[i].r, ref pixels[i].g, ref pixels[i].b, contrast);
 
                     // Adjust black level
-                    pixels[i].r = truncate((pixels[i].r - cutoff) / (1.0f - cutoff));
-                    pixels[i].g = truncate((pixels[i].g - cutoff) / (1.0f - cutoff));
-                    pixels[i].b = truncate((pixels[i].b - cutoff) / (1.0f - cutoff));
-                    pixels[i].a = truncate((pixels[i].a - cutoff) / (1.0f - cutoff));
+                    ProceduralImages.adjust_black_level(ref pixels[i].r, ref pixels[i].g, ref pixels[i].b, ref pixels[i].a, cutoff);
 
                     // Adjust opacity
                     pixels[i].a *= opacity;
