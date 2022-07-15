@@ -12,6 +12,7 @@ namespace Action
         private ProjectileEntity ProjectileEntity;
         private ItemInventoryEntity ItemEntity;
         private Vec2f StartPos;
+        float radius = 0.0f;
 
         public ToolActionThrowableGrenade(Contexts entitasContext, int actionID) : base(entitasContext, actionID)
         {
@@ -21,6 +22,11 @@ namespace Action
         {
             ItemEntity = EntitasContext.itemInventory.GetEntityWithItemID(ActionEntity.actionTool.ItemID);
             WeaponProperty = GameState.ItemCreationApi.GetWeapon(ItemEntity.itemType.Type);
+
+            if (ItemEntity.itemType.Type == Enums.ItemType.Grenade)
+                radius = 2.0f;
+            else if (ItemEntity.itemType.Type == Enums.ItemType.RPG)
+                radius = 4.0f;
 
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float x = worldPosition.x;
@@ -48,7 +54,15 @@ namespace Action
             StartPos.X += 0.5f;
             StartPos.Y += 0.5f;
 
-            ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Grenade);
+            if(ItemEntity.itemType.Type == Enums.ItemType.Grenade)
+            {
+                ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Grenade);
+                planet.AddFloatingText(WeaponProperty.GrenadeFlags.ToString(), 2.0f, new Vec2f(0, 0), new Vec2f(AgentEntity.physicsPosition2D.Value.X + 0.5f, AgentEntity.physicsPosition2D.Value.Y));
+            }
+            else if (ItemEntity.itemType.Type == Enums.ItemType.RPG)
+            {
+                ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Rocket);
+            }
 
             ActionEntity.actionExecution.State = Enums.ActionState.Running;
 
@@ -70,7 +84,6 @@ namespace Action
             // Check if projectile is inside in weapon range.
             if ((ProjectileEntity.projectilePosition2D.Value - StartPos).Magnitude > range)
             {
-                float radius = 10.0f;
 
                 planet.AddParticleEmitter(ProjectileEntity.projectilePosition2D.Value, Particle.ParticleEmitterType.DustEmitter);
 
@@ -80,12 +93,8 @@ namespace Action
                 // Todo: Create a agent colision system?
                 foreach (var entity in entities)
                 {
-                    if (entity == AgentEntity)
-                        continue;
-
                     float dist = Vector2.Distance(new Vector2(AgentEntity.physicsPosition2D.Value.X, AgentEntity.physicsPosition2D.Value.Y), new Vector2(ProjectileEntity.projectilePosition2D.Value.X, ProjectileEntity.projectilePosition2D.Value.Y));
 
-                    // Note (Mert): This is broken, change it.
                     if (dist < radius)
                     {
                         Vec2f entityPos = entity.physicsPosition2D.Value;

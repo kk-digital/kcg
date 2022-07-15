@@ -101,6 +101,13 @@ namespace Item
         public float RecoverTime;
         public float RecoverDelay;
 
+        /// <summary>
+        /// Melee Attack Properties
+        /// </summary>
+        public float StaggerTime;
+        public float StaggerRate;
+
+
         public Flags WeaponFlags;
         [Flags]
         public enum Flags : byte
@@ -109,8 +116,28 @@ namespace Item
             ShouldSpread = 2 << 1,
             HasCharge = 3 << 2
         }
+
+        public MeleeFlags MeleeAttackFlags;
+        public enum MeleeFlags : byte
+        {
+            Stab = 1 << 0,
+            Slash = 2 << 1
+        }
+
+        public GrenadesFlags GrenadeFlags;
+        public enum GrenadesFlags : byte
+        {
+            Cocussions = 1 << 0,
+            Flame = 2 << 1,
+            Fragmentation = 3 << 2
+        }
+
         public bool HasClip() { return WeaponFlags.HasFlag(Flags.HasClip); }
         public bool ShouldSpread() { return WeaponFlags.HasFlag(Flags.ShouldSpread); }
         public bool HasCharge() { return WeaponFlags.HasFlag(Flags.HasCharge); }
+
+        public bool IsStab() { return WeaponFlags.HasFlag(MeleeFlags.Stab); }
+        public bool IsSlash() { return WeaponFlags.HasFlag(MeleeFlags.Slash); }
+
     }
 }

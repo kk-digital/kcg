@@ -259,42 +259,182 @@ namespace ECSInput
                 if (Input.GetKeyDown(KeyCode.Alpha1))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 0);
+
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 0);
+
+                    var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
+
+                    // Todo: Create a agent colision system?
+                    foreach (var entityP in entities)
+                    {
+                        if (entityP.isAgentPlayer)
+                        {
+                            planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entityP.physicsPosition2D.Value.X + 0.4f,
+                                entityP.physicsPosition2D.Value.Y));
+                        }
+                    }
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha2))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 1);
+
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 1);
+
+                    var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
+
+                    // Todo: Create a agent colision system?
+                    foreach (var entityP in entities)
+                    {
+                        if (entityP.isAgentPlayer)
+                        {
+                            planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entityP.physicsPosition2D.Value.X + 0.4f,
+                                entityP.physicsPosition2D.Value.Y));
+                        }
+                    }
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha3))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 2);
+
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 2);
+
+                    var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
+
+                    // Todo: Create a agent colision system?
+                    foreach (var entityP in entities)
+                    {
+                        if (entityP.isAgentPlayer)
+                        {
+                            planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entityP.physicsPosition2D.Value.X + 0.4f,
+                                entityP.physicsPosition2D.Value.Y));
+                        }
+                    }
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha4))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 3);
+
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 3);
+
+                    var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
+
+                    // Todo: Create a agent colision system?
+                    foreach (var entityP in entities)
+                    {
+                        if (entityP.isAgentPlayer)
+                        {
+                            planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entityP.physicsPosition2D.Value.X + 0.4f,
+                                entityP.physicsPosition2D.Value.Y));
+                        }
+                    }
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha5))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 4);
+
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 4);
+
+                    var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
+
+                    // Todo: Create a agent colision system?
+                    foreach (var entityP in entities)
+                    {
+                        if (entityP.isAgentPlayer)
+                        {
+                            planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entityP.physicsPosition2D.Value.X + 0.4f,
+                                entityP.physicsPosition2D.Value.Y));
+                        }
+                    }
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha6))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 5);
+
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 5);
+
+                    var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
+
+                    // Todo: Create a agent colision system?
+                    foreach (var entityP in entities)
+                    {
+                        if (entityP.isAgentPlayer)
+                        {
+                            planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entityP.physicsPosition2D.Value.X + 0.4f,
+                                entityP.physicsPosition2D.Value.Y));
+                        }
+                    }
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha7))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 6);
+
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 6);
+
+                    var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
+
+                    // Todo: Create a agent colision system?
+                    foreach (var entityP in entities)
+                    {
+                        if (entityP.isAgentPlayer)
+                        {
+                            planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entityP.physicsPosition2D.Value.X + 0.4f,
+                                entityP.physicsPosition2D.Value.Y));
+                        }
+                    }
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha8))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 7);
+
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 7);
+
+                    var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
+
+                    // Todo: Create a agent colision system?
+                    foreach (var entityP in entities)
+                    {
+                        if (entityP.isAgentPlayer)
+                        {
+                            planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entityP.physicsPosition2D.Value.X + 0.4f,
+                                entityP.physicsPosition2D.Value.Y));
+                        }
+                    }
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha9))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 8);
+
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 8);
+
+                    var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
+
+                    // Todo: Create a agent colision system?
+                    foreach (var entityP in entities)
+                    {
+                        if (entityP.isAgentPlayer)
+                        {
+                            planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entityP.physicsPosition2D.Value.X + 0.4f,
+                                entityP.physicsPosition2D.Value.Y));
+                        }
+                    }
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha0))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 9);
+
+                    var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
+
+                    // Todo: Create a agent colision system?
+                    foreach (var entityP in entities)
+                    {
+                        if(entityP.isAgentPlayer)
+                        {
+                            var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 9);
+
+                            planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entityP.physicsPosition2D.Value.X + 0.4f,
+                                entityP.physicsPosition2D.Value.Y));
+                        }
+                    }
                 }
             }
         }

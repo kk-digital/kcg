@@ -30,6 +30,7 @@
         ToolActionEnemySpawn,
         ToolActionMiningLaser,
         ToolActionRemoveTile,
-        ToolActionThrowGrenade
+        ToolActionThrowGrenade,
+        ToolActionMeleeAttack
     }
 }

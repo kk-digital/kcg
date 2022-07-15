@@ -10,8 +10,15 @@
         /// <summary>
         /// Weapons
         /// </summary>
-        Gun,
+        Pistol,
+        PumpShotgun,
         Shotgun,
+        LongRifle,
+        AutoCannon,
+        RPG,
+        SMG,
+        Sword,
+        Bow,
 
         /// <summary>
         /// Throwable Explosive Weapons
