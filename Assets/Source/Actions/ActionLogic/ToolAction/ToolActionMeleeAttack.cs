@@ -9,7 +9,10 @@ namespace Action
     public class ToolActionMeleeAttack : ActionBase
     {
         private Item.FireWeaponPropreties WeaponProperty;
+        private List<AgentEntity> Enemies = new List<AgentEntity>();
         private ItemInventoryEntity ItemEntity;
+        private bool CanStun;
+        private float elapsed;
 
         public ToolActionMeleeAttack(Contexts entitasContext, int actionID) : base(entitasContext, actionID)
         {
@@ -42,8 +45,6 @@ namespace Action
             {
                 if (!entity.isAgentPlayer)
                 {
-                    float dist = Vector2.Distance(new Vector2(AgentEntity.physicsPosition2D.Value.X, AgentEntity.physicsPosition2D.Value.Y), new Vector2(x, y));
-
                     if (IsInRange(new Vector2(entity.physicsPosition2D.Value.X, entity.physicsPosition2D.Value.Y)))
                     {
                         Vec2f entityPos = entity.physicsPosition2D.Value;
@@ -54,11 +55,16 @@ namespace Action
 
                         Vector2 oppositeDirection = new Vector2(-diff.X, -diff.Y);
 
-                        if (AgentEntity.hasAgentStats)
+                        Enemies.Add(entity);
+
+                        if (entity.hasAgentStats)
                         {
                             var stats = entity.agentStats;
                             entity.ReplaceAgentStats(stats.Health - (int)damage, stats.Food, stats.Water, stats.Oxygen,
                                 stats.Fuel, stats.AttackCooldown);
+
+                            entity.physicsMovable.Velocity = Vec2f.Zero;
+                            CanStun = true;
 
                             // spawns a debug floating text for damage 
                             planet.AddFloatingText("" + damage, 0.5f, new Vec2f(oppositeDirection.x * 0.05f, oppositeDirection.y * 0.05f), new Vec2f(entityPos.X, entityPos.Y + 0.35f));
@@ -75,7 +81,23 @@ namespace Action
 
         public override void OnUpdate(float deltaTime, ref Planet.PlanetState planet)
         {
-            ActionEntity.actionExecution.State = Enums.ActionState.Success;
+            if (CanStun)
+            {
+                for (int i = 0; i < Enemies.Count; i++)
+                {
+                    Enemies[i].physicsMovable.Velocity = Vec2f.Zero;
+                }
+                elapsed += Time.deltaTime;
+                
+                if(elapsed > (WeaponProperty.StaggerTime * WeaponProperty.StaggerRate))
+                {
+                    elapsed = 0;
+                    CanStun = false;
+                }
+            }
+
+            if(!CanStun)
+                ActionEntity.actionExecution.State = Enums.ActionState.Success;
         }
 
         public override void OnExit(ref PlanetState planet)

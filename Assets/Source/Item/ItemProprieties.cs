@@ -101,6 +101,13 @@ namespace Item
         public float RecoverTime;
         public float RecoverDelay;
 
+        /// <summary>
+        /// Melee Attack Properties
+        /// </summary>
+        public float StaggerTime;
+        public float StaggerRate;
+
+
         public Flags WeaponFlags;
         [Flags]
         public enum Flags : byte

@@ -215,7 +215,7 @@ namespace Item
             PropertiesArray[(int)CurrentIndex].FireWeaponID = WeaponListSize++;
         }
 
-        public void SetSwordWeapon(float coolDown, float range, float basicDamage)
+        public void SetSwordWeapon(float coolDown, float range, float staggerTime, float staggerRate, float basicDamage)
         {
             IsItemTypeValid();
 
@@ -223,6 +223,8 @@ namespace Item
             {
                 CoolDown = coolDown,
                 Range = range,
+                StaggerTime = staggerTime,
+                StaggerRate = staggerRate,
                 BasicDemage = basicDamage,
             };
 
