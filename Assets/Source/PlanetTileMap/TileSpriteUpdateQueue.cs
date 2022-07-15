@@ -30,6 +30,8 @@ namespace PlanetTileMap
             ToUpdateTiles = new List<UpdateTile>();
         }
 
+
+        // add a tile position and layer to be updated later
         public void Add(int x, int y, MapLayerType layer)
         {
             ToUpdateTiles.Add(new UpdateTile(x, y, layer));
@@ -37,6 +39,9 @@ namespace PlanetTileMap
 
 
 
+        // called every frame
+        // updates a number of tiles each frame
+        // the remaining tiles will be left for the next frame 
         public void UpdateTileSprites(ref TileMap tileMap)
         {
             for(int i = 0; i < 1024 * 32 && i < ToUpdateTiles.Count; i++)
