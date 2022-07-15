@@ -625,10 +625,10 @@ namespace Source {
 
                 } else {
 
-                    //                                                    1 + ε             ν
-                    //               1 + ε      E                       √ ----- (1 - ε) tan(-)
-                    // ν = 2 atanh(√ ----- tanh(-))   =>   E = 2 atanh(   1 - ε             2  )
-                    //               1 - ε      2                       ---------------------- 
+                    //                                                    1 + ε              ν
+                    //               1 + ε      E                       √ ----- (1 - ε) tanh(-)
+                    // ν = 2 atanh(√ ----- tanh(-))   =>   E = 2 atanh(   1 - ε              2  )
+                    //               1 - ε      2                       ----------------------- 
                     //                                                           1 + ε
 
                     float one_plus_ecc  = 1 + eccentricity;
@@ -636,7 +636,7 @@ namespace Source {
 
                     eccentric_anomaly   = 2.0f * (float)Math.Atanh((Math.Sqrt(one_plus_ecc / one_minus_ecc)
                                                * one_minus_ecc
-                                               * Math.Tan(true_anomaly / 2)) / one_plus_ecc);
+                                               * Math.Tanh(true_anomaly / 2)) / one_plus_ecc);
 
                     // M = E - ε sinh(E)
 
