@@ -1,5 +1,6 @@
 using System;
 
+// TODO: Optimize these functions
 namespace Source {
     namespace SystemView {
         public static class ProceduralImages {
@@ -130,7 +131,7 @@ namespace Source {
                         float original_x       = x + distort_x_by;
                         float original_y       = y + distort_y_by;
 
-                        if(original_x < 0) original_x = w  + original_x;
+                        if(original_x < 0) original_x = w + original_x;
                         if(original_y < 0) original_y = h + original_y;
 
                         int   x0 = (int)original_x;
@@ -145,6 +146,50 @@ namespace Source {
                         float p1 = Tools.smootherstep(noise[x0 % w + (y1 % h) * w], noise[x1 % w + (y1 % h) * w], dx);
 
                         distorted[x + y * w] = Tools.smootherstep(p0, p1, dy);
+                    }
+
+                return distorted;
+            }
+
+            public static float[] swirl(float[] noise, int w, int h) {
+                float[] distorted = new float[w * h];
+
+                int     half_w    = w / 2;
+                int     half_h    = h / 2;
+
+                for(int x = 0; x < w; x++)
+                    for(int y = 0; y < h; y++) {
+                        float local_x      = x - half_w;
+                        float local_y      = y - half_h;
+
+                        if(local_x == 0 && local_y == 0) {
+                            distorted[x + y * w] = noise[x + y * w];
+                            continue;
+                        }
+
+                        float distance     = Tools.magnitude(local_x, local_y);
+                        float distort_to   = Tools.normalize_angle(Tools.get_angle(local_x, local_y) + Tools.halfpi);
+                        float distort_x_to = (float)Math.Cos(distort_to);
+                        float distort_y_to = (float)Math.Sin(distort_to);
+
+                        float original_x   = distort_x_to * distance;
+                        float original_y   = distort_y_to * distance;
+
+                        if(original_x < 0) original_x = w + original_x;
+                        if(original_y < 0) original_y = h + original_y;
+
+                        int   x0 = (int)original_x;
+                        int   x1 = (int)original_x + 1;
+                        int   y0 = (int)original_y;
+                        int   y1 = (int)original_y + 1;
+
+                        float dx = original_x - x0;
+                        float dy = original_y - y0;
+
+                        float p0 = Tools.smootherstep(noise[x0 % w + (y0 % h) * w], noise[x1 % w + (y0 % h) * w], dx);
+                        float p1 = Tools.smootherstep(noise[x0 % w + (y1 % h) * w], noise[x1 % w + (y1 % h) * w], dx);
+
+                        distorted[x + y * w] = Tools.smootherstep(p0, p1, dy) ;
                     }
 
                 return distorted;
@@ -211,12 +256,12 @@ namespace Source {
                 for(int x = 0; x < w; x++)
                     for(int y = 0; y < h; y++) {
                         float half_w  = w  * 0.5f;
-                        float half_h = h * 0.5f;
-                        float local_x     = x - half_w;
-                        float local_y     = y - half_h;
+                        float half_h  = h * 0.5f;
+                        float local_x = x - half_w;
+                        float local_y = y - half_h;
 
-                        float d           = local_x * local_x / (half_w  * half_w)
-                                          + local_y * local_y / (half_h * half_h);
+                        float d       = local_x * local_x / (half_w * half_w)
+                                      + local_y * local_y / (half_h * half_h);
 
                         if(d <= 0.15f)
                             output[x + y * w] = noise[x + y * w];

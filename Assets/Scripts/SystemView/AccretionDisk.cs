@@ -1,15 +1,15 @@
-using System;
 using UnityEngine;
 using Source.SystemView;
 
 namespace Scripts {
     namespace SystemView {
-        public class Nebula : MonoBehaviour {
+        public class AccretionDisk : MonoBehaviour {
             public int            seed;
             public int            layers;
             public int            colors;
             public int            width;
             public int            height;
+            public int            strands;
             public float          opacity;
             public float          contrast;
             public float          cutoff;           // Also sometimes called black level
@@ -20,15 +20,16 @@ namespace Scripts {
             private System.Random rng;
 
             private void generate() {
+
                 rng = new(seed);
 
                 Color[] pixels    = new Color[width * height];
 
                 for(int i = 0; i < width * height; i++) pixels[i] = new Color(0.0f, 0.0f, 0.0f, 0.0f);
 
-                float base_r = (float)rng.NextDouble() * 0.8f;
-                float base_g = (float)rng.NextDouble() * 0.8f;
-                float base_b = (float)rng.NextDouble() * 0.8f;
+                float base_r = 0.6f + (float)rng.NextDouble() * 0.2f;
+                float base_g = 0.6f + (float)rng.NextDouble() * 0.2f;
+                float base_b = 0.4f + (float)rng.NextDouble() * 0.4f;
 
                 float[] base_alpha = ProceduralImages.generate_noise(rng, 1.0f,             width / 64, height / 64);
                         base_alpha = ProceduralImages.smoothen_noise(base_alpha,            width / 64, height / 64, 64);
@@ -45,7 +46,8 @@ namespace Scripts {
                         pixels[x + y * width].a = base_alpha[x + y * width];
                     }
 
-                float max_dist = Tools.get_distance(0, 0, width, height);
+                float max_dist      = Tools.get_distance(0, 0, width,     height);
+                float max_half_dist = Tools.get_distance(0, 0, width / 2, height / 2);
 
                 for(int color = 0; color < colors; color++) {
 
@@ -79,7 +81,7 @@ namespace Scripts {
                     alpha = ProceduralImages.mask(   rng,       alpha,         8, width, height);
                     alpha = ProceduralImages.distort(rng,       alpha, 16.0f, 64, width, height);
                     alpha = ProceduralImages.soften(            alpha,         8, width, height);
-                    alpha = ProceduralImages.circular_mask(     alpha,            width, height);
+                    alpha = ProceduralImages.swirl(             alpha,            width, height);
 
                     float target_x = rng.Next(width);
                     float target_y = rng.Next(height);
@@ -88,7 +90,7 @@ namespace Scripts {
                         for(int y = 0; y < height; y++) {
                             float a                 = Tools.smootherstep(alpha[x + y * width] * 0.3f, 0.0f, 1.0f - pixels[x + y * width].a);
 
-                            float d                 = Tools.get_distance(x, y, target_x, target_y) / max_dist;
+                            float d                 = Tools.get_distance(x, y, target_x,  target_y) / max_dist;
 
                             float r                 = Tools.smootherstep(r0, r1, d);
                             float g                 = Tools.smootherstep(g0, g1, d);
@@ -103,21 +105,27 @@ namespace Scripts {
                 }
 
 
-                for(int i = 0; i < width * height; i++) {
-                    // Adjust contrast
-                    ProceduralImages.adjust_contrast(ref pixels[i].r, ref pixels[i].g, ref pixels[i].b, contrast);
+                for(int x = 0; x < width; x++)
+                    for(int y = 0; y < height; y++) {
+                        int i = x + y * width;
 
-                    // Adjust black level
-                    ProceduralImages.adjust_black_level(ref pixels[i].r, ref pixels[i].g, ref pixels[i].b, ref pixels[i].a, cutoff);
+                        // Adjust contrast
+                        ProceduralImages.adjust_contrast(ref pixels[i].r, ref pixels[i].g, ref pixels[i].b, contrast);
 
-                    // Adjust opacity
-                    pixels[i].a *= opacity;
-                }
+                        // Adjust black level
+                        ProceduralImages.adjust_black_level(ref pixels[i].r, ref pixels[i].g, ref pixels[i].b, ref pixels[i].a, cutoff);
+
+                        // Adjust opacity
+                        pixels[i].a *= opacity;
+
+                        // Fade pixels that are farther away from center using a smootherstep curve
+                        pixels[i].a  = Tools.smootherstep(pixels[i].a * 2.0f, 0.0f, Tools.get_distance(x, y, width / 2, height / 2) / max_half_dist);
+                    }
 
                 texture = new Texture2D(width, height);
                 texture.filterMode = FilterMode.Trilinear;
                 texture.SetPixels(pixels);
-                
+
                 texture.Apply();
 
             }
@@ -129,10 +137,7 @@ namespace Scripts {
                 renderer.sprite = Sprite.Create(texture,
                                                 new Rect(0, 0, width, height),
                                                 new Vector2(0.5f, 0.5f));
-
-                renderer.transform.Translate(new Vector3(0.0f, 0.0f, renderer.transform.position.z + 5.0f));
             }
         }
     }
 }
-    
