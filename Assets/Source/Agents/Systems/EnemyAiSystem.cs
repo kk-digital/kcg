@@ -32,6 +32,11 @@ namespace Agent
                     direction.Y = 0;
                     direction.Normalize();
 
+
+                    // enemy bumps into the player and takes damage
+                    // and gets pushed back in the opposite direction
+                    // a floating text with the amount of damage dealt on it
+                    // will be spawned at that position
                     if (entity.hasAgentStats && Len <= 0.6f && !targetMovable.Invulnerable)
                     {
                         Vector2 oppositeDirection = new Vector2(-direction.X, -direction.Y);
@@ -48,12 +53,22 @@ namespace Agent
                         movable.Velocity.X = 20.0f * oppositeDirection.x;
                     }
 
+
+                    // if the enemy is close to the player
+                    // the enemy will move towards the player
                     if (Len <= entity.agentEnemy.DetectionRadius && Len >= 0.5f)
                     {
+                        // if the enemy is stuck
+                        // trigger the jump
                         bool jump = Math.Abs(movable.Acceleration.X) <= 0.01f && 
                                         movable.Acceleration.Y <= 0.01f && 
                                         movable.Acceleration.Y >= -0.01f;
+
+                        // to move the enemy we have to add acceleration 
+                        // towards the player
                         movable.Acceleration = direction * movable.Speed * 25.0f;
+
+                        // jumping is just an increase in velocity
                         if (jump)
                         {
                             movable.Acceleration.Y = 0.0f;

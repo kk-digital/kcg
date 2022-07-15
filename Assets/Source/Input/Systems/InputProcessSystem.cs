@@ -39,6 +39,8 @@ namespace ECSInput
                 var movementState = entity.agentMovementState;
                 movementState.Running = running;
 
+
+                // handling horizontal movement (left/right)
                 if (movementState.Running)
                 {
                     movable.Acceleration.X = input.Value.X * movable.Speed * 100.0f * 2;
@@ -46,11 +48,9 @@ namespace ECSInput
                 else
                 {
                     movable.Acceleration.X = input.Value.X * movable.Speed * 100.0f;
-                }
+                }         
 
-                //movable.AffectedByGravity = false;
-            
-
+                // decrease the dash cooldown
                 movementState.DashCooldown -= Time.deltaTime;
 
                 // dash
@@ -68,10 +68,12 @@ namespace ECSInput
                     movementState.DashCooldown = 1.0f;
                 }
 
+
+                // we can start jumping only if the jump counter is 0
                 if (movementState.JumpCounter == 0)
                 {
     
-                    // jump
+                    // first jump
                     if (jump && movementState.MovementState != MovementState.Dashing)
                     {
                         // if we are sticking to a wall 
@@ -117,6 +119,7 @@ namespace ECSInput
                 }
                 else if (movementState.MovementState == MovementState.Flying)
                 {
+                    // if no fuel is left we change to movement state to none
                     movementState.MovementState = MovementState.None;
                 }
 
@@ -142,15 +145,22 @@ namespace ECSInput
                 // if the agent is dashing the gravity will not affect him
                 movable.AffectedByGravity = !(movementState.MovementState == MovementState.Dashing);
 
+
                 if (x == 1.0f)
                 {
+                    // if we move to the right
+                    // that means we are no longer sliding down on the left
                     movable.SlidingLeft = false;
                 }
                 else if (x == -1.0f)
                 {
+                    // if we move to the left
+                    // that means we are no longer sliding down on the right
                     movable.SlidingRight = false;
                 }
 
+
+                // if we are on the ground we reset the jump counter
                 if (movable.Landed)
                 {
                     movementState.JumpCounter = 0;
@@ -161,7 +171,8 @@ namespace ECSInput
                 }
 
                 
-
+                // if we are sliding
+                // spawn some particles and limit vertical movement
                 if (movable.SlidingLeft)
                 {
                     movementState.JumpCounter = 0;
@@ -177,6 +188,7 @@ namespace ECSInput
                     planet.AddParticleEmitter(pos.Value + new Vec2f(0.5f, -0.5f), Particle.ParticleEmitterType.DustEmitter);
                 }
 
+                // if we are flying, reduce the fuel and spawn particles
                 if (movementState.MovementState == MovementState.Flying)
                 {
                     stats.Fuel -= 1.0f;
@@ -188,14 +200,17 @@ namespace ECSInput
                 }
                 else
                 {
+                    // if we are not flying, add fuel to the tank
                     stats.Fuel += 1.0f;
                 }
 
+                // make sure the fuel never goes up more than it should
                 if (stats.Fuel > 100) 
                 {
                     stats.Fuel = 100;
                 }
 
+                // if we are dashing we add some particles
                 if (movementState.MovementState == MovementState.Dashing)
                 {
                     planet.AddParticleEmitter(pos.Value, Particle.ParticleEmitterType.DustEmitter);
