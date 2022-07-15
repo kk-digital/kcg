@@ -13,11 +13,14 @@ namespace Scripts {
             public float          opacity;
             public float          contrast;
             public float          cutoff;           // Also sometimes called black level
+            public float          spin;             // Angular velocity in degrees/second
+            public Vector3        center;           // Center position to spin around
 
             public Texture2D      texture;
             public SpriteRenderer renderer;
 
             private System.Random rng;
+            private float         last_time;
 
             private void generate() {
                 rng = new(seed);
@@ -131,6 +134,15 @@ namespace Scripts {
                                                 new Vector2(0.5f, 0.5f));
 
                 renderer.transform.Translate(new Vector3(0.0f, 0.0f, renderer.transform.position.z + 5.0f));
+
+                last_time = Time.time;
+            }
+
+            private void Update() {
+                float current_time = Time.time - last_time;
+                      last_time    = Time.time;
+
+                renderer.transform.RotateAround(center, new Vector3(0.0f, 0.0f, 1.0f), -current_time * spin);
             }
         }
     }
