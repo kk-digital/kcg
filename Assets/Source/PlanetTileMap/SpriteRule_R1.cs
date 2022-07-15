@@ -62,10 +62,9 @@ namespace PlanetTileMap
             return match;
         }
 
-        public static void UpdateSprite(int x, int y, MapLayerType planetLayer,
-                    ref TileMap tileMap)
+        public static void UpdateSprite(int x, int y, MapLayerType planetLayer, TileMap tileMap)
         {
-            ref var tile = ref tileMap.GetTile(x, y, planetLayer);
+            /*ref var tile = ref tileMap.GetTile(x, y, planetLayer);
             ref var property = ref GameState.TileCreationApi.GetTileProperty(tile.ID);
             
             // standard sheet mapping
@@ -116,7 +115,7 @@ namespace PlanetTileMap
 
             // the sprite ids are next to each other in the sprite atlas
             // we just have to know which one to draw based on the offset
-            tile.SpriteID = property.BaseSpriteId + tilePositionToTileSet[(int) tilePosition];
+            tile.SpriteID = property.BaseSpriteId + tilePositionToTileSet[(int) tilePosition];*/
         }
     }
 }

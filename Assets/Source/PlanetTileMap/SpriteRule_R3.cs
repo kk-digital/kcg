@@ -8,6 +8,7 @@ namespace PlanetTileMap
 
     public static class SpriteRule_R3
     {
+        // neighbor positions 
         // power of 2 numbers 
         // we need them to do bitwise operations
         public static int BitField_Right = 1 << 0; // 1
@@ -881,14 +882,13 @@ namespace PlanetTileMap
             
         }
 
-        public static void UpdateSprite(int x, int y, MapLayerType planetLayer,
-                    ref TileMap tileMap)
+        public static void UpdateSprite(int x, int y, MapLayerType planetLayer, TileMap tileMap)
         {
-             ref var tile = ref tileMap.GetTile(x, y, planetLayer);
+            /*ref var tile = ref tileMap.GetTile(x, y, planetLayer);
             ref var property = ref GameState.TileCreationApi.GetTileProperty(tile.ID);
-            
+
             int neighborsBitField = 0;
-            
+
             // check if Right Neighbor Exist and add the bit position 
             // only if the tile and the neighbor have the same id
             if (x + 1 < tileMap.MapSize.X)
@@ -899,7 +899,7 @@ namespace PlanetTileMap
                     neighborsBitField |= BitField_Right;
                 }
             }
-            
+
             // check if Left Neighbor Exist and add the bit position 
             // only if the tile and the neighbor have the same id
             if (x - 1 >= 0)
@@ -910,7 +910,7 @@ namespace PlanetTileMap
                     neighborsBitField |= BitField_Left;
                 }
             }
-            
+
             // check if Up Neighbor Exist and add the bit position 
             // only if the tile and the neighbor have the same id
             if (y + 1 < tileMap.MapSize.Y)
@@ -921,7 +921,7 @@ namespace PlanetTileMap
                     neighborsBitField |= BitField_Up;
                 }
             }
-            
+
             // check if Down Neighbor Exist and add the bit position 
             // only if the tile and the neighbor have the same id
             if (y - 1 >= 0)
@@ -932,7 +932,7 @@ namespace PlanetTileMap
                     neighborsBitField |= BitField_Down;
                 }
             }
-            
+
             // check if Up Right Neighbor Exist and add the bit position 
             // only if the tile and the neighbor have the same id
             if (x + 1 < tileMap.MapSize.X && y + 1 < tileMap.MapSize.Y)
@@ -943,7 +943,7 @@ namespace PlanetTileMap
                     neighborsBitField |= BitField_UpRight;
                 }
             }
-            
+
             // check if Up Left Neighbor Exist and add the bit position 
             // only if the tile and the neighbor have the same id
             if (x - 1 >= 0 && y + 1 < tileMap.MapSize.Y)
@@ -954,7 +954,7 @@ namespace PlanetTileMap
                     neighborsBitField |= BitField_UpLeft;
                 }
             }
-            
+
             // check if Down Right Neighbor Exist and add the bit position 
             // only if the tile and the neighbor have the same id
             if (x + 1 < tileMap.MapSize.X && y - 1 >= 0)
@@ -965,7 +965,7 @@ namespace PlanetTileMap
                     neighborsBitField |= BitField_DownRight;
                 }
             }
-            
+
             // check if Down Left Neighbor Exist and add the bit position 
             // only if the tile and the neighbor have the same id
             if (x - 1 >= 0 && y - 1 >= 0)
@@ -976,20 +976,20 @@ namespace PlanetTileMap
                     neighborsBitField |= BitField_DownLeft;
                 }
             }
-            
-            
-            
-            
-            
+
+
+
+
+
             int tilePosition = R3_Map[neighborsBitField];
-            
-            
-            
-            
-            
+
+
+
+
+
             // the sprite ids are next to each other in the sprite atlas
             // we just have to know which one to draw based on the offset
-            tile.SpriteID = property.BaseSpriteId + tilePosition;
+            tile.SpriteID = property.BaseSpriteId + tilePosition;*/
         }
     }
 }
