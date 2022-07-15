@@ -24,7 +24,7 @@ namespace Agent
             entity.isAgentPlayer = true;
             entity.isECSInput = true;
             entity.AddECSInputXY(new Vec2f(0, 0), false, false);
-            entity.AddAgentMovementState(false, 0, false, false, false, 0.0f);
+            entity.AddAgentMovementState(0, MovementState.None, false, 0.0f);
             entity.AddAgentID(agentId);
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=startingAnimation});
             entity.AddAgentSprite2D(spriteId, spriteSize); // adds the sprite  component to the entity
@@ -32,7 +32,7 @@ namespace Agent
             var size = new Vec2f(spriteSize.X - 0.5f, spriteSize.Y);
             entity.AddPhysicsBox2DCollider(size, new Vec2f(0.25f, .0f));
             entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.Zero, newAcceleration: Vec2f.Zero,
-                                             true, true, false, false);
+                                             true, true, false, false, false, false);
             entity.AddAgentStats(playerHealth, playerFood, playerWater, playerOxygen, playerFuel, attackCoolDown);
             //entity.AddAgentInventory(0);
             // Add Inventory and toolbar.
@@ -56,9 +56,9 @@ namespace Agent
             entity.AddPhysicsPosition2D(position, newPreviousValue: default); // 2d position
             entity.AddAgentSprite2D(spriteId, spriteSize); // adds the sprite  component to the entity
             entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.Zero, newAcceleration: Vec2f.Zero,
-                                     true, true, false, false); // used for physics simulation
+                                     true, true, false, false, false, false); // used for physics simulation
             entity.AddAnimationState(1.0f, new Animation.Animation{Type=properties.StartingAnimation});
-            entity.AddAgentMovementState(false, 0, false, false, false, 0.0f);
+            entity.AddAgentMovementState(0, MovementState.None, false, 0.0f);
             entity.AddAgentStats((int)properties.Health, 100, 100, 100, 100, properties.AttackCooldown);
 
             if (agentType == Agent.AgentType.Player)
@@ -101,7 +101,7 @@ namespace Agent
             entity.AddAgentSprite2D(spriteId, spriteSize); // adds the sprite  component to the entity
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
             entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.Zero, newAcceleration: Vec2f.Zero, 
-                                            true, true, false, false);
+                                            true, true, false, false, false, false);
 
             return entity;
         }
@@ -122,7 +122,7 @@ namespace Agent
             entity.AddAgentSprite2D(spriteId, spriteSize); // adds the sprite  component to the entity
             entity.AddPhysicsPosition2D(position, newPreviousValue: default);
             entity.AddPhysicsMovable(newSpeed: 1f, newVelocity: Vec2f.Zero, newAcceleration: Vec2f.Zero,
-                                        true, true, false, false);
+                                        true, true, false, false, false, false);
             entity.AddAgentEnemy(0, 4.0f);
             entity.AddAgentStats(100, 100, 100, 100, 100, 0.8f);
 

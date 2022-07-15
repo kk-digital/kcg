@@ -1,5 +1,6 @@
 using KMath;
 using UnityEngine;
+using Agent;
 
 namespace ECSInput
 {
@@ -63,20 +64,36 @@ namespace ECSInput
 
                     movable.Invulnerable = true;
                     movable.AffectedByGravity = false;
-                    movementState.Dashing = true;
+                    movementState.MovementState = MovementState.Dashing;
                     movementState.DashCooldown = 1.0f;
                 }
 
-                if (!movementState.Jumping)
+                if (movementState.JumpCounter == 0)
                 {
     
                     // jump
-                    if (jump && !movementState.Dashing)
+                    if (jump && movementState.MovementState != MovementState.Dashing)
                     {
+                        // if we are sticking to a wall 
+                        // throw the agent in the opposite direction
+                        if (movable.SlidingLeft)
+                        {
+                            movable.SlidingLeft = false;
+                            movable.Acceleration.X = 1.0f * movable.Speed * 400.0f * 2;
+                            movable.Acceleration.Y = -1.0f * movable.Speed * 400.0f * 2;
+                        }
+                        else if (movable.SlidingRight)
+                        {
+                            movable.SlidingRight = false;
+                            movable.Acceleration.X = -1.0f * movable.Speed * 400.0f * 2;
+                            movable.Acceleration.Y = -1.0f * movable.Speed * 400.0f * 2;
+                        }
+
+
+                        // jumping
                         movable.Landed = false;
                         movable.Acceleration.Y = 100.0f;
                         movable.Velocity.Y = 11.5f;
-                        movementState.Jumping = true;
                         movable.AffectedByGroundFriction = false;
                         movementState.JumpCounter++;
                     }
@@ -94,9 +111,18 @@ namespace ECSInput
                 }
 
                 // if the fly button is pressed
-                movementState.Flying = flying && stats.Fuel > 1.0f;
+                if (flying && stats.Fuel > 0.0f)
+                {
+                    movementState.MovementState = MovementState.Flying;
+                }
+                else if (movementState.MovementState == MovementState.Flying)
+                {
+                    movementState.MovementState = MovementState.None;
+                }
 
-                if (movementState.Flying)
+                // if we are using the jetpack
+                // set the Y velocity to a given value
+                if (movementState.MovementState == MovementState.Flying)
                 {
                     movable.Acceleration.Y = 0;
                     movable.Velocity.Y = 3.5f;
@@ -104,21 +130,54 @@ namespace ECSInput
 
                 // the end of dashing
                 // we can do this using a fixed amount of time
-                if (System.Math.Abs(movable.Velocity.X) <= 6.0f)
+                if (System.Math.Abs(movable.Velocity.X) <= 6.0f && 
+                movementState.MovementState == MovementState.Dashing)
                 {
-                    movable.AffectedByGravity = true;
-                    movementState.Dashing = false;
-                    movable.Invulnerable = false;
+
+                    movementState.MovementState = MovementState.None;    
+                }
+
+                // if the agent is dashing it becomes invulnerable to damage
+                movable.Invulnerable = movementState.MovementState == MovementState.Dashing;
+                // if the agent is dashing the gravity will not affect him
+                movable.AffectedByGravity = !(movementState.MovementState == MovementState.Dashing);
+
+                if (x == 1.0f)
+                {
+                    movable.SlidingLeft = false;
+                }
+                else if (x == -1.0f)
+                {
+                    movable.SlidingRight = false;
                 }
 
                 if (movable.Landed)
                 {
                     movementState.JumpCounter = 0;
-                    movementState.Jumping = false;
                     movable.AffectedByGroundFriction = true;
+
+                    movable.SlidingRight = false;
+                    movable.SlidingLeft = false;
                 }
 
-                if (movementState.Flying)
+                
+
+                if (movable.SlidingLeft)
+                {
+                    movementState.JumpCounter = 0;
+                    movable.Acceleration.Y = 0.0f;
+                    movable.Velocity.Y = -1.75f;
+                    planet.AddParticleEmitter(pos.Value + new Vec2f(0.0f, -0.5f), Particle.ParticleEmitterType.DustEmitter);
+                }
+                else if (movable.SlidingRight)
+                {
+                    movementState.JumpCounter = 0;
+                    movable.Acceleration.Y = 0.0f;
+                    movable.Velocity.Y = -1.75f;
+                    planet.AddParticleEmitter(pos.Value + new Vec2f(0.5f, -0.5f), Particle.ParticleEmitterType.DustEmitter);
+                }
+
+                if (movementState.MovementState == MovementState.Flying)
                 {
                     stats.Fuel -= 1.0f;
                     if (stats.Fuel <= 1.0f)
@@ -137,7 +196,7 @@ namespace ECSInput
                     stats.Fuel = 100;
                 }
 
-                if (movementState.Dashing)
+                if (movementState.MovementState == MovementState.Dashing)
                 {
                     planet.AddParticleEmitter(pos.Value, Particle.ParticleEmitterType.DustEmitter);
                 }

@@ -34,11 +34,19 @@ namespace Physics
 
             entityBoxBorders = new AABox2D(new Vec2f(pos.Value.X, pos.PreviousValue.Y) + box2DCollider.Offset, box2DCollider.Size);
 
-            if (entityBoxBorders.IsCollidingLeft(tileMap, movable.Velocity) || entityBoxBorders.IsCollidingRight(tileMap, movable.Velocity))
+            if (entityBoxBorders.IsCollidingLeft(tileMap, movable.Velocity))
             {
                 pos.Value = new Vec2f(pos.PreviousValue.X, pos.Value.Y);
                 movable.Velocity.X = 0.0f;
                 movable.Acceleration.X = 0.0f;
+                movable.SlidingLeft = true;
+            }
+            else if (entityBoxBorders.IsCollidingRight(tileMap, movable.Velocity))
+            {
+                pos.Value = new Vec2f(pos.PreviousValue.X, pos.Value.Y);
+                movable.Velocity.X = 0.0f;
+                movable.Acceleration.X = 0.0f;
+                movable.SlidingRight = true;
             }
 
             entityBoxBorders.DrawBox();
