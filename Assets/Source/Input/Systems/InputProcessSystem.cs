@@ -186,7 +186,7 @@ namespace ECSInput
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 0);
 
-                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, SlotComponent.Selected);
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 0);
 
                     var entities = planet.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
 
