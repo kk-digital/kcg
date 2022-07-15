@@ -168,12 +168,12 @@ namespace Source {
                         }
 
                         float distance     = Tools.magnitude(local_x, local_y);
-                        float distort_to   = Tools.normalize_angle(Tools.get_angle(local_x, local_y) + Tools.halfpi);
-                        float distort_x_to = (float)Math.Cos(distort_to);
-                        float distort_y_to = (float)Math.Sin(distort_to);
+                        float distort_to   = Tools.get_angle(local_x, local_y) + Tools.halfpi;
+                        float distort_x_to = (float)Math.Cos(-distort_to);
+                        float distort_y_to = (float)Math.Sin(-distort_to);
 
-                        float original_x   = distort_x_to * distance;
-                        float original_y   = distort_y_to * distance;
+                        float original_x   = distort_x_to * distance + half_w;
+                        float original_y   = distort_y_to * distance + half_h;
 
                         if(original_x < 0) original_x = w + original_x;
                         if(original_y < 0) original_y = h + original_y;
