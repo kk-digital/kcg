@@ -31,6 +31,7 @@
         ToolActionMiningLaser,
         ToolActionRemoveTile,
         ToolActionThrowGrenade,
-        ToolActionMeleeAttack
+        ToolActionMeleeAttack,
+        ToolActionPulseWeapon
     }
 }

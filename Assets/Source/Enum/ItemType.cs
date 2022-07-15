@@ -11,6 +11,7 @@
         /// Weapons
         /// </summary>
         Pistol,
+        PulseWeapon,
         PumpShotgun,
         Shotgun,
         LongRifle,

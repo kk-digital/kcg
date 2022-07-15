@@ -301,6 +301,38 @@ namespace Item
             fireWeapon.RecoverDelay = recoverDelay;
         }
 
+        public void SetPulseWeapon(float bulletSpeed, float coolDown, float range, bool isLaunchGrenade, float basicDamage, Vec2f spriteSize, int bulletSpriteID)
+        {
+            IsItemTypeValid();
+
+            FireWeaponPropreties fireWeapon = new FireWeaponPropreties()
+            {
+                BulletSpeed = bulletSpeed,
+                CoolDown = coolDown,
+                Range = range,
+                isLaunchGreanade = isLaunchGrenade,
+                BasicDemage = basicDamage,
+                BulletSpriteSize = spriteSize,
+                BulletSpriteID = bulletSpriteID
+            };
+
+            WeaponList[WeaponListSize] = fireWeapon;
+            PropertiesArray[(int)CurrentIndex].FireWeaponID = WeaponListSize++;
+        }
+
+        public void SetPulseWeaponClipSize(int bulletClipSize, int greandeClipSize, int bulletsPerShot, float bulletReloadTime)
+        {
+            IsItemTypeValid();
+
+            ref FireWeaponPropreties fireWeapon = ref WeaponList[PropertiesArray[(int)CurrentIndex].FireWeaponID];
+            fireWeapon.ClipSize = bulletClipSize;
+            fireWeapon.GrenadeClipSize = greandeClipSize;
+            fireWeapon.NumberOfGrenades = greandeClipSize;
+            fireWeapon.BulletsPerShot = bulletsPerShot;
+            fireWeapon.ReloadTime = bulletReloadTime;
+            fireWeapon.WeaponFlags |= FireWeaponPropreties.Flags.HasClip | FireWeaponPropreties.Flags.PulseWeapon;
+        }
+
         public void EndItem()
         {
             // Todo: Check if ItemType is valid in debug mode.

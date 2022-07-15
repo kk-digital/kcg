@@ -35,6 +35,11 @@ namespace Item
                 entity.AddItemFireWeaponSpread(weaponProperty.SpreadAngle);
             }
 
+            if (weaponProperty.IsPulse())
+            {
+                entity.AddItemPulseWeaponPulse(weaponProperty.isLaunchGreanade, weaponProperty.NumberOfGrenades);
+            }
+
             ItemID++;
             return entity;
         }
@@ -85,6 +90,11 @@ namespace Item
             if (weaponProperty.ShouldSpread())
             {
                 entity.AddItemFireWeaponSpread(weaponProperty.SpreadAngle);
+            }
+
+            if (weaponProperty.IsPulse())
+            {
+                entity.AddItemPulseWeaponPulse(weaponProperty.isLaunchGreanade, weaponProperty.NumberOfGrenades);
             }
 
             ItemID++;
