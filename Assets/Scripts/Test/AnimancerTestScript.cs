@@ -53,7 +53,7 @@ public class AnimancerTestScript : MonoBehaviour
          IdleAnimationClip = (AnimationClip)Resources.Load("Animation/" + "Humanoid-Idle");
          RunAnimationClip = (AnimationClip)Resources.Load("Animation/" + "Humanoid-Run");
          WalkAnimationClip = (AnimationClip)Resources.Load("Animation/" + "Humanoid-Walk");
-         GolfSwingClip = (AnimationClip)Resources.Load("Animation/" + "Humanoid-GolfSwing");
+         GolfSwingClip = (AnimationClip)Resources.Load("Animation/" + "old_man");
 
 
         // play the idle animation
