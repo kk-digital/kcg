@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using KMath;
 using PlanetTileMap;
 using UnityEngine;
@@ -76,7 +77,7 @@ namespace AI.Movement
     {
         const int MAX_NUM_NODES = 256; // Maximum size of open/closed Map.
 
-        readonly PathAdjacency[] Directions = new PathAdjacency[8] 
+        readonly PathAdjacency[] directions = new PathAdjacency[8] 
             {   new PathAdjacency() { dir = new Vec2f(1f, 0f),  cost = 100 },   // Right
                 new PathAdjacency() { dir = new Vec2f(-1f, 0f), cost = 100 },   // Left
                 new PathAdjacency() { dir = new Vec2f(0f, 1f),  cost = 100 },   // Up
@@ -86,15 +87,44 @@ namespace AI.Movement
                 new PathAdjacency() { dir = new Vec2f(-1f, 1f), cost = 144 },   // Left Up
                 new PathAdjacency() { dir = new Vec2f(-1f,-1f), cost = 144 }};  // Left Down
 
+        int openLenght;
+        int closedLenght;
 
-        Node[] openMap;
-        Node[] closedMap;
+        Node[] openList;
+        Node[] closedList;
         Node firstNode;
+
+        HashSet<Node> openSet;
+        HashSet<Node> closeSet;
+
+        bool Passable()
+        {
+            return true;
+        }
+
         void Initialize()
         {
-            openMap = new Node[MAX_NUM_NODES];
-            closedMap = new Node[MAX_NUM_NODES];
-            Node firstNode = new Node();
+            openLenght = 0;
+            closedLenght = 0;
+
+            openList = new Node[MAX_NUM_NODES];
+            closedList = new Node[MAX_NUM_NODES];
+            firstNode = new Node();
+
+            openSet.EnsureCapacity(MAX_NUM_NODES);
+            closeSet.EnsureCapacity(MAX_NUM_NODES);
+        }
+
+        void AddNodeOpenList(ref Node node)
+        {
+            openList[openLenght++] = node;
+            openSet.Add(firstNode);
+        }
+
+        void AddNodeCloseList(ref Node node)
+        {
+            closedList[closedLenght++] = node;
+            closeSet.Add(firstNode);
         }
 
         void SetFirstNode(Vec2f start, Vec2f end)
@@ -103,7 +133,7 @@ namespace AI.Movement
             firstNode.id = 1;
             firstNode.pathCost = 0;
             firstNode.SetPos(start, end);
-            openMap[0] = firstNode;
+            AddNodeOpenList(ref firstNode);
         }
 
         public Vec2f[] getPath(ref TileMap tileMap, Vec2f start, Vec2f end)
@@ -118,6 +148,49 @@ namespace AI.Movement
             // Check max distance here.
             SetFirstNode(start, end);
 
+            bool needSorting = false;
+            while (true)
+            {
+                if (openLenght >= MAX_NUM_NODES || closedLenght >= MAX_NUM_NODES)
+                {
+                    Debug.Log("The path is taking too long. Giving up.");
+                    break;
+                }
+
+                // We failed to find a path if open list is empty.
+                if (openSet.Count == 0)
+                {
+                    Debug.Log("Couldn't find a path to the destination.");
+                    break;
+                }
+
+                if(needSorting)
+                {
+                    // Sort array in c#.
+                    needSorting = false;
+                }
+
+                // Move to closed list.
+                ref Node current = ref openList[--openLenght];
+                openSet.Remove(current);
+
+                AddNodeCloseList(ref current);
+
+                if (current.pos == end)
+                {
+                    Debug.Log("Path found.");
+                    break;
+                }
+
+                for (int i = 0; i < directions.Length; i++)
+                {
+                    Node node = current;
+                    node.parentID = current.id;
+
+                    if (!Passable())
+                    { }
+                }
+            }
 
             return new Vec2f[10];
         }
