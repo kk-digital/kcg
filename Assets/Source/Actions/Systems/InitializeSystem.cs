@@ -83,6 +83,10 @@ namespace Action
             GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.ToolActionMeleeAttack);
             GameState.ActionPropertyManager.SetLogicFactory(new ToolActionMeleeAttackCreator());
             GameState.ActionPropertyManager.EndActionPropertyType();
+
+            GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.ToolActionPulseWeapon);
+            GameState.ActionPropertyManager.SetLogicFactory(new ToolActionPulseWeaponCreator());
+            GameState.ActionPropertyManager.EndActionPropertyType();
         }
     }
 }

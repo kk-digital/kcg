@@ -26,7 +26,7 @@ namespace Action
                 ItemEntity = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, toolBarID, selectedSlot);
                 WeaponPropreties = GameState.ItemCreationApi.GetWeapon(ItemEntity.itemType.Type);
 
-                bool isReloadable = ItemEntity.hasItemFireWeaponClip;
+                bool isReloadable = ItemEntity.hasItemFireWeaponClip | ItemEntity.hasItemPulseWeaponPulse;
 
                 if (isReloadable)
                 {
@@ -42,7 +42,12 @@ namespace Action
             runningTime += deltaTime;
             if (runningTime >= WeaponPropreties.ReloadTime)
             {
-                ItemEntity.itemFireWeaponClip.NumOfBullets = WeaponPropreties.ClipSize;
+                if(ItemEntity.hasItemFireWeaponClip)
+                    ItemEntity.itemFireWeaponClip.NumOfBullets = WeaponPropreties.ClipSize;
+                
+                if(ItemEntity.hasItemPulseWeaponPulse)
+                    ItemEntity.itemPulseWeaponPulse.NumberOfGrenades = WeaponPropreties.GrenadeClipSize;
+
                 ActionEntity.actionExecution.State =  Enums.ActionState.Success;
             }
         }
@@ -55,7 +60,10 @@ namespace Action
             }
             else
             {
-                Debug.Log("Weapon Reloaded." + ItemEntity.itemFireWeaponClip.NumOfBullets.ToString() + " Ammo in the clip.");
+                if (ItemEntity.hasItemFireWeaponClip)
+                    Debug.Log("Weapon Reloaded." + ItemEntity.itemFireWeaponClip.NumOfBullets.ToString() + " Ammo in the clip.");
+                else if (ItemEntity.hasItemPulseWeaponPulse)
+                    Debug.Log("Weapon Reloaded." + ItemEntity.itemPulseWeaponPulse.NumberOfGrenades.ToString() + " Grenades in the clip");
             }
 
             base.OnExit(ref planet);

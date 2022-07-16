@@ -105,8 +105,15 @@ namespace Item
         /// Melee Attack Properties
         /// </summary>
         public float StaggerTime;
+        [Range(0, 1)]
         public float StaggerRate;
 
+        /// <summary>
+        /// Pulse Weapon
+        /// </summary>
+        public bool isLaunchGreanade;
+        public int NumberOfGrenades;
+        public int GrenadeClipSize;
 
         public Flags WeaponFlags;
         [Flags]
@@ -114,7 +121,8 @@ namespace Item
         {
             HasClip = 1 << 0,
             ShouldSpread = 2 << 1,
-            HasCharge = 3 << 2
+            HasCharge = 3 << 2,
+            PulseWeapon = 4 << 3, 
         }
 
         public MeleeFlags MeleeAttackFlags;
@@ -138,6 +146,7 @@ namespace Item
 
         public bool IsStab() { return WeaponFlags.HasFlag(MeleeFlags.Stab); }
         public bool IsSlash() { return WeaponFlags.HasFlag(MeleeFlags.Slash); }
+        public bool IsPulse() { return WeaponFlags.HasFlag(Flags.PulseWeapon); }
 
     }
 }

@@ -23,7 +23,7 @@ namespace Action
             ItemEntity = EntitasContext.itemInventory.GetEntityWithItemID(ActionEntity.actionTool.ItemID);
             WeaponProperty = GameState.ItemCreationApi.GetWeapon(ItemEntity.itemType.Type);
 
-            if (ItemEntity.itemType.Type == Enums.ItemType.Grenade)
+            if (ItemEntity.itemType.Type == Enums.ItemType.GrenadeLauncher)
                 radius = 2.0f;
             else if (ItemEntity.itemType.Type == Enums.ItemType.RPG)
                 radius = 4.0f;
@@ -54,7 +54,7 @@ namespace Action
             StartPos.X += 0.5f;
             StartPos.Y += 0.5f;
 
-            if(ItemEntity.itemType.Type == Enums.ItemType.Grenade)
+            if(ItemEntity.itemType.Type == Enums.ItemType.GrenadeLauncher)
             {
                 ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Grenade);
                 planet.AddFloatingText(WeaponProperty.GrenadeFlags.ToString(), 2.0f, new Vec2f(0, 0), new Vec2f(AgentEntity.physicsPosition2D.Value.X + 0.5f, AgentEntity.physicsPosition2D.Value.Y));
