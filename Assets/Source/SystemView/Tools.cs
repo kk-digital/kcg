@@ -86,6 +86,20 @@ namespace Source {
             }
 
             /*
+             * Picks a value between a and b, using a smoothstep curve.
+             * 
+             * For w <= 0.0 it returns a.
+             * For w >= 1.0 it returns b.
+             * For 0.0 < w < 1.0 it returns a value between a and b along a smoothstep curve.
+             */
+            public static float smoothstep(float a, float b, float w) {
+                if(w < 0.0f) return a;
+                if(w > 1.0f) return b;
+
+                return (b - a) * w * w * (3.0f - 2.0f * w) + a;
+            }
+
+            /*
              * Picks a value between a and b, using a smootherstep curve.
              * 
              * For w <= 0.0 it returns a.
@@ -96,7 +110,7 @@ namespace Source {
                 if(w < 0.0f) return a;
                 if(w > 1.0f) return b;
 
-                return (b - a) * ((w * (w * 6.0f - 15.0f) + 10.0f) * w * w * w) + a;
+                return (b - a) * w * w * w * (w * (w * 6.0f - 15.0f) + 10.0f) + a;
             }
         }
     }

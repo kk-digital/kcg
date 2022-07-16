@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using UnityEngine;
 using Source.SystemView;
 
@@ -6,7 +8,6 @@ namespace Scripts {
         public class AccretionDisk : MonoBehaviour {
             public int            seed;
             public int            layers;
-            public int            colors;
             public int            width;
             public int            height;
             public float          opacity;
@@ -19,19 +20,17 @@ namespace Scripts {
             public SpriteRenderer renderer;
 
             private System.Random rng;
-            private float         last_time;
+
+            private Color[]       pixels;
+            private float[]       alpha;
 
             private void generate() {
 
                 rng = new(seed);
 
-                Color[] pixels    = new Color[width * height];
+                pixels    = new Color[width * height];
 
                 for(int i = 0; i < width * height; i++) pixels[i] = new Color(0.0f, 0.0f, 0.0f, 0.0f);
-
-                float base_r = 0.6f + (float)rng.NextDouble() * 0.2f;
-                float base_g = 0.6f + (float)rng.NextDouble() * 0.2f;
-                float base_b = 0.4f + (float)rng.NextDouble() * 0.4f;
 
                 float[] base_alpha = ProceduralImages.generate_noise(rng, 1.0f,             width / 64, height / 64);
                         base_alpha = ProceduralImages.smoothen_noise(base_alpha,            width / 64, height / 64, 64);
@@ -41,78 +40,82 @@ namespace Scripts {
                         base_alpha = ProceduralImages.circular_mask( base_alpha,            width,      height);
 
                 for(int x = 0; x < width; x++)
-                    for(int y = 0; y < height; y++) {
-                        pixels[x + y * width].r = base_r;
-                        pixels[x + y * width].g = base_g;
-                        pixels[x + y * width].b = base_b;
+                    for(int y = 0; y < height; y++)
                         pixels[x + y * width].a = base_alpha[x + y * width];
-                    }
 
-                float max_dist      = Tools.get_distance(0, 0, width,     height);
-                float max_half_dist = Tools.get_distance(0, 0, width / 2, height / 2);
+                float   halfw = width  / 2;
+                float   halfh = height /  2;
 
-                for(int color = 0; color < colors; color++) {
+                alpha = new float[width * height];
 
-                    float r0 = base_r * 0.6f + (float)rng.NextDouble() * base_r * 0.80f;
-                    float g0 = base_g * 0.6f + (float)rng.NextDouble() * base_g * 0.80f;
-                    float b0 = base_b * 0.6f + (float)rng.NextDouble() * base_b * 0.80f;
+                for(int layer = 0; layer < layers; layer++) {
 
-                    float r1 = base_r * 0.6f + (float)rng.NextDouble() * base_r * 0.80f;
-                    float g1 = base_g * 0.6f + (float)rng.NextDouble() * base_g * 0.80f;
-                    float b1 = base_b * 0.6f + (float)rng.NextDouble() * base_b * 0.80f;
+                    int   scale         = 1 << layers - layer + 1;
+                    float strength      = scale / layers;
 
-                    float[] alpha = new float[width * height];
-
-                    for(int layer = 0; layer < layers; layer++) {
-
-                        int   scale         = 1 << layers - layer + 1;
-                        float strength      = scale / layers;
-
-                        float[] layer_alpha = ProceduralImages.generate_noise(rng, strength, width / scale, height / scale);
-                                layer_alpha = ProceduralImages.blur_noise(   layer_alpha,    width / scale, height / scale);
-                                layer_alpha = ProceduralImages.smoothen_noise(layer_alpha,   width / scale, height / scale, scale);
-
-                        for(int x = 0; x < width; x++)
-                            for(int y = 0; y < height; y++) {
-                                float a              = layer_alpha[x + y * width] * 1.5f;
-                                alpha[x + y * width] = a  +  alpha[x + y * width] * (1.0f - a);
-                            }
-                    }
-
-                    alpha = ProceduralImages.exponential_filter(alpha,            width, height);
-                    alpha = ProceduralImages.mask(   rng,       alpha,         8, width, height);
-                    alpha = ProceduralImages.distort(rng,       alpha, 16.0f, 64, width, height);
-                    alpha = ProceduralImages.soften(            alpha,         8, width, height);
-                    alpha = ProceduralImages.swirl(             alpha,            width, height);
-
-                    float target_x = rng.Next(width);
-                    float target_y = rng.Next(height);
+                    float[] layer_alpha = ProceduralImages.generate_noise(rng, strength, width / scale, height / scale);
+                            layer_alpha = ProceduralImages.blur_noise(   layer_alpha,    width / scale, height / scale);
+                            layer_alpha = ProceduralImages.smoothen_noise(layer_alpha,   width / scale, height / scale, scale);
 
                     for(int x = 0; x < width; x++)
                         for(int y = 0; y < height; y++) {
-                            float a                 = Tools.smootherstep(alpha[x + y * width] * 0.3f, 0.0f, 1.0f - pixels[x + y * width].a);
-
-                            float d                 = Tools.get_distance(x, y, target_x,  target_y) / max_dist;
-
-                            float r                 = Tools.smootherstep(r0, r1, d);
-                            float g                 = Tools.smootherstep(g0, g1, d);
-                            float b                 = Tools.smootherstep(b0, b1, d);
-
-                            float blended_alpha     =      a +                           pixels[x + y * width].a * (1.0f - a);
-                            pixels[x + y * width].r = (r * a + pixels[x + y * width].r * pixels[x + y * width].a * (1.0f - a)) / blended_alpha;
-                            pixels[x + y * width].g = (g * a + pixels[x + y * width].g * pixels[x + y * width].a * (1.0f - a)) / blended_alpha;
-                            pixels[x + y * width].b = (b * a + pixels[x + y * width].b * pixels[x + y * width].a * (1.0f - a)) / blended_alpha;
-                            pixels[x + y * width].a = blended_alpha;
+                            float a              = layer_alpha[x + y * width] * 1.5f;
+                            alpha[x + y * width] = a  +  alpha[x + y * width] * (1.0f - a);
                         }
                 }
 
+                alpha = ProceduralImages.exponential_filter(alpha,            width, height);
+                alpha = ProceduralImages.distort(rng,       alpha, 16.0f, 64, width, height);
+                alpha = ProceduralImages.soften(            alpha,         8, width, height);
+                //alpha = ProceduralImages.swirl(             alpha,            width, height);
 
                 for(int x = 0; x < width; x++)
                     for(int y = 0; y < height; y++) {
                         int i = x + y * width;
 
+                        float a                 = alpha[i];
+
+                        float d                 = 1.0f - Tools.magnitude(x / halfw - 1.0f, y / halfh - 1.0f);
+
+                        float r, g, b;
+
+                        if(d < 0.2f) {
+                            float val           =  d         / 0.2f;
+
+                            r                   = Tools.smoothstep(0.0f, 0.20f, val);
+                            g                   = Tools.smoothstep(0.0f, 0.05f, val);
+                            b                   = Tools.smoothstep(0.0f, 0.00f, val);
+                            a                  *= Tools.smoothstep(0.0f, 0.40f, val);
+                        } else if(d < 0.5f) {
+                            float val           = (d - 0.1f) / 0.3f;
+
+                            r                   = Tools.smoothstep(0.2f, 0.80f, val);
+                            g                   = Tools.smoothstep(0.1f, 0.40f, val);
+                            b                   = Tools.smoothstep(0.0f, 0.20f, val);
+                            a                  *= Tools.smoothstep(0.4f, 1.00f, val);
+                        } else if(d < 0.8f) {
+                            float val           = (d - 0.5f) / 0.3f;
+
+                            r                   = Tools.smoothstep(0.8f, 1.00f, val);
+                            g                   = Tools.smoothstep(0.4f, 1.00f, val);
+                            b                   = Tools.smoothstep(0.2f, 0.40f, val);
+                            a                  *= Tools.smoothstep(1.0f, 1.70f, val);
+                        } else {
+                            float val           = (d - 0.8f) / 0.2f;
+
+                            r                   = Tools.smoothstep(1.0f, 1.00f, val);
+                            g                   = Tools.smoothstep(1.0f, 1.00f, val);
+                            b                   = Tools.smoothstep(0.4f, 0.90f, val);
+                            a                  *= Tools.smoothstep(1.7f, 4.00f, val);
+                        }
+
+                        pixels[i].r = r;
+                        pixels[i].g = g;
+                        pixels[i].b = b;
+                        pixels[i].a = a;
+
                         // Adjust contrast
-                        ProceduralImages.adjust_contrast(ref pixels[i].r, ref pixels[i].g, ref pixels[i].b, contrast);
+                        ProceduralImages.adjust_contrast   (ref pixels[i].r, ref pixels[i].g, ref pixels[i].b, contrast);
 
                         // Adjust black level
                         ProceduralImages.adjust_black_level(ref pixels[i].r, ref pixels[i].g, ref pixels[i].b, ref pixels[i].a, cutoff);
@@ -120,16 +123,58 @@ namespace Scripts {
                         // Adjust opacity
                         pixels[i].a *= opacity;
 
-                        // Fade pixels that are farther away from center using a smootherstep curve
-                        pixels[i].a  = Tools.smootherstep(pixels[i].a * 2.0f, 0.0f, Tools.get_distance(x, y, width / 2, height / 2) / max_half_dist);
+                        alpha[i]     = pixels[i].a;
                     }
 
                 texture = new Texture2D(width, height);
                 texture.filterMode = FilterMode.Trilinear;
                 texture.SetPixels(pixels);
-
                 texture.Apply();
 
+            }
+
+            // TODO: Convert to GPU code / shader for much higher performance
+            private void thread_function(int id, float current_spin) {
+                int startx      = id % 4 * width  / 4;
+                int starty      = id / 4 * height / 4;
+
+                int endx        = startx + width  / 4;
+                int endy        = starty + height / 4;
+
+                int half_width  =          width  / 2;
+                int half_height =          height / 2;
+
+                int maxr        = (width + height) / 4;
+
+                for(int x = startx; x < endx; x++)
+                    for(int y = starty; y < endy; y++) {
+                        float r = Tools.get_distance(x, y, half_width, half_height) / maxr;
+
+                        if(r > 1.0f || r == 0.0f) continue;
+
+                        float a = Tools.get_angle(half_width - x, half_height - y);
+
+                        a += current_spin / r;
+
+                        float original_x = half_width  * (1.0f + (float)Math.Cos(a));
+                        float original_y = half_height * (1.0f + (float)Math.Sin(a));
+
+                        int x0 = (int)original_x;
+                        int x1 = (int)original_x + 1;
+                        int y0 = (int)original_y;
+                        int y1 = (int)original_y + 1;
+
+                        if(x1 < 0 || x1 >= width)  x1 = x0;
+                        if(y1 < 0 || y1 >= height) y1 = y0;
+
+                        float dx = original_x - x0;
+                        float dy = original_y - y0;
+
+                        float v0 = Tools.smootherstep(alpha[x0 + y0 * width], alpha[x1 + y0 * width], dx);
+                        float v1 = Tools.smootherstep(alpha[x0 + y1 * width], alpha[x1 + y1 * width], dx);
+
+                        pixels[x + y * width].a = Tools.smootherstep(v0, v1, dy);
+                    }
             }
 
             private void Start() {
@@ -139,15 +184,48 @@ namespace Scripts {
                 renderer.sprite = Sprite.Create(texture,
                                                 new Rect(0, 0, width, height),
                                                 new Vector2(0.5f, 0.5f));
-
-                last_time       = Time.time;
             }
 
             private void Update() {
-                float current_time = Time.time - last_time;
-                      last_time    = Time.time;
+                if(spin != 0.0f) {
+                    float current_spin = Tools.normalize_angle(-Time.time * spin / 180.0f * Tools.pi);
 
-                renderer.transform.RotateAround(center, new Vector3(0.0f, 0.0f, 1.0f), -current_time * spin);
+                    Thread[] Ts = new Thread[16];
+
+                    /*
+                     * Doesn't work with for loop
+                     * 
+                     * for(int i = 0; i < 16; i++)
+                     *     Ts[i] = new Thread(new ThreadStart(() => thread_function(i, current_spin)));
+                     */
+
+                    /*Ts[ 0] = new Thread(new ThreadStart(() => thread_function( 0, current_spin)));
+                    Ts[ 1] = new Thread(new ThreadStart(() => thread_function( 1, current_spin)));
+                    Ts[ 2] = new Thread(new ThreadStart(() => thread_function( 2, current_spin)));
+                    Ts[ 3] = new Thread(new ThreadStart(() => thread_function( 3, current_spin)));
+                    Ts[ 4] = new Thread(new ThreadStart(() => thread_function( 4, current_spin)));
+                    Ts[ 5] = new Thread(new ThreadStart(() => thread_function( 5, current_spin)));
+                    Ts[ 6] = new Thread(new ThreadStart(() => thread_function( 6, current_spin)));
+                    Ts[ 7] = new Thread(new ThreadStart(() => thread_function( 7, current_spin)));
+                    Ts[ 8] = new Thread(new ThreadStart(() => thread_function( 8, current_spin)));
+                    Ts[ 9] = new Thread(new ThreadStart(() => thread_function( 9, current_spin)));
+                    Ts[10] = new Thread(new ThreadStart(() => thread_function(10, current_spin)));
+                    Ts[11] = new Thread(new ThreadStart(() => thread_function(11, current_spin)));
+                    Ts[12] = new Thread(new ThreadStart(() => thread_function(12, current_spin)));
+                    Ts[13] = new Thread(new ThreadStart(() => thread_function(13, current_spin)));
+                    Ts[14] = new Thread(new ThreadStart(() => thread_function(14, current_spin)));
+                    Ts[15] = new Thread(new ThreadStart(() => thread_function(15, current_spin)));
+
+                    foreach(Thread T in Ts) T.Start();
+                    foreach(Thread T in Ts) T.Join();*/
+
+                    texture.SetPixels(pixels);
+                    texture.Apply();
+
+                    renderer.sprite = Sprite.Create(texture,
+                                                    new Rect(0, 0, width, height),
+                                                    new Vector2(0.5f, 0.5f));
+                }
             }
         }
     }

@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 636615103}
   - component: {fileID: 636615102}
   m_Layer: 0
-  m_Name: Nebula 4
+  m_Name: Nebula
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -207,7 +207,7 @@ MonoBehaviour:
   colors: 3
   width: 512
   height: 512
-  opacity: 0.5
+  opacity: 0.6
   contrast: 1
   cutoff: 0
   spin: 1
@@ -227,7 +227,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &720212736
 GameObject:
@@ -330,118 +330,6 @@ MonoBehaviour:
   scale: 1
   DisableDragging: 0
   background: {fileID: 84783539}
---- !u!1 &1005818799
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1005818801}
-  - component: {fileID: 1005818800}
-  m_Layer: 0
-  m_Name: Nebula 1
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1005818800
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1005818799}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1897c9261aa54304690d1577b6d2bd0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  seed: 0
-  layers: 5
-  colors: 1
-  width: 512
-  height: 512
-  opacity: 1
-  contrast: 0.5
-  cutoff: 0.25
-  spin: 2.5
-  center: {x: 0, y: 0, z: 0}
-  texture: {fileID: 0}
-  renderer: {fileID: 0}
---- !u!4 &1005818801
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1005818799}
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.25, y: 0.5, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
---- !u!1 &1396996763
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1396996765}
-  - component: {fileID: 1396996764}
-  m_Layer: 0
-  m_Name: Nebula 3
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1396996764
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1396996763}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1897c9261aa54304690d1577b6d2bd0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  seed: 42069
-  layers: 5
-  colors: 1
-  width: 512
-  height: 512
-  opacity: 1
-  contrast: 1.2
-  cutoff: 0.15
-  spin: 3.25
-  center: {x: 0, y: 0, z: 0}
-  texture: {fileID: 0}
-  renderer: {fileID: 0}
---- !u!4 &1396996765
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1396996763}
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.65, y: -0.3, z: 1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!1 &1445746684
 GameObject:
   m_ObjectHideFlags: 0
@@ -516,62 +404,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   laser_towers: []
   player: {fileID: 0}
---- !u!1 &1743203361
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1743203363}
-  - component: {fileID: 1743203362}
-  m_Layer: 0
-  m_Name: Nebula 2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1743203362
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1743203361}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1897c9261aa54304690d1577b6d2bd0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  seed: 32
-  layers: 5
-  colors: 1
-  width: 512
-  height: 512
-  opacity: 0.5
-  contrast: 0.3
-  cutoff: 0.2
-  spin: 1
-  center: {x: 0, y: 0, z: 0}
-  texture: {fileID: 0}
-  renderer: {fileID: 0}
---- !u!4 &1743203363
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1743203361}
-  m_LocalRotation: {x: 0, y: 0, z: 0.13052616, w: 0.9914449}
-  m_LocalPosition: {x: -0.25, y: 2.1, z: -1}
-  m_LocalScale: {x: 4, y: 4, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 15}
 --- !u!1 &1858578266
 GameObject:
   m_ObjectHideFlags: 0
@@ -603,12 +435,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seed: 0
   layers: 5
-  colors: 2
   width: 512
   height: 512
-  opacity: 0.5
-  contrast: 1.25
-  cutoff: 0.1
+  opacity: 1
+  contrast: 0.8
+  cutoff: 0.02
   spin: 3.25
   center: {x: 0, y: 0, z: 0}
   texture: {fileID: 0}
@@ -620,67 +451,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1858578266}
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.3, y: 0.1, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.75, y: 0.75, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
---- !u!1 &2130055668
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2130055670}
-  - component: {fileID: 2130055669}
-  m_Layer: 0
-  m_Name: Nebula 5
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2130055669
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2130055668}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1897c9261aa54304690d1577b6d2bd0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  seed: 666
-  layers: 3
-  colors: 1
-  width: 512
-  height: 512
-  opacity: 0.3
-  contrast: 1
-  cutoff: 0.1
-  spin: 1.5
-  center: {x: 0, y: 0, z: 0}
-  texture: {fileID: 0}
-  renderer: {fileID: 0}
---- !u!4 &2130055670
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2130055668}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2}
-  m_LocalScale: {x: 6, y: 6, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

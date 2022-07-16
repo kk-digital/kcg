@@ -120,7 +120,6 @@ namespace Scripts {
                 texture = new Texture2D(width, height);
                 texture.filterMode = FilterMode.Trilinear;
                 texture.SetPixels(pixels);
-                
                 texture.Apply();
 
             }
