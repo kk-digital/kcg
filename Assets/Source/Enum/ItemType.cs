@@ -12,11 +12,11 @@
         /// </summary>
         LongRifle,
         PulseWeapon,
+        AutoCannon,
         SMG,
         Shotgun,
         PumpShotgun,
         Pistol,
-        AutoCannon,
         GrenadeLauncher,
         RPG,
         Bow,

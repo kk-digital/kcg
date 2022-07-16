@@ -237,6 +237,16 @@ public class GameResources
         GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionPulseWeapon);
         GameState.ItemCreationApi.EndItem();
 
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.AutoCannon, "AutoCannon");
+        GameState.ItemCreationApi.SetTexture(LongRifleIcon);
+        GameState.ItemCreationApi.SetInventoryTexture(LongRifleIcon);
+        GameState.ItemCreationApi.SetRangedWeapon(50.0f, 0.5f, 20.0f, 40.0f);
+        GameState.ItemCreationApi.SetRangedWeaponClip(40, 3, 4f);
+        GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
+        GameState.ItemCreationApi.SetBullet(OreIcon, new Vec2f(0.2f, 0.2f));
+        GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionFireWeapon);
+        GameState.ItemCreationApi.EndItem();
+
         GameState.ItemCreationApi.CreateItem(Enums.ItemType.SMG, "SMG");
         GameState.ItemCreationApi.SetTexture(SMGIcon);
         GameState.ItemCreationApi.SetInventoryTexture(SMGIcon);
