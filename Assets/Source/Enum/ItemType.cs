@@ -10,17 +10,18 @@
         /// <summary>
         /// Weapons
         /// </summary>
-        Pistol,
-        PulseWeapon,
-        PumpShotgun,
-        Shotgun,
         LongRifle,
-        AutoCannon,
-        RPG,
-        GrenadeLauncher,
+        PulseWeapon,
         SMG,
-        Sword,
+        Shotgun,
+        PumpShotgun,
+        Pistol,
+        AutoCannon,
+        GrenadeLauncher,
+        RPG,
         Bow,
+        Sword,
+        StunBaton,
 
         /// <summary>
         /// Tools
