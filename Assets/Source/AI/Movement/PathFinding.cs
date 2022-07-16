@@ -10,11 +10,7 @@ namespace AI.Movement
     {
         public int id;
         public int parentID;
-        public Vec2f pos
-        {
-            get;
-            private set;
-        }
+        public Vec2f pos;
 
         public void SetPos(Vec2f newPos, Vec2f end)
         {
@@ -22,25 +18,22 @@ namespace AI.Movement
             heuristicCost = (int)Heuristics.euclidean_distance(newPos, end) * 100;
         }
 
-        public int pathCost
-        {
-            get { return pathCost; }
-            set
-            {
-                pathCost = value;
-                TotalCost = heuristicCost + pathCost;
-            }
-        }
+        public int pathCost;
         public int heuristicCost
         {
             get { return heuristicCost; }
             private set
             {
                 heuristicCost = value;
-                TotalCost = heuristicCost + pathCost;
+                totalCost = heuristicCost + pathCost;
             }
         }
-        public int TotalCost { get; private set; }
+        public int totalCost { get; private set; }
+
+        public bool IsCheaper(ref Node node)
+        {
+            return totalCost < node.totalCost ? true : false;
+        }
     }
 
     internal struct PathAdjacency
@@ -94,12 +87,31 @@ namespace AI.Movement
         Node[] closedList;
         Node firstNode;
 
-        HashSet<Node> openSet;
-        HashSet<Node> closeSet;
+        HashSet<Vec2f> openSet;
+        HashSet<Vec2f> closedSet;
 
         bool Passable()
         {
             return true;
+        }
+
+        /// <summary>
+        /// Uses insertion sort. It's the fastest algorithm for almost sorted data.
+        /// startPos is an optimization. Every element before startPos is sorted.
+        /// </summary>
+        void SortOpenList(int startPos)
+        {
+            for (int i = startPos; i < openLenght; i++)
+            {
+                Node current = openList[i];
+                int j = i - 1;
+                while (j >= 0 && !current.IsCheaper(ref openList[j]))
+                {
+                    openList[j + 1] = openList[j];
+                    j--;
+                }
+                openList[j + 1] = current;
+            }
         }
 
         void Initialize()
@@ -112,19 +124,19 @@ namespace AI.Movement
             firstNode = new Node();
 
             openSet.EnsureCapacity(MAX_NUM_NODES);
-            closeSet.EnsureCapacity(MAX_NUM_NODES);
+            closedSet.EnsureCapacity(MAX_NUM_NODES);
         }
 
         void AddNodeOpenList(ref Node node)
         {
             openList[openLenght++] = node;
-            openSet.Add(firstNode);
+            openSet.Add(firstNode.pos);
         }
 
         void AddNodeCloseList(ref Node node)
         {
             closedList[closedLenght++] = node;
-            closeSet.Add(firstNode);
+            closedSet.Add(firstNode.pos);
         }
 
         void SetFirstNode(Vec2f start, Vec2f end)
@@ -148,7 +160,9 @@ namespace AI.Movement
             // Check max distance here.
             SetFirstNode(start, end);
 
-            bool needSorting = false;
+            // Todo: Profile sorting against searching, Gnomescroll sort the nodes. I am not sure its the fatest way.
+            // It's possible that 
+            int sortStartPost = 0; // If 0 no sorting needed.
             while (true)
             {
                 if (openLenght >= MAX_NUM_NODES || closedLenght >= MAX_NUM_NODES)
@@ -164,15 +178,15 @@ namespace AI.Movement
                     break;
                 }
 
-                if(needSorting)
+                if(sortStartPost > 0)
                 {
-                    // Sort array in c#.
-                    needSorting = false;
+                    SortOpenList(sortStartPost);
+                    sortStartPost = 0;
                 }
 
                 // Move to closed list.
                 ref Node current = ref openList[--openLenght];
-                openSet.Remove(current);
+                openSet.Remove(current.pos);
 
                 AddNodeCloseList(ref current);
 
@@ -189,6 +203,25 @@ namespace AI.Movement
 
                     if (!Passable())
                     { }
+
+                    if (closedSet.Contains(node.pos))
+                        continue;
+
+                    if (openSet.Contains(node.pos))
+                    {
+                        // Todo(Performace): Only search among nodes with cheaper cost.
+                        int index = Array.IndexOf(openList, node);
+                        if (node.IsCheaper(ref openList[index]))
+                        {
+                            openList[index] = node;
+                            if(sortStartPost > index)
+                                sortStartPost = index;
+                        }
+                        continue;
+                    }
+
+                    openSet.Add(node.pos);
+                    sortStartPost = openLenght - 1;
                 }
             }
 
