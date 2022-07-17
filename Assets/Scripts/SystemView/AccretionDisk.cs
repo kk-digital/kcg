@@ -13,7 +13,9 @@ namespace Scripts {
             public float          opacity;
             public float          contrast;
             public float          cutoff;           // Also sometimes called black level
-            public float          spin;             // Angular velocity in degrees/second
+            public bool           stationary;
+            public float          spin;             // Angular velocity in degrees/second at farthest point
+            public float          brightness;
             public Vector3        center;           // Center point to spin around
 
             public Texture2D      texture;
@@ -65,9 +67,8 @@ namespace Scripts {
                 }
 
                 alpha = ProceduralImages.exponential_filter(alpha,            width, height);
-                alpha = ProceduralImages.distort(rng,       alpha, 16.0f, 64, width, height);
+                alpha = ProceduralImages.distort(rng,       alpha, 32.0f, 64, width, height);
                 alpha = ProceduralImages.soften(            alpha,         8, width, height);
-                //alpha = ProceduralImages.swirl(             alpha,            width, height);
 
                 for(int x = 0; x < width; x++)
                     for(int y = 0; y < height; y++) {
@@ -79,34 +80,34 @@ namespace Scripts {
 
                         float r, g, b;
 
-                        if(d < 0.2f) {
-                            float val           =  d         / 0.2f;
+                        if(d < 0.25f) {
+                            float val           =  d         / 0.25f;
 
-                            r                   = Tools.smoothstep(0.0f, 0.20f, val);
-                            g                   = Tools.smoothstep(0.0f, 0.05f, val);
-                            b                   = Tools.smoothstep(0.0f, 0.00f, val);
-                            a                  *= Tools.smoothstep(0.0f, 0.40f, val);
+                            r                   = Tools.smoothstep(0.0f,               0.25f * brightness, val);
+                            g                   = Tools.smoothstep(0.0f,               0.03f * brightness, val);
+                            b                   = Tools.smoothstep(0.0f,               0.00f * brightness, val);
+                            a                  *= Tools.smoothstep(0.0f,               0.50f,              val);
                         } else if(d < 0.5f) {
-                            float val           = (d - 0.1f) / 0.3f;
+                            float val           = (d - 0.25f) / 0.25f;
 
-                            r                   = Tools.smoothstep(0.2f, 0.80f, val);
-                            g                   = Tools.smoothstep(0.1f, 0.40f, val);
-                            b                   = Tools.smoothstep(0.0f, 0.20f, val);
-                            a                  *= Tools.smoothstep(0.4f, 1.00f, val);
-                        } else if(d < 0.8f) {
-                            float val           = (d - 0.5f) / 0.3f;
+                            r                   = Tools.smoothstep(0.25f * brightness, 0.80f * brightness, val);
+                            g                   = Tools.smoothstep(0.03f * brightness, 0.40f * brightness, val);
+                            b                   = Tools.smoothstep(0.00f * brightness, 0.20f * brightness, val);
+                            a                  *= Tools.smoothstep(0.50f,              1.00f,              val);
+                        } else if(d < 0.75f) {
+                            float val           = (d - 0.50f) / 0.25f;
 
-                            r                   = Tools.smoothstep(0.8f, 1.00f, val);
-                            g                   = Tools.smoothstep(0.4f, 1.00f, val);
-                            b                   = Tools.smoothstep(0.2f, 0.40f, val);
-                            a                  *= Tools.smoothstep(1.0f, 1.70f, val);
+                            r                   = Tools.smoothstep(0.80f * brightness, 1.00f * brightness, val);
+                            g                   = Tools.smoothstep(0.40f * brightness, 1.00f * brightness, val);
+                            b                   = Tools.smoothstep(0.20f * brightness, 0.40f * brightness, val);
+                            a                  *= Tools.smoothstep(1.00f,              1.70f,              val);
                         } else {
-                            float val           = (d - 0.8f) / 0.2f;
+                            float val           = (d - 0.75f) / 0.25f;
 
-                            r                   = Tools.smoothstep(1.0f, 1.00f, val);
-                            g                   = Tools.smoothstep(1.0f, 1.00f, val);
-                            b                   = Tools.smoothstep(0.4f, 0.90f, val);
-                            a                  *= Tools.smoothstep(1.7f, 4.00f, val);
+                            r                   = Tools.smoothstep(1.00f * brightness, 1.00f * brightness, val);
+                            g                   = Tools.smoothstep(1.00f * brightness, 1.00f * brightness, val);
+                            b                   = Tools.smoothstep(0.40f * brightness, 0.90f * brightness, val);
+                            a                  *= Tools.smoothstep(1.70f,              4.00f,              val);
                         }
 
                         pixels[i].r = r;
@@ -153,8 +154,7 @@ namespace Scripts {
                         if(r > 1.0f || r == 0.0f) continue;
 
                         float a = Tools.get_angle(half_width - x, half_height - y);
-
-                        a += current_spin / r;
+                              a = Tools.normalize_angle(a + current_spin / r);
 
                         float original_x = half_width  * (1.0f + r * (float)Math.Cos(a));
                         float original_y = half_height * (1.0f + r * (float)Math.Sin(a));
@@ -177,50 +177,48 @@ namespace Scripts {
                     }
             }
 
+            private void do_spin(float current_spin) {
+                Thread[] Ts = new Thread[16];
+
+                Ts[ 0] = new Thread(new ThreadStart(() => thread_function( 0, current_spin)));
+                Ts[ 1] = new Thread(new ThreadStart(() => thread_function( 1, current_spin)));
+                Ts[ 2] = new Thread(new ThreadStart(() => thread_function( 2, current_spin)));
+                Ts[ 3] = new Thread(new ThreadStart(() => thread_function( 3, current_spin)));
+                Ts[ 4] = new Thread(new ThreadStart(() => thread_function( 4, current_spin)));
+                Ts[ 5] = new Thread(new ThreadStart(() => thread_function( 5, current_spin)));
+                Ts[ 6] = new Thread(new ThreadStart(() => thread_function( 6, current_spin)));
+                Ts[ 7] = new Thread(new ThreadStart(() => thread_function( 7, current_spin)));
+                Ts[ 8] = new Thread(new ThreadStart(() => thread_function( 8, current_spin)));
+                Ts[ 9] = new Thread(new ThreadStart(() => thread_function( 9, current_spin)));
+                Ts[10] = new Thread(new ThreadStart(() => thread_function(10, current_spin)));
+                Ts[11] = new Thread(new ThreadStart(() => thread_function(11, current_spin)));
+                Ts[12] = new Thread(new ThreadStart(() => thread_function(12, current_spin)));
+                Ts[13] = new Thread(new ThreadStart(() => thread_function(13, current_spin)));
+                Ts[14] = new Thread(new ThreadStart(() => thread_function(14, current_spin)));
+                Ts[15] = new Thread(new ThreadStart(() => thread_function(15, current_spin)));
+
+                foreach(Thread T in Ts) T.Start();
+                foreach(Thread T in Ts) T.Join();
+
+                texture.SetPixels(pixels);
+                texture.Apply();
+            }
+
             private void Start() {
                 generate();
 
                 renderer        = gameObject.AddComponent<SpriteRenderer>();
+
+                if(spin != 0.0f &&  stationary) do_spin(Tools.normalize_angle(spin * Tools.deg));
+
                 renderer.sprite = Sprite.Create(texture,
                                                 new Rect(0, 0, width, height),
                                                 new Vector2(0.5f, 0.5f));
             }
 
             private void Update() {
-                if(spin != 0.0f) {
-                    float current_spin = Tools.normalize_angle(-Time.time * spin / 180.0f * Tools.pi);
-
-                    Thread[] Ts = new Thread[16];
-
-                    /*
-                     * Doesn't work with for loop
-                     * 
-                     * for(int i = 0; i < 16; i++)
-                     *     Ts[i] = new Thread(new ThreadStart(() => thread_function(i, current_spin)));
-                     */
-
-                    Ts[ 0] = new Thread(new ThreadStart(() => thread_function( 0, current_spin)));
-                    Ts[ 1] = new Thread(new ThreadStart(() => thread_function( 1, current_spin)));
-                    Ts[ 2] = new Thread(new ThreadStart(() => thread_function( 2, current_spin)));
-                    Ts[ 3] = new Thread(new ThreadStart(() => thread_function( 3, current_spin)));
-                    Ts[ 4] = new Thread(new ThreadStart(() => thread_function( 4, current_spin)));
-                    Ts[ 5] = new Thread(new ThreadStart(() => thread_function( 5, current_spin)));
-                    Ts[ 6] = new Thread(new ThreadStart(() => thread_function( 6, current_spin)));
-                    Ts[ 7] = new Thread(new ThreadStart(() => thread_function( 7, current_spin)));
-                    Ts[ 8] = new Thread(new ThreadStart(() => thread_function( 8, current_spin)));
-                    Ts[ 9] = new Thread(new ThreadStart(() => thread_function( 9, current_spin)));
-                    Ts[10] = new Thread(new ThreadStart(() => thread_function(10, current_spin)));
-                    Ts[11] = new Thread(new ThreadStart(() => thread_function(11, current_spin)));
-                    Ts[12] = new Thread(new ThreadStart(() => thread_function(12, current_spin)));
-                    Ts[13] = new Thread(new ThreadStart(() => thread_function(13, current_spin)));
-                    Ts[14] = new Thread(new ThreadStart(() => thread_function(14, current_spin)));
-                    Ts[15] = new Thread(new ThreadStart(() => thread_function(15, current_spin)));
-
-                    foreach(Thread T in Ts) T.Start();
-                    foreach(Thread T in Ts) T.Join();
-
-                    texture.SetPixels(pixels);
-                    texture.Apply();
+                if(spin != 0.0f && !stationary) {
+                    do_spin(Tools.normalize_angle(Time.time * spin * Tools.deg));
 
                     renderer.sprite = Sprite.Create(texture,
                                                     new Rect(0, 0, width, height),

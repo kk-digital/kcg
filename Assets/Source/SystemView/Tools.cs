@@ -39,6 +39,10 @@ namespace Source {
             public const float rsqrt2                 = 0.7071068f;     // ---                  0.7071068
                                                                         // √ 2
 
+                                                                        //  π                   Multiply by this to convert from deg to rad
+            public const float deg                    = 0.0174533f;     // ---
+                                                                        // 180°                 Divide   by this to convert from rad to deg
+
             /*
              * Quick and simple function to calculate the magnitude of a vector
              */

@@ -439,8 +439,9 @@ MonoBehaviour:
   height: 512
   opacity: 1
   contrast: 0.8
-  cutoff: 0.02
+  cutoff: 0.1
   spin: 3.25
+  brightness: 0.75
   center: {x: 0, y: 0, z: 0}
   texture: {fileID: 0}
   renderer: {fileID: 0}
