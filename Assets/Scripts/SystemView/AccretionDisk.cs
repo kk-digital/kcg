@@ -179,11 +179,6 @@ namespace Scripts {
             }
 
             private void do_spin(float current_spin) {
-                if(current_spin > Tools.pi) {
-                    renderer.transform.RotateAround(center, new Vector3(0.0f, 0.0f, 1.0f), spin * (Time.time - last_time));
-                    return;
-                }
-
                 Thread[] Ts = new Thread[16];
 
                 Ts[ 0] = new Thread(new ThreadStart(() => thread_function( 0, current_spin)));
@@ -224,15 +219,20 @@ namespace Scripts {
             }
 
             private void Update() {
-                last_time = Time.time;
-
                 if(spin != 0.0f && !stationary) {
-                    do_spin(Tools.normalize_angle(Time.time * spin * Tools.deg));
+                    float current_spin = Time.time * spin * Tools.deg;
+
+                    if(current_spin > Tools.pi)
+                        renderer.transform.RotateAround(center, new Vector3(0.0f, 0.0f, 1.0f), spin * (Time.time - last_time));
+                    else
+                        do_spin(current_spin);
 
                     renderer.sprite = Sprite.Create(texture,
                                                     new Rect(0, 0, width, height),
                                                     new Vector2(0.5f, 0.5f));
                 }
+
+                last_time = Time.time;
             }
         }
     }
