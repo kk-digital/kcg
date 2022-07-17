@@ -148,7 +148,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 84783537}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 20}
+  m_LocalPosition: {x: 0, y: 0, z: 50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -330,6 +330,62 @@ MonoBehaviour:
   scale: 1
   DisableDragging: 0
   background: {fileID: 84783539}
+--- !u!1 &829905271
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 829905273}
+  - component: {fileID: 829905272}
+  m_Layer: 0
+  m_Name: Faint nebula
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &829905272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829905271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1897c9261aa54304690d1577b6d2bd0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seed: 987654321
+  layers: 5
+  colors: 2
+  width: 512
+  height: 512
+  opacity: 0.45
+  contrast: 1
+  cutoff: 0.02
+  spin: 0.4
+  center: {x: 0, y: 0, z: 0}
+  texture: {fileID: 0}
+  renderer: {fileID: 0}
+--- !u!4 &829905273
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829905271}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 5}
+  m_LocalScale: {x: 750, y: 750, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1445746684
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,6 +420,11 @@ MonoBehaviour:
   state: {fileID: 1445746688}
   inner_planets: 2
   outer_planets: 3
+  solar_mass: 5e+13
+  min_inner_planet_mass: 5e+9
+  max_inner_planet_mass: 2e+10
+  min_outer_planet_mass: 5e+10
+  max_outer_planet_mass: 4e+11
 --- !u!4 &1445746686
 Transform:
   m_ObjectHideFlags: 0
@@ -461,5 +522,5 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
