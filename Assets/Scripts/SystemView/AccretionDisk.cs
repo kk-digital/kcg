@@ -156,8 +156,8 @@ namespace Scripts {
 
                         a += current_spin / r;
 
-                        float original_x = half_width  * (1.0f + (float)Math.Cos(a));
-                        float original_y = half_height * (1.0f + (float)Math.Sin(a));
+                        float original_x = half_width  * (1.0f + r * (float)Math.Cos(a));
+                        float original_y = half_height * (1.0f + r * (float)Math.Sin(a));
 
                         int x0 = (int)original_x;
                         int x1 = (int)original_x + 1;
@@ -199,7 +199,7 @@ namespace Scripts {
                      *     Ts[i] = new Thread(new ThreadStart(() => thread_function(i, current_spin)));
                      */
 
-                    /*Ts[ 0] = new Thread(new ThreadStart(() => thread_function( 0, current_spin)));
+                    Ts[ 0] = new Thread(new ThreadStart(() => thread_function( 0, current_spin)));
                     Ts[ 1] = new Thread(new ThreadStart(() => thread_function( 1, current_spin)));
                     Ts[ 2] = new Thread(new ThreadStart(() => thread_function( 2, current_spin)));
                     Ts[ 3] = new Thread(new ThreadStart(() => thread_function( 3, current_spin)));
@@ -217,7 +217,7 @@ namespace Scripts {
                     Ts[15] = new Thread(new ThreadStart(() => thread_function(15, current_spin)));
 
                     foreach(Thread T in Ts) T.Start();
-                    foreach(Thread T in Ts) T.Join();*/
+                    foreach(Thread T in Ts) T.Join();
 
                     texture.SetPixels(pixels);
                     texture.Apply();
