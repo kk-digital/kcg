@@ -25,6 +25,7 @@ namespace Scripts {
 
             private Color[]       pixels;
             private float[]       alpha;
+            private float         last_time;
 
             private void generate() {
 
@@ -153,8 +154,8 @@ namespace Scripts {
 
                         if(r > 1.0f || r == 0.0f) continue;
 
-                        float a = Tools.get_angle(half_width - x, half_height - y);
-                              a = Tools.normalize_angle(a + current_spin / r);
+                        float a  = Tools.get_angle(half_width - x, half_height - y);
+                              a += (current_spin > Tools.pi ? Tools.pi : current_spin) / r;
 
                         float original_x = half_width  * (1.0f + r * (float)Math.Cos(a));
                         float original_y = half_height * (1.0f + r * (float)Math.Sin(a));
@@ -178,6 +179,11 @@ namespace Scripts {
             }
 
             private void do_spin(float current_spin) {
+                if(current_spin > Tools.pi) {
+                    renderer.transform.RotateAround(center, new Vector3(0.0f, 0.0f, 1.0f), spin * (Time.time - last_time));
+                    return;
+                }
+
                 Thread[] Ts = new Thread[16];
 
                 Ts[ 0] = new Thread(new ThreadStart(() => thread_function( 0, current_spin)));
@@ -208,6 +214,7 @@ namespace Scripts {
                 generate();
 
                 renderer        = gameObject.AddComponent<SpriteRenderer>();
+                last_time       = Time.time;
 
                 if(spin != 0.0f &&  stationary) do_spin(Tools.normalize_angle(spin * Tools.deg));
 
@@ -217,6 +224,8 @@ namespace Scripts {
             }
 
             private void Update() {
+                last_time = Time.time;
+
                 if(spin != 0.0f && !stationary) {
                     do_spin(Tools.normalize_angle(Time.time * spin * Tools.deg));
 
