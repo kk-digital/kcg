@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Enums.Tile;
 using KMath;
 using PlanetTileMap;
 using UnityEngine;
@@ -90,8 +91,77 @@ namespace AI.Movement
         HashSet<Vec2f> openSet;
         HashSet<Vec2f> closedSet;
 
-        bool Passable()
+        // todo: Deals with non square blocks.
+        bool PassableFly(ref TileMap tileMap, ref Node current, int indDir)
         {
+            // TODO -- parameterized
+            Vec2i CHARACTER_SIZE = new Vec2i(1, 1); // How many blocks character takes.
+
+            Vec2f exitPos = current.pos + directions[indDir].dir;
+
+            // Check if character can move to this tile
+            Vec2i tilePos =
+                new Vec2i((int)(exitPos.X - 0.5f) + (CHARACTER_SIZE.X - 1),
+                    (int)(exitPos.Y - 0.5f) + (CHARACTER_SIZE.Y - 1)); // Get block character wasn't occupying before.
+
+            // If solid return false.
+            if (tileMap.GetFrontTile(tilePos.X, tilePos.Y).ID != TileID.Air)
+                return false;
+
+            // if Diagonal directions.
+            if (indDir > 3)
+            {
+                // Adjacent blocks needs to be free to go in a diagonal directions. 
+                // (This is a simplification) This should not be true for small agents.
+                Vec2i verTilePos =
+                new Vec2i((int)(current.pos.X - 0.5f) + (CHARACTER_SIZE.X - 1),
+                    (int)(exitPos.Y - 0.5f) + (CHARACTER_SIZE.Y - 1));
+
+                if (tileMap.GetFrontTile(verTilePos.X, verTilePos.Y).ID != TileID.Air)
+                    return false;
+
+                Vec2i horTilePos =
+                    new Vec2i((int)(exitPos.X - 0.5f) + (CHARACTER_SIZE.X - 1),
+                        (int)(current.pos.Y - 0.5f) + (CHARACTER_SIZE.Y - 1));
+
+                if (tileMap.GetFrontTile(horTilePos.X, horTilePos.Y).ID != TileID.Air)
+                    return false;
+            }
+
+            current.pos = exitPos;
+            current.pathCost += directions[indDir].cost;
+            return true;
+        }
+
+        /// <summary>
+        /// Check if player can reach the space. 
+        /// Return false if tile is either too high or two low. 
+        /// Return false if block is solid.
+        /// </summary>
+        bool PassableJump(ref TileMap tileMap, ref Node current, int indDir)
+        {
+            // TODO -- parameterized
+            Vec2i CHARACTER_SIZE = new Vec2i(1, 1); // How many blocks character takes.
+            const int MAX_UP = 3;
+            const int MAX_DOWN = 9;
+
+            current.pos = current.pos + directions[indDir].dir;
+            current.pathCost += directions[indDir].cost;
+
+            // Check if character can move to this tile
+            Vec2i tilePos =
+                new Vec2i((int)(current.pos.X - 0.5f) + (CHARACTER_SIZE.X - 1),
+                    (int)(current.pos.Y - 0.5f) + (CHARACTER_SIZE.Y - 1)); // Get block character wasn't occupying before.
+
+            // If solid return false.
+            if (tileMap.GetFrontTile(tilePos.X, tilePos.Y).ID != TileID.Air)
+                return false;
+
+            //if () // needs Jump.
+            //{
+            //    return false;
+            //}
+
             return true;
         }
 
@@ -201,10 +271,7 @@ namespace AI.Movement
                     Node node = current;
                     node.parentID = current.id;
 
-                    if (!Passable())
-                    { }
-
-                    if (closedSet.Contains(node.pos))
+                    if (!PassableFly(ref tileMap, ref node, i))
                         continue;
 
                     if (openSet.Contains(node.pos))
@@ -218,6 +285,15 @@ namespace AI.Movement
                                 sortStartPost = index;
                         }
                         continue;
+                    }
+
+                    if (closedSet.Contains(node.pos))
+                    {
+                        int index = Array.IndexOf(closedList, node);
+                        if (!node.IsCheaper(ref closedList[index]))
+                        {
+                            continue;
+                        }
                     }
 
                     openSet.Add(node.pos);
