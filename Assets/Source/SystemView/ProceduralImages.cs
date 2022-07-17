@@ -36,7 +36,7 @@ namespace Source {
                 return noise;
             }
 
-            public static float[] circular_blur(float[] noise, int w, int h, float r) {
+            public static float[] circular_blur(float[] noise, float r, int w, int h) {
                 if(r <= 1.0f) return noise;
 
                 float[] blurred = new float[w * h];
@@ -245,6 +245,51 @@ namespace Source {
                 g = ProceduralImages.truncate((g - cutoff) / (1.0f - cutoff));
                 b = ProceduralImages.truncate((b - cutoff) / (1.0f - cutoff));
                 a = ProceduralImages.truncate((a - cutoff) / (1.0f - cutoff));
+            }
+
+            public static float[] swirl(float[] noise, float spin, int w, int h) {
+                int half_width  = w / 2;
+                int half_height = h / 2;
+
+                int maxr        = (w + h) / 4;
+
+                float[] alpha   = new float[w * h];
+
+                for(int x = 0; x < w; x++)
+                    for(int y = 0; y < h; y++) {
+                        float r = Tools.get_distance(x, y, half_width, half_height) / maxr;
+
+                        if(r > 1.0f || r == 0.0f) continue;
+
+                        float a  = Tools.get_angle(half_width - x, half_height - y);
+                              a += (spin > Tools.pi ? Tools.pi : spin) / r;
+
+                        float original_x = half_width  * (1.0f + r * (float)Math.Cos(a));
+                        float original_y = half_height * (1.0f + r * (float)Math.Sin(a));
+
+                        int x0 = (int)original_x;
+                        int x1 = (int)original_x + 1;
+                        int y0 = (int)original_y;
+                        int y1 = (int)original_y + 1;
+
+                        if(x0 <  0) x0 =     0;
+                        if(x0 >= w) x0 = w - 1;
+                        if(y0 <  0) y0 =     0;
+                        if(y0 >= h) y0 = h - 1;
+
+                        if(x1 < 0 || x1 >= w) x1 = x0;
+                        if(y1 < 0 || y1 >= h) y1 = y0;
+
+                        float dx = original_x - x0;
+                        float dy = original_y - y0;
+
+                        float v0 = Tools.smootherstep(noise[x0 + y0 * w], noise[x1 + y0 * w], dx);
+                        float v1 = Tools.smootherstep(noise[x0 + y1 * w], noise[x1 + y1 * w], dx);
+
+                        alpha[x + y * w] = Tools.smootherstep(v0, v1, dy);
+                    }
+
+                return alpha;
             }
         }
     }

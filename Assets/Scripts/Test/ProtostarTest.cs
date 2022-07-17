@@ -3,18 +3,20 @@
 namespace Scripts {
     namespace SystemView {
         public class ProtostarTest : MonoBehaviour {
-            public SystemState State;
+            public SystemState state;
+            public int         inner_planets;
+            public int         outer_planets;
 
             private void Start() {
-                State.stars.Add(new());
+                state.stars.Add(new());
 
-                State.stars[0].Object.self.mass    = 1E9f;
-                State.stars[0].Object.self.posx    = 0.0f;
-                State.stars[0].Object.self.posy    = 0.0f;
-                State.stars[0].Object.render_orbit = false;
-                State.stars[0].Object.brightness   = 0.08f;
+                state.stars[0].Object.self.mass    = 1E9f;
+                state.stars[0].Object.self.posx    = 0.0f;
+                state.stars[0].Object.self.posy    = 0.0f;
+                state.stars[0].Object.render_orbit = false;
+                state.stars[0].Object.brightness   = 0.08f;
 
-                State.generate_renderers();
+                state.generate_renderers();
             }
         }
     }

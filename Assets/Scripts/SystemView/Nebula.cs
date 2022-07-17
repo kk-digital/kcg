@@ -37,7 +37,7 @@ namespace Scripts {
                         base_alpha = ProceduralImages.smoothen_noise(base_alpha,            width / 64, height / 64, 64);
                         base_alpha = ProceduralImages.distort(rng,   base_alpha, 16.0f, 16, width,      height);
                         base_alpha = ProceduralImages.soften(        base_alpha, 4,         width,      height);
-                        base_alpha = ProceduralImages.circular_blur( base_alpha,            width,      height, 16.0f);
+                        base_alpha = ProceduralImages.circular_blur( base_alpha, 16.0f,     width,      height);
                         base_alpha = ProceduralImages.circular_mask( base_alpha,            width,      height);
 
                 for(int x = 0; x < width; x++)
