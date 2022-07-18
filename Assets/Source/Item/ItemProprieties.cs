@@ -10,14 +10,33 @@ namespace Item
 
     public struct ItemProprieties
     {
+        // Item Type
         public ItemType ItemType;
+
+        // Item's Invetory Sprite Id
         public int InventorSpriteID;
+
+        // Item's Sprite ID
         public int SpriteID;
+
+        // Item's Sprite Size
         public Vec2f SpriteSize;
 
+        // Item's Tool Action Type
         public Enums.ActionType ToolActionType;
+
+        // Item's Fire Weapon ID
         public int FireWeaponID;
 
+        /// <summary>
+        /// Item Flags:
+        /// 
+        /// Placeable -> If Item Placable Flag
+        /// Consumable -> If Item Consumable
+        /// Stackable -> If Item Stackable (Takeable more than once)
+        /// Tool -> If Item is Tool
+        /// 
+        /// </summary>
         public Flags ItemFlags;
         [Flags]
         public enum Flags : byte
@@ -28,10 +47,18 @@ namespace Item
             Tool        = 1 << 3
         }
 
+
+        // Is Item Placable
        public bool IsPlaceable() { return ItemFlags.HasFlag(Flags.Placeable); }
-       public bool IsConsumable() { return ItemFlags.HasFlag(Flags.Consumable); }
-       public bool IsStackable() { return ItemFlags.HasFlag(Flags.Stackable); }
-       public bool IsTool() { return ItemFlags.HasFlag(Flags.Tool); }
+
+        // Is Item Consumable
+        public bool IsConsumable() { return ItemFlags.HasFlag(Flags.Consumable); }
+
+        // Is Item Stackable
+        public bool IsStackable() { return ItemFlags.HasFlag(Flags.Stackable); }
+
+        // Is Item Tool
+        public bool IsTool() { return ItemFlags.HasFlag(Flags.Tool); }
     }
 
     public struct FireWeaponPropreties
@@ -61,7 +88,12 @@ namespace Item
         public int BulletsPerShot;
 
         /// <summary>
-        /// Can Recharge the gun
+        /// Can Recharge -> Recharge Condition
+        /// Charge Rate -> Charge Precentage
+        /// Charge Ratio -> Charge Multipiler
+        /// Charge Per Shot -> Charge will decrease per shot
+        /// Charge Min -> Minumum Charge
+        /// Charge Max -> Maximum Charge
         /// </summary>
         public bool CanCharge;
         public float ChargeRate;
@@ -103,6 +135,11 @@ namespace Item
 
         /// <summary>
         /// Melee Attack Properties
+        /// 
+        /// StaggerTime -> Stun Time
+        /// Stagger Rate -> Stagger Multipiler
+        /// Shield Active -> Shield Condition
+        /// 
         /// </summary>
         public float StaggerTime;
         [Range(0, 1)]
@@ -111,12 +148,26 @@ namespace Item
         public bool ShieldActive;
 
         /// <summary>
-        /// Pulse Weapon
+        /// Pulse Weapon Properties
+        /// 
+        /// isLaunchGreanade -> Launch Grenade Mode Condition
+        /// NumberOfGrenades-> Number Of Grenades in Clip
+        /// GrenadeClipSize -> Size of the Grenade Clip
+        /// 
         /// </summary>
         public bool isLaunchGreanade;
         public int NumberOfGrenades;
         public int GrenadeClipSize;
 
+        /// <summary>
+        /// Weapon Flags
+        /// 
+        /// HasClip -> If Weapon Has an Ammo Clip
+        /// ShouldSpread -> Should Weapon Spread the Ammos (ex, pump shotgun)
+        /// HasCharge -> If Weapon Chargable or Not
+        /// PulseWeapon -> If the weapon is a pulse weapon or not
+        /// 
+        /// </summary>
         public Flags WeaponFlags;
         [Flags]
         public enum Flags : byte
@@ -127,6 +178,13 @@ namespace Item
             PulseWeapon = 4 << 3, 
         }
 
+        /// <summary>
+        /// Melee Flags
+        /// 
+        /// Stab -> If Melee Weapon Stabs
+        /// Slash -> If Melee Weapon Slashes
+        /// 
+        /// </summary>
         public MeleeFlags MeleeAttackFlags;
         public enum MeleeFlags : byte
         {
@@ -134,6 +192,14 @@ namespace Item
             Slash = 2 << 1
         }
 
+        /// <summary>
+        /// Grenades Flags
+        /// 
+        /// Cocussions -> Cocussions Bombs
+        /// Flame -> Flame Bombs
+        /// Fragmentation -> Fragmentation Bombs
+        /// 
+        /// </summary>
         public GrenadesFlags GrenadeFlags;
         public enum GrenadesFlags : byte
         {
@@ -142,12 +208,22 @@ namespace Item
             Fragmentation = 3 << 2
         }
 
+        // Weapon Has Clip?
         public bool HasClip() { return WeaponFlags.HasFlag(Flags.HasClip); }
+
+        // Weapon Should Spread?
         public bool ShouldSpread() { return WeaponFlags.HasFlag(Flags.ShouldSpread); }
+
+        // Weapon Has Charge Flag?
         public bool HasCharge() { return WeaponFlags.HasFlag(Flags.HasCharge); }
 
+        // Is Weapon Stabs
         public bool IsStab() { return WeaponFlags.HasFlag(MeleeFlags.Stab); }
+
+        // Is Weapon Slash
         public bool IsSlash() { return WeaponFlags.HasFlag(MeleeFlags.Slash); }
+
+        // Is Weapon Pulse
         public bool IsPulse() { return WeaponFlags.HasFlag(Flags.PulseWeapon); }
 
     }
