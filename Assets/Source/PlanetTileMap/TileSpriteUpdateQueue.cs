@@ -42,13 +42,32 @@ namespace PlanetTileMap
         // called every frame
         // updates a number of tiles each frame
         // the remaining tiles will be left for the next frame 
-        public void UpdateTileSprites(ref TileMap tileMap)
+        public void UpdateTileSprites(TileMap tileMap)
         {
             for(int i = 0; i < 1024 * 32 && i < ToUpdateTiles.Count; i++)
             {
                 UpdateTile updateTile = ToUpdateTiles[i];
-                tileMap.UpdateTile(updateTile.XPos, updateTile.YPos, updateTile.Layer);
+                switch(updateTile.Layer)
+                {
+                    case MapLayerType.Back:
+                    {
+                        tileMap.UpdateBackTile(updateTile.XPos, updateTile.YPos);
+                        break;
+                    }
+                    case MapLayerType.Mid:
+                    {
+                        tileMap.UpdateMidTile(updateTile.XPos, updateTile.YPos);
+                        break;
+                    }
+                    case MapLayerType.Front:
+                    {
+                        tileMap.UpdateFrontTile(updateTile.XPos, updateTile.YPos);
+                        break;
+                    }
+                }
+                
             }
+
             ToUpdateTiles.RemoveRange(0, Math.Min(1024 * 32, ToUpdateTiles.Count));
         }
     }
