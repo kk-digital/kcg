@@ -23,7 +23,7 @@ public class AnimancerTestScript : MonoBehaviour
         //GameObject humanoid = GameObject.Find("DefaultHumanoid");
 
         // load the 3d model from file
-        GameObject prefab = (GameObject)Resources.Load("DefaultHumanoid");
+        GameObject prefab = (GameObject)Resources.Load("Stander");
 
         HumanoidArray = new GameObject[HumanoidCount];
         AnimancerComponentArray = new AnimancerComponent[HumanoidCount];
@@ -31,7 +31,7 @@ public class AnimancerTestScript : MonoBehaviour
         for(int i = 0; i < HumanoidCount; i++)
         {
             HumanoidArray[i] = Instantiate(prefab);
-            HumanoidArray[i].transform.position += new Vector3(i, 0.0f, 0.0f);
+            HumanoidArray[i].transform.position = new Vector3(i, 0.0f, 0.0f);
         }
 
 
@@ -50,10 +50,10 @@ public class AnimancerTestScript : MonoBehaviour
 
         
         // load some animation clips from disk
-         IdleAnimationClip = (AnimationClip)Resources.Load("Animation/" + "Humanoid-Idle");
-         RunAnimationClip = (AnimationClip)Resources.Load("Animation/" + "Humanoid-Run");
-         WalkAnimationClip = (AnimationClip)Resources.Load("Animation/" + "Humanoid-Walk");
-         GolfSwingClip = (AnimationClip)Resources.Load("Animation/" + "Humanoid-GolfSwing");
+         IdleAnimationClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Idle", typeof(AnimationClip));
+         RunAnimationClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Run", typeof(AnimationClip));
+         WalkAnimationClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Walk_F", typeof(AnimationClip));
+         GolfSwingClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Jump_Roll", typeof(AnimationClip));
 
 
         // play the idle animation
