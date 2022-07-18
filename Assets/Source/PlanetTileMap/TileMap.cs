@@ -215,7 +215,10 @@ namespace PlanetTileMap
             chunk.TileArray[(int) MapLayerType.Back][tileIndex].ID = tileID;
             chunk.TileArray[(int) MapLayerType.Back][tileIndex].SpriteID = GameResources.LoadingTilePlaceholderSpriteId;
             chunk.Sequence++;
+
+            TileSpriteUpdateQueue.Add(x, y, MapLayerType.Back);
         }
+
         public void SetMidTile(int x, int y, TileID tileID)
         {
             Utils.Assert(IsValid(x, y));
@@ -238,7 +241,9 @@ namespace PlanetTileMap
             chunk.TileArray[(int) MapLayerType.Mid][tileIndex].ID = tileID;
             chunk.TileArray[(int) MapLayerType.Mid][tileIndex].SpriteID = GameResources.LoadingTilePlaceholderSpriteId;
             chunk.Sequence++;
+            TileSpriteUpdateQueue.Add(x, y, MapLayerType.Mid);
         }
+
         public void SetFrontTile(int x, int y, TileID tileID)
         {
             Utils.Assert(IsValid(x, y));
@@ -261,6 +266,7 @@ namespace PlanetTileMap
             chunk.TileArray[(int) MapLayerType.Front][tileIndex].ID = tileID;
             chunk.TileArray[(int) MapLayerType.Front][tileIndex].SpriteID = GameResources.LoadingTilePlaceholderSpriteId;
             chunk.Sequence++;
+            TileSpriteUpdateQueue.Add(x, y, MapLayerType.Front);
         }
 
         #endregion
@@ -268,20 +274,10 @@ namespace PlanetTileMap
         // Update neighbour sprites of tiles
         #region Tile neighbour updater
 
-        public void UpdateBackTile(int x, int y)
-        {
-            TileSpriteUpdate.UpdateBackTile(x, y, this);
-        }
-
         // updates all the sprite ids in the layer
         public void UpdateBackTileMapPositions()
         {
             TileSpriteUpdate.UpdateBackTileMapPositions(this);
-        }
-
-        public void UpdateMidTile(int x, int y)
-        {
-            TileSpriteUpdate.UpdateMidTile(x, y, this);
         }
 
         // updates all the sprite ids in the layer
@@ -290,11 +286,6 @@ namespace PlanetTileMap
             TileSpriteUpdate.UpdateMidTileMapPositions(this);
         }
 
-
-        public void UpdateFrontTile(int x, int y)
-        {
-            TileSpriteUpdate.UpdateFrontTile(x, y, this);
-        }
 
         // updates all the sprite ids in the layer
         public void UpdateFrontTileMapPositions()

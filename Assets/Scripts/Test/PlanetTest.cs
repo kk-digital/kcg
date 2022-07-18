@@ -2,6 +2,7 @@ using UnityEngine;
 using Enums.Tile;
 using KMath;
 using Item;
+using Animancer;
 
 namespace Planet.Unity
 {
@@ -35,6 +36,18 @@ namespace Planet.Unity
         int inventoryID;
         int toolBarID;
 
+
+        public static int HumanoidCount = 1;
+        GameObject[] HumanoidArray;
+
+        AnimationClip IdleAnimationClip ;
+        AnimationClip RunAnimationClip ;
+        AnimationClip WalkAnimationClip ;
+        AnimationClip GolfSwingClip;
+
+
+        AnimancerComponent[] AnimancerComponentArray;
+
         static bool Init = false;
 
         public void Start()
@@ -48,6 +61,32 @@ namespace Planet.Unity
 
         public void Update()
         {
+
+            bool run = Input.GetKeyDown(KeyCode.R);
+            bool walk = Input.GetKeyDown(KeyCode.W);
+            bool idle = Input.GetKeyDown(KeyCode.I);
+            bool golf = Input.GetKeyDown(KeyCode.G);
+
+            for(int i = 0; i < HumanoidCount; i++)
+            {
+                if (run)
+                {
+                    AnimancerComponentArray[i].Play(RunAnimationClip, 0.25f);
+                }
+                else if (walk)
+                {
+                    AnimancerComponentArray[i].Play(WalkAnimationClip, 0.25f);
+                }
+                else if (idle)
+                {
+                    AnimancerComponentArray[i].Play(IdleAnimationClip, 0.25f);
+                }
+                else if (golf)
+                {
+                    AnimancerComponentArray[i].Play(GolfSwingClip, 0.25f);
+                }
+            }
+
             int toolBarID = Player.agentToolBar.ToolBarID;
             InventoryEntity Inventory = Planet.EntitasContext.inventory.GetEntityWithInventoryID(toolBarID);
             int selectedSlot = Inventory.inventorySlots.Selected;
@@ -129,6 +168,55 @@ namespace Planet.Unity
         // create the sprite atlas for testing purposes
         public void Initialize()
         {
+            // get the 3d model from the scene
+            //GameObject humanoid = GameObject.Find("DefaultHumanoid");
+
+            // load the 3d model from file
+            GameObject prefab = (GameObject)Resources.Load("Stander");
+
+            HumanoidArray = new GameObject[HumanoidCount];
+            AnimancerComponentArray = new AnimancerComponent[HumanoidCount];
+
+            for(int i = 0; i < HumanoidCount; i++)
+            {
+                HumanoidArray[i] = Instantiate(prefab);
+                HumanoidArray[i].transform.position = new Vector3(5.0f, 20.0f, -1.0f);
+
+                Vector3 eulers = HumanoidArray[i].transform.rotation.eulerAngles;
+                HumanoidArray[i].transform.rotation = Quaternion.Euler(0, eulers.y + 90, 0);
+                
+            }
+
+
+            
+
+
+            // create an animancer object and give it a reference to the Animator component
+            for(int i = 0; i < HumanoidCount; i++)
+            {
+                GameObject animancerComponent = new GameObject("AnimancerComponent", typeof(AnimancerComponent));
+                // get the animator component from the game object
+                // this component is used by animancer
+                AnimancerComponentArray[i] = animancerComponent.GetComponent<AnimancerComponent>();
+                AnimancerComponentArray[i].Animator = HumanoidArray[i].GetComponent<Animator>();
+            }
+
+            
+            // load some animation clips from disk
+            IdleAnimationClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Idle", typeof(AnimationClip));
+            RunAnimationClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Run", typeof(AnimationClip));
+            WalkAnimationClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Walk_F", typeof(AnimationClip));
+            GolfSwingClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Jump_Roll", typeof(AnimationClip));
+
+
+            // play the idle animation
+            for(int i = 0; i < HumanoidCount; i++)
+            {
+                AnimancerComponentArray[i].Play(IdleAnimationClip);
+            }
+
+            Application.targetFrameRate = 60;
+
             inventoryManager = new Inventory.InventoryManager();
             inventoryDrawSystem = new Inventory.DrawSystem();
 
@@ -311,7 +399,7 @@ namespace Planet.Unity
                 }
             }
 
-            //tileMap.UpdateTileMapPositions(MapLayerType.Front);
+            //tileMap.UpdateFrontTileMapPositions();
         }
 
         void SpawnStuff()

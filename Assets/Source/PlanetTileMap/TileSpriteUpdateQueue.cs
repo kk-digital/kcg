@@ -51,17 +51,17 @@ namespace PlanetTileMap
                 {
                     case MapLayerType.Back:
                     {
-                        tileMap.UpdateBackTile(updateTile.XPos, updateTile.YPos);
+                        TileSpriteUpdate.UpdateBackTile(updateTile.XPos, updateTile.YPos, tileMap);
                         break;
                     }
                     case MapLayerType.Mid:
                     {
-                        tileMap.UpdateMidTile(updateTile.XPos, updateTile.YPos);
+                        TileSpriteUpdate.UpdateMidTile(updateTile.XPos, updateTile.YPos, tileMap);
                         break;
                     }
                     case MapLayerType.Front:
                     {
-                        tileMap.UpdateFrontTile(updateTile.XPos, updateTile.YPos);
+                        TileSpriteUpdate.UpdateFrontTile(updateTile.XPos, updateTile.YPos, tileMap);
                         break;
                     }
                 }

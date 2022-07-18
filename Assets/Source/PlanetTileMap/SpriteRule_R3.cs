@@ -1221,6 +1221,9 @@ namespace PlanetTileMap
             int tilePosition = R3_Map[neighborsBitField];
 
 
+            UnityEngine.Debug.Log(tilePosition);
+
+
 
 
 
