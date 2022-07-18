@@ -11,6 +11,7 @@ namespace Planet.Unity
 
         Planet.PlanetState Planet;
         AgentEntity Player;
+        AgentEntity Agent;
 
         static bool Init = false;
 
@@ -32,8 +33,11 @@ namespace Planet.Unity
   
          if (Input.GetKeyDown(KeyCode.Mouse0))
          {
-             // When press key down select place player is going to move to.
-         }
+                Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vec2f goalPos = new Vec2f(worldPosition.x, worldPosition.y);
+                GameState.ActionCreationSystem.CreateMovementAction(Planet.EntitasContext, Enums.ActionType.MoveAction,
+                   Player.agentID.ID, goalPos);
+            }
 
             Planet.Update(Time.deltaTime, Material, transform);
         }
@@ -57,6 +61,7 @@ namespace Planet.Unity
             GenerateMap();
 
             Player = Planet.AddPlayer(GameResources.CharacterSpriteId, 32, 48, new Vec2f(3.0f, 3.0f), 0, 100, 100, 100, 100, 100);
+            Agent = Planet.AddAgent(new Vec2f(1.0f, 3.0f));
         }
 
         void GenerateMap()
