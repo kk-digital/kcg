@@ -146,17 +146,7 @@ namespace PlanetTileMap
             }
         }
 
-        // updates all the sprite ids in the layer
-        public static void UpdateBackTileMapPositions(TileMap tileMap)
-        {
-            for(int y = 0; y < tileMap.MapSize.Y; y++)
-            {
-                for(int x = 0; x < tileMap.MapSize.X; x++)
-                {
-                    UpdateBackNeighbourTiles(x, y, tileMap);
-                }
-            }
-        }
+        
 
 
 
@@ -175,14 +165,102 @@ namespace PlanetTileMap
             }
         }
 
+
         // updates all the sprite ids in the layer
-        public static void UpdateMidTileMapPositions(TileMap tileMap)
+        public static void UpdateBackTileMapPositions(TileMap tileMap, int i, int j)
         {
+            int bucketX = i / 64;
+            int bucketY = j / 64;
+
             for(int y = 0; y < tileMap.MapSize.Y; y++)
             {
+                int testBucketY = y / 64;
                 for(int x = 0; x < tileMap.MapSize.X; x++)
                 {
-                    UpdateMidNeighbourTiles(x, y, tileMap);
+                    int testBucketX = x / 64;
+                    if (bucketX == testBucketX && bucketY == testBucketY)
+                    {
+                        UpdateBackNeighbourTiles(x, y, tileMap);
+                    }
+                }
+            }
+
+            for(int y = 0; y < tileMap.MapSize.Y; y++)
+            {
+                int testBucketY = y / 64;
+                for(int x = 0; x < tileMap.MapSize.X; x++)
+                {
+                    int testBucketX = x / 64;
+                    if (bucketX != testBucketX || bucketY != testBucketY)
+                    {
+                        UpdateBackNeighbourTiles(x, y, tileMap);
+                    }
+                }
+            }
+        }
+
+        // updates all the sprite ids in the layer
+        public static void UpdateMidTileMapPositions(TileMap tileMap, int i, int j)
+        {
+            int bucketX = i / 64;
+            int bucketY = j / 64;
+
+            for(int y = 0; y < tileMap.MapSize.Y; y++)
+            {
+                int testBucketY = y / 64;
+                for(int x = 0; x < tileMap.MapSize.X; x++)
+                {
+                    int testBucketX = x / 64;
+                    if (bucketX == testBucketX && bucketY == testBucketY)
+                    {
+                        UpdateMidNeighbourTiles(x, y, tileMap);
+                    }
+                }
+            }
+
+            for(int y = 0; y < tileMap.MapSize.Y; y++)
+            {
+                int testBucketY = y / 64;
+                for(int x = 0; x < tileMap.MapSize.X; x++)
+                {
+                    int testBucketX = x / 64;
+                    if (bucketX != testBucketX || bucketY != testBucketY)
+                    {
+                        UpdateMidNeighbourTiles(x, y, tileMap);
+                    }
+                }
+            }
+        }
+
+        // updates all the sprite ids in the layer
+        public static void UpdateFrontTileMapPositions(TileMap tileMap, int i, int j)
+        {
+            int bucketX = i / 64;
+            int bucketY = j / 64;
+
+            for(int y = 0; y < tileMap.MapSize.Y; y++)
+            {
+                int testBucketY = y / 64;
+                for(int x = 0; x < tileMap.MapSize.X; x++)
+                {
+                    int testBucketX = x / 64;
+                    if (bucketX == testBucketX && bucketY == testBucketY)
+                    {
+                        UpdateFrontNeighbourTiles(x, y, tileMap);
+                    }
+                }
+            }
+
+            for(int y = 0; y < tileMap.MapSize.Y; y++)
+            {
+                int testBucketY = y / 64;
+                for(int x = 0; x < tileMap.MapSize.X; x++)
+                {
+                    int testBucketX = x / 64;
+                    if (bucketX != testBucketX || bucketY != testBucketY)
+                    {
+                        UpdateFrontNeighbourTiles(x, y, tileMap);
+                    }
                 }
             }
         }
@@ -200,18 +278,6 @@ namespace PlanetTileMap
                 {
                     if (!tileMap.IsValid(i, j)) continue;
                     UpdateFrontNeighbourTiles(i, j, tileMap);
-                }
-            }
-        }
-
-        // updates all the sprite ids in the layer
-        public static void UpdateFrontTileMapPositions(TileMap tileMap)
-        {
-            for(int y = 0; y < tileMap.MapSize.Y; y++)
-            {
-                for(int x = 0; x < tileMap.MapSize.X; x++)
-                {
-                    UpdateFrontNeighbourTiles(x, y, tileMap);
                 }
             }
         }

@@ -325,9 +325,8 @@ namespace Planet.Unity
                         }
                     }
 
-
-                    tileMap.SetFrontTile(i, j, frontTileID);
-                    tileMap.SetBackTile(i, j, backTileID);
+                    tileMap.GetFrontTile(i, j).ID = frontTileID;
+                    tileMap.GetBackTile(i, j).ID = backTileID;
                 }
             }
 
@@ -337,8 +336,8 @@ namespace Planet.Unity
             {
                 for (int j = tileMap.MapSize.Y - 10; j < tileMap.MapSize.Y; j++)
                 {
-                    tileMap.SetFrontTile(i, j, TileID.Air);
-                    tileMap.SetBackTile(i, j, TileID.Air);
+                    tileMap.GetFrontTile(i, j).ID = TileID.Air;
+                    tileMap.GetBackTile(i, j).ID = TileID.Air;
                 }
             }
 
@@ -365,9 +364,9 @@ namespace Planet.Unity
 
                 for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
-                    tileMap.SetFrontTile(i, j, TileID.Air);
-                    tileMap.SetBackTile(i, j, TileID.Air);
-                    tileMap.SetMidTile(i, j, TileID.Wire);
+                    tileMap.GetFrontTile(i, j).ID = TileID.Air;
+                    tileMap.GetBackTile(i, j).ID = TileID.Air;
+                    tileMap.GetMidTile(i, j).ID = TileID.Wire;
                 }
             }
 
@@ -394,12 +393,17 @@ namespace Planet.Unity
 
                 for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
-                    tileMap.SetFrontTile(i, j, TileID.Air);
-                    tileMap.SetMidTile(i, j, TileID.Pipe);
+                    tileMap.GetFrontTile(i, j).ID = TileID.Air;
+                    tileMap.GetMidTile(i, j).ID = TileID.Pipe;
                 }
             }
 
-            //tileMap.UpdateFrontTileMapPositions();
+            var camera = Camera.main;
+            Vector3 lookAtPosition = camera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, camera.nearClipPlane));
+
+            tileMap.UpdateBackTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
+            tileMap.UpdateMidTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
+            tileMap.UpdateFrontTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
         }
 
         void SpawnStuff()

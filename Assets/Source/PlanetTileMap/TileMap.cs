@@ -241,6 +241,7 @@ namespace PlanetTileMap
             chunk.TileArray[(int) MapLayerType.Mid][tileIndex].ID = tileID;
             chunk.TileArray[(int) MapLayerType.Mid][tileIndex].SpriteID = GameResources.LoadingTilePlaceholderSpriteId;
             chunk.Sequence++;
+
             TileSpriteUpdateQueue.Add(x, y, MapLayerType.Mid);
         }
 
@@ -266,6 +267,7 @@ namespace PlanetTileMap
             chunk.TileArray[(int) MapLayerType.Front][tileIndex].ID = tileID;
             chunk.TileArray[(int) MapLayerType.Front][tileIndex].SpriteID = GameResources.LoadingTilePlaceholderSpriteId;
             chunk.Sequence++;
+
             TileSpriteUpdateQueue.Add(x, y, MapLayerType.Front);
         }
 
@@ -275,22 +277,22 @@ namespace PlanetTileMap
         #region Tile neighbour updater
 
         // updates all the sprite ids in the layer
-        public void UpdateBackTileMapPositions()
+        public void UpdateBackTileMapPositions(int x, int y)
         {
-            TileSpriteUpdate.UpdateBackTileMapPositions(this);
+            TileSpriteUpdate.UpdateBackTileMapPositions(this, x, y);
         }
 
         // updates all the sprite ids in the layer
-        public void UpdateMidTileMapPositions()
+        public void UpdateMidTileMapPositions(int x, int y)
         {
-            TileSpriteUpdate.UpdateMidTileMapPositions(this);
+            TileSpriteUpdate.UpdateMidTileMapPositions(this, x, y);
         }
 
 
         // updates all the sprite ids in the layer
-        public void UpdateFrontTileMapPositions()
+        public void UpdateFrontTileMapPositions(int x, int y)
         {
-            TileSpriteUpdate.UpdateFrontTileMapPositions(this);
+            TileSpriteUpdate.UpdateFrontTileMapPositions(this, x, y);
         }
         
         // this is called every frame to update a limited number of sprite ids

@@ -135,7 +135,7 @@ namespace Planet.Unity
                     }
 
 
-                    tileMap.SetFrontTile(i, j, frontTileID);
+                    tileMap.GetFrontTile(i, j).ID =  frontTileID;
                 }
             }
 
@@ -201,7 +201,12 @@ namespace Planet.Unity
             }
 */
 
-       //     tileMap.UpdateTileMapPositions(MapLayerType.Front);
+            var camera = Camera.main;
+            Vector3 lookAtPosition = camera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, camera.nearClipPlane));
+
+            tileMap.UpdateBackTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
+            tileMap.UpdateMidTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
+            tileMap.UpdateFrontTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
 
         }
 
