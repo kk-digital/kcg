@@ -8,9 +8,16 @@ namespace Action
 {
     public class ToolActionPulseWeapon : ActionBase
     {
+        // Weapon Property
         private Item.FireWeaponPropreties WeaponProperty;
+
+        // Projectile Entity
         private ProjectileEntity ProjectileEntity;
+
+        // Item Entity
         private ItemInventoryEntity ItemEntity;
+
+        // Start Position
         private Vec2f StartPos;
 
         // Cone
@@ -22,21 +29,33 @@ namespace Action
 
         public override void OnEnter(ref Planet.PlanetState planet)
         {
+            // Item Entity
             ItemEntity = EntitasContext.itemInventory.GetEntityWithItemID(ActionEntity.actionTool.ItemID);
+
+            // Weapon Property
             WeaponProperty = GameState.ItemCreationApi.GetWeapon(ItemEntity.itemType.Type);
 
+            // Cursor Position
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float x = worldPosition.x;
             float y = worldPosition.y;
+
+            // Bullets Per Shot
             int bulletsPerShot = ItemEntity.itemFireWeaponClip.BulletsPerShot;
 
+            // If in grenade mode
             if(ItemEntity.itemPulseWeaponPulse.GrenadeMode)
             {
+                // If entity has pulse comp
                 if (ItemEntity.hasItemPulseWeaponPulse)
                 {
+                    // Number of grenades
                     int numGrenade = ItemEntity.itemPulseWeaponPulse.NumberOfGrenades;
+
+                    // If clip is empty
                     if (numGrenade == 0)
                     {
+                        // Error log
                         Debug.Log("Grenade Clip is empty. Press R to reload.");
                         ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
                         return;
@@ -45,11 +64,16 @@ namespace Action
             }
             else
             {
+                // If entity has clip component
                 if (ItemEntity.hasItemFireWeaponClip)
                 {
+                    // Number of bullets in clip
                     int numBullet = ItemEntity.itemFireWeaponClip.NumOfBullets;
+
+                    // If clip is empty
                     if (numBullet == 0)
                     {
+                        // Error log
                         Debug.Log("Clip is empty. Press R to reload.");
                         ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
                         return;
@@ -57,46 +81,64 @@ namespace Action
                 }
             }
 
+            // If Grenade Mode is On
             if (ItemEntity.itemPulseWeaponPulse.GrenadeMode)
             {
+                // If Pulse Weapon component has
                 if (ItemEntity.hasItemPulseWeaponPulse)
                 {
+                    // Decrease number of bullets in the clip when shoot
                     ItemEntity.itemPulseWeaponPulse.NumberOfGrenades -= bulletsPerShot;
                 }
             }
             else
             {
+                // If Fire Clip Weapon component has
                 if (ItemEntity.hasItemFireWeaponClip)
                 {
+                    // Decrease number of bullets in the clip when shoot
                     ItemEntity.itemFireWeaponClip.NumOfBullets -= bulletsPerShot;
                 }
             }
 
-            // Start positiom
+            // Start position
             StartPos = AgentEntity.physicsPosition2D.Value;
             StartPos.X += 0.3f;
             StartPos.Y += 0.5f;
 
+            // Check if entity has spread component
             if (ItemEntity.hasItemFireWeaponSpread)
             {
+                // Get Spread Component
                 var spread = ItemEntity.itemFireWeaponSpread;
+
+                // Spawn Every bullet with spread angle
                 for (int i = 0; i < bulletsPerShot; i++)
                 {
+                    // Calculate Spread
                     var random = UnityEngine.Random.Range(-spread.SpreadAngle, spread.SpreadAngle);
+
+                    // Spawn Bullets
                     ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f((x - StartPos.X) - random, y - StartPos.Y).Normalized, Enums.ProjectileType.Bullet);
+
+                    // Add The Spawned Bullets to Array
                     EndPointList.Add(ProjectileEntity);
                 }
             }
 
+            // Check if is in Grenade Mode
             if(!ItemEntity.itemPulseWeaponPulse.GrenadeMode)
                 ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Bullet);
             else
                 ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Grenade);
 
+            // Add spawned bullets to array
             EndPointList.Add(ProjectileEntity);
 
+            // Run execution
             ActionEntity.actionExecution.State = Enums.ActionState.Running;
 
+            // Set Cool Down After Shooting
             GameState.ActionCoolDownSystem.SetCoolDown(EntitasContext, ActionEntity.actionID.TypeID, AgentEntity.agentID.ID, WeaponProperty.CoolDown);
         }
 

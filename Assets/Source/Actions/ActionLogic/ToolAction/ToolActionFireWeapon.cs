@@ -8,9 +8,16 @@ namespace Action
 {
     public class ToolActionFireWeapon : ActionBase
     {
-        private Item.FireWeaponPropreties WeaponProperty; 
+        // Weapon Property
+        private Item.FireWeaponPropreties WeaponProperty;
+
+        // Projectile Entity
         private ProjectileEntity ProjectileEntity;
+
+        // Item Entity
         private ItemInventoryEntity ItemEntity;
+
+        // Start Position
         private Vec2f StartPos;
 
         // Cone
@@ -22,25 +29,37 @@ namespace Action
 
         public override void OnEnter(ref Planet.PlanetState planet)
         {
+            // Item Entity
             ItemEntity = EntitasContext.itemInventory.GetEntityWithItemID(ActionEntity.actionTool.ItemID);
+
+            // Weapon Property
             WeaponProperty = GameState.ItemCreationApi.GetWeapon(ItemEntity.itemType.Type);
 
+            // Cursor Position
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float x = worldPosition.x;
             float y = worldPosition.y;
+
+            // Bullets Per Shot
             int bulletsPerShot = ItemEntity.itemFireWeaponClip.BulletsPerShot;
 
+            // If entity has clip comp
             if (ItemEntity.hasItemFireWeaponClip)
             {
+                // Number of grenades
                 int numBullet = ItemEntity.itemFireWeaponClip.NumOfBullets;
+
+                // If clip is empty
                 if (numBullet <= 0)
                 {
+                    // Error log
                     Debug.Log("Clip is empty. Press R to reload.");
                     ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
                     return;
                 }
             }
 
+            // Decrease number of bullets in the clip when shoot
             if (ItemEntity.hasItemFireWeaponClip)
                 ItemEntity.itemFireWeaponClip.NumOfBullets -= bulletsPerShot;
 
@@ -49,6 +68,7 @@ namespace Action
             StartPos.X += 0.3f;
             StartPos.Y += 0.5f;
 
+            // Check if entity has spread component
             if (ItemEntity.hasItemFireWeaponSpread)
             {
                 var spread = ItemEntity.itemFireWeaponSpread;
@@ -60,6 +80,7 @@ namespace Action
                 }
             }
 
+            // If The weapon is Bow then spawn arche type projectile
             if(ItemEntity.itemType.Type == Enums.ItemType.Bow)
             {
                 ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Arrow);
