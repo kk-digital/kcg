@@ -10,6 +10,7 @@
         /// <summary>
         /// Weapons
         /// </summary>
+        SniperRifle,
         LongRifle,
         PulseWeapon,
         AutoCannon,
