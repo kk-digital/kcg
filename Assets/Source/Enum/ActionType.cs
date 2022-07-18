@@ -10,6 +10,7 @@
         PickUpAction,
         ReloadAction,
         ChargeAction,
+        ShieldAction,
 
         /// <summary>
         /// PlaceTileTool

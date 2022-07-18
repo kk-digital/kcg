@@ -54,6 +54,11 @@ namespace Action
             GameState.ActionPropertyManager.SetLogicFactory(new ReloadActionCreator());
             GameState.ActionPropertyManager.EndActionPropertyType();
 
+            GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.ShieldAction);
+            GameState.ActionPropertyManager.SetLogicFactory(new ShieldActionCreator());
+            GameState.ActionPropertyManager.SetShieldActive(false);
+            GameState.ActionPropertyManager.EndActionPropertyType();
+
             GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.ToolActionPlaceParticle);
             GameState.ActionPropertyManager.SetLogicFactory(new ToolActionPlaceParticleCreator());
             ToolActionPlaceParticleEmitter.Data placeParticleEmitterData = new ToolActionPlaceParticleEmitter.Data();

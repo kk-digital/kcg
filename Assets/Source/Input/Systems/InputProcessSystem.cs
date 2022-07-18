@@ -137,11 +137,12 @@ namespace ECSInput
                 movementState.MovementState == MovementState.Dashing)
                 {
 
-                    movementState.MovementState = MovementState.None;    
+                    movementState.MovementState = MovementState.None;
+
+                    // if the agent is dashing it becomes invulnerable to damage
+                    movable.Invulnerable = movementState.MovementState == MovementState.Dashing;
                 }
 
-                // if the agent is dashing it becomes invulnerable to damage
-                movable.Invulnerable = movementState.MovementState == MovementState.Dashing;
                 // if the agent is dashing the gravity will not affect him
                 movable.AffectedByGravity = !(movementState.MovementState == MovementState.Dashing);
 
@@ -232,6 +233,15 @@ namespace ECSInput
                 var players = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentPlayer));
                 foreach (var player in players)
                     GameState.ActionCreationSystem.CreateAction(planet.EntitasContext, Enums.ActionType.ReloadAction, player.agentID.ID);
+            }
+
+            // Shield Action.
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                var players = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentPlayer));
+                foreach (var player in players)
+                    GameState.ActionCreationSystem.CreateAction(planet.EntitasContext, Enums.ActionType.ShieldAction, player.agentID.ID);
+
             }
 
             //  Open Inventory with Tab.

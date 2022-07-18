@@ -45,6 +45,11 @@ namespace Action
             ActionPropertyEntity.AddActionPropertyCoolDown(coolDown);
         }
 
+        public void SetShieldActive(bool ShieldActive)
+        {
+            ActionPropertyEntity.AddActionPropertyShield(ShieldActive);
+        }
+
         public void SetData(object data)
         {
             ActionPropertyEntity.AddActionPropertyData(data);
