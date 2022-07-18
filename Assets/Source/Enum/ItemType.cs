@@ -23,6 +23,7 @@
         Bow,
         Sword,
         StunBaton,
+        RiotShield,
 
         /// <summary>
         /// Tools

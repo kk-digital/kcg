@@ -108,6 +108,8 @@ namespace Item
         [Range(0, 1)]
         public float StaggerRate;
 
+        public bool ShieldActive;
+
         /// <summary>
         /// Pulse Weapon
         /// </summary>

@@ -33,6 +33,7 @@
         ToolActionRemoveTile,
         ToolActionThrowGrenade,
         ToolActionMeleeAttack,
-        ToolActionPulseWeapon
+        ToolActionPulseWeapon,
+        ToolActionShield,
     }
 }

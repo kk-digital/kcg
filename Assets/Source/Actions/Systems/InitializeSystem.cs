@@ -92,6 +92,11 @@ namespace Action
             GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.ToolActionPulseWeapon);
             GameState.ActionPropertyManager.SetLogicFactory(new ToolActionPulseWeaponCreator());
             GameState.ActionPropertyManager.EndActionPropertyType();
+
+            GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.ToolActionShield);
+            GameState.ActionPropertyManager.SetLogicFactory(new ToolActionShieldCreator());
+            GameState.ActionPropertyManager.SetShieldActive(false);
+            GameState.ActionPropertyManager.EndActionPropertyType();
         }
     }
 }

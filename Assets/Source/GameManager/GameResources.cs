@@ -354,6 +354,14 @@ public class GameResources
         GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionMeleeAttack);
         GameState.ItemCreationApi.EndItem();
 
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.RiotShield, "RiotShield");
+        GameState.ItemCreationApi.SetTexture(SwordSpriteId);
+        GameState.ItemCreationApi.SetInventoryTexture(SwordSpriteId);
+        GameState.ItemCreationApi.SetShield(false);
+        GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
+        GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionShield);
+        GameState.ItemCreationApi.EndItem();
+
         GameState.ItemCreationApi.CreateItem(Enums.ItemType.Ore, "Ore");
         GameState.ItemCreationApi.SetTexture(OreIcon);
         GameState.ItemCreationApi.SetInventoryTexture(OreIcon);
