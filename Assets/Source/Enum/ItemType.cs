@@ -10,13 +10,18 @@
         /// <summary>
         /// Weapons
         /// </summary>
-        Gun,
+        LongRifle,
+        PulseWeapon,
+        AutoCannon,
+        SMG,
         Shotgun,
-
-        /// <summary>
-        /// Throwable Explosive Weapons
-        /// </summary>
-        Grenade,
+        PumpShotgun,
+        Pistol,
+        GrenadeLauncher,
+        RPG,
+        Bow,
+        Sword,
+        StunBaton,
 
         /// <summary>
         /// Tools

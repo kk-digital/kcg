@@ -23,7 +23,7 @@ namespace Item
             entity.AddItemType(itemType);
             entity.AddPhysicsPosition2D(position, Vec2f.Zero);
             entity.AddPhysicsBox2DCollider(size, Vec2f.Zero);
-            entity.AddPhysicsMovable(0f, Vec2f.Zero, Vec2f.Zero, true, true, false, false);
+            entity.AddPhysicsMovable(0f, Vec2f.Zero, Vec2f.Zero, true, true, false, false, false, false);
 
             if (weaponProperty.HasClip())
             {
@@ -33,6 +33,11 @@ namespace Item
             if (weaponProperty.ShouldSpread())
             {
                 entity.AddItemFireWeaponSpread(weaponProperty.SpreadAngle);
+            }
+
+            if (weaponProperty.IsPulse())
+            {
+                entity.AddItemPulseWeaponPulse(weaponProperty.isLaunchGreanade, weaponProperty.NumberOfGrenades);
             }
 
             ItemID++;
@@ -85,6 +90,11 @@ namespace Item
             if (weaponProperty.ShouldSpread())
             {
                 entity.AddItemFireWeaponSpread(weaponProperty.SpreadAngle);
+            }
+
+            if (weaponProperty.IsPulse())
+            {
+                entity.AddItemPulseWeaponPulse(weaponProperty.isLaunchGreanade, weaponProperty.NumberOfGrenades);
             }
 
             ItemID++;

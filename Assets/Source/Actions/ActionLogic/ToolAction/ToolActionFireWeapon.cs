@@ -33,7 +33,7 @@ namespace Action
             if (ItemEntity.hasItemFireWeaponClip)
             {
                 int numBullet = ItemEntity.itemFireWeaponClip.NumOfBullets;
-                if (numBullet == 0)
+                if (numBullet <= 0)
                 {
                     Debug.Log("Clip is empty. Press R to reload.");
                     ActionEntity.ReplaceActionExecution(this, Enums.ActionState.Fail);
@@ -60,7 +60,24 @@ namespace Action
                 }
             }
 
-            ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Bullet);
+            if(ItemEntity.itemType.Type == Enums.ItemType.Bow)
+            {
+                ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Arrow);
+            }
+            else
+            {
+                if(ItemEntity.itemFireWeaponClip.BulletsPerShot > 0)
+                {
+                    for(int i = 0; i < bulletsPerShot; i++)
+                    {
+                        ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Bullet);
+                    }
+                }
+                else
+                {
+                    ProjectileEntity = planet.AddProjectile(StartPos, new Vec2f(x - StartPos.X, y - StartPos.Y).Normalized, Enums.ProjectileType.Bullet);
+                }
+            }
             EndPointList.Add(ProjectileEntity);
 
             ActionEntity.actionExecution.State = Enums.ActionState.Running;

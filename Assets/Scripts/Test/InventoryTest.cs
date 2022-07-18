@@ -42,12 +42,12 @@ public class InventoryTest : MonoBehaviour
         int toolBarID = playerEntity.agentToolBar.ToolBarID;
 
         // Add item to tool bar.
-         inventoryManager.AddItem(context, itemSpawnSystem.SpawnInventoryItem(context, Enums.ItemType.Gun), toolBarID);
+         inventoryManager.AddItem(context, itemSpawnSystem.SpawnInventoryItem(context, Enums.ItemType.Pistol), toolBarID);
 
         // Test not stackable items.
         for (uint i = 0; i < 10; i++)
         {
-            inventoryManager.AddItem(context, itemSpawnSystem.SpawnInventoryItem(context, Enums.ItemType.Gun), inventoryID);
+            inventoryManager.AddItem(context, itemSpawnSystem.SpawnInventoryItem(context, Enums.ItemType.Pistol), inventoryID);
         }
 
         // Testing stackable items.
@@ -93,7 +93,7 @@ public class InventoryTest : MonoBehaviour
         int RockIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(RockSpriteSheet, 0, 0, Enums.AtlasType.Particle);
         int RockDustIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(RockDustSpriteSheet, 0, 0, Enums.AtlasType.Particle);
 
-        GameState.ItemCreationApi.CreateItem(Enums.ItemType.Gun, "Gun");
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.Pistol, "Pistol");
         GameState.ItemCreationApi.SetTexture(GunIcon);
         GameState.ItemCreationApi.SetInventoryTexture(GunIcon);
         GameState.ItemCreationApi.EndItem();

@@ -11,25 +11,21 @@ public partial class AgentEntity {
     public Agent.MovementStateComponent agentMovementState { get { return (Agent.MovementStateComponent)GetComponent(AgentComponentsLookup.AgentMovementState); } }
     public bool hasAgentMovementState { get { return HasComponent(AgentComponentsLookup.AgentMovementState); } }
 
-    public void AddAgentMovementState(bool newJumping, int newJumpCounter, bool newDashing, bool newFlying, bool newRunning, float newDashCooldown) {
+    public void AddAgentMovementState(int newJumpCounter, Agent.MovementState newMovementState, bool newRunning, float newDashCooldown) {
         var index = AgentComponentsLookup.AgentMovementState;
         var component = (Agent.MovementStateComponent)CreateComponent(index, typeof(Agent.MovementStateComponent));
-        component.Jumping = newJumping;
         component.JumpCounter = newJumpCounter;
-        component.Dashing = newDashing;
-        component.Flying = newFlying;
+        component.MovementState = newMovementState;
         component.Running = newRunning;
         component.DashCooldown = newDashCooldown;
         AddComponent(index, component);
     }
 
-    public void ReplaceAgentMovementState(bool newJumping, int newJumpCounter, bool newDashing, bool newFlying, bool newRunning, float newDashCooldown) {
+    public void ReplaceAgentMovementState(int newJumpCounter, Agent.MovementState newMovementState, bool newRunning, float newDashCooldown) {
         var index = AgentComponentsLookup.AgentMovementState;
         var component = (Agent.MovementStateComponent)CreateComponent(index, typeof(Agent.MovementStateComponent));
-        component.Jumping = newJumping;
         component.JumpCounter = newJumpCounter;
-        component.Dashing = newDashing;
-        component.Flying = newFlying;
+        component.MovementState = newMovementState;
         component.Running = newRunning;
         component.DashCooldown = newDashCooldown;
         ReplaceComponent(index, component);

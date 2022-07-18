@@ -11,7 +11,7 @@ public partial class ItemParticleEntity {
     public Physics.MovableComponent physicsMovable { get { return (Physics.MovableComponent)GetComponent(ItemParticleComponentsLookup.PhysicsMovable); } }
     public bool hasPhysicsMovable { get { return HasComponent(ItemParticleComponentsLookup.PhysicsMovable); } }
 
-    public void AddPhysicsMovable(float newSpeed, KMath.Vec2f newVelocity, KMath.Vec2f newAcceleration, bool newAffectedByGravity, bool newAffectedByGroundFriction, bool newInvulnerable, bool newLanded) {
+    public void AddPhysicsMovable(float newSpeed, KMath.Vec2f newVelocity, KMath.Vec2f newAcceleration, bool newAffectedByGravity, bool newAffectedByGroundFriction, bool newInvulnerable, bool newLanded, bool newSlidingRight, bool newSlidingLeft) {
         var index = ItemParticleComponentsLookup.PhysicsMovable;
         var component = (Physics.MovableComponent)CreateComponent(index, typeof(Physics.MovableComponent));
         component.Speed = newSpeed;
@@ -21,10 +21,12 @@ public partial class ItemParticleEntity {
         component.AffectedByGroundFriction = newAffectedByGroundFriction;
         component.Invulnerable = newInvulnerable;
         component.Landed = newLanded;
+        component.SlidingRight = newSlidingRight;
+        component.SlidingLeft = newSlidingLeft;
         AddComponent(index, component);
     }
 
-    public void ReplacePhysicsMovable(float newSpeed, KMath.Vec2f newVelocity, KMath.Vec2f newAcceleration, bool newAffectedByGravity, bool newAffectedByGroundFriction, bool newInvulnerable, bool newLanded) {
+    public void ReplacePhysicsMovable(float newSpeed, KMath.Vec2f newVelocity, KMath.Vec2f newAcceleration, bool newAffectedByGravity, bool newAffectedByGroundFriction, bool newInvulnerable, bool newLanded, bool newSlidingRight, bool newSlidingLeft) {
         var index = ItemParticleComponentsLookup.PhysicsMovable;
         var component = (Physics.MovableComponent)CreateComponent(index, typeof(Physics.MovableComponent));
         component.Speed = newSpeed;
@@ -34,6 +36,8 @@ public partial class ItemParticleEntity {
         component.AffectedByGroundFriction = newAffectedByGroundFriction;
         component.Invulnerable = newInvulnerable;
         component.Landed = newLanded;
+        component.SlidingRight = newSlidingRight;
+        component.SlidingLeft = newSlidingLeft;
         ReplaceComponent(index, component);
     }
 

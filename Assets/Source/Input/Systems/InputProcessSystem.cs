@@ -1,5 +1,6 @@
 using KMath;
 using UnityEngine;
+using Agent;
 
 namespace ECSInput
 {
@@ -38,6 +39,8 @@ namespace ECSInput
                 var movementState = entity.agentMovementState;
                 movementState.Running = running;
 
+
+                // handling horizontal movement (left/right)
                 if (movementState.Running)
                 {
                     movable.Acceleration.X = input.Value.X * movable.Speed * 100.0f * 2;
@@ -45,11 +48,9 @@ namespace ECSInput
                 else
                 {
                     movable.Acceleration.X = input.Value.X * movable.Speed * 100.0f;
-                }
+                }         
 
-                //movable.AffectedByGravity = false;
-            
-
+                // decrease the dash cooldown
                 movementState.DashCooldown -= Time.deltaTime;
 
                 // dash
@@ -63,20 +64,38 @@ namespace ECSInput
 
                     movable.Invulnerable = true;
                     movable.AffectedByGravity = false;
-                    movementState.Dashing = true;
+                    movementState.MovementState = MovementState.Dashing;
                     movementState.DashCooldown = 1.0f;
                 }
 
-                if (!movementState.Jumping)
+
+                // we can start jumping only if the jump counter is 0
+                if (movementState.JumpCounter == 0)
                 {
     
-                    // jump
-                    if (jump && !movementState.Dashing)
+                    // first jump
+                    if (jump && movementState.MovementState != MovementState.Dashing)
                     {
+                        // if we are sticking to a wall 
+                        // throw the agent in the opposite direction
+                        if (movable.SlidingLeft)
+                        {
+                            movable.SlidingLeft = false;
+                            movable.Acceleration.X = 1.0f * movable.Speed * 400.0f * 2;
+                            movable.Acceleration.Y = -1.0f * movable.Speed * 400.0f * 2;
+                        }
+                        else if (movable.SlidingRight)
+                        {
+                            movable.SlidingRight = false;
+                            movable.Acceleration.X = -1.0f * movable.Speed * 400.0f * 2;
+                            movable.Acceleration.Y = -1.0f * movable.Speed * 400.0f * 2;
+                        }
+
+
+                        // jumping
                         movable.Landed = false;
                         movable.Acceleration.Y = 100.0f;
                         movable.Velocity.Y = 11.5f;
-                        movementState.Jumping = true;
                         movable.AffectedByGroundFriction = false;
                         movementState.JumpCounter++;
                     }
@@ -94,9 +113,19 @@ namespace ECSInput
                 }
 
                 // if the fly button is pressed
-                movementState.Flying = flying && stats.Fuel > 1.0f;
+                if (flying && stats.Fuel > 0.0f)
+                {
+                    movementState.MovementState = MovementState.Flying;
+                }
+                else if (movementState.MovementState == MovementState.Flying)
+                {
+                    // if no fuel is left we change to movement state to none
+                    movementState.MovementState = MovementState.None;
+                }
 
-                if (movementState.Flying)
+                // if we are using the jetpack
+                // set the Y velocity to a given value
+                if (movementState.MovementState == MovementState.Flying)
                 {
                     movable.Acceleration.Y = 0;
                     movable.Velocity.Y = 3.5f;
@@ -104,21 +133,63 @@ namespace ECSInput
 
                 // the end of dashing
                 // we can do this using a fixed amount of time
-                if (System.Math.Abs(movable.Velocity.X) <= 6.0f)
+                if (System.Math.Abs(movable.Velocity.X) <= 6.0f && 
+                movementState.MovementState == MovementState.Dashing)
                 {
-                    movable.AffectedByGravity = true;
-                    movementState.Dashing = false;
-                    movable.Invulnerable = false;
+
+                    movementState.MovementState = MovementState.None;    
                 }
 
+                // if the agent is dashing it becomes invulnerable to damage
+                movable.Invulnerable = movementState.MovementState == MovementState.Dashing;
+                // if the agent is dashing the gravity will not affect him
+                movable.AffectedByGravity = !(movementState.MovementState == MovementState.Dashing);
+
+
+                if (x == 1.0f)
+                {
+                    // if we move to the right
+                    // that means we are no longer sliding down on the left
+                    movable.SlidingLeft = false;
+                }
+                else if (x == -1.0f)
+                {
+                    // if we move to the left
+                    // that means we are no longer sliding down on the right
+                    movable.SlidingRight = false;
+                }
+
+
+                // if we are on the ground we reset the jump counter
                 if (movable.Landed)
                 {
                     movementState.JumpCounter = 0;
-                    movementState.Jumping = false;
                     movable.AffectedByGroundFriction = true;
+
+                    movable.SlidingRight = false;
+                    movable.SlidingLeft = false;
                 }
 
-                if (movementState.Flying)
+                
+                // if we are sliding
+                // spawn some particles and limit vertical movement
+                if (movable.SlidingLeft)
+                {
+                    movementState.JumpCounter = 0;
+                    movable.Acceleration.Y = 0.0f;
+                    movable.Velocity.Y = -1.75f;
+                    planet.AddParticleEmitter(pos.Value + new Vec2f(0.0f, -0.5f), Particle.ParticleEmitterType.DustEmitter);
+                }
+                else if (movable.SlidingRight)
+                {
+                    movementState.JumpCounter = 0;
+                    movable.Acceleration.Y = 0.0f;
+                    movable.Velocity.Y = -1.75f;
+                    planet.AddParticleEmitter(pos.Value + new Vec2f(0.5f, -0.5f), Particle.ParticleEmitterType.DustEmitter);
+                }
+
+                // if we are flying, reduce the fuel and spawn particles
+                if (movementState.MovementState == MovementState.Flying)
                 {
                     stats.Fuel -= 1.0f;
                     if (stats.Fuel <= 1.0f)
@@ -129,21 +200,23 @@ namespace ECSInput
                 }
                 else
                 {
+                    // if we are not flying, add fuel to the tank
                     stats.Fuel += 1.0f;
                 }
 
+                // make sure the fuel never goes up more than it should
                 if (stats.Fuel > 100) 
                 {
                     stats.Fuel = 100;
                 }
 
-                if (movementState.Dashing)
+                // if we are dashing we add some particles
+                if (movementState.MovementState == MovementState.Dashing)
                 {
                     planet.AddParticleEmitter(pos.Value, Particle.ParticleEmitterType.DustEmitter);
                 }
 
             }
-
 
             // Recharge Weapon.
             if (Input.GetKeyDown(KeyCode.E))
@@ -174,6 +247,35 @@ namespace ECSInput
                 }
             }
 
+            // Change Pulse Weapon Mode.
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                // Change Item Selection with nums.
+                var PlayerWithToolBarPulse = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentPlayer, AgentMatcher.AgentToolBar));
+                foreach (var entity in PlayerWithInventory)
+                {
+                    int inventoryID = entity.agentToolBar.ToolBarID;
+                    InventoryEntity inventoryEntity = contexts.inventory.GetEntityWithInventoryID(inventoryID);
+                    var SlotComponent = inventoryEntity.inventorySlots;
+
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, SlotComponent.Selected);
+
+                    if (item.itemType.Type == Enums.ItemType.PulseWeapon)
+                    {
+                        if (!item.itemPulseWeaponPulse.GrenadeMode)
+                        {
+                            item.itemPulseWeaponPulse.GrenadeMode = true;
+                            planet.AddFloatingText("Grenade Mode", 1.0f, Vec2f.Zero, entity.physicsPosition2D.Value);
+                        }
+                        else
+                        {
+                            item.itemPulseWeaponPulse.GrenadeMode = false;
+                            planet.AddFloatingText("Bullet Mode", 1.0f, Vec2f.Zero, entity.physicsPosition2D.Value);
+                        }
+                    }
+                }
+            }
+
             // Change Item Selection with nums.
             var PlayerWithToolBar = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentPlayer, AgentMatcher.AgentToolBar));
             foreach (var entity in PlayerWithInventory)
@@ -185,42 +287,92 @@ namespace ECSInput
                 if (Input.GetKeyDown(KeyCode.Alpha1))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 0);
+
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 0);
+
+                    planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entity.physicsPosition2D.Value.X + 0.4f,
+                                entity.physicsPosition2D.Value.Y));
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha2))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 1);
+
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 1);
+
+                    planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entity.physicsPosition2D.Value.X + 0.4f,
+                                entity.physicsPosition2D.Value.Y));
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha3))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 2);
+
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 2);
+
+                    planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entity.physicsPosition2D.Value.X + 0.4f,
+                                entity.physicsPosition2D.Value.Y));
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha4))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 3);
+
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 3);
+
+                    planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entity.physicsPosition2D.Value.X + 0.4f,
+                        entity.physicsPosition2D.Value.Y));
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha5))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 4);
+
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 4);
+
+                    planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entity.physicsPosition2D.Value.X + 0.4f,
+                                entity.physicsPosition2D.Value.Y));
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha6))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 5);
+
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 5);
+
+                    planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entity.physicsPosition2D.Value.X + 0.4f,
+                                entity.physicsPosition2D.Value.Y));
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha7))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 6);
+
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 6);
+
+                    planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entity.physicsPosition2D.Value.X + 0.4f,
+                                entity.physicsPosition2D.Value.Y));
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha8))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 7);
+
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 7);
+
+                    planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entity.physicsPosition2D.Value.X + 0.4f,
+                                entity.physicsPosition2D.Value.Y));
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha9))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 8);
+
+                    var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 8);
+
+                    planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entity.physicsPosition2D.Value.X + 0.4f,
+                        entity.physicsPosition2D.Value.Y));
                 }
                 if (Input.GetKeyDown(KeyCode.Alpha0))
                 {
                     inventoryEntity.ReplaceInventorySlots(SlotComponent.Values, 9);
+
+                     var item = GameState.InventoryManager.GetItemInSlot(planet.EntitasContext.itemInventory, inventoryID, 9);
+
+                     planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entity.physicsPosition2D.Value.X + 0.4f,
+                         entity.physicsPosition2D.Value.Y));
                 }
             }
         }
