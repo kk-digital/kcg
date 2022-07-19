@@ -5,10 +5,10 @@ namespace Enums.Tile
         Error = 0,
         
         // Empty Block
-        EB,
+        EmptyBlock,
         
         // FullBlock
-        FB,
+        FullBlock,
 
         // HalfBlock
         HB_R1,

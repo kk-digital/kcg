@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using Enums.Tile;
 using KMath;
 using PlanetTileMap;
@@ -245,8 +244,8 @@ namespace Collisions
                     {
                         for (var tmp_y = tmp_ymin; tmp_y < tmp_ymax; tmp_y++)
                         {
-                            ref var tile = ref tileMap.GetFrontTile(tmp_x, tmp_y);
-                            if (tile.ID != TileID.Air)
+                            ref var frontTileID = ref tileMap.GetFrontTileID(tmp_x, tmp_y);
+                            if (frontTileID != TileID.Air)
                             {
                                 return true;
                             }

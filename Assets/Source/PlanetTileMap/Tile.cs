@@ -4,10 +4,16 @@ namespace PlanetTileMap
 {
     public struct Tile
     {
-        public TileID ID;
-        public int SpriteID;
-
-        public TileDrawType DrawType;
-        public int SpriteId2;
+        public TileID BackTileID;
+        public int BackTileSpriteID;
+        
+        public TileID MidTileID;
+        public int MidTileSpriteID;
+        
+        public TileID FrontTileID;
+        public int FrontTileSpriteID;
+        
+        public TileShapeAndRotation CollisionIsoType1;
+        public TileAdjacencyType CollisionIsoType2;
     }
 }

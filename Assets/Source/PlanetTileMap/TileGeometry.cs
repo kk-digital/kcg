@@ -335,9 +335,9 @@ namespace PlanetTileMap
             {
                 case TileShapeAndRotation.Error:
                     return null;
-                case TileShapeAndRotation.EB:
+                case TileShapeAndRotation.EmptyBlock:
                     return null;
-                case TileShapeAndRotation.FB:
+                case TileShapeAndRotation.FullBlock:
                     return new[]
                     {
                         GetTileLineSegmentPosition(TileLineSegment.L_C1_C2),
@@ -541,11 +541,11 @@ namespace PlanetTileMap
                 case TileShapeAndRotation.Error:
                     return TileShapeAndRotation.Error;
                 
-                case TileShapeAndRotation.EB:
-                    return TileShapeAndRotation.EB;
+                case TileShapeAndRotation.EmptyBlock:
+                    return TileShapeAndRotation.EmptyBlock;
                 
-                case TileShapeAndRotation.FB:
-                    return TileShapeAndRotation.FB;
+                case TileShapeAndRotation.FullBlock:
+                    return TileShapeAndRotation.FullBlock;
                 
                 case TileShapeAndRotation.HB_R1:
                     return TileShapeAndRotation.HB_R2;
@@ -613,10 +613,10 @@ namespace PlanetTileMap
             {
                 case TileShapeAndRotation.Error:
                     return TileShapeAndRotation.Error;
-                case TileShapeAndRotation.EB:
-                    return TileShapeAndRotation.EB;
-                case TileShapeAndRotation.FB:
-                    return TileShapeAndRotation.FB;
+                case TileShapeAndRotation.EmptyBlock:
+                    return TileShapeAndRotation.EmptyBlock;
+                case TileShapeAndRotation.FullBlock:
+                    return TileShapeAndRotation.FullBlock;
                 
                 case TileShapeAndRotation.HB_R1:
                     return TileShapeAndRotation.HB_R1;

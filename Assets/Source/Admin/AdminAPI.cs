@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Admin
@@ -54,10 +52,7 @@ namespace Admin
                 for(int x = 0; x < tileMap.MapSize.X; x++)
                 {
                     // If chunk is empty/air make it black
-                    if (tileMap.GetFrontTile(x, y).ID == Enums.Tile.TileID.Air)
-                        Gizmos.color = Color.black;
-                    else // If chunk is not empty make it green
-                        Gizmos.color = Color.green;
+                    Gizmos.color = tileMap.GetFrontTileID(x, y) == Enums.Tile.TileID.Air ? Color.black : Color.green;
 
                     if (!Utility.ObjectMesh.isOnScreen(x, y))
                         Gizmos.color = Color.blue;

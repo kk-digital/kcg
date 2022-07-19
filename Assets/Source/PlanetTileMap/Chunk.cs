@@ -7,7 +7,7 @@ namespace PlanetTileMap
         public int ChunkIndex;
         public MapChunkType Type;
 
-        public Tile[][] TileArray;
+        public Tile[] TileArray;
 
         public bool NeedsUpdate; //set to true if setting tile. Flag cleared after mesh reconstructed
         public int ReadCount; //increment if GetTile

@@ -18,8 +18,8 @@ namespace Collisions
                 {
                     if (y >= 0 && y < tileMap.MapSize.Y)
                     {
-                        ref var tile = ref tileMap.GetFrontTile(x, y);
-                        if (tile.ID != TileID.Air)
+                        var frontTileID = tileMap.GetFrontTileID(x, y);
+                        if (frontTileID != TileID.Air)
                         {
                             var tileBorders = new AABox2D(x, y);
                             tileBorders.DrawBox();
@@ -44,9 +44,8 @@ namespace Collisions
                 {
                     if (y >= 0 && y < tileMap.MapSize.Y)
                     {
-                        ref var tile = ref tileMap.GetFrontTile(x, y);
-
-                        if (tile.ID != TileID.Air)
+                        var frontTileID = tileMap.GetFrontTileID(x, y);
+                        if (frontTileID != TileID.Air)
                         {
                             var tileBorders = new AABox2D(x, y);
                             tileBorders.DrawBox();
@@ -75,8 +74,8 @@ namespace Collisions
                 {
                     if (x >= 0 && x < tileMap.MapSize.X)
                     {
-                        ref var tile = ref tileMap.GetFrontTile(x, y);
-                        if (tile.ID != TileID.Air)
+                        var frontTileID = tileMap.GetFrontTileID(x, y);
+                        if (frontTileID != TileID.Air)
                         {
                             var tileBorders = new AABox2D(x, y);
                             tileBorders.DrawBox();
@@ -103,8 +102,8 @@ namespace Collisions
                 {
                     if (x >= 0 && x < tileMap.MapSize.X)
                     {
-                        ref var tile = ref tileMap.GetFrontTile(x, y);
-                        if (tile.ID != TileID.Air)
+                        var frontTileID = tileMap.GetFrontTileID(x, y);
+                        if (frontTileID != TileID.Air)
                         {
                             var tileBorders = new AABox2D(x, y);
                             tileBorders.DrawBox();

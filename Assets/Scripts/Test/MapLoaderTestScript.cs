@@ -1,12 +1,9 @@
-using System;
 using UnityEngine;
-using System.Collections.Generic;
 using Enums.Tile;
 using Physics;
-using Agent;
+using KMath;
 
 #if UNITY_EDITOR
-using KMath;
 using UnityEditor;
 #endif
 
@@ -138,13 +135,13 @@ namespace Planet.Unity
 
             GameState.TileCreationApi.CreateTileProperty(TileID.Ore1);
             GameState.TileCreationApi.SetTilePropertyName("ore_1");
-            GameState.TileCreationApi.SetTilePropertyShape(TileShape.FullBlock, TileShapeAndRotation.FB);
+            GameState.TileCreationApi.SetTilePropertyShape(TileShape.FullBlock);
             GameState.TileCreationApi.SetTilePropertyTexture16(oreTileSheet, 0, 0);
             GameState.TileCreationApi.EndTileProperty();
 
             GameState.TileCreationApi.CreateTileProperty(TileID.Glass);
             GameState.TileCreationApi.SetTilePropertyName("glass");
-            GameState.TileCreationApi.SetTilePropertyShape(TileShape.FullBlock, TileShapeAndRotation.FB);
+            GameState.TileCreationApi.SetTilePropertyShape(TileShape.FullBlock);
             GameState.TileCreationApi.SetTilePropertySpriteSheet16(tilesMoon, 11, 10);
             GameState.TileCreationApi.EndTileProperty();
 
