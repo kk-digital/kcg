@@ -84,30 +84,30 @@ namespace Scripts {
                         if(d < 0.25f) {
                             float val           =  d          / 0.25f;
 
-                            r                   = Tools.smoothstep(0.0f,               0.25f * brightness, val);
-                            g                   = Tools.smoothstep(0.0f,               0.03f * brightness, val);
-                            b                   = Tools.smoothstep(0.0f,               0.00f * brightness, val);
+                            r                   = Tools.smoothstep(0.0f,               0.30f * brightness, val);
+                            g                   = Tools.smoothstep(0.0f,               0.15f * brightness, val);
+                            b                   = Tools.smoothstep(0.0f,               0.05f * brightness, val);
                             a                  *= Tools.smoothstep(0.0f,               0.70f,              val);
                         } else if(d < 0.5f) {
                             float val           = (d - 0.25f) / 0.25f;
 
-                            r                   = Tools.smoothstep(0.25f * brightness, 0.80f * brightness, val);
-                            g                   = Tools.smoothstep(0.03f * brightness, 0.40f * brightness, val);
-                            b                   = Tools.smoothstep(0.00f * brightness, 0.20f * brightness, val);
+                            r                   = Tools.smoothstep(0.30f * brightness, 0.80f * brightness, val);
+                            g                   = Tools.smoothstep(0.15f * brightness, 0.40f * brightness, val);
+                            b                   = Tools.smoothstep(0.05f * brightness, 0.20f * brightness, val);
                             a                  *= Tools.smoothstep(0.70f,              1.00f,              val);
                         } else if(d < 0.75f) {
                             float val           = (d - 0.50f) / 0.25f;
 
                             r                   = Tools.smoothstep(0.80f * brightness, 1.00f * brightness, val);
                             g                   = Tools.smoothstep(0.40f * brightness, 1.00f * brightness, val);
-                            b                   = Tools.smoothstep(0.20f * brightness, 0.40f * brightness, val);
+                            b                   = Tools.smoothstep(0.20f * brightness, 0.65f * brightness, val);
                             a                  *= Tools.smoothstep(1.00f,              1.80f,              val);
                         } else {
                             float val           = (d - 0.75f) / 0.25f;
 
                             r                   = Tools.smoothstep(1.00f * brightness, 1.00f * brightness, val);
                             g                   = Tools.smoothstep(1.00f * brightness, 1.00f * brightness, val);
-                            b                   = Tools.smoothstep(0.40f * brightness, 0.90f * brightness, val);
+                            b                   = Tools.smoothstep(0.65f * brightness, 0.90f * brightness, val);
                             a                  *= Tools.smoothstep(1.80f,              5.00f,              val);
                         }
 
