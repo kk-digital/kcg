@@ -244,6 +244,23 @@ namespace ECSInput
 
             }
 
+            // Show/Hide Statistics
+            if (Input.GetKeyDown(KeyCode.F1))
+            {
+                if (KGUI.Statistics.StatisticsDisplay.canDraw)
+                    KGUI.Statistics.StatisticsDisplay.canDraw = false;
+                else if (!KGUI.Statistics.StatisticsDisplay.canDraw)
+                    KGUI.Statistics.StatisticsDisplay.canDraw = true;
+
+            }
+
+            // Remove Tile At Cursor Position.
+            if (Input.GetKeyDown(KeyCode.F2))
+            {
+                Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                planet.TileMap.RemoveFrontTile((int)worldPosition.x, (int)worldPosition.y);
+            }
+
             //  Open Inventory with Tab.
             var PlayerWithInventory = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentInventory, AgentMatcher.AgentPlayer));
             foreach (var entity in PlayerWithInventory)

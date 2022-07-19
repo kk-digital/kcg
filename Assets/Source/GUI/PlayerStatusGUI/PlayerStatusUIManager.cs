@@ -78,25 +78,25 @@ namespace KGUI
                 Debug.Log("Health Indicator Off.");
 
             // Food Bar UI Indicator Check
-            if (foodBarUI.foodBar.GetComponent<Image>().fillAmount < 50)
+            if (foodBarUI.foodBar.GetComponent<Image>().fillAmount < 0.5f)
                 Debug.Log("Food Indicator On.");
             else
                 Debug.Log("Food Indicator Off.");
 
             // Water Bar UI Indicator Check
-            if (waterBarUI.waterBar.GetComponent<Image>().fillAmount < 50)
+            if (waterBarUI.waterBar.GetComponent<Image>().fillAmount < 0.5f)
                 Debug.Log("Water Indicator On.");
             else
                 Debug.Log("Water Indicator Off.");
 
             // Fuel Bar UI Indicator Check
-            if (fuelBarUI.fuelBar.GetComponent<Image>().fillAmount < 50)
+            if (fuelBarUI.fuelBar.GetComponent<Image>().fillAmount < 0.5f)
                 Debug.Log("Fuel Indicator On.");
             else
                 Debug.Log("Fuel Indicator Off.");
 
             // Oxygen Bar UI Indicator Check
-            if (oxygenBarUI.oxygenBar.GetComponent<Image>().fillAmount < 50)
+            if (oxygenBarUI.oxygenBar.GetComponent<Image>().fillAmount < 0.5f)
                 Debug.Log("Oxygen Indicator On.");
             else
                 Debug.Log("Oxygen Indicator Off.");

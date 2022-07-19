@@ -45,6 +45,9 @@ namespace Admin
         // Display Chunk Visualizer
         public static void DrawChunkVisualizer(PlanetTileMap.TileMap tileMap)
         {
+            if (tileMap == null)
+                return;
+
             // Draw square to every tile
             for (int y = 0; y < tileMap.MapSize.Y; y++)
             {

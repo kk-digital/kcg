@@ -74,6 +74,7 @@ namespace Planet.Unity
             Gizmos.color = Color.green;
             
             // Draw a cube around the map
+            if(Planet.TileMap != null)
             Gizmos.DrawWireCube(Vector3.zero, new Vector3(Planet.TileMap.MapSize.X, Planet.TileMap.MapSize.Y, 0.0f));
 
             // Draw lines around player if out of bounds
