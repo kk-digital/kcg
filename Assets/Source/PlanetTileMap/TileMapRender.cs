@@ -46,7 +46,7 @@ namespace PlanetTileMap
                 {
                     if (x >= 0 && y >= 0)
                     {
-                        ref var tile = ref tileMap.GetBackTile(x, y);
+                        ref var tile = ref tileMap.GetMidTile(x, y);
 
                         var spriteId = tile.SpriteID;
 
@@ -92,7 +92,7 @@ namespace PlanetTileMap
                 {
                     if (x >= 0 && y >= 0)
                     {
-                        ref var tile = ref tileMap.GetBackTile(x, y);
+                        ref var tile = ref tileMap.GetFrontTile(x, y);
 
                         var spriteId = tile.SpriteID;
 

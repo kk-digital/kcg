@@ -66,13 +66,13 @@ namespace Planet.Unity
             GameResources.Initialize();
 
             // Generating the map
-            Vec2i mapSize = new Vec2i(6400, 24);
+            Vec2i mapSize = new Vec2i(6400, 1600);
             Planet = new Planet.PlanetState();
             Planet.Init(mapSize);
             Planet.InitializeSystems(Material, transform);
 
             GenerateMap();
-            Player = Planet.AddPlayer(new Vec2f(3.0f, 25));
+            Player = Planet.AddPlayer(new Vec2f(3.0f, 1600));
             PlayerID = Player.agentID.ID;
             //SpawnStuff();
 
@@ -135,7 +135,7 @@ namespace Planet.Unity
                     }
 
 
-                    tileMap.SetFrontTile(i, j, frontTileID);
+                    tileMap.GetFrontTile(i, j).ID =  frontTileID;
                 }
             }
 
@@ -201,7 +201,12 @@ namespace Planet.Unity
             }
 */
 
-       //     tileMap.UpdateTileMapPositions(MapLayerType.Front);
+            var camera = Camera.main;
+            Vector3 lookAtPosition = camera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, camera.nearClipPlane));
+
+            tileMap.UpdateBackTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
+            tileMap.UpdateMidTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
+            tileMap.UpdateFrontTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
 
         }
 
