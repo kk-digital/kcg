@@ -137,7 +137,8 @@ namespace ECSInput
                 movementState.MovementState == MovementState.Dashing)
                 {
 
-                    movementState.MovementState = MovementState.None;    
+                    movementState.MovementState = MovementState.None;   
+                    movable.Invulnerable = false; 
                 }
 
                 // if the agent is dashing it becomes invulnerable to damage

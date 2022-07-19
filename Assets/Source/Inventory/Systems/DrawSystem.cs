@@ -117,7 +117,7 @@ namespace Inventory
                 // Draw Count if stackable.
                 if (itemEntity.hasItemStack)
                 {
-                    int fontSize = 50;
+                    //int fontSize = 50;
                     
                     // these Change with Camera size. Find better soluiton. AutoSize? MeshPro?
                     float characterSize = 0.05f * Camera.main.pixelWidth / 1024.0f;

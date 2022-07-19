@@ -882,9 +882,9 @@ namespace PlanetTileMap
             
         }
 
-        public static void UpdateSprite(int x, int y, MapLayerType planetLayer, TileMap tileMap)
+        public static void UpdateBackSprite(int x, int y, TileMap tileMap)
         {
-            /*ref var tile = ref tileMap.GetTile(x, y, planetLayer);
+            ref var tile = ref tileMap.GetBackTile(x, y);
             ref var property = ref GameState.TileCreationApi.GetTileProperty(tile.ID);
 
             int neighborsBitField = 0;
@@ -893,7 +893,7 @@ namespace PlanetTileMap
             // only if the tile and the neighbor have the same id
             if (x + 1 < tileMap.MapSize.X)
             {
-                ref var neighborTile = ref tileMap.GetTile(x + 1, y, planetLayer);
+                ref var neighborTile = ref tileMap.GetBackTile(x + 1, y);
                 if (neighborTile.ID == tile.ID)
                 {
                     neighborsBitField |= BitField_Right;
@@ -904,7 +904,7 @@ namespace PlanetTileMap
             // only if the tile and the neighbor have the same id
             if (x - 1 >= 0)
             {
-                ref var neighborTile = ref tileMap.GetTile(x - 1, y, planetLayer);
+                ref var neighborTile = ref tileMap.GetBackTile(x - 1, y);
                 if (neighborTile.ID == tile.ID)
                 {
                     neighborsBitField |= BitField_Left;
@@ -915,7 +915,7 @@ namespace PlanetTileMap
             // only if the tile and the neighbor have the same id
             if (y + 1 < tileMap.MapSize.Y)
             {
-                ref var neighborTile = ref tileMap.GetTile(x, y + 1, planetLayer);
+                ref var neighborTile = ref tileMap.GetBackTile(x, y + 1);
                 if (neighborTile.ID == tile.ID)
                 {
                     neighborsBitField |= BitField_Up;
@@ -926,7 +926,7 @@ namespace PlanetTileMap
             // only if the tile and the neighbor have the same id
             if (y - 1 >= 0)
             {
-                ref var neighborTile = ref tileMap.GetTile(x, y - 1, planetLayer);
+                ref var neighborTile = ref tileMap.GetBackTile(x, y - 1);
                 if (neighborTile.ID == tile.ID)
                 {
                     neighborsBitField |= BitField_Down;
@@ -937,7 +937,7 @@ namespace PlanetTileMap
             // only if the tile and the neighbor have the same id
             if (x + 1 < tileMap.MapSize.X && y + 1 < tileMap.MapSize.Y)
             {
-                ref var neighborTile = ref tileMap.GetTile(x + 1, y + 1, planetLayer);
+                ref var neighborTile = ref tileMap.GetBackTile(x + 1, y + 1);
                 if (neighborTile.ID == tile.ID)
                 {
                     neighborsBitField |= BitField_UpRight;
@@ -948,7 +948,7 @@ namespace PlanetTileMap
             // only if the tile and the neighbor have the same id
             if (x - 1 >= 0 && y + 1 < tileMap.MapSize.Y)
             {
-                ref var neighborTile = ref tileMap.GetTile(x - 1, y + 1, planetLayer);
+                ref var neighborTile = ref tileMap.GetBackTile(x - 1, y + 1);
                 if (neighborTile.ID == tile.ID)
                 {
                     neighborsBitField |= BitField_UpLeft;
@@ -959,7 +959,7 @@ namespace PlanetTileMap
             // only if the tile and the neighbor have the same id
             if (x + 1 < tileMap.MapSize.X && y - 1 >= 0)
             {
-                ref var neighborTile = ref tileMap.GetTile(x + 1, y - 1, planetLayer);
+                ref var neighborTile = ref tileMap.GetBackTile(x + 1, y - 1);
                 if (neighborTile.ID == tile.ID)
                 {
                     neighborsBitField |= BitField_DownRight;
@@ -970,7 +970,7 @@ namespace PlanetTileMap
             // only if the tile and the neighbor have the same id
             if (x - 1 >= 0 && y - 1 >= 0)
             {
-                ref var neighborTile = ref tileMap.GetTile(x - 1, y - 1, planetLayer);
+                ref var neighborTile = ref tileMap.GetBackTile(x - 1, y - 1);
                 if (neighborTile.ID == tile.ID)
                 {
                     neighborsBitField |= BitField_DownLeft;
@@ -989,7 +989,245 @@ namespace PlanetTileMap
 
             // the sprite ids are next to each other in the sprite atlas
             // we just have to know which one to draw based on the offset
-            tile.SpriteID = property.BaseSpriteId + tilePosition;*/
+            tile.SpriteID = property.BaseSpriteId + tilePosition;
+        }
+
+
+
+
+
+
+
+        public static void UpdateMidSprite(int x, int y, TileMap tileMap)
+        {
+            ref var tile = ref tileMap.GetMidTile(x, y);
+            ref var property = ref GameState.TileCreationApi.GetTileProperty(tile.ID);
+
+            int neighborsBitField = 0;
+
+            // check if Right Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
+            if (x + 1 < tileMap.MapSize.X)
+            {
+                ref var neighborTile = ref tileMap.GetMidTile(x + 1, y);
+                if (neighborTile.ID == tile.ID)
+                {
+                    neighborsBitField |= BitField_Right;
+                }
+            }
+
+            // check if Left Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
+            if (x - 1 >= 0)
+            {
+                ref var neighborTile = ref tileMap.GetMidTile(x - 1, y);
+                if (neighborTile.ID == tile.ID)
+                {
+                    neighborsBitField |= BitField_Left;
+                }
+            }
+
+            // check if Up Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
+            if (y + 1 < tileMap.MapSize.Y)
+            {
+                ref var neighborTile = ref tileMap.GetMidTile(x, y + 1);
+                if (neighborTile.ID == tile.ID)
+                {
+                    neighborsBitField |= BitField_Up;
+                }
+            }
+
+            // check if Down Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
+            if (y - 1 >= 0)
+            {
+                ref var neighborTile = ref tileMap.GetMidTile(x, y - 1);
+                if (neighborTile.ID == tile.ID)
+                {
+                    neighborsBitField |= BitField_Down;
+                }
+            }
+
+            // check if Up Right Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
+            if (x + 1 < tileMap.MapSize.X && y + 1 < tileMap.MapSize.Y)
+            {
+                ref var neighborTile = ref tileMap.GetMidTile(x + 1, y + 1);
+                if (neighborTile.ID == tile.ID)
+                {
+                    neighborsBitField |= BitField_UpRight;
+                }
+            }
+
+            // check if Up Left Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
+            if (x - 1 >= 0 && y + 1 < tileMap.MapSize.Y)
+            {
+                ref var neighborTile = ref tileMap.GetMidTile(x - 1, y + 1);
+                if (neighborTile.ID == tile.ID)
+                {
+                    neighborsBitField |= BitField_UpLeft;
+                }
+            }
+
+            // check if Down Right Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
+            if (x + 1 < tileMap.MapSize.X && y - 1 >= 0)
+            {
+                ref var neighborTile = ref tileMap.GetMidTile(x + 1, y - 1);
+                if (neighborTile.ID == tile.ID)
+                {
+                    neighborsBitField |= BitField_DownRight;
+                }
+            }
+
+            // check if Down Left Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
+            if (x - 1 >= 0 && y - 1 >= 0)
+            {
+                ref var neighborTile = ref tileMap.GetMidTile(x - 1, y - 1);
+                if (neighborTile.ID == tile.ID)
+                {
+                    neighborsBitField |= BitField_DownLeft;
+                }
+            }
+
+
+
+
+
+            int tilePosition = R3_Map[neighborsBitField];
+
+
+
+
+
+            // the sprite ids are next to each other in the sprite atlas
+            // we just have to know which one to draw based on the offset
+            tile.SpriteID = property.BaseSpriteId + tilePosition;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        public static void UpdateFrontSprite(int x, int y, TileMap tileMap)
+        {
+            ref var tile = ref tileMap.GetFrontTile(x, y);
+            ref var property = ref GameState.TileCreationApi.GetTileProperty(tile.ID);
+
+            int neighborsBitField = 0;
+
+            // check if Right Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
+            if (x + 1 < tileMap.MapSize.X)
+            {
+                ref var neighborTile = ref tileMap.GetFrontTile(x + 1, y);
+                if (neighborTile.ID == tile.ID)
+                {
+                    neighborsBitField |= BitField_Right;
+                }
+            }
+
+            // check if Left Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
+            if (x - 1 >= 0)
+            {
+                ref var neighborTile = ref tileMap.GetFrontTile(x - 1, y);
+                if (neighborTile.ID == tile.ID)
+                {
+                    neighborsBitField |= BitField_Left;
+                }
+            }
+
+            // check if Up Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
+            if (y + 1 < tileMap.MapSize.Y)
+            {
+                ref var neighborTile = ref tileMap.GetFrontTile(x, y + 1);
+                if (neighborTile.ID == tile.ID)
+                {
+                    neighborsBitField |= BitField_Up;
+                }
+            }
+
+            // check if Down Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
+            if (y - 1 >= 0)
+            {
+                ref var neighborTile = ref tileMap.GetFrontTile(x, y - 1);
+                if (neighborTile.ID == tile.ID)
+                {
+                    neighborsBitField |= BitField_Down;
+                }
+            }
+
+            // check if Up Right Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
+            if (x + 1 < tileMap.MapSize.X && y + 1 < tileMap.MapSize.Y)
+            {
+                ref var neighborTile = ref tileMap.GetFrontTile(x + 1, y + 1);
+                if (neighborTile.ID == tile.ID)
+                {
+                    neighborsBitField |= BitField_UpRight;
+                }
+            }
+
+            // check if Up Left Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
+            if (x - 1 >= 0 && y + 1 < tileMap.MapSize.Y)
+            {
+                ref var neighborTile = ref tileMap.GetFrontTile(x - 1, y + 1);
+                if (neighborTile.ID == tile.ID)
+                {
+                    neighborsBitField |= BitField_UpLeft;
+                }
+            }
+
+            // check if Down Right Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
+            if (x + 1 < tileMap.MapSize.X && y - 1 >= 0)
+            {
+                ref var neighborTile = ref tileMap.GetFrontTile(x + 1, y - 1);
+                if (neighborTile.ID == tile.ID)
+                {
+                    neighborsBitField |= BitField_DownRight;
+                }
+            }
+
+            // check if Down Left Neighbor Exist and add the bit position 
+            // only if the tile and the neighbor have the same id
+            if (x - 1 >= 0 && y - 1 >= 0)
+            {
+                ref var neighborTile = ref tileMap.GetFrontTile(x - 1, y - 1);
+                if (neighborTile.ID == tile.ID)
+                {
+                    neighborsBitField |= BitField_DownLeft;
+                }
+            }
+
+
+
+
+
+            int tilePosition = R3_Map[neighborsBitField];
+
+
+
+
+
+
+            // the sprite ids are next to each other in the sprite atlas
+            // we just have to know which one to draw based on the offset
+            tile.SpriteID = property.BaseSpriteId + tilePosition;
         }
     }
 }

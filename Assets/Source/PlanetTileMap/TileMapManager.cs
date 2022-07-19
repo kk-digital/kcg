@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.Text;
 using Enums.Tile;
+using KMath;
 
 namespace PlanetTileMap
 {
@@ -11,10 +13,10 @@ namespace PlanetTileMap
     {
 
 
-        public static TileMap Load(string filePath)
+        public static TileMap Load(string filePath, int playerPositionX, int playerPositionY)
         {
             TileMap tileMap;
-            using (var stream = File.Open(fileName, FileMode.Open))
+            using (var stream = File.Open(filePath, FileMode.Open))
             {
                 using (var reader = new BinaryReader(stream, Encoding.UTF8, false))
                 {
@@ -26,7 +28,7 @@ namespace PlanetTileMap
                     {
                         for(int x = 0; x < width; x++)
                         {
-                            tileMap.GetBackTile(x, y).ID = rader.ReadInt32();
+                            tileMap.GetBackTile(x, y).ID = (TileID)reader.ReadInt32();
                         }
                     }
 
@@ -34,7 +36,7 @@ namespace PlanetTileMap
                     {
                         for(int x = 0; x < width; x++)
                         {
-                            tileMap.GetMidTile(x, y).ID = rader.ReadInt32();
+                            tileMap.GetMidTile(x, y).ID = (TileID)reader.ReadInt32();
                         }
                     }
 
@@ -42,11 +44,18 @@ namespace PlanetTileMap
                     {
                         for(int x = 0; x < width; x++)
                         {
-                            tileMap.GetFrontTile(x, y).ID = rader.ReadInt32();
+                            tileMap.GetFrontTile(x, y).ID = (TileID)reader.ReadInt32();
                         }
                     }
+
+
+                    tileMap.UpdateBackTileMapPositions(playerPositionX, playerPositionY);
+                    tileMap.UpdateMidTileMapPositions(playerPositionX, playerPositionY);
+                    tileMap.UpdateFrontTileMapPositions(playerPositionX, playerPositionY);
                 }
             }
+
+            return tileMap;
         }
 
 
