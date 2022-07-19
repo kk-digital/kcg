@@ -17,7 +17,7 @@ namespace KGUI
         Sprites.Sprite fill;
 
         // Image
-        private GameObject oxygenBar;
+        public GameObject oxygenBar;
         private GameObject iconCanvas;
 
         Contexts EntitasContext;

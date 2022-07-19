@@ -46,6 +46,7 @@ public class GameResources
     public static int PulseIcon;
     public static int ShotgunIcon;
     public static int LongRifleIcon;
+    public static int SniperRifleIcon;
     public static int RPGIcon;
     public static int SMGIcon;
     public static int SlimeIcon;
@@ -76,6 +77,7 @@ public class GameResources
             GunSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Items\\Pistol\\gun-temp.png", 44, 25);
             ShotgunIcon = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Weapons\\Guns\\Pistol\\Guns\\Gun13.png", 48, 16);
             LongRifleIcon = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Weapons\\Guns\\Pistol\\Guns\\Gun10.png", 48, 16);
+            SniperRifleIcon = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Weapons\\Guns\\Pistol\\Guns\\Gun8.png", 48, 16);
             PulseIcon = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Weapons\\Guns\\Pistol\\Guns\\Gun17.png", 48, 16);
             RPGIcon = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Weapons\\Guns\\Pistol\\Guns\\Gun18.png", 48, 16);
             SMGIcon = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Weapons\\Guns\\Pistol\\Guns\\Gun6.png", 48, 16);
@@ -106,6 +108,7 @@ public class GameResources
             PistolIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(GunSpriteSheet, 0, 0, Enums.AtlasType.Particle);
             ShotgunIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(ShotgunIcon, 0, 0, Enums.AtlasType.Particle);
             LongRifleIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(LongRifleIcon, 0, 0, Enums.AtlasType.Particle);
+            SniperRifleIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(SniperRifleIcon, 0, 0, Enums.AtlasType.Particle);
             PulseIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(PulseIcon, 0, 0, Enums.AtlasType.Particle);
             RPGIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(RPGIcon, 0, 0, Enums.AtlasType.Particle);
             SMGIcon = GameState.SpriteAtlasManager.CopySpriteToAtlas(SMGIcon, 0, 0, Enums.AtlasType.Particle);
@@ -217,6 +220,17 @@ public class GameResources
 
     public static void CreateItems()
     {
+        // Sniper Rifle Item Creation
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.SniperRifle, "SniperRifle");
+        GameState.ItemCreationApi.SetTexture(SniperRifleIcon);
+        GameState.ItemCreationApi.SetInventoryTexture(SniperRifleIcon);
+        GameState.ItemCreationApi.SetRangedWeapon(200.0f, 1f, 350.0f, 60.0f);
+        GameState.ItemCreationApi.SetRangedWeaponClip(6, 1, 1.3f);
+        GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
+        GameState.ItemCreationApi.SetBullet(OreIcon, new Vec2f(0.2f, 0.2f));
+        GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionFireWeapon);
+        GameState.ItemCreationApi.EndItem();
+
         GameState.ItemCreationApi.CreateItem(Enums.ItemType.LongRifle, "LongRifle");
         GameState.ItemCreationApi.SetTexture(LongRifleIcon);
         GameState.ItemCreationApi.SetInventoryTexture(LongRifleIcon);
@@ -338,6 +352,14 @@ public class GameResources
         GameState.ItemCreationApi.SetFlags(Item.FireWeaponPropreties.MeleeFlags.Slash);
         GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
         GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionMeleeAttack);
+        GameState.ItemCreationApi.EndItem();
+
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.RiotShield, "RiotShield");
+        GameState.ItemCreationApi.SetTexture(SwordSpriteId);
+        GameState.ItemCreationApi.SetInventoryTexture(SwordSpriteId);
+        GameState.ItemCreationApi.SetShield(false);
+        GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
+        GameState.ItemCreationApi.SetAction(Enums.ActionType.ToolActionShield);
         GameState.ItemCreationApi.EndItem();
 
         GameState.ItemCreationApi.CreateItem(Enums.ItemType.Ore, "Ore");

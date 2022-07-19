@@ -240,6 +240,19 @@ namespace Item
             PropertiesArray[(int)CurrentIndex].FireWeaponID = WeaponListSize++;
         }
 
+        public void SetShield(bool ShieldActive)
+        {
+            IsItemTypeValid();
+
+            FireWeaponPropreties fireWeapon = new FireWeaponPropreties()
+            {
+                ShieldActive = ShieldActive,
+            }; 
+
+            WeaponList[WeaponListSize] = fireWeapon;
+            PropertiesArray[(int)CurrentIndex].FireWeaponID = WeaponListSize++;
+        }
+
         public void SetFlags(FireWeaponPropreties.MeleeFlags flags)
         {
             IsItemTypeValid();

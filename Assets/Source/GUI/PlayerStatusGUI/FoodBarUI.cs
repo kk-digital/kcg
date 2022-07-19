@@ -19,7 +19,7 @@ namespace KGUI
         Sprites.Sprite fill;
 
         // Image
-        private GameObject foodBar;
+        public GameObject foodBar;
         private GameObject iconCanvas;
         Contexts EntitasContext;
 
