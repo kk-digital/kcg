@@ -4,18 +4,23 @@ using KMath;
 
 public class CameraFollow
 {
+    // Follow Offset
     private Vec2f offset = new Vec2f(0f, 0f);
 
+    // Camera Follow Speed
     [Range(0, 10)]
     public float followSpeed = 3.0f;
 
+    // Player Position
     KMath.Vec2f PlayerPos;
 
+    // Follow Condition
     public bool canFollow = false;
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
     public void Update(ref Planet.PlanetState planetState)
     {
+        // Can Camera Follow Player?
         if(canFollow)
         {
             // Check if projectile has hit a enemy.

@@ -216,6 +216,7 @@ namespace Planet.Unity
 
             // Admin API Add Items
             Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.PlacementTool, Planet.EntitasContext);
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.PlacementToolBack, Planet.EntitasContext);
             Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.RemoveTileTool, Planet.EntitasContext);
             Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.SpawnEnemySlimeTool, Planet.EntitasContext);
             Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.MiningLaserTool, Planet.EntitasContext);

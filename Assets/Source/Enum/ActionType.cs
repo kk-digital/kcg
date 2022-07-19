@@ -23,6 +23,7 @@
         PlaceTilGlassAction,
         PlaceTilMoonAction,
         PlaceTilPipeAction,
+        PlaceTilBackgroundAction,
 
         /// <summary>
         /// Others tools actions

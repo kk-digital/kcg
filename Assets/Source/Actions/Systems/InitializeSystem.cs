@@ -75,6 +75,9 @@ namespace Action
             // Create Place Tile Tool Front
             CreateToolActionPlaceTile(entitasContext, TileID.Moon, MapLayerType.Front);
 
+            // Create Place Tile Tool Back
+            CreateToolActionPlaceTile(entitasContext, TileID.Background, MapLayerType.Back);
+
             // Create Place Tile Tool Mid
             CreateToolActionPlaceTile(entitasContext, TileID.Pipe, MapLayerType.Mid);
 
