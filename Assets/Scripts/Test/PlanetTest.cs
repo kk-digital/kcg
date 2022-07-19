@@ -2,6 +2,7 @@ using UnityEngine;
 using Enums.Tile;
 using KMath;
 using Item;
+using PlanetTileMap;
 
 namespace Planet.Unity
 {
@@ -142,6 +143,8 @@ namespace Planet.Unity
 
             GenerateMap();
             SpawnStuff();
+
+            TileMapManager.Save(Planet.TileMap, "map.kmap");
 
             inventoryID = Player.agentInventory.InventoryID;
             toolBarID = Player.agentToolBar.ToolBarID;
