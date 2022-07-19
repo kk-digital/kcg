@@ -45,6 +45,11 @@ namespace Action
             ActionPropertyEntity.AddActionPropertyCoolDown(coolDown);
         }
 
+        public void SetShieldActive(bool ShieldActive)
+        {
+            ActionPropertyEntity.AddActionPropertyShield(ShieldActive);
+        }
+
         public void SetData(object data)
         {
             ActionPropertyEntity.AddActionPropertyData(data);
@@ -59,9 +64,9 @@ namespace Action
         /// Todo: Data should be in component instead of attributes. This should be an empty component.
         /// ActionProperty that are or causes movement. Exemple: take cover.
         /// </summary>
-        public void SetMoveTo(Vector2Int goalPosition)
+        public void Movement()
         {
-            ActionPropertyEntity.AddActionPropertyMoveTo(goalPosition);
+            ActionPropertyEntity.isActionPropertyMovement = true;
         }
 
         public void SetGoap(AI.GoapState preCondition, AI.GoapState effects, int cost)

@@ -10,6 +10,8 @@
         PickUpAction,
         ReloadAction,
         ChargeAction,
+        ShieldAction,
+        MoveAction,
 
         /// <summary>
         /// PlaceTileTool
@@ -32,6 +34,7 @@
         ToolActionRemoveTile,
         ToolActionThrowGrenade,
         ToolActionMeleeAttack,
-        ToolActionPulseWeapon
+        ToolActionPulseWeapon,
+        ToolActionShield,
     }
 }

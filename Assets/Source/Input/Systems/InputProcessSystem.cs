@@ -136,13 +136,15 @@ namespace ECSInput
                 if (System.Math.Abs(movable.Velocity.X) <= 6.0f && 
                 movementState.MovementState == MovementState.Dashing)
                 {
+                    movementState.MovementState = MovementState.None;
 
+                    // if the agent is dashing it becomes invulnerable to damage
+                    movable.Invulnerable = movementState.MovementState == MovementState.Dashing;
+                    
                     movementState.MovementState = MovementState.None;   
                     movable.Invulnerable = false; 
                 }
 
-                // if the agent is dashing it becomes invulnerable to damage
-                movable.Invulnerable = movementState.MovementState == MovementState.Dashing;
                 // if the agent is dashing the gravity will not affect him
                 movable.AffectedByGravity = !(movementState.MovementState == MovementState.Dashing);
 
@@ -233,6 +235,32 @@ namespace ECSInput
                 var players = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentPlayer));
                 foreach (var player in players)
                     GameState.ActionCreationSystem.CreateAction(planet.EntitasContext, Enums.ActionType.ReloadAction, player.agentID.ID);
+            }
+
+            // Shield Action.
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                var players = contexts.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentPlayer));
+                foreach (var player in players)
+                    GameState.ActionCreationSystem.CreateAction(planet.EntitasContext, Enums.ActionType.ShieldAction, player.agentID.ID);
+
+            }
+
+            // Show/Hide Statistics
+            if (Input.GetKeyDown(KeyCode.F1))
+            {
+                if (KGUI.Statistics.StatisticsDisplay.canDraw)
+                    KGUI.Statistics.StatisticsDisplay.canDraw = false;
+                else if (!KGUI.Statistics.StatisticsDisplay.canDraw)
+                    KGUI.Statistics.StatisticsDisplay.canDraw = true;
+
+            }
+
+            // Remove Tile At Cursor Position.
+            if (Input.GetKeyDown(KeyCode.F2))
+            {
+                Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                planet.TileMap.RemoveFrontTile((int)worldPosition.x, (int)worldPosition.y);
             }
 
             //  Open Inventory with Tab.

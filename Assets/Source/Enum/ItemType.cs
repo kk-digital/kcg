@@ -10,6 +10,7 @@
         /// <summary>
         /// Weapons
         /// </summary>
+        SniperRifle,
         LongRifle,
         PulseWeapon,
         AutoCannon,
@@ -22,6 +23,7 @@
         Bow,
         Sword,
         StunBaton,
+        RiotShield,
 
         /// <summary>
         /// Tools

@@ -15,21 +15,6 @@ namespace Planet.Unity
         Inventory.InventoryManager inventoryManager;
         Inventory.DrawSystem inventoryDrawSystem;
 
-        // Health Bar
-        KGUI.HealthBarUI healthBarUI;
-
-        // Food Bar
-        KGUI.FoodBarUI foodBarUI;
-
-        // Water Bar
-        KGUI.WaterBarUI waterBarUI;
-
-        // Oxygen Bar
-        KGUI.OxygenBarUI oxygenBarUI;
-
-        // Fuel Bar
-        KGUI.FuelBarUI fuelBarUI;
-
         AgentEntity Player;
         int PlayerID;
 
@@ -118,20 +103,8 @@ namespace Planet.Unity
         {
             if (Init)
             {
-                //Health Bar Draw
-                healthBarUI.Draw(Planet.EntitasContext);
-
-                // Food Bar Update
-                foodBarUI.Update();
-
-                // Water Bar Update
-                waterBarUI.Update();
-
-                // Fuel Bar Update
-                fuelBarUI.Update(Player);
-
-                // Oxygen Bar Update
-                oxygenBarUI.Update();
+                // Draw Player Status UI
+                KGUI.PlayerStatusUIManager.Update();
             }
         }
 
@@ -141,6 +114,7 @@ namespace Planet.Unity
             Gizmos.color = Color.green;
             
             // Draw a cube around the map
+            if(Planet.TileMap != null)
             Gizmos.DrawWireCube(Vector3.zero, new Vector3(Planet.TileMap.MapSize.X, Planet.TileMap.MapSize.Y, 0.0f));
 
             // Draw lines around player if out of bounds
@@ -240,6 +214,9 @@ namespace Planet.Unity
             inventoryID = Player.agentInventory.InventoryID;
             toolBarID = Player.agentToolBar.ToolBarID;
 
+            // Player Status UI Init
+            KGUI.PlayerStatusUIManager.Initialize(Planet.EntitasContext, Player);
+
             // Admin API Spawn Items
             Admin.AdminAPI.SpawnItem(Enums.ItemType.Pistol, Planet.EntitasContext);
             Admin.AdminAPI.SpawnItem(Enums.ItemType.Ore, Planet.EntitasContext);
@@ -251,26 +228,6 @@ namespace Planet.Unity
             Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.MiningLaserTool, Planet.EntitasContext);
             Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.PipePlacementTool, Planet.EntitasContext);
             Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.ParticleEmitterPlacementTool, Planet.EntitasContext);
-
-            // Health Bar Initialize
-            healthBarUI = new KGUI.HealthBarUI();
-            healthBarUI.Initialize();
-
-            // Food Bar Initialize
-            foodBarUI = new KGUI.FoodBarUI();
-            foodBarUI.Initialize(Planet.EntitasContext);
-
-            // Water Bar Initialize
-            waterBarUI = new KGUI.WaterBarUI();
-            waterBarUI.Initialize(Planet.EntitasContext);
-
-            // Oxygen Bar Initialize
-            oxygenBarUI = new KGUI.OxygenBarUI();
-            oxygenBarUI.Initialize(Planet.EntitasContext);
-
-            // Oxygen Bar Initialize
-            fuelBarUI = new KGUI.FuelBarUI();
-            fuelBarUI.Initialize(Planet.EntitasContext);
         }
 
         void GenerateMap()

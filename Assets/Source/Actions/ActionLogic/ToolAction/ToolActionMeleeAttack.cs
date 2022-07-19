@@ -47,28 +47,35 @@ namespace Action
                 {
                     if (IsInRange(new Vector2(entity.physicsPosition2D.Value.X, entity.physicsPosition2D.Value.Y)))
                     {
-                        Vec2f entityPos = entity.physicsPosition2D.Value;
-                        Vec2f bulletPos = new Vec2f(x, y);
-                        Vec2f diff = bulletPos - entityPos;
-                        diff.Y = 0;
-                        diff.Normalize();
-
-                        Vector2 oppositeDirection = new Vector2(-diff.X, -diff.Y);
-
-                        Enemies.Add(entity);
-
-                        if (entity.hasAgentStats)
+                        if(ActionPropertyEntity.actionPropertyShield.ShieldActive)
                         {
-                            var stats = entity.agentStats;
-                            entity.ReplaceAgentStats(stats.Health - (int)damage, stats.Food, stats.Water, stats.Oxygen,
-                                stats.Fuel, stats.AttackCooldown);
+                            planet.AddFloatingText("Shield", 0.5f, Vec2f.Zero, new Vec2f(entity.physicsPosition2D.Value.X, entity.physicsPosition2D.Value.Y + 0.35f));
+                        }
+                        else
+                        {
+                            Vec2f entityPos = entity.physicsPosition2D.Value;
+                            Vec2f bulletPos = new Vec2f(x, y);
+                            Vec2f diff = bulletPos - entityPos;
+                            diff.Y = 0;
+                            diff.Normalize();
 
-                            entity.physicsMovable.Velocity = Vec2f.Zero;
-                            CanStun = true;
+                            Vector2 oppositeDirection = new Vector2(-diff.X, -diff.Y);
 
-                            // spawns a debug floating text for damage 
-                            planet.AddFloatingText("" + damage, 0.5f, new Vec2f(oppositeDirection.x * 0.05f, oppositeDirection.y * 0.05f), new Vec2f(entityPos.X, entityPos.Y + 0.35f));
-                            ActionEntity.actionExecution.State = Enums.ActionState.Success;
+                            Enemies.Add(entity);
+
+                            if (entity.hasAgentStats)
+                            {
+                                var stats = entity.agentStats;
+                                entity.ReplaceAgentStats(stats.Health - (int)damage, stats.Food, stats.Water, stats.Oxygen,
+                                    stats.Fuel, stats.AttackCooldown);
+
+                                entity.physicsMovable.Velocity = Vec2f.Zero;
+                                CanStun = true;
+
+                                // spawns a debug floating text for damage 
+                                planet.AddFloatingText("" + damage, 0.5f, new Vec2f(oppositeDirection.x * 0.05f, oppositeDirection.y * 0.05f), new Vec2f(entityPos.X, entityPos.Y + 0.35f));
+                                ActionEntity.actionExecution.State = Enums.ActionState.Success;
+                            }
                         }
                     }
                 }

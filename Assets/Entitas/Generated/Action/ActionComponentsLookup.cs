@@ -11,16 +11,18 @@ public static class ActionComponentsLookup {
     public const int ActionExecution = 0;
     public const int ActionID = 1;
     public const int ActionInterrupt = 2;
-    public const int ActionOwner = 3;
-    public const int ActionTime = 4;
-    public const int ActionTool = 5;
+    public const int ActionMoveTo = 3;
+    public const int ActionOwner = 4;
+    public const int ActionTime = 5;
+    public const int ActionTool = 6;
 
-    public const int TotalComponents = 6;
+    public const int TotalComponents = 7;
 
     public static readonly string[] componentNames = {
         "ActionExecution",
         "ActionID",
         "ActionInterrupt",
+        "ActionMoveTo",
         "ActionOwner",
         "ActionTime",
         "ActionTool"
@@ -30,6 +32,7 @@ public static class ActionComponentsLookup {
         typeof(Action.ExecutionComponent),
         typeof(Action.IDComponent),
         typeof(Action.InterruptComponent),
+        typeof(Action.MoveToComponent),
         typeof(Action.OwnerComponent),
         typeof(Action.TimeComponent),
         typeof(Action.ToolComponent)
