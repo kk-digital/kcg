@@ -46,7 +46,6 @@ namespace Planet.Unity
 
         public void Update()
         {
-
             bool run = Input.GetKeyDown(KeyCode.R);
             bool walk = Input.GetKeyDown(KeyCode.W);
             bool idle = Input.GetKeyDown(KeyCode.I);
@@ -104,6 +103,9 @@ namespace Planet.Unity
             {
                 // Draw Player Status UI
                 KGUI.PlayerStatusUIManager.Update();
+
+                // Draw Statistics
+                KGUI.Statistics.StatisticsDisplay.DrawStatistics(ref Planet);
             }
         }
 
@@ -160,9 +162,6 @@ namespace Planet.Unity
                 HumanoidArray[i].transform.rotation = Quaternion.Euler(0, eulers.y + 90, 0);
                 
             }
-
-
-            
 
 
             // create an animancer object and give it a reference to the Animator component

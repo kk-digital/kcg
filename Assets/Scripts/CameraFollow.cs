@@ -1,27 +1,37 @@
 using UnityEngine;
 using Entitas;
+using KMath;
 
-public class CameraFollow : MonoBehaviour
+public class CameraFollow
 {
-    private Vector3 offset = new Vector3(0f, 0f, -10f);
+    private Vec2f offset = new Vec2f(0f, 0f);
 
-    [Range(0, 1)]
-    public float smoothTime = 0.25f;
+    [Range(0, 10)]
+    public float followSpeed = 3.0f;
 
-    private Vector3 velocity = Vector3.zero;
+    KMath.Vec2f PlayerPos;
+
+    public bool canFollow = false;
 
     // Doc: https://docs.unity3d.com/ScriptReference/MonoBehaviour.Update.html
-    void Update()
+    public void Update(ref Planet.PlanetState planetState)
     {
-        // Get Player Position Info
-        IGroup<AgentEntity> Playerentities = Contexts.sharedInstance.agent.GetGroup(AgentMatcher.AgentPlayer);
-        foreach (var entity in Playerentities)
+        if(canFollow)
         {
-            if(entity.agentID.ID == 0)
+            // Check if projectile has hit a enemy.
+            var entities = planetState.EntitasContext.agent.GetGroup(AgentMatcher.AllOf(AgentMatcher.AgentID));
+            foreach (var entity in entities)
             {
-                Vector3 targetPosition = new Vector3(entity.physicsPosition2D.Value.X, entity.physicsPosition2D.Value.Y, 0.0f) + offset;
-                transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
+                if(entity.isAgentPlayer)
+                {
+                    // Set Player Position from Player Entity
+                    PlayerPos = new KMath.Vec2f(entity.physicsPosition2D.Value.X, entity.physicsPosition2D.Value.Y) + offset;
+                }
             }
+
+            // Follow Player Position
+            Camera.main.transform.position = Vector3.Slerp(Camera.main.transform.position, new Vector3(PlayerPos.X, PlayerPos.Y, -10.0f), followSpeed * Time.deltaTime);
         }
+        
     }
 }

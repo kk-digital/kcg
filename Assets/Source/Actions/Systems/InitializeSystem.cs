@@ -59,7 +59,8 @@ namespace Action
             GameState.ActionPropertyManager.SetLogicFactory(new MoveActionCreator());
             GameState.ActionPropertyManager.Movement();
             GameState.ActionPropertyManager.EndActionPropertyType();
-            
+
+            // Create Place Tile Tool Front
             CreateToolActionPlaceTile(entitasContext, TileID.Ore1, MapLayerType.Front);
 
             // Create Place Tile Tool Front
