@@ -62,9 +62,9 @@ namespace PlanetTileMap
             return match;
         }
 
-        public static void UpdateSprite(int x, int y, MapLayerType planetLayer, TileMap tileMap)
+        public static void UpdateBackSprite(int x, int y, TileMap tileMap)
         {
-            /*ref var tile = ref tileMap.GetTile(x, y, planetLayer);
+            ref var tile = ref tileMap.GetBackTile(x, y);
             ref var property = ref GameState.TileCreationApi.GetTileProperty(tile.ID);
             
             // standard sheet mapping
@@ -88,25 +88,25 @@ namespace PlanetTileMap
 
             if (x + 1 < tileMap.MapSize.X)
             {
-                ref var neighborTile = ref tileMap.GetTile(x + 1, y, planetLayer);
+                ref var neighborTile = ref tileMap.GetBackTile(x + 1, y);
                 neighbors[(int) Neighbor.Right] = neighborTile.ID;
             }
 
             if (x - 1 >= 0)
             {
-                ref var neighborTile = ref tileMap.GetTile(x - 1, y, planetLayer);
+                ref var neighborTile = ref tileMap.GetBackTile(x - 1, y);
                 neighbors[(int) Neighbor.Left] = neighborTile.ID;
             }
 
             if (y + 1 < tileMap.MapSize.Y)
             {
-                ref var neighborTile = ref tileMap.GetTile(x, y + 1, planetLayer);
+                ref var neighborTile = ref tileMap.GetBackTile(x, y + 1);
                 neighbors[(int) Neighbor.Up] = neighborTile.ID;
             }
 
             if (y - 1 >= 0)
             {
-                ref var neighborTile = ref tileMap.GetTile(x, y - 1, planetLayer);
+                ref var neighborTile = ref tileMap.GetBackTile(x, y - 1);
                 neighbors[(int) Neighbor.Down] = neighborTile.ID;
             }
 
@@ -115,7 +115,124 @@ namespace PlanetTileMap
 
             // the sprite ids are next to each other in the sprite atlas
             // we just have to know which one to draw based on the offset
-            tile.SpriteID = property.BaseSpriteId + tilePositionToTileSet[(int) tilePosition];*/
+            tile.SpriteID = property.BaseSpriteId + tilePositionToTileSet[(int) tilePosition];
+        }
+
+
+
+
+        public static void UpdateMidSprite(int x, int y, TileMap tileMap)
+        {
+            ref var tile = ref tileMap.GetMidTile(x, y);
+            ref var property = ref GameState.TileCreationApi.GetTileProperty(tile.ID);
+            
+            // standard sheet mapping
+            // every tile has a constant offset
+            // in the sprite atlas
+
+            // example: 15 is (3,3)
+            //           8 is (0,2)
+            //           1 is (1,0)
+            int[] tilePositionToTileSet = {15, 12, 14, 13, 3, 0, 2, 1, 11, 8, 10, 9, 7, 4, 6, 5};
+
+            // we have 4 neighbors per tile
+            // could be more but its 4 for now
+            // right/left/down/up
+            var neighbors = new TileID[4];
+
+            for (int i = 0; i < neighbors.Length; i++)
+            {
+                neighbors[i] = TileID.Air;
+            }
+
+            if (x + 1 < tileMap.MapSize.X)
+            {
+                ref var neighborTile = ref tileMap.GetMidTile(x + 1, y);
+                neighbors[(int) Neighbor.Right] = neighborTile.ID;
+            }
+
+            if (x - 1 >= 0)
+            {
+                ref var neighborTile = ref tileMap.GetMidTile(x - 1, y);
+                neighbors[(int) Neighbor.Left] = neighborTile.ID;
+            }
+
+            if (y + 1 < tileMap.MapSize.Y)
+            {
+                ref var neighborTile = ref tileMap.GetMidTile(x, y + 1);
+                neighbors[(int) Neighbor.Up] = neighborTile.ID;
+            }
+
+            if (y - 1 >= 0)
+            {
+                ref var neighborTile = ref tileMap.GetMidTile(x, y - 1);
+                neighbors[(int) Neighbor.Down] = neighborTile.ID;
+            }
+
+
+            var tilePosition = GetTilePosition(neighbors, tile.ID);
+
+            // the sprite ids are next to each other in the sprite atlas
+            // we just have to know which one to draw based on the offset
+            tile.SpriteID = property.BaseSpriteId + tilePositionToTileSet[(int) tilePosition];
+        }
+
+
+
+        public static void UpdateFrontSprite(int x, int y, TileMap tileMap)
+        {
+            ref var tile = ref tileMap.GetFrontTile(x, y);
+            ref var property = ref GameState.TileCreationApi.GetTileProperty(tile.ID);
+            
+            // standard sheet mapping
+            // every tile has a constant offset
+            // in the sprite atlas
+
+            // example: 15 is (3,3)
+            //           8 is (0,2)
+            //           1 is (1,0)
+            int[] tilePositionToTileSet = {15, 12, 14, 13, 3, 0, 2, 1, 11, 8, 10, 9, 7, 4, 6, 5};
+
+            // we have 4 neighbors per tile
+            // could be more but its 4 for now
+            // right/left/down/up
+            var neighbors = new TileID[4];
+
+            for (int i = 0; i < neighbors.Length; i++)
+            {
+                neighbors[i] = TileID.Air;
+            }
+
+            if (x + 1 < tileMap.MapSize.X)
+            {
+                ref var neighborTile = ref tileMap.GetFrontTile(x + 1, y);
+                neighbors[(int) Neighbor.Right] = neighborTile.ID;
+            }
+
+            if (x - 1 >= 0)
+            {
+                ref var neighborTile = ref tileMap.GetFrontTile(x - 1, y);
+                neighbors[(int) Neighbor.Left] = neighborTile.ID;
+            }
+
+            if (y + 1 < tileMap.MapSize.Y)
+            {
+                ref var neighborTile = ref tileMap.GetFrontTile(x, y + 1);
+                neighbors[(int) Neighbor.Up] = neighborTile.ID;
+            }
+
+            if (y - 1 >= 0)
+            {
+                ref var neighborTile = ref tileMap.GetFrontTile(x, y - 1);
+                neighbors[(int) Neighbor.Down] = neighborTile.ID;
+            }
+
+
+            var tilePosition = GetTilePosition(neighbors, tile.ID);
+
+            // the sprite ids are next to each other in the sprite atlas
+            // we just have to know which one to draw based on the offset
+            tile.SpriteID = property.BaseSpriteId + tilePositionToTileSet[(int) tilePosition];
         }
     }
 }

@@ -11,6 +11,7 @@
         ReloadAction,
         ChargeAction,
         ShieldAction,
+        MoveAction,
 
         /// <summary>
         /// PlaceTileTool

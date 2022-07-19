@@ -3,6 +3,7 @@ using KMath;
 using PlanetTileMap;
 using UnityEngine;
 using Utility;
+using Enums.Tile;
 
 namespace Physics
 {
@@ -47,6 +48,28 @@ namespace Physics
                 movable.Velocity.X = 0.0f;
                 movable.Acceleration.X = 0.0f;
                 movable.SlidingRight = true;
+            }
+
+            Vec2f position = pos.Value;
+            position.X += box2DCollider.Size.X / 2.0f;
+            //position.Y -= box2DCollider.Size.Y / 2.0f;
+
+            if ((int)position.X > 0 && (int)position.X + 1 < tileMap.MapSize.X &&
+            (int)position.Y > 0 && (int)position.Y < tileMap.MapSize.Y)
+            {
+                if (tileMap.GetFrontTile((int)position.X + 1, (int)position.Y).ID == TileID.Air)
+                {
+                    movable.SlidingRight = false;
+                }
+            }
+
+            if ((int)position.X > 0 && (int)position.X - 1 < tileMap.MapSize.X &&
+            (int)position.Y > 0 && (int)position.Y < tileMap.MapSize.Y)
+            {
+                if (tileMap.GetFrontTile((int)position.X - 1, (int)position.Y).ID == TileID.Air)
+                {
+                    movable.SlidingLeft = false;
+                }
             }
 
             entityBoxBorders.DrawBox();

@@ -136,11 +136,13 @@ namespace ECSInput
                 if (System.Math.Abs(movable.Velocity.X) <= 6.0f && 
                 movementState.MovementState == MovementState.Dashing)
                 {
-
                     movementState.MovementState = MovementState.None;
 
                     // if the agent is dashing it becomes invulnerable to damage
                     movable.Invulnerable = movementState.MovementState == MovementState.Dashing;
+                    
+                    movementState.MovementState = MovementState.None;   
+                    movable.Invulnerable = false; 
                 }
 
                 // if the agent is dashing the gravity will not affect him
