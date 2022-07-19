@@ -23,7 +23,7 @@ namespace KGUI
         Sprites.Sprite barDiv2;
 
         // Player Health
-        private float playerHealth;
+        public float playerHealth;
         public Rect fillPosition = new Rect(78, 36, 226, 14);
         public Rect div1Position = new Rect(130, 52, 3, -17);
         public Rect div2Position = new Rect(190, 52, 3, -17);
@@ -164,6 +164,7 @@ namespace KGUI
 
         private void ClearHealthBar()
         {
+            // Clear Health Bar Texture
             healthBar = new Texture2D(100, 1);
         }
 
@@ -188,7 +189,7 @@ namespace KGUI
 
                 DrawHealthBar(entitasContext);
 
-
+                // Update Div Textures for under 25
                 if (playerHealth < 25)
                 {
                     GUI.DrawTexture(div1Position, barDiv2.Texture);
@@ -198,6 +199,7 @@ namespace KGUI
                     GUI.DrawTexture(div1Position, barDiv1.Texture);
                 }
 
+                // Update Div Textures for under 50
                 if (playerHealth < 50)
                 {
                     GUI.DrawTexture(div2Position, barDiv2.Texture);
@@ -207,6 +209,7 @@ namespace KGUI
                     GUI.DrawTexture(div2Position, barDiv1.Texture);
                 }
 
+                // Update Div Textures for under 75
                 if (playerHealth < 75)
                 {
                     GUI.DrawTexture(div3Position, barDiv2.Texture);
@@ -216,9 +219,11 @@ namespace KGUI
                     GUI.DrawTexture(div3Position, barDiv1.Texture);
                 }
 
+                // Draw Icon
                 GUI.DrawTexture(IconPosition, icon.Texture);
             }
 
+            // Show Health With Text
             GUI.TextArea(TextPosition, playerHealth + "/100");
         }
     }

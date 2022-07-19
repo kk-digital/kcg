@@ -17,7 +17,7 @@ namespace KGUI
         Sprites.Sprite fill;
 
         // Image
-        private GameObject waterBar;
+        public GameObject waterBar;
         private GameObject iconCanvas;
 
         public void Initialize(Contexts contexts)
