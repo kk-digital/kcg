@@ -55,7 +55,11 @@ namespace Action
             GameState.ActionPropertyManager.SetLogicFactory(new PickUpActionCreator()); // Set Logic Factory
             GameState.ActionPropertyManager.EndActionPropertyType();
 
-            // Create Place Tile Tool Front
+            GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.MoveAction);
+            GameState.ActionPropertyManager.SetLogicFactory(new MoveActionCreator());
+            GameState.ActionPropertyManager.Movement();
+            GameState.ActionPropertyManager.EndActionPropertyType();
+            
             CreateToolActionPlaceTile(entitasContext, TileID.Ore1, MapLayerType.Front);
 
             // Create Place Tile Tool Front
