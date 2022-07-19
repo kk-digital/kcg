@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using Enums.Tile;
 using KMath;
 using PlanetTileMap;
@@ -213,16 +214,55 @@ namespace Collisions
             }
         }
 
-        public static Vec2i[] BoxTileCollisionCheck(Vec2f center, Vec2f halfSize, Vec2f velocity)
+        public static bool RegionTileCollisionCheck(TileMap tileMap, int xmin, int xmax, int ymin, int ymax)
         {
-            return null;
+            var xchunkmin = xmin << 4;
+            var xchunkmax = xmax << 4;
+            var ychunkmin = ymin << 4;
+            var ychunkmax = ymax << 4;
+
+            for (int x = xchunkmin; x < xchunkmax; x++) 
+            {
+                for (int y = ychunkmin; y < ychunkmax; y++)
+                {
+                    //note: we already divided by 16 above
+                    int chunk_index = x + y * tileMap.ChunkSize.X;
+                    //check index if chunk is empty
+                    if (tileMap.ChunkArray[chunk_index].Type == MapChunkType.Empty)
+                    {
+                        //skip-chunk its air
+                        continue;
+                    }
+                    
+                    //do the checks here for collisions
+                    int tmp_xmin = Int.IntMax(xmin, xmin & 0x0f);
+                    int tmp_xmax = Int.IntMin(xmax, xmax & 0x0f);
+                    int tmp_ymin = Int.IntMax(ymin, xmax & 0x0f);
+                    int tmp_ymax = Int.IntMin(ymax, ymax & 0x0f);
+                    
+                    //Do collision for each tile
+                    for (var tmp_x = tmp_xmin; tmp_x < tmp_xmax; tmp_x++) 
+                    {
+                        for (var tmp_y = tmp_ymin; tmp_y < tmp_ymax; tmp_y++)
+                        {
+                            ref var tile = ref tileMap.GetFrontTile(tmp_x, tmp_y);
+                            if (tile.ID != TileID.Air)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            return false;
         }
 
         //box1 is rectangle for position at start of frame
         //box2 is rectangle after applying velocity and doing linear displacement
 
         //public static Vec2i[] RectScan(xpos float, ypos, float xhalfsize, float yhalfsize, float vx, float vy)
-        public static Vec2i[] RectScan(ref TileMap tileMap)
+        public static Vec2i[] RectScan(TileMap tileMap)
         {
             int outputCount = (R1.xmax - R1.xmin) * (R1.ymax - R1.ymin);
             outputCount += (R2.xmax - R2.xmin) * (R2.ymax - R2.ymin);
@@ -248,53 +288,18 @@ namespace Collisions
                 }
             }
 
-            foreach (var pos in tilePositions)
-            {
-                var tile = tileMap.GetTile(pos.X, pos.Y, MapLayerType.Front);
-
-                if (tile.ID == TileID.Air)
-                {
-                    
-                }
-            }
-
             return tilePositions;
         }
-        
 
 
-        public static Chunk[] ChunkScan(ref TileMap tileMap)
-        {
-            var chunkSize = tileMap.ChunkSize;
-            
-            int GetChunkIndex(int x, int y)
-            {
-                var xChunkIndex = x / 16;
-                var yChunkIndex = (y / 16) * chunkSize.X;
-                return xChunkIndex + yChunkIndex;
-            }
-            
-            ref var xchunkmin = ref tileMap.ChunkArray[GetChunkIndex(R1.xmin, R1.ymax)];
-            ref var xchunkmax = ref tileMap.ChunkArray[GetChunkIndex(R1.xmax, R1.ymax)];
-            ref var ychunkmin = ref tileMap.ChunkArray[GetChunkIndex(R2.xmin, R2.ymin)];
-            ref var ychunkmax = ref tileMap.ChunkArray[GetChunkIndex(R2.xmin, R2.ymax)];
-
-            var outputCount = xchunkmin.Type;
-
-            return null;
-        }
-
-        public static bool RectOverlapRect(float r1_xmin, float r1_xmax, float r1_ymin, float r1_ymax, float r2_xmin, float r2_xmax, float r2_ymin, float r2_ymax) 
+        public static bool RectOverlapRect(float r1_xmin, float r1_xmax, float r1_ymin, float r1_ymax, float r2_xmin, float r2_xmax, float r2_ymin, float r2_ymax)
         {
             // are the sides of one rectangle touching the other?
 
-            if (r1_xmax >= r2_xmin &&    // r1 right edge past r2 left
-                r1_xmin <= r2_xmax &&    // r1 left edge past r2 right
-                r1_ymax >= r2_ymin &&    // r1 top edge past r2 bottom
-                r1_ymin <= r2_ymax) {    // r1 bottom edge past r2 top
-                return true;
-            }
-            return false;
+            return r1_xmax >= r2_xmin &&    // r1 right edge past r2 left
+                   r1_xmin <= r2_xmax &&    // r1 left edge past r2 right
+                   r1_ymax >= r2_ymin &&    // r1 top edge past r2 bottom
+                   r1_ymin <= r2_ymax;
         }
     }
 }
