@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Animancer;
 
-public class AnimancerTestScript : MonoBehaviour
+public class D3Animation : MonoBehaviour
 {
 
-    public static int HumanoidCount = 3;
+    public static int HumanoidCount = 1;
     GameObject[] HumanoidArray;
 
     AnimationClip IdleAnimationClip ;
@@ -33,6 +33,10 @@ public class AnimancerTestScript : MonoBehaviour
         {
             HumanoidArray[i] = Instantiate(prefab);
             HumanoidArray[i].transform.position = new Vector3(i, 0.0f, 0.0f);
+
+            Vector3 eulers = HumanoidArray[i].transform.rotation.eulerAngles;
+            HumanoidArray[i].transform.rotation = Quaternion.Euler(0, eulers.y + 90, 0);
+
         }
 
 

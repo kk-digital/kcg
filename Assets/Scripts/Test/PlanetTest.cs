@@ -146,8 +146,7 @@ namespace Planet.Unity
             // get the 3d model from the scene
             //GameObject humanoid = GameObject.Find("DefaultHumanoid");
 
-            // load the 3d model from file
-            GameObject prefab = (GameObject)Resources.Load("Stander");
+            GameObject prefab = Engine3D.AssetManager.Singelton.GetModel(Engine3D.ModelType.Stander);
 
             HumanoidArray = new GameObject[HumanoidCount];
             AnimancerComponentArray = new AnimancerComponent[HumanoidCount];
@@ -164,8 +163,6 @@ namespace Planet.Unity
 
 
             
-
-
             // create an animancer object and give it a reference to the Animator component
             for(int i = 0; i < HumanoidCount; i++)
             {
@@ -177,11 +174,10 @@ namespace Planet.Unity
             }
 
             
-            // load some animation clips from disk
-            IdleAnimationClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Idle", typeof(AnimationClip));
-            RunAnimationClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Run", typeof(AnimationClip));
-            WalkAnimationClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Walk_F", typeof(AnimationClip));
-            GolfSwingClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Jump_Roll", typeof(AnimationClip));
+            IdleAnimationClip = Engine3D.AssetManager.Singelton.GetAnimationClip(Engine3D.AnimationType.Idle);
+            RunAnimationClip = Engine3D.AssetManager.Singelton.GetAnimationClip(Engine3D.AnimationType.Run);
+            WalkAnimationClip = Engine3D.AssetManager.Singelton.GetAnimationClip(Engine3D.AnimationType.Walk);
+            GolfSwingClip = Engine3D.AssetManager.Singelton.GetAnimationClip(Engine3D.AnimationType.Flip);
 
 
             // play the idle animation
