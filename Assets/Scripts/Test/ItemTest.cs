@@ -11,7 +11,7 @@ namespace Planet.Unity
     {
         [SerializeField] Material   Material;
 
-        Planet.PlanetState          Planet;
+        Planet.PlanetState    Planet;
         AgentEntity           Player;
 
         static bool Init = false;

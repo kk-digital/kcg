@@ -39,6 +39,11 @@ namespace Action
             GameState.ActionPropertyManager.SetLogicFactory(new PickUpActionCreator());
             GameState.ActionPropertyManager.EndActionPropertyType();
 
+            GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.MoveAction);
+            GameState.ActionPropertyManager.SetLogicFactory(new MoveActionCreator());
+            GameState.ActionPropertyManager.Movement();
+            GameState.ActionPropertyManager.EndActionPropertyType();
+
             CreateToolActionPlaceTile(entitasContext, TileID.Ore1, MapLayerType.Front);
             CreateToolActionPlaceTile(entitasContext, TileID.Ore2, MapLayerType.Front);
             CreateToolActionPlaceTile(entitasContext, TileID.Ore3, MapLayerType.Front);

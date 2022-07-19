@@ -52,5 +52,16 @@ namespace Action
             }
             return actionID;
         }
+
+        public int CreateMovementAction(Contexts entitasContext, Enums.ActionType actionTypeID, int agentID, Vec2f goalPosition)
+        {
+            int actionID = CreateAction(entitasContext, actionTypeID, agentID);
+            if (actionID != -1)
+            {
+                ActionEntity actionEntity = entitasContext.action.GetEntityWithActionIDID(actionID);
+                actionEntity.AddActionMoveTo(goalPosition);
+            }
+            return actionID;
+        }
     }
 }

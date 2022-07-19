@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Entitas;
 using Entitas.CodeGeneration.Attributes;
-using UnityEngine;
+using KMath;
 
 namespace Action.Property
 {
@@ -10,8 +10,7 @@ namespace Action.Property
     /// This should be used by Goap. To request movement to movimentSystem. 
     /// </summary>
     [ActionProperties]
-    public class MoveToComponent : IComponent
+    public class MovementComponent : IComponent
     {
-        public Vector2Int GoalPosition;
     }
 }
