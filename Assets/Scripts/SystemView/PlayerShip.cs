@@ -32,11 +32,16 @@ namespace Scripts {
             public float sail_speed             = 0.5f;
             public bool  rudder_enabled         = true;
 
+            public bool  constant_rate_turning  = false;
+
             public bool  mouse_steering         = false;
 
             public const string main_weapon_key = "1";
             public const string broadsides_key  = "2";
             public const string turrets_key     = "3";
+
+            private float rotating_to;
+            private bool  rotating;
 
             public float periapsis;
             public float apoapsis;
@@ -58,6 +63,11 @@ namespace Scripts {
             public GameObject   angular_velocity_direction_renderer;
             public GameObject   angular_velocity_perpendicular_renderer;
 
+            public void rotate_to(float angle) {
+                rotating_to = angle;
+                rotating    = true;
+            }
+
             private void Start() {
                 camera_controller  = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
@@ -76,7 +86,7 @@ namespace Scripts {
                 ship.acceleration  = 5.0f;
                 ship.horizontal_acceleration = 2.5f;
 
-                ship.self.mass     = 1.0f;
+                ship.self.mass     = 100.0f;
 
                 renderer           = o.AddComponent<SystemShipRenderer>();
                 renderer.ship      = ship;
@@ -237,14 +247,21 @@ namespace Scripts {
                 bool  move_to_mouse = false;
                 float movement      = Input.GetAxis("Vertical");
 
+                if(rotating && ship.rotation != rotating_to) ship.rotate_to(rotating_to, current_time);
+                else rotating = false;
+
                 if (!mouse_steering) {
                     ship.rotation         += ship.self.angular_vel * current_time;
-                    if(Input.GetKey("left ctrl")) horizontal_movement = Input.GetAxis("Horizontal");
-                    else {
+                    if(Input.GetKey("left ctrl")) horizontal_movement = -Input.GetAxis("Horizontal");
+                    else if(!rotating) {
                         float acc              = (float)Math.Sqrt(ship.torque / ship.self.angular_inertia) * -Input.GetAxis("Horizontal");
                         ship.rotation         += 0.5f * acc * current_time * current_time;
-                        ship.self.angular_vel += acc * current_time;
-                        ship.self.angular_vel *= 0.99f;
+                        if(constant_rate_turning)
+                            ship.self.angular_vel = acc;
+                        else {
+                            ship.self.angular_vel += acc * current_time;
+                            ship.self.angular_vel *= 0.99f;
+                        }
                     }
                 } else {
                     horizontal_movement = -Input.GetAxis("Horizontal");
@@ -255,7 +272,7 @@ namespace Scripts {
 
                     float angle = Tools.get_angle(dx, dy);
 
-                    if(turn_towards_mouse) ship.rotate_to(angle, current_time);
+                    if(turn_towards_mouse) { if(!rotating) ship.rotate_to(angle, current_time); }
                     else if(Input.GetMouseButton(0)) {
                         direction     = angle;
                         move_to_mouse = true;
@@ -388,7 +405,7 @@ namespace Scripts {
 
                 if (render_orbit) {
                     if (ship.descriptor.central_body == null)
-                        ship.descriptor.central_body = state.stars[0].self;
+                        ship.descriptor.central_body = state.stars[0].Object.self;
 
                     SpaceObject strongest_gravity_object = null;
                     float g = 0.0f;
@@ -450,6 +467,8 @@ namespace Scripts {
             }
 
             void OnDestroy() {
+                GameObject.Destroy(angular_velocity_perpendicular_renderer);
+                GameObject.Destroy(angular_velocity_direction_renderer);
                 GameObject.Destroy(renderer);
                 GameObject.Destroy(o);
             }

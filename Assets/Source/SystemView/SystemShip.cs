@@ -53,7 +53,7 @@ namespace Source {
 
             public  float rotation;
 
-            public  float torque = 2.0f;
+            public  float torque = 50.0f;
 
             public  List<ShipWeapon> weapons;
 
@@ -74,10 +74,11 @@ namespace Source {
             public  bool ignore_gravity;
 
             public SystemShip() {
-                self            = new SpaceObject();
-                descriptor      = new OrbitingObjectDescriptor(self);
-                weapons         = new List<ShipWeapon>();
+                self              = new SpaceObject();
+                descriptor        = new OrbitingObjectDescriptor(self);
+                weapons           = new List<ShipWeapon>();
                 autopilot_delta_v = new float[2];
+                self.mass         = 100;
             }
 
             public void destroy() {
@@ -183,7 +184,7 @@ namespace Source {
                     targetrotation       = Tools.normalize_angle(targetrotation + Tools.pi);
 
                 if(rotation == targetrotation) {
-                    float diff = targetrotation - velocity_direction;
+                    float diff = true_anomaly - descriptor.true_anomaly;
                     if(diff > -0.4f && diff < 0.4f) accelerate(current_time);
                     else descriptor.update_position(current_time);
                 } else { rotate_to(targetrotation, current_time); descriptor.update_position(current_time); }
