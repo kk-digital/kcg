@@ -7,7 +7,8 @@ namespace Scripts {
         public class Nebula : MonoBehaviour {
             public int            seed;
             public int            layers;
-            public int            colors;
+            public Color          basecolor;
+            public Color[]        colors;
             public int            width;
             public int            height;
             public float          opacity;
@@ -45,10 +46,6 @@ namespace Scripts {
                 Color[] pixels    = new Color[width * height];
 
                 for(int i = 0; i < width * height; i++) pixels[i] = new Color(0.0f, 0.0f, 0.0f, 0.0f);
-
-                float base_r = (float)rng.NextDouble() * 0.8f;
-                float base_g = (float)rng.NextDouble() * 0.8f;
-                float base_b = (float)rng.NextDouble() * 0.8f;
 
                 // Generate base noise
                 ComputeBuffer base_buffer1 = new ComputeBuffer(width * height, sizeof(float));
@@ -127,30 +124,21 @@ namespace Scripts {
 
                 circular_mask_shader.Dispatch(0, width / 8, height / 8, 1);
 
+                float[] base_alpha = new float[width * height];
                 base_buffer2.GetData(base_alpha);
-
                 base_buffer2.Release();
 
                 for(int x = 0; x < width; x++)
                     for(int y = 0; y < height; y++) {
-                        pixels[x + y * width].r = base_r;
-                        pixels[x + y * width].g = base_g;
-                        pixels[x + y * width].b = base_b;
+                        pixels[x + y * width].r = basecolor.r;
+                        pixels[x + y * width].g = basecolor.g;
+                        pixels[x + y * width].b = basecolor.b;
                         pixels[x + y * width].a = base_alpha[x + y * width];
                     }
 
                 float max_dist = Tools.get_distance(0, 0, width, height);
 
-                for(int color = 0; color < colors; color++) {
-
-                    float r0 = base_r * 0.6f + (float)rng.NextDouble() * base_r * 0.80f;
-                    float g0 = base_g * 0.6f + (float)rng.NextDouble() * base_g * 0.80f;
-                    float b0 = base_b * 0.6f + (float)rng.NextDouble() * base_b * 0.80f;
-
-                    float r1 = base_r * 0.6f + (float)rng.NextDouble() * base_r * 0.80f;
-                    float g1 = base_g * 0.6f + (float)rng.NextDouble() * base_g * 0.80f;
-                    float b1 = base_b * 0.6f + (float)rng.NextDouble() * base_b * 0.80f;
-
+                foreach(Color color in colors) {
                     float[] alpha = new float[width * height];
                     ComputeBuffer color_buffer1 = new ComputeBuffer(width * height, sizeof(float));
 
@@ -252,18 +240,12 @@ namespace Scripts {
 
                     for(int x = 0; x < width; x++)
                         for(int y = 0; y < height; y++) {
-                            float a                 = Tools.smootherstep(alpha[x + y * width] * 0.3f, 0.0f, 1.0f - pixels[x + y * width].a);
+                            float a                 = Tools.smootherstep(alpha[x + y * width] * 0.3f, alpha[x + y * width] * 0.05f, 1.0f - pixels[x + y * width].a);
 
-                            float d                 = Tools.get_distance(x, y, target_x, target_y) / max_dist;
-
-                            float r                 = Tools.smootherstep(r0, r1, d);
-                            float g                 = Tools.smootherstep(g0, g1, d);
-                            float b                 = Tools.smootherstep(b0, b1, d);
-
-                            float blended_alpha     =      a +                           pixels[x + y * width].a * (1.0f - a);
-                            pixels[x + y * width].r = (r * a + pixels[x + y * width].r * pixels[x + y * width].a * (1.0f - a)) / blended_alpha;
-                            pixels[x + y * width].g = (g * a + pixels[x + y * width].g * pixels[x + y * width].a * (1.0f - a)) / blended_alpha;
-                            pixels[x + y * width].b = (b * a + pixels[x + y * width].b * pixels[x + y * width].a * (1.0f - a)) / blended_alpha;
+                            float blended_alpha     =            a +                           pixels[x + y * width].a * (1.0f - a);
+                            pixels[x + y * width].r = (color.r * a + pixels[x + y * width].r * pixels[x + y * width].a * (1.0f - a)) / blended_alpha;
+                            pixels[x + y * width].g = (color.g * a + pixels[x + y * width].g * pixels[x + y * width].a * (1.0f - a)) / blended_alpha;
+                            pixels[x + y * width].b = (color.b * a + pixels[x + y * width].b * pixels[x + y * width].a * (1.0f - a)) / blended_alpha;
                             pixels[x + y * width].a = blended_alpha;
                         }
                 }

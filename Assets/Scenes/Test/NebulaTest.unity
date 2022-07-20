@@ -123,132 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &343479151
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 343479153}
-  - component: {fileID: 343479152}
-  m_Layer: 0
-  m_Name: Nebula 3
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &343479152
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 343479151}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1897c9261aa54304690d1577b6d2bd0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  seed: 42069
-  layers: 5
-  colors: 2
-  width: 512
-  height: 512
-  opacity: 0.75
-  contrast: 0.5
-  cutoff: 0.2
-  spin: 0
-  center: {x: 0, y: 0, z: 0}
-  texture: {fileID: 0}
-  renderer: {fileID: 0}
-  blur_noise_shader: {fileID: 7200000, guid: 6265a9d36a176594480881d07bfe6ddf, type: 3}
-  scale_noise_shader: {fileID: 7200000, guid: 79f3f8a43bab1ba4399f86e66416a993, type: 3}
-  exponential_filter_shader: {fileID: 7200000, guid: 1954e415a298c274481ea30b23eee6d6, type: 3}
-  distortion_shader: {fileID: 7200000, guid: ebbb666a38ff3b7429286b25473a81fc, type: 3}
-  softening_shader: {fileID: 7200000, guid: dfd51fe3369013b46a74959398973d90, type: 3}
-  circular_blur_shader: {fileID: 7200000, guid: 0daecd51ef16bf5419fd99ed4c4a3103, type: 3}
-  circular_mask_shader: {fileID: 7200000, guid: 3a81d580afd4b1748bf5c40b11e020a4, type: 3}
---- !u!4 &343479153
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 343479151}
-  m_LocalRotation: {x: 0, y: 0, z: 0.8433915, w: 0.53729963}
-  m_LocalPosition: {x: -0.3, y: 0.4, z: 0}
-  m_LocalScale: {x: 0.7, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 115}
---- !u!1 &1155576048
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1155576050}
-  - component: {fileID: 1155576049}
-  m_Layer: 0
-  m_Name: Nebula 2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1155576049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1155576048}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1897c9261aa54304690d1577b6d2bd0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  seed: 69
-  layers: 5
-  colors: 2
-  width: 512
-  height: 512
-  opacity: 0.6
-  contrast: 0.5
-  cutoff: 0.1
-  spin: 0
-  center: {x: 0, y: 0, z: 0}
-  texture: {fileID: 0}
-  renderer: {fileID: 0}
-  blur_noise_shader: {fileID: 7200000, guid: 6265a9d36a176594480881d07bfe6ddf, type: 3}
-  scale_noise_shader: {fileID: 7200000, guid: 79f3f8a43bab1ba4399f86e66416a993, type: 3}
-  exponential_filter_shader: {fileID: 7200000, guid: 1954e415a298c274481ea30b23eee6d6, type: 3}
-  distortion_shader: {fileID: 7200000, guid: ebbb666a38ff3b7429286b25473a81fc, type: 3}
-  softening_shader: {fileID: 7200000, guid: dfd51fe3369013b46a74959398973d90, type: 3}
-  circular_blur_shader: {fileID: 7200000, guid: 0daecd51ef16bf5419fd99ed4c4a3103, type: 3}
-  circular_mask_shader: {fileID: 7200000, guid: 3a81d580afd4b1748bf5c40b11e020a4, type: 3}
---- !u!4 &1155576050
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1155576048}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.3, y: -0.3, z: 0}
-  m_LocalScale: {x: 0.9, y: 0.7, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1730390602
 GameObject:
   m_ObjectHideFlags: 0
@@ -330,7 +204,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seed: 69420
   layers: 5
-  colors: 2
+  basecolor: {r: 0.17968723, g: 0.23584908, b: 0.16798684, a: 0}
+  colors:
+  - {r: 0.44144043, g: 0.8584906, b: 0.36040404, a: 0}
+  - {r: 0.18006241, g: 0.4528302, b: 0.1260235, a: 0}
   width: 512
   height: 512
   opacity: 1
@@ -344,7 +221,6 @@ MonoBehaviour:
   scale_noise_shader: {fileID: 7200000, guid: 79f3f8a43bab1ba4399f86e66416a993, type: 3}
   exponential_filter_shader: {fileID: 7200000, guid: 1954e415a298c274481ea30b23eee6d6, type: 3}
   distortion_shader: {fileID: 7200000, guid: ebbb666a38ff3b7429286b25473a81fc, type: 3}
-  softening_shader: {fileID: 7200000, guid: dfd51fe3369013b46a74959398973d90, type: 3}
   circular_blur_shader: {fileID: 7200000, guid: 0daecd51ef16bf5419fd99ed4c4a3103, type: 3}
   circular_mask_shader: {fileID: 7200000, guid: 3a81d580afd4b1748bf5c40b11e020a4, type: 3}
 --- !u!4 &1886980502
