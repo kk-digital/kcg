@@ -1,13 +1,17 @@
 using System;
 
-// TODO: Optimize these functions
+// DEPRECATED
+// 
+// Most of these functions have been deprecated and replaced by new compute shaders
+// The new compute shaders can be found in Shaders/SystemView/Compute
+
 namespace Source {
     namespace SystemView {
         public static class ProceduralImages {
+            // This function generates random noise from a seeded System.Random
+
             public static float[] generate_noise(Random rng, float strength, int w, int h) {
                 float[] noise = new float[w * h];
-
-                // Generate random noise
 
                 for(int x = 1; x < w - 1; x++)
                     for(int y = 1; y < h - 1; y++) {
@@ -18,6 +22,13 @@ namespace Source {
                 return noise;
             }
 
+            // Blurs noise in a 3x3 grid
+            // 
+            // Center pixel is weighed highest
+            // Side pixels (left/right/up/down) are weighed second highest
+            // Corner pixels (top left/top right/bottom right/bottom left) are weighed third highest
+
+            [Obsolete("The blur noise function has been deprecated. Use the compute shader in Shaders/SystemView/Compute/blur_noise.compute instead.")]
             public static float[] blur_noise(float[] noise, int w, int h) {
 
                 for(int x = 1; x < w - 1; x++)
@@ -36,6 +47,11 @@ namespace Source {
                 return noise;
             }
 
+            // Blurs pixels within the defined radius
+            // 
+            // The values of pixels closer to the center are prioritized over the values of those farther away
+
+            [Obsolete("The circular blur function has been deprecated. Use the compute shader in Shaders/SystemView/Compute/circular_blur.compute instead.")]
             public static float[] circular_blur(float[] noise, float r, int w, int h) {
                 if(r <= 1.0f) return noise;
 
@@ -77,6 +93,9 @@ namespace Source {
                 return blurred;
             }
 
+            // Scales up noise smoothly, following a smootherscale curve.
+
+            [Obsolete("The smoothen noise function has been deprecated. Use the compute shader in Shaders/SystemView/Compute/scale_noise.compute instead.")]
             public static float[] smoothen_noise(float[] noise, int w, int h, int scale) {
                 int   scaled_w = w * scale;
                 int   scaled_h = h * scale;
@@ -104,6 +123,9 @@ namespace Source {
                 return smoothed_noise;
             }
 
+            // Applies an exponential filter to noise, which filters out noise with low values and produces a nicer result.
+
+            [Obsolete("The exponential filter function has been deprecated. Use the compute shader in Shaders/SystemView/Compute/exponential_filter.compute instead.")]
             public static float[] exponential_filter(float[] noise, int w, int h) {
                 float cutoff    = 0.05f;
                 float sharpness = 0.95f;
@@ -117,6 +139,10 @@ namespace Source {
                 return noise;
             }
 
+            // Distorts the noise using a randomly generated distortion map.
+            // The result of this are many curves and swivels which give a more natural feel.
+
+            [Obsolete("The distort function has been deprecated. Use the compute shader in Shaders/SystemView/Compute/distortion_shader.compute instead.")]
             public static float[] distort(Random rng, float[] noise, float strength, int distortion_scale, int w, int h) {
                 float[] distortion_noise = smoothen_noise(generate_noise(rng, 1.0f, w / distortion_scale, h / distortion_scale),
                                                                                     w / distortion_scale, h / distortion_scale, distortion_scale);
@@ -150,6 +176,10 @@ namespace Source {
 
                 return distorted;
             }
+
+            // Applies a random "natural looking" mask to the noise.
+            // This results in parts of the noise being cut out.
+            // The result is hard to explain, and it's easier to just try the function.
 
             public static float[] mask(Random rng, float[] noise, int repetitions, int w, int h) {
                 float[] masking_noise = generate_noise(rng, 1.0f, w, h);
@@ -187,6 +217,7 @@ namespace Source {
                 return noise;
             }
 
+            // Softens edges and shapes in a noise map.
             public static float[] soften(float[] noise, int repetitions, int w, int h) {
                 for(int i = 0; i < repetitions; i++)
                     for(int x = 0; x < w; x++)
@@ -206,6 +237,10 @@ namespace Source {
                 return noise;
             }
 
+            // Applies a circular mask to the noise map.
+            // This converts the square noise map to a circle.
+
+            [Obsolete("The circular mask function has been deprecated. Use the compute shader in Shaders/SystemView/Compute/circular_mask.compute instead.")]
             public static float[] circular_mask(float[] noise, int w, int h) {
                 float[] output = new float[w * h];
 
@@ -228,11 +263,15 @@ namespace Source {
                 return output;
             }
 
+            // Clamps a float value between 0.0f and 1.0f
+
             public static float truncate(float f) {
                 if(f < 0.0f) return 0.0f;
                 if(f > 1.0f) return 1.0f;
                 return f;
             }
+
+            // Adjusts the contrast of a pixel
 
             public static void adjust_contrast(ref float r, ref float g, ref float b, float contrast) {
                 r = truncate(contrast * (r - 0.5f) + 0.5f);
@@ -240,12 +279,33 @@ namespace Source {
                 b = truncate(contrast * (b - 0.5f) + 0.5f);
             }
 
-            public static void adjust_black_level(ref float r, ref float g, ref float b, ref float a, float cutoff) {
-                r = ProceduralImages.truncate((r - cutoff) / (1.0f - cutoff));
-                g = ProceduralImages.truncate((g - cutoff) / (1.0f - cutoff));
-                b = ProceduralImages.truncate((b - cutoff) / (1.0f - cutoff));
-                a = ProceduralImages.truncate((a - cutoff) / (1.0f - cutoff));
+            // Returns the brightness of a pixel
+
+            public static float get_brightness(float r, float g, float b) {
+                return Tools.magnitude(r, g, b);
             }
+
+            // Adjusts the black level of a pixel.
+            //
+            // Black level = brightness at the darkest part of an image.
+
+            public static void adjust_black_level(ref float r, ref float g, ref float b, ref float a, float black_level) {
+                a = ProceduralImages.truncate((a - black_level) / (1.0f - black_level));
+
+                float old_brightness =  get_brightness(r, g, b);
+
+                if(old_brightness <= 0.0f) return;
+
+                float new_brightness = (old_brightness - black_level) / (1.0f - black_level);
+                float scale_factor   =  new_brightness / old_brightness;
+
+                r *= scale_factor;
+                g *= scale_factor;
+                b *= scale_factor;
+            }
+
+            // Swirls noise around in a circular motion
+            // Results in a spiral
 
             public static float[] swirl(float[] noise, float spin, int w, int h) {
                 int half_width  = w / 2;
