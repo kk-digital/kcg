@@ -2,25 +2,25 @@ using UnityEngine;
 using UnityEngine.UI;
 using Entitas;
 
-namespace KGUI
+namespace KGUI.PlayerStatus
 {
-    public class WaterBarUI
+    public class OxygenBarUI
     {
         // Init
         private static bool Init;
 
-        // Water Bar Icon Position
+        // Oxygen Bar Icon Position
         public Rect iconPosition = new Rect(7, 140, 60, -60);
 
-        // Water Bar Icon Sprite
+        // Oxygen Bar Icon Sprite
         Sprites.Sprite icon;
         Sprites.Sprite fill;
 
         // Image
-        public GameObject waterBar;
+        public GameObject oxygenBar;
         private GameObject iconCanvas;
 
-        public void Initialize(Contexts contexts)
+        public void Initialize(AgentEntity agentEntity)
         {
             // Set Width and Height
             int IconWidth = 19;
@@ -28,7 +28,7 @@ namespace KGUI
             Vector2Int iconPngSize = new Vector2Int(IconWidth, IconHeight);
 
             // Load image from file
-            var iconSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\UserInterface\\Icons\\Water\\hud_status_water.png", IconWidth, IconHeight);
+            var iconSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\UserInterface\\Icons\\Oxygen\\hud_status_oxygen.png", IconWidth, IconHeight);
 
             // Set Sprite ID from Sprite Atlas
             int iconID = GameState.SpriteAtlasManager.CopySpriteToAtlas(iconSheet, 0, 0, Enums.AtlasType.Particle);
@@ -76,73 +76,61 @@ namespace KGUI
                 TextureCoords = new Vector4(0, 0, 1, 1)
             };
 
-            // Water Bar Initializon
-            iconCanvas = new GameObject("Water Icon");
+            // Oxygen Bar Initializon
+            iconCanvas = new GameObject("Oxygen Icon");
             iconCanvas.transform.parent = GameObject.Find("Canvas").transform;
             iconCanvas.AddComponent<RectTransform>();
             iconCanvas.AddComponent<Image>();
 
-            // Add Components and setup game object
+            // Add Components and setup agent object
             Sprite iconBar = Sprite.Create(icon.Texture, new Rect(0.0f, 0.0f, IconWidth, IconHeight), new Vector2(0.5f, 0.5f));
             iconCanvas.GetComponent<Image>().sprite = iconBar;
 
             if (Camera.main.aspect >= 1.7f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 64.9f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 5.9f, 4.873917f);
             else if (Camera.main.aspect >= 1.5f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, 67f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, 9.6f, 4.873917f);
             else
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 134.2f, 4.873917f);
-
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 75.3f, 4.873917f);
 
             iconCanvas.GetComponent<RectTransform>().localScale = new Vector3(0.6f, -0.6f, 0.5203559f);
 
-            // Water Bar Initializon
-            waterBar = new GameObject("Water Bar");
-            waterBar.transform.parent = iconCanvas.transform;
-            waterBar.AddComponent<RectTransform>();
-            waterBar.AddComponent<Image>();
+            // Oxygen Bar Initializon
+            oxygenBar = new GameObject("Oxygen Bar");
+            oxygenBar.transform.parent = iconCanvas.transform;
+            oxygenBar.AddComponent<RectTransform>();
+            oxygenBar.AddComponent<Image>();
 
-            // Add Components and setup game object
+            // Add Components and setup agent object
             Sprite bar = Sprite.Create(fill.Texture, new Rect(0.0f, 0.0f, FillWidth, FillHeight), new Vector2(0.5f, 0.5f));
 
-            waterBar.GetComponent<Image>().sprite = bar;
-            waterBar.GetComponent<Image>().raycastTarget = true;
-            waterBar.GetComponent<Image>().maskable = true;
-            waterBar.GetComponent<Image>().type = Image.Type.Filled;
-            waterBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
-            waterBar.GetComponent<Image>().fillOrigin = 0;
-            IGroup<AgentEntity> Playerentities =
-            contexts.agent.GetGroup(AgentMatcher.AgentStats);
-            foreach (var entity in Playerentities)
-            {
-                waterBar.GetComponent<Image>().fillAmount = entity.agentStats.Water / 100;
-            }
-            waterBar.GetComponent<Image>().fillClockwise = true;
+            oxygenBar.GetComponent<Image>().sprite = bar;
+            oxygenBar.GetComponent<Image>().raycastTarget = true;
+            oxygenBar.GetComponent<Image>().maskable = true;
+            oxygenBar.GetComponent<Image>().type = Image.Type.Filled;
+            oxygenBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
+            oxygenBar.GetComponent<Image>().fillOrigin = 0;
+            oxygenBar.GetComponent<Image>().fillAmount = agentEntity.agentStats.Oxygen / 100;
+            oxygenBar.GetComponent<Image>().fillClockwise = true;
+            oxygenBar.GetComponent<RectTransform>().localPosition = new Vector3(-0.4f, -0.1f, 4.873917f);
 
-            waterBar.GetComponent<RectTransform>().localPosition = new Vector3(-0.4f, -0.1f, 4.873917f);
-
-            waterBar.GetComponent<RectTransform>().localScale = new Vector3(0.8566527f, 0.8566527f, 0.3714702f);
+            oxygenBar.GetComponent<RectTransform>().localScale = new Vector3(0.8566527f, 0.8566527f, 0.3714702f);
 
             Init = true;
         }
 
-        public void Update()
+        public void Update(AgentEntity agentEntity)
         {
             if (Init)
             {
-                IGroup<AgentEntity> Playerentities =
-                Contexts.sharedInstance.agent.GetGroup(AgentMatcher.AgentStats);
-                foreach (var entity in Playerentities)
-                {
-                    waterBar.GetComponent<Image>().fillAmount = entity.agentStats.Water / 100;
-                }
+                oxygenBar.GetComponent<Image>().fillAmount = agentEntity.agentStats.Oxygen / 100;
 
                 if (Camera.main.aspect >= 1.7f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 64.9f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 5.9f, 4.873917f);
                 else if (Camera.main.aspect >= 1.5f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, 67f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, 9.6f, 4.873917f);
                 else
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 134.2f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 75.3f, 4.873917f);
             }
         }
     }

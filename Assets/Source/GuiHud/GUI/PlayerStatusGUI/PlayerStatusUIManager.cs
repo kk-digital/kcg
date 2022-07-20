@@ -5,71 +5,62 @@ using UnityEngine.UI;
 
 namespace KGUI
 {
-    public static class PlayerStatusUIManager
+    public class PlayerStatusUIManager : GUIManager
     {
         // Health Bar
-        private static KGUI.HealthBarUI healthBarUI;
+        private KGUI.PlayerStatus.HealthBarUI healthBarUI;
 
         // Food Bar
-        private static KGUI.FoodBarUI foodBarUI;
+        private KGUI.PlayerStatus.FoodBarUI foodBarUI;
 
         // Water Bar
-        private static KGUI.WaterBarUI waterBarUI;
+        private KGUI.PlayerStatus.WaterBarUI waterBarUI;
 
         // Oxygen Bar
-        private static KGUI.OxygenBarUI oxygenBarUI;
+        private KGUI.PlayerStatus.OxygenBarUI oxygenBarUI;
 
         // Fuel Bar
-        private static KGUI.FuelBarUI fuelBarUI;
+        private KGUI.PlayerStatus.FuelBarUI fuelBarUI;
 
-        // Entitas Contexts
-        private static Contexts _contexts;
-
-        // Agent Entity
-        private static AgentEntity _agentEntity;
-
-        public static void Initialize(Contexts contexts, AgentEntity agentEntity)
+        public override void Initialize(Contexts contexts, AgentEntity agentEntity)
         {
-            _contexts = contexts;
-            _agentEntity = agentEntity;
-
             // Health Bar Initialize
-            healthBarUI = new KGUI.HealthBarUI();
-            healthBarUI.Initialize();
+            healthBarUI = new KGUI.PlayerStatus.HealthBarUI();
+            healthBarUI.Initialize(agentEntity);
 
             // Food Bar Initialize
-            foodBarUI = new KGUI.FoodBarUI();
-            foodBarUI.Initialize(_contexts);
+            foodBarUI = new KGUI.PlayerStatus.FoodBarUI();
+            foodBarUI.Initialize(agentEntity);
 
             // Water Bar Initialize
-            waterBarUI = new KGUI.WaterBarUI();
-            waterBarUI.Initialize(_contexts);
+            waterBarUI = new KGUI.PlayerStatus.WaterBarUI();
+            waterBarUI.Initialize(agentEntity);
 
             // Oxygen Bar Initialize
-            oxygenBarUI = new KGUI.OxygenBarUI();
-            oxygenBarUI.Initialize(_contexts);
+            oxygenBarUI = new KGUI.PlayerStatus.OxygenBarUI();
+            oxygenBarUI.Initialize(agentEntity);
 
             // Oxygen Bar Initialize
-            fuelBarUI = new KGUI.FuelBarUI();
-            fuelBarUI.Initialize(_contexts);
+            fuelBarUI = new KGUI.PlayerStatus.FuelBarUI();
+            fuelBarUI.Initialize(agentEntity);
         }
 
-        public static void Update()
+        public override void Update(AgentEntity agentEntity)
         {
             //Health Bar Draw
-            healthBarUI.Draw(_contexts);
+            healthBarUI.Draw(agentEntity);
 
             // Food Bar Update
-            foodBarUI.Update();
+            foodBarUI.Update(agentEntity);
 
             // Water Bar Update
-            waterBarUI.Update();
+            waterBarUI.Update(agentEntity);
 
             // Fuel Bar Update
-            fuelBarUI.Update(_agentEntity);
+            fuelBarUI.Update(agentEntity);
 
             // Oxygen Bar Update
-            oxygenBarUI.Update();
+            oxygenBarUI.Update(agentEntity);
 
             // Water Bar UI Indicator Check
             if (healthBarUI.playerHealth < 50)

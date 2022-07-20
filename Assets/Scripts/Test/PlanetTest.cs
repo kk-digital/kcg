@@ -3,6 +3,7 @@ using Enums.Tile;
 using KMath;
 using Item;
 using Animancer;
+using HUD;
 
 namespace Planet.Unity
 {
@@ -21,7 +22,6 @@ namespace Planet.Unity
         int inventoryID;
         int toolBarID;
 
-
         public static int HumanoidCount = 1;
         GameObject[] HumanoidArray;
 
@@ -30,8 +30,9 @@ namespace Planet.Unity
         AnimationClip WalkAnimationClip ;
         AnimationClip GolfSwingClip;
 
-
         AnimancerComponent[] AnimancerComponentArray;
+
+        HUDManager hudManager;
 
         static bool Init = false;
 
@@ -101,8 +102,8 @@ namespace Planet.Unity
         {
             if (Init)
             {
-                // Draw Player Status UI
-                KGUI.PlayerStatusUIManager.Update();
+                // Draw HUD UI
+                hudManager.Update(Player);
 
                 // Draw Statistics
                 KGUI.Statistics.StatisticsDisplay.DrawStatistics(ref Planet);
@@ -207,8 +208,7 @@ namespace Planet.Unity
             inventoryID = Player.agentInventory.InventoryID;
             toolBarID = Player.agentToolBar.ToolBarID;
 
-            // Player Status UI Init
-            KGUI.PlayerStatusUIManager.Initialize(Planet.EntitasContext, Player);
+            hudManager = new HUDManager(Planet.EntitasContext, Player);
 
             // Admin API Spawn Items
             Admin.AdminAPI.SpawnItem(Enums.ItemType.Pistol, Planet.EntitasContext);

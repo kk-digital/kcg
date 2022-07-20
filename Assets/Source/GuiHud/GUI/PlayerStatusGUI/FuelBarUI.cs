@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Entitas;
 
-namespace KGUI
+namespace KGUI.PlayerStatus
 {
     public class FuelBarUI
     {
@@ -20,7 +20,7 @@ namespace KGUI
         public GameObject fuelBar;
         private GameObject iconCanvas;
 
-        public void Initialize(Contexts contexts)
+        public void Initialize(AgentEntity agentEntity)
         {
             // Set Width and Height
             int IconWidth = 19;
@@ -111,17 +111,12 @@ namespace KGUI
             fuelBar.GetComponent<Image>().type = Image.Type.Filled;
             fuelBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
             fuelBar.GetComponent<Image>().fillOrigin = 0;
-            IGroup<AgentEntity> Playerentities =
-            contexts.agent.GetGroup(AgentMatcher.AgentStats);
-            foreach (var entity in Playerentities)
+            float fuelValue = agentEntity.agentStats.Fuel;
+            if (fuelValue <= 0)
             {
-                float fuelValue = entity.agentStats.Fuel;
-                if (fuelValue <= 0)
-                {
-                    fuelValue = 0;
-                }
-                fuelBar.GetComponent<Image>().fillAmount = fuelValue / 100;
+                fuelValue = 0;
             }
+            fuelBar.GetComponent<Image>().fillAmount = fuelValue / 100;
             fuelBar.GetComponent<Image>().fillClockwise = true;
 
             fuelBar.GetComponent<RectTransform>().localPosition = new Vector3(-0.4f, -0.1f, 4.873917f);
@@ -131,11 +126,11 @@ namespace KGUI
             Init = true;
         }
 
-        public void Update(AgentEntity playerEntity)
+        public void Update(AgentEntity agentEntity)
         {
-            if(Init && playerEntity != null)
+            if(Init)
             {
-                float fuelValue = playerEntity.agentStats.Fuel;
+                float fuelValue = agentEntity.agentStats.Fuel;
                 if (fuelValue <= 0)
                 {
                     fuelValue = 0;
