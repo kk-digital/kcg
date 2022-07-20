@@ -392,6 +392,13 @@ public class GameResources
         GameState.ItemCreationApi.SetAction(Enums.ActionType.PlaceTilMoonAction);
         GameState.ItemCreationApi.EndItem();
 
+        GameState.ItemCreationApi.CreateItem(Enums.ItemType.PlacementToolBack, "BackgroundPlacementTool");
+        GameState.ItemCreationApi.SetTexture(PlacementToolIcon);
+        GameState.ItemCreationApi.SetInventoryTexture(PlacementToolIcon);
+        GameState.ItemCreationApi.SetSpriteSize(new Vec2f(0.5f, 0.5f));
+        GameState.ItemCreationApi.SetAction(Enums.ActionType.PlaceTilBackgroundAction);
+        GameState.ItemCreationApi.EndItem();
+
         GameState.ItemCreationApi.CreateItem(Enums.ItemType.RemoveTileTool, "RemoveTileTool");
         GameState.ItemCreationApi.SetTexture(RemoveToolIcon);
         GameState.ItemCreationApi.SetInventoryTexture(RemoveToolIcon);

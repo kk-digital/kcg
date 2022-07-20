@@ -5,7 +5,7 @@ using Entitas;
 using KMath;
 using Inventory;
 
-namespace KGUI
+namespace KGUI.PlayerStatus
 {
     public class HealthBarUI
     {
@@ -33,7 +33,7 @@ namespace KGUI
         public Rect TextPosition = new Rect(250, 60, 55, 22);
         public Color color = new Color(0.6f, 0, 0, 1.0f);
 
-        public void Initialize()
+        public void Initialize(AgentEntity agentEntity)
         {
             // Set Width and Height
             int IconWidth = 19;
@@ -148,15 +148,10 @@ namespace KGUI
             Init = true;
         }
 
-        void DrawHealthBar(Contexts contexts)
+        void DrawHealthBar(AgentEntity agentEntity)
         {
-            IGroup<AgentEntity> Playerentities =
-            contexts.agent.GetGroup(AgentMatcher.AgentStats);
-            foreach (var entity in Playerentities)
-            {
-                playerHealth = entity.agentStats.Health;
-            }
-
+            playerHealth = agentEntity.agentStats.Health;
+            
             ClearHealthBar();
 
             UpdateHealthBar((int)playerHealth);
@@ -181,13 +176,13 @@ namespace KGUI
             GUI.Box(fillPosition, GUIContent.none);
         }
 
-        public void Draw(Contexts entitasContext)
+        public void Draw(AgentEntity agentEntity)
         {
             if(Init)
             {
                 GUI.DrawTexture(borderPosition, barBorder.Texture);
 
-                DrawHealthBar(entitasContext);
+                DrawHealthBar(agentEntity);
 
                 // Update Div Textures for under 25
                 if (playerHealth < 25)

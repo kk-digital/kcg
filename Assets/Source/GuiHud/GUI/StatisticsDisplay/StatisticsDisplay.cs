@@ -33,7 +33,7 @@ namespace KGUI.Statistics
 
         public static bool canDraw = true;
 
-        public static void DrawStatistics(PlanetState planet)
+        public static void DrawStatistics(ref PlanetState planet)
         {
             if(canDraw)
             {

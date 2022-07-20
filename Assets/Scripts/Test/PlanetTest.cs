@@ -3,6 +3,7 @@ using Enums.Tile;
 using KMath;
 using Item;
 using Animancer;
+using HUD;
 using PlanetTileMap;
 
 namespace Planet.Unity
@@ -22,7 +23,6 @@ namespace Planet.Unity
         int inventoryID;
         int toolBarID;
 
-
         public static int HumanoidCount = 1;
         GameObject[] HumanoidArray;
 
@@ -31,8 +31,9 @@ namespace Planet.Unity
         AnimationClip WalkAnimationClip ;
         AnimationClip GolfSwingClip;
 
-
         AnimancerComponent[] AnimancerComponentArray;
+
+        HUDManager hudManager;
 
         static bool Init = false;
 
@@ -47,7 +48,6 @@ namespace Planet.Unity
 
         public void Update()
         {
-
             bool run = Input.GetKeyDown(KeyCode.R);
             bool walk = Input.GetKeyDown(KeyCode.W);
             bool idle = Input.GetKeyDown(KeyCode.I);
@@ -103,8 +103,11 @@ namespace Planet.Unity
         {
             if (Init)
             {
-                // Draw Player Status UI
-                KGUI.PlayerStatusUIManager.Update();
+                // Draw HUD UI
+                hudManager.Update(Player);
+
+                // Draw Statistics
+                KGUI.Statistics.StatisticsDisplay.DrawStatistics(ref Planet);
             }
         }
 
@@ -162,7 +165,6 @@ namespace Planet.Unity
             }
 
 
-            
             // create an animancer object and give it a reference to the Animator component
             for(int i = 0; i < HumanoidCount; i++)
             {
@@ -212,8 +214,7 @@ namespace Planet.Unity
             inventoryID = Player.agentInventory.InventoryID;
             toolBarID = Player.agentToolBar.ToolBarID;
 
-            // Player Status UI Init
-            KGUI.PlayerStatusUIManager.Initialize(Planet.EntitasContext, Player);
+            hudManager = new HUDManager(Planet.EntitasContext, Player);
 
             // Admin API Spawn Items
             Admin.AdminAPI.SpawnItem(Enums.ItemType.Pistol, Planet.EntitasContext);
@@ -221,6 +222,7 @@ namespace Planet.Unity
 
             // Admin API Add Items
             Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.PlacementTool, Planet.EntitasContext);
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.PlacementToolBack, Planet.EntitasContext);
             Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.RemoveTileTool, Planet.EntitasContext);
             Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.SpawnEnemySlimeTool, Planet.EntitasContext);
             Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.MiningLaserTool, Planet.EntitasContext);

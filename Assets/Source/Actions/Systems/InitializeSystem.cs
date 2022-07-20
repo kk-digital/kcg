@@ -59,7 +59,8 @@ namespace Action
             GameState.ActionPropertyManager.SetLogicFactory(new MoveActionCreator());
             GameState.ActionPropertyManager.Movement();
             GameState.ActionPropertyManager.EndActionPropertyType();
-            
+
+            // Create Place Tile Tool Front
             CreateToolActionPlaceTile(entitasContext, TileID.Ore1, MapLayerType.Front);
 
             // Create Place Tile Tool Front
@@ -73,6 +74,9 @@ namespace Action
 
             // Create Place Tile Tool Front
             CreateToolActionPlaceTile(entitasContext, TileID.Moon, MapLayerType.Front);
+
+            // Create Place Tile Tool Back
+            CreateToolActionPlaceTile(entitasContext, TileID.Background, MapLayerType.Back);
 
             // Create Place Tile Tool Mid
             CreateToolActionPlaceTile(entitasContext, TileID.Pipe, MapLayerType.Mid);

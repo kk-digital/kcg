@@ -1,26 +1,27 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Entitas;
+using KGUI.Elements;
 
-namespace KGUI
+namespace KGUI.PlayerStatus
 {
-    public class FuelBarUI
+    public class OxygenBarUI
     {
         // Init
         private static bool Init;
 
-        // Fuel Bar Icon Position
+        // Oxygen Bar Icon Position
         public Rect iconPosition = new Rect(7, 140, 60, -60);
 
-        // Fuel Bar Icon Sprite
+        // Oxygen Bar Icon Sprite
         Sprites.Sprite icon;
         Sprites.Sprite fill;
 
         // Image
-        public GameObject fuelBar;
+        public ProgressBar oxygenBar;
         private GameObject iconCanvas;
 
-        public void Initialize(Contexts contexts)
+        public void Initialize(AgentEntity agentEntity)
         {
             // Set Width and Height
             int IconWidth = 19;
@@ -28,7 +29,7 @@ namespace KGUI
             Vector2Int iconPngSize = new Vector2Int(IconWidth, IconHeight);
 
             // Load image from file
-            var iconSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\UserInterface\\Icons\\Fuel\\hud_status_fuel.png", IconWidth, IconHeight);
+            var iconSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\UserInterface\\Icons\\Oxygen\\hud_status_oxygen.png", IconWidth, IconHeight);
 
             // Set Sprite ID from Sprite Atlas
             int iconID = GameState.SpriteAtlasManager.CopySpriteToAtlas(iconSheet, 0, 0, Enums.AtlasType.Particle);
@@ -76,79 +77,48 @@ namespace KGUI
                 TextureCoords = new Vector4(0, 0, 1, 1)
             };
 
-            // Fuel Bar Initializon
-            iconCanvas = new GameObject("Fuel Icon");
+            // Oxygen Bar Initializon
+            iconCanvas = new GameObject("Oxygen Icon");
             iconCanvas.transform.parent = GameObject.Find("Canvas").transform;
             iconCanvas.AddComponent<RectTransform>();
             iconCanvas.AddComponent<Image>();
 
-            // Add Components and setup game object
+            // Add Components and setup agent object
             Sprite iconBar = Sprite.Create(icon.Texture, new Rect(0.0f, 0.0f, IconWidth, IconHeight), new Vector2(0.5f, 0.5f));
             iconCanvas.GetComponent<Image>().sprite = iconBar;
 
-            // Calculate position using aspect ratio
             if (Camera.main.aspect >= 1.7f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, -52.6f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 5.9f, 4.873917f);
             else if (Camera.main.aspect >= 1.5f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, -49.2f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, 9.6f, 4.873917f);
             else
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 16.6f, 4.873917f);
+                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 75.3f, 4.873917f);
 
             iconCanvas.GetComponent<RectTransform>().localScale = new Vector3(0.6f, -0.6f, 0.5203559f);
 
-            // Fuel Bar Initializon
-            fuelBar = new GameObject("Fuel Bar");
-            fuelBar.transform.parent = iconCanvas.transform;
-            fuelBar.AddComponent<RectTransform>();
-            fuelBar.AddComponent<Image>();
-
-            // Add Components and setup game object
+            // Add Components and setup agent object
             Sprite bar = Sprite.Create(fill.Texture, new Rect(0.0f, 0.0f, FillWidth, FillHeight), new Vector2(0.5f, 0.5f));
 
-            fuelBar.GetComponent<Image>().sprite = bar;
-            fuelBar.GetComponent<Image>().raycastTarget = true;
-            fuelBar.GetComponent<Image>().maskable = true;
-            fuelBar.GetComponent<Image>().type = Image.Type.Filled;
-            fuelBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
-            fuelBar.GetComponent<Image>().fillOrigin = 0;
-            IGroup<AgentEntity> Playerentities =
-            contexts.agent.GetGroup(AgentMatcher.AgentStats);
-            foreach (var entity in Playerentities)
-            {
-                float fuelValue = entity.agentStats.Fuel;
-                if (fuelValue <= 0)
-                {
-                    fuelValue = 0;
-                }
-                fuelBar.GetComponent<Image>().fillAmount = fuelValue / 100;
-            }
-            fuelBar.GetComponent<Image>().fillClockwise = true;
-
-            fuelBar.GetComponent<RectTransform>().localPosition = new Vector3(-0.4f, -0.1f, 4.873917f);
-
-            fuelBar.GetComponent<RectTransform>().localScale = new Vector3(0.8566527f, 0.8566527f, 0.3714702f);
+            // Oxygen Bar Initializon
+            oxygenBar = new ProgressBar("Oxygen Bar", iconCanvas.transform, bar, Image.FillMethod.Radial360, agentEntity.agentStats.Oxygen / 100, agentEntity);
+            oxygenBar.SetPosition(new Vector3(-0.4f, -0.1f, 4.873917f));
+            oxygenBar.SetScale(new Vector3(0.8566527f, 0.8566527f, 0.3714702f));
 
             Init = true;
         }
 
-        public void Update(AgentEntity playerEntity)
+        public void Update(AgentEntity agentEntity)
         {
-            if(Init && playerEntity != null)
+            if (Init)
             {
-                float fuelValue = playerEntity.agentStats.Fuel;
-                if (fuelValue <= 0)
-                {
-                    fuelValue = 0;
-                }
-                fuelBar.GetComponent<Image>().fillAmount = fuelValue / 100;
+                oxygenBar.Update(agentEntity.agentStats.Oxygen / 100);
 
-                // Calculate position using aspect ratio
                 if (Camera.main.aspect >= 1.7f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, -52.6f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 5.9f, 4.873917f);
                 else if (Camera.main.aspect >= 1.5f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, -49.2f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, 9.6f, 4.873917f);
                 else
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 16.6f, 4.873917f);
+                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 75.3f, 4.873917f);
             }
         }
     }

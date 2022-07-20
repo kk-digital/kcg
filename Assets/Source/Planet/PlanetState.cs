@@ -24,6 +24,7 @@ namespace Planet
         public ParticleEmitterList ParticleEmitterList;
         public ParticleList ParticleList;
         public ItemParticleList ItemParticleList;
+        public CameraFollow cameraFollow;
 
         public Contexts EntitasContext;
 
@@ -37,6 +38,7 @@ namespace Planet
             ParticleEmitterList = new ParticleEmitterList();
             ParticleList = new ParticleList();
             ItemParticleList = new ItemParticleList();
+            cameraFollow = new CameraFollow();
 
             EntitasContext = new Contexts();
         }
@@ -258,6 +260,7 @@ namespace Planet
             GameState.ParticleUpdateSystem.Update(ref this, EntitasContext.particle);
             GameState.ProjectileMovementSystem.Update(EntitasContext.projectile);
             GameState.ProjectileCollisionSystem.UpdateEx(ref this);
+            cameraFollow.Update(ref this);
 
             TileMap.UpdateTileSprites();
             

@@ -6,6 +6,39 @@ namespace ECSInput
 {
     public class InputProcessSystem
     {
+        private Enums.Mode mode = Enums.Mode.CameraOnly;
+
+        private void UpdateMode(ref Planet.PlanetState planetState, AgentEntity agentEntity)
+        {
+            agentEntity.physicsMovable.Invulnerable = false;
+            Camera.main.gameObject.GetComponent<CameraMove>().enabled = false;
+            planetState.cameraFollow.canFollow = false;
+
+            if (mode == Enums.Mode.Agent)
+            {
+                Camera.main.gameObject.GetComponent<CameraMove>().enabled = false;
+                planetState.cameraFollow.canFollow = true;
+
+            }
+            else if (mode == Enums.Mode.Camera)
+            {
+                Camera.main.gameObject.GetComponent<CameraMove>().enabled = true;
+                planetState.cameraFollow.canFollow = false;
+
+            }
+            else if(mode == Enums.Mode.CameraOnly)
+            {
+                Camera.main.gameObject.GetComponent<CameraMove>().enabled = true;
+                Camera.main.gameObject.GetComponent<CameraMove>().enabled = false;
+            }
+            else if (mode == Enums.Mode.Creative)
+            {
+                Camera.main.gameObject.GetComponent<CameraMove>().enabled = true;
+                planetState.cameraFollow.canFollow = false;
+                agentEntity.physicsMovable.Invulnerable = true;
+            }
+        }
+
         public void Update(ref Planet.PlanetState planet)
         {
             Contexts contexts = planet.EntitasContext;
@@ -256,11 +289,18 @@ namespace ECSInput
 
             }
 
-            // Remove Tile At Cursor Position.
+            // Remove Tile Front At Cursor Position.
             if (Input.GetKeyDown(KeyCode.F2))
             {
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 planet.TileMap.RemoveFrontTile((int)worldPosition.x, (int)worldPosition.y);
+            }
+
+            // Remove Tile Back At Cursor Position.
+            if (Input.GetKeyDown(KeyCode.F3))
+            {
+                Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                planet.TileMap.RemoveBackTile((int)worldPosition.x, (int)worldPosition.y);
             }
 
             //  Open Inventory with Tab.
@@ -403,6 +443,22 @@ namespace ECSInput
                      planet.AddFloatingText(item.itemType.Type.ToString(), 2.0f, Vec2f.Zero, new Vec2f(entity.physicsPosition2D.Value.X + 0.4f,
                          entity.physicsPosition2D.Value.Y));
                 }
+
+                            // Remove Tile Back At Cursor Position.
+            if (Input.GetKeyDown(KeyCode.BackQuote))
+            {
+                if (mode == Enums.Mode.Agent)
+                    mode = Enums.Mode.Camera;
+                else if (mode == Enums.Mode.Camera)
+                    mode = Enums.Mode.CameraOnly;
+                else if (mode == Enums.Mode.CameraOnly)
+                    mode = Enums.Mode.Creative;
+                else if (mode == Enums.Mode.Creative)
+                    mode = Enums.Mode.Agent;
+
+                UpdateMode(ref planet, entity);
+
+            }
             }
         }
     }

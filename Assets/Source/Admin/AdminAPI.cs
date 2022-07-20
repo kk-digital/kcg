@@ -56,8 +56,12 @@ namespace Admin
                     // If chunk is empty/air make it black
                     if (tileMap.GetFrontTile(x, y).ID == Enums.Tile.TileID.Air)
                         Gizmos.color = Color.black;
-                    else // If chunk is not empty make it green
+                    if (tileMap.GetFrontTile(x, y).ID != Enums.Tile.TileID.Air)
                         Gizmos.color = Color.green;
+                    if (tileMap.GetBackTile(x, y).ID != Enums.Tile.TileID.Air)
+                        Gizmos.color = Color.cyan;
+                    if (tileMap.GetMidTile(x, y).ID != Enums.Tile.TileID.Air)
+                        Gizmos.color = Color.yellow;
 
                     if (!Utility.ObjectMesh.isOnScreen(x, y))
                         Gizmos.color = Color.blue;
