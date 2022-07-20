@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Entitas;
+using KGUI.Elements;
 
 namespace KGUI.PlayerStatus
 {
@@ -16,8 +17,8 @@ namespace KGUI.PlayerStatus
         Sprites.Sprite icon;
         Sprites.Sprite fill;
 
-        // Image
-        public GameObject fuelBar;
+        // Progress Bar
+        public ProgressBar progressBar;
         private GameObject iconCanvas;
 
         public void Initialize(AgentEntity agentEntity)
@@ -96,32 +97,13 @@ namespace KGUI.PlayerStatus
 
             iconCanvas.GetComponent<RectTransform>().localScale = new Vector3(0.6f, -0.6f, 0.5203559f);
 
-            // Fuel Bar Initializon
-            fuelBar = new GameObject("Fuel Bar");
-            fuelBar.transform.parent = iconCanvas.transform;
-            fuelBar.AddComponent<RectTransform>();
-            fuelBar.AddComponent<Image>();
-
             // Add Components and setup game object
             Sprite bar = Sprite.Create(fill.Texture, new Rect(0.0f, 0.0f, FillWidth, FillHeight), new Vector2(0.5f, 0.5f));
 
-            fuelBar.GetComponent<Image>().sprite = bar;
-            fuelBar.GetComponent<Image>().raycastTarget = true;
-            fuelBar.GetComponent<Image>().maskable = true;
-            fuelBar.GetComponent<Image>().type = Image.Type.Filled;
-            fuelBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
-            fuelBar.GetComponent<Image>().fillOrigin = 0;
-            float fuelValue = agentEntity.agentStats.Fuel;
-            if (fuelValue <= 0)
-            {
-                fuelValue = 0;
-            }
-            fuelBar.GetComponent<Image>().fillAmount = fuelValue / 100;
-            fuelBar.GetComponent<Image>().fillClockwise = true;
-
-            fuelBar.GetComponent<RectTransform>().localPosition = new Vector3(-0.4f, -0.1f, 4.873917f);
-
-            fuelBar.GetComponent<RectTransform>().localScale = new Vector3(0.8566527f, 0.8566527f, 0.3714702f);
+            // Fuel Bar Initializon
+            progressBar = new ProgressBar("Fuel Bar",iconCanvas.transform, bar, Image.FillMethod.Radial360, agentEntity.agentStats.Fuel / 100, agentEntity);
+            progressBar.SetPosition(new Vector3(-0.4f, -0.1f, 4.873917f));
+            progressBar.SetScale(new Vector3(0.8566527f, 0.8566527f, 0.3714702f));
 
             Init = true;
         }
@@ -135,7 +117,7 @@ namespace KGUI.PlayerStatus
                 {
                     fuelValue = 0;
                 }
-                fuelBar.GetComponent<Image>().fillAmount = fuelValue / 100;
+                progressBar.Update(fuelValue / 100);
 
                 // Calculate position using aspect ratio
                 if (Camera.main.aspect >= 1.7f)

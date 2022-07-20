@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Entitas;
+using KGUI.Elements;
 
 namespace KGUI.PlayerStatus
 {
@@ -17,7 +18,7 @@ namespace KGUI.PlayerStatus
         Sprites.Sprite fill;
 
         // Image
-        public GameObject waterBar;
+        public ProgressBar waterBar;
         private GameObject iconCanvas;
 
         public void Initialize(AgentEntity agentEntity)
@@ -96,27 +97,13 @@ namespace KGUI.PlayerStatus
 
             iconCanvas.GetComponent<RectTransform>().localScale = new Vector3(0.6f, -0.6f, 0.5203559f);
 
-            // Water Bar Initializon
-            waterBar = new GameObject("Water Bar");
-            waterBar.transform.parent = iconCanvas.transform;
-            waterBar.AddComponent<RectTransform>();
-            waterBar.AddComponent<Image>();
-
             // Add Components and setup game object
             Sprite bar = Sprite.Create(fill.Texture, new Rect(0.0f, 0.0f, FillWidth, FillHeight), new Vector2(0.5f, 0.5f));
 
-            waterBar.GetComponent<Image>().sprite = bar;
-            waterBar.GetComponent<Image>().raycastTarget = true;
-            waterBar.GetComponent<Image>().maskable = true;
-            waterBar.GetComponent<Image>().type = Image.Type.Filled;
-            waterBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
-            waterBar.GetComponent<Image>().fillOrigin = 0;
-            waterBar.GetComponent<Image>().fillAmount = agentEntity.agentStats.Water / 100;
-            waterBar.GetComponent<Image>().fillClockwise = true;
-
-            waterBar.GetComponent<RectTransform>().localPosition = new Vector3(-0.4f, -0.1f, 4.873917f);
-
-            waterBar.GetComponent<RectTransform>().localScale = new Vector3(0.8566527f, 0.8566527f, 0.3714702f);
+            // Water Bar Initializon
+            waterBar = new ProgressBar("Water Bar", iconCanvas.transform, bar, Image.FillMethod.Radial360, agentEntity.agentStats.Water / 100, agentEntity);
+            waterBar.SetPosition(new Vector3(-0.4f, -0.1f, 4.873917f));
+            waterBar.SetScale(new Vector3(0.8566527f, 0.8566527f, 0.3714702f));
 
             Init = true;
         }
@@ -125,9 +112,7 @@ namespace KGUI.PlayerStatus
         {
             if (Init)
             {
-                IGroup<AgentEntity> Playerentities =
-                Contexts.sharedInstance.agent.GetGroup(AgentMatcher.AgentStats);
-                waterBar.GetComponent<Image>().fillAmount = agentEntity.agentStats.Water / 100;
+                waterBar.Update(agentEntity.agentStats.Water / 100);
 
                 if (Camera.main.aspect >= 1.7f)
                     iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 64.9f, 4.873917f);

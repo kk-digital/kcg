@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Entitas;
+using KGUI.Elements;
 
 namespace KGUI.PlayerStatus
 {
@@ -17,7 +18,7 @@ namespace KGUI.PlayerStatus
         Sprites.Sprite fill;
 
         // Image
-        public GameObject oxygenBar;
+        public ProgressBar oxygenBar;
         private GameObject iconCanvas;
 
         public void Initialize(AgentEntity agentEntity)
@@ -95,26 +96,13 @@ namespace KGUI.PlayerStatus
 
             iconCanvas.GetComponent<RectTransform>().localScale = new Vector3(0.6f, -0.6f, 0.5203559f);
 
-            // Oxygen Bar Initializon
-            oxygenBar = new GameObject("Oxygen Bar");
-            oxygenBar.transform.parent = iconCanvas.transform;
-            oxygenBar.AddComponent<RectTransform>();
-            oxygenBar.AddComponent<Image>();
-
             // Add Components and setup agent object
             Sprite bar = Sprite.Create(fill.Texture, new Rect(0.0f, 0.0f, FillWidth, FillHeight), new Vector2(0.5f, 0.5f));
 
-            oxygenBar.GetComponent<Image>().sprite = bar;
-            oxygenBar.GetComponent<Image>().raycastTarget = true;
-            oxygenBar.GetComponent<Image>().maskable = true;
-            oxygenBar.GetComponent<Image>().type = Image.Type.Filled;
-            oxygenBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
-            oxygenBar.GetComponent<Image>().fillOrigin = 0;
-            oxygenBar.GetComponent<Image>().fillAmount = agentEntity.agentStats.Oxygen / 100;
-            oxygenBar.GetComponent<Image>().fillClockwise = true;
-            oxygenBar.GetComponent<RectTransform>().localPosition = new Vector3(-0.4f, -0.1f, 4.873917f);
-
-            oxygenBar.GetComponent<RectTransform>().localScale = new Vector3(0.8566527f, 0.8566527f, 0.3714702f);
+            // Oxygen Bar Initializon
+            oxygenBar = new ProgressBar("Oxygen Bar", iconCanvas.transform, bar, Image.FillMethod.Radial360, agentEntity.agentStats.Oxygen / 100, agentEntity);
+            oxygenBar.SetPosition(new Vector3(-0.4f, -0.1f, 4.873917f));
+            oxygenBar.SetScale(new Vector3(0.8566527f, 0.8566527f, 0.3714702f));
 
             Init = true;
         }
@@ -123,7 +111,7 @@ namespace KGUI.PlayerStatus
         {
             if (Init)
             {
-                oxygenBar.GetComponent<Image>().fillAmount = agentEntity.agentStats.Oxygen / 100;
+                oxygenBar.Update(agentEntity.agentStats.Oxygen / 100);
 
                 if (Camera.main.aspect >= 1.7f)
                     iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 5.9f, 4.873917f);

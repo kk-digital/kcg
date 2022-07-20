@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Entitas;
+using KGUI.Elements;
 
 namespace KGUI.PlayerStatus
 {
@@ -19,7 +20,7 @@ namespace KGUI.PlayerStatus
         Sprites.Sprite fill;
 
         // Image
-        public GameObject foodBar;
+        public ProgressBar foodBar;
         private GameObject iconCanvas;
 
         public void Initialize(AgentEntity agentEntity)
@@ -97,30 +98,13 @@ namespace KGUI.PlayerStatus
 
             iconCanvas.GetComponent<RectTransform>().localScale = new Vector3(0.6f, -0.6f, 0.5203559f);
 
-            // Food Bar Initializon
-            foodBar = new GameObject("Food Bar");
-            foodBar.transform.parent = iconCanvas.transform;
-            foodBar.AddComponent<RectTransform>();
-            foodBar.AddComponent<Image>();
-
             // Add Components and setup game object
             Sprite bar = Sprite.Create(fill.Texture, new Rect(0.0f, 0.0f, FillWidth, FillHeight), new Vector2(0.5f, 0.5f));
 
-            foodBar.GetComponent<Image>().sprite = bar;
-            foodBar.GetComponent<Image>().raycastTarget = true;
-            foodBar.GetComponent<Image>().maskable = true;
-            foodBar.GetComponent<Image>().type = Image.Type.Filled;
-            foodBar.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
-            foodBar.GetComponent<Image>().fillOrigin = 0;
-            float foodValue = agentEntity.agentStats.Food;
-            if (foodValue <= 0)
-            {
-                foodValue = 0;
-            }
-            foodBar.GetComponent<Image>().fillAmount = foodValue / 100;
-            foodBar.GetComponent<Image>().fillClockwise = true;
-            foodBar.GetComponent<RectTransform>().localPosition = new Vector3(-0.4f, -0.1f, 4.873917f);
-            foodBar.GetComponent<RectTransform>().localScale = new Vector3(0.8566527f, 0.8566527f, 0.3714702f);
+            // Food Bar Initializon
+            foodBar = new ProgressBar("Food Bar", iconCanvas.transform, bar, Image.FillMethod.Radial360, agentEntity.agentStats.Food / 100, agentEntity);
+            foodBar.SetPosition(new Vector3(-0.4f, -0.1f, 4.873917f));
+            foodBar.SetScale(new Vector3(0.8566527f, 0.8566527f, 0.3714702f));
 
             Init = true;
         }
@@ -129,7 +113,7 @@ namespace KGUI.PlayerStatus
         {
             if (Init)
             {
-                foodBar.GetComponent<Image>().fillAmount = agentEntity.agentStats.Food / 100;
+                foodBar.Update(agentEntity.agentStats.Food / 100);
 
                 if (Camera.main.aspect >= 1.7f)
                     iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 123.8f, 4.873917f);
