@@ -21,16 +21,16 @@ namespace Scripts {
 
                 state.stars.Add(new());
 
-                state.stars[0].Object.self.mass    = solar_mass;
-                state.stars[0].Object.self.posx    = 0.0f;
-                state.stars[0].Object.self.posy    = 0.0f;
-                state.stars[0].Object.render_orbit = false;
-                state.stars[0].Object.brightness   = 0.08f;
+                state.stars[0].obj.self.mass    = solar_mass;
+                state.stars[0].obj.self.posx    = 0.0f;
+                state.stars[0].obj.self.posy    = 0.0f;
+                state.stars[0].obj.render_orbit = false;
+                state.stars[0].obj.brightness   = 0.08f;
 
                 for(int i = 0; i < inner_planets; i++) {
                     SystemPlanet planet = new SystemPlanet();
 
-                    planet.descriptor.central_body  = state.stars[0].Object.self;
+                    planet.descriptor.central_body  = state.stars[0].obj.self;
                     planet.descriptor.semiminoraxis = 30.0f + (i + 1) * (i + 1) * 10.0f;
                     planet.descriptor.semimajoraxis = planet.descriptor.semiminoraxis + (float)rng.NextDouble() * (i + 3);
                     planet.descriptor.rotation      = (float)rng.NextDouble() * Tools.twopi;
@@ -39,13 +39,13 @@ namespace Scripts {
 
                     state.planets.Add(new());
                     var p = state.planets[state.planets.Count - 1];
-                    p.Object = planet;
+                    p.obj = planet;
                 }
 
                 for(int i = 0; i < outer_planets; i++) {
                     SystemPlanet planet = new SystemPlanet();
 
-                    planet.descriptor.central_body  = state.stars[0].Object.self;
+                    planet.descriptor.central_body  = state.stars[0].obj.self;
                     planet.descriptor.semiminoraxis = 450.0f + (i + 1) * (i + 1) * 40.0f;
                     planet.descriptor.semimajoraxis = planet.descriptor.semiminoraxis + (float)rng.NextDouble() * (i + 10);
                     planet.descriptor.rotation      = (float)rng.NextDouble() * Tools.twopi;
@@ -54,7 +54,7 @@ namespace Scripts {
 
                     state.planets.Add(new());
                     var p = state.planets[state.planets.Count - 1];
-                    p.Object = planet;
+                    p.obj = planet;
                 }
 
                 state.generate_renderers();
@@ -66,7 +66,7 @@ namespace Scripts {
                       last_time    = Time.time;
 
                 foreach(var planet in state.planets)
-                    planet.Object.descriptor.update_position(-current_time);
+                    planet.obj.descriptor.update_position(-current_time);
             }
         }
     }

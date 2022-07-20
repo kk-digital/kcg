@@ -32,9 +32,9 @@ namespace Scripts {
                     float true_anomaly;
 
                     if(descriptor.eccentricity >= 1.0f)
-                        // 0.002f "safety" margin otherwise there is an unpleasant flickering
-                        true_anomaly = -descriptor.true_anomaly_asymptote + 0.001f
-                                     + (descriptor.true_anomaly_asymptote - 0.002f) * 2.0f * i / segments;
+                        // 0.0002f "safety" margin otherwise there is an unpleasant flickering
+                        true_anomaly = -descriptor.true_anomaly_asymptote + 0.0001f
+                                     + (descriptor.true_anomaly_asymptote - 0.0002f) * 2.0f * i / segments;
                     else
                         true_anomaly = descriptor.get_true_anomaly(
                             descriptor.get_eccentric_anomaly_at(

@@ -15,7 +15,6 @@ namespace Scripts {
                 camera = GetComponent<Camera>();
             }
 
-            // Update is called once per frame
             private void Update() {
                 if(Input.GetMouseButton(1) && Input.mousePosition.x < Screen.width * 0.75) {
                     transform.position += Vector3.right * Input.GetAxis("Mouse X") * -0.28f / scale;
@@ -25,6 +24,7 @@ namespace Scripts {
                 scale += Input.GetAxis("Mouse ScrollWheel") * 0.5f * scale;
                 camera.orthographicSize = 20.0f / scale;
 
+                // Scale background with camera to keep background at always the same size
                 if(background != null)
                     background.transform.localScale = new Vector3(5.0f / scale, 5.0f / scale, 1.0f);
             }
@@ -41,7 +41,7 @@ namespace Scripts {
             public float get_width()                     { return Screen.width; }
             public float get_height()                    { return Screen.height; }
 
-            public bool  size_changed() {
+            public bool size_changed() {
                 if(last_aspect == camera.aspect) return false;
 
                 last_aspect = camera.aspect;

@@ -22,8 +22,9 @@ namespace Scripts {
 
                 Color[] pixels    = new Color[width * height];
 
+                // Split random star generation into multiple threads for increased performance.
                 Thread[] Ts       = new Thread[threads];
-                for(int i = 0; i < 8; i++) {
+                for(int i = 0; i < threads; i++) {
                     Ts[i] = new Thread((object data) => {
                         System.Random rand = new System.Random((int)data);
                         

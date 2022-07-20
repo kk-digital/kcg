@@ -91,9 +91,9 @@ namespace Scripts {
                 LastTime = (int)(Time.time * 1000.0f);
 
                 State.stars.Add(new());
-                State.stars[0].Object.self.mass = 5000000.0f;
-                State.stars[0].Object.self.posx = -5.0f;
-                State.stars[0].Object.self.posy = 0.0f;
+                State.stars[0].obj.self.mass = 5000000.0f;
+                State.stars[0].obj.self.posx = -5.0f;
+                State.stars[0].obj.self.posy = 0.0f;
 
                 State.generate_renderers();
 
@@ -107,7 +107,7 @@ namespace Scripts {
                     State.ships.Add(new());
 
                     var s    = State.ships[State.ships.Count - 1];
-                    s.Object = Player.ship;
+                    s.obj = Player.ship;
 
                     UpdatePlayerWeapons();
                 }
@@ -117,7 +117,7 @@ namespace Scripts {
                     Enemies.Add(PendingEnemies[0]);
 
                     var s    = State.ships[State.ships.Count - 1];
-                    s.Object = PendingEnemies[0].ship;
+                    s.obj = PendingEnemies[0].ship;
 
                     PendingEnemies.RemoveAt(0);
                 }
@@ -148,7 +148,7 @@ namespace Scripts {
 
                     if(Projectile.UpdatePosition(current_millis / 1000.0f)) {
                         foreach(var s in State.ships) {
-                            SystemShip ship = s.Object;
+                            SystemShip ship = s.obj;
 
                             if(ship == Projectile.Self) continue;
 
@@ -173,7 +173,7 @@ namespace Scripts {
                 }
 
                 for(int i = 0; i < State.ships.Count; i++) {
-                    SystemShip ship = State.ships[i].Object;
+                    SystemShip ship = State.ships[i].obj;
 
                     foreach(ShipWeapon Weapon in ship.weapons) {
                         foreach(ShipWeaponProjectile Projectile in Weapon.projectiles_fired) {
@@ -191,7 +191,7 @@ namespace Scripts {
 
                     if(ship.destroyed) {
                         for(int j = 0; j < State.ships.Count; j++)
-                            if(State.ships[j].Object == ship) {
+                            if(State.ships[j].obj == ship) {
                                 State.ships.RemoveAt(j);
                                 break;
                             }
@@ -233,7 +233,7 @@ namespace Scripts {
             public void RespawnPlayer() {
                 if(Player != null) {
                     for(int i = 0; i < State.ships.Count; i++)
-                        if(State.ships[i].Object == Player.ship) {
+                        if(State.ships[i].obj == Player.ship) {
                             State.ships.RemoveAt(i);
                             break;
                         }
@@ -498,7 +498,7 @@ namespace Scripts {
             public void DeleteEnemy() {
                 if(SelectedEnemy != null && Enemies.Contains(SelectedEnemy)) {
                     for(int i = 0; i < State.ships.Count; i++)
-                        if(State.ships[i].Object == SelectedEnemy.ship) {
+                        if(State.ships[i].obj == SelectedEnemy.ship) {
                             State.ships.RemoveAt(i);
                             break;
                         }

@@ -6,9 +6,6 @@ using Source.SystemView;
 namespace Scripts {
     namespace SystemView {
         public class ShipWeaponProjectile {
-            // todo: is this even needed?        v
-            public OrbitingObjectDescriptor Descriptor;
-
             public SystemShip Self;
             public ShipWeapon Weapon;
 
@@ -54,7 +51,7 @@ namespace Scripts {
                     float      target_distance = 0.0f;
 
                     foreach(var s in state.ships) {
-                        SystemShip ship = s.Object;
+                        SystemShip ship = s.obj;
 
                         if(ship != Self) {
                             if(detection_angle != 0.0f) {
@@ -105,21 +102,9 @@ namespace Scripts {
                     }
                 }
 
-                if(Descriptor == null) // Linear trajectory
-                {
-                    Body.posx += dt * Body.velx;
-                    Body.posy += dt * Body.vely;
-                }
-                /*else // Orbital trajectory todo
-                {
-                    Descriptor.RotationalPosition += dt / Descriptor.GetDistanceFromCenter() / Descriptor.GetDistanceFromCenter();
-
-                    float[] Pos = Descriptor.GetPosition();
-
-                    PosX = Pos[0];
-                    PosY = Pos[1];
-                }*/
-
+                Body.posx += dt * Body.velx;
+                Body.posy += dt * Body.vely;
+                
                 return true;
             }
 

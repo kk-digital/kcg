@@ -221,16 +221,16 @@ namespace Scripts {
                                               0.0f);
 
                     rudder_renderer.SetPositions(vertices);
-                    rudder_renderer.positionCount  = 2;
+                    rudder_renderer.positionCount = 2;
 
-                    rudder_renderer.startWidth     =
-                    rudder_renderer.endWidth       = 0.1f / camera_controller.scale;
+                    rudder_renderer.startWidth    =
+                    rudder_renderer.endWidth      = 0.1f / camera_controller.scale;
                 } else {
                     vertices[0] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
                     vertices[1] = new Vector3(ship.self.posx, ship.self.posy, 0.0f);
 
                     rudder_renderer.SetPositions(vertices);
-                    rudder_renderer.positionCount  = 0;
+                    rudder_renderer.positionCount = 0;
                 }
 
                 if(ship.docking_autopilot_tick(current_time, 0.1f * system_scale, stations_orbiting)) return;
@@ -405,7 +405,7 @@ namespace Scripts {
 
                 if (render_orbit) {
                     if (ship.descriptor.central_body == null)
-                        ship.descriptor.central_body = state.stars[0].Object.self;
+                        ship.descriptor.central_body = state.stars[0].obj.self;
 
                     SpaceObject strongest_gravity_object = null;
                     float g = 0.0f;

@@ -51,20 +51,21 @@ namespace Scripts {
 
                 for(int x = 0; x < width; x++)
                     for(int y = 0; y < height; y++) {
-                        arrows[x, y]                    = new ArrowInfo();
-                        arrows[x, y].obj                = new GameObject();
-                        arrows[x, y].obj.name           = "Gravity direction renderer (" + x + ", " + y + ")";
-                        arrows[x, y].line               = arrows[x, y].obj.AddComponent<LineRenderer>();
-                        arrows[x, y].line.material      = mat;
-                        arrows[x, y].line.useWorldSpace = true;
-                        arrows[x, y].line.startColor    =
-                        arrows[x, y].line.endColor      = Color.white;
-                        arrows[x, y].vertices           = new Vector3[5];
-                        arrows[x, y].vertices[0]        = new Vector3();
-                        arrows[x, y].vertices[1]        = new Vector3();
-                        arrows[x, y].vertices[2]        = new Vector3();
-                        arrows[x, y].vertices[3]        = new Vector3();
-                        arrows[x, y].vertices[4]        = new Vector3();
+                        arrows[x, y]                      = new ArrowInfo();
+                        arrows[x, y].obj                  = new GameObject();
+                        arrows[x, y].obj.name             = "Gravity direction renderer (" + x + ", " + y + ")";
+                        arrows[x, y].obj.transform.parent = transform;
+                        arrows[x, y].line                 = arrows[x, y].obj.AddComponent<LineRenderer>();
+                        arrows[x, y].line.material        = mat;
+                        arrows[x, y].line.useWorldSpace   = true;
+                        arrows[x, y].line.startColor      =
+                        arrows[x, y].line.endColor        = Color.white;
+                        arrows[x, y].vertices             = new Vector3[5];
+                        arrows[x, y].vertices[0]          = new Vector3();
+                        arrows[x, y].vertices[1]          = new Vector3();
+                        arrows[x, y].vertices[2]          = new Vector3();
+                        arrows[x, y].vertices[3]          = new Vector3();
+                        arrows[x, y].vertices[4]          = new Vector3();
                     }
             }
 

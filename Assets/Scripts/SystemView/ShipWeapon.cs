@@ -70,6 +70,7 @@ namespace Scripts {
             };
 
             // Pre defined weapon types
+            // Regular single shot cannon
             public static ShipWeapon add_cannon(SystemShip self, SystemState state, int flags) {
                 ShipWeapon cannon = new ShipWeapon();
 
@@ -91,6 +92,7 @@ namespace Scripts {
                 return cannon;
             }
 
+            // Autocannon shoots 2x as fast as cannon, but 2/3 damage
             public static ShipWeapon add_auto_cannon(SystemShip self, SystemState state, int flags) {
                 ShipWeapon cannon = new ShipWeapon();
 
@@ -112,6 +114,7 @@ namespace Scripts {
                 return cannon;
             }
 
+            // Tri cannon fires 3 shots at once, each shot does same damage as auto cannon, but shoots a little over 3x slower
             public static ShipWeapon add_tri_cannon(SystemShip self, SystemState state, int flags) {
                 ShipWeapon cannon = new ShipWeapon();
 
@@ -134,6 +137,7 @@ namespace Scripts {
                 return cannon;
             }
 
+            // Very high damage low fire rate weapon
             public static ShipWeapon add_railgun(SystemShip self, SystemState state, int flags) {
                 ShipWeapon railgun = new ShipWeapon();
 
@@ -155,6 +159,7 @@ namespace Scripts {
                 return railgun;
             }
 
+            // Slow missile that tracks projectiles in a 45 degree cone
             public static ShipWeapon add_torpedo(SystemShip self, SystemState state, int flags) {
                 ShipWeapon torpedo = new ShipWeapon();
 
@@ -200,24 +205,16 @@ namespace Scripts {
 
                 cooldown = attack_speed;
 
-                ShipWeaponProjectile projectile = new ShipWeaponProjectile();
+                ShipWeaponProjectile projectile   = new ShipWeaponProjectile();
 
-                /*if (Self.Descriptor != null) // orbit
-                {
-                    // todo
-                    // is this even needed? a straight line approximation might be fine either way as ships are fighting within very short range, right?
-                }
-                else // straight line
-                {*/
-                    projectile.Self = self;
-                    projectile.Weapon = this;
+                projectile.Self                   = self;
+                projectile.Weapon                 = this;
 
-                    projectile.Body.posx = self.self.posx;
-                    projectile.Body.posy = self.self.posy;
+                projectile.Body.posx              = self.self.posx;
+                projectile.Body.posy              = self.self.posy;
 
-                    projectile.Body.velx = (target.self.posx - self.self.posx) / d * projectile_velocity;
-                    projectile.Body.vely = (target.self.posy - self.self.posy) / d * projectile_velocity;
-                //}
+                projectile.Body.velx              = (target.self.posx - self.self.posx) / d * projectile_velocity;
+                projectile.Body.vely              = (target.self.posy - self.self.posy) / d * projectile_velocity;
 
                 projectile.TimeElapsed            = 0.0f;
                 projectile.LifeSpan               = range / projectile_velocity;
@@ -229,13 +226,13 @@ namespace Scripts {
                 projectile.ShieldDamageMultiplier = shield_damage_multiplier;
                 projectile.HullDamageMultiplier   = hull_damage_multiplier;
 
-                projectile.Damage      = damage;
+                projectile.Damage                 = damage;
 
-                projectile.seeking     = (flags & (int)WeaponFlags.WEAPON_SEEKING) != 0;
-                projectile.rocket      = (flags & (int)WeaponFlags.WEAPON_ROCKET)  != 0;
-                projectile.acc         = acc;
-                projectile.state       = state;
-                projectile.penetration = penetration;
+                projectile.seeking                = (flags & (int)WeaponFlags.WEAPON_SEEKING) != 0;
+                projectile.rocket                 = (flags & (int)WeaponFlags.WEAPON_ROCKET)  != 0;
+                projectile.acc                    = acc;
+                projectile.state                  = state;
+                projectile.penetration            = penetration;
 
                 projectiles_fired.Add(projectile);
 
@@ -482,7 +479,7 @@ namespace Scripts {
                     target_info[] targets = new target_info[penetration];
 
                     foreach(var s in state.ships) {
-                        SystemShip ship = s.Object;
+                        SystemShip ship = s.obj;
 
                         if(ship == self) continue;
 

@@ -88,6 +88,9 @@ namespace Source {
                 destroyed = true;
             }
 
+            // Gradually rotates the ship towards the given angle
+            // Must be called each tick until the angle is reached
+
             public void rotate_to(float angle, float current_time) {
                 while(rotation > Tools.twopi) rotation -= Tools.twopi;
                 while(rotation < 0.0f)        rotation  = Tools.twopi + rotation;
@@ -143,6 +146,9 @@ namespace Source {
                 if(rotation - 0.005f < angle && rotation + 0.005f > angle) { rotation = angle; self.angular_vel = 0.0f; }
             }
 
+            // Accelerates the ship in the current direction
+            // Must be constantly called each tick while accelerating
+
             public void accelerate(float current_time) {
                 float accx = (float)Math.Cos(rotation) * acceleration;
                 float accy = (float)Math.Sin(rotation) * acceleration;
@@ -158,6 +164,9 @@ namespace Source {
 
                 descriptor.change_frame_of_reference(descriptor.central_body);
             }
+
+            // Keeps the ship moving linearly along it's current velocity
+            // Note: When this function is called the ship is unaffected by gravity
 
             public void transition(float current_time) {
                 self.posx += self.velx * current_time;

@@ -18,7 +18,7 @@ namespace Scripts {
 
             public  int damage;
             public  int firing_rate;
-            public  int last_millis;
+            private int last_millis;
             public  int cooldown;
 
             public  float shield_penetration;
@@ -53,7 +53,6 @@ namespace Scripts {
 
             // todo apply gravity to laser tower
 
-            // Start is called before the first frame update
             void Start() {
                 rand                               = new System.Random();
 
@@ -117,7 +116,6 @@ namespace Scripts {
                 laser_renderer.endColor            = laser_color;
             }
 
-            // Update is called once per frame
             void Update() {
                 sr.transform.position              = new Vector3(posx, posy, -0.1f);
                 sr.transform.localScale            = new Vector3(5.0f / camera.scale,
@@ -213,7 +211,7 @@ namespace Scripts {
                 if(target == null) {
                     if(state != null)
                         foreach(var s in state.ships) {
-                            SystemShip ship = s.Object;
+                            SystemShip ship = s.obj;
 
                             float DistanceX       = ship.self.posx - posx;
                             float DistanceY       = ship.self.posy - posy;

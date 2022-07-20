@@ -120,10 +120,10 @@ namespace Scripts {
 
                     State.stars.Add(new());
 
-                    State.stars[i].Object.self.mass                    = SunMass * (float)rnd.NextDouble() * (i + 1);
-                    State.stars[i].Object.self.posx                    = ((float)rnd.NextDouble() * 16.0f - 64.0f) * system_scale;
-                    State.stars[i].Object.self.posy                    = ((float)rnd.NextDouble() * 16.0f -  8.0f) * system_scale;
-                    State.stars[i].Object.render_orbit                 = StarCount > 1;
+                    State.stars[i].obj.self.mass                    = SunMass * (float)rnd.NextDouble() * (i + 1);
+                    State.stars[i].obj.self.posx                    = ((float)rnd.NextDouble() * 16.0f - 64.0f) * system_scale;
+                    State.stars[i].obj.self.posy                    = ((float)rnd.NextDouble() * 16.0f -  8.0f) * system_scale;
+                    State.stars[i].obj.render_orbit                 = StarCount > 1;
 
                 }
 
@@ -134,12 +134,12 @@ namespace Scripts {
                         do j = rnd.Next(StarCount);
                         while(j == i);
 
-                        State.stars[i].Object.descriptor.semiminoraxis = (float)rnd.NextDouble() * 32.0f * system_scale;
-                        State.stars[i].Object.descriptor.semimajoraxis = (float)rnd.NextDouble() * 32.0f * system_scale + State.stars[i].Object.descriptor.semiminoraxis;
-                        State.stars[i].Object.descriptor.rotation      = (float)rnd.NextDouble() * Tools.twopi;
-                        State.stars[i].Object.descriptor.rotation      = (float)rnd.NextDouble() * Tools.twopi;
-                        State.stars[i].Object.descriptor.mean_anomaly  = (float)rnd.NextDouble() * Tools.twopi;
-                        State.stars[i].Object.descriptor.central_body  = State.stars[j].Object.self;
+                        State.stars[i].obj.descriptor.semiminoraxis = (float)rnd.NextDouble() * 32.0f * system_scale;
+                        State.stars[i].obj.descriptor.semimajoraxis = (float)rnd.NextDouble() * 32.0f * system_scale + State.stars[i].obj.descriptor.semiminoraxis;
+                        State.stars[i].obj.descriptor.rotation      = (float)rnd.NextDouble() * Tools.twopi;
+                        State.stars[i].obj.descriptor.rotation      = (float)rnd.NextDouble() * Tools.twopi;
+                        State.stars[i].obj.descriptor.mean_anomaly  = (float)rnd.NextDouble() * Tools.twopi;
+                        State.stars[i].obj.descriptor.central_body  = State.stars[j].obj.self;
 
                     }
 
@@ -147,7 +147,7 @@ namespace Scripts {
 
                     SystemPlanet Planet = new SystemPlanet();
 
-                    Planet.descriptor.central_body  = State.stars[0].Object.self;
+                    Planet.descriptor.central_body  = State.stars[0].obj.self;
                     Planet.descriptor.semiminoraxis = (30.0f + (i + 1) * (i + 1) * 10) * system_scale;
                     Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + ((float)rnd.NextDouble() * (i + 5) * system_scale);
                     Planet.descriptor.rotation      = (float)rnd.NextDouble() * Tools.twopi;
@@ -156,7 +156,7 @@ namespace Scripts {
 
                     State.planets.Add(new());
                     var p = State.planets[State.planets.Count - 1];
-                    p.Object = Planet;
+                    p.obj = Planet;
 
                 }
 
@@ -164,8 +164,8 @@ namespace Scripts {
 
                     SystemPlanet Planet = new SystemPlanet();
 
-                    Planet.descriptor.central_body  = State.stars[0].Object.self;
-                    Planet.descriptor.semiminoraxis = State.planets[InnerPlanets - 1].Object.descriptor.semimajoraxis + ((i + 3) * (i + 3) * 10 * system_scale);
+                    Planet.descriptor.central_body  = State.stars[0].obj.self;
+                    Planet.descriptor.semiminoraxis = State.planets[InnerPlanets - 1].obj.descriptor.semimajoraxis + ((i + 3) * (i + 3) * 10 * system_scale);
                     Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + ((float)rnd.NextDouble() * i / 20.0f) * system_scale;
                     Planet.descriptor.rotation      = (float)rnd.NextDouble() * Tools.twopi;
                     Planet.descriptor.mean_anomaly  = (float)rnd.NextDouble() * Tools.twopi;
@@ -173,7 +173,7 @@ namespace Scripts {
 
                     State.planets.Add(new());
                     var p = State.planets[State.planets.Count - 1];
-                    p.Object = Planet;
+                    p.obj = Planet;
 
                     for(int j = 0; j < rnd.Next(i + 1); j++) {
 
@@ -188,7 +188,7 @@ namespace Scripts {
 
                         State.planets.Add(new());
                         var m = State.planets[State.planets.Count - 1];
-                        m.Object = Moon;
+                        m.obj = Moon;
 
                     }
 
@@ -198,8 +198,8 @@ namespace Scripts {
 
                     SystemPlanet Planet = new SystemPlanet();
 
-                    Planet.descriptor.central_body  = State.stars[0].Object.self;
-                    Planet.descriptor.semiminoraxis = State.planets[InnerPlanets + OuterPlanets - 1].Object.descriptor.semimajoraxis
+                    Planet.descriptor.central_body  = State.stars[0].obj.self;
+                    Planet.descriptor.semiminoraxis = State.planets[InnerPlanets + OuterPlanets - 1].obj.descriptor.semimajoraxis
                                                     + ((i + 3) * (i + 3) * 31 * system_scale);
                     Planet.descriptor.semimajoraxis = Planet.descriptor.semiminoraxis + (float)rnd.NextDouble() * (i + 1) * 82 * system_scale;
                     Planet.descriptor.rotation      = (float)rnd.NextDouble() * Tools.twopi;
@@ -208,7 +208,7 @@ namespace Scripts {
 
                     State.planets.Add(new());
                     var p = State.planets[State.planets.Count - 1];
-                    p.Object = Planet;
+                    p.obj = Planet;
 
                 }
 
@@ -216,13 +216,13 @@ namespace Scripts {
 
                     State.stations.Add(new());
 
-                    State.stations[i].Object.descriptor.central_body  = State.stars[0].Object.self;
-                    State.stations[i].Object.descriptor.semiminoraxis = ((float)rnd.NextDouble() *
-                                                                        State.planets[InnerPlanets + OuterPlanets - 1].Object.descriptor.semimajoraxis + 4.0f);
-                    State.stations[i].Object.descriptor.semimajoraxis =  (float)rnd.NextDouble() * system_scale + State.stations[i].Object.descriptor.semiminoraxis;
-                    State.stations[i].Object.descriptor.rotation      =  (float)rnd.NextDouble() * Tools.twopi;
-                    State.stations[i].Object.descriptor.mean_anomaly  =  (float)rnd.NextDouble() * Tools.twopi;
-                    State.stations[i].Object.descriptor.self.mass     = StationMass;
+                    State.stations[i].obj.descriptor.central_body  = State.stars[0].obj.self;
+                    State.stations[i].obj.descriptor.semiminoraxis = ((float)rnd.NextDouble() *
+                                                                        State.planets[InnerPlanets + OuterPlanets - 1].obj.descriptor.semimajoraxis + 4.0f);
+                    State.stations[i].obj.descriptor.semimajoraxis =  (float)rnd.NextDouble() * system_scale + State.stations[i].obj.descriptor.semiminoraxis;
+                    State.stations[i].obj.descriptor.rotation      =  (float)rnd.NextDouble() * Tools.twopi;
+                    State.stations[i].obj.descriptor.mean_anomaly  =  (float)rnd.NextDouble() * Tools.twopi;
+                    State.stations[i].obj.descriptor.self.mass     = StationMass;
 
                 }
 
@@ -313,7 +313,7 @@ namespace Scripts {
                 }*/
                 
                 foreach(var ship in State.ships) {
-                    SystemShip s = ship.Object;
+                    SystemShip s = ship.obj;
 
                     if(!s.path_planned)
                         s.path_planned = s.descriptor.plan_path(s.destination, 0.1f * system_scale);
@@ -333,37 +333,37 @@ namespace Scripts {
                     if(StarCount <= 1 || !n_body_gravity) {
 
                         foreach(var p in State.planets)
-                            p.Object.descriptor.update_position(current_time);
+                            p.obj.descriptor.update_position(current_time);
 
                         foreach(var s in State.stations)
-                            s.Object.descriptor.update_position(current_time);
+                            s.obj.descriptor.update_position(current_time);
 
                     } else {
 
                         foreach(var star in State.stars) {
 
-                            SpaceObject strongest_body = gravity_cycle(star.Object.self, current_time);
+                            SpaceObject strongest_body = gravity_cycle(star.obj.self, current_time);
 
                             if(strongest_body != null)
-                                star.Object.descriptor.change_frame_of_reference(strongest_body);
+                                star.obj.descriptor.change_frame_of_reference(strongest_body);
 
                         }
 
                         foreach(var planet in State.planets) {
 
-                            SpaceObject strongest_body = gravity_cycle(planet.Object.self, current_time);
+                            SpaceObject strongest_body = gravity_cycle(planet.obj.self, current_time);
 
                             if(strongest_body != null)
-                                planet.Object.descriptor.change_frame_of_reference(strongest_body);
+                                planet.obj.descriptor.change_frame_of_reference(strongest_body);
 
                         }
 
                         foreach(var station in State.stations) {
 
-                            SpaceObject strongest_body = gravity_cycle(station.Object.self, current_time);
+                            SpaceObject strongest_body = gravity_cycle(station.obj.self, current_time);
 
                             if(strongest_body != null)
-                                station.Object.descriptor.change_frame_of_reference(strongest_body);
+                                station.obj.descriptor.change_frame_of_reference(strongest_body);
 
                         }
 
@@ -456,7 +456,7 @@ namespace Scripts {
                 DockingTargetSelector.value = 0;
 
                 for(int i = 0; i < State.stations.Count; i++)
-                    if(State.stations[i].Object == DockingTarget) {
+                    if(State.stations[i].obj == DockingTarget) {
                         DockingTargetSelector.value = i + 1;
                         break;
                     }
@@ -466,8 +466,8 @@ namespace Scripts {
                 if(i == 0 || i > State.stations.Count) {
                     DockingTarget = null;
                     State.player.ship.disengage_docking_autopilot();
-                } else if(DockingTarget != State.stations[i - 1].Object)
-                    State.player.ship.engage_docking_autopilot(DockingTarget = State.stations[i - 1].Object);
+                } else if(DockingTarget != State.stations[i - 1].obj)
+                    State.player.ship.engage_docking_autopilot(DockingTarget = State.stations[i - 1].obj);
             }
         }
     }

@@ -9,7 +9,6 @@ namespace Scripts {
             public SystemState State;
 
             public Text SpeedText;
-            //public Text DragText;
             public Text AccelerationText;
             public Text GravityText;
             public Text OrbitalPeriodText;
@@ -25,16 +24,6 @@ namespace Scripts {
 
                     float Speed = Tools.magnitude(dvx, dvy);
                     SpeedText.text = "  Velocity: " + String.Format("{0:0.00}", Speed) + " m/s";
-
-                    /*float Drag = 0.0f;
-                    if (State.Player.GravitationalStrength < 1.0f)
-                    {
-                        float GravitationalFactor = 1.0f / (1.0f - State.Player.GravitationalStrength);
-
-                        Drag = Speed * (1.0f / (GravitationalFactor + State.Player.DragFactor));
-                    }
-
-                    DragText.text = "Drag: " + String.Format("{0:0.00}", Drag) + " m/s²";*/
 
                     AccelerationText.text = "Acceleration: " + String.Format("{0:0.00}", State.player.ship.acceleration) + " m/s²  ";
 
