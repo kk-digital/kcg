@@ -1,6 +1,7 @@
 using Enums.Tile;
 using KMath;
 using UnityEngine;
+using System;
 
 public class GameResources
 {
@@ -66,6 +67,9 @@ public class GameResources
     {
         if (!IsInitialized)
         {
+            long beginTime = DateTime.Now.Ticks;
+            
+
             IsInitialized = true;
             // loading the sprite sheets
             LoadingTilePlaceholderSpriteSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Tiles\\Terrains\\placeholder_loadingSprite.png", 32, 32);
@@ -127,6 +131,10 @@ public class GameResources
             CreateParticles();
             CreateParticleEmitters();
             CreateProjectiles();
+
+
+
+            Debug.Log("2d Assets Loading Time: " + (DateTime.Now.Ticks - beginTime) / TimeSpan.TicksPerMillisecond + " miliseconds");
         }
     }
 
