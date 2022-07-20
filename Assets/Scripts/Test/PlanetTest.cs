@@ -201,15 +201,17 @@ namespace Planet.Unity
             Vec2i mapSize = new Vec2i(0, 0);
             Planet = new Planet.PlanetState();
             Planet.Init(mapSize);
-            var camera = Camera.main;
-            Vector3 lookAtPosition = camera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, camera.nearClipPlane));
-            Planet.TileMap = TileMapManager.Load("map.kmap", (int)lookAtPosition.x, (int)lookAtPosition.y);
-            Planet.InitializeSystems(Material, transform);
 
-            //GenerateMap();
+            Planet.InitializeSystems(Material, transform);
+            
+            /*var camera = Camera.main;
+            Vector3 lookAtPosition = camera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, camera.nearClipPlane));
+            Planet.TileMap = TileMapManager.Load("map.kmap", (int)lookAtPosition.x, (int)lookAtPosition.y);*/
+
+            GenerateMap();
             SpawnStuff();
 
-            //TileMapManager.Save(Planet.TileMap, "map.kmap");
+            TileMapManager.Save(Planet.TileMap, "map.kmap");
 
             inventoryID = Player.agentInventory.InventoryID;
             toolBarID = Player.agentToolBar.ToolBarID;
@@ -267,24 +269,24 @@ namespace Planet.Unity
                         {
                             frontTileID = TileID.Moon;
                             backTileID = TileID.Background;
-                            /*if ((int) KMath.Random.Mt19937.genrand_int32() % 10 == 0)
+                            if ((int) KMath.Random.Mt19937.genrand_int32() % 10 == 0)
                             {
                                 int oreRandom = (int) KMath.Random.Mt19937.genrand_int32() % 3;
                                 if (oreRandom == 0)
                                 {
-                                    frontTile.SpriteId2 = GameResources.OreSprite;
+                                    tileMap.GetFrontTile(i, j).SpriteId2 = GameResources.OreSprite;
                                 }
                                 else if (oreRandom == 1)
                                 {
-                                    frontTile.SpriteId2 = GameResources.Ore2Sprite;
+                                    tileMap.GetFrontTile(i, j).SpriteId2 = GameResources.Ore2Sprite;
                                 }
                                 else
                                 {
-                                    frontTile.SpriteId2 = GameResources.Ore3Sprite;
+                                    tileMap.GetFrontTile(i, j).SpriteId2 = GameResources.Ore3Sprite;
                                 }
 
-                                frontTile.DrawType = TileDrawType.Composited;
-                            }*/
+                                tileMap.GetFrontTile(i, j).DrawType = TileDrawType.Composited;
+                            }
                         }
                     }
 
@@ -359,6 +361,19 @@ namespace Planet.Unity
                     tileMap.GetFrontTile(i, j).ID = TileID.Air;
                     tileMap.GetMidTile(i, j).ID = TileID.Pipe;
                 }
+            }
+
+
+            for(int i = 0; i < tileMap.MapSize.X; i++)
+            {
+                tileMap.GetFrontTile(i, 0).ID = TileID.Bedrock;
+                tileMap.GetFrontTile(i, tileMap.MapSize.Y - 1).ID = TileID.Bedrock;
+            }
+
+            for(int j = 0; j < tileMap.MapSize.Y; j++)
+            {
+                tileMap.GetFrontTile(0, j).ID = TileID.Bedrock;
+                tileMap.GetFrontTile(tileMap.MapSize.X - 1, j).ID = TileID.Bedrock;
             }
 
             var camera = Camera.main;

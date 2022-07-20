@@ -66,6 +66,23 @@ namespace PlanetTileMap
                             LayerMeshes[(int)MapLayerType.Mid].UpdateVertex((index * 4), x, y, width, height);
                             index++;
                         }
+
+                        if (tile.DrawType == TileDrawType.Composited)
+                        {
+                            Vector4 textureCoords = GameState.TileSpriteAtlasManager.GetSprite(tile.SpriteId2).TextureCoords;
+
+                            const float width = 1;
+                            const float height = 1;
+
+                            if (!Utility.ObjectMesh.isOnScreen(x, y))
+                                continue;
+
+                            // Update UVs
+                            LayerMeshes[(int)MapLayerType.Front].UpdateUV(textureCoords, (index) * 4);
+                            // Update Vertices
+                            LayerMeshes[(int)MapLayerType.Front].UpdateVertex((index * 4), x, y, width, height);
+                            index++;
+                        }
                     }
                 }
             }
@@ -99,6 +116,23 @@ namespace PlanetTileMap
                         if (spriteId >= 0)
                         {
                             Vector4 textureCoords = GameState.TileSpriteAtlasManager.GetSprite(spriteId).TextureCoords;
+
+                            const float width = 1;
+                            const float height = 1;
+
+                            if (!Utility.ObjectMesh.isOnScreen(x, y))
+                                continue;
+
+                            // Update UVs
+                            LayerMeshes[(int)MapLayerType.Front].UpdateUV(textureCoords, (index) * 4);
+                            // Update Vertices
+                            LayerMeshes[(int)MapLayerType.Front].UpdateVertex((index * 4), x, y, width, height);
+                            index++;
+                        }
+
+                        if (tile.DrawType == TileDrawType.Composited)
+                        {
+                            Vector4 textureCoords = GameState.TileSpriteAtlasManager.GetSprite(tile.SpriteId2).TextureCoords;
 
                             const float width = 1;
                             const float height = 1;
@@ -156,6 +190,23 @@ namespace PlanetTileMap
                             LayerMeshes[(int)MapLayerType.Back].UpdateUV(textureCoords, (index) * 4);
                             // Update Vertices
                             LayerMeshes[(int)MapLayerType.Back].UpdateVertex((index * 4), x, y, width, height);
+                            index++;
+                        }
+
+                        if (tile.DrawType == TileDrawType.Composited)
+                        {
+                            Vector4 textureCoords = GameState.TileSpriteAtlasManager.GetSprite(tile.SpriteId2).TextureCoords;
+
+                            const float width = 1;
+                            const float height = 1;
+
+                            if (!Utility.ObjectMesh.isOnScreen(x, y))
+                                continue;
+
+                            // Update UVs
+                            LayerMeshes[(int)MapLayerType.Front].UpdateUV(textureCoords, (index) * 4);
+                            // Update Vertices
+                            LayerMeshes[(int)MapLayerType.Front].UpdateVertex((index * 4), x, y, width, height);
                             index++;
                         }
                     }

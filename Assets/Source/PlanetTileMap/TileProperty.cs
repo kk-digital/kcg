@@ -27,6 +27,7 @@ namespace PlanetTileMap
         /// To map neighbour tiles or not
         /// </summary>
         public bool IsAutoMapping; 
+        public bool CannotBeRemoved; // bedrock cannot be removed
 
         public SpriteRuleType SpriteRuleType;
 
