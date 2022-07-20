@@ -252,26 +252,12 @@ namespace PlanetTileMap
             TilePropertyArray[(int)CurrentTileIndex].SpriteRuleType = spriteRuleType;
         }
 
-       /* public void SetTilePropertyVariant(int spriteSheetId, int row, int column, PlanetTileMap.TilePosition variant)
+        public void SetCannotBeRemoved(bool flag)
         {
-            if (CurrentTileIndex != -1)
-            {
-                int atlasSpriteId = 
-                    GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas(spriteSheetId, row, column, 0);
-                PropertiesArray[CurrentTileIndex].Variants[(int)variant] = atlasSpriteId;
-                
-            }
+            if (CurrentTileIndex == TileID.Error) return;
+            
+            TilePropertyArray[(int)CurrentTileIndex].CannotBeRemoved = flag;
         }
-
-        public void SetTilePropertyVariant16(int spriteSheetId, int row, int column, PlanetTileMap.TilePosition variant)
-        {
-            if (CurrentTileIndex != -1)
-            {
-                int atlasSpriteId = 
-                    GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(spriteSheetId, row, column, 0);
-                PropertiesArray[CurrentTileIndex].Variants[(int)variant] = atlasSpriteId;
-            }
-        }*/
 
         public void EndTileProperty()
         {

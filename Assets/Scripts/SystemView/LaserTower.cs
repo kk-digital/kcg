@@ -211,13 +211,15 @@ namespace Scripts {
                 }
 
                 if(target == null) {
-                    if(state != null) foreach(SystemShip Ship in state.ships) {
+                    if(state != null)
+                        foreach(var s in state.ships) {
+                            SystemShip ship = s.Object;
 
-                            float DistanceX       = Ship.self.posx - posx;
-                            float DistanceY       = Ship.self.posy - posy;
+                            float DistanceX       = ship.self.posx - posx;
+                            float DistanceY       = ship.self.posy - posy;
                             float Distance        = Tools.magnitude(DistanceX, DistanceY);
 
-                            if(Distance <= range) { target = Ship; break; }
+                            if(Distance <= range) { target = ship; break; }
                         }
                 }
 

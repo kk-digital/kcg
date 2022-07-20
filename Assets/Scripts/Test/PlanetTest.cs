@@ -4,6 +4,7 @@ using KMath;
 using Item;
 using Animancer;
 using HUD;
+using PlanetTileMap;
 
 namespace Planet.Unity
 {
@@ -148,8 +149,7 @@ namespace Planet.Unity
             // get the 3d model from the scene
             //GameObject humanoid = GameObject.Find("DefaultHumanoid");
 
-            // load the 3d model from file
-            GameObject prefab = (GameObject)Resources.Load("Stander");
+            GameObject prefab = Engine3D.AssetManager.Singelton.GetModel(Engine3D.ModelType.Stander);
 
             HumanoidArray = new GameObject[HumanoidCount];
             AnimancerComponentArray = new AnimancerComponent[HumanoidCount];
@@ -176,11 +176,10 @@ namespace Planet.Unity
             }
 
             
-            // load some animation clips from disk
-            IdleAnimationClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Idle", typeof(AnimationClip));
-            RunAnimationClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Run", typeof(AnimationClip));
-            WalkAnimationClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Walk_F", typeof(AnimationClip));
-            GolfSwingClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Jump_Roll", typeof(AnimationClip));
+            IdleAnimationClip = Engine3D.AssetManager.Singelton.GetAnimationClip(Engine3D.AnimationType.Idle);
+            RunAnimationClip = Engine3D.AssetManager.Singelton.GetAnimationClip(Engine3D.AnimationType.Run);
+            WalkAnimationClip = Engine3D.AssetManager.Singelton.GetAnimationClip(Engine3D.AnimationType.Walk);
+            GolfSwingClip = Engine3D.AssetManager.Singelton.GetAnimationClip(Engine3D.AnimationType.Flip);
 
 
             // play the idle animation
@@ -200,10 +199,17 @@ namespace Planet.Unity
             Vec2i mapSize = new Vec2i(32, 24);
             Planet = new Planet.PlanetState();
             Planet.Init(mapSize);
+
             Planet.InitializeSystems(Material, transform);
+            
+            /*var camera = Camera.main;
+            Vector3 lookAtPosition = camera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, camera.nearClipPlane));
+            Planet.TileMap = TileMapManager.Load("map.kmap", (int)lookAtPosition.x, (int)lookAtPosition.y);*/
 
             GenerateMap();
             SpawnStuff();
+
+            TileMapManager.Save(Planet.TileMap, "map.kmap");
 
             inventoryID = Player.agentInventory.InventoryID;
             toolBarID = Player.agentToolBar.ToolBarID;
@@ -261,24 +267,24 @@ namespace Planet.Unity
                         {
                             frontTileID = TileID.Moon;
                             backTileID = TileID.Background;
-                            /*if ((int) KMath.Random.Mt19937.genrand_int32() % 10 == 0)
+                            if ((int) KMath.Random.Mt19937.genrand_int32() % 10 == 0)
                             {
                                 int oreRandom = (int) KMath.Random.Mt19937.genrand_int32() % 3;
                                 if (oreRandom == 0)
                                 {
-                                    frontTile.SpriteId2 = GameResources.OreSprite;
+                                    tileMap.GetFrontTile(i, j).SpriteId2 = GameResources.OreSprite;
                                 }
                                 else if (oreRandom == 1)
                                 {
-                                    frontTile.SpriteId2 = GameResources.Ore2Sprite;
+                                    tileMap.GetFrontTile(i, j).SpriteId2 = GameResources.Ore2Sprite;
                                 }
                                 else
                                 {
-                                    frontTile.SpriteId2 = GameResources.Ore3Sprite;
+                                    tileMap.GetFrontTile(i, j).SpriteId2 = GameResources.Ore3Sprite;
                                 }
 
-                                frontTile.DrawType = TileDrawType.Composited;
-                            }*/
+                                tileMap.GetFrontTile(i, j).DrawType = TileDrawType.Composited;
+                            }
                         }
                     }
 
@@ -353,6 +359,19 @@ namespace Planet.Unity
                     tileMap.GetFrontTile(i, j).ID = TileID.Air;
                     tileMap.GetMidTile(i, j).ID = TileID.Pipe;
                 }
+            }
+
+
+            for(int i = 0; i < tileMap.MapSize.X; i++)
+            {
+                tileMap.GetFrontTile(i, 0).ID = TileID.Bedrock;
+                tileMap.GetFrontTile(i, tileMap.MapSize.Y - 1).ID = TileID.Bedrock;
+            }
+
+            for(int j = 0; j < tileMap.MapSize.Y; j++)
+            {
+                tileMap.GetFrontTile(0, j).ID = TileID.Bedrock;
+                tileMap.GetFrontTile(tileMap.MapSize.X - 1, j).ID = TileID.Bedrock;
             }
 
             var camera = Camera.main;

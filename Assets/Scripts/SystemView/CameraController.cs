@@ -7,6 +7,7 @@ namespace Scripts {
             public bool DisableDragging = false;
 
             private float last_aspect;
+            public  Background background;
 
             private Camera camera;
 
@@ -23,6 +24,8 @@ namespace Scripts {
 
                 scale += Input.GetAxis("Mouse ScrollWheel") * 0.5f * scale;
                 camera.orthographicSize = 20.0f / scale;
+                background.transform.position   = new Vector3(transform.position.x, transform.position.y, 10.0f);
+                background.transform.localScale = new Vector3(10.0f / scale, 10.0f / scale, 10.0f / scale);
             }
 
             public void set_position(float x, float y, float s) {

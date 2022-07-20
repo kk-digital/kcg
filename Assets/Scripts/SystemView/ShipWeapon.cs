@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Source.SystemView;
@@ -45,6 +45,15 @@ namespace Scripts {
             public int attack_speed; // in milliseconds
             public int cooldown;     // in milliseconds
 
+            public int   projectiles_per_burst = 1;
+            public float projectile_spread;
+            public float projectile_mass = 0.01f;
+
+            public float max_velocity;
+            public float detection_angle;
+
+            public int   penetration = 1; // Amount of enemies beams and projectiles can hit
+
             public List<ShipWeaponProjectile> projectiles_fired = new List<ShipWeaponProjectile>();
 
             public CameraController camera;
@@ -53,16 +62,131 @@ namespace Scripts {
             public Material         mat;
             public SystemState      state;
 
-            // Can't be WeaponFlags as type as C# doesn't let you bitwise OR enum values unless every single possible combination
-            // you might want to OR is defined as a value... Microsoft why??
             public int flags;
+
+            private class target_info {
+                public SystemShip ship;
+                public float      distance;
+            };
+
+            // Pre defined weapon types
+            public static ShipWeapon add_cannon(SystemShip self, SystemState state, int flags) {
+                ShipWeapon cannon = new ShipWeapon();
+
+                cannon.color                 = Color.white;
+                cannon.range                 = 30.0f;
+                cannon.shield_penetration    = 0.2f;
+                cannon.projectile_velocity   = 5.0f;
+                cannon.damage                = 3000;
+                cannon.attack_speed          = 800;
+                cannon.cooldown              = 0;
+                cannon.FOV                   = Tools.quarterpi;
+                cannon.self                  = self;
+                cannon.state                 = state;
+                cannon.projectiles_per_burst = 1;
+                cannon.flags                 = (int)WeaponFlags.WEAPON_PROJECTILE | flags;
+
+                self.weapons.Add(cannon);
+
+                return cannon;
+            }
+
+            public static ShipWeapon add_auto_cannon(SystemShip self, SystemState state, int flags) {
+                ShipWeapon cannon = new ShipWeapon();
+
+                cannon.color                 = Color.white;
+                cannon.range                 = 30.0f;
+                cannon.shield_penetration    = 0.2f;
+                cannon.projectile_velocity   = 5.0f;
+                cannon.damage                = 2000;
+                cannon.attack_speed          = 400;
+                cannon.cooldown              = 0;
+                cannon.FOV                   = Tools.quarterpi;
+                cannon.self                  = self;
+                cannon.state                 = state;
+                cannon.projectiles_per_burst = 1;
+                cannon.flags                 = (int)WeaponFlags.WEAPON_PROJECTILE | flags;
+
+                self.weapons.Add(cannon);
+
+                return cannon;
+            }
+
+            public static ShipWeapon add_tri_cannon(SystemShip self, SystemState state, int flags) {
+                ShipWeapon cannon = new ShipWeapon();
+
+                cannon.color                 = Color.white;
+                cannon.range                 = 30.0f;
+                cannon.shield_penetration    = 0.2f;
+                cannon.projectile_velocity   = 5.0f;
+                cannon.damage                = 2000;
+                cannon.attack_speed          = 1250;
+                cannon.cooldown              = 0;
+                cannon.FOV                   = Tools.sixthpi;
+                cannon.self                  = self;
+                cannon.state                 = state;
+                cannon.projectiles_per_burst = 3;
+                cannon.projectile_spread     = Tools.sixthpi;
+                cannon.flags                 = (int)WeaponFlags.WEAPON_PROJECTILE | flags;
+
+                self.weapons.Add(cannon);
+
+                return cannon;
+            }
+
+            public static ShipWeapon add_railgun(SystemShip self, SystemState state, int flags) {
+                ShipWeapon railgun = new ShipWeapon();
+
+                railgun.color                 = new Color(0.8f, 0.7f, 0.3f, 1.0f);
+                railgun.range                 = 100.0f;
+                railgun.shield_penetration    = 0.3f;
+                railgun.projectile_velocity   = 80.0f;
+                railgun.damage                = 4000;
+                railgun.attack_speed          = 2500;
+                railgun.cooldown              = 0;
+                railgun.FOV                   = Tools.sixthpi;
+                railgun.self                  = self;
+                railgun.state                 = state;
+                railgun.projectiles_per_burst = 1;
+                railgun.flags                 = (int)WeaponFlags.WEAPON_PROJECTILE | flags;
+
+                self.weapons.Add(railgun);
+
+                return railgun;
+            }
+
+            public static ShipWeapon add_torpedo(SystemShip self, SystemState state, int flags) {
+                ShipWeapon torpedo = new ShipWeapon();
+
+                torpedo.color                 = new Color(1.0f, 0.4f, 0.3f, 1.0f);
+                torpedo.range                 = 75.0f;
+                torpedo.shield_penetration    = 0.05f;
+                torpedo.projectile_velocity   =  5.0f;
+                torpedo.acc                   = 12.5f;
+                torpedo.max_velocity          =  7.5f;
+                torpedo.damage                =  8000;
+                torpedo.attack_speed          =   750;
+                torpedo.cooldown              =     0;
+                torpedo.FOV                   = Tools.quarterpi;
+                torpedo.self                  = self;
+                torpedo.state                 = state;
+                torpedo.projectiles_per_burst = 1;
+                torpedo.flags                 = (int)WeaponFlags.WEAPON_PROJECTILE
+                                              | (int)WeaponFlags.WEAPON_SEEKING
+                                              | (int)WeaponFlags.WEAPON_ROCKET
+                                              | flags;
+
+                self.weapons.Add(torpedo);
+
+                return torpedo;
+            }
 
             public void cleanup() {
                 if(laser_renderer != null) GameObject.Destroy(laser_renderer);
                 if(laser_object   != null) GameObject.Destroy(laser_object);
             }
 
-            // todo update this later
+            // todo remove
             public bool TryFiringAt(SystemShip target, int current_millis) {
                 cooldown -= current_millis;
                 if (cooldown < 0) cooldown = 0;
@@ -105,12 +229,13 @@ namespace Scripts {
                 projectile.ShieldDamageMultiplier = shield_damage_multiplier;
                 projectile.HullDamageMultiplier   = hull_damage_multiplier;
 
-                projectile.Damage = damage;
+                projectile.Damage      = damage;
 
-                projectile.seeking = (flags & (int)WeaponFlags.WEAPON_SEEKING) != 0;
-                projectile.rocket  = (flags & (int)WeaponFlags.WEAPON_ROCKET)  != 0;
-                projectile.acc     = acc;
-                projectile.state   = state;
+                projectile.seeking     = (flags & (int)WeaponFlags.WEAPON_SEEKING) != 0;
+                projectile.rocket      = (flags & (int)WeaponFlags.WEAPON_ROCKET)  != 0;
+                projectile.acc         = acc;
+                projectile.state       = state;
+                projectile.penetration = penetration;
 
                 projectiles_fired.Add(projectile);
 
@@ -232,39 +357,92 @@ namespace Scripts {
                 cooldown = attack_speed;
 
                 if((flags & (int)WeaponFlags.WEAPON_PROJECTILE) != 0) {
-                    ShipWeaponProjectile projectile = new ShipWeaponProjectile();
+                    float half_spread           = projectile_spread * 0.5f;
+                    float spread_per_projectile = projectile_spread / projectiles_per_burst;
 
-                    projectile.Self = self;
-                    projectile.Weapon = this;
+                    for(int i = 0; i < projectiles_per_burst; i++) {
+                        ShipWeaponProjectile projectile = new ShipWeaponProjectile();
 
-                    projectile.Body.posx = self.self.posx;
-                    projectile.Body.posy = self.self.posy;
+                        projectile.Self = self;
+                        projectile.Weapon = this;
 
-                    float angle = (float)Math.Acos(dx / d);
+                        projectile.Body.posx = self.self.posx;
+                        projectile.Body.posy = self.self.posy;
 
-                    if (dy < 0.0f) angle = 2.0f * 3.1415926f - angle;
+                        float angle = Tools.get_angle(dx, dy);
 
-                    float cos = (float)Math.Cos(angle);
-                    float sin = (float)Math.Sin(angle);
+                        angle -= half_spread;
+                        angle += spread_per_projectile * (i + 0.5f);
+                        angle  = Tools.normalize_angle(angle);
 
-                    projectile.Body.velx = cos * (float)Math.Sqrt(projectile_velocity * projectile_velocity - sin * sin) + self.self.velx;
-                    projectile.Body.vely = sin * (float)Math.Sqrt(projectile_velocity * projectile_velocity - cos * cos) + self.self.vely;
+                        float rel_velx = (float)Math.Cos(angle) * projectile_velocity;
+                        float rel_vely = (float)Math.Sin(angle) * projectile_velocity;
 
-                    projectile.TimeElapsed = 0.0f;
-                    projectile.LifeSpan = range / projectile_velocity;
+                        projectile.Body.velx         = self.self.velx + rel_velx;
+                        projectile.Body.vely         = self.self.vely + rel_vely;
 
-                    projectile.ProjectileColor = color;
+                        projectile.TimeElapsed       = 0.0f;
+                        projectile.LifeSpan          = range / projectile_velocity;
 
-                    projectile.ShieldPenetration = shield_penetration;
+                        projectile.ProjectileColor   = color;
 
-                    projectile.Damage = damage;
+                        projectile.ShieldPenetration = shield_penetration;
 
-                    projectile.seeking = (flags & (int)WeaponFlags.WEAPON_SEEKING) != 0;
-                    projectile.rocket  = (flags & (int)WeaponFlags.WEAPON_ROCKET)  != 0;
-                    projectile.acc     = acc;
-                    projectile.state   = state;
+                        projectile.Damage            = damage;
 
-                    projectiles_fired.Add(projectile);
+                        projectile.seeking           = (flags & (int)WeaponFlags.WEAPON_SEEKING)  != 0;
+                        projectile.detection_angle   = detection_angle;
+                        projectile.rocket            = (flags & (int)WeaponFlags.WEAPON_ROCKET)   != 0;
+                        projectile.acc_angle         = angle;
+                        projectile.acc               = acc;
+                        projectile.state             = state;
+                        projectile.penetration       = penetration;
+                        projectile.max_velocity      = max_velocity;
+
+                        /*
+                         * (1) E  = m * v²
+                         * 
+                         * Split into x and y component
+                         * 
+                         * (2) Ex = m * vx²
+                         *      ⤷ Energy imparted along x-axis
+                         *      
+                         * (3) Ey = m * vy²
+                         *      ⤷ Energy imparted along y-axis
+                         *      
+                         * Solve for velocity change applied to ship
+                         * 
+                         * (4) m₀ * vx₀² = m₁ * vx₁²
+                         *        ⤹          ⤷ Energy imparted on the projectile
+                         *         Energy imparted on the ship
+                         * 
+                         *                m₁ * vx₁²
+                         * (4) vx₀ = ± √ ——————————
+                         *           ⤹       m₀
+                         *            Sign is opposite of vx₁'s sign
+                         * 
+                         * (5) m₀ * vy₀² = m₁ * vy₁²
+                         *        ⤹          ⤷ Energy imparted on the projectile
+                         *         Energy imparted on the ship
+                         * 
+                         *                m₁ * vy₁²
+                         * (5) vy₀ = ± √ ——————————
+                         *           ⤹       m₀
+                         *            Sign is opposite of vy₁'s sign
+                         * 
+                         */
+
+                        float vx = (float)Math.Sqrt(projectile_mass / self.self.mass * rel_velx * rel_velx);
+                        float vy = (float)Math.Sqrt(projectile_mass / self.self.mass * rel_vely * rel_vely);
+
+                        if(rel_velx >= 0.0f) self.self.velx -= vx;
+                        else                 self.self.velx += vx;
+
+                        if(rel_vely >= 0.0f) self.self.vely -= vy;
+                        else                 self.self.vely += vy;
+
+                        projectiles_fired.Add(projectile);
+                    }
                 }
 
                 if((flags & (int)WeaponFlags.WEAPON_LASER) != 0) {
@@ -299,36 +477,70 @@ namespace Scripts {
                     last_x = x;
                     last_y = y;
 
-                    // todo: should be able to target stuff other than ships
-                    // todo: should be able to hit ship with whole laser, not just tip
-                    SystemShip target = null;
+                    // todo: should also be able to target stuff other than ships, like satellites, stations, etc.
 
-                    foreach(SystemShip ship in state.ships) {
-                        float _dx = ship.self.posx - x;
-                        float _dy = ship.self.posy - y;
-                        float _d  = Tools.magnitude(_dx, _dy);
+                    target_info[] targets = new target_info[penetration];
 
-                        if(_d < 2.5f / camera.scale) {
-                            target = ship;
-                            break;
+                    foreach(var s in state.ships) {
+                        SystemShip ship = s.Object;
+
+                        if(ship == self) continue;
+
+                        // (1) y = mx + b   =>   mx - y + b = 0
+                        //                  =>   b = y - mx
+
+                        //          |mx - y + b|
+                        // (2) d = --------------
+                        //           √ (m² + 1)
+
+                        float m = dy / dx;
+                        float b = y - m * x;
+
+                        float distance_from_beam = Math.Abs(m * ship.self.posx - ship.self.posy + b) / (float)Math.Sqrt(m * m + 1);
+                         
+                        // Probably should not be affected by camera scale, but it makes it easier at least for testing
+                        if(distance_from_beam < 2.5f / camera.scale) {
+
+                            float distance = Tools.get_distance(self.self.posx, self.self.posy, ship.self.posx, ship.self.posy);
+
+                            for(int i = 0; i < penetration; i++)
+                                if(targets[i] == null) {
+
+                                    targets[i]          = new target_info();
+                                    targets[i].ship     = ship;
+                                    targets[i].distance = distance;
+
+                                } else if(targets[i].distance > distance) {
+
+                                    for(int j = penetration - 1; j > i; j--) targets[j] = targets[j - 1];
+
+                                    targets[i].ship     = ship;
+                                    targets[i].distance = distance;
+
+                                }
+
                         }
+
+                        foreach(target_info target in targets)
+
+                            if(target != null) {
+
+                                float shield_damage          = damage * shield_damage_multiplier * 1.0f - shield_penetration;
+                                float hull_damage            = damage *   hull_damage_multiplier *        shield_penetration;
+
+                                target.ship.shield          -= (int)shield_damage;
+
+                                if(target.ship.shield < 0) {
+                                    hull_damage             -= (float)target.ship.shield / shield_damage_multiplier * hull_damage_multiplier;
+                                    target.ship.shield       = 0;
+                                }
+
+                                target.ship.health          -= (int)hull_damage;
+
+                                if(target.ship.health <= 0) target.ship.destroy();
+
+                            }
                     }
-
-                    if(target == null) return;
-
-                    float shield_damage          = damage * shield_damage_multiplier * 1.0f - shield_penetration;
-                    float hull_damage            = damage *   hull_damage_multiplier *        shield_penetration;
-
-                    target.shield               -= (int)shield_damage;
-
-                    if(target.shield < 0) {
-                        hull_damage             -= (float)target.shield / shield_damage_multiplier * hull_damage_multiplier;
-                        target.shield            = 0;
-                    }
-
-                    target.health               -= (int)hull_damage;
-
-                    if(target.health <= 0) target.destroy();
                 }
             }
         }

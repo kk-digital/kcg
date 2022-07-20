@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine; // For color
 using Source.SystemView;
 
@@ -23,11 +24,16 @@ namespace Scripts {
             public float ShieldDamageMultiplier;
             public float HullDamageMultiplier;
 
+            public float acc_angle;
             public float acc;
+            public float detection_angle;
             public bool  seeking;
             public bool  rocket;
+            public int   penetration;
+            public float max_velocity;
             public SystemState state;
 
+            public List<SystemShip> hits = new();
             public int Damage;
 
             public ShipWeaponProjectile() {
@@ -47,8 +53,18 @@ namespace Scripts {
                     SystemShip target          = null;
                     float      target_distance = 0.0f;
 
-                    foreach(SystemShip ship in state.ships)
+                    foreach(var s in state.ships) {
+                        SystemShip ship = s.Object;
+
                         if(ship != Self) {
+                            if(detection_angle != 0.0f) {
+                                float velocity_angle = Tools.get_angle(                 Body.velx,                  Body.vely);
+                                float    enemy_angle = Tools.get_angle(ship.self.posx - Body.posx, ship.self.posy - Body.posy);
+                                float          angle = Tools.normalize_angle(enemy_angle - velocity_angle);
+
+                                if(angle < -detection_angle * 0.5f || angle > detection_angle * 0.5f) continue;
+                            }
+
                             float distance = Tools.get_distance(Body.posx, Body.posy, ship.self.posx, ship.self.posy);
 
                             if(target == null || target_distance > distance) {
@@ -56,6 +72,7 @@ namespace Scripts {
                                 target = ship;
                             }
                         }
+                    }
 
                     if(target != null) {
 
@@ -74,10 +91,18 @@ namespace Scripts {
                 }
 
                 if(rocket && !accelerated) {
-                    float vel   = Tools.magnitude(Body.velx, Body.vely);
+                    Body.velx  += acc * dt * (float)Math.Cos(acc_angle);
+                    Body.vely  += acc * dt * (float)Math.Sin(acc_angle);
 
-                    Body.velx  += acc * dt * Body.velx / vel;
-                    Body.vely  += acc * dt * Body.vely / vel;
+                    accelerated = true;
+                }
+
+                if(accelerated && max_velocity != 0.0f) {
+                    float vel = Tools.magnitude(Body.velx, Body.vely);
+                    if(vel > max_velocity) {
+                        Body.velx *= max_velocity / vel;
+                        Body.vely *= max_velocity / vel;
+                    }
                 }
 
                 if(Descriptor == null) // Linear trajectory
@@ -105,20 +130,30 @@ namespace Scripts {
                 return Target != null && Math.Sqrt(dx * dx + dy * dy) < AcceptableRange;
             }
 
-            public void DoDamage(SystemShip Target) {
-                Target.shield -= (int)(Damage * (1.0 - ShieldPenetration));
-                Target.health -= (int)(Damage * ShieldPenetration);
+            public bool DoDamage(SystemShip Target) {
+                if(!hits.Contains(Target)) {
+                    Target.shield -= (int)(Damage * (1.0 - ShieldPenetration));
+                    Target.health -= (int)(Damage * ShieldPenetration);
 
-                if(Target.shield < 0) {
-                    Target.health += Target.shield;
-                    Target.shield = 0;
+                    if(Target.shield < 0) {
+                        Target.health += Target.shield;
+                        Target.shield = 0;
+                    }
+
+                    if(Target.health <= 0) {
+                        Target.destroy();
+                    }
+
+                    hits.Add(Target);
+
+                    penetration--;
+                    if(penetration <= 0) {
+                        Weapon.projectiles_fired.Remove(this);
+                        return true;
+                    }
                 }
 
-                if(Target.health <= 0) {
-                    Target.destroy();
-                }
-
-                Weapon.projectiles_fired.Remove(this);
+                return false;
             }
         }
     }
