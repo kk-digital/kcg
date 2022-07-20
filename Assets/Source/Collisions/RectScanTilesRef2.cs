@@ -244,8 +244,7 @@ namespace Collisions
                     {
                         for (var tmp_y = tmp_ymin; tmp_y < tmp_ymax; tmp_y++)
                         {
-                            ref var frontTileID = ref tileMap.GetFrontTileID(tmp_x, tmp_y);
-                            if (frontTileID != TileID.Air)
+                            if (tileMap.GetFrontTileID(tmp_x, tmp_y) != TileID.Air)
                             {
                                 return true;
                             }

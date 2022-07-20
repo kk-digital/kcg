@@ -135,7 +135,7 @@ namespace Planet.Unity
                     }
 
 
-                    tileMap.GetFrontTile(i, j).ID =  frontTileID;
+                    tileMap.SetFrontTile(i, j, frontTileID);
                 }
             }
 

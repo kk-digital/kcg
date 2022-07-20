@@ -28,7 +28,7 @@ namespace PlanetTileMap
                     {
                         for(int x = 0; x < width; x++)
                         {
-                            tileMap.GetBackTile(x, y).ID = (TileID)reader.ReadInt32();
+                            tileMap.SetBackTile(x, y, (TileID)reader.ReadInt32());
                         }
                     }
 
@@ -36,7 +36,7 @@ namespace PlanetTileMap
                     {
                         for(int x = 0; x < width; x++)
                         {
-                            tileMap.GetMidTile(x, y).ID = (TileID)reader.ReadInt32();
+                            tileMap.SetMidTile(x, y, (TileID)reader.ReadInt32());
                         }
                     }
 
@@ -44,7 +44,7 @@ namespace PlanetTileMap
                     {
                         for(int x = 0; x < width; x++)
                         {
-                            tileMap.GetFrontTile(x, y).ID = (TileID)reader.ReadInt32();
+                            tileMap.SetFrontTile(x, y, (TileID)reader.ReadInt32());
                         }
                     }
 
@@ -76,21 +76,21 @@ namespace PlanetTileMap
                 {
                     for(int x = 0; x < width; x++)
                     {
-                        binWriter.Write((int)tileMap.GetBackTile(x, y).ID);
+                        binWriter.Write((int)tileMap.GetBackTileID(x, y));
                     }
                 }
                 for(int y = 0; y < height; y++)
                 {
                     for(int x = 0; x < width; x++)
                     {
-                        binWriter.Write((int)tileMap.GetMidTile(x, y).ID);
+                        binWriter.Write((int)tileMap.GetMidTileID(x, y));
                     }
                 }
                 for(int y = 0; y < height; y++)
                 {
                     for(int x = 0; x < width; x++)
                     {
-                        binWriter.Write((int)tileMap.GetFrontTile(x, y).ID);
+                        binWriter.Write((int)tileMap.GetFrontTileID(x, y));
                     }
                 }
             }  

@@ -17,7 +17,8 @@ namespace PlanetTileMap
         
         public TileID TileID;
         public int BaseSpriteId;
-        
+        public TileDrawType DrawType;
+
         public byte Durability; //max health of tile
         
         /// <summary>

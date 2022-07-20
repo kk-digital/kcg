@@ -265,7 +265,7 @@ namespace Planet.Unity
                         {
                             frontTileID = TileID.Moon;
                             backTileID = TileID.Background;
-                            if ((int) KMath.Random.Mt19937.genrand_int32() % 10 == 0)
+                            /*if ((int) KMath.Random.Mt19937.genrand_int32() % 10 == 0)
                             {
                                 int oreRandom = (int) KMath.Random.Mt19937.genrand_int32() % 3;
                                 if (oreRandom == 0)
@@ -282,12 +282,12 @@ namespace Planet.Unity
                                 }
 
                                 tileMap.GetFrontTile(i, j).DrawType = TileDrawType.Composited;
-                            }
+                            }*/
                         }
                     }
 
-                    tileMap.GetFrontTile(i, j).ID = frontTileID;
-                    tileMap.GetBackTile(i, j).ID = backTileID;
+                    tileMap.SetFrontTile(i, j, frontTileID);
+                    tileMap.SetBackTile(i, j, backTileID);
                 }
             }
 
@@ -297,8 +297,8 @@ namespace Planet.Unity
             {
                 for (int j = tileMap.MapSize.Y - 10; j < tileMap.MapSize.Y; j++)
                 {
-                    tileMap.GetFrontTile(i, j).ID = TileID.Air;
-                    tileMap.GetBackTile(i, j).ID = TileID.Air;
+                    tileMap.SetFrontTile(i, j, TileID.Air);
+                    tileMap.SetBackTile(i, j, TileID.Air);
                 }
             }
 
@@ -325,9 +325,9 @@ namespace Planet.Unity
 
                 for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
-                    tileMap.GetFrontTile(i, j).ID = TileID.Air;
-                    tileMap.GetBackTile(i, j).ID = TileID.Air;
-                    tileMap.GetMidTile(i, j).ID = TileID.Wire;
+                    tileMap.SetFrontTile(i, j, TileID.Air);
+                    tileMap.SetBackTile(i, j, TileID.Air);
+                    tileMap.SetMidTile(i, j, TileID.Wire);
                 }
             }
 
@@ -354,22 +354,22 @@ namespace Planet.Unity
 
                 for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
-                    tileMap.GetFrontTile(i, j).ID = TileID.Air;
-                    tileMap.GetMidTile(i, j).ID = TileID.Pipe;
+                    tileMap.SetFrontTile(i, j, TileID.Air);
+                    tileMap.SetMidTile(i, j, TileID.Pipe);
                 }
             }
 
 
             for(int i = 0; i < tileMap.MapSize.X; i++)
             {
-                tileMap.GetFrontTile(i, 0).ID = TileID.Bedrock;
-                tileMap.GetFrontTile(i, tileMap.MapSize.Y - 1).ID = TileID.Bedrock;
+                tileMap.SetFrontTile(i, 0, TileID.Bedrock);
+                tileMap.SetFrontTile(i, tileMap.MapSize.Y - 1, TileID.Bedrock);
             }
 
             for(int j = 0; j < tileMap.MapSize.Y; j++)
             {
-                tileMap.GetFrontTile(0, j).ID = TileID.Bedrock;
-                tileMap.GetFrontTile(tileMap.MapSize.X - 1, j).ID = TileID.Bedrock;
+                tileMap.SetFrontTile(0, j, TileID.Bedrock);
+                tileMap.SetFrontTile(tileMap.MapSize.X - 1, j, TileID.Bedrock);
             }
 
             var camera = Camera.main;

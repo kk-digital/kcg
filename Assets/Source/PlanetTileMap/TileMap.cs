@@ -74,29 +74,6 @@ namespace PlanetTileMap
                    y >= 0 && y < MapSize.Y;
         }
 
-        #region Tile getters
-
-        public ref TileID GetBackTileID(int x, int y)
-        {
-            Utils.Assert(IsValid(x, y));
-            
-            var xChunkIndex = x >> 4;
-            var yChunkIndex = ((y >> 4) * MapSize.X) >> 4;
-            var chunkIndex = (xChunkIndex + yChunkIndex);
-
-            ref var chunk = ref ChunkArray[chunkIndex];
-            
-            Utils.Assert(chunk.Type != MapChunkType.Error);
-
-            var xIndex = x & 0x0f;
-            var yIndex = y & 0x0f;
-            var tileIndex = xIndex + (yIndex << 4);
-            
-            chunk.ReadCount++;
-            
-            return ref chunk.TileArray[tileIndex].BackTileID;
-        }
-        
         public ref Tile GetTile(int x, int y)
         {
             Utils.Assert(IsValid(x, y));
@@ -118,46 +95,42 @@ namespace PlanetTileMap
             return ref chunk.TileArray[tileIndex];
         }
         
-        public ref TileID GetMidTileID(int x, int y)
+        #region Tile ID getters
+
+        public TileID GetBackTileID(int x, int y)
         {
-            Utils.Assert(IsValid(x, y));
-            
-            var xChunkIndex = x >> 4;
-            var yChunkIndex = ((y >> 4) * MapSize.X) >> 4;
-            var chunkIndex = (xChunkIndex + yChunkIndex);
-
-            ref var chunk = ref ChunkArray[chunkIndex];
-            
-            Utils.Assert(chunk.Type != MapChunkType.Error);
-
-            var xIndex = x & 0x0f;
-            var yIndex = y & 0x0f;
-            var tileIndex = xIndex + (yIndex << 4);
-            
-            chunk.ReadCount++;
-            
-            return ref chunk.TileArray[tileIndex].MidTileID;
+            ref var tile = ref GetTile(x, y);
+            return tile.BackTileID;
         }
-        
-        public ref TileID GetFrontTileID(int x, int y)
+        public TileID GetMidTileID(int x, int y)
         {
-            Utils.Assert(IsValid(x, y));
-            
-            var xChunkIndex = x >> 4;
-            var yChunkIndex = ((y >> 4) * MapSize.X) >> 4;
-            var chunkIndex = (xChunkIndex + yChunkIndex);
+            ref var tile = ref GetTile(x, y);
+            return tile.MidTileID;
+        }
+        public TileID GetFrontTileID(int x, int y)
+        {
+            ref var tile = ref GetTile(x, y);
+            return tile.FrontTileID;
+        }
 
-            ref var chunk = ref ChunkArray[chunkIndex];
-            
-            Utils.Assert(chunk.Type != MapChunkType.Error);
+        #endregion
+        
+        #region Tile Sprite ID getters
 
-            var xIndex = x & 0x0f;
-            var yIndex = y & 0x0f;
-            var tileIndex = xIndex + (yIndex << 4);
-            
-            chunk.ReadCount++;
-            
-            return ref chunk.TileArray[tileIndex].FrontTileID;
+        public int GetBackTileSpriteID(int x, int y)
+        {
+            ref var tile = ref GetTile(x, y);
+            return tile.BackTileSpriteID;
+        }
+        public int GetMidTileSpriteID(int x, int y)
+        {
+            ref var tile = ref GetTile(x, y);
+            return tile.MidTileSpriteID;
+        }
+        public int GetFrontTileSpriteID(int x, int y)
+        {
+            ref var tile = ref GetTile(x, y);
+            return tile.FrontTileSpriteID;
         }
 
         #endregion

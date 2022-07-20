@@ -43,9 +43,9 @@ namespace PlanetTileMap
                 {
                     if (x >= 0 && y >= 0)
                     {
-                        ref var tile = ref tileMap.GetMidTileID(x, y);
+                        var tile = tileMap.GetTile(x, y);
 
-                        /*var spriteId = tile.SpriteID;
+                        var spriteId = tile.MidTileSpriteID;
 
                         if (spriteId >= 0)
                         {
@@ -62,11 +62,13 @@ namespace PlanetTileMap
                             // Update Vertices
                             LayerMeshes[(int)MapLayerType.Mid].UpdateVertex((index * 4), x, y, width, height);
                             index++;
-                        }*/
+                        }
 
-                        if (tile.DrawType == TileDrawType.Composited)
+                        var tileProperty = GameState.TileCreationApi.GetTileProperty(tile.MidTileID);
+                        
+                        if (tileProperty.DrawType == TileDrawType.Composited)
                         {
-                            Vector4 textureCoords = GameState.TileSpriteAtlasManager.GetSprite(tile.SpriteId2).TextureCoords;
+                            Vector4 textureCoords = GameState.TileSpriteAtlasManager.GetSprite(spriteId).TextureCoords;
 
                             const float width = 1;
                             const float height = 1;
@@ -126,10 +128,12 @@ namespace PlanetTileMap
                             LayerMeshes[(int)MapLayerType.Front].UpdateVertex((index * 4), x, y, width, height);
                             index++;
                         }
+                        
+                        var tileProperty = GameState.TileCreationApi.GetTileProperty(tile.MidTileID);
 
-                        if (tile.DrawType == TileDrawType.Composited)
+                        if (tileProperty.DrawType == TileDrawType.Composited)
                         {
-                            Vector4 textureCoords = GameState.TileSpriteAtlasManager.GetSprite(tile.SpriteId2).TextureCoords;
+                            Vector4 textureCoords = GameState.TileSpriteAtlasManager.GetSprite(spriteId).TextureCoords;
 
                             const float width = 1;
                             const float height = 1;
@@ -169,9 +173,9 @@ namespace PlanetTileMap
                 {
                     if (x >= 0 && y >= 0)
                     {
-                        ref var tile = ref tileMap.GetBackTileID(x, y);
+                        ref var tile = ref tileMap.GetTile(x, y);
 
-                        /*var spriteId = tile.SpriteID;
+                        var spriteId = tile.BackTileSpriteID;
 
                         if (spriteId >= 0)
                         {
@@ -188,11 +192,13 @@ namespace PlanetTileMap
                             // Update Vertices
                             LayerMeshes[(int)MapLayerType.Back].UpdateVertex((index * 4), x, y, width, height);
                             index++;
-                        }*/
+                        }
 
-                        if (tile.DrawType == TileDrawType.Composited)
+                        var tileProperty = GameState.TileCreationApi.GetTileProperty(tile.MidTileID);
+                        
+                        if (tileProperty.DrawType == TileDrawType.Composited)
                         {
-                            Vector4 textureCoords = GameState.TileSpriteAtlasManager.GetSprite(tile.SpriteId2).TextureCoords;
+                            Vector4 textureCoords = GameState.TileSpriteAtlasManager.GetSprite(spriteId).TextureCoords;
 
                             const float width = 1;
                             const float height = 1;

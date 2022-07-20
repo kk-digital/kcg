@@ -197,7 +197,7 @@ public class GameResources
         GameState.TileCreationApi.CreateTileProperty(TileID.Bedrock);
         GameState.TileCreationApi.SetTilePropertyName("Bedrock");
         GameState.TileCreationApi.SetCannotBeRemoved(true);
-        GameState.TileCreationApi.SetTilePropertyShape(TileShape.FullBlock, TileShapeAndRotation.FB);
+        GameState.TileCreationApi.SetTilePropertyShape(TileShape.FullBlock);
         GameState.TileCreationApi.SetSpriteRuleType(PlanetTileMap.SpriteRuleType.R3);
         GameState.TileCreationApi.SetTilePropertySpriteSheet16(MoonSpriteSheet, 0, 10);
         GameState.TileCreationApi.EndTileProperty();

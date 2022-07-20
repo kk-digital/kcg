@@ -95,7 +95,7 @@ namespace AI.Movement
 
         public Vec2f[] getPath(ref TileMap tileMap, Vec2f start, Vec2f end)
         {
-            if (tileMap.GetFrontTile((int)end.X, (int)end.Y).ID != Enums.Tile.TileID.Air)
+            if (tileMap.GetFrontTileID((int)end.X, (int)end.Y) != TileID.Air)
             {
                 Debug.Log("Not possible path. Endpoint is solid(unreacheable)");
             }
@@ -221,7 +221,7 @@ namespace AI.Movement
                     (int)(exitPos.Y - 0.5f) + (CHARACTER_SIZE.Y - 1)); // Get block character wasn't occupying before.
 
             // If solid return false.
-            if (tileMap.GetFrontTile(tilePos.X, tilePos.Y).ID != TileID.Air)
+            if (tileMap.GetFrontTileID(tilePos.X, tilePos.Y) != TileID.Air)
                 return false;
 
             // if Diagonal directions.
@@ -232,13 +232,13 @@ namespace AI.Movement
                 Vec2i verTilePos = tilePos;
                 verTilePos.X -= (int)directions[indDir].dir.X;
 
-                if (tileMap.GetFrontTile(verTilePos.X, verTilePos.Y).ID != TileID.Air)
+                if (tileMap.GetFrontTileID(verTilePos.X, verTilePos.Y) != TileID.Air)
                     return false;
 
                 Vec2i horTilePos = tilePos;
                 horTilePos.Y -= (int)directions[indDir].dir.Y;
 
-                if (tileMap.GetFrontTile(horTilePos.X, horTilePos.Y).ID != TileID.Air)
+                if (tileMap.GetFrontTileID(horTilePos.X, horTilePos.Y) != TileID.Air)
                     return false;
             }
 
@@ -285,12 +285,12 @@ namespace AI.Movement
                 return false;
 
             // If solid return false.
-            if (tileMap.GetFrontTile(tilePos.X, tilePos.Y).ID != TileID.Air)
+            if (tileMap.GetFrontTileID(tilePos.X, tilePos.Y) != TileID.Air)
                 return false;
 
             // Is tile at ground.
             Vec2i GroundPos = new Vec2i((int)(current.pos.X - 0.5f), (int)(current.pos.Y - 0.5f) - 1);
-            if (tileMap.GetFrontTile(GroundPos.X, GroundPos.Y).ID == TileID.Air)
+            if (tileMap.GetFrontTileID(GroundPos.X, GroundPos.Y) == TileID.Air)
                 return false;
 
             return true;
