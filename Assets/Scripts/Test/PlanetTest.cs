@@ -194,7 +194,7 @@ namespace Planet.Unity
             GameResources.Initialize();
 
             // Generating the map
-            Vec2i mapSize = new Vec2i(0, 0);
+            Vec2i mapSize = new Vec2i(32, 24);
             Planet = new Planet.PlanetState();
             Planet.Init(mapSize);
 
