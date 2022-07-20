@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Enums.Tile;
 using KMath;
 using Inventory;
+using Item;
 
 namespace Planet.Unity
 {
@@ -10,7 +11,7 @@ namespace Planet.Unity
     {
         [SerializeField] Material   Material;
 
-        Planet.PlanetState          Planet;
+        Planet.PlanetState    Planet;
         AgentEntity           Player;
 
         static bool Init = false;
@@ -32,24 +33,23 @@ namespace Planet.Unity
 
             if (Input.GetKeyDown(KeyCode.T))
             {
-                GameState.ActionSchedulerSystem.ScheduleAction(Player, 
-                    GameState.ActionCreationSystem.CreateAction(Planet.EntitasContext, (int)Enums.ActionType.DropAction, Player.agentID.ID));
+                GameState.ActionCreationSystem.CreateAction(Planet.EntitasContext, (int)Enums.ActionType.DropAction, Player.agentID.ID);
             }
 
             int toolBarID = Player.agentToolBar.ToolBarID;
             InventoryEntity Inventory = Planet.EntitasContext.inventory.GetEntityWithInventoryID(toolBarID);
             int selectedSlot = Inventory.inventorySlots.Selected;
        
-            ItemEntity item = GameState.InventoryManager.GetItemInSlot(Planet.EntitasContext.item, toolBarID, selectedSlot);
+            ItemInventoryEntity item = GameState.InventoryManager.GetItemInSlot(Planet.EntitasContext.itemInventory, toolBarID, selectedSlot);
             if (item != null)
             {
-                ItemPropertiesEntity itemProperty = Planet.EntitasContext.itemProperties.GetEntityWithItemProperty(item.itemType.Type);
-                if (itemProperty.hasItemPropertyAction)
+                ItemProprieties itemProperty = GameState.ItemCreationApi.Get(item.itemType.Type);
+                if (itemProperty.IsTool())
                 {
                     if (Input.GetKeyDown(KeyCode.Mouse0))
                     {
-                        GameState.ActionSchedulerSystem.ScheduleAction(Player,
-                            GameState.ActionCreationSystem.CreateAction(Planet.EntitasContext, itemProperty.itemPropertyAction.ActionTypeID, Player.agentID.ID)); 
+                        GameState.ActionCreationSystem.CreateAction(Planet.EntitasContext, itemProperty.ToolActionType, 
+                            Player.agentID.ID, item.itemID.ID); 
                     }
                 }
             }
@@ -66,24 +66,35 @@ namespace Planet.Unity
         {
             GameResources.Initialize();
 
-
             // Generating the map
             Vec2i mapSize = new Vec2i(16, 16);
             Planet = new Planet.PlanetState();
             Planet.Init(mapSize);
             Planet.InitializeSystems(Material, transform);
 
-            GameResources.CreateItems(Planet.EntitasContext);
-
             GenerateMap();
 
             Player = Planet.AddPlayer(GameResources.CharacterSpriteId, 32, 48, new Vec2f(3.0f, 3.0f), 0, 100, 100, 100, 100, 100);
             int toolBarID = Player.agentToolBar.ToolBarID;
 
-            // Create Action            
-            GameState.ItemSpawnSystem.SpawnItem(Planet.EntitasContext, Enums.ItemType.Gun, new Vec2f(3.0f, 3.0f));
-            GameState.ItemSpawnSystem.SpawnItem(Planet.EntitasContext, Enums.ItemType.Ore, new Vec2f(6.0f, 3.0f));
-            var SpawnEnemyTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.SpawnEnemySlimeTool);
+            GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.Pistol, new Vec2f(3.0f, 3.0f));
+            GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.PumpShotgun, new Vec2f(3.0f, 3.0f));
+            GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.PulseWeapon, new Vec2f(3.0f, 3.0f));
+            GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.SniperRifle, new Vec2f(3.0f, 3.0f));
+            GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.SMG, new Vec2f(3.0f, 3.0f));
+            //GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.Shotgun, new Vec2f(3.0f, 3.0f));
+            //GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.LongRifle, new Vec2f(3.0f, 3.0f));
+            //GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.RPG, new Vec2f(3.0f, 3.0f));
+            //GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.SMG, new Vec2f(3.0f, 3.0f));
+            //GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.GrenadeLauncher, new Vec2f(3.0f, 3.0f));
+            GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.Sword, new Vec2f(3.0f, 3.0f));
+            GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.RiotShield, new Vec2f(3.0f, 3.0f));
+            //GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.StunBaton, new Vec2f(3.0f, 3.0f));
+            //GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.AutoCannon, new Vec2f(3.0f, 3.0f));
+            //GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.Bow, new Vec2f(3.0f, 3.0f));
+            //GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.Ore, new Vec2f(6.0f, 3.0f));
+
+            var SpawnEnemyTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext, Enums.ItemType.SpawnEnemySlimeTool);
             GameState.InventoryManager.AddItem(Planet.EntitasContext, SpawnEnemyTool, toolBarID);
         }
 
@@ -126,13 +137,9 @@ namespace Planet.Unity
                     }
 
 
-                    tileMap.SetTile(i, j, frontTile, MapLayerType.Front);
+                    tileMap.SetFrontTile(i, j, frontTile);
                 }
             }
-
-
-
-            tileMap.UpdateTileMapPositions(MapLayerType.Front);
             //TileMap.BuildLayerTexture(MapLayerType.Front);
         }
     }

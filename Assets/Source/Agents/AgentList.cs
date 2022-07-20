@@ -91,7 +91,8 @@ namespace Agent
         // set the IsInitialized field to false
         public void Remove(int agentId)
         {
-            AgentEntity entity = Get(agentId);
+            LastFreeIndex = agentId;
+            ref AgentEntity entity = ref List[agentId];
             entity.Destroy();
             entity = null;
             Size--;

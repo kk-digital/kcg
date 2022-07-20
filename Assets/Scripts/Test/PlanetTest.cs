@@ -1,6 +1,10 @@
 using UnityEngine;
 using Enums.Tile;
 using KMath;
+using Item;
+using Animancer;
+using HUD;
+using PlanetTileMap;
 
 namespace Planet.Unity
 {
@@ -12,27 +16,24 @@ namespace Planet.Unity
         Inventory.InventoryManager inventoryManager;
         Inventory.DrawSystem inventoryDrawSystem;
 
-        // Health Bar
-        KGUI.HealthBarUI healthBarUI;
-
-        // Food Bar
-        KGUI.FoodBarUI foodBarUI;
-
-        // Water Bar
-        KGUI.WaterBarUI waterBarUI;
-
-        // Oxygen Bar
-        KGUI.OxygenBarUI oxygenBarUI;
-
-        // Fuel Bar
-        KGUI.FuelBarUI fuelBarUI;
-
         AgentEntity Player;
         int PlayerID;
 
         int CharacterSpriteId;
         int inventoryID;
         int toolBarID;
+
+        public static int HumanoidCount = 1;
+        GameObject[] HumanoidArray;
+
+        AnimationClip IdleAnimationClip ;
+        AnimationClip RunAnimationClip ;
+        AnimationClip WalkAnimationClip ;
+        AnimationClip GolfSwingClip;
+
+        AnimancerComponent[] AnimancerComponentArray;
+
+        HUDManager hudManager;
 
         static bool Init = false;
 
@@ -47,21 +48,46 @@ namespace Planet.Unity
 
         public void Update()
         {
+            bool run = Input.GetKeyDown(KeyCode.R);
+            bool walk = Input.GetKeyDown(KeyCode.W);
+            bool idle = Input.GetKeyDown(KeyCode.I);
+            bool golf = Input.GetKeyDown(KeyCode.G);
+
+            for(int i = 0; i < HumanoidCount; i++)
+            {
+                if (run)
+                {
+                    AnimancerComponentArray[i].Play(RunAnimationClip, 0.25f);
+                }
+                else if (walk)
+                {
+                    AnimancerComponentArray[i].Play(WalkAnimationClip, 0.25f);
+                }
+                else if (idle)
+                {
+                    AnimancerComponentArray[i].Play(IdleAnimationClip, 0.25f);
+                }
+                else if (golf)
+                {
+                    AnimancerComponentArray[i].Play(GolfSwingClip, 0.25f);
+                }
+            }
+
             int toolBarID = Player.agentToolBar.ToolBarID;
             InventoryEntity Inventory = Planet.EntitasContext.inventory.GetEntityWithInventoryID(toolBarID);
             int selectedSlot = Inventory.inventorySlots.Selected;
 
-            ItemEntity item = GameState.InventoryManager.GetItemInSlot(Planet.EntitasContext.item, toolBarID, selectedSlot);
-            ItemPropertiesEntity itemProperty = Planet.EntitasContext.itemProperties.GetEntityWithItemProperty(item.itemType.Type);
-            if (itemProperty.hasItemPropertyAction)
+            ItemInventoryEntity item = GameState.InventoryManager.GetItemInSlot(Planet.EntitasContext.itemInventory, toolBarID, selectedSlot);
+            ItemProprieties itemProperty = GameState.ItemCreationApi.Get(item.itemType.Type);
+            if (itemProperty.IsTool())
             {
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
-                    GameState.ActionSchedulerSystem.ScheduleAction(Player,
-                        GameState.ActionCreationSystem.CreateAction(Planet.EntitasContext, itemProperty.itemPropertyAction.ActionTypeID, Player.agentID.ID));
+                    GameState.ActionCreationSystem.CreateAction(Planet.EntitasContext, itemProperty.ToolActionType, 
+                       Player.agentID.ID, item.itemID.ID);
                 }
             }
-
+            
             Planet.Update(Time.deltaTime, Material, transform);
             //   Vector2 playerPosition = Player.Entity.physicsPosition2D.Value;
 
@@ -77,26 +103,93 @@ namespace Planet.Unity
         {
             if (Init)
             {
-                //Health Bar Draw
-                healthBarUI.Draw(Planet.EntitasContext);
+                // Draw HUD UI
+                hudManager.Update(Player);
 
-                // Food Bar Update
-                foodBarUI.Update();
-
-                // Water Bar Update
-                waterBarUI.Update();
-
-                // Fuel Bar Update
-                fuelBarUI.Update();
-
-                // OxygenBar Update
-                oxygenBarUI.Update();
+                // Draw Statistics
+                KGUI.Statistics.StatisticsDisplay.DrawStatistics(ref Planet);
             }
+        }
+
+        private void OnDrawGizmos()
+        {
+            // Set the color of gizmos
+            Gizmos.color = Color.green;
+            
+            // Draw a cube around the map
+            if(Planet.TileMap != null)
+            Gizmos.DrawWireCube(Vector3.zero, new Vector3(Planet.TileMap.MapSize.X, Planet.TileMap.MapSize.Y, 0.0f));
+
+            // Draw lines around player if out of bounds
+            if (Player != null)
+                if(Player.physicsPosition2D.Value.X -10.0f >= Planet.TileMap.MapSize.X)
+                {
+                    // Out of bounds
+                
+                    // X+
+                    Gizmos.DrawLine(new Vector3(Player.physicsPosition2D.Value.X, Player.physicsPosition2D.Value.Y, 0.0f), new Vector3(Player.physicsPosition2D.Value.X + 10.0f, Player.physicsPosition2D.Value.Y));
+
+                    // X-
+                    Gizmos.DrawLine(new Vector3(Player.physicsPosition2D.Value.X, Player.physicsPosition2D.Value.Y, 0.0f), new Vector3(Player.physicsPosition2D.Value.X - 10.0f, Player.physicsPosition2D.Value.Y));
+
+                    // Y+
+                    Gizmos.DrawLine(new Vector3(Player.physicsPosition2D.Value.X, Player.physicsPosition2D.Value.Y, 0.0f), new Vector3(Player.physicsPosition2D.Value.X, Player.physicsPosition2D.Value.Y + 10.0f));
+
+                    // Y-
+                    Gizmos.DrawLine(new Vector3(Player.physicsPosition2D.Value.X, Player.physicsPosition2D.Value.Y, 0.0f), new Vector3(Player.physicsPosition2D.Value.X, Player.physicsPosition2D.Value.Y - 10.0f));
+                }
+
+            // Draw Chunk Visualizer
+            Admin.AdminAPI.DrawChunkVisualizer(Planet.TileMap);
         }
 
         // create the sprite atlas for testing purposes
         public void Initialize()
         {
+            // get the 3d model from the scene
+            //GameObject humanoid = GameObject.Find("DefaultHumanoid");
+
+            GameObject prefab = Engine3D.AssetManager.Singelton.GetModel(Engine3D.ModelType.Stander);
+
+            HumanoidArray = new GameObject[HumanoidCount];
+            AnimancerComponentArray = new AnimancerComponent[HumanoidCount];
+
+            for(int i = 0; i < HumanoidCount; i++)
+            {
+                HumanoidArray[i] = Instantiate(prefab);
+                HumanoidArray[i].transform.position = new Vector3(5.0f, 20.0f, -1.0f);
+
+                Vector3 eulers = HumanoidArray[i].transform.rotation.eulerAngles;
+                HumanoidArray[i].transform.rotation = Quaternion.Euler(0, eulers.y + 90, 0);
+                
+            }
+
+
+            // create an animancer object and give it a reference to the Animator component
+            for(int i = 0; i < HumanoidCount; i++)
+            {
+                GameObject animancerComponent = new GameObject("AnimancerComponent", typeof(AnimancerComponent));
+                // get the animator component from the game object
+                // this component is used by animancer
+                AnimancerComponentArray[i] = animancerComponent.GetComponent<AnimancerComponent>();
+                AnimancerComponentArray[i].Animator = HumanoidArray[i].GetComponent<Animator>();
+            }
+
+            
+            IdleAnimationClip = Engine3D.AssetManager.Singelton.GetAnimationClip(Engine3D.AnimationType.Idle);
+            RunAnimationClip = Engine3D.AssetManager.Singelton.GetAnimationClip(Engine3D.AnimationType.Run);
+            WalkAnimationClip = Engine3D.AssetManager.Singelton.GetAnimationClip(Engine3D.AnimationType.Walk);
+            GolfSwingClip = Engine3D.AssetManager.Singelton.GetAnimationClip(Engine3D.AnimationType.Flip);
+
+
+            // play the idle animation
+            for(int i = 0; i < HumanoidCount; i++)
+            {
+                AnimancerComponentArray[i].Play(IdleAnimationClip);
+            }
+
+            Application.targetFrameRate = 60;
+
             inventoryManager = new Inventory.InventoryManager();
             inventoryDrawSystem = new Inventory.DrawSystem();
 
@@ -106,55 +199,35 @@ namespace Planet.Unity
             Vec2i mapSize = new Vec2i(32, 24);
             Planet = new Planet.PlanetState();
             Planet.Init(mapSize);
-            Planet.InitializeSystems(Material, transform);
 
-            GameResources.CreateItems(Planet.EntitasContext);
+            Planet.InitializeSystems(Material, transform);
+            
+            /*var camera = Camera.main;
+            Vector3 lookAtPosition = camera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, camera.nearClipPlane));
+            Planet.TileMap = TileMapManager.Load("map.kmap", (int)lookAtPosition.x, (int)lookAtPosition.y);*/
 
             GenerateMap();
             SpawnStuff();
 
-            var inventoryAttacher = Inventory.InventoryAttacher.Instance;
+            TileMapManager.Save(Planet.TileMap, "map.kmap");
 
             inventoryID = Player.agentInventory.InventoryID;
             toolBarID = Player.agentToolBar.ToolBarID;
 
-            ItemEntity gun = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.Gun);
-            ItemEntity ore = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.Ore);
-            ItemEntity placementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.PlacementTool);
-            ItemEntity removeTileTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.RemoveTileTool);
-            ItemEntity spawnEnemySlimeTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.SpawnEnemySlimeTool);
-            ItemEntity miningLaserTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.MiningLaserTool);
-            ItemEntity pipePlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.PipePlacementTool);
-            ItemEntity particleEmitterPlacementTool = GameState.ItemSpawnSystem.SpawnInventoryItem(Planet.EntitasContext.item, Enums.ItemType.ParticleEmitterPlacementTool);
+            hudManager = new HUDManager(Planet.EntitasContext, Player);
 
+            // Admin API Spawn Items
+            Admin.AdminAPI.SpawnItem(Enums.ItemType.Pistol, Planet.EntitasContext);
+            Admin.AdminAPI.SpawnItem(Enums.ItemType.Ore, Planet.EntitasContext);
 
-            inventoryManager.AddItem(Planet.EntitasContext, placementTool, toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, removeTileTool, toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, spawnEnemySlimeTool, toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, miningLaserTool, toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, pipePlacementTool, toolBarID);
-            inventoryManager.AddItem(Planet.EntitasContext, particleEmitterPlacementTool, toolBarID);
-
-
-            // Health Bar Initialize
-            healthBarUI = new KGUI.HealthBarUI();
-            healthBarUI.Initialize();
-
-            // Food Bar Initialize
-            foodBarUI = new KGUI.FoodBarUI();
-            foodBarUI.Initialize(Planet.EntitasContext);
-
-            // Water Bar Initialize
-            waterBarUI = new KGUI.WaterBarUI();
-            waterBarUI.Initialize(Planet.EntitasContext);
-
-            // Oxygen Bar Initialize
-            oxygenBarUI = new KGUI.OxygenBarUI();
-            oxygenBarUI.Initialize(Planet.EntitasContext);
-
-            // Oxygen Bar Initialize
-            fuelBarUI = new KGUI.FuelBarUI();
-            fuelBarUI.Initialize(Planet.EntitasContext);
+            // Admin API Add Items
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.PlacementTool, Planet.EntitasContext);
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.PlacementToolBack, Planet.EntitasContext);
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.RemoveTileTool, Planet.EntitasContext);
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.SpawnEnemySlimeTool, Planet.EntitasContext);
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.MiningLaserTool, Planet.EntitasContext);
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.PipePlacementTool, Planet.EntitasContext);
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.ParticleEmitterPlacementTool, Planet.EntitasContext);
         }
 
         void GenerateMap()
@@ -168,16 +241,19 @@ namespace Planet.Unity
                 for (int i = 0; i < tileMap.MapSize.X; i++)
                 {
                     var frontTileID = TileID.Air;
+                    var backTileID = TileID.Air;
 
                     if (i >= tileMap.MapSize.X / 2)
                     {
                         if (j % 2 == 0 && i == tileMap.MapSize.X / 2)
                         {
                             frontTileID = TileID.Moon;
+                            backTileID = TileID.Background;
                         }
                         else
                         {
                             frontTileID = TileID.Glass;
+                            backTileID = TileID.Background;
                         }
                     }
                     else
@@ -185,41 +261,46 @@ namespace Planet.Unity
                         if (j % 3 == 0 && i == tileMap.MapSize.X / 2 + 1)
                         {
                             frontTileID = TileID.Glass;
+                            backTileID = TileID.Background;
                         }
                         else
                         {
                             frontTileID = TileID.Moon;
-                            /*if ((int) KMath.Random.Mt19937.genrand_int32() % 10 == 0)
+                            backTileID = TileID.Background;
+                            if ((int) KMath.Random.Mt19937.genrand_int32() % 10 == 0)
                             {
                                 int oreRandom = (int) KMath.Random.Mt19937.genrand_int32() % 3;
                                 if (oreRandom == 0)
                                 {
-                                    frontTile.SpriteId2 = GameResources.OreSprite;
+                                    tileMap.GetFrontTile(i, j).SpriteId2 = GameResources.OreSprite;
                                 }
                                 else if (oreRandom == 1)
                                 {
-                                    frontTile.SpriteId2 = GameResources.Ore2Sprite;
+                                    tileMap.GetFrontTile(i, j).SpriteId2 = GameResources.Ore2Sprite;
                                 }
                                 else
                                 {
-                                    frontTile.SpriteId2 = GameResources.Ore3Sprite;
+                                    tileMap.GetFrontTile(i, j).SpriteId2 = GameResources.Ore3Sprite;
                                 }
 
-                                frontTile.DrawType = TileDrawType.Composited;
-                            }*/
+                                tileMap.GetFrontTile(i, j).DrawType = TileDrawType.Composited;
+                            }
                         }
                     }
 
-
-                    tileMap.SetTile(i, j, frontTileID, MapLayerType.Front);
+                    tileMap.GetFrontTile(i, j).ID = frontTileID;
+                    tileMap.GetBackTile(i, j).ID = backTileID;
                 }
             }
+
+
 
             for (int i = 0; i < tileMap.MapSize.X; i++)
             {
                 for (int j = tileMap.MapSize.Y - 10; j < tileMap.MapSize.Y; j++)
                 {
-                    tileMap.SetTile(i, j, TileID.Air, MapLayerType.Front);
+                    tileMap.GetFrontTile(i, j).ID = TileID.Air;
+                    tileMap.GetBackTile(i, j).ID = TileID.Air;
                 }
             }
 
@@ -239,9 +320,16 @@ namespace Planet.Unity
                     carveHeight = tileMap.MapSize.Y - 1;
                 }
 
+                if (carveHeight < 0)
+                {
+                    carveHeight = 0;
+                }
+
                 for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
-                    tileMap.SetTile(i, j, TileID.Air, MapLayerType.Front);
+                    tileMap.GetFrontTile(i, j).ID = TileID.Air;
+                    tileMap.GetBackTile(i, j).ID = TileID.Air;
+                    tileMap.GetMidTile(i, j).ID = TileID.Wire;
                 }
             }
 
@@ -268,13 +356,30 @@ namespace Planet.Unity
 
                 for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
-                    tileMap.SetTile(i, j, TileID.Air, MapLayerType.Front);
+                    tileMap.GetFrontTile(i, j).ID = TileID.Air;
+                    tileMap.GetMidTile(i, j).ID = TileID.Pipe;
                 }
             }
 
 
-            tileMap.UpdateTileMapPositions(MapLayerType.Front);
+            for(int i = 0; i < tileMap.MapSize.X; i++)
+            {
+                tileMap.GetFrontTile(i, 0).ID = TileID.Bedrock;
+                tileMap.GetFrontTile(i, tileMap.MapSize.Y - 1).ID = TileID.Bedrock;
+            }
 
+            for(int j = 0; j < tileMap.MapSize.Y; j++)
+            {
+                tileMap.GetFrontTile(0, j).ID = TileID.Bedrock;
+                tileMap.GetFrontTile(tileMap.MapSize.X - 1, j).ID = TileID.Bedrock;
+            }
+
+            var camera = Camera.main;
+            Vector3 lookAtPosition = camera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, camera.nearClipPlane));
+
+            tileMap.UpdateBackTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
+            tileMap.UpdateMidTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
+            tileMap.UpdateFrontTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
         }
 
         void SpawnStuff()
@@ -298,9 +403,8 @@ namespace Planet.Unity
                 }
             }
             
-            GameState.ItemSpawnSystem.SpawnItem(Planet.EntitasContext, Enums.ItemType.Gun, new Vec2f(6.0f, spawnHeight));
-            GameState.ItemSpawnSystem.SpawnItem(Planet.EntitasContext, Enums.ItemType.Ore, new Vec2f(10.0f, spawnHeight));
+            GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.Pistol, new Vec2f(6.0f, spawnHeight));
+            GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.Ore, new Vec2f(10.0f, spawnHeight));
         }
-        
     }
 }

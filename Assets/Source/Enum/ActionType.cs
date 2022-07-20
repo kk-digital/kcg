@@ -8,6 +8,10 @@
         /// </summary>
         DropAction,
         PickUpAction,
+        ReloadAction,
+        ChargeAction,
+        ShieldAction,
+        MoveAction,
 
         /// <summary>
         /// PlaceTileTool
@@ -19,14 +23,19 @@
         PlaceTilGlassAction,
         PlaceTilMoonAction,
         PlaceTilPipeAction,
+        PlaceTilBackgroundAction,
 
         /// <summary>
         /// Others tools actions
         /// </summary>
-        FireWeaponAction,
-        PlaceParticleEmitterAction,
-        EnemySpawnAction,
-        MiningLaserAction,
-        RemoveTileAction
+        ToolActionFireWeapon,
+        ToolActionPlaceParticle,
+        ToolActionEnemySpawn,
+        ToolActionMiningLaser,
+        ToolActionRemoveTile,
+        ToolActionThrowGrenade,
+        ToolActionMeleeAttack,
+        ToolActionPulseWeapon,
+        ToolActionShield,
     }
 }

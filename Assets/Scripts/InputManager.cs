@@ -11,9 +11,6 @@ public class InputManager : MonoBehaviour
         public string keyName;
     }
 
-    // Input Device
-    private Enums.eInputDevice inputDevice;
-
     // Player State
     private Enums.PlayerState playerState = Enums.PlayerState.Pedestrian;
 
@@ -27,14 +24,6 @@ public class InputManager : MonoBehaviour
         if (SceneManager.Instance != null)
         {
             SceneManager.Instance.Register(this, Enums.SceneObjectType.SceneObjectTypeUtilityScript);
-        }
-
-        if (Camera.main.gameObject.GetComponent<CameraMove>().enabled == true)
-        {
-            if (Camera.main.gameObject.GetComponent<CameraFollow>() != null)
-                Camera.main.gameObject.GetComponent<CameraFollow>().enabled = false;
-            else
-                Camera.main.gameObject.AddComponent<CameraFollow>();
         }
     }
 
@@ -77,30 +66,6 @@ public class InputManager : MonoBehaviour
                     pixelCam.targetCameraHalfWidth += 1.0f;
                 // Update Zoomed ortho pixel perfect calculation
                 pixelCam.adjustCameraFOV();
-            }
-
-            // Open or close statistics
-            if (Input.GetKeyDown(KeyCode.F1))
-            {
-                if (KGUI.Statistics.StatisticsDisplay.canDraw)
-                    KGUI.Statistics.StatisticsDisplay.canDraw = false;
-                else if (!KGUI.Statistics.StatisticsDisplay.canDraw)
-                    KGUI.Statistics.StatisticsDisplay.canDraw = true;
-
-            }
-
-            if(Input.GetKeyDown(KeyCode.LeftAlt))
-            {
-                if(Camera.main.gameObject.GetComponent<CameraFollow>().enabled == true)
-                {
-                    Camera.main.gameObject.GetComponent<CameraFollow>().enabled = false;
-                    Camera.main.gameObject.GetComponent<CameraMove>().enabled = true;
-                }
-                else
-                {
-                    Camera.main.gameObject.GetComponent<CameraFollow>().enabled = true;
-                    Camera.main.gameObject.GetComponent<CameraMove>().enabled = false;
-                }
             }
         }
 
@@ -146,9 +111,6 @@ public class InputManager : MonoBehaviour
     {
         // Detect Input device to understand which device player using.
         DetectInputDevice();
-
-        if (GameObject.Find("Test") != null)
-            KGUI.Statistics.StatisticsDisplay.DrawStatistics(GameObject.Find("Test").GetComponent<Planet.Unity.PlanetTest>().Planet);
     }
 
     // Detecting Input device from input actions

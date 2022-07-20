@@ -1,0 +1,274 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset0 Bahnschrift SemiCondensed;}{\f1\fnil\fcharset0 Calibri;}{\f2\fnil\fcharset0 Cascadia Mono;}{\f3\fnil Cascadia Mono;}{\f4\fnil\fcharset2 Symbol;}}
+{\colortbl ;\red0\green0\blue255;\red0\green0\blue0;\red0\green128\blue0;\red43\green145\blue175;}
+{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\qc\ul\b\f0\fs44\lang9\par
+\par
+
+\pard\sl276\slmult1\qc\fs96 InteliMap\par
+AI Tilemap Generator\par
+Documentation v1.1.1\fs44\par
+
+\pard\sa200\sl276\slmult1\qr\ulnone\b0\fs28\par
+Created By: Tigpan (aka Timothy Letkeman)\ul\b\fs44\par
+
+\pard\sa200\sl276\slmult1\f1\fs40 Table of contents: \b0\fs24\line\ulnone\tab 1. Description\line\tab 2. Links to Video Tutorials\line\tab 3. How to Build a Generator\line\tab 4. Runtime Generation\line\tab\tab a. On Start\line\tab\tab b. How to Create Custom Runtime Behaviour\line\tab 5. v1.1 Update\line\tab\tab a. Multi-layered Tilemaps\line\tab\tab b. How to Build and Generate Multi-layered Tilemaps\line\tab\tab c. Updating a Generator from v1.0 to v1.1\line\tab 6. Script Reference\line\tab\tab a. Major Objects\line\tab\tab\tab i. InteliMapBuilder \line\tab\tab\tab ii. InteliMapGenerator \line\tab\tab a. Minor Objects\line\tab\tab\tab i. GeneratorBuildResult\line\tab\tab\tab ii. BuildMode\line\tab\tab\tab iii. DirectionalBools\line\tab\tab\tab iv. GeneratorMap\line\tab\tab\tab v. InteliMapBuilderAdvanced\line\tab 7. Contact Information\par
+\par
+\par
+\ul\b\fs40 1. Description:\ulnone\b0\fs24\par
+InteliMap is \b the tool for you \b0 to use if you are looking to improve your 2d map design workflow, or if you want to create stunning AI generated tilemaps. It's main features are editor tools for you \b to easily and quickly create entire environments that look handcrafted\b0 , it also includes tools for highly performant runtime generation.\par
+InteliMap supports any 2D tilemap, allowing you to simply use any tilemap you desire and start creating quicky, no coding required! Designed to be as simple and hassle-free as possible, this is sure to be the ideal asset for your game.\par
+
+\pard\sl276\slmult1\b Features\b0 :\par
+
+\pard{\pntext\f4\'B7\tab}{\*\pn\pnlvlblt\pnf4\pnindent0{\pntxtb\'B7}}\fi-360\li720\sl276\slmult1 Editor tools for you to quickly create vast environments in as little as one click!\par
+{\pntext\f4\'B7\tab}Generate detailed levels at runtime.\par
+{\pntext\f4\'B7\tab}Integrates seamlessly with Unity's Tilemaps, no external tools nessesary!\par
+{\pntext\f4\'B7\tab}Tons of customizable features to finely tune your generation to exactly your needs.\par
+{\pntext\f4\'B7\tab}Includes detailed documentation and video tutorials.\par
+{\pntext\f4\'B7\tab}Incredibly simple to use API for easily creating your own runtime behaviours.\par
+{\pntext\f4\'B7\tab}Full source code included.\par
+{\pntext\f4\'B7\tab}Includes 6 example scenes complete with tilemaps.\par
+
+\pard{\pntext\f4\'B7\tab}{\*\pn\pnlvlblt\pnf4\pnindent0{\pntxtb\'B7}}\fi-360\li720\sa200\sl276\slmult1 Actively supported and updated.\par
+
+\pard\sa200\sl276\slmult1\par
+\line\ul\b\fs40 2. Links to Video Tutorials:\fs24\par
+\ulnone\b0 Quick Start Guide: {{\field{\*\fldinst{HYPERLINK https://youtu.be/ZJ8dSDtggFc }}{\fldrslt{https://youtu.be/ZJ8dSDtggFc\ul0\cf0}}}}\f1\fs24\par
+This quick start guide is intended to get you using InteliMap AI Tilemap Generator as quickly as possible. If you'd like to learn more please watch the advanced guide as well, thank you!\par
+\par
+Advanced Guide: {{\field{\*\fldinst{HYPERLINK https://youtu.be/qqkBe5VBxlg }}{\fldrslt{https://youtu.be/qqkBe5VBxlg\ul0\cf0}}}}\f1\fs24\par
+This advanced guide will teach you many tips and tricks of InteliMap. It includes information on all the different settings, how to resolve common issues, and how to use the API to create your own runtime generation behaviour.\par
+\par
+\fs40\par
+\ul\b 3. How to Build A Generator:\par
+\ulnone\b0\fs24 InteliMap works using a system of builders and generators. First a builder analyzes some example environment, then it produces a generator that can generate environment just like what the builder analyzed.\par
+To begin this process first make sure you have added a tilemap to your scene, and created an example map using a tile palette of your choice (this is done exactly the same as in vanilla Unity). Next you'll want to add an IntelliMapBuilder component to any object in your scene. Now you'll need to add the example tilemap as a \f2 BuildMap \f1 for the builder, there are two ways to do this.\par
+Option 1) On the left side of the scene view there will be a tool bar. When you have selected an object with an IntelliMapBuilder component, there will a tool with a hammer icon. Simply selecting that tool and dragging a box over the example map will add that area to the builders build maps.\par
+Option 2) Clicking the plus icon on the build maps list will add a new build map. On the new entry you can select the map layers and bounds you would like to use. You can add multiple layers to build a multi-layered tilemap.\par
+After you added all your build maps, you can simply click Start Generation on the builder. This may take a short time, but once it is done it will have produced an InteliMapGenerator component, this is what can actually produce the generation. To get started generating, you have three options.\par
+Option 1) On the left side of the scene view there will be a tool bar. When you have selected an object with an IntelliMapGenerator component, there will be a tool with a map icon. Simply selecting that tool and dragging a box over the area you would like to generate will generate in that area.\par
+Option 2) The InteliMapGenerator component includes a few buttons that will cause it to instantly generate at that generators boundsToFill. Change the bounds to whatever you would like, then hit the Generate button.\par
+Option 3) You can also generate during runtime, this can be done either on scene start, or however else you like according to your custom runtime behaviours. You can read more about runtime generation in section 4.\ul\b\par
+\par
+\ulnone\b0\par
+\ul\b\fs40 4. Runtime Generation:\fs24\par
+a) On Start:\ulnone\b0  \par
+By default, InteliMapGenerator's generateOnStart property is set to true. This means that if that InteliMapGenerator component is enabled. Then upon the scene starting (MonoBehaviour.Start), the area corresponding to that components boundsToFill and areaToFill will be generated. \par
+\ul\b b) How to Create Custom Runtime Behaviour:\ulnone\b0  \par
+If you need more functionality than just generating on start, you will need to interact with the InteliMapGenerator through a script. In this short step by step guide you will learn how to create your own custom runtime generation behaviour with InteliMap.\par
+\ul Step 1\ulnone : First create the component you wish to use to control this runtime generation. To do this right click on the assets panel, then Create > C# Script. This script will be responsible for controlling, in this example I'll be naming this script \f2 RuntimeExample \f1 All of InteliMaps code is under the \f2 InteliMap \f1 namespace, thus you must should put \f2 using InteliMap; \f1 at the top of your project. At the end of step one your script should look like this (extra comments have also been included):\par
+
+\pard\sl276\slmult1\cf1\f3\fs19 using\cf2  System.Collections;\par
+\cf1 using\cf2  System.Collections.Generic;\par
+\cf1 using\cf2  UnityEngine;\par
+\cf1 using\cf2  InteliMap; \cf3 // needed to interact with InteliMapGenerator\cf2\par
+\par
+\cf1 public\cf2  \cf1 class\cf2  \cf4 RuntimeExample\cf2  : MonoBehaviour\par
+\{\par
+    \cf3 // Start is called before the first frame update\cf2\par
+    \cf1 void\cf2  \cf1 Start\cf2 ()\par
+    \{\par
+        \par
+    \}\par
+\par
+    \cf3 // Update is called once per frame\cf2\par
+    \cf1 void\cf2  \cf1 Update\cf2 ()\par
+    \{\par
+        \par
+    \}\par
+\}\par
+
+\pard\sa200\sl276\slmult1\cf0\f1\fs24\par
+\ul\fs22 Step 2:\ulnone  Next you'll need to be able to interact with an InteliMapGenerator. To do this add a public InteliMapGenerator variable, this will allow you to set your generator through the inspector. Now to generate you will want to call the \f2\fs24 StartGeneration()\f1  method of that generator (if you want seeded generation, you can use the \f2 StartGenerationWithSeed(int seed)\f1  method).\par
+
+\pard\sl276\slmult1\cf1\f3\fs19 using\cf2  System.Collections;\par
+\cf1 using\cf2  System.Collections.Generic;\par
+\cf1 using\cf2  UnityEngine;\par
+\cf1 using\cf2  InteliMap; \cf3 // needed to interact with InteliMapGenerator\cf2\par
+\par
+\cf1 public\cf2  \cf1 class\cf2  \cf4 RuntimeExample\cf2  : MonoBehaviour\par
+\{\par
+    \cf1 public\cf2  InteliMapGenerator\f2\lang1033  \f3\lang9 generator; \cf3 // the generator to use for runtime generation\cf2\par
+\par
+    \cf3 // Start is called before the first frame update\cf2\par
+    \cf1 void\cf2  \cf1 Start\cf2 ()\par
+    \{\par
+        generator.StartGeneration(); \cf3 // starts the generator upon Start\cf2\par
+        \cf3 // generator.StartGenerationWithSeed(1234); // also for generating with a seed\cf2\par
+    \}\par
+\par
+    \cf3 // Update is called once per frame\cf2\par
+    \cf1 void\cf2  \cf1 Update\cf2 ()\par
+    \{\par
+        \par
+    \}\par
+\}\par
+
+\pard\sa200\sl276\slmult1\cf0\f1\fs22\par
+\ul Step 3:\ulnone  Now that you have the basic generation working, you can do anything you'd like with the generator by moving its boundsToFill property and then calling StartGeneration. For example, if you wanted to make a side scrolling environment, you could you could incrementally move the boundsToFill's position to the right, and then call generate. One thing to note is to make sure the bounds overlap with what is already placed, if there is no overlap then the generator will not bother to meaningfully connect the tiles and you will end up with rough boundaries between the generated areas.\par
+
+\pard\sl276\slmult1\cf1\f3\fs19 using\cf2  System.Collections;\par
+\cf1 using\cf2  System.Collections.Generic;\par
+\cf1 using\cf2  UnityEngine;\par
+\cf1 using\cf2  InteliMap; \cf3 // needed to interact with InteliMapGenerator\cf2\par
+\par
+\cf1 public\cf2  \cf1 class\cf2  \cf4 RuntimeExample\cf2  : MonoBehaviour\par
+\{\par
+    \cf1 public\cf2  InteliMapGenerator generator; \cf3 // the generator to use for runtime generation\cf2\par
+\par
+    \cf1 public\cf2  \cf1 int\cf2  chunkSize = 16;\par
+    \cf1 public\cf2  \cf1 float\cf2  timePerChunk = 1.0f;\par
+\par
+    \cf1 private\cf2  \cf1 float\cf2  timer = 0.0f;\par
+\par
+    \cf3 // Start is called before the first frame update\cf2\par
+    \cf1 void\cf2  \cf1 Start\cf2 ()\par
+    \{\par
+        generator.StartGeneration(); \cf3 // starts the generator upon Start\cf2\par
+        \cf3 // generator.StartGenerationWithSeed(1234); // also for generating with a seed\cf2\par
+\par
+        \cf3 // Set the generators bounds to fill size to match the chunk size (+1 to ensure an overlap)\cf2\par
+        generator.boundsToFill.size = \cf1 new\cf2  Vector3Int(chunkSize + 1, generator.boundsToFill.size.y, generator.boundsToFill.size.z);\par
+    \}\par
+\par
+    \cf3 // Update is called once per frame\cf2\par
+    \cf1 void\cf2  \cf1 Update\cf2 ()\par
+    \{\par
+        \cf3 // Increase the timer\cf2\par
+        timer += Time.deltaTime;\par
+\par
+        \cf1 if\cf2  (timer > timePerChunk) \par
+        \{\par
+            \cf3 // Reset the timer\cf2\par
+            timer = 0.0f;\par
+\par
+            \cf3 // Tell the generator to generate\cf2\par
+            generator.StartGeneration();\par
+\par
+            \cf3 // Move the generators position to the right\cf2\par
+            generator.boundsToFill.position += \cf1 new\cf2  Vector3Int(chunkSize, 0, 0);\par
+        \}\par
+    \}\par
+\}\par
+
+\pard\sa200\sl276\slmult1\f1\fs24\par
+\par
+\cf0\ul\b\fs40 5. v1.1 Update:\par
+\fs24 a) Multi-layered Tilemaps:\fs40\par
+\ulnone\b0\fs24\tab InteliMap version 1.1 introduced support for multi-layered tilemaps. This means that you can now build and generate multi layers at once, and each layer will interact with and influence each other. For example: you can now design a portion of one layer, then generating in that area will fill in all the layers, based on what you designed. The multiple layers also have strongly enforced connections, meaning that if a connection doesn't appear in one of the build maps, it will never appear in one of the generated maps. For example: if a tree tile never appears on top of water in any of the build maps, then a tree tile will never be placed in the generated area.\par
+\par
+\ul\b b) How to Build and Generate Multi-layered Tilemaps:\fs40\par
+\ulnone\b0\fs24\tab The process to build and generate multi-layered tilemaps is nearly identical to the process for single-layered tilemaps. To build, open up the build maps property of the InteliMapBuilder, then input multiple layers into the \cf2\f2\fs19\lang1033 mapLayers\f1  \cf0\fs24\lang9 property of each build map. All build maps should have the same number of layers. The ordering of the layers also matters, all build maps should have their layers ordered in the same way, or else you may encounter tiles generating on layers you don't expect. To generate mutli-layered tilemaps, make sure to include the appropriate amount of tilemaps in the \cf2\f2\fs19\lang1033 mapToFill\f1  \cf0\fs24\lang9 property of the InteliMapGenerator. I.e., if the generator was built with 2 layers, the \cf2\f2\fs19\lang1033 mapToFill\f1  \cf0\fs24\lang9 must include 2 tilemaps. \par
+\par
+\ul\b c) Updating a Generator from v1.0 to v1.1:\par
+\ulnone\b0\tab If you built a generator prior to v1.1, you may find that attempting to generate with it, now produces errors. This is because v1.1 uses a different system for storing unique tiles compared to v1.0. If you don't want to retrain a new generator, you are able to update a generator to v1.1 assuming you haven't changed any of the build maps. To update the generator, ensure that generator is on the same object as the builder. Then select \cf2\f3\fs19 LoadFromGenerator\f1\fs24  as the build mode, and set epochs to 0. Building will update the unique tiles and connection information, without retraining the generator.\cf0\ul\b\fs40\par
+\ulnone\b0\fs24\par
+\ul\b\fs40\par
+6. Script Reference:\fs24\line\line a) Major Objects:\par
+\ulnone\b0\fs22\tab\ul\b\fs24 i) InteliMapBuilder:\ulnone\b0  Used for building InteliMapGenerators, which can be used to create AI generated tilemaps. Intended to be used while creating your scene, then removed before release. You can build during runtime, however it is not recommended due to the sometimes long build times.\ul\b\par
+\ulnone\b0 Public Attributes:\par
+
+\pard{\pntext\f4\'B7\tab}{\*\pn\pnlvlblt\pnf4\pnindent0{\pntxtb\'B7}}\fi-360\li720\sa200\sl276\slmult1\cf1\f2\fs19\lang1033 int \cf2 epochs \cf0\f1\fs24\lang9 - How many times to analyze the build maps. Higher values will result in longer build times and more accurate generation.\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 BuildMode \cf2 buildMode \cf0\f1\fs24\lang9 - Wether to train the machine learning model from scratch, or loading an existing one from a Generator on this gameobject.\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 int \cf2 neighborhoodRadius \cf0\f1\fs24\lang9 - The size of a tiles 'neighborhood'. A tiles neighborhood is all the nearby tiles that are relevent to deciding what that tile is going to be. Ex. A radius of 1 implies a 3x3 area, a radius of 2 implies a 5x5 area, etc.. The lower this is, the quicker the build will be.\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 List<GeneratorMap> \cf2 buildMaps \cf0\f1\fs24\lang9 - The list of Tilemaps to analyze and build the generator from.\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 InteliMapBuilderAdvanced \cf2 advanced \cf0\f1\fs24\lang9 - A collection of all the advanced settings for the InteliMapBuilder.\fs22\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 GeneratorBuildResult \cf2 buildResult \f1\fs24 - The result of the most recent build from the builder.\f2\fs19  \cf0\f1\fs22\lang9\par
+
+\pard\sa200\sl276\slmult1\fs24 Public Functions:\par
+
+\pard{\pntext\f4\'B7\tab}{\*\pn\pnlvlblt\pnf4\pnindent0{\pntxtb\'B7}}\fi-360\li720\sa200\sl276\slmult1\cf1\f2\fs19\lang1033 void \cf2 CancelBuild() \cf0\f1\fs24\lang9 - Cancels the current build if there is one running. Note that if a generator was already overwritten it can not be retrieved by canceling the build.\fs22\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 void \cf2 SaveAndQuitBuild() \cf0\f1\fs24\lang9 - Save and quits the current build if there is one running. It will wait until the end of the current epoch to stop.\fs22\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 void \cf2 Build() \cf0\f1\fs24\lang9 - Builds a generator according to the attributes of this builder.\fs22\par
+
+\pard\sa200\sl276\slmult1\par
+\tab\ul\b\fs24 ii) InteliMapGenerator:\ulnone\b0  Used to create AI generated tilemaps, can be used in the editor or at runtime.\par
+Public Attributes:\par
+
+\pard{\pntext\f4\'B7\tab}{\*\pn\pnlvlblt\pnf4\pnindent0{\pntxtb\'B7}}\fi-360\li720\sa200\sl276\slmult1\cf1\f2\fs19\lang1033 List<Tilemap> \cf2 mapToFill \cf0\f1\fs24\lang9 - The tilemap to fill by generating. Each seperate entry into the list should be a different layer of the map to fill.\fs22\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 BoundsInt \cf2 boundsToFill \cf0\f1\fs24\lang9 - The bounds of the given tilemap to fill by generating. Tiles that are already placed in the bounds will be incorporated into the new generation in-place.\fs22\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 bool \cf2 generateOnStart \cf0\f1\fs24\lang9 - Wether to start generation upon the scene starting (i.e., on MonoBehaviour.Start).\fs22\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 bool \cf2 forceful \cf0\f1\fs24\lang9 - When this is set to true, if the generator encounters an area impossible to generate in, instead of throwing an exception, it will forcefully generate by changing some of the previously set tiles.\fs22\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 float \cf2 temperature \cf0\f1\fs24\lang9 - How 'random' the generation should be. Positive values of this will likely result in more random generation, while negative values may result in more consistent generation.\fs22\par
+
+\pard\sa200\sl276\slmult1\fs24 Public Functions:\par
+
+\pard{\pntext\f4\'B7\tab}{\*\pn\pnlvlblt\pnf4\pnindent0{\pntxtb\'B7}}\fi-360\li720\sa200\sl276\slmult1\cf1\f2\fs19\lang1033 void \cf2 StartGeneration() \cf1 throws System.ArgumentException \cf0\f1\fs24\lang9 - Starts the map generation. Throws System.ArguementException if it is impossible to generate a valid map within the given bounds and forceful is set to false. This can often be fixed by removing some nearby tiles or making the example build maps larger so that it has more connection information, then try again. It can also be fixed by setting forceful to true, provided it is acceptable to remove some previously placed tiles.\fs22\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 void \cf2 StartGenerationWithSeed(int seed) \cf1 throws System.ArgumentException \cf0\f1\fs24\lang9 - Starts the map generation with the given seed. Throws System.ArguementException if it is impossible to generate a valid map within the given bounds and forceful is set to false. This can often be fixed by removing some nearby tiles or making the example build maps larger so that it has more connection information, then try again. It can also be fixed by setting forceful to true, provided it is acceptable to remove some previously placed tiles.\fs22\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 void \cf2 ClearBounds() \f1\fs24 - Clears the area of the mapToFill within the boundsToFill.\f2\fs19  \cf0\f1\fs22\lang9\par
+
+\pard\sa200\sl276\slmult1\ul\b\fs24\par
+b) Minor Objects:\par
+\ulnone\b0\tab\ul\b i) GeneratorBuildResult:\ulnone\b0  An enumerator of the result code of the most recent build from an InteliMapBuilder. \ul\b\par
+
+\pard\sl240\slmult1\cf1\ulnone\b0\f3\fs19 public\cf2  \cf1 enum\cf2  \cf4 GeneratorBuildResult\cf2\par
+\{\par
+    None,\par
+    InProgress,\par
+    \par
+    \cf3 // Warning Messages\cf2\par
+    Cancelled,\par
+\par
+    \cf3 // Success Messages\cf2\par
+    Success,\par
+\par
+    \cf3 // Error Messages\cf2\par
+    NanError,\par
+    ZeroMaps,\par
+    NullMaps,\par
+    InvalidCommonality\par
+\}\par
+
+\pard\sa200\sl276\slmult1\par
+\cf0\f1\fs24\tab\ul\b ii) BuildMode:\ulnone\b0  An enumerator that dictates what mode to use while building a generator. \par
+
+\pard\sl240\slmult1\cf1\f3\fs19 public\cf2  \cf1 enum\cf2  \cf4\f2\lang1033 Build\f3\lang9 Mode\cf2\par
+\{\par
+    FromScratch,\par
+    FromScratchOverwrite,\par
+    LoadFromGenerator\par
+\}\cf0\f1\fs24\par
+
+\pard\sa200\sl276\slmult1\fs22\par
+\tab\ul\b\fs24 iii) DirectionalBools:\ulnone\b0  A struct that allows storing four bools that correspond to the four orthogonal directions.\par
+
+\pard\sl240\slmult1\cf1\f3\fs19 public\cf2  \cf1 struct\cf2  \cf4 DirectionalBools\cf2\par
+\{\par
+\f2\lang1033\tab\cf1\f3\lang9 public\cf2  \cf4 DirectionalBools\cf2 (\cf1 bool\cf2  top, \cf1 bool\cf2  bottom, \cf1 bool\cf2  left, \cf1 bool\cf2  right) \par
+\par
+\f2\lang1033\tab\cf1\f3\lang9 public\cf2  \cf1 bool\cf2  top;\par
+\f2\lang1033\tab\cf1\f3\lang9 public\cf2  \cf1 bool\cf2  bottom;\par
+\f2\lang1033\tab\cf1\f3\lang9 public\cf2  \cf1 bool\cf2  left;\par
+\f2\lang1033\tab\cf1\f3\lang9 public\cf2  \cf1 bool\cf2  right;\par
+\}\par
+
+\pard\sa200\sl276\slmult1\cf0\f1\fs22\par
+\tab\ul\b\fs24 iv) GeneratorMap:\ulnone\b0  A class used to store a build map for an InteliMapBuilder's buildMaps list.\par
+Public Attributes:\par
+
+\pard{\pntext\f4\'B7\tab}{\*\pn\pnlvlblt\pnf4\pnindent0{\pntxtb\'B7}}\fi-360\li720\sa200\sl276\slmult1\cf1\f2\fs19\lang1033 List<Tilemap> \cf2 mapLayers \cf0\f1\fs24\lang9 - The Tilemap object(s) to open and analyze for the purposes of building the generator. Having multiple entries in this list allows you to make multi-layered tilemaps.\fs22\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 float \cf2 commonality \cf0\f1\fs24\lang9 - How 'common' this map should be considered. I.e., make this value low if the map includes rare structures. These values are normalized, meaning the effective commonality of a map is the commonality of that map, divided by the total commonality of all build maps. This feature should be used if you want to make some structures more rare or more common than others, or set to an extremely low value if you want to include some connection information, but don't want to generate those structures.\fs22\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 bool \cf2 manualBounds \cf0\f1\fs24\lang9 - Wether to use manually inputted boundaries (this objects bounds property, or to just use the entire tilemap.\fs22\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 BoundsInt \cf2 bounds \cf0\f1\fs24\lang9 - The boundaries of the map to analyze for building the generator.\fs22\par
+
+\pard\sa200\sl276\slmult1\par
+\tab\ul\b\fs24 vi) InteliMapBuilderAdvanced:\ulnone\b0  A class used to store all the advanced settings for an InteliMapBuilder.\par
+Public Attributes:\par
+
+\pard{\pntext\f4\'B7\tab}{\*\pn\pnlvlblt\pnf4\pnindent0{\pntxtb\'B7}}\fi-360\li720\sa200\sl276\slmult1\cf1\f2\fs19\lang1033 float \cf2 startLearningRate \cf0\f1\fs24\lang9 - The starting learning rate of the machine learning model. Higher values may result in faster generation, but going too high may result in unexpected behaviour. This value is logarithmically interpolated with the End Learning Rate throughout the build.\fs22\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 float \cf2 endLearningRate \cf0\f1\fs24\lang9 - The ending learning rate of the machine learning model. Higher values may result in faster generation, but going too high may result in unexpected behaviour. This value is logarithmically interpolated with the Start Learning Rate throughout the build.\fs22\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 Connectivity \cf2 connectivity \cf0\f1\fs24\lang9 - How to enforce which tiles can connect to which other tiles. Four way connectivity (Connectivity.FourWay) means only the orthogonal connections are enforced, eight way (Connectivity.EightWay) means diagonal connections are also enforced.\fs22\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 bool \cf2 interpretEmptyAsTile \cf0\f1\fs24\lang9 - Wether to interpret empty tiles as intentionally empty tiles. If this is true, then empty tiles may be placed during generation; if it is false, then empty tiles will never be placed during generation.\fs22\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 DirectionalBools \cf2 acknowledgeBounds \cf0\f1\fs24\lang9 - What boundaries of the generation bounds to use as an input during training. This will cause schematics generated with this option set to true to correlate the selected boundaries of the generation with structures that are seen around the selected boundaries.\fs22\par
+{\pntext\f4\'B7\tab}\cf1\f2\fs19\lang1033 DirectionalBools \cf2 enforceBorderConnectivity \cf0\f1\fs24\lang9 - Wether to enforce what tiles are allowed to be connected to the selected edges of the generation border.\fs22\par
+
+\pard\sa200\sl276\slmult1\ul\b\fs40\par
+\par
+7. Contact Information:\ulnone\b0\par
+\fs24 If you have any questions or inquires please email \cf2\f2\fs19\lang1033 intelimapai@gmail.com\f1\fs24 .\par
+\cf0\fs22\lang9\par
+\fs24\par
+
+\pard\sl240\slmult1\fs22\par
+}
+ 

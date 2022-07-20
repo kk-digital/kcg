@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using KMath;
 using Entitas;
+using Item;
 
 namespace Inventory
 {
@@ -51,8 +52,8 @@ namespace Inventory
 
             DrawCells(x, y, width, height, tileSize, slotSize, material, inventoryEntity);
 
-            var itemInInventory = entitasContext.item.GetEntitiesWithItemAttachedInventory(inventoryEntity.inventoryID.ID);
-            DrawIcons(entitasContext, x, y, width, height, tileSize, slotSize, material, transform, itemInInventory);
+            var itemsInInventory = entitasContext.itemInventory.GetEntitiesWithItemInventory(inventoryEntity.inventoryID.ID);
+            DrawIcons(entitasContext, x, y, width, height, tileSize, slotSize, material, transform, itemsInInventory);
         }
 
         void DrawBackGround(float x, float y, float w, float h, Material material)
@@ -101,11 +102,11 @@ namespace Inventory
             }
         }
 
-        void DrawIcons(Contexts entitasContext, float x, float y, int width, int height, Vec2f tileSize, Vec2f slotSize, Material material, Transform transform, HashSet<ItemEntity> itemInInventory)
+        void DrawIcons(Contexts entitasContext, float x, float y, int width, int height, Vec2f tileSize, Vec2f slotSize, Material material, Transform transform, HashSet<ItemInventoryEntity> itemInInventory)
         {
-            foreach (ItemEntity itemEntity in itemInInventory)
+            foreach (ItemInventoryEntity itemEntity in itemInInventory)
             {
-                int slotNumber = itemEntity.itemAttachedInventory.SlotNumber;
+                int slotNumber = itemEntity.itemInventory.SlotNumber;
                 int i = slotNumber % width;
                 int j = (height - 1) - (slotNumber - i) / width;
 
@@ -116,7 +117,7 @@ namespace Inventory
                 // Draw Count if stackable.
                 if (itemEntity.hasItemStack)
                 {
-                    int fontSize = 50;
+                    //int fontSize = 50;
                     
                     // these Change with Camera size. Find better soluiton. AutoSize? MeshPro?
                     float characterSize = 0.05f * Camera.main.pixelWidth / 1024.0f;
@@ -129,8 +130,8 @@ namespace Inventory
                 }
 
                 // Draw sprites.
-                ItemPropertiesEntity itemPropertyEntity = entitasContext.itemProperties.GetEntityWithItemProperty(itemEntity.itemType.Type);
-                int SpriteID = itemPropertyEntity.itemPropertyInventorySprite.ID;
+                Item.ItemProprieties itemProprieties = GameState.ItemCreationApi.Get(itemEntity.itemType.Type);
+                int SpriteID = itemProprieties.SpriteID;
 
                 Sprites.Sprite sprite = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle);
 

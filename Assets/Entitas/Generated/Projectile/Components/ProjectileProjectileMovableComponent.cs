@@ -11,19 +11,21 @@ public partial class ProjectileEntity {
     public Projectile.MovableComponent projectileMovable { get { return (Projectile.MovableComponent)GetComponent(ProjectileComponentsLookup.ProjectileMovable); } }
     public bool hasProjectileMovable { get { return HasComponent(ProjectileComponentsLookup.ProjectileMovable); } }
 
-    public void AddProjectileMovable(KMath.Vec2f newVelocity, KMath.Vec2f newAcceleration) {
+    public void AddProjectileMovable(KMath.Vec2f newVelocity, KMath.Vec2f newAcceleration, bool newAffectedByGravity) {
         var index = ProjectileComponentsLookup.ProjectileMovable;
         var component = (Projectile.MovableComponent)CreateComponent(index, typeof(Projectile.MovableComponent));
         component.Velocity = newVelocity;
         component.Acceleration = newAcceleration;
+        component.AffectedByGravity = newAffectedByGravity;
         AddComponent(index, component);
     }
 
-    public void ReplaceProjectileMovable(KMath.Vec2f newVelocity, KMath.Vec2f newAcceleration) {
+    public void ReplaceProjectileMovable(KMath.Vec2f newVelocity, KMath.Vec2f newAcceleration, bool newAffectedByGravity) {
         var index = ProjectileComponentsLookup.ProjectileMovable;
         var component = (Projectile.MovableComponent)CreateComponent(index, typeof(Projectile.MovableComponent));
         component.Velocity = newVelocity;
         component.Acceleration = newAcceleration;
+        component.AffectedByGravity = newAffectedByGravity;
         ReplaceComponent(index, component);
     }
 

@@ -1,6 +1,11 @@
 namespace Enums
 {
-    public enum WorldState
+    public enum Mode
     {
+        Error = -1,
+        Agent,
+        Camera,
+        CameraOnly,
+        Creative
     }
 }

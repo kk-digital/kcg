@@ -9,11 +9,14 @@ namespace Physics
         private void Update(Position2DComponent pos, MovableComponent movable, float deltaTime)
         {
             float Gravity = 800.0f;
-            float MaxAcceleration = 300.0f;
+            float MaxAcceleration = 50.0f;
             // maximum Y velocity
             float MaxVelocityY = 15.0f;
 
-            movable.Acceleration.Y -= Gravity * deltaTime;
+            if (movable.AffectedByGravity)
+            {
+                movable.Acceleration.Y -= Gravity * deltaTime;
+            }
 
             // maximum acceleration in the game
             if (movable.Acceleration.Y <= -MaxAcceleration)
@@ -37,10 +40,19 @@ namespace Physics
                 movable.Velocity.Y = -MaxVelocityY;
             }
 
-            Vec2f displacement = 
-                    0.5f * movable.Acceleration * (deltaTime * deltaTime) + movable.Velocity * deltaTime;
-            Vec2f newVelocity = movable.Acceleration * deltaTime + movable.Velocity;
-            newVelocity.X *= 0.7f;
+            Vec2f displacement = 0.5f * movable.Acceleration * (deltaTime * deltaTime) + movable.Velocity * deltaTime;
+            Vec2f newVelocity =         movable.Acceleration *  deltaTime              + movable.Velocity;
+
+            if (movable.AffectedByGroundFriction)
+            {
+                // ground friction
+                newVelocity.X *= 0.7f;
+            }
+            else
+            {
+                // air friction
+                newVelocity.X *= 0.7f;
+            }
 
 
             // maximum velocity in the game
@@ -76,10 +88,10 @@ namespace Physics
             }
         }
 
-        public void Update(ItemContext Context)
+        public void Update(ItemParticleContext Context)
         {
             float deltaTime = Time.deltaTime;
-            var EntitiesWithVelocity = Context.GetGroup(ItemMatcher.AllOf(ItemMatcher.PhysicsMovable, ItemMatcher.PhysicsPosition2D));
+            var EntitiesWithVelocity = Context.GetGroup(ItemParticleMatcher.AllOf(ItemParticleMatcher.PhysicsMovable, ItemParticleMatcher.PhysicsPosition2D));
             foreach (var entity in EntitiesWithVelocity)
             {
                 var pos = entity.physicsPosition2D;

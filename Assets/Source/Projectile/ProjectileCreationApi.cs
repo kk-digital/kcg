@@ -112,6 +112,35 @@ namespace Projectile
             }
         }
 
+        public void SetRamp(bool canRamp, float startSpeed, float maxSpeed, 
+            float rampTime)
+        {
+            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
+            {
+                PropertiesArray[CurrentIndex].rampTime = rampTime;
+                PropertiesArray[CurrentIndex].canRamp = canRamp;
+                PropertiesArray[CurrentIndex].StartVelocity = startSpeed;
+                PropertiesArray[CurrentIndex].MaxVelocity = maxSpeed;
+            }
+        }
+
+        public void SetLinearDrag(float linearDrag, float cutOff)
+        {
+            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
+            {
+                PropertiesArray[CurrentIndex].linearDrag = linearDrag;
+                PropertiesArray[CurrentIndex].linearCutOff = cutOff;
+            }
+        }
+
+        public void SetDragType(Enums.DragType dragType)
+        {
+            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
+            {
+                PropertiesArray[CurrentIndex].dragType = dragType;
+            }
+        }
+
         public void SetAcceleration(Vec2f acceleration)
         {
             if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
@@ -125,6 +154,14 @@ namespace Projectile
             if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
             {
                 PropertiesArray[CurrentIndex].DeltaRotation = deltaRotation;
+            }
+        }
+
+        public void SetAffectedByGravity(bool affectedByGravity)
+        {
+            if (CurrentIndex >= 0 && CurrentIndex < PropertiesArray.Length)
+            {
+                PropertiesArray[CurrentIndex].AffectedByGravity = affectedByGravity;
             }
         }
 

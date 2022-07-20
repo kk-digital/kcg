@@ -8,7 +8,6 @@ using Enums;
 using Item;
 using KMath;
 using UnityEngine;
-using Item;
 
 namespace Planet
 {
@@ -25,10 +24,9 @@ namespace Planet
         public ParticleEmitterList ParticleEmitterList;
         public ParticleList ParticleList;
         public ItemParticleList ItemParticleList;
-
+        public CameraFollow cameraFollow;
 
         public Contexts EntitasContext;
-
 
         public void Init(Vec2i mapSize)
         {
@@ -40,6 +38,7 @@ namespace Planet
             ParticleEmitterList = new ParticleEmitterList();
             ParticleList = new ParticleList();
             ItemParticleList = new ItemParticleList();
+            cameraFollow = new CameraFollow();
 
             EntitasContext = new Contexts();
         }
@@ -49,7 +48,7 @@ namespace Planet
             GameState.ActionInitializeSystem.Initialize(EntitasContext, material);
 
             // Mesh builders
-            TileMap.InitializeLayerMesh(material, transform, 7);
+            GameState.TileMapRenderer.Initialize(material, transform, 7);
             GameState.ItemMeshBuilderSystem.Initialize(material, transform, 11);
             GameState.AgentMeshBuilderSystem.Initialize(material, transform, 12);
             GameState.ProjectileMeshBuilderSystem.Initialize(material, transform, 13);
@@ -136,7 +135,7 @@ namespace Planet
             FloatingTextEntity entity = FloatingTextList.Get(floatingTextId);
             Utils.Assert(entity.isEnabled);
             GameObject.Destroy(entity.floatingTextSprite.GameObject);
-            FloatingTextList.Remove(entity);
+            FloatingTextList.Remove(floatingTextId);
         }
 
         public ParticleEntity AddParticleEmitter(Vec2f position, Particle.ParticleEmitterType type)
@@ -196,11 +195,11 @@ namespace Planet
             VehicleList.Remove(vehicleId);
         }
 
-        public ItemEntity AddItemParticle(Vec2f position, ItemType itemType)
+        public ItemParticleEntity AddItemParticle(Vec2f position, ItemType itemType)
         {
             Utils.Assert(ItemParticleList.Size < PlanetEntityLimits.ItemParticlesLimit);
 
-            ItemEntity newEntity = ItemParticleList.Add(GameState.ItemSpawnSystem.SpawnItem(EntitasContext, itemType, position));
+            ItemParticleEntity newEntity = ItemParticleList.Add(GameState.ItemSpawnSystem.SpawnItemParticle(EntitasContext, itemType, position));
             return newEntity;
         }
 
@@ -215,10 +214,10 @@ namespace Planet
         // updates the entities, must call the systems and so on ..
         public void Update(float deltaTime, Material material, Transform transform)
         {
-            float targetFps = 60.0f;
+            float targetFps = 30.0f;
             float frameTime = 1.0f / targetFps;
 
-            TimeState.Deficit += deltaTime;
+            /*TimeState.Deficit += deltaTime;
 
             while (TimeState.Deficit >= frameTime)
             {
@@ -228,24 +227,11 @@ namespace Planet
                     TimeState.TickTime++;
 
 
-
-
-
-                    for (int index = 0; index < ProjectileList.Capacity; index++)
-                    {
-                        ProjectileEntity projectile = ProjectileList.List[index];
-                        if (projectile != null)
-                        {
-                            //var position = projectile.Entity.projectilePhysicsState2D;
-                        }
-                    }
-
-
                 }
 
-            }
+            }*/
 
-            // check if the sprite atlas textures needs to be updated
+            // check if the sprite atlas teSetTilextures needs to be updated
             for(int type = 0; type < GameState.SpriteAtlasManager.Length; type++)
             {
                 GameState.SpriteAtlasManager.UpdateAtlasTexture(type);
@@ -261,30 +247,36 @@ namespace Planet
 
             GameState.InputProcessSystem.Update(ref this);
             GameState.PhysicsMovableSystem.Update(EntitasContext.agent);
-            GameState.PhysicsMovableSystem.Update(EntitasContext.item);
+            GameState.PhysicsMovableSystem.Update(EntitasContext.itemParticle);
             GameState.PhysicsProcessCollisionSystem.Update(EntitasContext.agent, ref TileMap);
-            GameState.PhysicsProcessCollisionSystem.Update(EntitasContext.item, ref TileMap);
+            GameState.PhysicsProcessCollisionSystem.Update(EntitasContext.itemParticle, ref TileMap);
             GameState.EnemyAiSystem.Update(ref this);
             GameState.FloatingTextUpdateSystem.Update(ref this, frameTime);
             GameState.AnimationUpdateSystem.Update(EntitasContext, frameTime);
             GameState.ItemPickUpSystem.Update(EntitasContext);
             GameState.ActionSchedulerSystem.Update(EntitasContext, frameTime, ref this);
+            GameState.ActionCoolDownSystem.Update(EntitasContext, deltaTime);
             GameState.ParticleEmitterUpdateSystem.Update(ref this);
             GameState.ParticleUpdateSystem.Update(ref this, EntitasContext.particle);
             GameState.ProjectileMovementSystem.Update(EntitasContext.projectile);
             GameState.ProjectileCollisionSystem.UpdateEx(ref this);
+            cameraFollow.Update(ref this);
 
+            TileMap.UpdateTileSprites();
+            
             // Update Meshes.
-            TileMap.UpdateLayerMesh(MapLayerType.Mid);
-            TileMap.UpdateLayerMesh(MapLayerType.Front);
+            GameState.TileMapRenderer.UpdateBackLayerMesh(ref TileMap);
+            GameState.TileMapRenderer.UpdateMidLayerMesh(ref TileMap);
+            GameState.TileMapRenderer.UpdateFrontLayerMesh(ref TileMap);
             GameState.ItemMeshBuilderSystem.UpdateMesh(EntitasContext);
             GameState.AgentMeshBuilderSystem.UpdateMesh(EntitasContext.agent);
             GameState.ProjectileMeshBuilderSystem.UpdateMesh(EntitasContext.projectile);
             GameState.ParticleMeshBuilderSystem.UpdateMesh(EntitasContext.particle);
 
             // Draw Frames.
-            TileMap.DrawLayer(MapLayerType.Mid);
-            TileMap.DrawLayer(MapLayerType.Front);
+            GameState.TileMapRenderer.DrawLayer(MapLayerType.Back);
+            GameState.TileMapRenderer.DrawLayer(MapLayerType.Mid);
+            GameState.TileMapRenderer.DrawLayer(MapLayerType.Front);
             Utility.Render.DrawFrame(ref GameState.ItemMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));
             Utility.Render.DrawFrame(ref GameState.AgentMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Agent));
             Utility.Render.DrawFrame(ref GameState.ProjectileMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Particle));

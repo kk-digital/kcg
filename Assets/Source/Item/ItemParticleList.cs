@@ -8,7 +8,7 @@ namespace Item
     {
 
         // array for storing entities
-        public ItemEntity[] List;
+        public ItemParticleEntity[] List;
 
         public int Size;
         // used for tracking down an available 
@@ -26,11 +26,11 @@ namespace Item
 
         public ItemParticleList()
         {
-            List = new ItemEntity[1024];
+            List = new ItemParticleEntity[1024];
         }
 
 
-        public ItemEntity Add(ItemEntity entity)
+        public ItemParticleEntity Add(ItemParticleEntity entity)
         {
             // if we dont have enough space we expand
             // the capacity
@@ -45,7 +45,7 @@ namespace Item
             int Found = -1;
             for (int index = LastFreeIndex; index < Capacity; index++)
             {
-                ref ItemEntity thisEntity = ref List[index];
+                ref ItemParticleEntity thisEntity = ref List[index];
 
                 if (!thisEntity.isEnabled)
                 {
@@ -57,7 +57,7 @@ namespace Item
             {
                 for (int index = 0; index < LastFreeIndex; index++)
                 {
-                    ref ItemEntity thisEntity = ref List[index];
+                    ref ItemParticleEntity thisEntity = ref List[index];
 
                     if (!thisEntity.isEnabled)
                     {
@@ -81,7 +81,7 @@ namespace Item
         }
 
 
-        public ItemEntity Get(int Index)
+        public ItemParticleEntity Get(int Index)
         {
             return List[Index];
         }
@@ -91,8 +91,10 @@ namespace Item
         // set the IsInitialized field to false
         public void Remove(int itemParticleId)
         {
-            ItemEntity entity = Get(itemParticleId);
+            LastFreeIndex = itemParticleId;
+            ref ItemParticleEntity entity = ref List[itemParticleId];
             entity.Destroy();
+            entity = null;
             Size--;
         }
 

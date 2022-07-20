@@ -33,9 +33,8 @@ namespace Planet.Unity
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 int x = (int)worldPosition.x;
                 int y = (int)worldPosition.y;
-                Planet.TileMap.SetTile(x, y, TileID.Moon, MapLayerType.Front);
+                Planet.TileMap.SetFrontTile(x, y, TileID.Moon);
                 //TileMap.BuildLayerTexture(MapLayerType.Front);
-                
             }
 
             if (Input.GetKeyDown(KeyCode.Mouse1))
@@ -43,9 +42,8 @@ namespace Planet.Unity
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 int x = (int)worldPosition.x;
                 int y = (int)worldPosition.y;
-                tileMap.RemoveTile(x, y, MapLayerType.Front);
+                tileMap.RemoveFrontTile(x, y);
                 //TileMap.BuildLayerTexture(MapLayerType.Front);
-                
             }
 
             Planet.Update(Time.deltaTime, Material, transform);
@@ -74,20 +72,23 @@ namespace Planet.Unity
             int SlimeJumpBaseSpriteId = GameState.SpriteAtlasManager.CopySpritesToAtlas(SlimeSpriteSheet, 0, 2, 1, 3, Enums.AtlasType.Agent);
 
 
-            GameState.TileCreationApi.CreateTile(TileID.Ore1);
-            GameState.TileCreationApi.SetTileName("ore_1");
-            GameState.TileCreationApi.SetTileTexture16(OreTileSheet, 0, 0);
-            GameState.TileCreationApi.EndTile();
+            GameState.TileCreationApi.CreateTileProperty(TileID.Ore1);
+            GameState.TileCreationApi.SetTilePropertyName("ore_1");
+            GameState.TileCreationApi.SetTilePropertyShape(TileShape.FullBlock, TileShapeAndRotation.FB);
+            GameState.TileCreationApi.SetTilePropertyTexture16(OreTileSheet, 0, 0);
+            GameState.TileCreationApi.EndTileProperty();
 
-            GameState.TileCreationApi.CreateTile(TileID.Glass);
-            GameState.TileCreationApi.SetTileName("glass");
-            GameState.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 11, 10);
-            GameState.TileCreationApi.EndTile();
+            GameState.TileCreationApi.CreateTileProperty(TileID.Glass);
+            GameState.TileCreationApi.SetTilePropertyName("glass");
+            GameState.TileCreationApi.SetTilePropertyShape(TileShape.FullBlock, TileShapeAndRotation.FB);
+            GameState.TileCreationApi.SetTilePropertySpriteSheet16(TilesMoon, 11, 10);
+            GameState.TileCreationApi.EndTileProperty();
 
-            GameState.TileCreationApi.CreateTile(TileID.Moon);
-            GameState.TileCreationApi.SetTileName("moon");
-            GameState.TileCreationApi.SetTileSpriteSheet16(TilesMoon, 0, 0);
-            GameState.TileCreationApi.EndTile();
+            GameState.TileCreationApi.CreateTileProperty(TileID.Moon);
+            GameState.TileCreationApi.SetTilePropertyName("moon");
+            GameState.TileCreationApi.SetTilePropertyShape(TileShape.FullBlock, TileShapeAndRotation.FB);
+            GameState.TileCreationApi.SetTilePropertySpriteSheet16(TilesMoon, 0, 0);
+            GameState.TileCreationApi.EndTileProperty();
 
             int particleAnimation = 0;
             int slimeIdle = 1;
@@ -136,7 +137,6 @@ namespace Planet.Unity
                 for (int i = 0; i < tileMap.MapSize.Y; i++)
                 {
                     var frontTile = TileID.Air;
-                    var oreTile = TileID.Air;
 
                     if (i >= tileMap.MapSize.X / 2)
                     {
@@ -161,25 +161,15 @@ namespace Planet.Unity
                         }
                     }
 
-
-                    if (i % 10 == 0)
-                    {
-                        oreTile = TileID.Ore1;
-                    }
-
                     if (j is > 1 and < 6 || (j > 8 + i))
                     {
                         frontTile = TileID.Air;
-                        oreTile = TileID.Air;
                     }
 
 
-                    tileMap.SetTile(i, j, frontTile, MapLayerType.Front);
+                    tileMap.SetFrontTile(i, j, frontTile);
                 }
             }
-
-            tileMap.UpdateTileMapPositions(MapLayerType.Front);
-
         }
     }
 }

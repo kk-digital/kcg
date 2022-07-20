@@ -7,17 +7,17 @@ namespace Action
 {
     public class PickUpAction : ActionBase
     {
-        private ItemEntity ItemEntity;
+        private ItemParticleEntity ItemEntity;
         private float Speed = 3.0f;
         private float aceleration = 0.5f;
 
-        public PickUpAction(Contexts entitasContext, int actionID, int agentID) : base(entitasContext, actionID, agentID)
+        public PickUpAction(Contexts entitasContext, int actionID) : base(entitasContext, actionID)
         {
         }
 
         public override void OnEnter(ref Planet.PlanetState planet)
         {
-            ItemEntity = EntitasContext.item.GetEntityWithItemID(ActionEntity.actionItem.ItemID);
+            ItemEntity = EntitasContext.itemParticle.GetEntityWithItemID(ActionEntity.actionTool.ItemID);
 
 #if DEBUG
             // Item Doesnt Exist
@@ -47,7 +47,7 @@ namespace Action
             // Update item pos.
 
             // Center position Item.
-            Vec2f itemSize = EntitasContext.itemProperties.GetEntityWithItemProperty(ItemEntity.itemType.Type).itemPropertySize.Size;
+            Vec2f itemSize = GameState.ItemCreationApi.Get(ItemEntity.itemType.Type).SpriteSize;
             Vec2f itemCenterPos = ItemEntity.itemDrawPosition2D.Value + itemSize / 2.0f;
             Vec2f agentCenterPos = AgentEntity.physicsPosition2D.Value + new Vec2f(1.0f, 1.5f)/2f; // Todo: Add agentSizeCompenent
 
@@ -93,16 +93,17 @@ namespace Action
 
         public override void OnExit(ref Planet.PlanetState planet)
         {
-            ItemEntity.RemoveItemDrawPosition2D();
+            if(ItemEntity.isEnabled)
+                ItemEntity.RemoveItemDrawPosition2D();
             base.OnExit(ref planet);
         }
     }
 
     public class PickUpActionCreator : ActionCreator
     {
-        public override ActionBase CreateAction(Contexts entitasContext, int actionID, int agentID)
+        public override ActionBase CreateAction(Contexts entitasContext, int action)
         {
-            return new PickUpAction(entitasContext, actionID, agentID);
+            return new PickUpAction(entitasContext, action);
         }
     }
 }

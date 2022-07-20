@@ -17,57 +17,50 @@ namespace Item
         }
 
         public void UpdateMesh(Contexts context)
-        {
-            var ItemPropertyWithSprite = context.itemProperties.GetGroup(ItemPropertiesMatcher.AllOf(ItemPropertiesMatcher.ItemPropertySprite));
+        {            
             Mesh.Clear();
             int index = 0;
-            foreach (var ItemTypeEntity in ItemPropertyWithSprite)
-            {
-                int SpriteID = ItemTypeEntity.itemPropertySprite.ID;
-                Vector4 textureCoords = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle).TextureCoords;
-                
-                // Draw all items with same sprite.
-                var ItemsOfType = context.item.GetEntitiesWithItemType(ItemTypeEntity.itemProperty.ItemType);
 
-                foreach (var entity in ItemsOfType)
+            ItemParticleEntity[] items = context.itemParticle.GetEntities();
+            foreach (var entity in items)
+            {
+                ItemProprieties proprieties = GameState.ItemCreationApi.Get(entity.itemType.Type);
+
+                int SpriteID = proprieties.SpriteID;
+                Vector4 textureCoords = GameState.SpriteAtlasManager.GetSprite(SpriteID, Enums.AtlasType.Particle).TextureCoords;
+
+
+                float x, y;
+                if (entity.hasItemDrawPosition2D)
                 {
-                    // Test if Item is Drawable.
-                    if (!ItemTypeEntity.hasItemPropertySize) // Test if Item is Drawable.
-                        continue;
-                    
-                    float x, y;
-                    if (entity.hasItemDrawPosition2D)
+                    x = entity.itemDrawPosition2D.Value.X;
+                    y = entity.itemDrawPosition2D.Value.Y;
+                }
+                else
+                {
+                    if (entity.hasPhysicsPosition2D)
                     {
-                        x = entity.itemDrawPosition2D.Value.X;
-                        y = entity.itemDrawPosition2D.Value.Y;
+                        x = entity.physicsPosition2D.Value.X;
+                        y = entity.physicsPosition2D.Value.Y;
                     }
                     else
                     {
-                        if (entity.hasPhysicsPosition2D)
-                        {
-                            x = entity.physicsPosition2D.Value.X;
-                            y = entity.physicsPosition2D.Value.Y;
-                        }
-                        else
-                        {
-                            continue;
-                        }
-                    }
-                    
-                    float w = ItemTypeEntity.itemPropertySize.Size.X;
-                    float h = ItemTypeEntity.itemPropertySize.Size.Y;
-
-                    if (!Utility.ObjectMesh.isOnScreen(x, y))
                         continue;
-
-                    // Update UVs
-                    Mesh.UpdateUV(textureCoords, (index) * 4);
-                    // Update Vertices
-                    Mesh.UpdateVertex((index * 4), x, y, w, h);
-                    index++;
+                    }
                 }
+
+                float w = proprieties.SpriteSize.X;
+                float h = proprieties.SpriteSize.Y;
+
+                if (!Utility.ObjectMesh.isOnScreen(x, y))
+                    continue;
+
+                // Update UVs
+                Mesh.UpdateUV(textureCoords, (index) * 4);
+                // Update Vertices
+                Mesh.UpdateVertex((index * 4), x, y, w, h);
+                index++;
             }
         }
     }
 }
-
