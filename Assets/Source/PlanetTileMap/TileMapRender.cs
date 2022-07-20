@@ -22,7 +22,7 @@ namespace PlanetTileMap
             }
         }
 
-        public void UpdateMidLayerMesh(ref TileMap tileMap)
+        public void UpdateMidLayerMesh(TileMap tileMap)
         {
             if (Camera.main == null) { Debug.LogError("Camera.main not found, failed to create edge colliders"); return; }
 
@@ -45,7 +45,7 @@ namespace PlanetTileMap
                     {
                         ref var tile = ref tileMap.GetMidTileID(x, y);
 
-                        var spriteId = tile.SpriteID;
+                        /*var spriteId = tile.SpriteID;
 
                         if (spriteId >= 0)
                         {
@@ -62,7 +62,7 @@ namespace PlanetTileMap
                             // Update Vertices
                             LayerMeshes[(int)MapLayerType.Mid].UpdateVertex((index * 4), x, y, width, height);
                             index++;
-                        }
+                        }*/
 
                         if (tile.DrawType == TileDrawType.Composited)
                         {
@@ -85,7 +85,7 @@ namespace PlanetTileMap
             }
         }
 
-        public void UpdateFrontLayerMesh(ref TileMap tileMap)
+        public void UpdateFrontLayerMesh(TileMap tileMap)
         {
             if (Camera.main == null) { Debug.LogError("Camera.main not found, failed to create edge colliders"); return; }
 
@@ -106,9 +106,9 @@ namespace PlanetTileMap
                 {
                     if (x >= 0 && y >= 0)
                     {
-                        ref var tile = ref tileMap.GetFrontTileID(x, y);
+                        ref var tile = ref tileMap.GetTile(x, y);
 
-                        var spriteId = tile.SpriteID;
+                        var spriteId = tile.FrontTileSpriteID;
 
                         if (spriteId >= 0)
                         {
@@ -148,7 +148,7 @@ namespace PlanetTileMap
             }
         }
         
-        public void UpdateBackLayerMesh(ref TileMap tileMap)
+        public void UpdateBackLayerMesh(TileMap tileMap)
         {
             if (Camera.main == null) { Debug.LogError("Camera.main not found, failed to create edge colliders"); return; }
 
@@ -171,7 +171,7 @@ namespace PlanetTileMap
                     {
                         ref var tile = ref tileMap.GetBackTileID(x, y);
 
-                        var spriteId = tile.SpriteID;
+                        /*var spriteId = tile.SpriteID;
 
                         if (spriteId >= 0)
                         {
@@ -188,7 +188,7 @@ namespace PlanetTileMap
                             // Update Vertices
                             LayerMeshes[(int)MapLayerType.Back].UpdateVertex((index * 4), x, y, width, height);
                             index++;
-                        }
+                        }*/
 
                         if (tile.DrawType == TileDrawType.Composited)
                         {

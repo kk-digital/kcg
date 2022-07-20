@@ -1,98 +1,14 @@
 using System;
+using Enums.Tile;
 using KMath;
+using PlanetTileMap;
 using UnityEngine;
 
-public class TestSquare : MonoBehaviour 
-{
-    // Renderer
-    public LineRenderer renderer;
-    public Shader       shader;
-    public Material     material;
-
-    // Current color of square
-    public Color color;
-
-    // Color of square if square is colliding
-    public Color collision_color;
-
-    // Color of square if square is not colliding with anything
-    public Color no_collision_color;
-
-    // Set to true if square should be draggable with mouse
-    public bool draggable;
-
-    // Velocity
-    public Vec2f velocity;
-    
-    public float xmin;
-    public float xmax;
-    public float ymax;
-    public float ymin;
-
-    // Used by renderer
-    public Vector3[] corners   = new Vector3[4];
-    public const float LineThickness = 1.0f;
-
-    void Start() 
-    {
-        // Initialize test shader, material, and renderer
-        shader                 = Shader.Find("Hidden/Internal-Colored");
-        material               = new Material(shader)
-        {
-            hideFlags = HideFlags.HideAndDontSave
-        };
-        renderer               = gameObject.AddComponent<LineRenderer>();
-        renderer.material      = material;
-        renderer.useWorldSpace = true;
-        renderer.loop          = true;
-
-        renderer.startWidth    = renderer.endWidth = LineThickness;
-
-        corners[0]             = new Vector3();
-        corners[1]             = new Vector3();
-        corners[2]             = new Vector3();
-        corners[3]             = new Vector3();
-
-        material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-        material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-        material.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
-        material.SetInt("_ZWrite", 0);
-        material.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
-    }
-
-    void Update() 
-    {
-        xmin += velocity.X;
-        xmax += velocity.X;
-        ymin += velocity.Y;
-        ymax += velocity.Y;
-
-        corners[0].x = xmin + LineThickness;
-        corners[1].x = xmin + LineThickness;
-        corners[2].x = xmax;
-        corners[3].x = xmax;
-
-        corners[0].y = ymax;
-        corners[1].y = ymin + LineThickness;
-        corners[2].y = ymin + LineThickness;
-        corners[3].y = ymax;
-
-        corners[0].z = -0.1f;
-        corners[1].z = -0.1f;
-        corners[2].z = -0.1f;
-        corners[3].z = -0.1f;
-
-        renderer.SetPositions(corners);
-        renderer.positionCount = 4;
-
-        renderer.startColor = renderer.endColor = color;
-    }
-}
-
-public class RectangleTileCollisionTest : MonoBehaviour 
+public class RectangleTileCollisionTest_v2 : MonoBehaviour 
 {
     // 16x16 background grid
-    public TestSquare[,] grid;
+    public TileMap tileMap;
+    public Material Material;
     
     public TestSquare square1;
     public TestSquare square2;
@@ -106,17 +22,14 @@ public class RectangleTileCollisionTest : MonoBehaviour
 
     public Color square1_no_collision_color = new(1.0f, 1.0f, 1.0f, 1.0f);
     public Color square2_no_collision_color = new(0.8f, 0.8f, 0.8f, 1.0f);
-
-    // Size of squares in grid
-    public Vec2i square_size = new(12, 12);
-
+    
     // Amount of squares in grid
-    public Vec2i grid_size   = new(12, 12);
+    public Vec2i mapSize   = new(32, 32);
 
     // Size of square 1
-    public Vec2f square1_size = new(30, 18);
+    public Vec2f square1_size = new(5, 5);
     // Size of square 2
-    public Vec2f square2_size = new(12, 24);
+    public Vec2f square2_size = new(5, 5);
     public TestSquare SetSquare(Vec2f center, Vec2f halfSize)
     {
         var square1_obj = new GameObject
@@ -178,8 +91,10 @@ public class RectangleTileCollisionTest : MonoBehaviour
 
     void Start()
     {
+        GameState.TileMapRenderer.Initialize(Material, transform, 7);
+        
         GameObject.Find("Main Camera").transform.position = new Vector3(144f / 2f, 144f / 2f, -10);
-        grid                          = new TestSquare[grid_size.X, grid_size.Y];
+        tileMap                          = new TileMap(mapSize);
 
         // Alternate colors for odd and even tiles to make grid more pleasurable to look at
         Color odd_collision_color     = new(1.00f, 0.50f, 0.50f, 1.0f);
@@ -209,41 +124,33 @@ public class RectangleTileCollisionTest : MonoBehaviour
         SetRegions(square1.xmin, square1.xmax, square1.ymin, square1.ymax, new Vec2f(12f, 12f));
         
         var halfSize2 = new Vec2f(square2_size.X / 2f, square2_size.Y / 2f);
-        var center2 = new Vec2f(grid_size.X * square_size.X - halfSize2.X, grid_size.Y * square_size.Y - halfSize2.Y);
+        var center2 = new Vec2f(mapSize.X - halfSize2.X, mapSize.Y - halfSize2.Y);
         square2 = SetSquare(center2, halfSize2);
         square2.collision_color    = square2_collision_color;
         square2.no_collision_color = square2_no_collision_color;
         square2.color              = square2_no_collision_color;
+        
+        int tilesMoon = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Tiles\\Terrains\\Tiles_Moon.png", 16, 16);
+        int oreTileSheet = GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Items\\Ores\\Gems\\Hexagon\\gem_hexagon_1.png", 16, 16);
+        
+        GameState.TileCreationApi.CreateTileProperty(TileID.Ore1);
+        GameState.TileCreationApi.SetTilePropertyName("ore_1");
+        GameState.TileCreationApi.SetTilePropertyShape(TileShape.FullBlock);
+        GameState.TileCreationApi.SetTilePropertyTexture16(oreTileSheet, 0, 0);
+        GameState.TileCreationApi.EndTileProperty();
+        
+        GameState.TileCreationApi.CreateTileProperty(TileID.Glass);
+        GameState.TileCreationApi.SetTilePropertyName("glass");
+        GameState.TileCreationApi.SetTilePropertyShape(TileShape.FullBlock);
+        GameState.TileCreationApi.SetTilePropertySpriteSheet16(tilesMoon, 11, 10);
+        GameState.TileCreationApi.EndTileProperty();
+        
 
-        for (int x = 0; x < grid_size.X; x++)
+        for (int x = 0; x < mapSize.X; x++)
         {
-            for (int y = 0; y < grid_size.Y; y++)
+            for (int y = 0; y < mapSize.Y; y++)
             {
-                GameObject obj = new GameObject
-                {
-                    name = "Background grid square " + (x + 1) + " | " + (y + 1)
-                };
-
-                grid[x, y]     = obj.AddComponent<TestSquare>();
-
-                bool even = x % 2 != y % 2;
-
-                if (even)
-                {
-                    grid[x, y].collision_color    = even_collision_color;
-                    grid[x, y].no_collision_color = even_no_collision_color;
-                }
-                else
-                {
-                    grid[x, y].collision_color    = odd_collision_color;
-                    grid[x, y].no_collision_color = odd_no_collision_color;
-                }
-
-                grid[x, y].color = grid[x, y].no_collision_color;
-                grid[x, y].xmin  = x * square_size.X;
-                grid[x, y].xmax  = x * square_size.X + square_size.X;
-                grid[x, y].ymin  = y * square_size.Y;
-                grid[x, y].ymax  = y * square_size.Y + square_size.Y;
+                tileMap.SetFrontTile(x, y, TileID.Glass);
             }
         }
     }
@@ -278,43 +185,58 @@ public class RectangleTileCollisionTest : MonoBehaviour
         }
 
         // Reset colors for all squares
-        for (int x = 0; x < grid_size.X; x++)
+        for (int x = 0; x < mapSize.X; x++)
         {
-            for (int y = 0; y < grid_size.Y; y++)
+            for (int y = 0; y < mapSize.Y; y++)
             {
-                grid[x, y].color = grid[x, y].no_collision_color;
+                tileMap.SetFrontTile(x, y, TileID.Glass);
             }
         }
         square1.color = square1.no_collision_color;
         square2.color = square2.no_collision_color;
 
         // Check collisions for square 1
-        for (int x = 0; x < grid_size.X; x++)
+        for (int x = 0; x < mapSize.X; x++)
         {
-            for (int y = 0; y < grid_size.Y; y++)
+            for (int y = 0; y < mapSize.Y; y++)
             {
                 if (Collisions.Collisions.RectOverlapRect(square1.xmin, square1.xmax, square1.ymin, square1.ymax,
-                                                          grid[x, y].xmin, grid[x, y].xmax, grid[x, y].ymin, grid[x, y].ymax))
+                                                          x, x + 1f, y, y + 1f))
                 {
                     square1.color    = square1.collision_color;
-                    grid[x, y].color = grid[x, y].collision_color;
+                    tileMap.SetFrontTile(x, y, TileID.Ore1);
                 }
             }
         }
 
 
         // Check collisions for square 2
-        for (int x = 0; x < grid_size.X; x++)
+        for (int x = 0; x < mapSize.X; x++)
         {
-            for (int y = 0; y < grid_size.Y; y++)
+            for (int y = 0; y < mapSize.Y; y++)
             {
                 if (Collisions.Collisions.RectOverlapRect(square2.xmin, square2.xmax, square2.ymin, square2.ymax,
-                                                          grid[x, y].xmin, grid[x, y].xmax, grid[x, y].ymin, grid[x, y].ymax))
+                        x, x + 1f, y, y + 1f))
                 {
                     square2.color    = square2.collision_color;
-                    grid[x, y].color = grid[x, y].collision_color;
+                    tileMap.SetFrontTile(x, y, TileID.Ore1);
                 }
             }
         }
+        
+        // check if the sprite atlas textures needs to be updated
+        for(int type = 0; type < GameState.SpriteAtlasManager.Length; type++)
+        {
+            GameState.SpriteAtlasManager.UpdateAtlasTexture(type);
+        }
+
+        // check if the tile sprite atlas textures needs to be updated
+        for(int type = 0; type < GameState.TileSpriteAtlasManager.Length; type++)
+        {
+            GameState.TileSpriteAtlasManager.UpdateAtlasTexture(type);
+        }
+        
+        GameState.TileMapRenderer.UpdateFrontLayerMesh(tileMap);
+        GameState.TileMapRenderer.DrawLayer(MapLayerType.Front);
     }
 }

@@ -21,9 +21,16 @@ namespace PlanetTileMap
             ChunkArrayLength = 0;
             TileSpriteUpdateQueue = new TileSpriteUpdateQueue();
 
-            ChunkSize = new Vec2i(mapSize.X / 16 + 1, mapSize.Y / 16 + 1);
-            
-            ChunkArrayCapacity = ChunkSize.X * ChunkSize.Y;
+            // >> 4 == / 16
+            ChunkArrayCapacity = (mapSize.X + mapSize.Y) >> 4;
+
+            // & 0x0F == & 15
+            // 17 & 15 = 1
+            // 16 & 15 = 0
+            if (((mapSize.X + mapSize.Y) & 0x0F) != 0)
+            {
+                ChunkArrayCapacity++;
+            }
             ChunkIndexLookup = new int[ChunkArrayCapacity];
             ChunkArray = new Chunk[ChunkArrayCapacity];
 
@@ -88,6 +95,27 @@ namespace PlanetTileMap
             chunk.ReadCount++;
             
             return ref chunk.TileArray[tileIndex].BackTileID;
+        }
+        
+        public ref Tile GetTile(int x, int y)
+        {
+            Utils.Assert(IsValid(x, y));
+            
+            var xChunkIndex = x >> 4;
+            var yChunkIndex = ((y >> 4) * MapSize.X) >> 4;
+            var chunkIndex = (xChunkIndex + yChunkIndex);
+
+            ref var chunk = ref ChunkArray[chunkIndex];
+            
+            Utils.Assert(chunk.Type != MapChunkType.Error);
+
+            var xIndex = x & 0x0f;
+            var yIndex = y & 0x0f;
+            var tileIndex = xIndex + (yIndex << 4);
+            
+            chunk.ReadCount++;
+            
+            return ref chunk.TileArray[tileIndex];
         }
         
         public ref TileID GetMidTileID(int x, int y)

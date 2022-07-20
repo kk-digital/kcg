@@ -1,119 +1,26 @@
-using Enums.Tile;
-using KMath;
-using Utility;
-
 namespace Collisions
 {
     public static class Collisions
     {
-        public static bool IsCollidingLeft(this AABox2D borders, PlanetTileMap.TileMap tileMap, Vec2f velocity)
+        // Checks if square is colliding with another square
+        public static bool RectOverlapRect(float r1_xmin, float r1_xmax, float r1_ymin, float r1_ymax, float r2_xmin, float r2_xmax, float r2_ymin, float r2_ymax)
         {
-            if (velocity.X >= 0.0f) return false;
-            
-            int x = borders.xmin < 0 ? (int) borders.xmin - 1 : (int)borders.xmin;
-            
-            if (x >= 0 && x < tileMap.MapSize.X)
-            {
-                for (int y = (int)borders.ymin; y <= (int)borders.ymax; y++)
-                {
-                    if (y >= 0 && y < tileMap.MapSize.Y)
-                    {
-                        var frontTileID = tileMap.GetFrontTileID(x, y);
-                        if (frontTileID != TileID.Air)
-                        {
-                            var tileBorders = new AABox2D(x, y);
-                            tileBorders.DrawBox();
-                            return true;
-                        }
-                    }
-                }
-            }
+            // are the sides of one rectangle touching the other?
 
-            return false;
+            return r1_xmax >= r2_xmin &&    // r1 right edge past r2 left
+                   r1_xmin <= r2_xmax &&    // r1 left edge past r2 right
+                   r1_ymax >= r2_ymin &&    // r1 top edge past r2 bottom
+                   r1_ymin <= r2_ymax;
         }
-
-        public static bool IsCollidingRight(this AABox2D borders, PlanetTileMap.TileMap tileMap, Vec2f velocity)
+    
+        // Checks if square is colliding with point
+        public static bool PointOverlapRect(float px, float py, float r_xmin, float r_xmax, float r_ymin, float r_ymax)
         {
-            if (velocity.X <= 0.0f) return false;
-            
-            int x = borders.xmax < 0 ? (int) borders.xmax - 1 : (int)borders.xmax;
-            
-            if (x >= 0 && x < tileMap.MapSize.X)
-            {
-                for (int y = (int)borders.ymin; y <= (int)borders.ymax; y++)
-                {
-                    if (y >= 0 && y < tileMap.MapSize.Y)
-                    {
-                        var frontTileID = tileMap.GetFrontTileID(x, y);
-                        if (frontTileID != TileID.Air)
-                        {
-                            var tileBorders = new AABox2D(x, y);
-                            tileBorders.DrawBox();
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            return false;
-        }
-        
-        public static bool IsCollidingBottom(this AABox2D borders, PlanetTileMap.TileMap tileMap, Vec2f velocity)
-        {
-            if (velocity.Y >= 0.0f) return false;
-            
-            // LeftBottom.X >= 0f ? (int)LeftBottom.X : (int)LeftBottom.X - 1;
-            
-            int y = (int)borders.ymin;
-            int leftX = borders.xmin < 0 ? (int) borders.xmin - 1 : (int)borders.xmin;
-            int rightX = borders.xmax < 0 ? (int) borders.xmax - 1 : (int)borders.xmax;
-            
-            if (y >= 0 && y < tileMap.MapSize.Y)
-            {
-                for (int x = leftX; x <= rightX; x++)
-                {
-                    if (x >= 0 && x < tileMap.MapSize.X)
-                    {
-                        var frontTileID = tileMap.GetFrontTileID(x, y);
-                        if (frontTileID != TileID.Air)
-                        {
-                            var tileBorders = new AABox2D(x, y);
-                            tileBorders.DrawBox();
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        public static bool IsCollidingTop(this AABox2D borders, PlanetTileMap.TileMap tileMap, Vec2f velocity)
-        {
-            if (velocity.Y <= 0.0f) return false;
-            
-            int y = (int)borders.ymax;
-            int leftX = borders.xmin < 0 ? (int) borders.xmin - 1 : (int)borders.xmin;
-            int rightX = borders.xmax < 0 ? (int) borders.xmax - 1 : (int)borders.xmax;
-            
-            if (y >= 0 && y < tileMap.MapSize.Y)
-            {
-                for (int x = leftX; x <= rightX; x++)
-                {
-                    if (x >= 0 && x < tileMap.MapSize.X)
-                    {
-                        var frontTileID = tileMap.GetFrontTileID(x, y);
-                        if (frontTileID != TileID.Air)
-                        {
-                            var tileBorders = new AABox2D(x, y);
-                            tileBorders.DrawBox();
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            return false;
+            // is the point inside the rectangle's bounds?
+            return px >= r_xmin &&        // right of the left edge AND
+                   px <= r_xmax &&   // left of the right edge AND
+                   py >= r_ymin &&        // below the top AND
+                   py <= r_ymax;     // above the bottom
         }
     }
 }

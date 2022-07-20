@@ -115,7 +115,7 @@ namespace Planet.Unity
             AgentProcessCollisionSystem.Update(Contexts.sharedInstance.agent, ref PlanetState.TileMap);
 
             AgentMeshBuilderSystem.UpdateMesh(Contexts.sharedInstance.agent);
-            GameState.TileMapRenderer.UpdateFrontLayerMesh(ref PlanetState.TileMap);
+            GameState.TileMapRenderer.UpdateFrontLayerMesh(PlanetState.TileMap);
 
             GameState.TileMapRenderer.DrawLayer(MapLayerType.Front);
             Utility.Render.DrawFrame(ref AgentMeshBuilderSystem.Mesh, GameState.SpriteAtlasManager.GetSpriteAtlas(Enums.AtlasType.Agent));

@@ -133,8 +133,8 @@ namespace Collisions
             Utils.Assert(R2.xmin < R2.xmax);
             Utils.Assert(R2.ymin < R2.ymax);
             
-            Utils.Assert(!RectOverlapRect(R1.xmin, R1.xmax, R1.ymin, R1.ymax, 
-                                          R2.xmin, R2.xmax, R2.ymin, R2.ymax));
+            Utils.Assert(!Collisions.RectOverlapRect(R1.xmin, R1.xmax, R1.ymin, R1.ymax, 
+                                                     R2.xmin, R2.xmax, R2.ymin, R2.ymax));
 
             //R0
             Utils.Assert(R0.xmin < R0.xmax);
@@ -288,17 +288,6 @@ namespace Collisions
             }
 
             return tilePositions;
-        }
-
-
-        public static bool RectOverlapRect(float r1_xmin, float r1_xmax, float r1_ymin, float r1_ymax, float r2_xmin, float r2_xmax, float r2_ymin, float r2_ymax)
-        {
-            // are the sides of one rectangle touching the other?
-
-            return r1_xmax >= r2_xmin &&    // r1 right edge past r2 left
-                   r1_xmin <= r2_xmax &&    // r1 left edge past r2 right
-                   r1_ymax >= r2_ymin &&    // r1 top edge past r2 bottom
-                   r1_ymin <= r2_ymax;
         }
     }
 }

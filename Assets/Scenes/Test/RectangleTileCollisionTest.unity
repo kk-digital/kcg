@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &311326216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,22 +147,20 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 311326215}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 667c08c9938ec374cb5a44ce4f6be89c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 1675255535}
   square1: {fileID: 0}
   square2: {fileID: 0}
+  R0: {fileID: 0}
+  R1: {fileID: 0}
+  R2: {fileID: 0}
   square1_collision_color: {r: 0, g: 1, b: 0, a: 1}
   square2_collision_color: {r: 0, g: 0, b: 1, a: 1}
   square1_no_collision_color: {r: 1, g: 1, b: 1, a: 1}
   square2_no_collision_color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
-  square1_width: 30
-  square1_height: 18
-  square2_width: 12
-  square2_height: 24
 --- !u!4 &311326217
 Transform:
   m_ObjectHideFlags: 0
@@ -177,6 +175,60 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &371753551
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 371753553}
+  - component: {fileID: 371753552}
+  m_Layer: 0
+  m_Name: CollisionTest_v2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &371753552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 371753551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d472d9e2459e21549a355ea7c7c38c59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Material: {fileID: 2100000, guid: 4073de6af124b4f40bdce02691603836, type: 2}
+  square1: {fileID: 0}
+  square2: {fileID: 0}
+  R0: {fileID: 0}
+  R1: {fileID: 0}
+  R2: {fileID: 0}
+  square1_collision_color: {r: 0, g: 1, b: 0, a: 1}
+  square2_collision_color: {r: 0, g: 0, b: 1, a: 1}
+  square1_no_collision_color: {r: 1, g: 1, b: 1, a: 1}
+  square2_no_collision_color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+--- !u!4 &371753553
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 371753551}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1675255533
 GameObject:

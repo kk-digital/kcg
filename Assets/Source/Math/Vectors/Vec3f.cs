@@ -9,9 +9,9 @@ namespace KMath
     // Vector 3D Floating-Point
     public struct Vec3f
     {
-        float X;
-        float Y;
-        float Z;
+        public float X;
+        public float Y;
+        public float Z;
 
         public Vec3f(float x, float y)
         {
