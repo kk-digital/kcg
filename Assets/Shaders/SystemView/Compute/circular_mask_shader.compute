@@ -1,0 +1,24 @@
+#pragma kernel mask
+
+RWStructuredBuffer<float> noise;
+
+uint width;
+uint height;
+
+float smootherstep(float a, float b, float w) {
+    return (b - a) * w * w * w * (w * (w * 6.0f - 15.0f) + 10.0f) + a;
+}
+
+[numthreads(8, 8, 1)]
+void mask(uint3 id : SV_DispatchThreadID) {
+    float half_w  = width  * 0.5f;
+    float half_h  = height * 0.5f;
+    float local_x = id.x - half_w;
+    float local_y = id.y - half_h;
+
+    float d = local_x * local_x / (half_w * half_w)
+            + local_y * local_y / (half_h * half_h);
+
+         if(d > 0.50f) noise[id.x + id.y * width] = 0.0f;
+    else if(d > 0.15f) noise[id.x + id.y * width] = smootherstep(0.0f, noise[id.x + id.y * width], (0.5f - d) / 0.35f);
+}

@@ -1,0 +1,20 @@
+#pragma kernel blur_noise
+
+RWStructuredBuffer<float> noise;
+uint width;
+uint height;
+
+[numthreads(8, 8, 1)]
+void blur_noise(uint3 id : SV_DispatchThreadID) {
+    if(id.x <= 0 || id.y <= 0 || id.x >= width - 1 || id.y >= height - 1) return;
+
+    float center  =   0.20f *  noise[id.x     +  id.y      * width];
+
+    float sides   =  0.125f * (noise[id.x - 1 +  id.y      * width] + noise[id.x + 1 +  id.y      * width]
+                            +  noise[id.x     + (id.y - 1) * width] + noise[id.x     + (id.y + 1) * width]);
+
+    float corners = 0.0625f * (noise[id.x - 1 + (id.y - 1) * width] + noise[id.x + 1 + (id.y - 1) * width]
+                            +  noise[id.x - 1 + (id.y + 1) * width] + noise[id.x + 1 + (id.y + 1) * width]);
+
+    noise[id.x + id.y * width] = center + sides + corners;
+}

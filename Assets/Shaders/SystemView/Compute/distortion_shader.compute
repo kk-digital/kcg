@@ -1,0 +1,41 @@
+#pragma kernel distort
+
+  StructuredBuffer<float> distortionnoise;
+  StructuredBuffer<float>           noise;
+RWStructuredBuffer<float>     outputnoise;
+
+uint  width;
+uint  height;
+float strength;
+
+float smootherstep(float a, float b, float w) {
+    return (b - a) * w * w * w * (w * (w * 6.0f - 15.0f) + 10.0f) + a;
+}
+
+[numthreads(8, 8, 1)]
+void distort(uint3 id : SV_DispatchThreadID) {
+    float distortion_angle = distortionnoise[id.x + id.y * width] * 6.2831852f;
+
+    float distort_x_by = cos(distortion_angle) * strength;
+    float distort_y_by = sin(distortion_angle) * strength;
+
+    float original_x = id.x + distort_x_by;
+    float original_y = id.y + distort_y_by;
+
+    if(original_x < 0) original_x = width  + (original_x % width);
+    if(original_y < 0) original_y = height + (original_y % height);
+
+    uint  x0 = (uint)original_x;
+    uint  x1 = (uint)original_x + 1;
+    uint  y0 = (uint)original_y;
+    uint  y1 = (uint)original_y + 1;
+
+    float dx = original_x - x0;
+    float dy = original_y - y0;
+
+    outputnoise[id.x + id.y * width] = smootherstep(smootherstep(noise[x0 % width + (y0 % height) * width],
+                                                                 noise[x1 % width + (y0 % height) * width], dx),
+                                                    smootherstep(noise[x0 % width + (y1 % height) * width],
+                                                                 noise[x1 % width + (y1 % height) * width], dx),
+                                                                                                            dy);
+}

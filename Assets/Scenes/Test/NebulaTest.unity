@@ -160,9 +160,17 @@ MonoBehaviour:
   opacity: 0.75
   contrast: 0.5
   cutoff: 0.2
+  spin: 0
+  center: {x: 0, y: 0, z: 0}
   texture: {fileID: 0}
   renderer: {fileID: 0}
-  camera: {fileID: 1913073821}
+  blur_noise_shader: {fileID: 7200000, guid: 6265a9d36a176594480881d07bfe6ddf, type: 3}
+  scale_noise_shader: {fileID: 7200000, guid: 79f3f8a43bab1ba4399f86e66416a993, type: 3}
+  exponential_filter_shader: {fileID: 7200000, guid: 1954e415a298c274481ea30b23eee6d6, type: 3}
+  distortion_shader: {fileID: 7200000, guid: ebbb666a38ff3b7429286b25473a81fc, type: 3}
+  softening_shader: {fileID: 7200000, guid: dfd51fe3369013b46a74959398973d90, type: 3}
+  circular_blur_shader: {fileID: 7200000, guid: 0daecd51ef16bf5419fd99ed4c4a3103, type: 3}
+  circular_mask_shader: {fileID: 7200000, guid: 3a81d580afd4b1748bf5c40b11e020a4, type: 3}
 --- !u!4 &343479153
 Transform:
   m_ObjectHideFlags: 0
@@ -215,9 +223,17 @@ MonoBehaviour:
   opacity: 0.6
   contrast: 0.5
   cutoff: 0.1
+  spin: 0
+  center: {x: 0, y: 0, z: 0}
   texture: {fileID: 0}
   renderer: {fileID: 0}
-  camera: {fileID: 1913073821}
+  blur_noise_shader: {fileID: 7200000, guid: 6265a9d36a176594480881d07bfe6ddf, type: 3}
+  scale_noise_shader: {fileID: 7200000, guid: 79f3f8a43bab1ba4399f86e66416a993, type: 3}
+  exponential_filter_shader: {fileID: 7200000, guid: 1954e415a298c274481ea30b23eee6d6, type: 3}
+  distortion_shader: {fileID: 7200000, guid: ebbb666a38ff3b7429286b25473a81fc, type: 3}
+  softening_shader: {fileID: 7200000, guid: dfd51fe3369013b46a74959398973d90, type: 3}
+  circular_blur_shader: {fileID: 7200000, guid: 0daecd51ef16bf5419fd99ed4c4a3103, type: 3}
+  circular_mask_shader: {fileID: 7200000, guid: 3a81d580afd4b1748bf5c40b11e020a4, type: 3}
 --- !u!4 &1155576050
 Transform:
   m_ObjectHideFlags: 0
@@ -263,12 +279,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 0
-  stars: 10000
+  stars: 5000
   width: 1920
   height: 1080
   texture: {fileID: 0}
   renderer: {fileID: 0}
-  camera: {fileID: 1913073821}
 --- !u!4 &1730390604
 Transform:
   m_ObjectHideFlags: 0
@@ -278,7 +293,7 @@ Transform:
   m_GameObject: {fileID: 1730390602}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -321,9 +336,17 @@ MonoBehaviour:
   opacity: 1
   contrast: 0.5
   cutoff: 0.1
+  spin: 0
+  center: {x: 0, y: 0, z: 0}
   texture: {fileID: 0}
   renderer: {fileID: 0}
-  camera: {fileID: 1913073821}
+  blur_noise_shader: {fileID: 7200000, guid: 6265a9d36a176594480881d07bfe6ddf, type: 3}
+  scale_noise_shader: {fileID: 7200000, guid: 79f3f8a43bab1ba4399f86e66416a993, type: 3}
+  exponential_filter_shader: {fileID: 7200000, guid: 1954e415a298c274481ea30b23eee6d6, type: 3}
+  distortion_shader: {fileID: 7200000, guid: ebbb666a38ff3b7429286b25473a81fc, type: 3}
+  softening_shader: {fileID: 7200000, guid: dfd51fe3369013b46a74959398973d90, type: 3}
+  circular_blur_shader: {fileID: 7200000, guid: 0daecd51ef16bf5419fd99ed4c4a3103, type: 3}
+  circular_mask_shader: {fileID: 7200000, guid: 3a81d580afd4b1748bf5c40b11e020a4, type: 3}
 --- !u!4 &1886980502
 Transform:
   m_ObjectHideFlags: 0

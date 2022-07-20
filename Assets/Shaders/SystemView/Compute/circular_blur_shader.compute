@@ -1,0 +1,41 @@
+#pragma kernel blur
+
+  StructuredBuffer<float>       noise;
+RWStructuredBuffer<float> outputnoise;
+
+uint  width;
+uint  height;
+
+float radius;
+
+[numthreads(8, 8, 1)]
+void blur(uint3 id : SV_DispatchThreadID) {
+    float pixels  = 0.0f;
+    float value   = 0.0f;
+
+    uint  large_r = ceil(radius);
+
+    uint startx = clamp(id.x - large_r, 0, width);
+    uint starty = clamp(id.y - large_r, 0, height);
+
+    for(uint x0 = startx; x0 <= id.x; x0++) {
+        uint x1 = id.x + id.x - x0;
+
+        for(uint y0 = starty; y0 <= id.y; y0++) {
+            uint y1 = id.y + id.y - y0;
+
+            float distance = pow((id.x - x0) * (id.x - x0) + (id.y - y0) * (id.y - y0), 0.5f);
+
+            if(distance > radius) continue;
+
+            pixels += 4 * distance / radius;
+
+            value  += (noise[x0 + y0 * width]
+                   +   noise[x1 + y0 * width]
+                   +   noise[x0 + y1 * width]
+                   +   noise[x1 + y1 * width]) * (1.0f - distance / radius);
+        }
+    }
+
+    outputnoise[id.x + id.y * width] = value / pixels;
+}

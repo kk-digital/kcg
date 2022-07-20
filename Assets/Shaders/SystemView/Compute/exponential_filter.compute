@@ -1,0 +1,17 @@
+#pragma kernel exponential_filter
+
+RWStructuredBuffer<float> noise;
+
+uint  width;
+uint  height;
+
+[numthreads(8, 8, 1)]
+void exponential_filter(uint3 id : SV_DispatchThreadID) {
+    const float cutoff    = 0.05f;
+    const float sharpness = 0.95f;
+
+    float        c = 255.0f * (noise[id.x + id.y * width] - (1.0f - cutoff));
+    if(c < 0.0f) c = 0.0f;
+
+    noise[id.x + id.y * width] = clamp(1.0f - pow(abs(sharpness), c), 0.0f, 1.0f);
+}
