@@ -10,6 +10,10 @@ namespace HUD
     {
         private GUIManager guiManager;
 
+        public HUDManager()
+        {
+        }
+
         public HUDManager(Contexts contexts, AgentEntity agentEntity)
         {
             guiManager = new GUIManager();
