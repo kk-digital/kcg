@@ -65,15 +65,15 @@ namespace Scripts {
 
                 // Generate distortion noise
                 base_buffer2.Release();
-                base_buffer2 = new ComputeBuffer(width * height / 256, sizeof(float));
-                base_buffer2.SetData(ProceduralImages.generate_noise(rng, 16.0f, width / 16, height / 16));
+                base_buffer2 = new ComputeBuffer(width * height / 1024, sizeof(float));
+                base_buffer2.SetData(ProceduralImages.generate_noise(rng, 1.0f, width / 32, height / 32));
 
                 ComputeBuffer distortion_buffer = new ComputeBuffer(width * height, sizeof(float));
 
                 // Scale distortion noise
                 scale_noise_shader.SetInt( width_id, width);
                 scale_noise_shader.SetInt(height_id, height);
-                scale_noise_shader.SetInt( scale_id, 16);
+                scale_noise_shader.SetInt( scale_id, 32);
 
                 scale_noise_shader.SetBuffer(0,  noise_id, base_buffer2);
                 scale_noise_shader.SetBuffer(0, output_id, distortion_buffer);
@@ -88,7 +88,7 @@ namespace Scripts {
                 distortion_shader.SetInt( width_id, width);
                 distortion_shader.SetInt(height_id, height);
 
-                distortion_shader.SetFloat(strength_id, 16.0f);
+                distortion_shader.SetFloat(strength_id, 24.0f);
 
                 distortion_shader.SetBuffer(0, distortion_id, distortion_buffer);
                 distortion_shader.SetBuffer(0,      noise_id, base_buffer1);
@@ -97,6 +97,12 @@ namespace Scripts {
                 distortion_shader.Dispatch(0, width / 8, height / 8, 1);
 
                 distortion_buffer.Release();
+
+                float[] base_alpha = new float[width * height];
+
+                base_buffer2.GetData(base_alpha);
+                base_alpha = ProceduralImages.soften(base_alpha, 4, width, height);
+                base_buffer2.SetData(base_alpha);
 
                 // Apply circular blur
                 circular_blur_shader.SetInt( width_id, width);
@@ -119,8 +125,6 @@ namespace Scripts {
 
                 circular_mask_shader.Dispatch(0, width / 8, height / 8, 1);
                 
-                float[] base_alpha = new float[width * height];
-
                 base_buffer1.GetData(base_alpha);
                 base_buffer1.Release();
 
@@ -140,7 +144,7 @@ namespace Scripts {
 
                     for(int layer = 0; layer < layers; layer++) {
 
-                        int   scale         = 1 << layers - layer + 1;
+                        int   scale         = 1 << layers - layer - 1;
                         float strength      = scale / layers;
 
                         ComputeBuffer layer_buffer = new ComputeBuffer(width / scale * height / scale, sizeof(float));
@@ -183,7 +187,7 @@ namespace Scripts {
 
                     // Generate distortion noise
                     ComputeBuffer color_buffer2 = new ComputeBuffer(width * height / 4096, sizeof(float));
-                    color_buffer2.SetData(ProceduralImages.generate_noise(rng, 16.0f, width / 64, height / 64));
+                    color_buffer2.SetData(ProceduralImages.generate_noise(rng, 1.0f, width / 64, height / 64));
 
                     // Scale distortion noise
                     ComputeBuffer distortion_noise = new ComputeBuffer(width * height, sizeof(float));
@@ -205,7 +209,7 @@ namespace Scripts {
                     distortion_shader.SetInt( width_id, width);
                     distortion_shader.SetInt(height_id, height);
 
-                    distortion_shader.SetFloat(strength_id, 16.0f);
+                    distortion_shader.SetFloat(strength_id, 32.0f);
 
                     distortion_shader.SetBuffer(0, distortion_id, distortion_noise);
                     distortion_shader.SetBuffer(0,      noise_id, color_buffer1);
@@ -215,6 +219,10 @@ namespace Scripts {
 
                     distortion_noise.Release();
                     color_buffer1.Release();
+
+                    // Soften noise
+                    color_buffer2.GetData(alpha);
+                    color_buffer2.SetData(ProceduralImages.soften(alpha, 8, width, height));
 
                     // Apply circular mask
                     circular_mask_shader.SetInt( width_id, width);
