@@ -280,8 +280,6 @@ GameObject:
   - component: {fileID: 530959988}
   - component: {fileID: 530959987}
   - component: {fileID: 530959986}
-  - component: {fileID: 530959985}
-  - component: {fileID: 530959983}
   - component: {fileID: 530959982}
   m_Layer: 0
   m_Name: Main Camera
@@ -302,42 +300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d93b9a763533fec4cbec453f5c239fdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smoothTime: 0.25
---- !u!114 &530959983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 530959981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed771354369887441a8200653af6b229, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxCameraHalfWidthEnabled: 0
-  maxCameraHalfHeightEnabled: 0
-  maxCameraHalfWidth: 3
-  maxCameraHalfHeight: 2
-  targetDimension: 1
-  targetCameraHalfWidth: 2
-  targetCameraHalfHeight: 1.5
-  pixelPerfect: 0
-  assetsPixelsPerUnit: 100
---- !u!114 &530959985
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 530959981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ff83c0244d66e449a362982d7d23ed9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cam: {fileID: 530959988}
-  viewType: 0
+  smoothTime: 0.255
 --- !u!114 &530959986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -386,7 +349,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 4
+  orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
