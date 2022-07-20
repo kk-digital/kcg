@@ -24,8 +24,11 @@ namespace Scripts {
 
                 scale += Input.GetAxis("Mouse ScrollWheel") * 0.5f * scale;
                 camera.orthographicSize = 20.0f / scale;
-                background.transform.position   = new Vector3(transform.position.x, transform.position.y, 10.0f);
-                background.transform.localScale = new Vector3(10.0f / scale, 10.0f / scale, 10.0f / scale);
+
+                if(background != null) {
+                    background.transform.position   = new Vector3(transform.position.x, transform.position.y, 10.0f);
+                    background.transform.localScale = new Vector3(5.0f / scale, 5.0f / scale, 1.0f);
+                }
             }
 
             public void set_position(float x, float y, float s) {
