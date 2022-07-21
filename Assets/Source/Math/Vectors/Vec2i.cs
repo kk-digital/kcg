@@ -85,6 +85,14 @@ namespace KMath
         public static Vec2i operator -(Vec2i a, int b) => new(a.X - b, a.Y - b);
         [MethodImpl((MethodImplOptions) 256)]
         public static Vec2i operator +(Vec2i a, Vec2i b) => new(a.X + b.X, a.Y + b.Y);
+        [MethodImpl((MethodImplOptions)256)]
+        public static bool operator ==(Vec2i lhs, Vec2i rhs)
+        {
+            return (rhs.X == lhs.X && rhs.Y == lhs.Y) ? true : false;
+        }
+
+        [MethodImpl((MethodImplOptions)256)]
+        public static bool operator !=(Vec2i lhs, Vec2i rhs) => !(lhs == rhs);
 
         #endregion
 

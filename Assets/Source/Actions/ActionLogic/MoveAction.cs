@@ -37,13 +37,12 @@ namespace Action
             Vec2f targetPos = path[pathLength - 1];
 
             Vec2f direction = AgentEntity.physicsPosition2D.Value - targetPos;
-            var movable = AgentEntity.physicsMovable;
 
             if (direction.Magnitude < 0.1f)
             {
                 if (--pathLength == 0)
                 {
-                    movable.Acceleration = Vec2f.Zero;
+                    AgentEntity.physicsMovable.Acceleration = Vec2f.Zero;
                     ActionEntity.actionExecution.State = Enums.ActionState.Success;
                     return;
                 }
@@ -52,7 +51,7 @@ namespace Action
             // Todo: deals with flying agents.
             direction.Y = 0;
             direction.Normalize();
-            movable.Acceleration = direction * movable.Speed * 25.0f;
+            AgentEntity.physicsMovable.Acceleration = direction * AgentEntity.physicsMovable.Speed * 25.0f;
             // Todo deals with jumping.
         }
 

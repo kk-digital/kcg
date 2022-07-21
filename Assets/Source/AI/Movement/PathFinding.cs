@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Enums.Tile;
 using KMath;
 using PlanetTileMap;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEditor.PlayerSettings;
 
 namespace AI.Movement
 {
-    internal struct Node
+    struct Node
     {
         public int id;  // Is  equal closedList index. 
         public int parentID;
-        public Vec2f pos;
+        public Vec2i pos;
 
         public int pathCost;
         public int heuristicCost;
@@ -23,16 +26,24 @@ namespace AI.Movement
             return totalCost < node.totalCost ? true : false;
         }
 
-        public void UpdateCost(Vec2f end)
+        public void UpdateCost(Vec2i end)
         {
             heuristicCost = (int)Heuristics.euclidean_distance(pos, end) * 100;
             totalCost = heuristicCost + pathCost;
+        }
+
+        // Used by Array.indexOF
+        public override bool Equals(object obj)
+        {
+            if (obj is Node)
+                return pos == ((Node)obj).pos ? true : false;
+            return false;
         }
     }
 
     internal struct PathAdjacency
     {
-        public Vec2f dir;
+        public Vec2i dir;
         public int cost;
     }
 
@@ -45,14 +56,14 @@ namespace AI.Movement
 
     internal static class Heuristics
     {
-        static public float euclidean_distance(Vec2f firstPos, Vec2f secondPos)
+        static public float euclidean_distance(Vec2i firstPos, Vec2i secondPos)
         {
             float x = firstPos.X - secondPos.X;
             float y = firstPos.Y - secondPos.Y;
             return System.MathF.Sqrt(x * x + y * y);
         }
 
-        static public float manhattan_distance(Vec2f firstPos, Vec2f secondPos)
+        static public float manhattan_distance(Vec2i firstPos, Vec2i secondPos)
         {
             float x = firstPos.X - secondPos.X;
             float y = firstPos.Y - secondPos.Y;
@@ -65,21 +76,22 @@ namespace AI.Movement
         const int MAX_NUM_NODES = 256; // Maximum size of open/closed Map.
 
         readonly PathAdjacency[] directions = new PathAdjacency[8] 
-            {   new PathAdjacency() { dir = new Vec2f(0f, 0f),  cost = 100 },   // Right
-                new PathAdjacency() { dir = new Vec2f(-1f, 0f), cost = 100 },   // Left
-                new PathAdjacency() { dir = new Vec2f(0f, 1f),  cost = 100 },   // Up
-                new PathAdjacency() { dir = new Vec2f(0f, -1f), cost = 100 },   // Down
-                new PathAdjacency() { dir = new Vec2f(1f, 1f),  cost = 144 },   // Right Up 
-                new PathAdjacency() { dir = new Vec2f(1f, -1f), cost = 144 },   // Right Down
-                new PathAdjacency() { dir = new Vec2f(-1f, 1f), cost = 144 },   // Left Up
-                new PathAdjacency() { dir = new Vec2f(-1f,-1f), cost = 144 }};  // Left Down
+            {   new PathAdjacency() { dir = new Vec2i(1, 0),  cost = 100 },   // Right
+                new PathAdjacency() { dir = new Vec2i(-1, 0), cost = 100 },   // Left
+                new PathAdjacency() { dir = new Vec2i(0, 1),  cost = 100 },   // Up
+                new PathAdjacency() { dir = new Vec2i(0, -1), cost = 100 },   // Down
+                new PathAdjacency() { dir = new Vec2i(1, 1),  cost = 144 },   // Right Up 
+                new PathAdjacency() { dir = new Vec2i(1, -1), cost = 144 },   // Right Down
+                new PathAdjacency() { dir = new Vec2i(-1, 1), cost = 144 },   // Left Up
+                new PathAdjacency() { dir = new Vec2i(-1,-1), cost = 144 }};  // Left Down
 
         Node[] openList;
         Node[] closedList;
         Node firstNode;
 
-        HashSet<Vec2f> openSet;
-        HashSet<Vec2f> closedSet;
+        // Used to verify 
+        HashSet<Vec2i> openSet;
+        HashSet<Vec2i> closedSet;
 
         public void Initialize()
         {
@@ -87,12 +99,16 @@ namespace AI.Movement
             closedList = new Node[MAX_NUM_NODES];
             firstNode = new Node();
 
-            openSet = new HashSet<Vec2f>();
-            closedSet = new HashSet<Vec2f>();
+            openSet = new HashSet<Vec2i>();
+            closedSet = new HashSet<Vec2i>();
             openSet.EnsureCapacity(MAX_NUM_NODES);
             closedSet.EnsureCapacity(MAX_NUM_NODES);
         }
 
+        /// <summary>
+        /// Path is the shortest possible path.
+        /// Vec2f[] has closest node at the end of the list.
+        /// </summary>
         public Vec2f[] getPath(ref TileMap tileMap, Vec2f start, Vec2f end)
         {
             if (tileMap.GetFrontTile((int)end.X, (int)end.Y).MaterialType != TileMaterialType.Air)
@@ -100,10 +116,11 @@ namespace AI.Movement
                 Debug.Log("Not possible path. Endpoint is solid(unreacheable)");
             }
 
-            Debug.Log(end);
+            Vec2i startPos = new Vec2i((int)start.X, (int)start.Y);
+            Vec2i endPos = new Vec2i((int)end.X, (int)end.Y);
 
             // Check max distance here.
-            SetFirstNode(start, end);
+            SetFirstNode(startPos, endPos);
 
             // Todo: Profile sorting against searching, Gnomescroll sort the nodes. I am not sure its the fatest way.
             // It's possible that 
@@ -123,20 +140,20 @@ namespace AI.Movement
                     return null;
                 }
 
-                 if (sortStartPost > 0)
+                if (sortStartPost > 0)
                 {
                     SortOpenList(sortStartPost);
                     sortStartPost = 0;
                 }
 
                 // Move to closed list.
-                ref Node current = ref openList[openSet.Count - 1];
+                Node current = openList[openSet.Count - 1];
                 openSet.Remove(current.pos);
 
                 current.id = closedSet.Count;
                 AddNodeCloseList(ref current);
 
-                if (current.pos == end)
+                if (current.pos == endPos)
                 {
                     Debug.Log("Path found.");
                     break;
@@ -150,7 +167,7 @@ namespace AI.Movement
                     if (!PassableJump(ref tileMap, ref node, i))
                         continue;
 
-                    node.UpdateCost(end);
+                    node.UpdateCost(endPos);
 
                     if (openSet.Contains(node.pos))
                     {
@@ -172,35 +189,36 @@ namespace AI.Movement
                         {
                             continue;
                         }
-                    }
+}
 
+                    openList[openSet.Count] = node;
                     openSet.Add(node.pos);
                     sortStartPost = openSet.Count - 1;
                 }
             }
 
-            return constructPath(end);
+            return constructPath(endPos);
         }
 
-        Vec2f[] constructPath(Vec2f end)
+        Vec2f[] constructPath(Vec2i end)
         {
             int first = closedList[closedSet.Count - 1].parentID;
-            int len = 1;
+            int length = 0;
 
             // Get path lenth.
             while (first >= 0)
             {
                 first = closedList[first].parentID;
-                len++;
+                length++;
             }
 
-            Vec2f[] path = new Vec2f[len];
+            Vec2f[] path = new Vec2f[length];
 
             // Add to path array starting form last element.
             first = closedList[closedSet.Count - 1].parentID;
-            while (first >= 0)
+            for(int i = 0; i < length; i++)
             {
-                path[--len] = closedList[first].pos;
+                path[i] = new Vec2f(closedList[first].pos.X, closedList[first].pos.Y);
                 first = closedList[first].parentID;
             }
 
@@ -215,7 +233,7 @@ namespace AI.Movement
             // TODO -- parameterized
             Vec2i CHARACTER_SIZE = new Vec2i(1, 1); // How many blocks character takes.
 
-            Vec2f exitPos = current.pos + directions[indDir].dir;
+            Vec2i exitPos = current.pos + directions[indDir].dir;
 
             // Check if character can move to this tile
             Vec2i tilePos =
@@ -276,24 +294,17 @@ namespace AI.Movement
                 return false;
             }
 
-            // Check if character can move to this tile
-            Vec2i tilePos = new Vec2i((int)current.pos.X, (int)current.pos.Y);
-            //Vec2i tilePos =
-            //    new Vec2i((int)(current.pos.X - 0.5f) + (CHARACTER_SIZE.X - 1),
-            //        (int)(current.pos.Y - 0.5f) + (CHARACTER_SIZE.Y - 1)); // Get block character wasn't occupying before.
-
             // Check if tile is inside the map.
-            if (tilePos.X < 0 || tilePos.X > tileMap.MapSize.X ||
-                tilePos.Y < 0 || tilePos.Y > tileMap.MapSize.Y)
+            if (current.pos.X < 0 || current.pos.X > tileMap.MapSize.X ||
+                current.pos.Y < 0 || current.pos.Y > tileMap.MapSize.Y)
                 return false;
 
             // If solid return false.
-            if (tileMap.GetFrontTile(tilePos.X, tilePos.Y).MaterialType != TileMaterialType.Air)
+            if (tileMap.GetFrontTile(current.pos.X, current.pos.Y).MaterialType != TileMaterialType.Air)
                 return false;
 
-            // Is tile at ground.
-            Vec2i GroundPos = new Vec2i((int)(current.pos.X - 0.5f), (int)(current.pos.Y - 0.5f) - 1);
-            if (tileMap.GetFrontTile(GroundPos.X, GroundPos.Y).MaterialType == TileMaterialType.Air)
+            // Is tile at ground. // Todo deals with fall path.
+            if (tileMap.GetFrontTile(current.pos.X, current.pos.Y - 1).MaterialType == TileMaterialType.Air)
                 return false;
 
             return true;
@@ -327,10 +338,10 @@ namespace AI.Movement
         void AddNodeCloseList(ref Node node)
         {
             closedList[closedSet.Count] = node;
-            closedSet.Add(firstNode.pos);
+            closedSet.Add(node.pos);
         }
 
-        void SetFirstNode(Vec2f start, Vec2f end)
+        void SetFirstNode(Vec2i start, Vec2i end)
         {
             firstNode.parentID = -1;
             firstNode.id = 0;
