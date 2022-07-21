@@ -104,6 +104,10 @@ namespace Collisions
                     if (x >= 0 && x < tileMap.MapSize.X)
                     {
                         ref var tile = ref tileMap.GetFrontTile(x, y);
+                        if (GameState.TileCreationApi.GetTileProperty(tile.ID).CollisionIsoType == CollisionType.Platform)
+                        {
+                            return false;
+                        }
                         if (tile.ID != TileID.Air)
                         {
                             var tileBorders = new AABox2D(x, y);
