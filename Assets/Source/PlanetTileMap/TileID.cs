@@ -12,6 +12,7 @@ namespace Enums.Tile
         Pipe,
         Background,
         Wire,
-        Bedrock
+        Bedrock,
+        Platform
     }
 }
