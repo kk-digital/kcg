@@ -29,7 +29,7 @@ namespace Source {
             public const float sixthpi                = 0.5235988f;     // ---                  0.5235988                    30.0°
                                                                         //  6
 
-            //  π
+                                                                        //  π
             public const float eigthpi                = 0.3926991f;     // ---                  0.3926991                    22.5°
                                                                         //  8
 
@@ -38,6 +38,10 @@ namespace Source {
                                                                         //  1
             public const float rsqrt2                 = 0.7071068f;     // ---                  0.7071068
                                                                         // √ 2
+
+                                                                        //  π                   Multiply by this to convert from deg to rad
+            public const float deg                    = 0.0174533f;     // ---
+                                                                        // 180°                 Divide   by this to convert from rad to deg
 
             /*
              * Quick and simple function to calculate the magnitude of a vector
@@ -80,9 +84,37 @@ namespace Source {
              * Clamps an angle between 0 and 2π
              */
             public static float normalize_angle(float angle) {
-                while(angle > twopi) angle -= twopi;
-                if   (angle <  0.0f) angle += twopi;
+                angle %= twopi;
+                if (angle < 0.0f) angle += twopi;
                 return angle;
+            }
+
+            /*
+             * Picks a value between a and b, using a smoothstep curve.
+             * 
+             * For w <= 0.0 it returns a.
+             * For w >= 1.0 it returns b.
+             * For 0.0 < w < 1.0 it returns a value between a and b along a smoothstep curve.
+             */
+            public static float smoothstep(float a, float b, float w) {
+                if(w < 0.0f) return a;
+                if(w > 1.0f) return b;
+
+                return (b - a) * w * w * (3.0f - 2.0f * w) + a;
+            }
+
+            /*
+             * Picks a value between a and b, using a smootherstep curve.
+             * 
+             * For w <= 0.0 it returns a.
+             * For w >= 1.0 it returns b.
+             * For 0.0 < w < 1.0 it returns a value between a and b along a smootherstep curve.
+             */
+            public static float smootherstep(float a, float b, float w) {
+                if(w < 0.0f) return a;
+                if(w > 1.0f) return b;
+
+                return (b - a) * w * w * w * (w * (w * 6.0f - 15.0f) + 10.0f) + a;
             }
         }
     }

@@ -3,6 +3,8 @@ using Enums.Tile;
 using KMath;
 using Item;
 using Animancer;
+using HUD;
+using PlanetTileMap;
 
 namespace Planet.Unity
 {
@@ -21,7 +23,6 @@ namespace Planet.Unity
         int inventoryID;
         int toolBarID;
 
-
         public static int HumanoidCount = 1;
         GameObject[] HumanoidArray;
 
@@ -30,8 +31,9 @@ namespace Planet.Unity
         AnimationClip WalkAnimationClip ;
         AnimationClip GolfSwingClip;
 
-
         AnimancerComponent[] AnimancerComponentArray;
+
+        HUDManager hudManager;
 
         static bool Init = false;
 
@@ -46,7 +48,6 @@ namespace Planet.Unity
 
         public void Update()
         {
-
             bool run = Input.GetKeyDown(KeyCode.R);
             bool walk = Input.GetKeyDown(KeyCode.W);
             bool idle = Input.GetKeyDown(KeyCode.I);
@@ -102,8 +103,11 @@ namespace Planet.Unity
         {
             if (Init)
             {
-                // Draw Player Status UI
-                KGUI.PlayerStatusUIManager.Update();
+                // Draw HUD UI
+                hudManager.Update(Player);
+
+                // Draw Statistics
+                KGUI.Statistics.StatisticsDisplay.DrawStatistics(ref Planet);
             }
         }
 
@@ -145,8 +149,7 @@ namespace Planet.Unity
             // get the 3d model from the scene
             //GameObject humanoid = GameObject.Find("DefaultHumanoid");
 
-            // load the 3d model from file
-            GameObject prefab = (GameObject)Resources.Load("Stander");
+            GameObject prefab = Engine3D.AssetManager.Singelton.GetModel(Engine3D.ModelType.Stander);
 
             HumanoidArray = new GameObject[HumanoidCount];
             AnimancerComponentArray = new AnimancerComponent[HumanoidCount];
@@ -162,9 +165,6 @@ namespace Planet.Unity
             }
 
 
-            
-
-
             // create an animancer object and give it a reference to the Animator component
             for(int i = 0; i < HumanoidCount; i++)
             {
@@ -176,11 +176,10 @@ namespace Planet.Unity
             }
 
             
-            // load some animation clips from disk
-            IdleAnimationClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Idle", typeof(AnimationClip));
-            RunAnimationClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Run", typeof(AnimationClip));
-            WalkAnimationClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Walk_F", typeof(AnimationClip));
-            GolfSwingClip = (AnimationClip)Resources.Load("Shinabro/Platform_Animation/Animation/00_Base/Stander@Jump_Roll", typeof(AnimationClip));
+            IdleAnimationClip = Engine3D.AssetManager.Singelton.GetAnimationClip(Engine3D.AnimationType.Idle);
+            RunAnimationClip = Engine3D.AssetManager.Singelton.GetAnimationClip(Engine3D.AnimationType.Run);
+            WalkAnimationClip = Engine3D.AssetManager.Singelton.GetAnimationClip(Engine3D.AnimationType.Walk);
+            GolfSwingClip = Engine3D.AssetManager.Singelton.GetAnimationClip(Engine3D.AnimationType.Flip);
 
 
             // play the idle animation
@@ -200,16 +199,22 @@ namespace Planet.Unity
             Vec2i mapSize = new Vec2i(32, 24);
             Planet = new Planet.PlanetState();
             Planet.Init(mapSize);
+
             Planet.InitializeSystems(Material, transform);
+            
+            /*var camera = Camera.main;
+            Vector3 lookAtPosition = camera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, camera.nearClipPlane));
+            Planet.TileMap = TileMapManager.Load("map.kmap", (int)lookAtPosition.x, (int)lookAtPosition.y);*/
 
             GenerateMap();
             SpawnStuff();
 
+            TileMapManager.Save(Planet.TileMap, "map.kmap");
+
             inventoryID = Player.agentInventory.InventoryID;
             toolBarID = Player.agentToolBar.ToolBarID;
 
-            // Player Status UI Init
-            KGUI.PlayerStatusUIManager.Initialize(Planet.EntitasContext, Player);
+            hudManager = new HUDManager(Planet.EntitasContext, Player);
 
             // Admin API Spawn Items
             Admin.AdminAPI.SpawnItem(Enums.ItemType.Pistol, Planet.EntitasContext);
@@ -217,6 +222,7 @@ namespace Planet.Unity
 
             // Admin API Add Items
             Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.PlacementTool, Planet.EntitasContext);
+            Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.PlacementToolBack, Planet.EntitasContext);
             Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.RemoveTileTool, Planet.EntitasContext);
             Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.SpawnEnemySlimeTool, Planet.EntitasContext);
             Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.MiningLaserTool, Planet.EntitasContext);
@@ -234,56 +240,56 @@ namespace Planet.Unity
             {
                 for (int i = 0; i < tileMap.MapSize.X; i++)
                 {
-                    var frontTileID = TileID.Air;
-                    var backTileID = TileID.Air;
+                    var frontTileID = TileMaterialType.Air;
+                    var backTileID = TileMaterialType.Air;
 
                     if (i >= tileMap.MapSize.X / 2)
                     {
                         if (j % 2 == 0 && i == tileMap.MapSize.X / 2)
                         {
-                            frontTileID = TileID.Moon;
-                            backTileID = TileID.Background;
+                            frontTileID = TileMaterialType.Moon;
+                            backTileID = TileMaterialType.Background;
                         }
                         else
                         {
-                            frontTileID = TileID.Glass;
-                            backTileID = TileID.Background;
+                            frontTileID = TileMaterialType.Glass;
+                            backTileID = TileMaterialType.Background;
                         }
                     }
                     else
                     {
                         if (j % 3 == 0 && i == tileMap.MapSize.X / 2 + 1)
                         {
-                            frontTileID = TileID.Glass;
-                            backTileID = TileID.Background;
+                            frontTileID = TileMaterialType.Glass;
+                            backTileID = TileMaterialType.Background;
                         }
                         else
                         {
-                            frontTileID = TileID.Moon;
-                            backTileID = TileID.Background;
-                            /*if ((int) KMath.Random.Mt19937.genrand_int32() % 10 == 0)
+                            frontTileID = TileMaterialType.Moon;
+                            backTileID = TileMaterialType.Background;
+                            if ((int) KMath.Random.Mt19937.genrand_int32() % 10 == 0)
                             {
                                 int oreRandom = (int) KMath.Random.Mt19937.genrand_int32() % 3;
                                 if (oreRandom == 0)
                                 {
-                                    frontTile.SpriteId2 = GameResources.OreSprite;
+                                    tileMap.GetFrontTile(i, j).SpriteId2 = GameResources.OreSprite;
                                 }
                                 else if (oreRandom == 1)
                                 {
-                                    frontTile.SpriteId2 = GameResources.Ore2Sprite;
+                                    tileMap.GetFrontTile(i, j).SpriteId2 = GameResources.Ore2Sprite;
                                 }
                                 else
                                 {
-                                    frontTile.SpriteId2 = GameResources.Ore3Sprite;
+                                    tileMap.GetFrontTile(i, j).SpriteId2 = GameResources.Ore3Sprite;
                                 }
 
-                                frontTile.DrawType = TileDrawType.Composited;
-                            }*/
+                                tileMap.GetFrontTile(i, j).DrawType = TileDrawType.Composited;
+                            }
                         }
                     }
 
-                    tileMap.GetFrontTile(i, j).ID = frontTileID;
-                    tileMap.GetBackTile(i, j).ID = backTileID;
+                    tileMap.GetFrontTile(i, j).MaterialType = frontTileID;
+                    tileMap.GetBackTile(i, j).MaterialType = backTileID;
                 }
             }
 
@@ -293,8 +299,8 @@ namespace Planet.Unity
             {
                 for (int j = tileMap.MapSize.Y - 10; j < tileMap.MapSize.Y; j++)
                 {
-                    tileMap.GetFrontTile(i, j).ID = TileID.Air;
-                    tileMap.GetBackTile(i, j).ID = TileID.Air;
+                    tileMap.GetFrontTile(i, j).MaterialType = TileMaterialType.Air;
+                    tileMap.GetBackTile(i, j).MaterialType = TileMaterialType.Air;
                 }
             }
 
@@ -321,9 +327,9 @@ namespace Planet.Unity
 
                 for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
-                    tileMap.GetFrontTile(i, j).ID = TileID.Air;
-                    tileMap.GetBackTile(i, j).ID = TileID.Air;
-                    tileMap.GetMidTile(i, j).ID = TileID.Wire;
+                    tileMap.GetFrontTile(i, j).MaterialType = TileMaterialType.Air;
+                    tileMap.GetBackTile(i, j).MaterialType = TileMaterialType.Air;
+                    tileMap.GetMidTile(i, j).MaterialType = TileMaterialType.Wire;
                 }
             }
 
@@ -350,9 +356,22 @@ namespace Planet.Unity
 
                 for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
-                    tileMap.GetFrontTile(i, j).ID = TileID.Air;
-                    tileMap.GetMidTile(i, j).ID = TileID.Pipe;
+                    tileMap.GetFrontTile(i, j).MaterialType = TileMaterialType.Air;
+                    tileMap.GetMidTile(i, j).MaterialType = TileMaterialType.Pipe;
                 }
+            }
+
+
+            for(int i = 0; i < tileMap.MapSize.X; i++)
+            {
+                tileMap.GetFrontTile(i, 0).MaterialType = TileMaterialType.Bedrock;
+                tileMap.GetFrontTile(i, tileMap.MapSize.Y - 1).MaterialType = TileMaterialType.Bedrock;
+            }
+
+            for(int j = 0; j < tileMap.MapSize.Y; j++)
+            {
+                tileMap.GetFrontTile(0, j).MaterialType = TileMaterialType.Bedrock;
+                tileMap.GetFrontTile(tileMap.MapSize.X - 1, j).MaterialType = TileMaterialType.Bedrock;
             }
 
             var camera = Camera.main;

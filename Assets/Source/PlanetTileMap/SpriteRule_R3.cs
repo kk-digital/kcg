@@ -885,7 +885,7 @@ namespace PlanetTileMap
         public static void UpdateBackSprite(int x, int y, TileMap tileMap)
         {
             ref var tile = ref tileMap.GetBackTile(x, y);
-            ref var property = ref GameState.TileCreationApi.GetTileProperty(tile.ID);
+            ref TileMaterial tileMaterial = ref GameState.TileCreationApi.GetMaterial(tile.MaterialType);
 
             int neighborsBitField = 0;
 
@@ -894,7 +894,7 @@ namespace PlanetTileMap
             if (x + 1 < tileMap.MapSize.X)
             {
                 ref var neighborTile = ref tileMap.GetBackTile(x + 1, y);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_Right;
                 }
@@ -905,7 +905,7 @@ namespace PlanetTileMap
             if (x - 1 >= 0)
             {
                 ref var neighborTile = ref tileMap.GetBackTile(x - 1, y);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_Left;
                 }
@@ -916,7 +916,7 @@ namespace PlanetTileMap
             if (y + 1 < tileMap.MapSize.Y)
             {
                 ref var neighborTile = ref tileMap.GetBackTile(x, y + 1);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_Up;
                 }
@@ -927,7 +927,7 @@ namespace PlanetTileMap
             if (y - 1 >= 0)
             {
                 ref var neighborTile = ref tileMap.GetBackTile(x, y - 1);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_Down;
                 }
@@ -938,7 +938,7 @@ namespace PlanetTileMap
             if (x + 1 < tileMap.MapSize.X && y + 1 < tileMap.MapSize.Y)
             {
                 ref var neighborTile = ref tileMap.GetBackTile(x + 1, y + 1);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_UpRight;
                 }
@@ -949,7 +949,7 @@ namespace PlanetTileMap
             if (x - 1 >= 0 && y + 1 < tileMap.MapSize.Y)
             {
                 ref var neighborTile = ref tileMap.GetBackTile(x - 1, y + 1);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_UpLeft;
                 }
@@ -960,7 +960,7 @@ namespace PlanetTileMap
             if (x + 1 < tileMap.MapSize.X && y - 1 >= 0)
             {
                 ref var neighborTile = ref tileMap.GetBackTile(x + 1, y - 1);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_DownRight;
                 }
@@ -971,7 +971,7 @@ namespace PlanetTileMap
             if (x - 1 >= 0 && y - 1 >= 0)
             {
                 ref var neighborTile = ref tileMap.GetBackTile(x - 1, y - 1);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_DownLeft;
                 }
@@ -989,7 +989,7 @@ namespace PlanetTileMap
 
             // the sprite ids are next to each other in the sprite atlas
             // we just have to know which one to draw based on the offset
-            tile.SpriteID = property.BaseSpriteId + tilePosition;
+            tile.TileID = tileMaterial.StartTileIndex + tilePosition;
         }
 
 
@@ -1001,7 +1001,7 @@ namespace PlanetTileMap
         public static void UpdateMidSprite(int x, int y, TileMap tileMap)
         {
             ref var tile = ref tileMap.GetMidTile(x, y);
-            ref var property = ref GameState.TileCreationApi.GetTileProperty(tile.ID);
+            ref TileMaterial tileMaterial = ref GameState.TileCreationApi.GetMaterial(tile.MaterialType);
 
             int neighborsBitField = 0;
 
@@ -1010,7 +1010,7 @@ namespace PlanetTileMap
             if (x + 1 < tileMap.MapSize.X)
             {
                 ref var neighborTile = ref tileMap.GetMidTile(x + 1, y);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_Right;
                 }
@@ -1021,7 +1021,7 @@ namespace PlanetTileMap
             if (x - 1 >= 0)
             {
                 ref var neighborTile = ref tileMap.GetMidTile(x - 1, y);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_Left;
                 }
@@ -1032,7 +1032,7 @@ namespace PlanetTileMap
             if (y + 1 < tileMap.MapSize.Y)
             {
                 ref var neighborTile = ref tileMap.GetMidTile(x, y + 1);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_Up;
                 }
@@ -1043,7 +1043,7 @@ namespace PlanetTileMap
             if (y - 1 >= 0)
             {
                 ref var neighborTile = ref tileMap.GetMidTile(x, y - 1);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_Down;
                 }
@@ -1054,7 +1054,7 @@ namespace PlanetTileMap
             if (x + 1 < tileMap.MapSize.X && y + 1 < tileMap.MapSize.Y)
             {
                 ref var neighborTile = ref tileMap.GetMidTile(x + 1, y + 1);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_UpRight;
                 }
@@ -1065,7 +1065,7 @@ namespace PlanetTileMap
             if (x - 1 >= 0 && y + 1 < tileMap.MapSize.Y)
             {
                 ref var neighborTile = ref tileMap.GetMidTile(x - 1, y + 1);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_UpLeft;
                 }
@@ -1076,7 +1076,7 @@ namespace PlanetTileMap
             if (x + 1 < tileMap.MapSize.X && y - 1 >= 0)
             {
                 ref var neighborTile = ref tileMap.GetMidTile(x + 1, y - 1);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_DownRight;
                 }
@@ -1087,7 +1087,7 @@ namespace PlanetTileMap
             if (x - 1 >= 0 && y - 1 >= 0)
             {
                 ref var neighborTile = ref tileMap.GetMidTile(x - 1, y - 1);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_DownLeft;
                 }
@@ -1105,7 +1105,7 @@ namespace PlanetTileMap
 
             // the sprite ids are next to each other in the sprite atlas
             // we just have to know which one to draw based on the offset
-            tile.SpriteID = property.BaseSpriteId + tilePosition;
+            tile.TileID = tileMaterial.StartTileIndex + tilePosition;
         }
 
 
@@ -1122,7 +1122,7 @@ namespace PlanetTileMap
         public static void UpdateFrontSprite(int x, int y, TileMap tileMap)
         {
             ref var tile = ref tileMap.GetFrontTile(x, y);
-            ref var property = ref GameState.TileCreationApi.GetTileProperty(tile.ID);
+            ref TileMaterial tileMaterial = ref GameState.TileCreationApi.GetMaterial(tile.MaterialType);
 
             int neighborsBitField = 0;
 
@@ -1131,7 +1131,7 @@ namespace PlanetTileMap
             if (x + 1 < tileMap.MapSize.X)
             {
                 ref var neighborTile = ref tileMap.GetFrontTile(x + 1, y);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_Right;
                 }
@@ -1142,7 +1142,7 @@ namespace PlanetTileMap
             if (x - 1 >= 0)
             {
                 ref var neighborTile = ref tileMap.GetFrontTile(x - 1, y);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_Left;
                 }
@@ -1153,7 +1153,7 @@ namespace PlanetTileMap
             if (y + 1 < tileMap.MapSize.Y)
             {
                 ref var neighborTile = ref tileMap.GetFrontTile(x, y + 1);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_Up;
                 }
@@ -1164,7 +1164,7 @@ namespace PlanetTileMap
             if (y - 1 >= 0)
             {
                 ref var neighborTile = ref tileMap.GetFrontTile(x, y - 1);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_Down;
                 }
@@ -1175,7 +1175,7 @@ namespace PlanetTileMap
             if (x + 1 < tileMap.MapSize.X && y + 1 < tileMap.MapSize.Y)
             {
                 ref var neighborTile = ref tileMap.GetFrontTile(x + 1, y + 1);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_UpRight;
                 }
@@ -1186,7 +1186,7 @@ namespace PlanetTileMap
             if (x - 1 >= 0 && y + 1 < tileMap.MapSize.Y)
             {
                 ref var neighborTile = ref tileMap.GetFrontTile(x - 1, y + 1);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_UpLeft;
                 }
@@ -1197,7 +1197,7 @@ namespace PlanetTileMap
             if (x + 1 < tileMap.MapSize.X && y - 1 >= 0)
             {
                 ref var neighborTile = ref tileMap.GetFrontTile(x + 1, y - 1);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_DownRight;
                 }
@@ -1208,7 +1208,7 @@ namespace PlanetTileMap
             if (x - 1 >= 0 && y - 1 >= 0)
             {
                 ref var neighborTile = ref tileMap.GetFrontTile(x - 1, y - 1);
-                if (neighborTile.ID == tile.ID)
+                if (neighborTile.MaterialType == tile.MaterialType)
                 {
                     neighborsBitField |= BitField_DownLeft;
                 }
@@ -1224,10 +1224,9 @@ namespace PlanetTileMap
 
 
 
-
             // the sprite ids are next to each other in the sprite atlas
             // we just have to know which one to draw based on the offset
-            tile.SpriteID = property.BaseSpriteId + tilePosition;
+            tile.TileID = tileMaterial.StartTileIndex + tilePosition;
         }
     }
 }

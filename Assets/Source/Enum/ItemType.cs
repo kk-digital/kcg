@@ -29,6 +29,7 @@
         /// Tools
         /// </summary>
         PlacementTool,
+        PlacementToolBack,
         RemoveTileTool,
         MiningLaserTool,
         SpawnEnemySlimeTool,

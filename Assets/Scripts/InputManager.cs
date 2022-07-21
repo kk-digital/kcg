@@ -25,14 +25,6 @@ public class InputManager : MonoBehaviour
         {
             SceneManager.Instance.Register(this, Enums.SceneObjectType.SceneObjectTypeUtilityScript);
         }
-
-        if (Camera.main.gameObject.GetComponent<CameraMove>().enabled == true)
-        {
-            if (Camera.main.gameObject.GetComponent<CameraFollow>() != null)
-                Camera.main.gameObject.GetComponent<CameraFollow>().enabled = false;
-            else
-                Camera.main.gameObject.AddComponent<CameraFollow>();
-        }
     }
 
     public void Controls()
@@ -119,9 +111,6 @@ public class InputManager : MonoBehaviour
     {
         // Detect Input device to understand which device player using.
         DetectInputDevice();
-
-        if (GameObject.Find("Test") != null)
-            KGUI.Statistics.StatisticsDisplay.DrawStatistics(GameObject.Find("Test").GetComponent<Planet.Unity.PlanetTest>().Planet);
     }
 
     // Detecting Input device from input actions

@@ -383,7 +383,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5.2109375
+  orthographic size: 3.4375
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

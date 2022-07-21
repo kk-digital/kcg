@@ -4,6 +4,7 @@ using Enums.Tile;
 using KMath;
 using Inventory;
 using Item;
+using PlanetTileMap;
 
 namespace Planet.Unity
 {
@@ -81,6 +82,7 @@ namespace Planet.Unity
             GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.PumpShotgun, new Vec2f(3.0f, 3.0f));
             GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.PulseWeapon, new Vec2f(3.0f, 3.0f));
             GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.SniperRifle, new Vec2f(3.0f, 3.0f));
+            GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.SMG, new Vec2f(3.0f, 3.0f));
             //GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.Shotgun, new Vec2f(3.0f, 3.0f));
             //GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.LongRifle, new Vec2f(3.0f, 3.0f));
             //GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.RPG, new Vec2f(3.0f, 3.0f));
@@ -105,34 +107,34 @@ namespace Planet.Unity
             {
                 for (int i = 0; i < tileMap.MapSize.X; i++)
                 {
-                    TileID frontTile;
+                    TileMaterialType frontTile;
 
                     if (i >= tileMap.MapSize.X / 2)
                     {
                         if (j % 2 == 0 && i == tileMap.MapSize.X / 2)
                         {
-                            frontTile = TileID.Moon;
+                            frontTile = TileMaterialType.Moon;
                         }
                         else
                         {
-                            frontTile = TileID.Glass;
+                            frontTile = TileMaterialType.Glass;
                         }
                     }
                     else
                     {
                         if (j % 3 == 0 && i == tileMap.MapSize.X / 2 + 1)
                         {
-                            frontTile = TileID.Glass;
+                            frontTile = TileMaterialType.Glass;
                         }
                         else
                         {
-                            frontTile = TileID.Moon;
+                            frontTile = TileMaterialType.Moon;
                         }
                     }
 
                     if (j is > 1 and < 6 || (j > 8 + i))
                     {
-                        frontTile = TileID.Air;
+                        frontTile = TileMaterialType.Air;
                     }
 
 
