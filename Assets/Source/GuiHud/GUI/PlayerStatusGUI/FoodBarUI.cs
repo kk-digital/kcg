@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using Entitas;
 using KGUI.Elements;
+using UnityEngine.EventSystems;
 
 namespace KGUI.PlayerStatus
 {
-    public class FoodBarUI
+    public class FoodBarUI : GUIManager
     {
         // Init
         private static bool Init;
@@ -23,7 +24,7 @@ namespace KGUI.PlayerStatus
         public ProgressBar foodBar;
         private GameObject iconCanvas;
 
-        public void Initialize(AgentEntity agentEntity)
+        public override void Initialize(Contexts contexts, AgentEntity agentEntity)
         {
             // Set Width and Height
             int IconWidth = 19;
@@ -84,6 +85,9 @@ namespace KGUI.PlayerStatus
             iconCanvas.transform.parent = GameObject.Find("Canvas").transform;
             iconCanvas.AddComponent<RectTransform>();
             iconCanvas.AddComponent<Image>();
+            iconCanvas.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
+            iconCanvas.GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
+            iconCanvas.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
 
             // Add Components and setup game object
             Sprite iconBar = Sprite.Create(icon.Texture, new Rect(0.0f, 0.0f, IconWidth, IconHeight), new Vector2(0.5f, 0.5f));
@@ -109,10 +113,11 @@ namespace KGUI.PlayerStatus
             Init = true;
         }
 
-        public void Update(AgentEntity agentEntity)
+        public override void Update(AgentEntity agentEntity)
         {
             if (Init)
             {
+                ObjectPosition = new KMath.Vec2f(iconCanvas.transform.position.x, iconCanvas.transform.position.y);
                 foodBar.Update(agentEntity.agentStats.Food / 100);
 
                 if (Camera.main.aspect >= 1.7f)
@@ -122,6 +127,21 @@ namespace KGUI.PlayerStatus
                 else
                     iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 193.4f, 4.873917f);
             }
+        }
+
+        public override void OnMouseClick(AgentEntity agentEntity)
+        {
+            Debug.LogWarning("Food Bar Clicked");
+        }
+
+        public override void OnMouseEnter()
+        {
+            Debug.LogWarning("Food Bar Mouse Enter");
+        }
+
+        public override void OnMouseExit()
+        {
+            Debug.LogWarning("Food Bar Mouse Exit");
         }
     }
 }

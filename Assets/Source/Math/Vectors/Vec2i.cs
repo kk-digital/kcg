@@ -85,6 +85,15 @@ namespace KMath
         public static Vec2i operator -(Vec2i a, int b) => new(a.X - b, a.Y - b);
         [MethodImpl((MethodImplOptions) 256)]
         public static Vec2i operator +(Vec2i a, Vec2i b) => new(a.X + b.X, a.Y + b.Y);
+        [MethodImpl((MethodImplOptions)256)]
+        public static bool operator ==(Vec2i lhs, Vec2i rhs)
+        {
+            int num1 = lhs.X - rhs.X;
+            int num2 = lhs.Y - rhs.Y;
+            return num1 * (double)num1 + num2 * (double)num2 < 9.99999943962493E-11;
+        }
+        [MethodImpl((MethodImplOptions)256)]
+        public static bool operator !=(Vec2i lhs, Vec2i rhs) => !(lhs == rhs);
 
         #endregion
 

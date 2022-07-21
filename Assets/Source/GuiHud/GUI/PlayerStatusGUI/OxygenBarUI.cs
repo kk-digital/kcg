@@ -86,6 +86,9 @@ namespace KGUI.PlayerStatus
             // Add Components and setup agent object
             Sprite iconBar = Sprite.Create(icon.Texture, new Rect(0.0f, 0.0f, IconWidth, IconHeight), new Vector2(0.5f, 0.5f));
             iconCanvas.GetComponent<Image>().sprite = iconBar;
+            iconCanvas.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
+            iconCanvas.GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
+            iconCanvas.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
 
             if (Camera.main.aspect >= 1.7f)
                 iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 5.9f, 4.873917f);

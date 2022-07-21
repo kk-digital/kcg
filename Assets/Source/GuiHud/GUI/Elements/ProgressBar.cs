@@ -19,6 +19,9 @@ namespace KGUI.Elements
             Bar.transform.parent = parent;
             Bar.AddComponent<RectTransform>();
             Bar.AddComponent<Image>();
+            Bar.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
+            Bar.GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
+            Bar.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
 
             Bar.GetComponent<Image>().sprite = barTexture;
             Bar.GetComponent<Image>().raycastTarget = true;

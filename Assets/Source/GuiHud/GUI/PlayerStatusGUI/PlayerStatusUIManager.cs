@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using HUD;
+using UnityEngine.EventSystems;
 
 namespace KGUI
 {
@@ -10,9 +11,6 @@ namespace KGUI
     {
         // Health Bar
         private KGUI.PlayerStatus.HealthBarUI healthBarUI;
-
-        // Food Bar
-        private KGUI.PlayerStatus.FoodBarUI foodBarUI;
 
         // Water Bar
         private KGUI.PlayerStatus.WaterBarUI waterBarUI;
@@ -28,10 +26,6 @@ namespace KGUI
             // Health Bar Initialize
             healthBarUI = new KGUI.PlayerStatus.HealthBarUI();
             healthBarUI.Initialize(agentEntity);
-
-            // Food Bar Initialize
-            foodBarUI = new KGUI.PlayerStatus.FoodBarUI();
-            foodBarUI.Initialize(agentEntity);
 
             // Water Bar Initialize
             waterBarUI = new KGUI.PlayerStatus.WaterBarUI();
@@ -51,9 +45,6 @@ namespace KGUI
             //Health Bar Draw
             healthBarUI.Draw(agentEntity);
 
-            // Food Bar Update
-            foodBarUI.Update(agentEntity);
-
             // Water Bar Update
             waterBarUI.Update(agentEntity);
 
@@ -68,12 +59,6 @@ namespace KGUI
                 Debug.Log("Health Indicator On.");
             else
                 Debug.Log("Health Indicator Off.");
-
-            // Food Bar UI Indicator Check
-            if (foodBarUI.foodBar._fillValue < 0.5f)
-                Debug.Log("Food Indicator On.");
-            else
-                Debug.Log("Food Indicator Off.");
 
             // Water Bar UI Indicator Check
             if (waterBarUI.waterBar._fillValue < 0.5f)
@@ -92,6 +77,19 @@ namespace KGUI
                 Debug.Log("Oxygen Indicator On.");
             else
                 Debug.Log("Oxygen Indicator Off.");
+        }
+
+        public override void OnMouseClick(AgentEntity agentEntity)
+        {
+            
+        }
+
+        public override void OnMouseEnter()
+        {
+        }
+
+        public override void OnMouseExit()
+        {
         }
     }
 }

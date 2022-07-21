@@ -82,6 +82,9 @@ namespace KGUI.PlayerStatus
             iconCanvas.transform.parent = GameObject.Find("Canvas").transform;
             iconCanvas.AddComponent<RectTransform>();
             iconCanvas.AddComponent<Image>();
+            iconCanvas.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
+            iconCanvas.GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
+            iconCanvas.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
 
             // Add Components and setup game object
             Sprite iconBar = Sprite.Create(icon.Texture, new Rect(0.0f, 0.0f, IconWidth, IconHeight), new Vector2(0.5f, 0.5f));
