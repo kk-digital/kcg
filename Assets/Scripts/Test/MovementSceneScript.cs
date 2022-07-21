@@ -3,6 +3,7 @@ using Enums.Tile;
 using KMath;
 using Item;
 using Animancer;
+using HUD;
 using PlanetTileMap;
 
 namespace Planet.Unity
@@ -22,6 +23,8 @@ namespace Planet.Unity
         int CharacterSpriteId;
         int inventoryID;
         int toolBarID;
+
+        HUDManager hudManager;
 
         static bool Init = false;
 
@@ -82,8 +85,11 @@ namespace Planet.Unity
         {
             if (Init)
             {
-                // Draw Player Status UI
-                KGUI.PlayerStatusUIManager.Update();
+                // Draw HUD UI
+                hudManager.Update(Player);
+
+                // Draw Statistics
+                KGUI.Statistics.StatisticsDisplay.DrawStatistics(ref Planet);
             }
         }
         
@@ -155,7 +161,7 @@ namespace Planet.Unity
             toolBarID = Player.agentToolBar.ToolBarID;
 
             // Player Status UI Init
-            KGUI.PlayerStatusUIManager.Initialize(Planet.EntitasContext, Player);
+            hudManager = new HUDManager(Planet.EntitasContext, Player);
 
             // Admin API Spawn Items
             Admin.AdminAPI.SpawnItem(Enums.ItemType.Pistol, Planet.EntitasContext);
