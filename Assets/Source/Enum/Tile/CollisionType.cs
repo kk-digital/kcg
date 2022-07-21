@@ -4,7 +4,8 @@ namespace Enums.Tile
     {
         Error = 0,
         Solid,
-        Air
+        Air,
+        Platform
     }
 }
 
