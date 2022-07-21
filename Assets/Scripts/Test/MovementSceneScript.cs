@@ -191,8 +191,8 @@ namespace Planet.Unity
             
             ref var tileMap = ref Planet.TileMap;
 
-
-            for(int j = 0; j < tileMap.MapSize.Y / 2; j++)
+            
+            for (int j = 0; j < tileMap.MapSize.Y / 2; j++)
             {
                 for(int i = 0; i < tileMap.MapSize.X; i++)
                 {
@@ -214,13 +214,17 @@ namespace Planet.Unity
                 tileMap.GetFrontTile(0, j).ID = TileID.Bedrock;
                 tileMap.GetFrontTile(tileMap.MapSize.X - 1, j).ID = TileID.Bedrock;
             }
-
+           
             var camera = Camera.main;
             Vector3 lookAtPosition = camera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, camera.nearClipPlane));
 
             tileMap.UpdateBackTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
             tileMap.UpdateMidTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
             tileMap.UpdateFrontTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
+
+           
+
+
         }
 
     }
