@@ -147,8 +147,10 @@ namespace Planet.Unity
             var camera = Camera.main;
             Vector3 lookAtPosition = camera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, camera.nearClipPlane));
 
-            Planet.TileMap = TileMapManager.Load("generated-maps/movement-map.kmap", (int)lookAtPosition.x, (int)lookAtPosition.y);
-                Debug.Log("loaded!");
+            /*Planet.TileMap = TileMapManager.Load("generated-maps/movement-map.kmap", (int)lookAtPosition.x, (int)lookAtPosition.y);
+                Debug.Log("loaded!");*/
+
+            GenerateMap();
 
             Planet.TileMap.UpdateBackTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
             Planet.TileMap.UpdateMidTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
@@ -214,7 +216,12 @@ namespace Planet.Unity
                 tileMap.GetFrontTile(0, j).ID = TileID.Bedrock;
                 tileMap.GetFrontTile(tileMap.MapSize.X - 1, j).ID = TileID.Bedrock;
             }
-           
+
+            tileMap.GetFrontTile(7, 14).ID = TileID.Platform;
+            tileMap.GetFrontTile(8, 14).ID = TileID.Platform;
+            tileMap.GetFrontTile(9, 14).ID = TileID.Platform;
+            tileMap.GetFrontTile(1, 14).ID = TileID.Bedrock;
+            
             var camera = Camera.main;
             Vector3 lookAtPosition = camera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, camera.nearClipPlane));
 
