@@ -139,6 +139,11 @@ namespace KGUI.PlayerStatus
             Debug.LogWarning("Food Bar Mouse Enter");
         }
 
+        public override void OnMouseStay()
+        {
+            Debug.LogWarning("Food Bar Mouse Stay");
+        }
+
         public override void OnMouseExit()
         {
             Debug.LogWarning("Food Bar Mouse Exit");

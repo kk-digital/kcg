@@ -5,7 +5,7 @@ using KGUI.Elements;
 
 namespace KGUI.PlayerStatus
 {
-    public class OxygenBarUI
+    public class OxygenBarUI : GUIManager
     {
         // Init
         private static bool Init;
@@ -21,7 +21,7 @@ namespace KGUI.PlayerStatus
         public ProgressBar oxygenBar;
         private GameObject iconCanvas;
 
-        public void Initialize(AgentEntity agentEntity)
+        public override void Initialize(Contexts contexts, AgentEntity agentEntity)
         {
             // Set Width and Height
             int IconWidth = 19;
@@ -110,10 +110,11 @@ namespace KGUI.PlayerStatus
             Init = true;
         }
 
-        public void Update(AgentEntity agentEntity)
+        public override void Update(AgentEntity agentEntity)
         {
             if (Init)
             {
+                ObjectPosition = new KMath.Vec2f(iconCanvas.transform.position.x, iconCanvas.transform.position.y);
                 oxygenBar.Update(agentEntity.agentStats.Oxygen / 100);
 
                 if (Camera.main.aspect >= 1.7f)
@@ -123,6 +124,26 @@ namespace KGUI.PlayerStatus
                 else
                     iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 75.3f, 4.873917f);
             }
+        }
+
+        public override void OnMouseClick(AgentEntity agentEntity)
+        {
+            Debug.LogWarning("Oxygen Bar Clicked");
+        }
+
+        public override void OnMouseEnter()
+        {
+            Debug.LogWarning("Oxygen Bar Mouse Enter");
+        }
+
+        public override void OnMouseStay()
+        {
+            Debug.LogWarning("Oxygen Bar Mouse Stay");
+        }
+
+        public override void OnMouseExit()
+        {
+            Debug.LogWarning("Oxygen Bar Mouse Exit");
         }
     }
 }

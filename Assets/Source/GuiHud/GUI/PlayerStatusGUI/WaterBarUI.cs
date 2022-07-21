@@ -5,7 +5,7 @@ using KGUI.Elements;
 
 namespace KGUI.PlayerStatus
 {
-    public class WaterBarUI
+    public class WaterBarUI : GUIManager
     {
         // Init
         private static bool Init;
@@ -21,7 +21,7 @@ namespace KGUI.PlayerStatus
         public ProgressBar waterBar;
         private GameObject iconCanvas;
 
-        public void Initialize(AgentEntity agentEntity)
+        public override void Initialize(Contexts contexts, AgentEntity agentEntity)
         {
             // Set Width and Height
             int IconWidth = 19;
@@ -111,10 +111,11 @@ namespace KGUI.PlayerStatus
             Init = true;
         }
 
-        public void Update(AgentEntity agentEntity)
+        public override void Update(AgentEntity agentEntity)
         {
             if (Init)
             {
+                ObjectPosition = new KMath.Vec2f(iconCanvas.transform.position.x, iconCanvas.transform.position.y);
                 waterBar.Update(agentEntity.agentStats.Water / 100);
 
                 if (Camera.main.aspect >= 1.7f)
@@ -124,6 +125,26 @@ namespace KGUI.PlayerStatus
                 else
                     iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 134.2f, 4.873917f);
             }
+        }
+
+        public override void OnMouseClick(AgentEntity agentEntity)
+        {
+            Debug.LogWarning("Water Bar Clicked");
+        }
+
+        public override void OnMouseEnter()
+        {
+            Debug.LogWarning("Water Bar Mouse Enter");
+        }
+
+        public override void OnMouseStay()
+        {
+            Debug.LogWarning("Water Bar Mouse Stay");
+        }
+
+        public override void OnMouseExit()
+        {
+            Debug.LogWarning("Water Bar Mouse Exit");
         }
     }
 }

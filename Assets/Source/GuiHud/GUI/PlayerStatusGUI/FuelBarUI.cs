@@ -5,7 +5,7 @@ using KGUI.Elements;
 
 namespace KGUI.PlayerStatus
 {
-    public class FuelBarUI
+    public class FuelBarUI : GUIManager
     {
         // Init
         private static bool Init;
@@ -21,7 +21,7 @@ namespace KGUI.PlayerStatus
         public ProgressBar progressBar;
         private GameObject iconCanvas;
 
-        public void Initialize(AgentEntity agentEntity)
+        public override void Initialize(Contexts contexts, AgentEntity agentEntity)
         {
             // Set Width and Height
             int IconWidth = 19;
@@ -111,10 +111,11 @@ namespace KGUI.PlayerStatus
             Init = true;
         }
 
-        public void Update(AgentEntity agentEntity)
+        public override void Update(AgentEntity agentEntity)
         {
             if(Init)
             {
+                ObjectPosition = new KMath.Vec2f(iconCanvas.transform.position.x, iconCanvas.transform.position.y);
                 float fuelValue = agentEntity.agentStats.Fuel;
                 if (fuelValue <= 0)
                 {
@@ -130,6 +131,26 @@ namespace KGUI.PlayerStatus
                 else
                     iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 16.6f, 4.873917f);
             }
+        }
+
+        public override void OnMouseClick(AgentEntity agentEntity)
+        {
+            Debug.LogWarning("Fuel Bar Clicked");
+        }
+
+        public override void OnMouseEnter()
+        {
+            Debug.LogWarning("Fuel Bar Mouse Enter");
+        }
+
+        public override void OnMouseStay()
+        {
+            Debug.LogWarning("Fuel Bar Mouse Stay");
+        }
+
+        public override void OnMouseExit()
+        {
+            Debug.LogWarning("Fuel Bar Mouse Exit");
         }
     }
 }

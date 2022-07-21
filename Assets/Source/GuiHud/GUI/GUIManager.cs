@@ -7,10 +7,11 @@ namespace KGUI
 {
     public class GUIManager
     {
-        // Player Status GUI Elements
-        static PlayerStatusUIManager playerStatus = new PlayerStatusUIManager();
-
         static KGUI.PlayerStatus.FoodBarUI foodBarUI = new PlayerStatus.FoodBarUI();
+        static KGUI.PlayerStatus.WaterBarUI waterBarUI = new PlayerStatus.WaterBarUI();
+        static KGUI.PlayerStatus.OxygenBarUI oxygenBarUI = new PlayerStatus.OxygenBarUI();
+        static KGUI.PlayerStatus.FuelBarUI fuelBarUI = new PlayerStatus.FuelBarUI();
+        static KGUI.PlayerStatus.HealthBarUI healthBarUI = new PlayerStatus.HealthBarUI();
 
         // GUI Elements List
         static List<GUIManager> UIList = new List<GUIManager>();
@@ -21,11 +22,18 @@ namespace KGUI
         // Object Screen Position
         public Vec2f ObjectPosition;
 
+        // Run Various Functions One Time
+        private bool CanRun = true;
+
         public virtual void Initialize(Contexts contexts, AgentEntity agentEntity)
         {
             // Add Elements
-            UIList.Add(playerStatus);
             UIList.Add(foodBarUI);
+            UIList.Add(waterBarUI);
+            UIList.Add(oxygenBarUI);
+            UIList.Add(fuelBarUI);
+
+            healthBarUI.Initialize(agentEntity);
 
             // Init Elements
             for (int i = 0; i < UIList.Count; i++)
@@ -44,15 +52,14 @@ namespace KGUI
 
             // Assign New Cursor Position
             CursorPosition = new Vec2f(Input.mousePosition.x, Input.mousePosition.y);
-
+            healthBarUI.Draw(agentEntity);
             HandleInputs(agentEntity);
         }
 
         public void HandleInputs(AgentEntity agentEntity)
         {
             OnMouseClick(agentEntity);
-            OnMouseEnter();
-            OnMouseExit();
+            OnMouseStay();
         }
 
         public virtual void OnMouseClick(AgentEntity agentEntity)
@@ -78,9 +85,27 @@ namespace KGUI
             // Handle Inputs
             for (int i = 0; i < UIList.Count; i++)
             {
+                if(UIList[i].CanRun)
+                {
+                    UIList[i].CanRun = false;
+                    UIList[i].OnMouseEnter();
+                }
+            }
+        }
+
+        public virtual void OnMouseStay()
+        {
+            // Handle Inputs
+            for (int i = 0; i < UIList.Count; i++)
+            {
                 if (Vector2.Distance(new Vector2(CursorPosition.X, CursorPosition.Y), new Vector2(UIList[i].ObjectPosition.X, UIList[i].ObjectPosition.Y)) < 20.0f)
                 {
-                    UIList[i].OnMouseEnter();
+                    OnMouseEnter();
+                    UIList[i].OnMouseStay();
+                }
+                else
+                {
+                    OnMouseExit();
                 }
             }
         }
@@ -90,8 +115,9 @@ namespace KGUI
             // Handle Inputs
             for (int i = 0; i < UIList.Count; i++)
             {
-                if (Vector2.Distance(new Vector2(CursorPosition.X, CursorPosition.Y), new Vector2(UIList[i].ObjectPosition.X, UIList[i].ObjectPosition.Y)) > 20.0f)
+                if (!UIList[i].CanRun)
                 {
+                    UIList[i].CanRun = true;
                     UIList[i].OnMouseExit();
                 }
             }
