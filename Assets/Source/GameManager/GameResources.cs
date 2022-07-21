@@ -204,6 +204,7 @@ public class GameResources
 
         GameState.TileCreationApi.CreateTileProperty(TileID.Platform);
         GameState.TileCreationApi.SetTilePropertyName("Platform");
+        GameState.TileCreationApi.SetTilePropertyCollisionType(CollisionType.Platform);
         GameState.TileCreationApi.SetSpriteRuleType(PlanetTileMap.SpriteRuleType.R3);
         GameState.TileCreationApi.SetTilePropertySpriteSheet16(BackgroundSpriteSheet, 0, 0);
         GameState.TileCreationApi.EndTileProperty();
