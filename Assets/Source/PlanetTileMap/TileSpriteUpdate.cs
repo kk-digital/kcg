@@ -16,32 +16,32 @@ namespace PlanetTileMap
         {
             ref var tile = ref tileMap.GetBackTile(x, y);
             
-            if (tile.ID != TileID.Error)
+            if (tile.MaterialType != TileMaterialType.Error)
             {
-                ref var property = ref GameState.TileCreationApi.GetTileProperty(tile.ID);
-                if (property.IsAutoMapping)
+                ref TileMaterial material = ref GameState.TileCreationApi.GetMaterial(tile.MaterialType);
+                if (material.SpriteRuleType != SpriteRuleType.NoRule )
                 {
-                    if (property.SpriteRuleType == SpriteRuleType.R1)
+                    if (material.SpriteRuleType == SpriteRuleType.R1)
                     {
                         SpriteRule_R1.UpdateBackSprite(x, y, tileMap);
                     }
-                    else if (property.SpriteRuleType == SpriteRuleType.R2)
+                    else if (material.SpriteRuleType == SpriteRuleType.R2)
                     {
                         SpriteRule_R2.UpdateBackSprite(x, y, tileMap);
                     }
-                    else if (property.SpriteRuleType == SpriteRuleType.R3)
+                    else if (material.SpriteRuleType == SpriteRuleType.R3)
                     {
                         SpriteRule_R3.UpdateBackSprite(x, y, tileMap);
                     }
                 }
                 else
                 {
-                    tile.SpriteID = property.BaseSpriteId;
+                    tile.TileID = -1;
                 }
             }
             else
             {
-                tile.SpriteID = -1;
+                tile.TileID = -1;
             }
 
             tileMap.NeedsUpdate[(int) MapLayerType.Back] = true;
@@ -56,32 +56,32 @@ namespace PlanetTileMap
         {
             ref var tile = ref tileMap.GetMidTile(x, y);
             
-            if (tile.ID != TileID.Error)
+            if (tile.MaterialType != TileMaterialType.Error)
             {
-                ref var property = ref GameState.TileCreationApi.GetTileProperty(tile.ID);
-                if (property.IsAutoMapping)
+                ref TileMaterial material = ref GameState.TileCreationApi.GetMaterial(tile.MaterialType);
+                if (material.SpriteRuleType != SpriteRuleType.NoRule)
                 {
-                    if (property.SpriteRuleType == SpriteRuleType.R1)
+                    if (material.SpriteRuleType == SpriteRuleType.R1)
                     {
                         SpriteRule_R1.UpdateMidSprite(x, y, tileMap);
                     }
-                    else if (property.SpriteRuleType == SpriteRuleType.R2)
+                    else if (material.SpriteRuleType == SpriteRuleType.R2)
                     {
                         SpriteRule_R2.UpdateMidSprite(x, y, tileMap);
                     }
-                    else if (property.SpriteRuleType == SpriteRuleType.R3)
+                    else if (material.SpriteRuleType == SpriteRuleType.R3)
                     {
                         SpriteRule_R3.UpdateMidSprite(x, y, tileMap);
                     }
                 }
                 else
                 {
-                    tile.SpriteID = property.BaseSpriteId;
+                    tile.TileID = -1;
                 }
             }
             else
             {
-                tile.SpriteID = -1;
+                tile.TileID = -1;
             }
 
             tileMap.NeedsUpdate[(int) MapLayerType.Back] = true;
@@ -96,32 +96,34 @@ namespace PlanetTileMap
         {
             ref var tile = ref tileMap.GetFrontTile(x, y);
             
-            if (tile.ID != TileID.Error)
+ 
+            if ( tile.MaterialType != TileMaterialType.Error)
             {
-                ref var property = ref GameState.TileCreationApi.GetTileProperty(tile.ID);
-                if (property.IsAutoMapping)
+                ref TileMaterial material = ref GameState.TileCreationApi.GetMaterial(tile.MaterialType);
+                if (material.SpriteRuleType != SpriteRuleType.NoRule )
                 {
-                    if (property.SpriteRuleType == SpriteRuleType.R1)
+                    if (material.SpriteRuleType == SpriteRuleType.R1)
                     {
                         SpriteRule_R1.UpdateFrontSprite(x, y, tileMap);
                     }
-                    else if (property.SpriteRuleType == SpriteRuleType.R2)
+                    else if (material.SpriteRuleType == SpriteRuleType.R2)
                     {
                         SpriteRule_R2.UpdateFrontSprite(x, y, tileMap);
                     }
-                    else if (property.SpriteRuleType == SpriteRuleType.R3)
+                    else if (material.SpriteRuleType == SpriteRuleType.R3)
                     {
+                        
                         SpriteRule_R3.UpdateFrontSprite(x, y, tileMap);
                     }
                 }
                 else
                 {
-                    tile.SpriteID = property.BaseSpriteId;
+                    tile.TileID = -1;
                 }
             }
             else
             {
-                tile.SpriteID = -1;
+                tile.TileID = -1;
             }
 
             tileMap.NeedsUpdate[(int) MapLayerType.Back] = true;

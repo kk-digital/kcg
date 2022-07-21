@@ -18,18 +18,13 @@ namespace PlanetTileMap
         public string Name; //later use string pool
         public string Description; //later use string pool
         
-        public TileID TileID;
-        public int BaseSpriteId;
-        
-        public byte Durability; //max health of tile
+        public int TileID;
+        public TileMaterialType MaterialType;
+        public int SpriteId;
         
         /// <summary>
         /// To map neighbour tiles or not
         /// </summary>
-        public bool IsAutoMapping; 
-        public bool CannotBeRemoved; // bedrock cannot be removed
-
-        public SpriteRuleType SpriteRuleType;
 
         public CollisionType CollisionIsoType;
         public TileShape BlockShapeType;
@@ -37,10 +32,5 @@ namespace PlanetTileMap
 
         public bool IsSolid => CollisionIsoType == CollisionType.Solid;
 
-        public TileProperty(TileID tileID, int baseSpriteId) : this()
-        {
-            TileID = tileID;
-            BaseSpriteId = baseSpriteId;
-        }
     }
 }

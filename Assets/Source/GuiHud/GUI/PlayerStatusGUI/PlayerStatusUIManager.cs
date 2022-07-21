@@ -63,7 +63,7 @@ namespace KGUI
             oxygenBarUI.Update(agentEntity);
 
             // Water Bar UI Indicator Check
-            if (healthBarUI.playerHealth < 50)
+           /* if (healthBarUI.playerHealth < 50)
                 Debug.Log("Health Indicator On.");
             else
                 Debug.Log("Health Indicator Off.");
@@ -90,7 +90,7 @@ namespace KGUI
             if (oxygenBarUI.oxygenBar._fillValue < 0.5f)
                 Debug.Log("Oxygen Indicator On.");
             else
-                Debug.Log("Oxygen Indicator Off.");
+                Debug.Log("Oxygen Indicator Off.");*/
         }
     }
 }
