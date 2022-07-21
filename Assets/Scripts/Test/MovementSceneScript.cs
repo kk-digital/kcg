@@ -196,8 +196,8 @@ namespace Planet.Unity
             {
                 for(int i = 0; i < tileMap.MapSize.X; i++)
                 {
-                    tileMap.GetFrontTile(i, j).ID = TileID.Moon;
-                    tileMap.GetBackTile(i, j).ID = TileID.Background;
+                    tileMap.GetFrontTile(i, j).MaterialType = TileMaterialType.Moon;
+                    tileMap.GetBackTile(i, j).MaterialType = TileMaterialType.Background;
                 }
             }
 
@@ -205,14 +205,14 @@ namespace Planet.Unity
 
             for(int i = 0; i < tileMap.MapSize.X; i++)
             {
-                tileMap.GetFrontTile(i, 0).ID = TileID.Bedrock;
-                tileMap.GetFrontTile(i, tileMap.MapSize.Y - 1).ID = TileID.Bedrock;
+                tileMap.GetFrontTile(i, 0).MaterialType = TileMaterialType.Bedrock;
+                tileMap.GetFrontTile(i, tileMap.MapSize.Y - 1).MaterialType = TileMaterialType.Bedrock;
             }
 
             for(int j = 0; j < tileMap.MapSize.Y; j++)
             {
-                tileMap.GetFrontTile(0, j).ID = TileID.Bedrock;
-                tileMap.GetFrontTile(tileMap.MapSize.X - 1, j).ID = TileID.Bedrock;
+                tileMap.GetFrontTile(0, j).MaterialType = TileMaterialType.Bedrock;
+                tileMap.GetFrontTile(tileMap.MapSize.X - 1, j).MaterialType = TileMaterialType.Bedrock;
             }
 
             var camera = Camera.main;

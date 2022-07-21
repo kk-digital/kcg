@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Enums.Tile;
+using PlanetTileMap;
 
 namespace Action
 {
@@ -8,7 +9,7 @@ namespace Action
     {
         public struct Data
         {
-            public TileID TileID;
+            public TileMaterialType MaterialType;
             public MapLayerType Layer;
         }
 
@@ -31,13 +32,13 @@ namespace Action
             switch (data.Layer)
             {
                 case MapLayerType.Back:
-                    planet.TileMap.SetBackTile(x, y, data.TileID);
+                    planet.TileMap.SetBackTile(x, y, data.MaterialType);
                     break;
                 case MapLayerType.Mid:
-                    planet.TileMap.SetMidTile(x, y, data.TileID);
+                    planet.TileMap.SetMidTile(x, y, data.MaterialType);
                     break;
                 case MapLayerType.Front:
-                    planet.TileMap.SetFrontTile(x, y, data.TileID);
+                    planet.TileMap.SetFrontTile(x, y, data.MaterialType);
                     break;
             }
             }

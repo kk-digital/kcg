@@ -11,7 +11,7 @@ namespace PlanetTileMap
 {
     public class TileMap
     {
-        public static Tile AirTile = new() {ID = TileID.Air, SpriteID = -1};
+        public static Tile AirTile = new() {MaterialType = TileMaterialType.Air, TileID = -1};
         public static readonly int LayerCount = Enum.GetNames(typeof(MapLayerType)).Length;
         
         public bool[] NeedsUpdate;
@@ -56,8 +56,8 @@ namespace PlanetTileMap
                     for (int tileIndex = 0; tileIndex < layer.Length; tileIndex++)
                     {
                         // ... set tile to Air
-                        layer[tileIndex].ID = TileID.Air;
-                        layer[tileIndex].SpriteID = -1;
+                        layer[tileIndex].MaterialType = TileMaterialType.Air;
+                        layer[tileIndex].TileID = -1;
                     }
                 }
             
@@ -164,27 +164,24 @@ namespace PlanetTileMap
         public void RemoveBackTile(int x, int y)
         {
             ref var backTile = ref GetBackTile(x, y);
-            backTile.ID = TileID.Air;
-            backTile.SpriteID = -1;
-            backTile.SpriteID = GameResources.LoadingTilePlaceholderSpriteId;
+            backTile.MaterialType = TileMaterialType.Air;
+            backTile.TileID = GameResources.LoadingTilePlaceholderTileId;
             TileSpriteUpdateQueue.Add(x, y, MapLayerType.Back);
             //UpdateBackTile(x, y);
         }
         public void RemoveMidTile(int x, int y)
         {
             ref var midTile = ref GetMidTile(x, y);
-            midTile.ID = TileID.Air;
-            midTile.SpriteID = -1;
-            midTile.SpriteID = GameResources.LoadingTilePlaceholderSpriteId;
+            midTile.MaterialType = TileMaterialType.Air;
+            midTile.TileID = GameResources.LoadingTilePlaceholderTileId;
             TileSpriteUpdateQueue.Add(x, y, MapLayerType.Mid);
           //  UpdateBackTile(x, y);
         }
         public void RemoveFrontTile(int x, int y)
         {
             ref var frontTile = ref GetFrontTile(x, y);
-            frontTile.ID = TileID.Air;
-            frontTile.SpriteID = -1;
-            frontTile.SpriteID = GameResources.LoadingTilePlaceholderSpriteId;
+            frontTile.MaterialType = TileMaterialType.Air;
+            frontTile.TileID = GameResources.LoadingTilePlaceholderTileId;
             TileSpriteUpdateQueue.Add(x, y, MapLayerType.Front);
             //UpdateBackTile(x, y);
         }
@@ -193,7 +190,7 @@ namespace PlanetTileMap
 
         #region Tile setters
 
-        public void SetBackTile(int x, int y, TileID tileID)
+        public void SetBackTile(int x, int y, TileMaterialType materialType)
         {
             Utils.Assert(IsValid(x, y));
 
@@ -205,21 +202,21 @@ namespace PlanetTileMap
             
             if (chunk.Type == MapChunkType.Error)
             {
-                if (tileID != TileID.Air) chunk.Type = MapChunkType.NotEmpty;
+                if (materialType != TileMaterialType.Air) chunk.Type = MapChunkType.NotEmpty;
             }
 
             var xTileIndex = x & 0x0f;
             var yTileIndex = y & 0x0f;
             var tileIndex = xTileIndex + (yTileIndex << 4);
 
-            chunk.TileArray[(int) MapLayerType.Back][tileIndex].ID = tileID;
-            chunk.TileArray[(int) MapLayerType.Back][tileIndex].SpriteID = GameResources.LoadingTilePlaceholderSpriteId;
+            chunk.TileArray[(int) MapLayerType.Back][tileIndex].MaterialType = materialType;
+            chunk.TileArray[(int) MapLayerType.Back][tileIndex].TileID = GameResources.LoadingTilePlaceholderTileId;
             chunk.Sequence++;
 
             TileSpriteUpdateQueue.Add(x, y, MapLayerType.Back);
         }
 
-        public void SetMidTile(int x, int y, TileID tileID)
+        public void SetMidTile(int x, int y, TileMaterialType materialType)
         {
             Utils.Assert(IsValid(x, y));
 
@@ -231,21 +228,21 @@ namespace PlanetTileMap
             
             if (chunk.Type == MapChunkType.Error)
             {
-                if (tileID != TileID.Air) chunk.Type = MapChunkType.NotEmpty;
+                if (materialType != TileMaterialType.Air) chunk.Type = MapChunkType.NotEmpty;
             }
 
             var xTileIndex = x & 0x0f;
             var yTileIndex = y & 0x0f;
             var tileIndex = xTileIndex + (yTileIndex << 4);
 
-            chunk.TileArray[(int) MapLayerType.Mid][tileIndex].ID = tileID;
-            chunk.TileArray[(int) MapLayerType.Mid][tileIndex].SpriteID = GameResources.LoadingTilePlaceholderSpriteId;
+            chunk.TileArray[(int) MapLayerType.Mid][tileIndex].MaterialType = materialType;
+            chunk.TileArray[(int) MapLayerType.Mid][tileIndex].TileID = GameResources.LoadingTilePlaceholderTileId;
             chunk.Sequence++;
 
             TileSpriteUpdateQueue.Add(x, y, MapLayerType.Mid);
         }
 
-        public void SetFrontTile(int x, int y, TileID tileID)
+        public void SetFrontTile(int x, int y, TileMaterialType materialType)
         {
             Utils.Assert(IsValid(x, y));
 
@@ -257,15 +254,15 @@ namespace PlanetTileMap
             
             if (chunk.Type == MapChunkType.Error)
             {
-                if (tileID != TileID.Air) chunk.Type = MapChunkType.NotEmpty;
+                if (materialType != TileMaterialType.Air) chunk.Type = MapChunkType.NotEmpty;
             }
 
             var xTileIndex = x & 0x0f;
             var yTileIndex = y & 0x0f;
             var tileIndex = xTileIndex + (yTileIndex << 4);
 
-            chunk.TileArray[(int) MapLayerType.Front][tileIndex].ID = tileID;
-            chunk.TileArray[(int) MapLayerType.Front][tileIndex].SpriteID = GameResources.LoadingTilePlaceholderSpriteId;
+            chunk.TileArray[(int) MapLayerType.Front][tileIndex].MaterialType = materialType;
+            chunk.TileArray[(int) MapLayerType.Front][tileIndex].TileID = GameResources.LoadingTilePlaceholderTileId;
             chunk.Sequence++;
 
             TileSpriteUpdateQueue.Add(x, y, MapLayerType.Front);

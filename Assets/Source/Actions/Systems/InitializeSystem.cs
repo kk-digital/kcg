@@ -1,6 +1,7 @@
 ﻿using Entitas;
 using Enums.Tile;
 using UnityEngine;
+using PlanetTileMap;
 
 namespace Action
 { 
@@ -15,10 +16,10 @@ namespace Action
             return actionID;
         }
         
-        private static void CreateToolActionPlaceTile(Contexts entitasContext, TileID tileID, MapLayerType layer)
+        private static void CreateToolActionPlaceTile(Contexts entitasContext, TileMaterialType materialType, MapLayerType layer)
         {
             // Create Action Property Type
-            GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.PlaceTilOre1Action + (int)tileID - (int)TileID.Ore1);
+            GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.PlaceTilOre1Action + (int)materialType - (int)TileMaterialType.Ore1);
 
             // Set Logic Factory
             GameState.ActionPropertyManager.SetLogicFactory(new ToolActionPlaceTileCreator());
@@ -27,7 +28,7 @@ namespace Action
             var data = new ToolActionPlaceTile.Data
             {
                 // Set Tile ID
-                TileID = tileID,
+                MaterialType = materialType,
                 
                 // Set Layer
                 Layer = layer
@@ -61,25 +62,25 @@ namespace Action
             GameState.ActionPropertyManager.EndActionPropertyType();
 
             // Create Place Tile Tool Front
-            CreateToolActionPlaceTile(entitasContext, TileID.Ore1, MapLayerType.Front);
+            CreateToolActionPlaceTile(entitasContext, TileMaterialType.Ore1, MapLayerType.Front);
 
             // Create Place Tile Tool Front
-            CreateToolActionPlaceTile(entitasContext, TileID.Ore2, MapLayerType.Front);
+            CreateToolActionPlaceTile(entitasContext, TileMaterialType.Ore2, MapLayerType.Front);
 
             // Create Place Tile Tool Front
-            CreateToolActionPlaceTile(entitasContext, TileID.Ore3, MapLayerType.Front);
+            CreateToolActionPlaceTile(entitasContext, TileMaterialType.Ore3, MapLayerType.Front);
 
             // Create Place Tile Tool Front
-            CreateToolActionPlaceTile(entitasContext, TileID.Glass, MapLayerType.Front);
+            CreateToolActionPlaceTile(entitasContext, TileMaterialType.Glass, MapLayerType.Front);
 
             // Create Place Tile Tool Front
-            CreateToolActionPlaceTile(entitasContext, TileID.Moon, MapLayerType.Front);
+            CreateToolActionPlaceTile(entitasContext, TileMaterialType.Moon, MapLayerType.Front);
 
             // Create Place Tile Tool Back
-            CreateToolActionPlaceTile(entitasContext, TileID.Background, MapLayerType.Back);
+            CreateToolActionPlaceTile(entitasContext, TileMaterialType.Background, MapLayerType.Back);
 
             // Create Place Tile Tool Mid
-            CreateToolActionPlaceTile(entitasContext, TileID.Pipe, MapLayerType.Mid);
+            CreateToolActionPlaceTile(entitasContext, TileMaterialType.Pipe, MapLayerType.Mid);
 
             // Create Action Fire Weapon
             GameState.ActionPropertyManager.CreateActionPropertyType(entitasContext, Enums.ActionType.ToolActionFireWeapon);
