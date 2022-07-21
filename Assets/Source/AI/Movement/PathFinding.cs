@@ -65,7 +65,7 @@ namespace AI.Movement
         const int MAX_NUM_NODES = 256; // Maximum size of open/closed Map.
 
         readonly PathAdjacency[] directions = new PathAdjacency[8] 
-            {   new PathAdjacency() { dir = new Vec2f(1f, 0f),  cost = 100 },   // Right
+            {   new PathAdjacency() { dir = new Vec2f(0f, 0f),  cost = 100 },   // Right
                 new PathAdjacency() { dir = new Vec2f(-1f, 0f), cost = 100 },   // Left
                 new PathAdjacency() { dir = new Vec2f(0f, 1f),  cost = 100 },   // Up
                 new PathAdjacency() { dir = new Vec2f(0f, -1f), cost = 100 },   // Down
@@ -100,6 +100,8 @@ namespace AI.Movement
                 Debug.Log("Not possible path. Endpoint is solid(unreacheable)");
             }
 
+            Debug.Log(end);
+
             // Check max distance here.
             SetFirstNode(start, end);
 
@@ -121,14 +123,14 @@ namespace AI.Movement
                     return null;
                 }
 
-                if (sortStartPost > 0)
+                 if (sortStartPost > 0)
                 {
                     SortOpenList(sortStartPost);
                     sortStartPost = 0;
                 }
 
                 // Move to closed list.
-                ref Node current = ref openList[openSet.Count];
+                ref Node current = ref openList[openSet.Count - 1];
                 openSet.Remove(current.pos);
 
                 current.id = closedSet.Count;
@@ -275,9 +277,10 @@ namespace AI.Movement
             }
 
             // Check if character can move to this tile
-            Vec2i tilePos =
-                new Vec2i((int)(current.pos.X - 0.5f) + (CHARACTER_SIZE.X - 1),
-                    (int)(current.pos.Y - 0.5f) + (CHARACTER_SIZE.Y - 1)); // Get block character wasn't occupying before.
+            Vec2i tilePos = new Vec2i((int)current.pos.X, (int)current.pos.Y);
+            //Vec2i tilePos =
+            //    new Vec2i((int)(current.pos.X - 0.5f) + (CHARACTER_SIZE.X - 1),
+            //        (int)(current.pos.Y - 0.5f) + (CHARACTER_SIZE.Y - 1)); // Get block character wasn't occupying before.
 
             // Check if tile is inside the map.
             if (tilePos.X < 0 || tilePos.X > tileMap.MapSize.X ||
