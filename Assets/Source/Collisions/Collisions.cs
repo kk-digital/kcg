@@ -89,7 +89,7 @@ namespace Collisions
                         if (tile.MaterialType != PlanetTileMap.TileMaterialType.Air)
                         {
                             var tileBorders = new AABox2D(x, y);
-                            if(Math.Abs(borders.ymin - tileBorders.ymax) > 0.1f)
+                            if(Math.Abs(borders.ymin - tileBorders.ymax) > 0.1f && tile.MaterialType == PlanetTileMap.TileMaterialType.Platform)
                             {
                                 return false;
                             }
