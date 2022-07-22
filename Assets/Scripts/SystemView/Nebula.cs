@@ -40,6 +40,7 @@ namespace Scripts {
                 int     radius_id = Shader.PropertyToID("radius");
                 int distortion_id = Shader.PropertyToID("distortionnoise");
                 int     output_id = Shader.PropertyToID("outputnoise");
+                int    sharpen_id = Shader.PropertyToID("sharpen");
                 
                 rng = new(seed);
 
@@ -120,6 +121,8 @@ namespace Scripts {
                 // Apply circular mask
                 circular_mask_shader.SetInt( width_id, width);
                 circular_mask_shader.SetInt(height_id, height);
+
+                circular_mask_shader.SetBool(sharpen_id, false);
 
                 circular_mask_shader.SetBuffer(0, noise_id, base_buffer1);
 
@@ -239,15 +242,14 @@ namespace Scripts {
                     circular_mask_shader.SetInt( width_id, width);
                     circular_mask_shader.SetInt(height_id, height);
 
+                    circular_mask_shader.SetBool(sharpen_id, false);
+
                     circular_mask_shader.SetBuffer(0, noise_id, color_buffer1);
 
                     circular_mask_shader.Dispatch(0, width / 8, height / 8, 1);
 
                     color_buffer1.GetData(alpha);
                     color_buffer1.Release();
-
-                    float target_x = rng.Next(width);
-                    float target_y = rng.Next(height);
 
                     for(int x = 0; x < width; x++)
                         for(int y = 0; y < height; y++) {

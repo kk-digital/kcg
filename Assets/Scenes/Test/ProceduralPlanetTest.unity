@@ -147,7 +147,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 485678436}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9736cbde8c01cc84391ca06a6fab43c4, type: 3}
   m_Name: 
@@ -157,9 +157,10 @@ MonoBehaviour:
   seed: 0
   texture: {fileID: 0}
   basecolor: {r: 0.2924528, g: 0.27815995, b: 0.2662424, a: 1}
-  colors: []
+  colors:
+  - {r: 0.8018868, g: 0.71488965, b: 0.71488965, a: 0.6117647}
   radius: 96
-  layers: 0
+  layers: 5
   orbitColor: {r: 0.5, g: 0.7, b: 1, a: 1}
   Camera: {fileID: 1913073823}
   blur_noise_shader: {fileID: 7200000, guid: 6265a9d36a176594480881d07bfe6ddf, type: 3}
@@ -177,7 +178,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 485678436}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 10, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -208,7 +209,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 983011622}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9736cbde8c01cc84391ca06a6fab43c4, type: 3}
   m_Name: 
@@ -219,8 +220,9 @@ MonoBehaviour:
   texture: {fileID: 0}
   basecolor: {r: 0.26415092, g: 0.20925792, b: 0.18814524, a: 1}
   colors:
-  - {r: 0.23584908, g: 0.21230249, b: 0.19691174, a: 1}
-  - {r: 0.7058824, g: 0.7019608, b: 0.68235296, a: 1}
+  - {r: 0.23584908, g: 0.21230249, b: 0.19691174, a: 0.5803922}
+  - {r: 0.7058824, g: 0.7019608, b: 0.68235296, a: 0.7529412}
+  - {r: 0.509434, g: 0.478632, b: 0.39649343, a: 0.8352941}
   radius: 256
   layers: 5
   orbitColor: {r: 0.5, g: 0.7, b: 1, a: 1}
@@ -240,7 +242,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 983011622}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -10, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -330,10 +332,10 @@ MonoBehaviour:
   or: {fileID: 0}
   seed: 0
   texture: {fileID: 0}
-  basecolor: {r: 0.32805273, g: 0.7169812, b: 0.6110579, a: 1}
+  basecolor: {r: 0.764151, g: 0.57774675, b: 0.3063813, a: 1}
   colors:
-  - {r: 0.7830189, g: 0.45667925, b: 0.23268957, a: 1}
-  - {r: 0.5019608, g: 0.7019608, b: 1, a: 1}
+  - {r: 0.7830189, g: 0.45667925, b: 0.23268957, a: 0.5529412}
+  - {r: 0.8018868, g: 0.27136216, b: 0.22316661, a: 0.6666667}
   radius: 512
   layers: 5
   orbitColor: {r: 0.5, g: 0.7, b: 1, a: 1}

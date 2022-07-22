@@ -2432,7 +2432,7 @@ MonoBehaviour:
   gas_giant_base_color: {r: 0.8490566, g: 0.75820327, b: 0.59674263, a: 1}
   moon_base_color: {r: 0.26415092, g: 0.25696966, b: 0.25044498, a: 1}
   rocky_planet_radius: 256
-  gas_giant_radius: 512
+  gas_giant_radius: 384
   moon_radius: 96
   Camera: {fileID: 0}
   DockingTargetSelector: {fileID: 1953044954}
