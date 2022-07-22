@@ -4,7 +4,7 @@ using Enums;
 using Inventory;
 using System.Collections.Generic;
 
-namespace Agend
+namespace Agent
 {
     [Agent]
     public class ItemDropComponent : IComponent
@@ -14,7 +14,7 @@ namespace Agend
 
     public class ItemDrop
     {
-        private int itemCount;
-        ItemType itemType;
+        public int itemCount;
+        public ItemType itemType;
     }
 }
