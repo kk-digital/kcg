@@ -218,22 +218,33 @@ namespace Scripts {
                     distortion_shader.Dispatch(0, width / 8, height / 8, 1);
 
                     distortion_noise.Release();
-                    color_buffer1.Release();
+
+                    // Apply circular blur
+                    circular_blur_shader.SetInt(width_id, width);
+                    circular_blur_shader.SetInt(height_id, height);
+
+                    circular_blur_shader.SetFloat(radius_id, 4.0f);
+
+                    circular_blur_shader.SetBuffer(0, noise_id, color_buffer2);
+                    circular_blur_shader.SetBuffer(0, output_id, color_buffer1);
+
+                    circular_blur_shader.Dispatch(0, width / 8, height / 8, 1);
+                    color_buffer2.Release();
 
                     // Soften noise
-                    color_buffer2.GetData(alpha);
-                    color_buffer2.SetData(ProceduralImages.soften(alpha, 8, width, height));
+                    color_buffer1.GetData(alpha);
+                    color_buffer1.SetData(ProceduralImages.soften(alpha, 8, width, height));
 
                     // Apply circular mask
                     circular_mask_shader.SetInt( width_id, width);
                     circular_mask_shader.SetInt(height_id, height);
 
-                    circular_mask_shader.SetBuffer(0, noise_id, color_buffer2);
+                    circular_mask_shader.SetBuffer(0, noise_id, color_buffer1);
 
                     circular_mask_shader.Dispatch(0, width / 8, height / 8, 1);
 
-                    color_buffer2.GetData(alpha);
-                    color_buffer2.Release();
+                    color_buffer1.GetData(alpha);
+                    color_buffer1.Release();
 
                     float target_x = rng.Next(width);
                     float target_y = rng.Next(height);
