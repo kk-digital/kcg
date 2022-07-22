@@ -19,7 +19,7 @@ namespace Collisions
                     if (y >= 0 && y < tileMap.MapSize.Y)
                     {
                         ref var tile = ref tileMap.GetFrontTile(x, y);
-                        if (tile.ID != TileID.Air)
+                        if (tile.MaterialType != PlanetTileMap.TileMaterialType.Air)
                         {
                             if (IsAPlatform(tile))
                             {
@@ -50,7 +50,7 @@ namespace Collisions
                     {
                         ref var tile = ref tileMap.GetFrontTile(x, y);
 
-                        if (tile.ID != TileID.Air)
+                        if (tile.MaterialType != PlanetTileMap.TileMaterialType.Air)
                         {
                             if (IsAPlatform(tile))
                             {
@@ -84,7 +84,7 @@ namespace Collisions
                     if (x >= 0 && x < tileMap.MapSize.X)
                     {
                         ref var tile = ref tileMap.GetFrontTile(x, y);
-                        if (tile.ID != TileID.Air)
+                        if (tile.MaterialType != PlanetTileMap.TileMaterialType.Air)
                         {
                             var tileBorders = new AABox2D(x, y);
                             tileBorders.DrawBox();
@@ -113,7 +113,7 @@ namespace Collisions
                     {
                         ref var tile = ref tileMap.GetFrontTile(x, y);
                         
-                        if (tile.ID != TileID.Air)
+                        if (tile.MaterialType != PlanetTileMap.TileMaterialType.Air)
                         {
                             if (IsAPlatform(tile))
                             {
@@ -132,7 +132,7 @@ namespace Collisions
 
         public static bool IsAPlatform(PlanetTileMap.Tile tile)
         {
-            return GameState.TileCreationApi.GetTileProperty(tile.ID).CollisionIsoType == CollisionType.Platform;
+            return GameState.TileCreationApi.GetTileProperty(tile.TileID).CollisionIsoType == CollisionType.Platform;
         }
     }
 }

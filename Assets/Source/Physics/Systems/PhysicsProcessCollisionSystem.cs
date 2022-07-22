@@ -4,7 +4,7 @@ using PlanetTileMap;
 using UnityEngine;
 using Utility;
 using Enums.Tile;
-
+using System;
 namespace Physics
 {
     //TODO: Collision calculation should internally cache the chunks around player
@@ -21,8 +21,6 @@ namespace Physics
 
             if (entityBoxBorders.IsCollidingBottom(tileMap, movable.Velocity))
             {
-<<<<<<< HEAD
-<<<<<<< HEAD
                 var tile = tileMap.GetFrontTile((int)pos.Value.X, (int)Math.Ceiling(pos.Value.Y)-1);
                 Debug.Log(tile.TileID);
                 if (GameState.TileCreationApi.GetTileProperty(tile.TileID).CollisionIsoType != CollisionType.Platform || !movable.Droping)
@@ -34,17 +32,10 @@ namespace Physics
                 }
 
                
-=======
-=======
->>>>>>> parent of e967bec8 (platforms made)
                 pos.Value = new Vec2f(pos.Value.X, pos.PreviousValue.Y);
                 movable.Velocity.Y = 0.0f;
                 movable.Acceleration.Y = 0.0f;
                 movable.Landed = true;
-<<<<<<< HEAD
->>>>>>> parent of e967bec8 (platforms made)
-=======
->>>>>>> parent of e967bec8 (platforms made)
             }
             if (entityBoxBorders.IsCollidingTop(tileMap, movable.Velocity))
             {   
