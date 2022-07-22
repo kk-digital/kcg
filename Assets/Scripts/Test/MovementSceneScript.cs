@@ -130,7 +130,6 @@ namespace Planet.Unity
         public void Initialize()
         {
 
-            
             Application.targetFrameRate = 60;
 
             inventoryManager = new Inventory.InventoryManager();

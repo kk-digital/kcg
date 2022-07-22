@@ -1,7 +1,7 @@
 using Enums.Tile;
 using KMath;
 using Utility;
-
+using System;
 namespace Collisions
 {
     public static class Collisions
@@ -87,6 +87,12 @@ namespace Collisions
                         if (tile.ID != TileID.Air)
                         {
                             var tileBorders = new AABox2D(x, y);
+
+                            if (Math.Abs(borders.ymin - tileBorders.ymax) > 0.2f)
+                            {
+                                return false;
+                            }
+
                             tileBorders.DrawBox();
                             return true;
                         }
