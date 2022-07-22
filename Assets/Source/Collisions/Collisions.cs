@@ -1,6 +1,7 @@
 using Enums.Tile;
 using KMath;
 using Utility;
+using UnityEngine;
 
 namespace Collisions
 {
@@ -132,7 +133,8 @@ namespace Collisions
 
         public static bool IsAPlatform(PlanetTileMap.Tile tile)
         {
-            return GameState.TileCreationApi.GetTileProperty(tile.TileID).CollisionIsoType == CollisionType.Platform;
+            Debug.Log(tile.MaterialType);
+            return tile.MaterialType == PlanetTileMap.TileMaterialType.Platform;
         }
     }
 }

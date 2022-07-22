@@ -217,10 +217,12 @@ namespace Planet.Unity
                 tileMap.GetFrontTile(tileMap.MapSize.X - 1, j).MaterialType = TileMaterialType.Bedrock;
             }
 
-            tileMap.GetFrontTile(7, 14).MaterialType = TileMaterialType.Platform;
             tileMap.GetFrontTile(8, 14).MaterialType = TileMaterialType.Platform;
             tileMap.GetFrontTile(9, 14).MaterialType = TileMaterialType.Platform;
-            tileMap.GetFrontTile(1, 14).MaterialType = TileMaterialType.Platform;
+            tileMap.GetFrontTile(10, 14).MaterialType = TileMaterialType.Platform;
+            tileMap.GetFrontTile(11, 14).MaterialType = TileMaterialType.Platform;
+            tileMap.GetFrontTile(12, 14).MaterialType = TileMaterialType.Platform;
+            tileMap.GetFrontTile(13, 14).MaterialType = TileMaterialType.Platform;
 
             var camera = Camera.main;
             Vector3 lookAtPosition = camera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, camera.nearClipPlane));

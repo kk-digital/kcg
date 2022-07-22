@@ -224,6 +224,19 @@ public class GameResources
             }
         }
 
+
+        GameState.TileCreationApi.BeginMaterial(TileMaterialType.Platform);
+        GameState.TileCreationApi.SetMaterialName("platform");
+
+        GameState.TileCreationApi.CreateTileProperty();
+        GameState.TileCreationApi.SetTilePropertyTexture16(RockSpriteSheet, 0, 0);
+
+        GameState.TileCreationApi.SetTilePropertyCollisionType(CollisionType.Platform);
+
+        GameState.TileCreationApi.EndTileProperty();
+
+        GameState.TileCreationApi.EndMaterial();
+
         /*GameState.TileCreationApi.CreateTileProperty(TileID.Background);
         GameState.TileCreationApi.SetTilePropertyName("background");
         GameState.TileCreationApi.SetSpriteRuleType(PlanetTileMap.SpriteRuleType.R3);
@@ -316,10 +329,14 @@ public class GameResources
         GameState.TileCreationApi.SetTilePropertySpriteSheet16(MoonSpriteSheet, 0, 10);
         GameState.TileCreationApi.EndTileProperty();*/
 
-        GameState.TileCreationApi.CreateTileProperty();
         GameState.TileCreationApi.BeginMaterial(TileMaterialType.Platform);
+        GameState.TileCreationApi.CreateTileProperty();
         GameState.TileCreationApi.SetMaterialName("Platform");
+        GameState.TileCreationApi.SetTilePropertyShape(TileShape.FullBlock, TileShapeAndRotation.FB);
         GameState.TileCreationApi.SetMaterialSpriteRuleType(SpriteRuleType.R3);
+        GameState.TileCreationApi.EndTileProperty();
+        GameState.TileCreationApi.EndMaterial();
+
         
     }
 
