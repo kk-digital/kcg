@@ -240,33 +240,33 @@ namespace Planet.Unity
             {
                 for (int i = 0; i < tileMap.MapSize.X; i++)
                 {
-                    var frontTileID = TileID.Air;
-                    var backTileID = TileID.Air;
+                    var frontTileID = TileMaterialType.Air;
+                    var backTileID = TileMaterialType.Air;
 
                     if (i >= tileMap.MapSize.X / 2)
                     {
                         if (j % 2 == 0 && i == tileMap.MapSize.X / 2)
                         {
-                            frontTileID = TileID.Moon;
-                            backTileID = TileID.Background;
+                            frontTileID = TileMaterialType.Moon;
+                            backTileID = TileMaterialType.Background;
                         }
                         else
                         {
-                            frontTileID = TileID.Glass;
-                            backTileID = TileID.Background;
+                            frontTileID = TileMaterialType.Glass;
+                            backTileID = TileMaterialType.Background;
                         }
                     }
                     else
                     {
                         if (j % 3 == 0 && i == tileMap.MapSize.X / 2 + 1)
                         {
-                            frontTileID = TileID.Glass;
-                            backTileID = TileID.Background;
+                            frontTileID = TileMaterialType.Glass;
+                            backTileID = TileMaterialType.Background;
                         }
                         else
                         {
-                            frontTileID = TileID.Moon;
-                            backTileID = TileID.Background;
+                            frontTileID = TileMaterialType.Moon;
+                            backTileID = TileMaterialType.Background;
                             if ((int) KMath.Random.Mt19937.genrand_int32() % 10 == 0)
                             {
                                 int oreRandom = (int) KMath.Random.Mt19937.genrand_int32() % 3;
@@ -288,8 +288,8 @@ namespace Planet.Unity
                         }
                     }
 
-                    tileMap.GetFrontTile(i, j).ID = frontTileID;
-                    tileMap.GetBackTile(i, j).ID = backTileID;
+                    tileMap.GetFrontTile(i, j).MaterialType = frontTileID;
+                    tileMap.GetBackTile(i, j).MaterialType = backTileID;
                 }
             }
 
@@ -299,8 +299,8 @@ namespace Planet.Unity
             {
                 for (int j = tileMap.MapSize.Y - 10; j < tileMap.MapSize.Y; j++)
                 {
-                    tileMap.GetFrontTile(i, j).ID = TileID.Air;
-                    tileMap.GetBackTile(i, j).ID = TileID.Air;
+                    tileMap.GetFrontTile(i, j).MaterialType = TileMaterialType.Air;
+                    tileMap.GetBackTile(i, j).MaterialType = TileMaterialType.Air;
                 }
             }
 
@@ -327,9 +327,9 @@ namespace Planet.Unity
 
                 for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
-                    tileMap.GetFrontTile(i, j).ID = TileID.Air;
-                    tileMap.GetBackTile(i, j).ID = TileID.Air;
-                    tileMap.GetMidTile(i, j).ID = TileID.Wire;
+                    tileMap.GetFrontTile(i, j).MaterialType = TileMaterialType.Air;
+                    tileMap.GetBackTile(i, j).MaterialType = TileMaterialType.Air;
+                    tileMap.GetMidTile(i, j).MaterialType = TileMaterialType.Wire;
                 }
             }
 
@@ -356,22 +356,22 @@ namespace Planet.Unity
 
                 for (int j = carveHeight; j < tileMap.MapSize.Y && j < carveHeight + 4; j++)
                 {
-                    tileMap.GetFrontTile(i, j).ID = TileID.Air;
-                    tileMap.GetMidTile(i, j).ID = TileID.Pipe;
+                    tileMap.GetFrontTile(i, j).MaterialType = TileMaterialType.Air;
+                    tileMap.GetMidTile(i, j).MaterialType = TileMaterialType.Pipe;
                 }
             }
 
 
             for(int i = 0; i < tileMap.MapSize.X; i++)
             {
-                tileMap.GetFrontTile(i, 0).ID = TileID.Bedrock;
-                tileMap.GetFrontTile(i, tileMap.MapSize.Y - 1).ID = TileID.Bedrock;
+                tileMap.GetFrontTile(i, 0).MaterialType = TileMaterialType.Bedrock;
+                tileMap.GetFrontTile(i, tileMap.MapSize.Y - 1).MaterialType = TileMaterialType.Bedrock;
             }
 
             for(int j = 0; j < tileMap.MapSize.Y; j++)
             {
-                tileMap.GetFrontTile(0, j).ID = TileID.Bedrock;
-                tileMap.GetFrontTile(tileMap.MapSize.X - 1, j).ID = TileID.Bedrock;
+                tileMap.GetFrontTile(0, j).MaterialType = TileMaterialType.Bedrock;
+                tileMap.GetFrontTile(tileMap.MapSize.X - 1, j).MaterialType = TileMaterialType.Bedrock;
             }
 
             var camera = Camera.main;
