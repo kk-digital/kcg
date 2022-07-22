@@ -34,9 +34,21 @@ namespace KGUI
         // Run Various Functions One Time
         private bool CanRun = true;
 
+        // UI Scaling
+        private float HUDScale = 1.0f;
+
+        // Canvas
+        Canvas _Canvas;
+
         // Initialize
         public virtual void Initialize(Contexts contexts, AgentEntity agentEntity)
         {
+            // Set Canvas
+            _Canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+
+            // Set HUD Scale
+            _Canvas.scaleFactor = HUDScale;
+
             // Add Food Bar To Draw Array
             UIList.Add(foodBarUI);
 
@@ -61,6 +73,9 @@ namespace KGUI
 
         public virtual void Update(AgentEntity agentEntity)
         {
+            // Update HUD Scale
+            _Canvas.scaleFactor = HUDScale;
+
             // Update Elements
             for (int i = 0; i < UIList.Count; i++)
             {
