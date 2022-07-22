@@ -2,6 +2,7 @@ using Enums.Tile;
 using KMath;
 using Utility;
 using UnityEngine;
+using System;
 
 namespace Collisions
 {
@@ -88,6 +89,10 @@ namespace Collisions
                         if (tile.MaterialType != PlanetTileMap.TileMaterialType.Air)
                         {
                             var tileBorders = new AABox2D(x, y);
+                            if(Math.Abs(borders.ymin - tileBorders.ymax) > 0.1f)
+                            {
+                                return false;
+                            }
                             tileBorders.DrawBox();
                             return true;
                         }
