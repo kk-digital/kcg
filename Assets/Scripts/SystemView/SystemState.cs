@@ -28,15 +28,40 @@ namespace Scripts {
 
             }
 
+            public void create_renderers() {
+                for(int i = 0; i < planets.Count; i++) {
+                    var planet               = planets[i];
+                    planet.unity_object      = new GameObject("Planet #" + (i + 1));
+                    planet.renderer          = planet.unity_object.AddComponent<SystemPlanetRenderer>();
+                }
+
+                for(int i = 0; i < ships.Count; i++) {
+                    var ship                 = ships[i];
+                    ship.unity_object        = new GameObject("Ship #" + (i + 1));
+                    ship.renderer            = ship.unity_object.AddComponent<SystemShipRenderer>();
+                }
+
+                for(int i = 0; i < stations.Count; i++) {
+                    var station              = stations[i];
+                    station.unity_object     = new GameObject("Station #" + (i + 1));
+                    station.renderer         = station.unity_object.AddComponent<SpaceStationRenderer>();
+                }
+
+                for(int i = 0; i < stars.Count; i++) {
+                    var star                 = stars[i];
+                    star.unity_object        = new GameObject("Star #" + (i + 1));
+                    star.renderer            = star.unity_object.AddComponent<SystemStarRenderer>();
+                }
+            }
+
             public void generate_renderers() {
                 for(int i = 0; i < planets.Count; i++) {
                     var planet               = planets[i];
 
                     planet.obj.descriptor.compute();
 
-                    planet.unity_object      = new GameObject("Planet #" + (i + 1));
-                    planet.renderer          = planet.unity_object.AddComponent<SystemPlanetRenderer>();
                     planet.renderer.planet   = planet.obj;
+                    planet.renderer.init();
 
                     objects.Add(planet.obj.self);
                 }
@@ -46,8 +71,6 @@ namespace Scripts {
 
                     ship.obj.descriptor.compute();
 
-                    ship.unity_object        = new GameObject("Ship #" + (i + 1));
-                    ship.renderer            = ship.unity_object.AddComponent<SystemShipRenderer>();
                     ship.renderer.ship       = ship.obj;
                 }
 
@@ -56,8 +79,6 @@ namespace Scripts {
 
                     station.obj.descriptor.compute();
 
-                    station.unity_object     = new GameObject("Station #" + (i + 1));
-                    station.renderer         = station.unity_object.AddComponent<SpaceStationRenderer>();
                     station.renderer.Station = station.obj;
                 }
 
@@ -67,8 +88,6 @@ namespace Scripts {
                     if(stars.Count > 1)
                         star.obj.descriptor.compute();
 
-                    star.unity_object        = new GameObject("Star #" + (i + 1));
-                    star.renderer            = star.unity_object.AddComponent<SystemStarRenderer>();
                     star.renderer.star       = star.obj;
 
                     objects.Add(star.obj.self);

@@ -2260,14 +2260,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seed: 69420
   layers: 5
-  colors: 2
+  basecolor: {r: 0, g: 0, b: 0, a: 0}
+  colors: []
   width: 512
   height: 512
   opacity: 1
   contrast: 0.5
   cutoff: 0.1
+  spin: 0
+  center: {x: 0, y: 0, z: 0}
   texture: {fileID: 0}
   renderer: {fileID: 0}
+  blur_noise_shader: {fileID: 7200000, guid: 6265a9d36a176594480881d07bfe6ddf, type: 3}
+  scale_noise_shader: {fileID: 7200000, guid: 79f3f8a43bab1ba4399f86e66416a993, type: 3}
+  exponential_filter_shader: {fileID: 7200000, guid: 1954e415a298c274481ea30b23eee6d6, type: 3}
+  distortion_shader: {fileID: 7200000, guid: ebbb666a38ff3b7429286b25473a81fc, type: 3}
+  circular_blur_shader: {fileID: 7200000, guid: 0daecd51ef16bf5419fd99ed4c4a3103, type: 3}
+  circular_mask_shader: {fileID: 7200000, guid: 3a81d580afd4b1748bf5c40b11e020a4, type: 3}
 --- !u!4 &410944484
 Transform:
   m_ObjectHideFlags: 0
@@ -2413,6 +2422,18 @@ MonoBehaviour:
   TrackingPlayer: 0
   planet_movement: 1
   n_body_gravity: 1
+  blur_noise_shader: {fileID: 7200000, guid: 6265a9d36a176594480881d07bfe6ddf, type: 3}
+  scale_noise_shader: {fileID: 7200000, guid: 79f3f8a43bab1ba4399f86e66416a993, type: 3}
+  exponential_filter_shader: {fileID: 7200000, guid: 1954e415a298c274481ea30b23eee6d6, type: 3}
+  distortion_shader: {fileID: 7200000, guid: ebbb666a38ff3b7429286b25473a81fc, type: 3}
+  circular_blur_shader: {fileID: 7200000, guid: 0daecd51ef16bf5419fd99ed4c4a3103, type: 3}
+  circular_mask_shader: {fileID: 7200000, guid: 3a81d580afd4b1748bf5c40b11e020a4, type: 3}
+  rocky_planet_base_color: {r: 0.3490566, g: 0.2755455, b: 0.23544855, a: 1}
+  gas_giant_base_color: {r: 0.8490566, g: 0.75820327, b: 0.59674263, a: 1}
+  moon_base_color: {r: 0.26415092, g: 0.25696966, b: 0.25044498, a: 1}
+  rocky_planet_radius: 256
+  gas_giant_radius: 512
+  moon_radius: 96
   Camera: {fileID: 0}
   DockingTargetSelector: {fileID: 1953044954}
   gravity_renderer: {fileID: 451157162}
@@ -10668,14 +10689,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seed: 42069
   layers: 5
-  colors: 2
+  basecolor: {r: 0, g: 0, b: 0, a: 0}
+  colors: []
   width: 512
   height: 512
   opacity: 0.75
   contrast: 0.5
   cutoff: 0.2
+  spin: 0
+  center: {x: 0, y: 0, z: 0}
   texture: {fileID: 0}
   renderer: {fileID: 0}
+  blur_noise_shader: {fileID: 7200000, guid: 6265a9d36a176594480881d07bfe6ddf, type: 3}
+  scale_noise_shader: {fileID: 7200000, guid: 79f3f8a43bab1ba4399f86e66416a993, type: 3}
+  exponential_filter_shader: {fileID: 7200000, guid: 1954e415a298c274481ea30b23eee6d6, type: 3}
+  distortion_shader: {fileID: 7200000, guid: ebbb666a38ff3b7429286b25473a81fc, type: 3}
+  circular_blur_shader: {fileID: 7200000, guid: 0daecd51ef16bf5419fd99ed4c4a3103, type: 3}
+  circular_mask_shader: {fileID: 7200000, guid: 3a81d580afd4b1748bf5c40b11e020a4, type: 3}
 --- !u!4 &1768860445
 Transform:
   m_ObjectHideFlags: 0

@@ -95,6 +95,7 @@ namespace Scripts {
                 State.stars[0].obj.self.posx = -5.0f;
                 State.stars[0].obj.self.posy = 0.0f;
 
+                State.create_renderers();
                 State.generate_renderers();
 
                 RespawnPlayer();

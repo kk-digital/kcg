@@ -9,37 +9,52 @@ namespace Scripts {
     namespace SystemView {
 
         public class SystemViewTest : MonoBehaviour {
-            public SystemState State;
+            public SystemState       State;
 
-            private float LastTime;
-            public System.Random rnd = new System.Random();
+            private float            LastTime;
+            public System.Random     rnd = new System.Random();
 
-            public  int   StarCount        =                    1;
-            public  int   InnerPlanets     =                    4;
-            public  int   OuterPlanets     =                    6;
-            public  int   FarOrbitPlanets  =                    2;
-            public  int   SpaceStations    =                    0;
+            public  int              StarCount        =                    1;
+            public  int              InnerPlanets     =                    4;
+            public  int              OuterPlanets     =                    6;
+            public  int              FarOrbitPlanets  =                    2;
+            public  int              SpaceStations    =                    0;
 
-            public  float system_scale     =                25.0f;
+            public  float            system_scale     =                25.0f;
 
-            public  float SunMass          = 50000000000000000.0f;
-            public  float PlanetMass       =   100000000000000.0f;
-            public  float MoonMass         =    20000000000000.0f;
-            public  float StationMass      =        1000000000.0f;
+            public  float            SunMass          = 50000000000000000.0f;
+            public  float            PlanetMass       =   100000000000000.0f;
+            public  float            MoonMass         =    20000000000000.0f;
+            public  float            StationMass      =        1000000000.0f;
 
-            public  float time_scale       =                 1.0f;
+            public  float            time_scale       =                 1.0f;
 
-            public  float acceleration     =               250.0f;
-            public  float drag_factor      =             10000.0f;
-            public  float sailing_factor   =                20.0f;
+            public  float            acceleration     =               250.0f;
+            public  float            drag_factor      =             10000.0f;
+            public  float            sailing_factor   =                20.0f;
 
-            private float CachedSunMass    = 50000000000000000.0f;
-            private float CachedPlanetMass =   100000000000000.0f;
-            private float CachedMoonMass   =    20000000000000.0f;
+            private float            CachedSunMass    = 50000000000000000.0f;
+            private float            CachedPlanetMass =   100000000000000.0f;
+            private float            CachedMoonMass   =    20000000000000.0f;
 
-            public  bool  TrackingPlayer   =                false;
-            public  bool  planet_movement  =                 true;
-            public  bool  n_body_gravity   =                 true;
+            public  bool             TrackingPlayer   =                false;
+            public  bool             planet_movement  =                 true;
+            public  bool             n_body_gravity   =                 true;
+
+            public  ComputeShader    blur_noise_shader;
+            public  ComputeShader    scale_noise_shader;
+            public  ComputeShader    exponential_filter_shader;
+            public  ComputeShader    distortion_shader;
+            public  ComputeShader    circular_blur_shader;
+            public  ComputeShader    circular_mask_shader;
+
+            public  Color            rocky_planet_base_color;
+            public  Color            gas_giant_base_color;
+            public  Color            moon_base_color;
+
+            public  int              rocky_planet_radius;
+            public  int              gas_giant_radius;
+            public  int              moon_radius;
 
             public  CameraController Camera;
 
@@ -153,6 +168,7 @@ namespace Scripts {
                     Planet.descriptor.rotation      = (float)rnd.NextDouble() * Tools.twopi;
                     Planet.descriptor.mean_anomaly  = (float)rnd.NextDouble() * Tools.twopi;
                     Planet.descriptor.self.mass     = PlanetMass;
+                    Planet.type                     = PlanetType.PLANET_ROCKY;
 
                     State.planets.Add(new());
                     var p = State.planets[State.planets.Count - 1];
@@ -170,6 +186,7 @@ namespace Scripts {
                     Planet.descriptor.rotation      = (float)rnd.NextDouble() * Tools.twopi;
                     Planet.descriptor.mean_anomaly  = (float)rnd.NextDouble() * Tools.twopi;
                     Planet.descriptor.self.mass     = PlanetMass;
+                    Planet.type                     = PlanetType.PLANET_GAS_GIANT;
 
                     State.planets.Add(new());
                     var p = State.planets[State.planets.Count - 1];
@@ -185,6 +202,7 @@ namespace Scripts {
                         Moon.descriptor.semimajoraxis = Moon.descriptor.semiminoraxis + ((float)rnd.NextDouble() * 2.0f) * system_scale;
                         Moon.descriptor.rotation      = (float)rnd.NextDouble() * Tools.twopi;
                         Moon.descriptor.mean_anomaly  = (float)rnd.NextDouble() * Tools.twopi;
+                        Moon.type                     = PlanetType.PLANET_MOON;
 
                         State.planets.Add(new());
                         var m = State.planets[State.planets.Count - 1];
@@ -205,6 +223,7 @@ namespace Scripts {
                     Planet.descriptor.rotation      = (float)rnd.NextDouble() * Tools.twopi;
                     Planet.descriptor.mean_anomaly  = (float)rnd.NextDouble() * Tools.twopi;
                     Planet.descriptor.self.mass     = PlanetMass;
+                    Planet.type                     = PlanetType.PLANET_ROCKY;
 
                     State.planets.Add(new());
                     var p = State.planets[State.planets.Count - 1];
@@ -216,14 +235,41 @@ namespace Scripts {
 
                     State.stations.Add(new());
 
-                    State.stations[i].obj.descriptor.central_body  = State.stars[0].obj.self;
-                    State.stations[i].obj.descriptor.semiminoraxis = ((float)rnd.NextDouble() *
-                                                                        State.planets[InnerPlanets + OuterPlanets - 1].obj.descriptor.semimajoraxis + 4.0f);
-                    State.stations[i].obj.descriptor.semimajoraxis =  (float)rnd.NextDouble() * system_scale + State.stations[i].obj.descriptor.semiminoraxis;
+                    State.stations[i].obj.descriptor.central_body  =  State.stars[0].obj.self;
+                    State.stations[i].obj.descriptor.semiminoraxis = ((float)rnd.NextDouble()
+                                                                   *  State.planets[InnerPlanets + OuterPlanets - 1].obj.descriptor.semimajoraxis + 4.0f);
+                    State.stations[i].obj.descriptor.semimajoraxis =  (float)rnd.NextDouble() * system_scale
+                                                                   +  State.stations[i].obj.descriptor.semiminoraxis;
                     State.stations[i].obj.descriptor.rotation      =  (float)rnd.NextDouble() * Tools.twopi;
                     State.stations[i].obj.descriptor.mean_anomaly  =  (float)rnd.NextDouble() * Tools.twopi;
-                    State.stations[i].obj.descriptor.self.mass     = StationMass;
+                    State.stations[i].obj.descriptor.self.mass     =  StationMass;
 
+                }
+
+                State.create_renderers();
+
+                foreach(var Planet in State.planets) {
+                    Planet.renderer.blur_noise_shader         = blur_noise_shader;
+                    Planet.renderer.scale_noise_shader        = scale_noise_shader;
+                    Planet.renderer.exponential_filter_shader = exponential_filter_shader;
+                    Planet.renderer.distortion_shader         = distortion_shader;
+                    Planet.renderer.circular_blur_shader      = circular_blur_shader;
+                    Planet.renderer.circular_mask_shader      = circular_mask_shader;
+
+                    switch(Planet.obj.type) {
+                        case PlanetType.PLANET_ROCKY:
+                            Planet.renderer.radius    = rocky_planet_radius;
+                            Planet.renderer.basecolor = rocky_planet_base_color;
+                            break;
+                        case PlanetType.PLANET_GAS_GIANT:
+                            Planet.renderer.radius    = gas_giant_radius;
+                            Planet.renderer.basecolor = gas_giant_base_color;
+                            break;
+                        case PlanetType.PLANET_MOON:
+                            Planet.renderer.radius    = moon_radius;
+                            Planet.renderer.basecolor = moon_base_color;
+                            break;
+                    }
                 }
 
                 State.generate_renderers();

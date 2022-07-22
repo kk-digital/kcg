@@ -57,6 +57,7 @@ namespace Scripts {
                     p.obj = planet;
                 }
 
+                state.create_renderers();
                 state.generate_renderers();
                 last_time = Time.time;
             }
