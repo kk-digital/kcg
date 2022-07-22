@@ -51,55 +51,122 @@ namespace PlanetTileMap
     public class TileCreationApi
     {
         // Start is called before the first frame update
-        private TileID CurrentTileIndex;
+        public TileMaterial[] TileMaterialArray;
         public TileProperty[] TilePropertyArray;
+        public int CurrentTileMaterialType;
+        public int CurrentTileIndex;
         
         public TileCreationApi()
         {
-            var tilePropertyArray = new TileProperty[4096];
+            TilePropertyArray = new TileProperty[4096];
+            TileMaterialArray = new TileMaterial[1024];
 
-            for (int i = 0; i < tilePropertyArray.Length; i++)
+            for (int i = 0; i < TilePropertyArray.Length; i++)
             {
-                tilePropertyArray[i].TileID = TileID.Error;
-                tilePropertyArray[i].BaseSpriteId = -1;
+                TilePropertyArray[i].MaterialType = TileMaterialType.Error;
+                TilePropertyArray[i].TileID = -1;
+            }
+            
+            CurrentTileIndex = 1;
+            CurrentTileMaterialType = -1;
+        }
+
+        public ref TileMaterial GetMaterial(TileMaterialType MaterialType)
+        {
+            return ref TileMaterialArray[(int)MaterialType];
+        }
+
+        public ref TileProperty GetTileProperty(int tileID)
+        {
+            return ref TilePropertyArray[tileID];
+        }
+
+
+        public void BeginMaterial(TileMaterialType MaterialType)
+        {
+            if ((int)MaterialType >= TileMaterialArray.Length)   
+            {
+                System.Array.Resize(ref TileMaterialArray, TileMaterialArray.Length * 2);
             }
 
-            TilePropertyArray = tilePropertyArray;
-            
-            CurrentTileIndex = TileID.Error;
+            CurrentTileMaterialType = (int)MaterialType;  
+            TileMaterialArray[CurrentTileMaterialType].MaterialType = (TileMaterialType)CurrentTileMaterialType; 
+            TileMaterialArray[CurrentTileMaterialType].StartTileIndex = CurrentTileIndex;
         }
 
-        public ref TileProperty GetTileProperty(TileID tileID)
+        public int CreateTileProperty()
         {
-            return ref TilePropertyArray[(int)tileID];
+            Utils.Assert(CurrentTileMaterialType != -1);
+
+            if (CurrentTileIndex >= TilePropertyArray.Length)   
+            {
+                System.Array.Resize(ref TilePropertyArray, TilePropertyArray.Length * 2);
+            }
+
+            TilePropertyArray[CurrentTileIndex].TileID = CurrentTileIndex;
+            TilePropertyArray[CurrentTileIndex].MaterialType = (TileMaterialType)CurrentTileMaterialType;
+
+            return CurrentTileIndex;
         }
 
-        public void CreateTileProperty(TileID tileID)
+
+        public void SetMaterialName(string name)
+        {
+            Utils.Assert(CurrentTileIndex != (int)TileMaterialType.Error);
+
+            TileMaterialArray[(int)CurrentTileMaterialType].Name = name;
+        }
+
+        public void SetMaterialDurability(byte durability)
+        {
+            Utils.Assert(CurrentTileIndex != (int)TileMaterialType.Error);
+
+            TileMaterialArray[(int)CurrentTileMaterialType].Durability = durability;
+        }
+
+        public void SetMaterialCannotBeRemoved(bool flag)
+        {
+            Utils.Assert(CurrentTileIndex != (int)TileMaterialType.Error);
+            
+            TileMaterialArray[(int)CurrentTileMaterialType].CannotBeRemoved = flag;
+        }
+
+        public void SetMaterialSpriteRuleType(SpriteRuleType spriteRuleType)
+        {
+            Utils.Assert(CurrentTileIndex != (int)TileMaterialType.Error);
+
+            TileMaterialArray[(int)CurrentTileMaterialType].SpriteRuleType = spriteRuleType;
+        }
+                
+        public void EndMaterial()
+        {
+
+        }
+
+        public void EndTileProperty()
+        {
+            CurrentTileIndex++;
+        }
+
+        /*public void CreateTileProperty(TileID tileID)
         {
             if (tileID == TileID.Error) return;
 
             TilePropertyArray[(int)CurrentTileIndex].TileID = tileID;
             CurrentTileIndex = tileID;
-        }
+        }*/
 
         public void SetTilePropertyShape(TileShape shape, TileShapeAndRotation shapeAndRotation)
         {
-            if (CurrentTileIndex == TileID.Error) return;
+            Utils.Assert(CurrentTileIndex != 0);
 
             TilePropertyArray[(int) CurrentTileIndex].BlockShapeType = shape;
             TilePropertyArray[(int) CurrentTileIndex].BlockShapeAndRotation = shapeAndRotation;
         }
 
-        public void SetTilePropertyName(string name)
+        /*public void SetTilePropertySpriteSheet16(int spriteSheetId, int row, int column)
         {
-            if (CurrentTileIndex == TileID.Error) return;
-
-            TilePropertyArray[(int)CurrentTileIndex].Name = name;
-        }
-
-        public void SetTilePropertySpriteSheet16(int spriteSheetId, int row, int column)
-        {
-            if (CurrentTileIndex == TileID.Error) return;
+            Utils.Assert(CurrentTileIndex != 0);
             
            
 
@@ -150,11 +217,11 @@ namespace PlanetTileMap
                 TilePropertyArray[(int)CurrentTileIndex].BaseSpriteId = baseId;
                 TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = true;
             }
-        }
+        }*/
 
-        public void SetTilePropertySpriteSheet(int spriteSheetId, int row, int column)
+        /*public void SetTilePropertySpriteSheet(int spriteSheetId, int row, int column)
         {
-            if (CurrentTileIndex == TileID.Error) return;
+            Utils.Assert(CurrentTileIndex != 0);
             
             if (TilePropertyArray[(int)CurrentTileIndex].SpriteRuleType == SpriteRuleType.R1 ||
             TilePropertyArray[(int)CurrentTileIndex].SpriteRuleType == SpriteRuleType.R2)
@@ -200,68 +267,33 @@ namespace PlanetTileMap
                 TilePropertyArray[(int)CurrentTileIndex].BaseSpriteId = baseId;
                 TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = true;
             }
-        }
+        }*/
 
         public void SetTilePropertyTexture(int spriteSheetId, int row, int column)
         {
-            if (CurrentTileIndex == TileID.Error) return;
+            Utils.Assert(CurrentTileIndex != 0);
             
             //FIX: Dont import GameState, make a method?
             //TileAtlas is imported by GameState, so TileAtlas should not import GameState
             int atlasSpriteId = GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas(spriteSheetId, row, column, 0);
-            TilePropertyArray[(int)CurrentTileIndex].BaseSpriteId = atlasSpriteId;
-            TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = false;
+            TilePropertyArray[(int)CurrentTileIndex].SpriteId = atlasSpriteId;
         }
 
         public void SetTilePropertyTexture16(int spriteSheetId, int row, int column)
         {
-            if (CurrentTileIndex == TileID.Error) return;
+            Utils.Assert(CurrentTileIndex != 0);
               
             int atlasSpriteId = GameState.TileSpriteAtlasManager.CopyTileSpriteToAtlas16To32(spriteSheetId, row, column, 0);
-            TilePropertyArray[(int)CurrentTileIndex].BaseSpriteId = atlasSpriteId;
-            TilePropertyArray[(int)CurrentTileIndex].IsAutoMapping = false;
+            TilePropertyArray[(int)CurrentTileIndex].SpriteId = atlasSpriteId;
             
         }
 
         public void SetTilePropertyCollisionType(CollisionType type)
         {
-            if (CurrentTileIndex == TileID.Error) return;
+            Utils.Assert(CurrentTileIndex != 0);
 
             TilePropertyArray[(int)CurrentTileIndex].CollisionIsoType = type;
         }
 
-        
-        public void SetTilePropertyDurability(byte durability)
-        {
-            if (CurrentTileIndex == TileID.Error) return;
-
-            TilePropertyArray[(int)CurrentTileIndex].Durability = durability;
-        }
-
-        public void SetTilePropertyDescription(byte durability)
-        {
-            if (CurrentTileIndex == TileID.Error) return;
-            
-            TilePropertyArray[(int)CurrentTileIndex].Durability = durability;
-        }
-
-        public void SetSpriteRuleType(SpriteRuleType spriteRuleType)
-        {
-            Utils.Assert((int)CurrentTileIndex >= 0 && (int)CurrentTileIndex < TilePropertyArray.Length);
-
-            TilePropertyArray[(int)CurrentTileIndex].SpriteRuleType = spriteRuleType;
-        }
-
-        public void SetCannotBeRemoved(bool flag)
-        {
-            if (CurrentTileIndex == TileID.Error) return;
-            
-            TilePropertyArray[(int)CurrentTileIndex].CannotBeRemoved = flag;
-        }
-
-        public void EndTileProperty()
-        {
-            CurrentTileIndex = TileID.Error;
-        }
     }
 }

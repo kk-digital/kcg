@@ -2,6 +2,7 @@ using UnityEngine;
 using Enums.Tile;
 using KMath;
 using Item;
+using PlanetTileMap;
 
 namespace Planet.Unity
 {
@@ -109,33 +110,33 @@ namespace Planet.Unity
             {
                 for (int i = 0; i < tileMap.MapSize.X; i++)
                 {
-                    var frontTileID = TileID.Air;
+                    var frontTileID = TileMaterialType.Air;
 
                     if (i >= tileMap.MapSize.X / 2)
                     {
                         if (j % 2 == 0 && i == tileMap.MapSize.X / 2)
                         {
-                            frontTileID = TileID.Moon;
+                            frontTileID = TileMaterialType.Moon;
                         }
                         else
                         {
-                            frontTileID = TileID.Glass;
+                            frontTileID = TileMaterialType.Glass;
                         }
                     }
                     else
                     {
                         if (j % 3 == 0 && i == tileMap.MapSize.X / 2 + 1)
                         {
-                            frontTileID = TileID.Glass;
+                            frontTileID = TileMaterialType.Glass;
                         }
                         else
                         {
-                            frontTileID = TileID.Moon;
+                            frontTileID = TileMaterialType.Moon;
                         }
                     }
 
 
-                    tileMap.GetFrontTile(i, j).ID =  frontTileID;
+                    tileMap.GetFrontTile(i, j).MaterialType =  frontTileID;
                 }
             }
 

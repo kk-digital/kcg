@@ -136,22 +136,22 @@ namespace Planet.Unity
             GameState.SpriteLoader.GetSpriteSheetID("Assets\\StreamingAssets\\Items\\Ores\\Gems\\Hexagon\\gem_hexagon_1.png", 16, 16);
 
 
-            GameState.TileCreationApi.CreateTileProperty(TileID.Ore1);
+           /* GameState.TileCreationApi.CreateTileProperty(TileMaterialType.Ore1);
             GameState.TileCreationApi.SetTilePropertyName("ore_1");
             GameState.TileCreationApi.SetTilePropertyShape(TileShape.FullBlock, TileShapeAndRotation.FB);
             GameState.TileCreationApi.SetTilePropertyTexture16(oreTileSheet, 0, 0);
             GameState.TileCreationApi.EndTileProperty();
 
-            GameState.TileCreationApi.CreateTileProperty(TileID.Glass);
+            GameState.TileCreationApi.CreateTileProperty(TileMaterialType.Glass);
             GameState.TileCreationApi.SetTilePropertyName("glass");
             GameState.TileCreationApi.SetTilePropertyShape(TileShape.FullBlock, TileShapeAndRotation.FB);
             GameState.TileCreationApi.SetTilePropertySpriteSheet16(tilesMoon, 11, 10);
-            GameState.TileCreationApi.EndTileProperty();
+            GameState.TileCreationApi.EndTileProperty();*/
 
 
 
             // Generating the map
-            Vec2i mapSize = new Vec2i(16, 16);
+          /*  Vec2i mapSize = new Vec2i(16, 16);
 
             PlanetState = new PlanetState();
             PlanetState.Init(mapSize);
@@ -170,7 +170,7 @@ namespace Planet.Unity
 
                     PlanetState.TileMap.SetFrontTile(i, j, frontTile);
                 }
-            }
+            }*/
         }
     }
 }

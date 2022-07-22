@@ -68,7 +68,7 @@ namespace Physics
             if ((int)position.X > 0 && (int)position.X + 1 < tileMap.MapSize.X &&
             (int)position.Y > 0 && (int)position.Y < tileMap.MapSize.Y)
             {
-                if (tileMap.GetFrontTile((int)position.X + 1, (int)position.Y).ID == TileID.Air)
+                if (tileMap.GetFrontTile((int)position.X + 1, (int)position.Y).MaterialType == TileMaterialType.Air)
                 {
                     movable.SlidingRight = false;
                 }
@@ -77,7 +77,7 @@ namespace Physics
             if ((int)position.X > 0 && (int)position.X - 1 < tileMap.MapSize.X &&
             (int)position.Y > 0 && (int)position.Y < tileMap.MapSize.Y)
             {
-                if (tileMap.GetFrontTile((int)position.X - 1, (int)position.Y).ID == TileID.Air)
+                if (tileMap.GetFrontTile((int)position.X - 1, (int)position.Y).MaterialType == TileMaterialType.Air)
                 {
                     movable.SlidingLeft = false;
                 }

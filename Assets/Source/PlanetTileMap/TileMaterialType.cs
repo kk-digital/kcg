@@ -1,6 +1,6 @@
-namespace Enums.Tile
+namespace PlanetTileMap
 {
-    public enum TileID
+    public enum TileMaterialType
     {
         Error = 0,
         Air,
@@ -13,6 +13,7 @@ namespace Enums.Tile
         Background,
         Wire,
         Bedrock,
+        Placeholder,
         Platform
     }
 }

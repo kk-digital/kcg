@@ -1,7 +1,8 @@
 using Enums.Tile;
 using KMath;
 using Utility;
-using System;
+using PlanetTileMap;
+
 namespace Collisions
 {
     public static class Collisions
@@ -19,12 +20,8 @@ namespace Collisions
                     if (y >= 0 && y < tileMap.MapSize.Y)
                     {
                         ref var tile = ref tileMap.GetFrontTile(x, y);
-                        if (tile.ID != TileID.Air)
+                        if (tile.MaterialType != TileMaterialType.Air)
                         {
-                            if (IsAPlatform(tile))
-                            {
-                                return false;
-                            }
                             var tileBorders = new AABox2D(x, y);
                             tileBorders.DrawBox();
                             return true;
@@ -50,12 +47,8 @@ namespace Collisions
                     {
                         ref var tile = ref tileMap.GetFrontTile(x, y);
 
-                        if (tile.ID != TileID.Air)
+                        if (tile.MaterialType != TileMaterialType.Air)
                         {
-                            if (IsAPlatform(tile))
-                            {
-                                return false;
-                            }
                             var tileBorders = new AABox2D(x, y);
                             tileBorders.DrawBox();
                             return true;
@@ -84,15 +77,9 @@ namespace Collisions
                     if (x >= 0 && x < tileMap.MapSize.X)
                     {
                         ref var tile = ref tileMap.GetFrontTile(x, y);
-                        if (tile.ID != TileID.Air)
+                        if (tile.MaterialType != TileMaterialType.Air)
                         {
                             var tileBorders = new AABox2D(x, y);
-
-                            if (Math.Abs(borders.ymin - tileBorders.ymax) > 0.2f)
-                            {
-                                return false;
-                            }
-
                             tileBorders.DrawBox();
                             return true;
                         }
@@ -118,13 +105,8 @@ namespace Collisions
                     if (x >= 0 && x < tileMap.MapSize.X)
                     {
                         ref var tile = ref tileMap.GetFrontTile(x, y);
-                        
-                        if (tile.ID != TileID.Air)
+                        if (tile.MaterialType != TileMaterialType.Air)
                         {
-                            if (IsAPlatform(tile))
-                            {
-                                return false;
-                            }
                             var tileBorders = new AABox2D(x, y);
                             tileBorders.DrawBox();
                             return true;
@@ -134,11 +116,6 @@ namespace Collisions
             }
 
             return false;
-        }
-
-        public static bool IsAPlatform(PlanetTileMap.Tile tile)
-        {
-            return GameState.TileCreationApi.GetTileProperty(tile.ID).CollisionIsoType == CollisionType.Platform;
         }
     }
 }
