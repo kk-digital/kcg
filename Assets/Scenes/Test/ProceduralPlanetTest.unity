@@ -159,6 +159,7 @@ MonoBehaviour:
   basecolor: {r: 0.2924528, g: 0.27815995, b: 0.2662424, a: 1}
   colors: []
   radius: 96
+  layers: 0
   orbitColor: {r: 0.5, g: 0.7, b: 1, a: 1}
   Camera: {fileID: 1913073823}
   blur_noise_shader: {fileID: 7200000, guid: 6265a9d36a176594480881d07bfe6ddf, type: 3}
@@ -207,18 +208,21 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 983011622}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9736cbde8c01cc84391ca06a6fab43c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sr: {fileID: 0}
   or: {fileID: 0}
-  seed: 1
+  seed: 0
   texture: {fileID: 0}
   basecolor: {r: 0.26415092, g: 0.20925792, b: 0.18814524, a: 1}
-  colors: []
+  colors:
+  - {r: 0.23584908, g: 0.21230249, b: 0.19691174, a: 1}
+  - {r: 0.7058824, g: 0.7019608, b: 0.68235296, a: 1}
   radius: 256
+  layers: 5
   orbitColor: {r: 0.5, g: 0.7, b: 1, a: 1}
   Camera: {fileID: 1913073823}
   blur_noise_shader: {fileID: 7200000, guid: 6265a9d36a176594480881d07bfe6ddf, type: 3}
@@ -317,7 +321,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1762792753}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9736cbde8c01cc84391ca06a6fab43c4, type: 3}
   m_Name: 
@@ -327,8 +331,11 @@ MonoBehaviour:
   seed: 0
   texture: {fileID: 0}
   basecolor: {r: 0.32805273, g: 0.7169812, b: 0.6110579, a: 1}
-  colors: []
+  colors:
+  - {r: 0.7830189, g: 0.45667925, b: 0.23268957, a: 1}
+  - {r: 0.5019608, g: 0.7019608, b: 1, a: 1}
   radius: 512
+  layers: 5
   orbitColor: {r: 0.5, g: 0.7, b: 1, a: 1}
   Camera: {fileID: 1913073823}
   blur_noise_shader: {fileID: 7200000, guid: 6265a9d36a176594480881d07bfe6ddf, type: 3}
