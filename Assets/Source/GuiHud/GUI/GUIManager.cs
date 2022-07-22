@@ -122,7 +122,7 @@ namespace KGUI
                 if (!UIList[i].CanRun)
                 {
                     UIList[i].CanRun = true;
-                    if (Vector2.Distance(new Vector2(CursorPosition.X, CursorPosition.Y), new Vector2(UIList[i].ObjectPosition.X, UIList[i].ObjectPosition.Y)) > 1.0f)
+                    if (Vector2.Distance(new Vector2(CursorPosition.X, CursorPosition.Y), new Vector2(UIList[i].ObjectPosition.X, UIList[i].ObjectPosition.Y)) > 30.0f)
                     {
                         UIList[i].OnMouseExit();
                     }

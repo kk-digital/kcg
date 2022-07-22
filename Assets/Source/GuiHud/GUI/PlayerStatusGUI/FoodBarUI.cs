@@ -1,10 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Entitas;
 using KGUI.Elements;
-using UnityEngine.EventSystems;
 
 namespace KGUI.PlayerStatus
 {
@@ -22,7 +20,7 @@ namespace KGUI.PlayerStatus
 
         // Image
         public ProgressBar foodBar;
-        private GameObject iconCanvas;
+        private Image Icon;
 
         public override void Initialize(Contexts contexts, AgentEntity agentEntity)
         {
@@ -80,33 +78,26 @@ namespace KGUI.PlayerStatus
                 TextureCoords = new Vector4(0, 0, 1, 1)
             };
 
-            // Food Bar Initializon
-            iconCanvas = new GameObject("Food Icon");
-            iconCanvas.transform.parent = GameObject.Find("Canvas").transform;
-            iconCanvas.AddComponent<RectTransform>();
-            iconCanvas.AddComponent<Image>();
-            iconCanvas.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
-            iconCanvas.GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
-            iconCanvas.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
-
             // Add Components and setup game object
             Sprite iconBar = Sprite.Create(icon.Texture, new Rect(0.0f, 0.0f, IconWidth, IconHeight), new Vector2(0.5f, 0.5f));
-            iconCanvas.GetComponent<Image>().sprite = iconBar;
+
+            // Food Bar Initializon
+            Icon = new Image("Food Icon", iconBar);
 
             if (Camera.main.aspect >= 1.7f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 123.8f, 4.873917f);
+                Icon.SetPosition(new Vector3(-377.3f, 123.8f, 4.873917f));
             else if (Camera.main.aspect >= 1.5f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, 125.4f, 4.873917f);
+                Icon.SetPosition(new Vector3(-335.6f, 125.4f, 4.873917f));
             else
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 193.4f, 4.873917f);
+                Icon.SetPosition(new Vector3(-363.8f, 193.4f, 4.873917f));
 
-            iconCanvas.GetComponent<RectTransform>().localScale = new Vector3(0.6f, -0.6f, 0.5203559f);
+            Icon.SetScale(new Vector3(0.6f, -0.6f, 0.5203559f));
 
             // Add Components and setup game object
             Sprite bar = Sprite.Create(fill.Texture, new Rect(0.0f, 0.0f, FillWidth, FillHeight), new Vector2(0.5f, 0.5f));
 
             // Food Bar Initializon
-            foodBar = new ProgressBar("Food Bar", iconCanvas.transform, bar, Image.FillMethod.Radial360, agentEntity.agentStats.Food / 100, agentEntity);
+            foodBar = new ProgressBar("Food Bar", Icon.GetTransform(), bar, UnityEngine.UI.Image.FillMethod.Radial360, agentEntity.agentStats.Food / 100, agentEntity);
             foodBar.SetPosition(new Vector3(-0.4f, -0.1f, 4.873917f));
             foodBar.SetScale(new Vector3(0.8566527f, 0.8566527f, 0.3714702f));
 
@@ -117,15 +108,15 @@ namespace KGUI.PlayerStatus
         {
             if (Init)
             {
-                ObjectPosition = new KMath.Vec2f(iconCanvas.transform.position.x, iconCanvas.transform.position.y);
+                ObjectPosition = new KMath.Vec2f(Icon.GetTransform().position.x, Icon.GetTransform().position.y);
                 foodBar.Update(agentEntity.agentStats.Food / 100);
 
                 if (Camera.main.aspect >= 1.7f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 123.8f, 4.873917f);
+                    Icon.SetPosition(new Vector3(-377.3f, 123.8f, 4.873917f));
                 else if (Camera.main.aspect >= 1.5f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, 125.4f, 4.873917f);
+                    Icon.SetPosition(new Vector3(-335.6f, 125.4f, 4.873917f));
                 else
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 193.4f, 4.873917f);
+                    Icon.SetPosition(new Vector3(-363.8f, 193.4f, 4.873917f));
             }
         }
 

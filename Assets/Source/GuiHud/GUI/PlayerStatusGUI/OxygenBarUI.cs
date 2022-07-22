@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using Entitas;
 using KGUI.Elements;
 
@@ -19,7 +18,7 @@ namespace KGUI.PlayerStatus
 
         // Image
         public ProgressBar oxygenBar;
-        private GameObject iconCanvas;
+        private Image iconCanvas;
 
         public override void Initialize(Contexts contexts, AgentEntity agentEntity)
         {
@@ -77,33 +76,26 @@ namespace KGUI.PlayerStatus
                 TextureCoords = new Vector4(0, 0, 1, 1)
             };
 
-            // Oxygen Bar Initializon
-            iconCanvas = new GameObject("Oxygen Icon");
-            iconCanvas.transform.parent = GameObject.Find("Canvas").transform;
-            iconCanvas.AddComponent<RectTransform>();
-            iconCanvas.AddComponent<Image>();
-
             // Add Components and setup agent object
             Sprite iconBar = Sprite.Create(icon.Texture, new Rect(0.0f, 0.0f, IconWidth, IconHeight), new Vector2(0.5f, 0.5f));
-            iconCanvas.GetComponent<Image>().sprite = iconBar;
-            iconCanvas.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
-            iconCanvas.GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
-            iconCanvas.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
+
+            // Oxygen Bar Initializon
+            iconCanvas = new Image("Oxygen Icon", iconBar);
 
             if (Camera.main.aspect >= 1.7f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 5.9f, 4.873917f);
+                iconCanvas.SetPosition(new Vector3(-377.3f, 5.9f, 4.873917f));
             else if (Camera.main.aspect >= 1.5f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, 9.6f, 4.873917f);
+                iconCanvas.SetPosition(new Vector3(-335.6f, 9.6f, 4.873917f));
             else
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 75.3f, 4.873917f);
+                iconCanvas.SetPosition(new Vector3(-363.8f, 75.3f, 4.873917f));
 
-            iconCanvas.GetComponent<RectTransform>().localScale = new Vector3(0.6f, -0.6f, 0.5203559f);
+            iconCanvas.SetScale(new Vector3(0.6f, -0.6f, 0.5203559f));
 
             // Add Components and setup agent object
             Sprite bar = Sprite.Create(fill.Texture, new Rect(0.0f, 0.0f, FillWidth, FillHeight), new Vector2(0.5f, 0.5f));
 
             // Oxygen Bar Initializon
-            oxygenBar = new ProgressBar("Oxygen Bar", iconCanvas.transform, bar, Image.FillMethod.Radial360, agentEntity.agentStats.Oxygen / 100, agentEntity);
+            oxygenBar = new ProgressBar("Oxygen Bar", iconCanvas.GetTransform(), bar, UnityEngine.UI.Image.FillMethod.Radial360, agentEntity.agentStats.Oxygen / 100, agentEntity);
             oxygenBar.SetPosition(new Vector3(-0.4f, -0.1f, 4.873917f));
             oxygenBar.SetScale(new Vector3(0.8566527f, 0.8566527f, 0.3714702f));
 
@@ -114,15 +106,15 @@ namespace KGUI.PlayerStatus
         {
             if (Init)
             {
-                ObjectPosition = new KMath.Vec2f(iconCanvas.transform.position.x, iconCanvas.transform.position.y);
+                ObjectPosition = new KMath.Vec2f(iconCanvas.GetTransform().position.x, iconCanvas.GetTransform().position.y);
                 oxygenBar.Update(agentEntity.agentStats.Oxygen / 100);
 
                 if (Camera.main.aspect >= 1.7f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 5.9f, 4.873917f);
+                    iconCanvas.SetPosition(new Vector3(-377.3f, 5.9f, 4.873917f));
                 else if (Camera.main.aspect >= 1.5f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, 9.6f, 4.873917f);
+                    iconCanvas.SetPosition(new Vector3(-335.6f, 9.6f, 4.873917f));
                 else
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 75.3f, 4.873917f);
+                    iconCanvas.SetPosition(new Vector3(-363.8f, 75.3f, 4.873917f));
             }
         }
 

@@ -10,7 +10,7 @@ namespace KGUI.Elements
         private GameObject Bar;
         public float _fillValue;
 
-        public ProgressBar(string barName, Transform parent, Sprite barTexture, Image.FillMethod fillMethod, float fillValue, AgentEntity agentEntity)
+        public ProgressBar(string barName, Transform parent, Sprite barTexture, UnityEngine.UI.Image.FillMethod fillMethod, float fillValue, AgentEntity agentEntity)
         {
             _fillValue = fillValue;
 
@@ -18,19 +18,19 @@ namespace KGUI.Elements
             Bar = new GameObject(barName);
             Bar.transform.parent = parent;
             Bar.AddComponent<RectTransform>();
-            Bar.AddComponent<Image>();
+            Bar.AddComponent<UnityEngine.UI.Image>();
             Bar.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0);
             Bar.GetComponent<RectTransform>().anchorMax = new Vector2(0, 0);
             Bar.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
 
-            Bar.GetComponent<Image>().sprite = barTexture;
-            Bar.GetComponent<Image>().raycastTarget = true;
-            Bar.GetComponent<Image>().maskable = true;
-            Bar.GetComponent<Image>().type = Image.Type.Filled;
-            Bar.GetComponent<Image>().fillMethod = fillMethod;
-            Bar.GetComponent<Image>().fillOrigin = 0;
-            Bar.GetComponent<Image>().fillAmount = fillValue;
-            Bar.GetComponent<Image>().fillClockwise = true;
+            Bar.GetComponent<UnityEngine.UI.Image>().sprite = barTexture;
+            Bar.GetComponent<UnityEngine.UI.Image>().raycastTarget = true;
+            Bar.GetComponent<UnityEngine.UI.Image>().maskable = true;
+            Bar.GetComponent<UnityEngine.UI.Image>().type = UnityEngine.UI.Image.Type.Filled;
+            Bar.GetComponent<UnityEngine.UI.Image>().fillMethod = fillMethod;
+            Bar.GetComponent<UnityEngine.UI.Image>().fillOrigin = 0;
+            Bar.GetComponent<UnityEngine.UI.Image>().fillAmount = fillValue;
+            Bar.GetComponent<UnityEngine.UI.Image>().fillClockwise = true;
         }
 
         public void SetPosition(Vector3 newPos)
@@ -51,7 +51,7 @@ namespace KGUI.Elements
         public void Update(float fillValue)
         {
             _fillValue = fillValue;
-            Bar.GetComponent<Image>().fillAmount = fillValue;
+            Bar.GetComponent<UnityEngine.UI.Image>().fillAmount = fillValue;
         }
     }
 }
