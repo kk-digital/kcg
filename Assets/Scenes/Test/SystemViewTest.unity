@@ -2260,7 +2260,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seed: 69420
   layers: 5
-  basecolor: {r: 0, g: 0, b: 0, a: 0}
+  basecolor: {r: 0.31545216, g: 0.8018868, b: 0.23073156, a: 0}
   colors: []
   width: 512
   height: 512
@@ -10689,7 +10689,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seed: 42069
   layers: 5
-  basecolor: {r: 0, g: 0, b: 0, a: 0}
+  basecolor: {r: 0.5931827, g: 0.7521614, b: 0.8113208, a: 0}
   colors: []
   width: 512
   height: 512
