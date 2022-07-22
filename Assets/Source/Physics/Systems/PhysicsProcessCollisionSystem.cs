@@ -23,11 +23,8 @@ namespace Physics
             if (entityBoxBorders.IsCollidingBottom(tileMap, movable.Velocity))
             {
                 var tile = tileMap.GetFrontTile((int)pos.Value.X, (int)Math.Ceiling(pos.Value.Y)-1);
-                Debug.Log(Math.Ceiling(pos.Value.Y));
-                Debug.Log("ID" + tile.ID);
-                Debug.Log("collision type" + GameState.TileCreationApi.GetTileProperty(tile.ID).CollisionIsoType);
-                Debug.Log("droping " + movable.Droping);
-                if (GameState.TileCreationApi.GetTileProperty(tile.ID).CollisionIsoType != CollisionType.Platform || !movable.Droping)
+                Debug.Log(tile.TileID);
+                if (GameState.TileCreationApi.GetTileProperty(tile.TileID).CollisionIsoType != CollisionType.Platform || !movable.Droping)
                 {
                     pos.Value = new Vec2f(pos.Value.X, pos.PreviousValue.Y);
                     movable.Velocity.Y = 0.0f;

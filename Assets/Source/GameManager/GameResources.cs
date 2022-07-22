@@ -315,6 +315,12 @@ public class GameResources
         GameState.TileCreationApi.SetSpriteRuleType(PlanetTileMap.SpriteRuleType.R3);
         GameState.TileCreationApi.SetTilePropertySpriteSheet16(MoonSpriteSheet, 0, 10);
         GameState.TileCreationApi.EndTileProperty();*/
+
+        GameState.TileCreationApi.CreateTileProperty();
+        GameState.TileCreationApi.BeginMaterial(TileMaterialType.Platform);
+        GameState.TileCreationApi.SetMaterialName("Platform");
+        GameState.TileCreationApi.SetMaterialSpriteRuleType(SpriteRuleType.R3);
+        
     }
 
     private static void CreateAnimations()
