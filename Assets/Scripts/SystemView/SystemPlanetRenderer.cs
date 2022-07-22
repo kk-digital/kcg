@@ -27,6 +27,8 @@ namespace Scripts {
             public  ComputeShader      circular_blur_shader;
             public  ComputeShader      circular_mask_shader;
 
+            public  bool autoinit; // For testing
+
             private bool initialized;
 
             private void generate() {
@@ -39,6 +41,7 @@ namespace Scripts {
                 int     radius_id = Shader.PropertyToID("radius");
                 int distortion_id = Shader.PropertyToID("distortionnoise");
                 int     output_id = Shader.PropertyToID("outputnoise");
+                int    sharpen_id = Shader.PropertyToID("sharpen");
 
                 rng = new(seed);
 
@@ -47,45 +50,25 @@ namespace Scripts {
                 for(int i = 0; i < radius * radius; i++) pixels[i] = new Color(0.0f, 0.0f, 0.0f, 0.0f);
 
                 // Generate base noise
-                ComputeBuffer base_buffer1 = new ComputeBuffer(radius * radius, sizeof(float));
-                ComputeBuffer base_buffer2 = new ComputeBuffer(radius * radius / 4096, sizeof(float));
+                float[] base_alpha = new float[radius * radius];
+                for(int i = 0; i < radius * radius; i++) base_alpha[i] = 1.0f;
 
-                base_buffer2.SetData(ProceduralImages.generate_noise(rng, 1.0f, radius / 64, radius / 64));
-                    
-                // Scale noise  
-                scale_noise_shader.SetInt( width_id, radius);
-                scale_noise_shader.SetInt(height_id, radius);
-                scale_noise_shader.SetInt( scale_id, 64);
+                ComputeBuffer base_buffer = new ComputeBuffer(radius * radius, sizeof(float));
 
-                scale_noise_shader.SetBuffer(0,  noise_id, base_buffer2);
-                scale_noise_shader.SetBuffer(0, output_id, base_buffer1);
-
-                scale_noise_shader.Dispatch(0, radius / 8, radius / 8, 1);
-
-                // Apply circular blur
-                circular_blur_shader.SetInt( width_id, radius);
-                circular_blur_shader.SetInt(height_id, radius);
-
-                circular_blur_shader.SetFloat(radius_id, 16.0f);
-
-                circular_blur_shader.SetBuffer(0,  noise_id, base_buffer2);
-                circular_blur_shader.SetBuffer(0, output_id, base_buffer1);
-
-                circular_blur_shader.Dispatch(0, radius / 8, radius / 8, 1);
-
-                base_buffer2.Release(); 
+                base_buffer.SetData(base_alpha);
 
                 // Apply circular mask
                 circular_mask_shader.SetInt( width_id, radius);
                 circular_mask_shader.SetInt(height_id, radius);
 
-                circular_mask_shader.SetBuffer(0, noise_id, base_buffer1);
+                circular_mask_shader.SetBool(sharpen_id, true);
+
+                circular_mask_shader.SetBuffer(0, noise_id, base_buffer);
 
                 circular_mask_shader.Dispatch(0, radius / 8, radius / 8, 1);
 
-                float[] base_alpha = new float[radius * radius];
-                base_buffer1.GetData(base_alpha);
-                base_buffer1.Release();
+                base_buffer.GetData(base_alpha);
+                base_buffer.Release();
 
                 for(int x = 0; x < radius; x++)
                     for(int y = 0; y < radius; y++) {
@@ -106,13 +89,17 @@ namespace Scripts {
                 texture.Apply();
             }
 
+            private void Start() {
+                if(autoinit) init();
+            }
+
             public void init() {
                 or = gameObject.AddComponent<OrbitRenderer>();
                 sr = gameObject.AddComponent<SpriteRenderer>();
 
                 Camera = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
-                or.descriptor = planet.descriptor;
+                if(planet != null) or.descriptor = planet.descriptor;
 
                 generate();
 
@@ -126,14 +113,16 @@ namespace Scripts {
             void LateUpdate() {
                 if(!initialized) return;
 
-                float[] pos = planet.descriptor.get_position();
+                if(planet != null) {
+                    float[] pos = planet.descriptor.get_position();
 
-                sr.transform.position   = new Vector3(pos[0], pos[1], -0.1f);
-                sr.transform.localScale = new Vector3(3.0f / Camera.scale, 3.0f / Camera.scale, 1.0f);
+                    sr.transform.position   = new Vector3(pos[0], pos[1], -0.1f);
+                    sr.transform.localScale = new Vector3(3.0f / Camera.scale, 3.0f / Camera.scale, 1.0f);
 
-                or.color = orbitColor;
+                    or.color = orbitColor;
 
-                or.update_renderer(128);
+                    or.update_renderer(128);
+                }
             }
 
             void OnDestroy() {
