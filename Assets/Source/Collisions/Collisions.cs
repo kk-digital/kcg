@@ -1,7 +1,10 @@
 using Enums.Tile;
 using KMath;
 using Utility;
+<<<<<<< HEAD
 using PlanetTileMap;
+=======
+>>>>>>> parent of e967bec8 (platforms made)
 
 namespace Collisions
 {
