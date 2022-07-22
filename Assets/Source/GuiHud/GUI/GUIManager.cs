@@ -88,7 +88,10 @@ namespace KGUI
                 if(UIList[i].CanRun)
                 {
                     UIList[i].CanRun = false;
-                    UIList[i].OnMouseEnter();
+                    if (Vector2.Distance(new Vector2(CursorPosition.X, CursorPosition.Y), new Vector2(UIList[i].ObjectPosition.X, UIList[i].ObjectPosition.Y)) < 20.0f)
+                    {
+                        UIList[i].OnMouseEnter();
+                    }
                 }
             }
         }
@@ -103,10 +106,11 @@ namespace KGUI
                     OnMouseEnter();
                     UIList[i].OnMouseStay();
                 }
-                else
+                else if (Vector2.Distance(new Vector2(CursorPosition.X, CursorPosition.Y), new Vector2(UIList[i].ObjectPosition.X, UIList[i].ObjectPosition.Y)) > 30.0f)
                 {
-                    OnMouseExit();
+                    UIList[i].CanRun = true;
                 }
+
             }
         }
 
@@ -118,7 +122,10 @@ namespace KGUI
                 if (!UIList[i].CanRun)
                 {
                     UIList[i].CanRun = true;
-                    UIList[i].OnMouseExit();
+                    if (Vector2.Distance(new Vector2(CursorPosition.X, CursorPosition.Y), new Vector2(UIList[i].ObjectPosition.X, UIList[i].ObjectPosition.Y)) > 1.0f)
+                    {
+                        UIList[i].OnMouseExit();
+                    }
                 }
             }
         }
