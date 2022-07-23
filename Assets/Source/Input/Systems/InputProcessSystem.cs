@@ -49,6 +49,7 @@ namespace ECSInput
             bool dash = Input.GetKeyDown(KeyCode.Space);
             bool running = Input.GetKey(KeyCode.LeftAlt);
             bool flying = Input.GetKey(KeyCode.F);
+            bool downKey = Input.GetKey(KeyCode.DownArrow);
 
             float x = 0.0f;
             if (Input.GetKey(KeyCode.RightArrow))
@@ -72,6 +73,7 @@ namespace ECSInput
                 var movementState = entity.agentMovementState;
                 movementState.Running = running;
 
+                movable.Droping = downKey;
 
                 // handling horizontal movement (left/right)
                 if (movementState.Running)
@@ -91,7 +93,6 @@ namespace ECSInput
                 {
                     movable.Acceleration.X += 500.0f * x;
                     movable.Velocity.X = 90.0f * x;
-
                     movable.Velocity.Y = 0.0f;
                     movable.Acceleration.Y = 0.0f;
 
@@ -101,6 +102,7 @@ namespace ECSInput
                     movementState.DashCooldown = 1.0f;
                 }
 
+                
 
                 // we can start jumping only if the jump counter is 0
                 if (movementState.JumpCounter == 0)
@@ -163,6 +165,7 @@ namespace ECSInput
                     movable.Acceleration.Y = 0;
                     movable.Velocity.Y = 3.5f;
                 }
+
 
                 // the end of dashing
                 // we can do this using a fixed amount of time
@@ -251,7 +254,14 @@ namespace ECSInput
                 {
                     planet.AddParticleEmitter(pos.Value, Particle.ParticleEmitterType.DustEmitter);
                 }
+                //if (movable.Droping && movable.Landed)
+                //{
+                   
+                //        movable.Landed = false;
+                //        movable.Acceleration.Y = 100.0f;
+                    
 
+                //}
             }
 
             // Recharge Weapon.

@@ -147,8 +147,10 @@ namespace Planet.Unity
             var camera = Camera.main;
             Vector3 lookAtPosition = camera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, camera.nearClipPlane));
 
-            Planet.TileMap = TileMapManager.Load("generated-maps/movement-map.kmap", (int)lookAtPosition.x, (int)lookAtPosition.y);
-                Debug.Log("loaded!");
+            /*Planet.TileMap = TileMapManager.Load("generated-maps/movement-map.kmap", (int)lookAtPosition.x, (int)lookAtPosition.y);
+                Debug.Log("loaded!");*/
+
+            GenerateMap();
 
             Planet.TileMap.UpdateBackTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
             Planet.TileMap.UpdateMidTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
@@ -175,11 +177,11 @@ namespace Planet.Unity
             Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.PipePlacementTool, Planet.EntitasContext);
             Admin.AdminAPI.AddItem(inventoryManager, toolBarID, Enums.ItemType.ParticleEmitterPlacementTool, Planet.EntitasContext);
 
-            GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.Pistol, new Vec2f(3.0f, 25.0f));
-            GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.PumpShotgun, new Vec2f(4.0f, 25.0f));
-            GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.PulseWeapon, new Vec2f(5.0f, 25.0f));
-            GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.SniperRifle, new Vec2f(6.0f, 25.0f));
-            GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.Sword, new Vec2f(7.0f, 25.0f));
+            //GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.Pistol, new Vec2f(3.0f, 25.0f));
+            //GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.PumpShotgun, new Vec2f(4.0f, 25.0f));
+            //GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.PulseWeapon, new Vec2f(5.0f, 25.0f));
+            //GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.SniperRifle, new Vec2f(6.0f, 25.0f));
+            //GameState.ItemSpawnSystem.SpawnItemParticle(Planet.EntitasContext, Enums.ItemType.Sword, new Vec2f(7.0f, 25.0f));
 
         }
 
@@ -191,8 +193,8 @@ namespace Planet.Unity
             
             ref var tileMap = ref Planet.TileMap;
 
-
-            for(int j = 0; j < tileMap.MapSize.Y / 2; j++)
+            
+            for (int j = 0; j < tileMap.MapSize.Y / 2; j++)
             {
                 for(int i = 0; i < tileMap.MapSize.X; i++)
                 {
@@ -215,12 +217,23 @@ namespace Planet.Unity
                 tileMap.GetFrontTile(tileMap.MapSize.X - 1, j).MaterialType = TileMaterialType.Bedrock;
             }
 
+            tileMap.GetFrontTile(8, 14).MaterialType = TileMaterialType.Platform;
+            tileMap.GetFrontTile(9, 14).MaterialType = TileMaterialType.Platform;
+            tileMap.GetFrontTile(10, 14).MaterialType = TileMaterialType.Platform;
+            tileMap.GetFrontTile(11, 14).MaterialType = TileMaterialType.Platform;
+            tileMap.GetFrontTile(12, 14).MaterialType = TileMaterialType.Platform;
+            tileMap.GetFrontTile(13, 14).MaterialType = TileMaterialType.Platform;
+
             var camera = Camera.main;
             Vector3 lookAtPosition = camera.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, camera.nearClipPlane));
 
             tileMap.UpdateBackTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
             tileMap.UpdateMidTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
             tileMap.UpdateFrontTileMapPositions((int)lookAtPosition.x, (int)lookAtPosition.y);
+
+           
+
+
         }
 
     }

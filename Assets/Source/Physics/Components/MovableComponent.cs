@@ -30,6 +30,8 @@ namespace Physics
         public bool Landed; // are we standing on a block or not
         public bool SlidingRight; // sliding down
         public bool SlidingLeft; // sliding down
+
+        public bool Droping;//dropping
     }
 }
 
