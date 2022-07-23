@@ -13,6 +13,7 @@ namespace PlanetTileMap
         Background,
         Wire,
         Bedrock,
-        Placeholder
+        Placeholder,
+        Platform
     }
 }
