@@ -1,13 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Entitas;
 using KGUI.Elements;
 
 namespace KGUI.PlayerStatus
 {
-    public class FoodBarUI
+    public class FoodBarUI : GUIManager
     {
         // Init
         private static bool Init;
@@ -21,9 +20,9 @@ namespace KGUI.PlayerStatus
 
         // Image
         public ProgressBar foodBar;
-        private GameObject iconCanvas;
+        private Image Icon;
 
-        public void Initialize(AgentEntity agentEntity)
+        public override void Initialize(Contexts contexts, AgentEntity agentEntity)
         {
             // Set Width and Height
             int IconWidth = 19;
@@ -79,49 +78,66 @@ namespace KGUI.PlayerStatus
                 TextureCoords = new Vector4(0, 0, 1, 1)
             };
 
-            // Food Bar Initializon
-            iconCanvas = new GameObject("Food Icon");
-            iconCanvas.transform.parent = GameObject.Find("Canvas").transform;
-            iconCanvas.AddComponent<RectTransform>();
-            iconCanvas.AddComponent<Image>();
-
             // Add Components and setup game object
             Sprite iconBar = Sprite.Create(icon.Texture, new Rect(0.0f, 0.0f, IconWidth, IconHeight), new Vector2(0.5f, 0.5f));
-            iconCanvas.GetComponent<Image>().sprite = iconBar;
+
+            // Food Bar Initializon
+            Icon = new Image("Food Icon", iconBar);
 
             if (Camera.main.aspect >= 1.7f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 123.8f, 4.873917f);
+                Icon.SetPosition(new Vector3(-377.3f, 123.8f, 4.873917f));
             else if (Camera.main.aspect >= 1.5f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, 125.4f, 4.873917f);
+                Icon.SetPosition(new Vector3(-335.6f, 125.4f, 4.873917f));
             else
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 193.4f, 4.873917f);
+                Icon.SetPosition(new Vector3(-363.8f, 193.4f, 4.873917f));
 
-            iconCanvas.GetComponent<RectTransform>().localScale = new Vector3(0.6f, -0.6f, 0.5203559f);
+            Icon.SetScale(new Vector3(0.6f, -0.6f, 0.5203559f));
 
             // Add Components and setup game object
             Sprite bar = Sprite.Create(fill.Texture, new Rect(0.0f, 0.0f, FillWidth, FillHeight), new Vector2(0.5f, 0.5f));
 
             // Food Bar Initializon
-            foodBar = new ProgressBar("Food Bar", iconCanvas.transform, bar, Image.FillMethod.Radial360, agentEntity.agentStats.Food / 100, agentEntity);
+            foodBar = new ProgressBar("Food Bar", Icon.GetTransform(), bar, UnityEngine.UI.Image.FillMethod.Radial360, agentEntity.agentStats.Food / 100, agentEntity);
             foodBar.SetPosition(new Vector3(-0.4f, -0.1f, 4.873917f));
             foodBar.SetScale(new Vector3(0.8566527f, 0.8566527f, 0.3714702f));
 
             Init = true;
         }
 
-        public void Update(AgentEntity agentEntity)
+        public override void Update(AgentEntity agentEntity)
         {
             if (Init)
             {
+                ObjectPosition = new KMath.Vec2f(Icon.GetTransform().position.x, Icon.GetTransform().position.y);
                 foodBar.Update(agentEntity.agentStats.Food / 100);
 
                 if (Camera.main.aspect >= 1.7f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 123.8f, 4.873917f);
+                    Icon.SetPosition(new Vector3(-377.3f, 123.8f, 4.873917f));
                 else if (Camera.main.aspect >= 1.5f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, 125.4f, 4.873917f);
+                    Icon.SetPosition(new Vector3(-335.6f, 125.4f, 4.873917f));
                 else
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 193.4f, 4.873917f);
+                    Icon.SetPosition(new Vector3(-363.8f, 193.4f, 4.873917f));
             }
+        }
+
+        public override void OnMouseClick(AgentEntity agentEntity)
+        {
+            Debug.LogWarning("Food Bar Clicked");
+        }
+
+        public override void OnMouseEnter()
+        {
+            Debug.LogWarning("Food Bar Mouse Enter");
+        }
+
+        public override void OnMouseStay()
+        {
+            Debug.LogWarning("Food Bar Mouse Stay");
+        }
+
+        public override void OnMouseExit()
+        {
+            Debug.LogWarning("Food Bar Mouse Exit");
         }
     }
 }

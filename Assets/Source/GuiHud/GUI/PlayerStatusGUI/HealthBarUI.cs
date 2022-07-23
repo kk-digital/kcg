@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Entitas;
-using KMath;
-using Inventory;
+using KGUI.Elements;
 
 namespace KGUI.PlayerStatus
 {
@@ -32,6 +28,8 @@ namespace KGUI.PlayerStatus
         public Rect IconPosition = new Rect(10, 75, 50, -50);
         public Rect TextPosition = new Rect(250, 60, 55, 22);
         public Color color = new Color(0.6f, 0, 0, 1.0f);
+
+        Image Icon;
 
         public void Initialize(AgentEntity agentEntity)
         {
@@ -143,6 +141,21 @@ namespace KGUI.PlayerStatus
                 TextureCoords = new Vector4(0, 0, 1, 1)
             };
 
+            // Add Components and setup agent object
+            Sprite iconBar = Sprite.Create(icon.Texture, new Rect(0.0f, 0.0f, IconWidth, IconHeight), new Vector2(0.5f, 0.5f));
+
+            
+            Icon = new Image("Health Bar", iconBar);
+
+            if (Camera.main.aspect >= 1.7f)
+                Icon.SetPosition(new Vector3(-377.3f, 183.0f, 4.873917f));
+            else if (Camera.main.aspect >= 1.5f)
+                Icon.SetPosition(new Vector3(-335.6f, 9.6f, 4.873917f));
+            else
+                Icon.SetPosition(new Vector3(-364.8f, 255.3f, 4.873917f));
+
+            Icon.SetScale(new Vector3(0.6f, -0.6f, 0.5203559f));
+
             healthBar = new Texture2D(100, 1);
 
             Init = true;
@@ -214,8 +227,12 @@ namespace KGUI.PlayerStatus
                     GUI.DrawTexture(div3Position, barDiv1.Texture);
                 }
 
-                // Draw Icon
-                GUI.DrawTexture(IconPosition, icon.Texture);
+                if (Camera.main.aspect >= 1.7f)
+                    Icon.SetPosition(new Vector3(-377.3f, 183.0f, 4.873917f));
+                else if (Camera.main.aspect >= 1.5f)
+                    Icon.SetPosition(new Vector3(-335.6f, 9.6f, 4.873917f));
+                else
+                    Icon.SetPosition(new Vector3(-364.8f, 255.3f, 4.873917f));
             }
 
             // Show Health With Text

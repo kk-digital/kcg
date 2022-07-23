@@ -1,11 +1,10 @@
 using UnityEngine;
-using UnityEngine.UI;
 using Entitas;
 using KGUI.Elements;
 
 namespace KGUI.PlayerStatus
 {
-    public class WaterBarUI
+    public class WaterBarUI : GUIManager
     {
         // Init
         private static bool Init;
@@ -19,9 +18,9 @@ namespace KGUI.PlayerStatus
 
         // Image
         public ProgressBar waterBar;
-        private GameObject iconCanvas;
+        private Image iconCanvas;
 
-        public void Initialize(AgentEntity agentEntity)
+        public override void Initialize(Contexts contexts, AgentEntity agentEntity)
         {
             // Set Width and Height
             int IconWidth = 19;
@@ -77,50 +76,66 @@ namespace KGUI.PlayerStatus
                 TextureCoords = new Vector4(0, 0, 1, 1)
             };
 
-            // Water Bar Initializon
-            iconCanvas = new GameObject("Water Icon");
-            iconCanvas.transform.parent = GameObject.Find("Canvas").transform;
-            iconCanvas.AddComponent<RectTransform>();
-            iconCanvas.AddComponent<Image>();
-
             // Add Components and setup game object
             Sprite iconBar = Sprite.Create(icon.Texture, new Rect(0.0f, 0.0f, IconWidth, IconHeight), new Vector2(0.5f, 0.5f));
-            iconCanvas.GetComponent<Image>().sprite = iconBar;
+
+            // Water Bar Initializon
+            iconCanvas = new Image("Water Icon", iconBar);
 
             if (Camera.main.aspect >= 1.7f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 64.9f, 4.873917f);
+                iconCanvas.SetPosition(new Vector3(-377.3f, 64.9f, 4.873917f));
             else if (Camera.main.aspect >= 1.5f)
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, 67f, 4.873917f);
+                iconCanvas.SetPosition(new Vector3(-335.6f, 67f, 4.873917f));
             else
-                iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 134.2f, 4.873917f);
+                iconCanvas.SetPosition(new Vector3(-363.8f, 134.2f, 4.873917f));
 
-
-            iconCanvas.GetComponent<RectTransform>().localScale = new Vector3(0.6f, -0.6f, 0.5203559f);
+            iconCanvas.SetScale(new Vector3(0.6f, -0.6f, 0.5203559f));
 
             // Add Components and setup game object
             Sprite bar = Sprite.Create(fill.Texture, new Rect(0.0f, 0.0f, FillWidth, FillHeight), new Vector2(0.5f, 0.5f));
 
             // Water Bar Initializon
-            waterBar = new ProgressBar("Water Bar", iconCanvas.transform, bar, Image.FillMethod.Radial360, agentEntity.agentStats.Water / 100, agentEntity);
+            waterBar = new ProgressBar("Water Bar", iconCanvas.GetTransform(), bar, UnityEngine.UI.Image.FillMethod.Radial360, agentEntity.agentStats.Water / 100, agentEntity);
             waterBar.SetPosition(new Vector3(-0.4f, -0.1f, 4.873917f));
             waterBar.SetScale(new Vector3(0.8566527f, 0.8566527f, 0.3714702f));
 
             Init = true;
         }
 
-        public void Update(AgentEntity agentEntity)
+        public override void Update(AgentEntity agentEntity)
         {
             if (Init)
             {
+                ObjectPosition = new KMath.Vec2f(iconCanvas.GetTransform().position.x, iconCanvas.GetTransform().position.y);
                 waterBar.Update(agentEntity.agentStats.Water / 100);
 
                 if (Camera.main.aspect >= 1.7f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-377.3f, 64.9f, 4.873917f);
+                    iconCanvas.SetPosition(new Vector3(-377.3f, 64.9f, 4.873917f));
                 else if (Camera.main.aspect >= 1.5f)
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-335.6f, 67f, 4.873917f);
+                    iconCanvas.SetPosition(new Vector3(-335.6f, 67f, 4.873917f));
                 else
-                    iconCanvas.GetComponent<RectTransform>().localPosition = new Vector3(-363.8f, 134.2f, 4.873917f);
+                    iconCanvas.SetPosition(new Vector3(-363.8f, 134.2f, 4.873917f));
             }
+        }
+
+        public override void OnMouseClick(AgentEntity agentEntity)
+        {
+            Debug.LogWarning("Water Bar Clicked");
+        }
+
+        public override void OnMouseEnter()
+        {
+            Debug.LogWarning("Water Bar Mouse Enter");
+        }
+
+        public override void OnMouseStay()
+        {
+            Debug.LogWarning("Water Bar Mouse Stay");
+        }
+
+        public override void OnMouseExit()
+        {
+            Debug.LogWarning("Water Bar Mouse Exit");
         }
     }
 }
