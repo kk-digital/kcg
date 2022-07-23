@@ -3,7 +3,7 @@ using KGUI.Elements;
 
 namespace KGUI.PlayerStatus
 {
-    public class HealthBarUI
+    public class HealthBarUI : GUIManager
     {
         // Init Condition
         private static bool Init;
@@ -30,8 +30,9 @@ namespace KGUI.PlayerStatus
         public Color color = new Color(0.6f, 0, 0, 1.0f);
 
         Image Icon;
+        Image Border;
 
-        public void Initialize(AgentEntity agentEntity)
+        public override void Initialize(Contexts contexts, AgentEntity agentEntity)
         {
             // Set Width and Height
             int IconWidth = 19;
@@ -143,18 +144,30 @@ namespace KGUI.PlayerStatus
 
             // Add Components and setup agent object
             Sprite iconBar = Sprite.Create(icon.Texture, new Rect(0.0f, 0.0f, IconWidth, IconHeight), new Vector2(0.5f, 0.5f));
+            Sprite borderSprite = Sprite.Create(barBorder.Texture, new Rect(0.0f, 0.0f, BarBorderWidth, BarBorderHeight), new Vector2(0.5f, 0.5f));
 
-            
+
             Icon = new Image("Health Bar", iconBar);
+            Border = new Image("Border", Icon.GetTransform(), borderSprite);
 
             if (Camera.main.aspect >= 1.7f)
+            {
                 Icon.SetPosition(new Vector3(-377.3f, 183.0f, 4.873917f));
+                Border.SetPosition(new Vector3(338.9f, 58f, 0.0f));
+            }
             else if (Camera.main.aspect >= 1.5f)
+            {
                 Icon.SetPosition(new Vector3(-335.6f, 9.6f, 4.873917f));
+
+            }
             else
+            {
                 Icon.SetPosition(new Vector3(-364.8f, 255.3f, 4.873917f));
 
+            }
+
             Icon.SetScale(new Vector3(0.6f, -0.6f, 0.5203559f));
+            Border.SetScale(new Vector3(4.06952143f, 0.46484375f, 1));
 
             healthBar = new Texture2D(100, 1);
 
@@ -186,14 +199,16 @@ namespace KGUI.PlayerStatus
             healthBar.Apply();
             GUI.skin.box.normal.background = healthBar;
             GUI.backgroundColor = Color.white;
+
+            // Create Box
             GUI.Box(fillPosition, GUIContent.none);
         }
 
-        public void Draw(AgentEntity agentEntity)
+        public override void Update(AgentEntity agentEntity)
         {
             if(Init)
             {
-                GUI.DrawTexture(borderPosition, barBorder.Texture);
+                ObjectPosition = new KMath.Vec2f(Icon.GetTransform().position.x, Icon.GetTransform().position.y);
 
                 DrawHealthBar(agentEntity);
 
@@ -228,15 +243,44 @@ namespace KGUI.PlayerStatus
                 }
 
                 if (Camera.main.aspect >= 1.7f)
+                {
                     Icon.SetPosition(new Vector3(-377.3f, 183.0f, 4.873917f));
+                    Border.SetPosition(new Vector3(338.9f, 58f, 0.0f));
+                }
                 else if (Camera.main.aspect >= 1.5f)
+                {
                     Icon.SetPosition(new Vector3(-335.6f, 9.6f, 4.873917f));
+
+                }
                 else
+                {
                     Icon.SetPosition(new Vector3(-364.8f, 255.3f, 4.873917f));
+
+                }
             }
 
             // Show Health With Text
             GUI.TextArea(TextPosition, playerHealth + "/100");
+        }
+
+        public override void OnMouseClick(AgentEntity agentEntity)
+        {
+            Debug.LogWarning("Health Bar Clicked");
+        }
+
+        public override void OnMouseEnter()
+        {
+            Debug.LogWarning("Health Bar Mouse Enter");
+        }
+
+        public override void OnMouseStay()
+        {
+            Debug.LogWarning("Health Bar Mouse Stay");
+        }
+
+        public override void OnMouseExit()
+        {
+            Debug.LogWarning("Health Bar Mouse Exit");
         }
     }
 }

@@ -62,7 +62,7 @@ namespace KGUI
             UIList.Add(fuelBarUI);
 
             // Add Health Bar To Draw Array
-            healthBarUI.Initialize(agentEntity);
+            UIList.Add(healthBarUI);
 
             // Init Elements
             for (int i = 0; i < UIList.Count; i++)
@@ -84,9 +84,6 @@ namespace KGUI
 
             // Assign New Cursor Position
             CursorPosition = new Vec2f(Input.mousePosition.x, Input.mousePosition.y);
-
-            // Draw Health Bar
-            healthBarUI.Draw(agentEntity);
 
             // Handle Inputs
             HandleInputs(agentEntity);
