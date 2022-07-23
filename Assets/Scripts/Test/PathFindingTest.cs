@@ -11,14 +11,13 @@ namespace Planet.Unity
         [SerializeField] Material Material;
 
         Planet.PlanetState Planet;
-        AgentEntity Player;
         AgentEntity Agent;
 
         static bool Init = false;
 
         public void Start()
         {
-
+            Debug.Log("Click somewhere to set slime target gol.");
             if (!Init)
             {
                 Initialize();
@@ -37,7 +36,7 @@ namespace Planet.Unity
                 Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Vec2f goalPos = new Vec2f(worldPosition.x, worldPosition.y);
                 GameState.ActionCreationSystem.CreateMovementAction(Planet.EntitasContext, Enums.ActionType.MoveAction,
-                   Player.agentID.ID, goalPos);
+                   Agent.agentID.ID, goalPos);
             }
 
             Planet.Update(Time.deltaTime, Material, transform);
@@ -61,8 +60,7 @@ namespace Planet.Unity
 
             GenerateMap();
 
-            Player = Planet.AddPlayer(GameResources.CharacterSpriteId, 32, 48, new Vec2f(3.0f, 3.0f), 0, 100, 100, 100, 100, 100);
-            Agent = Planet.AddAgent(new Vec2f(1.0f, 3.0f));
+            Agent = Planet.AddEnemy(new Vec2f(1.0f, 3.0f));
         }
 
         void GenerateMap()
@@ -107,7 +105,6 @@ namespace Planet.Unity
                     tileMap.SetFrontTile(i, j, frontTile);
                 }
             }
-            //TileMap.BuildLayerTexture(MapLayerType.Front);
         }
     }
 }
