@@ -12,7 +12,9 @@ namespace Scripts {
             public SystemState       State;
 
             private float            LastTime;
-            public System.Random     rnd = new System.Random();
+            public System.Random     rnd;
+
+            public  int              seed;
 
             public  int              StarCount        =                    1;
             public  int              InnerPlanets     =                    4;
@@ -52,9 +54,17 @@ namespace Scripts {
             public  Color            gas_giant_base_color;
             public  Color            moon_base_color;
 
+            public  Color[]          rocky_planet_colors;
+            public  Color[]          gas_giant_colors;
+            public  Color[]          moon_colors;
+
             public  int              rocky_planet_radius;
             public  int              gas_giant_radius;
             public  int              moon_radius;
+
+            public  int              rocky_planet_layers;
+            public  int              gas_giant_layers;
+            public  int              moon_layers;
 
             public  CameraController Camera;
 
@@ -130,6 +140,8 @@ namespace Scripts {
                 // delete previous system
 
                 State.cleanup();
+
+                rnd = new System.Random(seed);
 
                 for(int i = 0; i < StarCount; i++) {
 
@@ -256,19 +268,31 @@ namespace Scripts {
                     Planet.renderer.circular_blur_shader      = circular_blur_shader;
                     Planet.renderer.circular_mask_shader      = circular_mask_shader;
 
+                    Planet.renderer.seed                      = rnd.Next();
+
                     switch(Planet.obj.type) {
+
                         case PlanetType.PLANET_ROCKY:
                             Planet.renderer.radius    = rocky_planet_radius;
+                            Planet.renderer.layers    = rocky_planet_layers;
                             Planet.renderer.basecolor = rocky_planet_base_color;
+                            Planet.renderer.colors    = rocky_planet_colors;
                             break;
+
                         case PlanetType.PLANET_GAS_GIANT:
                             Planet.renderer.radius    = gas_giant_radius;
+                            Planet.renderer.layers    = gas_giant_layers;
                             Planet.renderer.basecolor = gas_giant_base_color;
+                            Planet.renderer.colors    = gas_giant_colors;
                             break;
+
                         case PlanetType.PLANET_MOON:
                             Planet.renderer.radius    = moon_radius;
+                            Planet.renderer.layers    = moon_layers;
                             Planet.renderer.basecolor = moon_base_color;
+                            Planet.renderer.colors    = moon_colors;
                             break;
+
                     }
                 }
 

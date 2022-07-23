@@ -154,13 +154,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sr: {fileID: 0}
   or: {fileID: 0}
-  seed: 0
+  seed: 5
   texture: {fileID: 0}
   basecolor: {r: 0.2924528, g: 0.27815995, b: 0.2662424, a: 1}
   colors:
   - {r: 0.8018868, g: 0.71488965, b: 0.71488965, a: 0.6117647}
+  - {r: 0.26415092, g: 0.22552508, b: 0.22552508, a: 0.6117647}
   radius: 96
-  layers: 5
+  layers: 3
   orbitColor: {r: 0.5, g: 0.7, b: 1, a: 1}
   Camera: {fileID: 1913073823}
   blur_noise_shader: {fileID: 7200000, guid: 6265a9d36a176594480881d07bfe6ddf, type: 3}
@@ -178,7 +179,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 485678436}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 0, z: 0}
+  m_LocalPosition: {x: 250, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -242,7 +243,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 983011622}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10, y: 0, z: 0}
+  m_LocalPosition: {x: -250, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -336,6 +337,7 @@ MonoBehaviour:
   colors:
   - {r: 0.7830189, g: 0.45667925, b: 0.23268957, a: 0.5529412}
   - {r: 0.8018868, g: 0.27136216, b: 0.22316661, a: 0.6666667}
+  - {r: 0.20630117, g: 0.7169812, b: 0.34303442, a: 0.6666667}
   radius: 512
   layers: 5
   orbitColor: {r: 0.5, g: 0.7, b: 1, a: 1}
